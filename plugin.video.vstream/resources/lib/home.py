@@ -128,7 +128,6 @@ class cHome:
 
         oGui.setEndOfDirectory()
 
-
     def showSearchText(self):
         oGui = cGui()
         oInputParameterHandler = cInputParameterHandler()
