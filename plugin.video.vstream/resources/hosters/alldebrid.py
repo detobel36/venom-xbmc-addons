@@ -13,7 +13,7 @@ class cHoster(iHoster):
     def __init__(self):
         iHoster.__init__(self, 'alldebrid', 'Alldebrid', 'violet')
 
-    def _getMediaLinkForGuest(self):
+    def _getMediaLinkForGuest(self, autoPlay = False):
         token_Alldebrid = cPremiumHandler(self.getPluginIdentifier()).getToken()
         if token_Alldebrid:
             sUrl_Bypass = "https://api.alldebrid.com/v4/link/unlock?agent=service&version=1.0-&apikey=" + \

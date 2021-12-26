@@ -13,6 +13,10 @@ class cHosterGui:
     SITE_NAME = 'cHosterGui'
     ADDON = addon()
 
+    def __init__(self):
+        from resources.lib.player import cPlayer
+        self.oPlayer = cPlayer()
+
     # step 1 - bGetRedirectUrl in ein extra optionsObject verpacken
     def showHoster(self, oGui, oHoster, sMediaUrl, sThumbnail, bGetRedirectUrl=False, oInputParameterHandler=False):
         oOutputParameterHandler = cOutputParameterHandler()
@@ -294,7 +298,7 @@ class cHosterGui:
         klass = getattr(mod, 'cHoster')
         return klass()
 
-    def play(self, oInputParameterHandler = False):
+    def play(self, oInputParameterHandler = False, autoPlay = False):
         oGui = cGui()
         oDialog = dialog()
 
@@ -318,9 +322,9 @@ class cHosterGui:
 
         try:
             mediaDisplay = sMediaUrl.split('/')
-            VSlog('Hoster - play : %s/ ... /%s' % ('/'.join(mediaDisplay[0:3]), mediaDisplay[-1]))
+            VSlog('Hoster %s - play : %s/ ... /%s' % (sHosterIdentifier, '/'.join(mediaDisplay[0:3]), mediaDisplay[-1]))
         except:
-            VSlog('Hoster - play : ' + sMediaUrl)
+            VSlog('Hoster %s - play : ' % (sHosterIdentifier, sMediaUrl))
 
         oHoster = self.getHoster(sHosterIdentifier)
         oHoster.setFileName(sFileName)
@@ -330,7 +334,7 @@ class cHosterGui:
 
         try:
             oHoster.setUrl(sMediaUrl)
-            aLink = oHoster.getMediaLink()
+            aLink = oHoster.getMediaLink(autoPlay)
 
             if aLink and (aLink[0] or aLink[1]):  # Le hoster ne sait pas résoudre mais a retourné une autre url
                 if not aLink[0]:  # Voir exemple avec allDebrid qui : return False, URL
@@ -340,7 +344,7 @@ class cHosterGui:
                         sHosterName = oHoster.getDisplayName()
                         oDialog.VSinfo(sHosterName, 'Resolve')
                         oHoster.setUrl(aLink[1])
-                        aLink = oHoster.getMediaLink()
+                        aLink = oHoster.getMediaLink(autoPlay)
 
                 if aLink[0]:
                     oGuiElement = cGuiElement()
@@ -353,16 +357,17 @@ class cHosterGui:
                     oGuiElement.setMeta(int(sMeta))
                     oGuiElement.getInfoLabel()
 
-                    from resources.lib.player import cPlayer
-                    oPlayer = cPlayer(oInputParameterHandler)
+                    # from resources.lib.player import cPlayer
+                    # oPlayer = cPlayer(oInputParameterHandler)
 
                     # sous titres ?
                     if len(aLink) > 2:
-                        oPlayer.AddSubtitles(aLink[2])
+                        self.oPlayer.AddSubtitles(aLink[2])
 
-                    return oPlayer.run(oGuiElement, aLink[1])
+                    return self.oPlayer.prepareToRun(oGuiElement)
 
-            oDialog.VSerror(self.ADDON.VSlang(30020))
+            if not autoPlay:
+                oDialog.VSerror(self.ADDON.VSlang(30020))
             return False
 
         except Exception as e:
@@ -371,8 +376,12 @@ class cHosterGui:
             traceback.print_exc()
             return False
 
-        oGui.setEndOfDirectory()
+        if not autoPlay:
+            oGui.setEndOfDirectory()
         return False
+
+    def playPlayer(self):
+        return self.oPlayer.run(cGuiElement(), '')
 
     def addToPlaylist(self):
         oGui = cGui()
@@ -390,7 +399,7 @@ class cHosterGui:
         oHoster.setFileName(sFileName)
 
         oHoster.setUrl(sMediaUrl)
-        aLink = oHoster.getMediaLink()
+        aLink = oHoster.getMediaLink(False)
 
         if aLink[0]:
             oGuiElement = cGuiElement()

@@ -3,12 +3,14 @@
 #
 from resources.lib.handler.inputParameterHandler import cInputParameterHandler
 from resources.lib.handler.pluginHandler import cPluginHandler
+from resources.lib.handler.requestHandler import cRequestHandler
 from resources.lib.gui.gui import cGui
 from resources.lib.upnext import UpNext
 from resources.lib.comaddon import addon, dialog, xbmc, isKrypton, VSlog, addonManager, isMatrix
 from resources.lib.db import cDb
 from resources.lib.util import cUtil, Unquote
 import xbmcplugin
+import xbmcaddon
 
 try:  # Python 2
     from urlparse import urlparse
@@ -32,6 +34,7 @@ class cPlayer(xbmc.Player):
         sPlayerType = self.__getPlayerType()
         xbmc.Player.__init__(self, sPlayerType)
 
+        self.listMediaUrl = []
         self.Subtitles_file = []
         self.SubtitleActive = False
 
@@ -83,7 +86,25 @@ class cPlayer(xbmc.Player):
         else:
             self.Subtitles_file.append(files)
 
+    def preCheckVideoWork(self, sUrl):
+        parsedUrl = urlparse(sUrl)
+        domainUrl = parsedUrl.scheme + "://" + parsedUrl.hostname
+        VSlog("Pre check video work (" + str(domainUrl) + ")")
+        oRequestHandler = cRequestHandler(domainUrl)
+        result = oRequestHandler.request()
+        if result:
+            VSlog("Result: " + str(oRequestHandler.statusCode()))
+
+            return int(oRequestHandler.statusCode()) in [200, 403, 404]
+        else:
+            VSlog("Pre check failed (" + str(result) + ")")
+        return False
+
+    def prepareToRun(self, oGuiElement):
+        self.listMediaUrl.append(oGuiElement.getMediaUrl())
+
     def run(self, oGuiElement, sUrl):
+        isCorrecltyPlay = False
 
         # Lancement d'une vidéo sans avoir arreté la précedente
         self.tvShowTitle = oGuiElement.getItemValue('tvshowtitle')
@@ -103,8 +124,19 @@ class cPlayer(xbmc.Player):
         sPluginHandle = cPluginHandler().getPluginHandle()
 
         oGui = cGui()
-        item = oGui.createListItem(oGuiElement)
-        item.setPath(oGuiElement.getMediaUrl())
+        item = oGui._createListItem(oGuiElement)
+        if self.listMediaUrl and len(self.listMediaUrl) > 1:
+            VSlog("List of media url: " + str(self.listMediaUrl))
+            path = 'stack://' + ' , '.join(self.listMediaUrl)
+        else:
+            VSlog("Gui element")
+            path = oGuiElement.getMediaUrl()
+
+        VSlog("Create path: " + str(path))
+        item.setPath(path)
+
+        if sUrl == '':
+            sUrl = item.getPath()
 
         #Sous titres
         if (self.Subtitles_file):
@@ -129,25 +161,34 @@ class cPlayer(xbmc.Player):
                 VSlog('Player use inputstream addon')
             else:
                 dialog().VSerror('Nécessite kodi 17 minimum')
-                return
+                return isCorrecltyPlay
+            isCorrecltyPlay = True
         #1 er mode de lecture
         elif (player_conf == '0'):
             self.play(sUrl,item)
             VSlog('Player use Play() method')
+            isCorrecltyPlay = True
         #2 eme mode non utilise
         elif (player_conf == 'neverused'):
             xbmc.executebuiltin('PlayMedia(' + sUrl + ')')
             VSlog('Player use PlayMedia() method')
+            isCorrecltyPlay = True
         #3 eme mode (defaut)
         else:
-            item.customDebug()
+            # if self.preCheckVideoWork(item.getPath()):
             xbmcplugin.setResolvedUrl(sPluginHandle, True, item)
             VSlog('Player use setResolvedUrl() method')
+            isCorrecltyPlay = True
+            # else:
+            #     isCorrecltyPlay = False
 
         #Attend que le lecteur demarre, avec un max de 20s
-        for _ in range(20):
+        for i in range(20):
             if self.playBackEventReceived:
+                VSlog("Break playBackEventReceived " + str(i))
                 break
+
+            VSlog("Sleep 1 " + str(i) + ": " + str(self.isPlayingVideo()))
             xbmc.sleep(1000)
 
         #active/desactive les sous titres suivant l'option choisie dans la config
@@ -165,13 +206,16 @@ class cPlayer(xbmc.Player):
                 self.currentTime = self.getTime()
 
                 waitingNext += 1
-                if waitingNext == 8: # attendre un peu avant de chercher le prochain épisode d'une série
+                if waitingNext == 8 and self.isPlayingVideo(): # attendre un peu avant de chercher le prochain épisode d'une série
                     self.totalTime = self.getTotalTime()
                     self.infotag = self.getVideoInfoTag()
                     UpNext().nextEpisode(oGuiElement)
 
+                VSlog("Sleep 2 " + str(waitingNext) + ": " + str(self.isPlayingVideo()))
+
             except Exception as err:
                 VSlog("Exception run: {0}".format(err))
+                isCorrecltyPlay = False
 
             xbmc.sleep(1000)
 
@@ -184,7 +228,7 @@ class cPlayer(xbmc.Player):
             return r
 
         VSlog('Closing player')
-        return True
+        return isCorrecltyPlay
 
     #fonction light servant par exemple pour visualiser les DL ou les chaines de TV
     def startPlayer(self, window=False):
@@ -367,4 +411,3 @@ class cPlayer(xbmc.Player):
                 return xbmc.PLAYER_CORE_DVDPLAYER
         except:
             return False
-
