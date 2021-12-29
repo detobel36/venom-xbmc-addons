@@ -160,6 +160,7 @@ class cPlayer(xbmc.Player):
                 dialog().VSinfo('Des sous-titres sont disponibles', 'Sous-titres', 4)
 
         waitingNext = 0
+
         while self.isPlaying() and not self.forcestop:
             try:
                 self.currentTime = self.getTime()
@@ -172,6 +173,7 @@ class cPlayer(xbmc.Player):
 
             except Exception as err:
                 VSlog("Exception run: {0}".format(err))
+
             xbmc.sleep(1000)
 
         if not self.playBackStoppedEventReceived:
