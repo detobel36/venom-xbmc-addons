@@ -7,6 +7,7 @@ try:  # Python 2
 except ImportError:  # Python 3
     import urllib.request as urllib2
 
+import requests
 import json
 import requests
 
