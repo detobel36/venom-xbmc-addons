@@ -4,9 +4,11 @@
 # vstream = xbmcaddon.Addon('plugin.video.vstream')
 # sLibrary = VSPath(vstream.getAddonInfo("path")).decode("utf-8")
 # sys.path.append (sLibrary)
-from resources.lib.handler.requestHandler import cRequestHandler
-from resources.lib.comaddon import addon, dialog, VSlog, window, VSPath, xbmc
-from resources.lib.util import urlEncode
+import json
+import xbmcvfs
+import xbmc
+import xbmcgui
+import sys
 
 try:  # Python 2
     import urllib2
@@ -14,10 +16,9 @@ try:  # Python 2
 except ImportError:  # Python 3
     import urllib.request as urllib2
 
-import xbmcvfs
-import sys
-import xbmc
-import xbmcgui
+from resources.lib.handler.requestHandler import cRequestHandler
+from resources.lib.comaddon import addon, dialog, VSlog, window, VSPath
+# from resources.lib.util import urlEncode
 
 try:
     from sqlite3 import dbapi2 as sqlite
@@ -26,10 +27,6 @@ except:
     from pysqlite2 import dbapi2 as sqlite
     VSlog('SQLITE 2 as DB engine')
 
-try:
-    import json
-except:
-    import simplejson as json
 
 SITE_IDENTIFIER = 'runscript'
 SITE_NAME = 'runscript'
@@ -158,7 +155,7 @@ class cClear:
                     cached_Cache = VSPath(cached_Cache).decode("utf-8")
                 except AttributeError:
                     cached_Cache = VSPath(cached_Cache)
-                
+
                 try:
                     db = sqlite.connect(cached_Cache)
                     dbcur = db.cursor()
@@ -249,12 +246,12 @@ class cClear:
                     oRequestHandler = cRequestHandler(cUrl)
                     oRequestHandler.setRequestType(1)
                     oRequestHandler.addHeaderEntry('User-Agent', UA)
-                    oRequestHandler.addParameters('raw_paste',result)
+                    oRequestHandler.addParameters('raw_paste', result)
                     oRequestHandler.addParameters('author', "kodi.log")
                     oRequestHandler.addParameters('language', "text")
-                    oRequestHandler.addParameters('permissions',1) # private
+                    oRequestHandler.addParameters('permissions', 1)  # private
                     oRequestHandler.addParameters('expire', 259200)  # 3j
-                    oRequestHandler.addParameters('submit', 'Submit+Paste') 
+                    oRequestHandler.addParameters('submit', 'Submit+Paste')
                     sHtmlContent = oRequestHandler.request()
                     code = oRequestHandler.getRealUrl().replace('http://slexy.org/view/', '')
 
@@ -270,6 +267,8 @@ class cClear:
             class XMLDialog(xbmcgui.WindowXMLDialog):
 
                 ADDON = addon()
+                data = None
+                path = VSPath('special://home/addons/plugin.video.vstream/resources/sites.json')
 
                 def __init__(self, *args, **kwargs):
                     xbmcgui.WindowXMLDialog.__init__(self)
@@ -286,15 +285,19 @@ class cClear:
                     oPluginHandler = cPluginHandler()
                     aPlugins = oPluginHandler.getAllPlugins()
 
+                    self.data = json.load(open(self.path))
+
                     for aPlugin in aPlugins:
                         # teste si deja dans le dsip
                         sPluginSettingsName = 'plugin_' + aPlugin[1]
-                        bPlugin = self.ADDON.getSetting(sPluginSettingsName)
+                        bPlugin = self.data['site'][sPluginSettingsName]['active']
 
                         icon = "special://home/addons/plugin.video.vstream/resources/art/sites/%s.png" % aPlugin[1]
-                        stitle = aPlugin[0].replace('[COLOR violet]', '').replace('[COLOR orange]', '')\
-                                           .replace('[/COLOR]', '').replace('[COLOR dodgerblue]', '')\
-                                           .replace('[COLOR coral]', '')
+                        stitle = self.data['site'][sPluginSettingsName]['label'].replace('[COLOR violet]', '')\
+                                                                                .replace('[COLOR orange]', '')\
+                                                                                .replace('[/COLOR]', '')\
+                                                                                .replace('[COLOR dodgerblue]', '')\
+                                                                                .replace('[COLOR coral]', '')
                         if (bPlugin == 'true'):
                             stitle = ('%s %s') % (stitle, valid)
                         listitem = xbmcgui.ListItem(label=stitle, label2=aPlugin[2])
@@ -305,12 +308,13 @@ class cClear:
                             listitem.select(True)
 
                         listitems.append(listitem)
-
                     self.container.addItems(listitems)
                     self.setFocus(self.container)
 
                 def onClick(self, controlId):
                     if controlId == 5:
+                        with open(self.path, 'w') as f:
+                            f.write(json.dumps(self.data, indent=4))
                         self.close()
                         return
                     elif controlId == 99:
@@ -329,25 +333,16 @@ class cClear:
                             label = item.getLabel().replace(valid, '')
                             item.setLabel(label)
                             item.select(False)
-                            sPluginSettingsName = ('plugin_%s') % (item.getProperty('sitename'))
-                            self.ADDON.setSetting(sPluginSettingsName, str('false'))
+                            self.data['site']["plugin_" + item.getProperty('sitename')]['active'] = "false"
                         else:
                             label = ('%s %s') % (item.getLabel(), valid)
                             item.setLabel(label)
                             item.select(True)
-                            sPluginSettingsName = ('plugin_%s') % (item.getProperty('sitename'))
-                            self.ADDON.setSetting(sPluginSettingsName, str('true'))
+                            self.data['site']["plugin_" + item.getProperty('sitename')]['active'] = "true"
                         return
 
                 def onFocus(self, controlId):
                     self.controlId = controlId
-
-                def _close_dialog(self):
-                    self.close()
-
-                # def onAction(self, action):
-                    # if action.getId() in (9, 10, 92, 216, 247, 257, 275, 61467, 61448):
-                        # self.close()
 
             path = "special://home/addons/plugin.video.vstream"
             wd = XMLDialog('DialogSelect.xml', path, "Default")
@@ -421,11 +416,13 @@ class cClear:
     #         file_path = os.path.join(dir, the_file).encode('utf-8')
     #         if clearNested and os.path.isdir(file_path):
     #             self.ClearDir(file_path, clearNested)
-    #             try: os.rmdir(file_path)
+    #             try:
+    #                 os.rmdir(file_path)
     #             except Exception as e:
     #                 print(str(e))
     #         else:
-    #             try:os.unlink(file_path)
+    #             try:
+    #                 os.unlink(file_path)
     #             except Exception as e:
     #                 print str(e)
 
@@ -434,7 +431,8 @@ class cClear:
     #         dir = dir.decode("utf8")
     #     except:
     #         pass
-    #     try:os.unlink(dir)
+    #     try:
+    #         os.unlink(dir)
     #     except Exception as e:
     #         print(str(e))
 

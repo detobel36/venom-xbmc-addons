@@ -22,6 +22,7 @@ class cGui:
     listing = []
     episodeListing = []  # Pour gérer l'enchainement des episodes
     ADDON = addon()
+    displaySeason = addon().getSetting('display_season_title')
 
     if isKrypton():
         CONTENT = 'addons'
@@ -95,17 +96,17 @@ class cGui:
         except Exception as e:
             pass
 
-    #    Categorie       sCat          Meta     CONTENT
+    #    Categorie       Meta          sCat     CONTENT
     #    Film            1             1        movies
     #    Serie           2             2        tvshows
-    #    Anime           3             4        tvshows
-    #    Saison          4             5        episodes
-    #    Divers          5             0        videos
-    #    IPTV (Officiel) 6             0        files
-    #    Saga            7             3        movies
-    #    Episodes        8             6        episodes
-    #    Person          /             7        artists
-    #    Nerwork         /             8        files
+    #    Anime           4             3        tvshows
+    #    Saison          5             4        episodes
+    #    Divers          0             5        videos
+    #    IPTV (Officiel) 0             6        files
+    #    Saga            3             7        movies
+    #    Episodes        6             8        episodes
+    #    Person          7             /        artists
+    #    Network         8             /        files
 
     def addMovie(self, sId, sFunction, sLabel, sIcon, sThumbnail, sDesc, oOutputParameterHandler=''):
         movieUrl = oOutputParameterHandler.getValue('siteUrl')
@@ -158,7 +159,7 @@ class cGui:
         if not oOutputParameterHandler.getValue('sLang'):
             oOutputParameterHandler.addParameter('sLang', oInputParameterHandler.getValue('sLang'))
 
-        # # Affichage du pourcentage de lecture en cours, non utilisé car pas très eronomique au niveau des liens lorsqu'il y a beaucoup de liens
+        # Affichage du pourcentage de lecture en cours, non utilisé car pas très economique au niveau des liens lorsqu'il y en a beaucoup
         # oOutputParameterHandler.addParameter('ResumeTime', oInputParameterHandler.getValue('ResumeTime'))
         # oOutputParameterHandler.addParameter('TotalTime', oInputParameterHandler.getValue('TotalTime'))
 
@@ -329,13 +330,16 @@ class cGui:
                 host = ''
                 if 'tvshowtitle' in data:
                     host = itemTitle.split(data['tvshowtitle'])[1]
-                itemTitle = str(data['season']) + "x" + str(data['episode']) + ". " + episodeTitle + " " + host
+                if self.displaySeason == "true":
+                    itemTitle = str(data['season']) + "x" + str(data['episode']) + ". " + episodeTitle + " " + host
+                else:
+                    itemTitle = episodeTitle + " " + host
                 data['title'] = itemTitle
             except:
                 data['title'] = itemTitle
                 pass
         else:
-            #Permets d'afficher toutes les informations pour les films.
+            # Permets d'afficher toutes les informations pour les films.
             data['title'] = itemTitle
 
         if ":" in str(data.get('duration')):
@@ -371,7 +375,7 @@ class cGui:
             videoInfoTag.setPlotOutline(data.get('tagline', ""))
             videoInfoTag.setYear(int(data.get('year', 0)))
             videoInfoTag.setRating(float(data.get('rating', 0.0)))
-            videoInfoTag.setMpaa(data.get('mpaa',""))
+            videoInfoTag.setMpaa(data.get('mpaa', ""))
             videoInfoTag.setDuration(int(data.get('duration', 0)))
             videoInfoTag.setPlaycount(int(data.get('playcount', 0)))
             videoInfoTag.setCountries(data.get('country', [""]))
@@ -558,7 +562,10 @@ class cGui:
         xbmcplugin.addDirectoryItems(iHandler, self.listing, len(self.listing))
         xbmcplugin.setPluginCategory(iHandler, '')
         xbmcplugin.setContent(iHandler, cGui.CONTENT)
-        xbmcplugin.addSortMethod(iHandler, xbmcplugin.SORT_METHOD_NONE)
+        if cGui.CONTENT == 'episodes':
+            xbmcplugin.addSortMethod(iHandler, xbmcplugin.SORT_METHOD_EPISODE)
+        else:
+            xbmcplugin.addSortMethod(iHandler, xbmcplugin.SORT_METHOD_NONE)
         xbmcplugin.endOfDirectory(iHandler, succeeded=True, cacheToDisc=True)
         # reglage vue
         # 50 = liste / 51 grande liste / 500 icone / 501 gallerie / 508 fanart /
@@ -638,7 +645,7 @@ class cGui:
 
         # Si lancé depuis la page Home de Kodi, il faut d'abord en sortir pour lancer la recherche
         if xbmc.getCondVisibility('Window.IsVisible(home)'):
-            xbmc.executebuiltin('ActivateWindow(%d)' % (10028))
+            xbmc.executebuiltin('ActivateWindow(%d)' % 10028)
 
         xbmc.executebuiltin('Container.Update(%s)' % sTest)
 
@@ -712,16 +719,14 @@ class cGui:
             meta['cat'] = sCat
 
             from resources.lib.db import cDb
-            db = cDb()
-            row = db.get_watched(meta)
-            if row:
-                db.del_watched(meta)
-                db.del_resume(meta)
-            else:
-                db.insert_watched(meta)
-                db.del_viewing(meta)
-            # To test
-            # updateDirectory()
+            with cDb() as db:
+                row = db.get_watched(meta)
+                if row:
+                    db.del_watched(meta)
+                    db.del_resume(meta)
+                else:
+                    db.insert_watched(meta)
+                    db.del_viewing(meta)
 
         else:
             # Use kodi buildin feature

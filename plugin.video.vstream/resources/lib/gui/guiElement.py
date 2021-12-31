@@ -1,10 +1,9 @@
 # -*- coding: utf-8 -*-
 # vStream https://github.com/Kodi-vStream/venom-xbmc-addons
-# Venom.
 import re
-import unicodedata
+import xbmc
 
-from resources.lib.comaddon import addon, xbmc, isMatrix, VSlog, isNexus
+from resources.lib.comaddon import addon, isMatrix, isNexus
 from resources.lib.db import cDb
 from resources.lib.util import cUtil, QuoteSafe
 
@@ -18,13 +17,11 @@ from resources.lib.util import cUtil, QuoteSafe
 class cGuiElement:
 
     DEFAULT_FOLDER_ICON = 'icon.png'
-    # COUNT = 0
-    DB = cDb()
 
     def __init__(self):
 
         self.addons = addon()
-        
+
         # self.__sRootArt = cConfig().getRootArt()
         self.__sFunctionName = ''
         self.__sRootArt = 'special://home/addons/plugin.video.vstream/resources/art/'
@@ -42,7 +39,7 @@ class cGuiElement:
         self.__sTitleWatched = ''
         self.__ResumeTime = 0   # Durée déjà lue de la vidéo
         self.__TotalTime = 0    # Durée totale de la vidéo
-        
+
         # contient le titre modifié pour BDD
         self.__sFileName = ''
         self.__sDescription = ''
@@ -53,7 +50,6 @@ class cGuiElement:
         self.__Episode = ''
         self.__sIcon = self.DEFAULT_FOLDER_ICON
         self.__sFanart = 'special://home/addons/plugin.video.vstream/fanart.jpg'
-        self.__sDecoColor = self.addons.getSetting('deco_color')
         self.poster = 'https://image.tmdb.org/t/p/%s' % self.addons.getSetting('poster_tmdb')
         self.fanart = 'https://image.tmdb.org/t/p/%s' % self.addons.getSetting('backdrop_tmdb')
         # For meta search
@@ -67,7 +63,7 @@ class cGuiElement:
         self.__aProperties = {}
         self.__aContextElements = []
         self.__sSiteName = ''
-        
+
         # categorie utilisé pour marque-page et recherche.
         # 1 - movies/saga , 2 - tvshow/episode/anime, 5 - misc/Next
         self.__sCat = ''
@@ -195,7 +191,8 @@ class cGuiElement:
         try:
             # traitement du titre pour les caracteres spéciaux déplacé dans parser plus global
             # traitement du titre pour retirer le - quand c'est une Saison. Tiret, tiret moyen et cadratin
-            sTitle = sTitle.replace(' - Saison', ' Saison').replace(' – Saison', ' Saison').replace(' — Saison', ' Saison')
+            sTitle = sTitle.replace(' - Saison', ' Saison').replace(' – Saison', ' Saison')\
+                           .replace(' — Saison', ' Saison')
 
             if not isMatrix():
                 sTitle = sTitle.decode('utf-8')
@@ -215,16 +212,6 @@ class cGuiElement:
             sTitle = sTitle.replace(string.group(0), '')
             self.__Date = str(string.group(0))
             sTitle = '%s (%s) ' % (sTitle, self.__Date)
-
-        #~ #recherche Lang
-        #~ index = {' vostfr': ' [VOSTFR]', ' vf': ' [VF]', ' truefrench': ' [TrueFrench]'}
-        #~ for cle in index:
-            #~ sTitle = sTitle.replace(cle.upper(), index[cle]).replace(cle, index[cle]).replace('(%s)' % (cle), index[cle])
-
-        #~ #recherche Qualité
-        #~ index = {'1080i': '(1080)', '1080p': '(1080)', '1080I': '(1080)', '1080P': '(1080)', '720i': '(720)', '720p': '(720)', '720I': '(720)', '720P': '(720)'}
-        #~ for cle in index:
-            #~ sTitle = sTitle.replace(cle, index[cle]).replace('[%s]' % (cle), index[cle])
 
         # Recherche saison et episode a faire pr serie uniquement
         if True:
@@ -271,7 +258,8 @@ class cGuiElement:
             sTitle = sTitle[1:]
 
         # recherche les Tags restant : () ou [] sauf tag couleur
-        sTitle = re.sub('([\(|\[](?!\/*COLOR)[^\)\(\]\[]+?[\]|\)])', '[COLOR ' + self.__sDecoColor + ']\\1[/COLOR]', sTitle)
+        sDecoColor = self.addons.getSetting('deco_color')
+        sTitle = re.sub('([\(|\[](?!\/*COLOR)[^\)\(\]\[]+?[\]|\)])', '[COLOR ' + sDecoColor + ']\\1[/COLOR]', sTitle)
 
         # on reformate SXXEXX Titre [tag] (Annee)
         sTitle2 = ''
@@ -288,12 +276,12 @@ class cGuiElement:
         self.addItemValues('originaltitle', self.__sTitleWatched)
 
         if sTitle2:
-            sTitle2 = '[COLOR %s]%s[/COLOR] ' % (self.__sDecoColor, sTitle2)
+            sTitle2 = '[COLOR %s]%s[/COLOR] ' % (sDecoColor, sTitle2)
 
         sTitle2 = sTitle2 + sTitle
 
         if self.__Year:
-            sTitle2 = '%s [COLOR %s](%s)[/COLOR]' % (sTitle2, self.__sDecoColor, self.__Year)
+            sTitle2 = '%s [COLOR %s](%s)[/COLOR]' % (sTitle2, sDecoColor, self.__Year)
 
         # on repasse en utf-8
         if not isMatrix():
@@ -307,9 +295,9 @@ class cGuiElement:
             self.__sCleanTitle = re.sub('\[.+?\]|\(.+?\)','', sTitle)
 
         if isMatrix():
-            #Python 3 decode sTitle
+            # Python 3 decode sTitle
             try:
-                sTitle = str(sTitle.encode('latin-1'),'utf-8')
+                sTitle = str(sTitle.encode('latin-1'), 'utf-8')
             except:
                 pass
         else:
@@ -336,11 +324,11 @@ class cGuiElement:
         return self.__sTitleWatched
 
     def setDescription(self, sDescription):
-        #Py3
+        # Py3
         if isMatrix():
             try:
                 if 'Ã' in sDescription or '\\xc' in sDescription:
-                    self.__sDescription = str(sDescription.encode('latin-1'),'utf-8')
+                    self.__sDescription = str(sDescription.encode('latin-1'), 'utf-8')
                 else:
                     self.__sDescription = sDescription
             except:
@@ -420,9 +408,9 @@ class cGuiElement:
         meta['site'] = self.getSiteUrl()
         meta['cat'] = self.getCat()
 
-        data = self.DB.get_watched(meta)
+        with cDb() as db:
+            data = db.get_watched(meta)
         return data
-
 
     def getInfoLabel(self):
         meta = {
@@ -458,7 +446,7 @@ class cGuiElement:
             url = meta.pop('backdrop_path')
             self.addItemProperties('fanart_image', url)
             self.__sFanart = url
-            
+
         if 'trailer' in meta and meta['trailer']:
             self.__sTrailer = meta['trailer']
 
@@ -509,9 +497,9 @@ class cGuiElement:
             sTitle = sTitle.strip()
             if sTitle.endswith(' les'):
                 sTitle = sTitle[:-4]
-            elif sTitle.endswith(' la') :
+            elif sTitle.endswith(' la'):
                 sTitle = sTitle[:-3]
-            elif sTitle.endswith(' l') :
+            elif sTitle.endswith(' l'):
                 sTitle = sTitle[:-2]
             sTitle = sTitle.strip()
 
@@ -519,9 +507,11 @@ class cGuiElement:
         if metaType in (2, 4, 5, 6):
             tvshowtitle = self.getItemValue('tvshowtitle')
             if tvshowtitle:
-                sTitle =  tvshowtitle
-                   
-        sType = str(metaType).replace('1', 'movie').replace('2', 'tvshow').replace('3', 'collection').replace('4', 'anime').replace('5', 'season').replace('6', 'episode').replace('7', 'person').replace('8', 'network')
+                sTitle = tvshowtitle
+
+        sType = str(metaType).replace('1', 'movie').replace('2', 'tvshow').replace('3', 'collection')\
+                             .replace('4', 'anime').replace('5', 'season').replace('6', 'episode')\
+                             .replace('7', 'person').replace('8', 'network')
 
         meta = {}
         try:
@@ -579,10 +569,10 @@ class cGuiElement:
 
         if 'trailer' in meta and meta['trailer']:
             self.__sTrailer = meta['trailer']
-        
+
         if 'guest_stars' in meta:
             meta.pop('guest_stars')
-        
+
         if 'nbseasons' in meta:
             meta['season'] = meta.pop('nbseasons')
 
@@ -601,10 +591,10 @@ class cGuiElement:
             meta.pop('vote_count')
         if 'backdrop_url' in meta:
             meta.pop('backdrop_url')
-            
+
         for key, value in meta.items():
             self.addItemValues(key, value)
-            
+
         return
 
     def getItemValues(self):
@@ -684,7 +674,7 @@ class cGuiElement:
         # Used only if there is data in db, overwrite getMetadonne()
         sCat = str(self.getCat())
         try:
-            if sCat and int(sCat) in(1, 2, 3, 4, 5, 8):  # Vérifier seulement si de type média
+            if sCat and int(sCat) in (1, 2, 3, 4, 5, 8):  # Vérifier seulement si de type média
                 if self.getWatched():
                     self.addItemValues('playcount', 1)
         except:
@@ -701,13 +691,14 @@ class cGuiElement:
         else:
             self.addItemProperties('resumetime', self.getResumeTime())
             self.addItemProperties('totaltime', self.getTotalTime())
-            
+
         if sCat:
             self.addItemProperties('sCat', sCat)
-            mediatypes = {'1': 'movie', '2': 'tvshow', '3': 'tvshow', '4': 'season', '5': 'video', '6': 'video', '7': 'season', '8': 'episode'}
+            mediatypes = {'1': 'movie', '2': 'tvshow', '3': 'tvshow', '4': 'season', '5': 'video',
+                          '6': 'video', '7': 'season', '8': 'episode'}
             if sCat in mediatypes.keys():
                 mediatype = mediatypes.get(sCat)
-                self.addItemValues('mediatype', mediatype) # video, movie, tvshow, season, episode, musicvideo
+                self.addItemValues('mediatype', mediatype)  # video, movie, tvshow, season, episode, musicvideo
 
         if self.getSeason():
             self.addItemValues('season', int(self.getSeason()))
