@@ -30,7 +30,7 @@ class cGui:
     searchResults = {}
     searchResultsSemaphore = threading.Semaphore()
 
-    def emptySearchResult(siteName):
+    def emptySearchResult(self, siteName):
         cGui.searchResultsSemaphore.acquire()
         cGui.searchResults[siteName] = []  # vider le tableau de résultats
         cGui.searchResultsSemaphore.release()
