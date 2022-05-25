@@ -215,9 +215,6 @@ class cSearch:
         listThread = []
         window(10101).setProperty('search', 'true')
         for plugin in listPlugins:
-            if not self._continueToSearch():
-                break
-
             thread = threading.Thread(target = targetFunction, args = tuple([plugin] + argsList))
             thread.start()
             listThread.append(thread)
