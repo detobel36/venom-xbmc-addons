@@ -302,7 +302,13 @@ class cSearch:
 
 
     def _removeNonLetterCaracter(self, word):
-        return "".join(re.findall(r'[a-zA-Z0-9 ]*', word, flags=re.I)).strip()
+        result = re.sub(r'[^a-zA-Z0-9]', ' ', word, flags=re.I)
+        result = re.sub(r'éèêë', 'e', result, flags=re.I)
+        result = re.sub(r'à', 'a', result, flags=re.I)
+        result = re.sub(r'ô', 'o', result, flags=re.I)
+        result = re.sub(r'ù', 'u', result, flags=re.I)
+        result = re.sub(r'œ', 'oe', result, flags=re.I)
+        return result
 
 
     def _getSearchInfo(self):
