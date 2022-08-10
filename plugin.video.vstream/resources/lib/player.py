@@ -10,10 +10,10 @@ from resources.lib.db import cDb
 from resources.lib.util import cUtil, Unquote
 import xbmcplugin
 
-if isMatrix():
-    from urllib.parse import urlparse
-else:
+try:  # Python 2
     from urlparse import urlparse
+except ImportError:  # Python 3
+    from urllib.parse import urlparse
 
 from os.path import splitext
 
@@ -81,7 +81,7 @@ class cPlayer(xbmc.Player):
         else:
             self.Subtitles_file.append(files)
 
-    def run(self, oGuiElement, sTitle, sUrl):
+    def run(self, oGuiElement, sUrl):
 
         # Lancement d'une vidéo sans avoir arreté la précedente
         self.tvShowTitle = oGuiElement.getItemValue('tvshowtitle')

@@ -2,7 +2,7 @@
 # vStream https://github.com/Kodi-vStream/venom-xbmc-addons
 
 import time
-
+import json
 import xbmc
 import xbmcaddon
 import xbmcgui
@@ -241,7 +241,7 @@ class progress:
         self.PROGRESS = None
         self.COUNT = 0
 
-    def VScreate(self, title='vStream', desc='', large=False):
+    def VScreate(self, title='', desc='', large=False):
         # l'option "large" permet de forcer un sablier large, seul le sablier large peut être annulé.
 
         # Ne pas afficher le sablier si nous ne sommes pas dans un menu vStream
@@ -256,6 +256,9 @@ class progress:
             return empty()
 
         if self.PROGRESS == None:
+            if not title:
+                title = addon().VSlang(30140)
+            
             if large:
                 self.PROGRESS = xbmcgui.DialogProgress()
             elif ADDONVS.getSetting('spinner_small') == 'true':
@@ -273,9 +276,16 @@ class progress:
         if not search and window(10101).getProperty('search') == 'true':
             return
 
+        if not text:
+            text= addon().VSlang(30140)
+
         self.COUNT += 1
         iPercent = int(float(self.COUNT * 100) / total)
-        self.PROGRESS.update(iPercent, 'Chargement ' + str(self.COUNT) + '/' + str(total) + " " + text)
+        text += ' : ' + str(self.COUNT) + '/' + str(total) + '\n'
+        if isinstance(self.PROGRESS, xbmcgui.DialogProgress):
+            self.PROGRESS.update(iPercent, text )
+        else:
+            self.PROGRESS.update(iPercent, message = text )
 
     def iscanceled(self):
         if isinstance(self.PROGRESS, xbmcgui.DialogProgress):
@@ -419,7 +429,6 @@ def VSPath(pathSpecial):
 
 # Récupere le nom du profil courant
 def VSProfil():
-    import json
     # On chercher le profil courant.
     request = {
         "jsonrpc": "2.0",
@@ -437,6 +446,140 @@ def VSProfil():
     return name
 
 
+# Gestion des sources : activer/désactiver, libellé, url, ... 
+class siteManager:
+
+    SITES = 'sites'
+    ACTIVE = 'active'
+    LABEL = 'label'
+    URL_MAIN = 'url'
+
+    def __init__(self):
+        
+        # Propriétés par défaut
+        self.defaultPath = VSPath('special://home/addons/plugin.video.vstream/resources/sites.json')
+        self.defaultData = None
+
+        # Propriétés selon le profil        
+        name = VSProfil()
+        if name == 'Master user':   # Le cas par defaut
+            path = VSPath('special://home/userdata/addon_data/plugin.video.vstream/sites.json')
+        else:
+            path = VSPath('special://home/userdata/profiles/' + name + '/addon_data/plugin.video.vstream/sites.json')
+        
+        # Résolution du chemin
+        try:
+            self.propertiesPath = VSPath(path).decode('utf-8')
+        except AttributeError:
+            self.propertiesPath = VSPath(path)
+
+        # Chargement des properties
+        try:
+            self.data = json.load(open(self.propertiesPath))
+        except IOError:
+            # le fichier n'existe pas, on le crée à partir des settings par défaut
+            xbmcvfs.copy(self.defaultPath, path)
+            self.data = json.load(open(self.propertiesPath))
+            
+
+    def isActive(self, sourceName):
+        return self.getProperty(sourceName, self.ACTIVE) == 'True'
+    
+    def setActive(self, sourceName, state):
+        self.setProperty(sourceName, self.ACTIVE, state)
+
+    def getUrlMain(self, sourceName):
+        return str(self.getDefaultProperty(sourceName, self.URL_MAIN))
+    
+    def disableAll(self):
+        for sourceName in self.data[self.SITES]:
+            self.setActive(sourceName, False)
+        return
+
+    def enableAll(self):
+        for sourceName in self.data[self.SITES]:
+            self.setActive(sourceName, True)
+        return
+
+
+    def getDefaultProperty(self, sourceName, propName):
+        defaultProps = self._getDefaultProp(sourceName)
+        if propName not in defaultProps:
+            return False
+        return defaultProps.get(propName)
+
+
+    def getProperty(self, sourceName, propName):
+        sourceData = self._getDataSource(sourceName)
+        if sourceData:
+            if propName in sourceData:
+                return sourceData.get(propName)
+
+            # Propriété inconnue, on récupérere la valeur par défaut ...
+            defaultProps = self._getDefaultProp(sourceName)
+            if propName not in defaultProps:
+                return False
+
+            # ... et on l'enregistre
+            value = defaultProps.get(propName)
+            self.setProperty(sourceName, propName, value)
+            self.save()
+            return value
+
+
+    def setProperty(self, sourceName, propName, value):
+        sourceData = self._getDataSource(sourceName)
+        if sourceData:
+            sourceData[propName] = str(value)
+
+    def setDefaultProps(self, props):
+        self.defaultData = props
+        self._saveDefault()
+
+    # Lire les settings d'une source
+    def _getDataSource(self, sourceName):
+
+        # userSettings
+        sourceData = self.data[self.SITES].get(sourceName)
+        
+        # pas de user Settings, on recherche dans les default Settings
+        if not sourceData:
+            sourceData = self._getDefaultProp(sourceName)
+
+            # Sauvegarder dans les user Settings
+            if sourceData:
+                self.data[self.SITES][sourceName] = sourceData
+
+        return sourceData 
+        
+    # Récupérer les propriétés par défaut d'une source
+    def _getDefaultProp(self, sourceName):
+
+        # Chargement des properties par défaut
+        if not self.defaultData:
+            self.defaultData = json.load(open(self.defaultPath))
+
+        # Retrouver la prop par défaut
+        sourceData = self.defaultData[self.SITES].get(sourceName) if self.SITES in self.defaultData else None
+        
+        # pas de valeurs par défaut, on en crée à la volée
+        if not sourceData:
+            sourceData = {self.ACTIVE : 'False', self.LABEL : sourceName, self.URL_MAIN : sourceName}
+
+        return sourceData
+    
+    # Sauvegarder les propriétés modifiées
+    def save(self):
+        with open(self.propertiesPath, 'w') as f:
+            f.write(json.dumps(self.data, indent=4))
+
+    # Sauvegarder les propriétés par défaut
+    def _saveDefault(self):
+        with open(self.defaultPath, 'w') as f:
+            f.write(json.dumps(self.defaultData, indent=4))
+
+    
+
 class addonManager:
     # Demande l'installation d'un addon
     def installAddon(self, addon_id):
@@ -448,7 +591,6 @@ class addonManager:
 
     # Active/desactive un addon
     def enableAddon(self, addon_id, enable='True'):
-        import json
 
         request = {
             "jsonrpc": "2.0",

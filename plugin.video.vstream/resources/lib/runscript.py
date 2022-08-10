@@ -17,7 +17,7 @@ except ImportError:  # Python 3
     import urllib.request as urllib2
 
 from resources.lib.handler.requestHandler import cRequestHandler
-from resources.lib.comaddon import addon, dialog, VSlog, window, VSPath
+from resources.lib.comaddon import addon, dialog, VSlog, window, VSPath, siteManager
 # from resources.lib.util import urlEncode
 
 try:
@@ -51,8 +51,8 @@ class cClear:
             return
 
         elif (env == 'changelog_old'):
+            sUrl = 'https://raw.githubusercontent.com/Kodi-vStream/venom-xbmc-addons/master/plugin.video.vstream/changelog.txt'
             try:
-                sUrl = 'https://raw.githubusercontent.com/Kodi-vStream/venom-xbmc-addons/master/plugin.video.vstream/changelog.txt'
                 oRequest = urllib2.Request(sUrl)
                 oResponse = urllib2.urlopen(oRequest)
 
@@ -108,7 +108,6 @@ class cClear:
 
                         listitem = xbmcgui.ListItem(label=login, label2=desc)
                         listitem.setArt({'icon': icon, 'thumb': icon})
-
                         listitems.append(listitem)
 
                     self.container.addItems(listitems)
@@ -131,8 +130,8 @@ class cClear:
             return
 
         elif (env == 'soutient'):
+            sUrl = 'https://raw.githubusercontent.com/Kodi-vStream/venom-xbmc-addons/master/plugin.video.vstream/soutient.txt'
             try:
-                sUrl = 'https://raw.githubusercontent.com/Kodi-vStream/venom-xbmc-addons/master/plugin.video.vstream/soutient.txt'
                 oRequest = urllib2.Request(sUrl)
                 oResponse = urllib2.urlopen(oRequest)
 
@@ -147,7 +146,7 @@ class cClear:
                 self.DIALOG.VSerror("%s, %s" % (self.ADDON.VSlang(30205), sUrl))
             return
 
-        elif (env == 'addon'): # Vider le cache des métadonnées
+        elif (env == 'addon'):  # Vider le cache des métadonnées
             if self.DIALOG.VSyesno(self.ADDON.VSlang(30456)):
                 cached_Cache = "special://home/userdata/addon_data/plugin.video.vstream/video_cache.db"
                 # important seul xbmcvfs peux lire le special
@@ -172,7 +171,8 @@ class cClear:
             return
 
         elif (env == 'clean'):
-            liste = ['Historiques des recherches', 'Marque-Pages', 'En cours de lecture', 'Niveau de lecture', 'Marqués vues', 'Téléchargements']
+            liste = ['Historiques des recherches', 'Marque-Pages', 'En cours de lecture',
+                     'Niveau de lecture', 'Marqués vues', 'Téléchargements']
             ret = self.DIALOG.VSselect(liste, self.ADDON.VSlang(30110))
             cached_DB = "special://home/userdata/addon_data/plugin.video.vstream/vstream.db"
             # important seul xbmcvfs peux lire le special
@@ -235,9 +235,9 @@ class cClear:
             if self.DIALOG.VSyesno(self.ADDON.VSlang(30456)):
                 path = "special://logpath/kodi.log"
                 UA = 'Mozilla/5.0 (Windows NT 6.1; WOW64; rv:50.0) Gecko/20100101 Firefox/50.0'
-                headers = {'User-Agent': UA}
+                # headers = {'User-Agent': UA}
                 if xbmcvfs.exists(path):
-                    post_data = {}
+                    # post_data = {}
                     cUrl = 'http://slexy.org/index.php/submit'
                     logop = xbmcvfs.File(path, 'rb')
                     result = logop.read()
@@ -252,13 +252,34 @@ class cClear:
                     oRequestHandler.addParameters('permissions', 1)  # private
                     oRequestHandler.addParameters('expire', 259200)  # 3j
                     oRequestHandler.addParameters('submit', 'Submit+Paste')
-                    sHtmlContent = oRequestHandler.request()
+                    oRequestHandler.request()
                     code = oRequestHandler.getRealUrl().replace('http://slexy.org/view/', '')
 
                     self.ADDON.setSetting('service_log', code)
                     self.DIALOG.VSok(self.ADDON.VSlang(30097) + '  ' + code)
             return
 
+        # activer toutes les sources
+        elif (env == 'enableSources'):
+            if self.DIALOG.VSyesno(self.ADDON.VSlang(30456)):
+                sitesManager = siteManager()
+                sitesManager.enableAll()
+                sitesManager.save()
+                self.DIALOG.VSinfo(self.ADDON.VSlang(30014))
+
+            return
+
+        # désactiver toutes les sources
+        elif (env == 'disableSources'):
+            if self.DIALOG.VSyesno(self.ADDON.VSlang(30456)):
+                sitesManager = siteManager()
+                sitesManager.disableAll()
+                sitesManager.save()
+                self.DIALOG.VSinfo(self.ADDON.VSlang(30014))
+
+            return
+
+        # aciver/désactiver les sources
         elif (env == 'search'):
 
             from resources.lib.handler.pluginHandler import cPluginHandler
@@ -267,9 +288,8 @@ class cClear:
             class XMLDialog(xbmcgui.WindowXMLDialog):
 
                 ADDON = addon()
-                data = None
-                path = VSPath('special://home/addons/plugin.video.vstream/resources/sites.json')
-
+                sitesManager = siteManager()
+                
                 def __init__(self, *args, **kwargs):
                     xbmcgui.WindowXMLDialog.__init__(self)
                     pass
@@ -285,26 +305,22 @@ class cClear:
                     oPluginHandler = cPluginHandler()
                     aPlugins = oPluginHandler.getAllPlugins()
 
-                    self.data = json.load(open(self.path))
+                    #self.data = json.load(open(self.path))
 
                     for aPlugin in aPlugins:
                         # teste si deja dans le dsip
-                        sPluginSettingsName = 'plugin_' + aPlugin[1]
-                        bPlugin = self.data['site'][sPluginSettingsName]['active']
+                        sPluginName = aPlugin[1]
+                        isActive = self.sitesManager.isActive(sPluginName)
+                        icon = "special://home/addons/plugin.video.vstream/resources/art/sites/%s.png" % sPluginName
+                        stitle = self.sitesManager.getProperty(sPluginName, self.sitesManager.LABEL)
 
-                        icon = "special://home/addons/plugin.video.vstream/resources/art/sites/%s.png" % aPlugin[1]
-                        stitle = self.data['site'][sPluginSettingsName]['label'].replace('[COLOR violet]', '')\
-                                                                                .replace('[COLOR orange]', '')\
-                                                                                .replace('[/COLOR]', '')\
-                                                                                .replace('[COLOR dodgerblue]', '')\
-                                                                                .replace('[COLOR coral]', '')
-                        if (bPlugin == 'true'):
+                        if isActive:
                             stitle = ('%s %s') % (stitle, valid)
                         listitem = xbmcgui.ListItem(label=stitle, label2=aPlugin[2])
                         listitem.setArt({'icon': icon, 'thumb': icon})
                         listitem.setProperty('Addon.Summary', aPlugin[2])
                         listitem.setProperty('sitename', aPlugin[1])
-                        if (bPlugin == 'true'):
+                        if isActive:
                             listitem.select(True)
 
                         listitems.append(listitem)
@@ -312,9 +328,8 @@ class cClear:
                     self.setFocus(self.container)
 
                 def onClick(self, controlId):
-                    if controlId == 5:
-                        with open(self.path, 'w') as f:
-                            f.write(json.dumps(self.data, indent=4))
+                    if controlId == 5:       # OK
+                        self.sitesManager.save()
                         self.close()
                         return
                     elif controlId == 99:
@@ -333,12 +348,14 @@ class cClear:
                             label = item.getLabel().replace(valid, '')
                             item.setLabel(label)
                             item.select(False)
-                            self.data['site']["plugin_" + item.getProperty('sitename')]['active'] = "false"
+                            sPluginSettingsName = item.getProperty('sitename')
+                            self.sitesManager.setActive(sPluginSettingsName, False)
                         else:
                             label = ('%s %s') % (item.getLabel(), valid)
                             item.setLabel(label)
                             item.select(True)
-                            self.data['site']["plugin_" + item.getProperty('sitename')]['active'] = "true"
+                            sPluginSettingsName = item.getProperty('sitename')
+                            self.sitesManager.setActive(sPluginSettingsName, True)
                         return
 
                 def onFocus(self, controlId):

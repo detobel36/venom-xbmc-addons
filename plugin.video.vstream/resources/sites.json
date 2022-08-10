@@ -1,412 +1,493 @@
 {
-    "site": {
-        "plugin__1seriestreaming": {
+    "sites": {
+        "_1seriestreaming": {
             "label": "1 SerieStreaming",
-            "active": "true"
+            "active": "True",
+            "url": "https://1seriestreaming.com/"
         },
-        "plugin__33seriestreaming": {
+        "_33seriestreaming": {
             "label": "33 S\u00e9ries",
-            "active": "true"
+            "active": "True",
+            "url": "https://33seriestreaming.rip/"
         },
-        "plugin__4kstreamz": {
+        "_4kstreamz": {
             "label": "4kstreamz",
-            "active": "true"
+            "active": "True",
+            "url": "https://www.4kstreamz.net/"
         },
-        "plugin_adkami_com": {
+        "adkami_com": {
             "label": "Adkami",
-            "active": "true"
+            "active": "True",
+            "url": "https://www.adkami.com/"
         },
-        "plugin_alldebrid": {
+        "alldebrid": {
             "label": "AllDebrid",
-            "active": "true"
+            "active": "True"
         },
-        "plugin_animecomplet": {
+        "animecomplet": {
             "label": "AnimeComplet",
-            "active": "true"
+            "active": "True",
+            "url": "https://animecomplet.me/"
         },
-        "plugin_animeultime": {
+        "animeultime": {
             "label": "Anime Ultime",
-            "active": "true"
+            "active": "True",
+            "url": "http://www.anime-ultime.net/"
         },
-        "plugin_asia_insane": {
+        "asia_insane": {
             "label": "Asia Insane",
-            "active": "true"
+            "active": "True",
+            "url": "https://www.asia-insane.biz/"
         },
-        "plugin_buzzmonclick_com": {
+        "buzzmonclick_com": {
             "label": "BuzzMonClick",
-            "active": "true"
+            "active": "True",
+            "url": "https://buzzmonclick.net/category/replay-tv/"
         },
-        "plugin_channelstream": {
+        "channelstream": {
             "label": "ChannelStream",
-            "active": "true"
+            "active": "True",
+            "url": "https://channelstream.es"
         },
-        "plugin_cine974": {
+        "cine974": {
             "label": "cine974",
-            "active": "true"
+            "active": "True",
+            "url": "https://www.cine974.com/"
         },
-        "plugin_cinemay_cc": {
+        "cinemay_cc": {
             "label": "Cinemay_cc",
-            "active": "true"
+            "active": "True",
+            "url": "https://cinemay.cc/"
         },
-        "plugin_cinemay_com": {
+        "cinemay_com": {
             "label": "Cinemay",
-            "active": "true"
+            "active": "True",
+            "url": "https://cinemay.li/"
         },
-        "plugin_debrid_link": {
-            "label": "Debrid Link",
-            "active": "true"
-        },
-        "plugin_dbanimes": {
+        "dbanimes": {
             "label": "DBanimes",
-            "active": "true"
+            "active": "True",
+            "url": "https://dbanimes.co/"
         },
-        "plugin_ddl1": {
-            "label": "DDL1",
-            "active": "true"
+        "debrid_link": {
+            "label": "Debrid Link",
+            "active": "True",
+            "url": "https://debrid-link.fr"
         },
-        "plugin_docu_fr": {
+        "docu_fr": {
             "label": "Docu Fr",
-            "active": "true"
+            "active": "True",
+            "url": "https://documentaire.io/"
         },
-        "plugin_dpstream": {
+        "dpstream": {
             "label": "Dpstream",
-            "active": "true"
+            "active": "True",
+            "url": "https://dpstream.io/"
         },
-        "plugin_dpstreamhd": {
+        "dpstreamhd": {
             "label": "DpStream HD",
-            "active": "true"
+            "active": "True",
+            "url": "https://serie.dpstreamhd.com/"
         },
-        "plugin_ducine": {
+        "ducine": {
             "label": "Du Cin\u00e9",
-            "active": "true"
+            "active": "True",
+            "url": "https://www.ducine.site/"
         },
-        "plugin_enstream_series": {
+        "enstream_series": {
             "label": "Enstream (S\u00e9ries)",
-            "active": "true"
+            "active": "True",
+            "url": "https://www.enstream.cam/"
         },
-        "plugin_enstream": {
-            "label": "Enstream",
-            "active": "true"
-        },
-        "plugin_extreme_down": {
+        "extreme_down": {
             "label": "ExtremeDown",
-            "active": "true"
+            "active": "True",
+            "url": "https://www.extreme-down.plus/"
         },
-        "plugin_filmspourenfants": {
-            "label": "Films pour Enfants",
-            "active": "true"
-        },
-        "plugin_filmoflix": {
+        "filmoflix": {
             "label": "Filmoflix",
-            "active": "true"
+            "active": "True",
+            "url": "https://www.filmoflix.club/"
         },
-        "plugin_freebox": {
-            "label": "Freebox",
-            "active": "true"
+        "filmspourenfants": {
+            "label": "Films pour Enfants",
+            "active": "True",
+            "url": "https://films-pour-enfants.com/"
         },
-        "plugin_filmstoon_pro": {
+        "filmstoon_pro": {
             "label": "Films Toon",
-            "active": "true"
+            "active": "True",
+            "url": "https://filmstoon.in/"
         },
-        "plugin_filmstreamingy": {
+        "filmstreamingy": {
             "label": "FilmstreamingY",
-            "active": "true"
+            "active": "True",
+            "url": "https://wwv.le-streamingk.com/"
         },
-        "plugin_filmstreamvk_com": {
+        "filmstreamvk_com": {
             "label": "Filmstream vk",
-            "active": "true"
+            "active": "True",
+            "url": "https://filmstreamvk.bz/"
         },
-        "plugin_free_telechargement_org": {
+        "free_telechargement_org": {
             "label": "Free Telechargement",
-            "active": "true"
+            "active": "True",
+            "url": "https://www.free-telecharger.net/"
         },
-        "plugin_french_stream_com": {
+        "freebox": {
+            "label": "Freebox",
+            "active": "True",
+            "url": "http://mafreebox.freebox.fr/freeboxtv/playlist.m3u"
+        },
+        "french_stream_com": {
             "label": "French Stream",
-            "active": "true"
+            "active": "True",
+            "url": "https://www.french-streaming.in/"
         },
-        "plugin_french_stream_lol": {
+        "french_stream_lol": {
             "label": "French-stream-lol",
-            "active": "true"
+            "active": "True",
+            "url": "https://french-stream.re/"
         },
-        "plugin_frenchanimes": {
+        "frenchanimes": {
             "label": "French Animes",
-            "active": "true"
+            "active": "True",
+            "url": "https://french-anime.com/"
         },
-        "plugin_funeralforamanga": {
+        "fullmatchtv": {
+            "label": "Full Match TV",
+            "active": "True",
+            "url": "https://fullmatchtv.com/"
+        },
+        "funeralforamanga": {
             "label": "Funeral for a manga",
-            "active": "true"
+            "active": "True",
+            "url": "https://funeralforamanga.fr/"
         },
-        "plugin_fullmatchtv": {
-            "label": "Sport NBA",
-            "active": "true"
-        },
-        "plugin_gum_gum_streaming_com": {
+        "gum_gum_streaming_com": {
             "label": "Gum-Gum-Streaming",
-            "active": "true"
+            "active": "True",
+            "url": "https://gum-gum-streaming.com/"
         },
-        "plugin_hds_fm": {
+        "hds_fm": {
             "label": "Hds-fm",
-            "active": "true"
+            "active": "True",
+            "url": "https://www1.hds.fm/"
         },
-        "plugin_hds_stream": {
+        "hds_stream": {
             "label": "Hds-stream",
-            "active": "true"
+            "active": "True",
+            "url": "https://hds.club/"
         },
-        "plugin_ianime": {
+        "ianime": {
             "label": "Ianime",
-            "active": "true"
+            "active": "True",
+            "url": "https://www.ianimes.org/"
         },
-        "plugin_illimitestreaming": {
+        "illimitestreaming": {
             "label": "Illimitestreaming",
-            "active": "true"
+            "active": "True",
+            "url": "https://www.illimitestreaming.co/"
         },
-        "plugin_k_streaming": {
+        "k_streaming": {
             "label": "K_Streaming",
-            "active": "true"
+            "active": "True",
+            "url": "https://streaming-films.net/"
         },
-        "plugin_kaydo_ws": {
+        "kaydo_ws": {
             "label": "kaydo",
-            "active": "true"
+            "active": "True",
+            "url": "https://hdss.nu/"
         },
-        "plugin_kepliz_com": {
+        "kepliz_com": {
             "label": "Kepliz",
-            "active": "true"
+            "active": "True",
+            "url": "http://www.poblom.com/"
         },
-        "plugin_kstreamingfilm": {
+        "kstreamingfilm": {
             "label": "K streaming Film",
-            "active": "true"
+            "active": "True",
+            "url": "https://kstreamingfilm.com/"
         },
-        "plugin_kstreamingserie": {
+        "kstreamingserie": {
             "label": "K streaming S\u00e9rie",
-            "active": "true"
+            "active": "True",
+            "url": "https://www.kstreamingserie.com/"
         },
-        "plugin_les_debiles": {
+        "leet365": {
+            "label": "leet365",
+            "active": "True",
+            "url": "https://leet365.cc/vip2.php?d"
+        },
+        "les_debiles": {
             "label": "Les D\u00e9biles",
-            "active": "true"
+            "active": "True",
+            "url": "http://www.lesdebiles.com/"
         },
-        "plugin_les_docus": {
+        "les_docus": {
             "label": "Les docus",
-            "active": "true"
+            "active": "True",
+            "url": "https://www.les-docus.com/"
         },
-        "plugin_libertyland_tv": {
+        "libertyland_tv": {
             "label": "Libertyland",
-            "active": "true"
+            "active": "True",
+            "url": "https://www.libertyvf.one/"
         },
-        "plugin_livetv": {
+        "livetv": {
             "label": "Live TV",
-            "active": "true"
+            "active": "True",
+            "url": "http://livetv.sx"
         },
-        "plugin_lsdb": {
+        "lsdb": {
             "label": "Liveset Database",
-            "active": "true"
+            "active": "True",
+            "url": "https://lsdb.eu"
         },
-        "plugin_mamcin": {
+        "mamcin": {
             "label": "Mamcin",
-            "active": "true"
+            "active": "True",
+            "url": "https://www.mamcin.com/"
         },
-        "plugin_mesfilms": {
+        "mesfilms": {
             "label": "Mes Films",
-            "active": "true"
+            "active": "True",
+            "url": "https://mesfilms.net/"
         },
-        "plugin_mystream_zone": {
+        "mystream_zone": {
             "label": "MyStream",
-            "active": "true"
+            "active": "True",
+            "url": "https://www3.mystream.zone/"
         },
-        "plugin_neko_sama": {
+        "neko_sama": {
             "label": "Neko Sama",
-            "active": "true"
+            "active": "True",
+            "url": "https://neko-sama.fr/"
         },
-        "plugin_neuf_docu": {
+        "neuf_docu": {
             "label": "9Docu",
-            "active": "true"
+            "active": "True",
+            "url": "https://9docu.org/"
         },
-        "plugin_o1streaming": {
+        "o1streaming": {
             "label": "O1 streaming",
-            "active": "true"
+            "active": "True",
+            "url": "https://01streaming.tv/"
         },
-        "plugin_otaku_attitude": {
+        "otaku_attitude": {
             "label": "Otaku-Attitude",
-            "active": "true"
+            "active": "True",
+            "url": "https://www.otaku-attitude.net/"
         },
-        "plugin_otakufr_com": {
+        "otakufr_com": {
             "label": "OtakuFR",
-            "active": "true"
+            "active": "True",
+            "url": "https://otakufr.co/"
         },
-        "plugin_pastebin": {
+        "pastebin": {
             "label": "PasteBin",
-            "active": "true"
+            "active": "True",
+            "url": "https://pastebin.com/raw/"
         },
-        "plugin_planet_streaming": {
+        "planet_streaming": {
             "label": "Planet Streaming",
-            "active": "true"
+            "active": "True",
+            "url": "https://planet-streaming.xyz/"
         },
-        "plugin_pluto_tv": {
+        "pluto_tv": {
             "label": "Pluto TV",
-            "active": "true"
+            "active": "True",
+            "url": "https://api.pluto.tv"
         },
-        "plugin_psyplay": {
+        "psyplay": {
             "label": "Psy Play",
-            "active": "true"
+            "active": "True",
+            "url": "https://www.filmenstreaming.live/"
         },
-        "plugin_radio": {
+        "radio": {
             "label": "Radio",
-            "active": "true"
+            "active": "True",
+            "url": ""
         },
-        "plugin_serie_streaming": {
+        "serie_streaming": {
             "label": "S\u00e9rie Streaming",
-            "active": "true"
+            "active": "True",
+            "url": "https://serie-streaming.plus/"
         },
-        "plugin_series_en_streaming": {
+        "series_en_streaming": {
             "label": "Series en Streaming",
-            "active": "true"
+            "active": "True",
+            "url": "https://ww1.series-en-streaming.xyz/"
         },
-        "plugin_series_stream": {
+        "series_stream": {
             "label": "Series Stream",
-            "active": "true"
+            "active": "True",
+            "url": "https://wwv.series-stream.cc/"
         },
-        "plugin_siteonefichier": {
+        "siteonefichier": {
             "label": "Mon Compte 1Fichier",
-            "active": "true"
+            "active": "True",
+            "url": "https://1fichier.com/"
         },
-        "plugin_siteuptobox": {
+        "siteuptobox": {
             "label": "Mon Compte Uptobox",
-            "active": "true"
+            "active": "True",
+            "url": "https://uptobox.com/"
         },
-        "plugin_skyanimes": {
+        "skyanimes": {
             "label": "Sky-Animes",
-            "active": "true"
+            "active": "True",
+            "url": "http://www.sky-animes.com/"
         },
-        "plugin_sokrostream": {
-            "label": "Sokrostream",
-            "active": "true"
-        },
-        "plugin_spion_com": {
-            "label": "Spion",
-            "active": "true"
-        },
-        "plugin_streamonsport": {
-            "label": "Streamonsport",
-            "active": "true"
-        },
-        "plugin_stream_complet": {
+        "stream_complet": {
             "label": "Stream Complet",
-            "active": "true"
+            "active": "True",
+            "url": "https://w3.stream-complet.biz/"
         },
-        "plugin_streamay_series": {
-            "label": "StreamAy S\u00e9ries",
-            "active": "true"
-        },
-        "plugin_streamcomplet3": {
+        "streamcomplet3": {
             "label": "Streamcomplet3",
-            "active": "true"
+            "active": "True",
+            "url": "https://streamcomplet3.cc/"
         },
-        "plugin_streamdivx": {
+        "streamdivx": {
             "label": "StreamDivx",
-            "active": "true"
+            "active": "True",
+            "url": "https://wvvw.streamdivx.net/"
         },
-        "plugin_streaming_series": {
+        "streaming_series": {
             "label": "Streaming-Series",
-            "active": "true"
+            "active": "True",
+            "url": "https://streaming-series.la/"
         },
-        "plugin_streamingdivx": {
+        "streamingdivx": {
             "label": "StreamingDivx",
-            "active": "true"
+            "active": "True",
+            "url": "https://www.streamingdivx.tel/"
         },
-        "plugin_streaminz": {
+        "streaminz": {
             "label": "Streaminz",
-            "active": "true"
+            "active": "True",
+            "url": "https://www.streaminz.biz/"
         },
-        "plugin_streampourvous": {
+        "streamonsport": {
+            "label": "Streamonsport",
+            "active": "True",
+            "url": "https://streamonsport11.xyz/"
+        },
+        "streampourvous": {
             "label": "Streampourvous",
-            "active": "true"
+            "active": "True",
+            "url": "https://ww1.streampourvous.ws/"
         },
-        "plugin_telecharger_streaming": {
+        "telecharger_streaming": {
             "label": "T\u00e9l\u00e9charger-streaming",
-            "active": "true"
+            "active": "True",
+            "url": "https://telecharger-streaming.org/"
         },
-        "plugin_themoviedb_org": {
+        "themoviedb_org": {
             "label": "The Movie Database",
-            "active": "true"
+            "active": "True",
+            "url": "https://www.themoviedb.org/"
         },
-        "plugin_tirexo": {
+        "tirexo": {
             "label": "Tirexo",
-            "active": "true"
+            "active": "True",
+            "url": "https://www2.tirexo.art/"
         },
-        "plugin_topimdb": {
-            "label": "Top IMDB",
-            "active": "true"
-        },
-        "plugin_toonanime": {
+        "toonanime": {
             "label": "Toonanime",
-            "active": "true"
+            "active": "True",
+            "url": "https://vvww.toonanime.cc/"
         },
-        "plugin_topreplay": {
+        "topimdb": {
+            "label": "Top IMDB",
+            "active": "True",
+            "url": "https://www.imdb.com/"
+        },
+        "topreplay": {
             "label": "TopReplay",
-            "active": "true"
+            "active": "True",
+            "url": "https://wvw.topreplay.cc/"
         },
-        "plugin_vf_film": {
+        "vf_film": {
             "label": "VF Film",
-            "active": "true"
+            "active": "True",
+            "url": "https://vf-film.co/"
         },
-        "plugin_vf_serie": {
+        "vf_serie": {
             "label": "VF S\u00e9rie",
-            "active": "true"
+            "active": "True",
+            "url": "https://vf-serie.site/"
         },
-        "plugin_vfilms": {
+        "vfilms": {
             "label": "VFilms",
-            "active": "true"
+            "active": "True",
+            "url": "https://www.vfilms.club/"
         },
-        "plugin_videobuzzy_com": {
+        "videobuzzy_com": {
             "label": "Videobuzzy",
-            "active": "true"
+            "active": "True",
+            "url": "https://www.videobuzzy.com/"
         },
-        "plugin_viki_com": {
+        "viki_com": {
             "label": "Viki",
-            "active": "true"
+            "active": "True",
+            "url": "https://www.viki.com/"
         },
-        "plugin_voiranime": {
+        "voiranime": {
             "label": "voiranime",
-            "active": "true"
+            "active": "True",
+            "url": "https://voiranime.com/"
         },
-        "plugin_voirfilms_org": {
+        "voirfilms_org": {
             "label": "VoirFilms",
-            "active": "true"
+            "active": "True",
+            "url": "https://www.voir-films.info/"
         },
-        "plugin_voirseries_best": {
+        "voirseries_best": {
             "label": "VoirSeries",
-            "active": "true"
+            "active": "True",
+            "url": "https://voirseries.io/"
         },
-        "plugin_vostfree": {
+        "vostfree": {
             "label": "Vostfree",
-            "active": "true"
+            "active": "True",
+            "url": "https://vostfree.tv/"
         },
-        "plugin_watchvf": {
+        "watchvf": {
             "label": "WatchVF",
-            "active": "true"
+            "active": "True",
+            "url": "https://watchvf.com/"
         },
-        "plugin_wawacity": {
+        "wawacity": {
             "label": "Wawacity",
-            "active": "true"
+            "active": "True",
+            "url": "https://www.wawacity.blue/"
         },
-        "plugin_wiflix": {
+        "wiflix": {
             "label": "WiFlix",
-            "active": "true"
+            "active": "True",
+            "url": "https://wiflix.city/"
         },
-        "plugin_youtitou_com": {
+        "youtitou_com": {
             "label": "YouTitou (Anim\u00e9s)",
-            "active": "true"
+            "active": "True",
+            "url": "https://youtitou.com/"
         },
-        "plugin_zone_streaming": {
+        "zone_streaming": {
             "label": "Zone Streaming",
-            "active": "true"
+            "active": "True",
+            "url": "http://www.zone-streaming.fr/"
         },
-        "plugin_zone_telechargement_ws": {
+        "zone_telechargement_ws": {
             "label": "Zone T\u00e9l\u00e9chargement.ws",
-            "active": "true"
+            "active": "True",
+            "url": "https://www.zone-telechargement.cam/"
         },
-        "plugin_zustream": {
+        "zustream": {
             "label": "ZuStream",
-            "active": "true"
+            "active": "True",
+            "url": "https://www.zustream.info/"
         }
     }
 }

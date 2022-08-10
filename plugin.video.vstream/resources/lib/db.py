@@ -37,7 +37,12 @@ class cDb(object):
             self.db = sqlite.connect(REALDB)
             self.db.row_factory = sqlite.Row
             self.dbcur = self.db.cursor()
-            if self.dbcur.rowcount == -1:
+
+            self.dbcur.execute("""
+                SELECT name, sql FROM sqlite_master
+                WHERE type='table'
+                ORDER BY name;""")
+            if self.dbcur.fetchone() is None:
                 self._create_tables()
             return self
             
@@ -65,9 +70,6 @@ class cDb(object):
                      "title TEXT, "\
                      "disp TEXT, "\
                      "icone TEXT, "\
-                     "isfolder TEXT, "\
-                     "level TEXT, "\
-                     "lastwatched TIMESTAMP "", "\
                      "UNIQUE(title)"\
                      ");"
         self.dbcur.execute(sql_create)
@@ -181,7 +183,7 @@ class cDb(object):
             pass
 
     def get_history(self):
-        sql_select = 'SELECT * FROM history'
+        sql_select = 'SELECT * FROM history ORDER BY addon_id DESC'
 
         try:
             self.dbcur.execute(sql_select)

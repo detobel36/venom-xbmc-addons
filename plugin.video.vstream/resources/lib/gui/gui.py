@@ -3,8 +3,10 @@
 import xbmcplugin
 import xbmc
 import json
+import threading
+import copy
 
-from resources.lib.comaddon import listitem, addon, dialog, window, isKrypton, isNexus
+from resources.lib.comaddon import listitem, addon, dialog, window, isKrypton, isNexus, progress, VSlog
 from resources.lib.gui.contextElement import cContextElement
 from resources.lib.gui.guiElement import cGuiElement
 from resources.lib.handler.inputParameterHandler import cInputParameterHandler
@@ -18,11 +20,15 @@ class cGui:
 
     SITE_NAME = 'cGui'
     CONTENT = 'files'
-    searchResults = []
     listing = []
+    thread_listing = []
     episodeListing = []  # Pour gérer l'enchainement des episodes
     ADDON = addon()
     displaySeason = addon().getSetting('display_season_title')
+
+    # Gérer les résultats de la recherche
+    searchResults = {}
+    searchResultsSemaphore = threading.Semaphore()
 
     if isKrypton():
         CONTENT = 'addons'
@@ -66,7 +72,8 @@ class cGui:
             oOutputParameterHandler.addParameter('sMeta', sMeta)
             oGuiElement.setMeta(sMeta)
 
-        # Si pas d'id TMDB on recupère le précedent
+        # Si pas d'id TMDB pour un episode, on recupère le précédent qui vient de la série
+        # if Type == 'episodes':
         if not oOutputParameterHandler.getValue('sTmdbId'):
             oInputParameterHandler = cInputParameterHandler()
             sTmdbID = oInputParameterHandler.getValue('sTmdbId')
@@ -93,8 +100,8 @@ class cGui:
 
         try:
             return self.addFolder(oGuiElement, oOutputParameterHandler)
-        except Exception as e:
-            pass
+        except Exception as error:
+            VSlog("addNewDir error: " + str(error))
 
     #    Categorie       Meta          sCat     CONTENT
     #    Film            1             1        movies
@@ -159,10 +166,6 @@ class cGui:
         if not oOutputParameterHandler.getValue('sLang'):
             oOutputParameterHandler.addParameter('sLang', oInputParameterHandler.getValue('sLang'))
 
-        # Affichage du pourcentage de lecture en cours, non utilisé car pas très economique au niveau des liens lorsqu'il y en a beaucoup
-        # oOutputParameterHandler.addParameter('ResumeTime', oInputParameterHandler.getValue('ResumeTime'))
-        # oOutputParameterHandler.addParameter('TotalTime', oInputParameterHandler.getValue('TotalTime'))
-
         sIcon = sThumbnail
         return self.addNewDir('link', sId, sFunction, sLabel, sIcon, sThumbnail, sDesc, oOutputParameterHandler, 0, None)
 
@@ -175,7 +178,6 @@ class cGui:
         return self.addNewDir('seasons', sId, sFunction, sLabel, sIcon, sThumbnail, sDesc, oOutputParameterHandler, 5, 4)
 
     def addEpisode(self, sId, sFunction, sLabel, sIcon, sThumbnail, sDesc, oOutputParameterHandler=''):
-
         # Pour gérer l'enchainement des épisodes, l'URL de la saison
         oInputParameterHandler = cInputParameterHandler()
         saisonUrl = oInputParameterHandler.getValue('saisonUrl')
@@ -222,7 +224,6 @@ class cGui:
         return self.addText(sId)
 
     def addText(self, sId, sLabel='', sIcon='none.png'):
-
         # Pas de texte lors des recherches globales
         if window(10101).getProperty('search') == 'true':
             return
@@ -242,13 +243,12 @@ class cGui:
 
     # afficher les liens non playable
     def addFolder(self, oGuiElement, oOutputParameterHandler='', _isFolder=True):
-        if _isFolder == False:
+        if _isFolder is False:
             cGui.CONTENT = 'files'
 
         # recherche append les reponses
         if window(10101).getProperty('search') == 'true':
-            import copy
-            cGui.searchResults.append({'guiElement': oGuiElement, 'params': copy.deepcopy(oOutputParameterHandler)})
+            self.addSearchResult(oGuiElement, oOutputParameterHandler)
             return
 
         # Des infos a rajouter ?
@@ -270,11 +270,6 @@ class cGui:
 
         oListItem = self.createListItem(oGuiElement)
 
-        if _isFolder == False:
-            oListItem.setProperty('IsPlayable', 'true')
-        else:
-            oListItem.setProperty('IsPlayable', 'false')
-
         sCat = oGuiElement.getCat()
         if sCat:
             cGui.sCat = sCat
@@ -286,7 +281,8 @@ class cGui:
 
         oListItem = self.__createContextMenu(oGuiElement, oListItem)
 
-        if _isFolder == True:
+        if _isFolder is True:
+            # oListItem.setProperty('IsPlayable', 'true')
             if sCat:    # 1 = movies, moviePack; 2 = series, animes, episodes; 5 = MISC
                 if oGuiElement.getMeta():
                     self.createContexMenuinfo(oGuiElement, oOutputParameterHandler)
@@ -304,6 +300,7 @@ class cGui:
                 if sCat != 6:
                     self.createContexMenuWatch(oGuiElement, oOutputParameterHandler)
         else:
+            oListItem.setProperty('IsPlayable', 'true')
             self.createContexMenuWatch(oGuiElement, oOutputParameterHandler)
 
         oListItem = self.__createContextMenu(oGuiElement, oListItem)
@@ -313,7 +310,29 @@ class cGui:
         oOutputParameterHandler.clearParameter()
         return oListItem
 
+
     def createListItem(self, oGuiElement):
+        
+        # Récupération des metadonnées par thread
+        if oGuiElement.getMeta() and oGuiElement.getMetaAddon() == 'true':
+            return self.createListItemThread(oGuiElement)
+        
+        # pas de meta, appel direct
+        return self._createListItem(oGuiElement)
+        
+        
+    # Utilisation d'un Thread pour un chargement des metas en parallèle
+    def createListItemThread(self, oGuiElement):
+        itemTitle = oGuiElement.getTitle()
+        oListItem = listitem(itemTitle)
+        t = threading.Thread(target = self._createListItem, args=(oGuiElement,oListItem))
+        self.thread_listing.append(t)
+        t.start()
+        return oListItem
+
+
+    def _createListItem(self, oGuiElement, oListItem = None):
+        
         # Enleve les elements vides
         data = {key: val for key, val in oGuiElement.getItemValues().items() if val != ""}
 
@@ -321,7 +340,7 @@ class cGui:
 
         # Formatage nom episode
         sCat = oGuiElement.getCat()
-        if sCat and int(sCat)== 8:  # Nom de l'épisode
+        if sCat and int(sCat) == 8:  # Nom de l'épisode
             try:
                 if 'tagline' in data and data['tagline']:
                     episodeTitle = data['tagline']
@@ -346,7 +365,8 @@ class cGui:
             # Convertion en seconde, utile pour le lien final.
             data['duration'] = (sum(x * int(t) for x, t in zip([1, 60, 3600], reversed(data.get('duration', '').split(":")))))
 
-        oListItem = listitem(itemTitle)
+        if not oListItem:
+            oListItem = listitem(itemTitle)
 
         if data.get('cast'):
             credits = json.loads(data['cast'])
@@ -356,8 +376,6 @@ class cGui:
                     data['cast'].append(xbmc.Actor(i['name'], i['character'], i['order'], i.get('thumbnail', "")))
                 else:
                     data['cast'].append((i['name'], i['character'], i['order'], i.get('thumbnail', "")))
-        else:
-            credits = None
 
         if not isNexus():
             # voir : https://kodi.wiki/view/InfoLabels
@@ -532,7 +550,7 @@ class cGui:
         return oListItem
 
     def __createItemUrl(self, oGuiElement, oOutputParameterHandler=''):
-        if (oOutputParameterHandler == ''):
+        if oOutputParameterHandler == '':
             oOutputParameterHandler = cOutputParameterHandler()
 
         # On descend l'id TMDB dans les saisons et les épisodes
@@ -546,7 +564,7 @@ class cGui:
 
         sPluginPath = cPluginHandler().getPluginPath()
 
-        if (len(oGuiElement.getFunction()) == 0):
+        if len(oGuiElement.getFunction()) == 0:
             sItemUrl = '%s?site=%s&title=%s&%s' % (sPluginPath, oGuiElement.getSiteName(), QuotePlus(oGuiElement.getCleanTitle()), sParams)
         else:
             sItemUrl = '%s?site=%s&function=%s&title=%s&%s' % (sPluginPath, oGuiElement.getSiteName(), oGuiElement.getFunction(), QuotePlus(oGuiElement.getCleanTitle()), sParams)
@@ -559,6 +577,18 @@ class cGui:
         if not self.listing:
             self.addText('cGui')
 
+        # attendre l'arret des thread utilisés pour récupérer les métadonnées
+        total = len(self.thread_listing)
+        if total>0 :
+            progress_ = progress().VScreate(addon().VSlang(30141))
+            for thread in self.thread_listing:
+                progress_.VSupdate(progress_, total)
+                thread.join(100)
+            progress_.VSclose(progress_)
+
+
+        del self.thread_listing[:]
+        
         xbmcplugin.addDirectoryItems(iHandler, self.listing, len(self.listing))
         xbmcplugin.setPluginCategory(iHandler, '')
         xbmcplugin.setContent(iHandler, cGui.CONTENT)
@@ -573,7 +603,7 @@ class cGui:
             xbmc.executebuiltin('Container.SetViewMode(' + str(forceViewMode) + ')')
         else:
             if self.ADDON.getSetting('active-view') == 'true':
-                if cGui.CONTENT == 'movies' or  cGui.CONTENT == 'artists':
+                if cGui.CONTENT == 'movies' or cGui.CONTENT == 'artists':
                     # xbmc.executebuiltin('Container.SetViewMode(507)')
                     xbmc.executebuiltin('Container.SetViewMode(%s)' % self.ADDON.getSetting('movies-view'))
                 elif cGui.CONTENT in ['tvshows', 'seasons', 'episodes']:
@@ -738,16 +768,18 @@ class cGui:
         keyboard = xbmc.Keyboard(sDefaultText)
         keyboard.setHeading(heading)
         keyboard.doModal()
-        if (keyboard.isConfirmed()):
+        if keyboard.isConfirmed():
             sSearchText = keyboard.getText()
             if (len(sSearchText)) > 0:
                 return sSearchText
 
         return False
 
-    def showNumBoard(self, sDefaultNum=''):
+    def showNumBoard(self, sTitle="", sDefaultNum=''):
         dialogs = dialog()
-        numboard = dialogs.numeric(0, self.ADDON.VSlang(30019), sDefaultNum)
+        if not sTitle:
+            sTitle = self.ADDON.VSlang(30019)
+        numboard = dialogs.numeric(0, sTitle, sDefaultNum)
         # numboard.doModal()
         if numboard is not None:
             return numboard
@@ -765,3 +797,27 @@ class cGui:
 
     def showInfo(self, sTitle, sDescription, iSeconds=0):
         return False
+
+    def getSearchResult(self):
+        cGui.searchResultsSemaphore.acquire()
+        result = copy.deepcopy(cGui.searchResults)
+        cGui.searchResultsSemaphore.release()
+        return result
+
+    def addSearchResult(self, oGuiElement, oOutputParameterHandler):
+        cGui.searchResultsSemaphore.acquire()
+        searchSiteId = oOutputParameterHandler.getValue('searchSiteId')
+        if not searchSiteId:
+            searchSiteId = oGuiElement.getSiteName()
+
+        if searchSiteId not in cGui.searchResults:
+            cGui.searchResults[searchSiteId] = []
+
+        cGui.searchResults[searchSiteId].append({'guiElement': oGuiElement,
+            'params': copy.deepcopy(oOutputParameterHandler)})
+        cGui.searchResultsSemaphore.release()
+
+    def resetSearchResult(self):
+        cGui.searchResultsSemaphore.acquire()
+        cGui.searchResults = {}
+        cGui.searchResultsSemaphore.release()
