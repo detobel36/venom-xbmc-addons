@@ -4,7 +4,7 @@
 import re
 
 from resources.lib.gui.hoster import cHosterGui
-from resources.lib.gui.gui import cGui
+from resources.lib.gui.gui import Gui
 from resources.lib.handler.inputParameterHandler import cInputParameterHandler
 from resources.lib.handler.outputParameterHandler import cOutputParameterHandler
 from resources.lib.handler.requestHandler import cRequestHandler
@@ -29,7 +29,7 @@ NETS_CATS = (True, 'showGenres')
 
 
 def load():
-    oGui = cGui()
+    oGui = Gui()
 
     oOutputParameterHandler = cOutputParameterHandler()
     oOutputParameterHandler.addParameter('siteUrl', 'http://venom/')
@@ -48,7 +48,7 @@ def load():
 
 
 def showSearch():
-    oGui = cGui()
+    oGui = Gui()
 
     sSearchText = oGui.showKeyBoard()
     if sSearchText:
@@ -59,7 +59,7 @@ def showSearch():
 
 
 def showGenre():
-    oGui = cGui()
+    oGui = Gui()
 
     liste = [['Nouveautés', 'videos-s0-1'], ['Top Vues', 'videos-s1-1'], ['Top Vote', 'videos-s2-1'],
              ['Hit Parade', 'videos-s5-1'], ['Fatality', 'videos-s7-1'], ['Vidéos Longues', 'videos-s3-1']]
@@ -73,7 +73,7 @@ def showGenre():
 
 
 def showGenres():
-    oGui = cGui()
+    oGui = Gui()
     oParser = cParser()
     oRequestHandler = cRequestHandler(URL_MAIN + 'categories.html')
     sHtmlContent = oRequestHandler.request()
@@ -95,7 +95,7 @@ def showGenres():
 
 
 def showMovies(sSearch=''):
-    oGui = cGui()
+    oGui = Gui()
     oParser = cParser()
 
     if sSearch:
@@ -159,7 +159,7 @@ def __checkForNextPage(sHtmlContent):
 
 
 def showHosters():
-    oGui = cGui()
+    oGui = Gui()
     oParser = cParser()
     oInputParameterHandler = cInputParameterHandler()
     sUrl = oInputParameterHandler.getValue('siteUrl')

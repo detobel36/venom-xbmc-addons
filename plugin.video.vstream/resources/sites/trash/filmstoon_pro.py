@@ -5,7 +5,7 @@ from resources.lib.parser import cParser
 from resources.lib.handler.requestHandler import cRequestHandler
 from resources.lib.handler.outputParameterHandler import cOutputParameterHandler
 from resources.lib.handler.inputParameterHandler import cInputParameterHandler
-from resources.lib.gui.gui import cGui
+from resources.lib.gui.gui import Gui
 from resources.lib.gui.hoster import cHosterGui
 from resources.lib.comaddon import progress
 import base64
@@ -40,7 +40,7 @@ URL_SEARCH_SERIES = (key_search_series, 'showSearch')
 
 
 def load():
-    oGui = cGui()
+    oGui = Gui()
 
     oOutputParameterHandler = cOutputParameterHandler()
     oOutputParameterHandler.addParameter('siteUrl', URL_SEARCH_MOVIES[0])
@@ -73,7 +73,7 @@ def load():
 
 
 def showSearch():
-    oGui = cGui()
+    oGui = Gui()
     oInputParameterHandler = cInputParameterHandler()
     sUrl = oInputParameterHandler.getValue('siteUrl')
     sSearchText = oGui.showKeyBoard()
@@ -85,7 +85,7 @@ def showSearch():
 
 
 def showGenres():
-    oGui = cGui()
+    oGui = Gui()
     # https://filmstoon.in/genre/action/
 
     liste = []
@@ -106,7 +106,7 @@ def showGenres():
 
 
 def showYears():
-    oGui = cGui()
+    oGui = Gui()
     # https://filmstoon.in/release-year/2020/
     oOutputParameterHandler = cOutputParameterHandler()
     for i in reversed(range(1935, 2023)):
@@ -117,7 +117,7 @@ def showYears():
 
 
 def showMovies(sSearch=''):
-    oGui = cGui()
+    oGui = Gui()
 
     bSearchMovie = False
     bSearchSerie = False
@@ -261,7 +261,7 @@ def __checkForNextPage(shtml, surl):
 
 
 def showSaison():
-    oGui = cGui()
+    oGui = Gui()
 
     oInputParameterHandler = cInputParameterHandler()
     sUrl = oInputParameterHandler.getValue('siteUrl')
@@ -303,7 +303,7 @@ def showSaison():
 
 
 def showSXE():
-    oGui = cGui()
+    oGui = Gui()
 
     oInputParameterHandler = cInputParameterHandler()
     sUrl = oInputParameterHandler.getValue('siteUrl')
@@ -345,7 +345,7 @@ def showSXE():
 
 
 def showHosters():
-    oGui = cGui()
+    oGui = Gui()
 
     oInputParameterHandler = cInputParameterHandler()
     sUrl = oInputParameterHandler.getValue('siteUrl')

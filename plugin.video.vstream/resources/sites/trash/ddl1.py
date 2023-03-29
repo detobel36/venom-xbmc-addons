@@ -6,7 +6,7 @@ from resources.lib.parser import cParser
 from resources.lib.handler.requestHandler import cRequestHandler
 from resources.lib.handler.outputParameterHandler import cOutputParameterHandler
 from resources.lib.handler.inputParameterHandler import cInputParameterHandler
-from resources.lib.gui.gui import cGui
+from resources.lib.gui.gui import Gui
 from resources.lib.gui.hoster import cHosterGui
 import base64
 import requests
@@ -74,7 +74,7 @@ FILM_ANIMS = (URL_MAIN + 'dessin-anime-mangas/films-mangas/', 'showMovies')
 
 
 def load():
-    oGui = cGui()
+    oGui = Gui()
 
     oOutputParameterHandler = cOutputParameterHandler()
     oOutputParameterHandler.addParameter('siteUrl', 'http://venom/')
@@ -90,7 +90,7 @@ def load():
 
 
 def showMenuMovies():
-    oGui = cGui()
+    oGui = Gui()
 
     oOutputParameterHandler = cOutputParameterHandler()
     oOutputParameterHandler.addParameter('siteUrl', URL_SEARCH_MOVIES[0])
@@ -153,7 +153,7 @@ def showMenuMovies():
 
 
 def showMenuSeries():
-    oGui = cGui()
+    oGui = Gui()
 
     oOutputParameterHandler = cOutputParameterHandler()
     oOutputParameterHandler.addParameter('siteUrl', URL_SEARCH_SERIES[0])
@@ -202,7 +202,7 @@ def showMenuSeries():
 
 
 def showMenuMangas():
-    oGui = cGui()
+    oGui = Gui()
 
     oOutputParameterHandler = cOutputParameterHandler()
     oOutputParameterHandler.addParameter('siteUrl', URL_SEARCH_ANIMS[0])
@@ -221,7 +221,7 @@ def showMenuMangas():
 
 
 def showSearch():
-    oGui = cGui()
+    oGui = Gui()
     oInputParameterHandler = cInputParameterHandler()
     sUrl = oInputParameterHandler.getValue('siteUrl')
 
@@ -234,7 +234,7 @@ def showSearch():
 
 
 def showGenre():
-    oGui = cGui()
+    oGui = Gui()
 
     listeGenres = ['action', 'animation', 'arts-martiaux', 'aventure', 'biopic', 'comédie-dramatique',
                    'comédie-musicale', 'comédie', 'divers', 'documentaire', 'drame', 'epouvante-horreur', 'espionnage',
@@ -250,7 +250,7 @@ def showGenre():
 
 
 def showYears():
-    oGui = cGui()
+    oGui = Gui()
 
     oOutputParameterHandler = cOutputParameterHandler()
     oOutputParameterHandler.addParameter('siteUrl', MOVIE_2010[0])
@@ -281,7 +281,7 @@ def showYears():
 
 
 def showMovies(sSearch=''):
-    oGui = cGui()
+    oGui = Gui()
     oParser = cParser()
     oInputParameterHandler = cInputParameterHandler()
     sUrl = oInputParameterHandler.getValue('siteUrl')
@@ -424,7 +424,7 @@ def __checkForNextPage(sUrl, sHtmlContent):
 
 
 def showMoviesLinks():
-    oGui = cGui()
+    oGui = Gui()
     oParser = cParser()
     oInputParameterHandler = cInputParameterHandler()
     sMovieTitle = oInputParameterHandler.getValue('sMovieTitle')
@@ -490,7 +490,7 @@ def showMoviesLinks():
 
 
 def showHosters():
-    oGui = cGui()
+    oGui = Gui()
     oInputParameterHandler = cInputParameterHandler()
     sMovieTitle = oInputParameterHandler.getValue('sMovieTitle')
     sUrl = oInputParameterHandler.getValue('siteUrl')
@@ -571,7 +571,7 @@ def showSeriesHosters():
     aResult = oParser.parse(sHtmlContent, sPattern)
 
     if aResult[0]:
-        oGui = cGui()
+        oGui = Gui()
         oOutputParameterHandler = cOutputParameterHandler()
         for aEntry in aResult[1]:
             if aEntry[0]:
@@ -610,7 +610,7 @@ def showSeriesHosters():
 
 
 def Display_protected_link():
-    oGui = cGui()
+    oGui = Gui()
     oInputParameterHandler = cInputParameterHandler()
     sMovieTitle = oInputParameterHandler.getValue('sMovieTitle')
     sUrl = oInputParameterHandler.getValue('siteUrl')

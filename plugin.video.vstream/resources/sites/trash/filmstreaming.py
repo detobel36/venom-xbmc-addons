@@ -7,7 +7,7 @@ from resources.lib.handler.requestHandler import cRequestHandler
 from resources.lib.handler.outputParameterHandler import cOutputParameterHandler
 from resources.lib.handler.inputParameterHandler import cInputParameterHandler
 from resources.lib.gui.hoster import cHosterGui
-from resources.lib.gui.gui import cGui
+from resources.lib.gui.gui import Gui
 from resources.lib.comaddon import progress  # , VSlog
 import re
 import base64
@@ -31,7 +31,7 @@ URL_SEARCH_MOVIES = (URL_SEARCH[0], 'showMovies')
 
 
 def load():
-    oGui = cGui()
+    oGui = Gui()
 
     oOutputParameterHandler = cOutputParameterHandler()
     oOutputParameterHandler.addParameter('siteUrl', 'http://venom/')
@@ -57,7 +57,7 @@ def load():
 
 
 def showSearch():
-    oGui = cGui()
+    oGui = Gui()
     sSearchText = oGui.showKeyBoard()
     if (sSearchText):
         sSearch = URL_SEARCH[0] + sSearchText.replace(' ', '+')
@@ -67,7 +67,7 @@ def showSearch():
 
 
 def showSearchOld():
-    oGui = cGui()
+    oGui = Gui()
     sSearchText = oGui.showKeyBoard()
     if (sSearchText):
         showSearchMovies(sSearchText)
@@ -76,7 +76,7 @@ def showSearchOld():
 
 
 def showSearchMovies(sSearch=''):
-    oGui = cGui()
+    oGui = Gui()
 
     sSearch = Unquote(sSearch)
     sUrl2 = URL_MAIN + 'wp-admin/admin-ajax.php'
@@ -124,7 +124,7 @@ def showSearchMovies(sSearch=''):
 
 
 def showGenres():
-    oGui = cGui()
+    oGui = Gui()
     oParser = cParser()
     oRequestHandler = cRequestHandler(MOVIE_NEWS[0])
     sHtmlContent = oRequestHandler.request()
@@ -147,7 +147,7 @@ def showGenres():
 
 
 def AlphaSearch():
-    oGui = cGui()
+    oGui = Gui()
 
     for i in range(0, 27):
         if (i == 0):
@@ -170,7 +170,7 @@ def AlphaSearch():
 
 
 def showList():
-    oGui = cGui()
+    oGui = Gui()
     oParser = cParser()
 
     oInputParameterHandler = cInputParameterHandler()
@@ -234,7 +234,7 @@ def showList():
 
 
 def showMovies(sSearch=''):
-    oGui = cGui()
+    oGui = Gui()
     oParser = cParser()
 
     if sSearch:
@@ -311,7 +311,7 @@ def __checkForNextPage(sHtmlContent):
 
 
 def showHosters():
-    oGui = cGui()
+    oGui = Gui()
     oInputParameterHandler = cInputParameterHandler()
     sUrl = oInputParameterHandler.getValue('siteUrl')
     sMovieTitle = oInputParameterHandler.getValue('sMovieTitle')

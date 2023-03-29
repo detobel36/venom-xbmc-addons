@@ -5,7 +5,7 @@
 import re
 
 from resources.lib.gui.hoster import cHosterGui
-from resources.lib.gui.gui import cGui
+from resources.lib.gui.gui import Gui
 from resources.lib.handler.inputParameterHandler import cInputParameterHandler
 from resources.lib.handler.outputParameterHandler import cOutputParameterHandler
 from resources.lib.handler.requestHandler import cRequestHandler
@@ -36,7 +36,7 @@ FUNCTION_SEARCH = 'showMovies'
 
 
 def load():
-    oGui = cGui()
+    oGui = Gui()
 
     oOutputParameterHandler = cOutputParameterHandler()
     oOutputParameterHandler.addParameter('siteUrl', URL_SEARCH[0])
@@ -61,7 +61,7 @@ def load():
 
 
 def showMenuMovies():
-    oGui = cGui()
+    oGui = Gui()
 
     oOutputParameterHandler = cOutputParameterHandler()
     oOutputParameterHandler.addParameter('siteUrl', URL_SEARCH_MOVIES[0])
@@ -83,7 +83,7 @@ def showMenuMovies():
 
 
 def showMenuTvShows():
-    oGui = cGui()
+    oGui = Gui()
 
     oOutputParameterHandler = cOutputParameterHandler()
     oOutputParameterHandler.addParameter('siteUrl', URL_SEARCH_SERIES[0])
@@ -96,7 +96,7 @@ def showMenuTvShows():
 
 
 def showSearch():
-    oGui = cGui()
+    oGui = Gui()
     sSearchText = oGui.showKeyBoard()
     if sSearchText:
         sUrl = URL_SEARCH[0] + sSearchText.replace(' ', '+')
@@ -106,7 +106,7 @@ def showSearch():
 
 
 def showGenres():
-    oGui = cGui()
+    oGui = Gui()
     oInputParameterHandler = cInputParameterHandler()
     sUrl = oInputParameterHandler.getValue('siteUrl')
 
@@ -132,7 +132,7 @@ def showGenres():
 
 
 def showMovieYears():
-    oGui = cGui()
+    oGui = Gui()
     oParser = cParser()
     oRequestHandler = cRequestHandler(URL_MAIN)
     sHtmlContent = oRequestHandler.request()
@@ -155,7 +155,7 @@ def showMovieYears():
 
 
 def showMovies(sSearch=''):
-    oGui = cGui()
+    oGui = Gui()
     oParser = cParser()
     oInputParameterHandler = cInputParameterHandler()
     sUrl = oInputParameterHandler.getValue('siteUrl')
@@ -250,7 +250,7 @@ def __checkForNextPage(sHtmlContent):
 
 
 def showSxE():
-    oGui = cGui()
+    oGui = Gui()
     oInputParameterHandler = cInputParameterHandler()
     sUrl = oInputParameterHandler.getValue('siteUrl')
     sThumb = oInputParameterHandler.getValue('sThumb')
@@ -294,7 +294,7 @@ def showSxE():
 
 
 def showHosters():
-    oGui = cGui()
+    oGui = Gui()
     oParser = cParser()
     oInputParameterHandler = cInputParameterHandler()
     sUrl = oInputParameterHandler.getValue('siteUrl')
@@ -331,7 +331,7 @@ def showHosters():
 
 
 def showSeriesHosters():
-    oGui = cGui()
+    oGui = Gui()
     oParser = cParser()
     oInputParameterHandler = cInputParameterHandler()
     sUrl = oInputParameterHandler.getValue('siteUrl')
@@ -372,7 +372,7 @@ def showSeriesHosters():
 
 
 def showLink():
-    oGui = cGui()
+    oGui = Gui()
     oParser = cParser()
     oInputParameterHandler = cInputParameterHandler()
     sUrl = oInputParameterHandler.getValue('siteUrl')

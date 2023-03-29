@@ -4,7 +4,7 @@
 import re
 
 from resources.lib.comaddon import siteManager
-from resources.lib.gui.gui import cGui
+from resources.lib.gui.gui import Gui
 from resources.lib.gui.hoster import cHosterGui
 from resources.lib.handler.inputParameterHandler import cInputParameterHandler
 from resources.lib.handler.outputParameterHandler import cOutputParameterHandler
@@ -36,7 +36,7 @@ channels = {
 
 
 def load():
-    oGui = cGui()
+    oGui = Gui()
 
     oOutputParameterHandler = cOutputParameterHandler()
 
@@ -50,7 +50,7 @@ def load():
 
 
 def showTV():
-    oGui = cGui()
+    oGui = Gui()
 
     sUrl = URL_MAIN + '/cast/stream-%d.php'
     chaines = [116, 117, 118, 119, 120, 121, 122]
@@ -69,7 +69,7 @@ def showTV():
 
 
 def showGenres():
-    oGui = cGui()
+    oGui = Gui()
 
     sUrl = URL_MAIN
     oRequestHandler = cRequestHandler(sUrl)
@@ -112,7 +112,7 @@ def showGenres():
 
 
 def showMovies():
-    oGui = cGui()
+    oGui = Gui()
     oParser = cParser()
     sUrl = URL_MAIN
 
@@ -147,7 +147,7 @@ def showMovies():
 
 
 def showHoster():
-    oGui = cGui()
+    oGui = Gui()
     oParser = cParser()
     urlMain = URL_MAIN
 
@@ -191,7 +191,7 @@ def showHoster():
 
 
 def showLink():
-    oGui = cGui()
+    oGui = Gui()
 
     oInputParameterHandler = cInputParameterHandler()
     sUrl = oInputParameterHandler.getValue('siteUrl')

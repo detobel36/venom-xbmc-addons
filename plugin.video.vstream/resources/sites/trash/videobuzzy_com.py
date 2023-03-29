@@ -5,7 +5,7 @@ from resources.lib.parser import cParser
 from resources.lib.handler.requestHandler import cRequestHandler
 from resources.lib.handler.outputParameterHandler import cOutputParameterHandler
 from resources.lib.handler.inputParameterHandler import cInputParameterHandler
-from resources.lib.gui.gui import cGui
+from resources.lib.gui.gui import Gui
 from resources.lib.gui.hoster import cHosterGui
 import re
 return False
@@ -26,7 +26,7 @@ NETS_GENRES = (True, 'showGenres')
 
 def load():
 
-    oGui = cGui()
+    oGui = Gui()
 
     oOutputParameterHandler = cOutputParameterHandler()
     oOutputParameterHandler.addParameter('siteUrl', 'http://venom/')
@@ -42,7 +42,7 @@ def load():
 
 
 def showSearch():
-    oGui = cGui()
+    oGui = Gui()
 
     sSearchText = oGui.showKeyBoard()
     if (sSearchText):
@@ -53,7 +53,7 @@ def showSearch():
 
 
 def showGenres():
-    oGui = cGui()
+    oGui = Gui()
 
     liste = []
     liste.append(['Galerie', URL_MAIN + 'galerie.htm'])
@@ -77,7 +77,7 @@ def showGenres():
 
 
 def showMovies(sSearch=''):
-    oGui = cGui()
+    oGui = Gui()
     oParser = cParser()
     if sSearch:
         sUrl = sSearch
@@ -127,7 +127,7 @@ def __checkForNextPage(sHtmlContent):
 
 
 def showHosters():
-    oGui = cGui()
+    oGui = Gui()
     oInputParameterHandler = cInputParameterHandler()
     sUrl = oInputParameterHandler.getValue('siteUrl')
     sMovieTitle = oInputParameterHandler.getValue('sMovieTitle')

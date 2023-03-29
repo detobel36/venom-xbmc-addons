@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 # https://github.com/Kodi-vStream/venom-xbmc-addons
 from resources.lib.gui.hoster import cHosterGui  # systeme de recherche pour l'hote
-from resources.lib.gui.gui import cGui  # systeme d'affichage pour xbmc
+from resources.lib.gui.gui import Gui  # systeme d'affichage pour xbmc
 from resources.lib.handler.inputParameterHandler import cInputParameterHandler  # entree des parametres
 from resources.lib.handler.outputParameterHandler import cOutputParameterHandler  # sortie des parametres
 from resources.lib.handler.requestHandler import cRequestHandler  # requete url
@@ -31,7 +31,7 @@ ANIM_ANIMS = (URL_MAIN + 'anime-list-all/', 'showMovies2')  # anime vrac
 
 
 def load():  # fonction chargee automatiquement par l'addon l'index de votre navigation.
-    oGui = cGui()  # ouvre l'affichage
+    oGui = Gui()  # ouvre l'affichage
 
     oOutputParameterHandler = cOutputParameterHandler()  # apelle la function pour sortir un parametre
     # sortie du parametres siteUrl n'oubliez pas la Majuscule
@@ -53,7 +53,7 @@ def load():  # fonction chargee automatiquement par l'addon l'index de votre nav
 
 
 def showSearch():  # function de recherche
-    oGui = cGui()
+    oGui = Gui()
 
     sSearchText = oGui.showKeyBoard()  # apelle le clavier xbmx
     if (sSearchText):
@@ -64,7 +64,7 @@ def showSearch():  # function de recherche
 
 
 def showMovies(sSearch=''):
-    oGui = cGui()  # ouvre l'affichage
+    oGui = Gui()  # ouvre l'affichage
     if sSearch:  # si une url et envoyer directement grace a la function showSearch
         sUrl = sSearch
     else:
@@ -137,7 +137,7 @@ def showMovies(sSearch=''):
 
 
 def showMovies2(sSearch=''):
-    oGui = cGui()
+    oGui = Gui()
     if sSearch:
         sUrl = sSearch
     else:
@@ -184,7 +184,7 @@ def __checkForNextPage(sHtmlContent):  # cherche la page suivante
 
 
 def showHosters():  # recherche et affiche les hotes
-    oGui = cGui()  # ouvre l'affichage
+    oGui = Gui()  # ouvre l'affichage
     oInputParameterHandler = cInputParameterHandler()  # apelle l'entree de paramettre
     sUrl = oInputParameterHandler.getValue('siteUrl')  # apelle siteUrl
     sMovieTitle = oInputParameterHandler.getValue('sMovieTitle')  # apelle le titre
@@ -221,7 +221,7 @@ def showHosters():  # recherche et affiche les hotes
 
 
 def seriesListEpisodes():  # cherche les episode de series
-    oGui = cGui()
+    oGui = Gui()
     oInputParameterHandler = cInputParameterHandler()
     sUrl = oInputParameterHandler.getValue('siteUrl')
     sMovieTitle = oInputParameterHandler.getValue('sMovieTitle')

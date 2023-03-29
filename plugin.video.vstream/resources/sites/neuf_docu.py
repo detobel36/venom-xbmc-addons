@@ -6,7 +6,7 @@ import re
 import random
 
 from resources.lib.gui.hoster import cHosterGui
-from resources.lib.gui.gui import cGui
+from resources.lib.gui.gui import Gui
 from resources.lib.handler.inputParameterHandler import cInputParameterHandler
 from resources.lib.handler.outputParameterHandler import cOutputParameterHandler
 from resources.lib.handler.requestHandler import cRequestHandler
@@ -34,7 +34,7 @@ UA = 'Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:66.0) Gecko/20100101 Firefox/
 
 
 def load():
-    oGui = cGui()
+    oGui = Gui()
 
     oOutputParameterHandler = cOutputParameterHandler()
     oOutputParameterHandler.addParameter('siteUrl', 'http://venom/')
@@ -50,7 +50,7 @@ def load():
 
 
 def showSearch():
-    oGui = cGui()
+    oGui = Gui()
     sSearchText = oGui.showKeyBoard()
     if sSearchText:
         sUrl = URL_SEARCH[0] + sSearchText
@@ -60,7 +60,7 @@ def showSearch():
 
 
 def showGenres():
-    oGui = cGui()
+    oGui = Gui()
 
     liste = []
     liste.append(['[COLOR gold]CATEGORIES[/COLOR]', ''])
@@ -126,7 +126,7 @@ def showGenres():
 
 
 def showMovies(sSearch=''):
-    oGui = cGui()
+    oGui = Gui()
     oParser = cParser()
     oInputParameterHandler = cInputParameterHandler()
     sUrl = oInputParameterHandler.getValue('siteUrl')
@@ -188,7 +188,7 @@ def __checkForNextPage(sHtmlContent):
 
 
 def showHosters():
-    oGui = cGui()
+    oGui = Gui()
     oParser = cParser()
     oInputParameterHandler = cInputParameterHandler()
     sUrl = oInputParameterHandler.getValue('siteUrl')

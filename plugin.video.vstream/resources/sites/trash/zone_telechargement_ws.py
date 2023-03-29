@@ -4,7 +4,7 @@ import re
 import unicodedata
 
 from resources.lib.comaddon import progress, dialog, siteManager
-from resources.lib.gui.gui import cGui
+from resources.lib.gui.gui import Gui
 from resources.lib.gui.hoster import cHosterGui
 from resources.lib.handler.inputParameterHandler import cInputParameterHandler
 from resources.lib.handler.outputParameterHandler import cOutputParameterHandler
@@ -78,7 +78,7 @@ AUTOFORM_VID = (URL_MAIN + 'autoformations-videos/', 'showMovies')
 
 
 def load():
-    oGui = cGui()
+    oGui = Gui()
 
     oOutputParameterHandler = cOutputParameterHandler()
     oOutputParameterHandler.addParameter('siteUrl', 'http://venom/')
@@ -100,7 +100,7 @@ def load():
 
 
 def showMenuFilms():
-    oGui = cGui()
+    oGui = Gui()
 
     oOutputParameterHandler = cOutputParameterHandler()
     oOutputParameterHandler.addParameter('siteUrl', MOVIE_NEWS[0])
@@ -169,7 +169,7 @@ def showMenuFilms():
 
 
 def showMenuTvShows():
-    oGui = cGui()
+    oGui = Gui()
 
     oOutputParameterHandler = cOutputParameterHandler()
     oOutputParameterHandler.addParameter('siteUrl', SERIE_VFS[0])
@@ -200,7 +200,7 @@ def showMenuTvShows():
 
 
 def showMenuMangas():
-    oGui = cGui()
+    oGui = Gui()
 
     oOutputParameterHandler = cOutputParameterHandler()
     oOutputParameterHandler.addParameter('siteUrl', ANIM_VFS[0])
@@ -231,7 +231,7 @@ def showMenuMangas():
 
 
 def showMenuAutres():
-    oGui = cGui()
+    oGui = Gui()
 
     oOutputParameterHandler = cOutputParameterHandler()
     oOutputParameterHandler.addParameter('siteUrl', DOC_NEWS[0])
@@ -247,7 +247,7 @@ def showMenuAutres():
 
 
 def showSearch():
-    oGui = cGui()
+    oGui = Gui()
 
     sSearchText = oGui.showKeyBoard()
     if sSearchText:
@@ -259,7 +259,7 @@ def showSearch():
 
 
 def showGenre():
-    oGui = cGui()
+    oGui = Gui()
     oInputParameterHandler = cInputParameterHandler()
     UrlGenre = oInputParameterHandler.getValue('siteUrl')
 
@@ -280,7 +280,7 @@ def showGenre():
 
 
 def showMovies(sSearch=''):
-    oGui = cGui()
+    oGui = Gui()
 
     oInputParameterHandler = cInputParameterHandler()
     sUrl = oInputParameterHandler.getValue('siteUrl').replace('index.php', '')
@@ -410,7 +410,7 @@ def __checkForNextPage(sHtmlContent):
 
 def showMoviesLinks():
     # VSlog('mode film')
-    oGui = cGui()
+    oGui = Gui()
     oParser = cParser()
     oInputParameterHandler = cInputParameterHandler()
     sMovieTitle = oInputParameterHandler.getValue('sMovieTitle')
@@ -481,7 +481,7 @@ def showMoviesLinks():
 
 def showSeriesLinks():
     # VSlog('mode serie')
-    oGui = cGui()
+    oGui = Gui()
     oParser = cParser()
     oInputParameterHandler = cInputParameterHandler()
     sMovieTitle = oInputParameterHandler.getValue('sMovieTitle')
@@ -603,7 +603,7 @@ def showSeriesLinks():
 
 def showHosters():
     # VSlog('showHosters')
-    oGui = cGui()
+    oGui = Gui()
     oInputParameterHandler = cInputParameterHandler()
     sMovieTitle = oInputParameterHandler.getValue('sMovieTitle')
     sUrl = oInputParameterHandler.getValue('siteUrl')
@@ -657,7 +657,7 @@ def showHosters():
 
 def showSeriesHosters():
     # VSlog('showSeriesHosters')
-    oGui = cGui()
+    oGui = Gui()
     oParser = cParser()
     oInputParameterHandler = cInputParameterHandler()
     sMovieTitle = oInputParameterHandler.getValue('sMovieTitle')
@@ -717,7 +717,7 @@ def showSeriesHosters():
 
 def Display_protected_link():
     # VSlog('Display_protected_link')
-    oGui = cGui()
+    oGui = Gui()
     oParser = cParser()
     oInputParameterHandler = cInputParameterHandler()
     sMovieTitle = oInputParameterHandler.getValue('sMovieTitle')

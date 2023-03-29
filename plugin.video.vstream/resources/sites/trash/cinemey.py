@@ -5,7 +5,7 @@ from resources.lib.parser import cParser
 from resources.lib.handler.requestHandler import cRequestHandler
 from resources.lib.handler.outputParameterHandler import cOutputParameterHandler
 from resources.lib.handler.inputParameterHandler import cInputParameterHandler
-from resources.lib.gui.gui import cGui
+from resources.lib.gui.gui import Gui
 from resources.lib.gui.hoster import cHosterGui
 import xbmc
 import re
@@ -33,7 +33,7 @@ SERIE_SERIES = (True, 'showMenuSeries')
 
 
 def load():
-    oGui = cGui()
+    oGui = Gui()
 
     oOutputParameterHandler = cOutputParameterHandler()
     oOutputParameterHandler.addParameter('siteUrl', 'http://venom/')
@@ -55,7 +55,7 @@ def load():
 
 
 def showMenuMovies():
-    oGui = cGui()
+    oGui = Gui()
 
     oOutputParameterHandler = cOutputParameterHandler()
     oOutputParameterHandler.addParameter('siteUrl', 'http://venom/')
@@ -74,7 +74,7 @@ def showMenuMovies():
 
 
 def showMenuSeries():
-    oGui = cGui()
+    oGui = Gui()
 
     oOutputParameterHandler = cOutputParameterHandler()
     oOutputParameterHandler.addParameter('siteUrl', SERIE_NEWS[0])
@@ -84,7 +84,7 @@ def showMenuSeries():
 
 
 def showSearch():
-    oGui = cGui()
+    oGui = Gui()
     sSearchText = oGui.showKeyBoard()
     if (sSearchText):
         sUrl = URL_SEARCH[0] + sSearchText.replace(' ', '+')
@@ -94,7 +94,7 @@ def showSearch():
 
 
 def showGenres():
-    oGui = cGui()
+    oGui = Gui()
 
     liste = []
     # https://cinemey.com/categorie/romance
@@ -117,7 +117,7 @@ def showGenres():
 
 
 def showMovieYears():
-    oGui = cGui()
+    oGui = Gui()
     # https://cinemey.com/annee/2020
     oOutputParameterHandler = cOutputParameterHandler()
     for i in reversed(range(2001, 2023)):  # pas grand chose 32 - 90
@@ -129,7 +129,7 @@ def showMovieYears():
 
 
 def showMovies(sSearch=''):
-    oGui = cGui()
+    oGui = Gui()
     oParser = cParser()
 
     if sSearch:
@@ -227,7 +227,7 @@ def __checkForNextPage(sHtmlContent):
 
 
 def showSelectType():
-    oGui = cGui()
+    oGui = Gui()
 
     oInputParameterHandler = cInputParameterHandler()
     sUrl = oInputParameterHandler.getValue('siteUrl')
@@ -262,7 +262,7 @@ def showSelectType():
 
 
 def showSXE():
-    oGui = cGui()
+    oGui = Gui()
 
     oInputParameterHandler = cInputParameterHandler()
     sUrl = oInputParameterHandler.getValue('siteUrl')
@@ -309,7 +309,7 @@ def showSXE():
 
 
 def showLink():
-    oGui = cGui()
+    oGui = Gui()
 
     oInputParameterHandler = cInputParameterHandler()
     sUrl = oInputParameterHandler.getValue('siteUrl')
@@ -375,7 +375,7 @@ def showLink():
 
 
 def showHosters():
-    oGui = cGui()
+    oGui = Gui()
 
     oInputParameterHandler = cInputParameterHandler()
     sUrl = oInputParameterHandler.getValue('siteUrl')

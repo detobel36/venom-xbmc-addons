@@ -7,7 +7,7 @@ from resources.lib.parser import cParser
 from resources.lib.handler.requestHandler import cRequestHandler
 from resources.lib.handler.outputParameterHandler import cOutputParameterHandler
 from resources.lib.handler.inputParameterHandler import cInputParameterHandler
-from resources.lib.gui.gui import cGui
+from resources.lib.gui.gui import Gui
 from resources.lib.gui.hoster import cHosterGui
 import re
 return False  # de nouveau en panne au 08/07/22
@@ -41,7 +41,7 @@ SERIE_ANNEES = (True, 'showSerieAnnees')
 
 
 def load():
-    oGui = cGui()
+    oGui = Gui()
 
     oOutputParameterHandler = cOutputParameterHandler()
     oOutputParameterHandler.addParameter('siteUrl', 'http://venom/')
@@ -54,7 +54,7 @@ def load():
 
 
 def showMenuMovies():
-    oGui = cGui()
+    oGui = Gui()
 
     oOutputParameterHandler = cOutputParameterHandler()
     oOutputParameterHandler.addParameter('siteUrl', URL_SEARCH_MOVIES[0])
@@ -79,7 +79,7 @@ def showMenuMovies():
 
 
 def showMenuTvShows():
-    oGui = cGui()
+    oGui = Gui()
 
     oOutputParameterHandler = cOutputParameterHandler()
     oOutputParameterHandler.addParameter('siteUrl', URL_SEARCH_SERIES[0])
@@ -98,7 +98,7 @@ def showMenuTvShows():
 
 
 def showSearch():
-    oGui = cGui()
+    oGui = Gui()
     oInputParameterHandler = cInputParameterHandler()
     sUrl = oInputParameterHandler.getValue('siteUrl')
 
@@ -111,7 +111,7 @@ def showSearch():
 
 
 def showMovieGenres():
-    oGui = cGui()
+    oGui = Gui()
 
     liste = [['Action', 'action'], ['Animation', 'animation'], ['Arts martiaux', 'arts-martiaux'],
              ['Aventure', 'aventure'], ['Biographie', 'biographie'], ['Biopic', 'biopic'], ['Comédie', 'comedie'],
@@ -131,7 +131,7 @@ def showMovieGenres():
 
 
 def showSerieGenres():
-    oGui = cGui()
+    oGui = Gui()
 
     liste = [['Action', 'action'], ['Animé', 'anime'], ['Aventure', 'aventure'], ['Comédie', 'comedie'],
              ['DC Comics', 'dc-comics'], ['Documentaire', 'documentaire'], ['Drama', 'drama'], ['Drame', 'drame'],
@@ -149,7 +149,7 @@ def showSerieGenres():
 
 
 def showMovieAnnees():
-    oGui = cGui()
+    oGui = Gui()
     oOutputParameterHandler = cOutputParameterHandler()
     for i in reversed(range(1914, 2023)):
         Year = str(i)
@@ -160,7 +160,7 @@ def showMovieAnnees():
 
 
 def showSerieAnnees():
-    oGui = cGui()
+    oGui = Gui()
     oOutputParameterHandler = cOutputParameterHandler()
     for i in reversed(range(1989, 2023)):
         Year = str(i)
@@ -171,7 +171,7 @@ def showSerieAnnees():
 
 
 def showMovies(sSearch=''):
-    oGui = cGui()
+    oGui = Gui()
     oParser = cParser()
 
     if sSearch:
@@ -327,7 +327,7 @@ def ReformatUrl(link):
 
 
 def showSaisonsEpisodes():
-    oGui = cGui()
+    oGui = Gui()
     oParser = cParser()
     oInputParameterHandler = cInputParameterHandler()
     sUrl = oInputParameterHandler.getValue('siteUrl')
@@ -368,7 +368,7 @@ def showSaisonsEpisodes():
 
 
 def showLinks():
-    oGui = cGui()
+    oGui = Gui()
     oParser = cParser()
     oInputParameterHandler = cInputParameterHandler()
     sUrl = oInputParameterHandler.getValue('siteUrl')
@@ -423,7 +423,7 @@ def showLinks():
 
 
 def showHosters():
-    oGui = cGui()
+    oGui = Gui()
     oParser = cParser()
     oInputParameterHandler = cInputParameterHandler()
     sUrl = oInputParameterHandler.getValue('siteUrl')

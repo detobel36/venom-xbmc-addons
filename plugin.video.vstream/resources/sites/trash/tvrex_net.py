@@ -6,7 +6,7 @@ from resources.lib.handler.requestHandler import cRequestHandler
 from resources.lib.handler.outputParameterHandler import cOutputParameterHandler
 from resources.lib.handler.inputParameterHandler import cInputParameterHandler
 from resources.lib.gui.hoster import cHosterGui
-from resources.lib.gui.gui import cGui
+from resources.lib.gui.gui import Gui
 from resources.lib.comaddon import progress
 import urllib2
 import re
@@ -52,7 +52,7 @@ def TimeET():
 
 def load():
 
-    oGui = cGui()
+    oGui = Gui()
 
     oOutputParameterHandler = cOutputParameterHandler()
     oOutputParameterHandler.addParameter('siteUrl', 'http://venom/')
@@ -82,7 +82,7 @@ def load():
 
 
 def showSearch():
-    oGui = cGui()
+    oGui = Gui()
     sSearchText = oGui.showKeyBoard()
     if (sSearchText):
         sUrl = URL_SEARCH[0] + sSearchText
@@ -92,7 +92,7 @@ def showSearch():
 
 
 def showFinals():
-    oGui = cGui()
+    oGui = Gui()
 
     oOutputParameterHandler = cOutputParameterHandler()
     oOutputParameterHandler.addParameter('siteUrl', URL_MAIN +
@@ -131,7 +131,7 @@ def showFinals():
 
 
 def showGenres():
-    oGui = cGui()
+    oGui = Gui()
     liste = []
     liste.append(['Atlanta (Hawks)', URL_MAIN + 'category/nba/atlanta-hawks/'])
     liste.append(['Boston (Celtics)', URL_MAIN + 'category/nba/boston-celtics/'])
@@ -174,7 +174,7 @@ def showGenres():
 
 
 def showMovies(sSearch=''):
-    oGui = cGui()
+    oGui = Gui()
     oInputParameterHandler = cInputParameterHandler()
     sUrl = oInputParameterHandler.getValue('siteUrl')
 
@@ -345,7 +345,7 @@ def __checkForNextPage(sHtmlContent, sUrl):
 
 
 def showHosters():
-    oGui = cGui()
+    oGui = Gui()
     oInputParameterHandler = cInputParameterHandler()
     sUrl = oInputParameterHandler.getValue('siteUrl')
     sMovieTitle = oInputParameterHandler.getValue('sMovieTitle')
@@ -470,7 +470,7 @@ def showHosters():
 
 # Live 24/24 chaine nbatv
 def showLiveNbatv():
-    oGui = cGui()
+    oGui = Gui()
 
     sThumb = base64.b64decode(Logo_Nba)
     sUrl = [('aHR0cDovL3d3dy4yNDdoZC5wdy9uYmEucGhwP2V4dGlkPTEmdmlldz1OQkFUVg=='), ('aHR0cDovL3lzaWhkLm1lL25iYXR2Lw==')]
@@ -495,7 +495,7 @@ def showLiveNbatv():
 
 # recuperation lecture m3u8 nba livestream - ok sauf si geoIP (USA) ou lien secu ou regex a maj
 def showLiveHosters():
-    oGui = cGui()
+    oGui = Gui()
     oInputParameterHandler = cInputParameterHandler()
     sUrl = oInputParameterHandler.getValue('siteUrl')
     sTitle = oInputParameterHandler.getValue('sMovieTitle')
@@ -544,7 +544,7 @@ def showLiveHosters():
 
 
 def showHosters4():
-    oGui = cGui()
+    oGui = Gui()
     oInputParameterHandler = cInputParameterHandler()
     sUrl = oInputParameterHandler.getValue('siteUrl')
     sMovieTitle = oInputParameterHandler.getValue('sMovieTitle')

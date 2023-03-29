@@ -4,7 +4,7 @@
 import re
 
 from resources.lib.gui.hoster import cHosterGui
-from resources.lib.gui.gui import cGui
+from resources.lib.gui.gui import Gui
 from resources.lib.handler.inputParameterHandler import cInputParameterHandler
 from resources.lib.handler.outputParameterHandler import cOutputParameterHandler
 from resources.lib.handler.requestHandler import cRequestHandler
@@ -33,7 +33,7 @@ FUNCTION_SEARCH = 'showSeries'
 
 
 def load():
-    oGui = cGui()
+    oGui = Gui()
 
     oOutputParameterHandler = cOutputParameterHandler()
     oOutputParameterHandler.addParameter('siteUrl', 'http://venom/')
@@ -58,7 +58,7 @@ def load():
 
 
 def showSearch():
-    oGui = cGui()
+    oGui = Gui()
     sSearchText = oGui.showKeyBoard()
     if sSearchText:
         sUrl = URL_SEARCH[0] + sSearchText
@@ -69,7 +69,7 @@ def showSearch():
 
 def showSerieYears():
     # for i in itertools.chain(range(5, 7), [8, 9]): afficher dans l'ordre (pense bete ne pas effacer)
-    oGui = cGui()
+    oGui = Gui()
     from itertools import chain
     generator = chain([1955], range(1957, 2023))
 
@@ -83,7 +83,7 @@ def showSerieYears():
 
 
 def showAlpha():
-    oGui = cGui()
+    oGui = Gui()
 
     liste = [['0', str('0')], ['1', str('1')], ['2', str('2')], ['3', str('3')], ['4', str('4')], ['5', str('5')],
              ['6', str('6')], ['7', str('7')], ['8', str('8')], ['9', str('9')],
@@ -108,7 +108,7 @@ def showAlpha():
 
 
 def showGenres():
-    oGui = cGui()
+    oGui = Gui()
 
     liste = [['Action & Aventure', 'action-adventure'], ['Animation', 'animation'], ['Comédie', 'comedie'],
              ['Crime', 'crime'], ['Documentaire', 'documentaire'], ['Drame', 'drame'], ['Familial', 'familial'],
@@ -127,7 +127,7 @@ def showGenres():
 
 
 def showSeries(sSearch=''):
-    oGui = cGui()
+    oGui = Gui()
     oParser = cParser()
 
     if sSearch:
@@ -203,7 +203,7 @@ def __checkForNextPage(sHtmlContent):
 
 
 def showSaisons():
-    oGui = cGui()
+    oGui = Gui()
     oParser = cParser()
     oInputParameterHandler = cInputParameterHandler()
     sUrl = oInputParameterHandler.getValue('siteUrl')
@@ -246,7 +246,7 @@ def showSaisons():
 
 
 def showEpisodes():
-    oGui = cGui()
+    oGui = Gui()
     oParser = cParser()
     oInputParameterHandler = cInputParameterHandler()
     sUrl = oInputParameterHandler.getValue('siteUrl')
@@ -277,7 +277,7 @@ def showEpisodes():
 
 
 def showLinks():
-    oGui = cGui()
+    oGui = Gui()
     oParser = cParser()
     oInputParameterHandler = cInputParameterHandler()
     sUrl = oInputParameterHandler.getValue('siteUrl')
@@ -316,7 +316,7 @@ def showLinks():
 
 
 def showHosters():
-    oGui = cGui()
+    oGui = Gui()
     oInputParameterHandler = cInputParameterHandler()
     sUrl = oInputParameterHandler.getValue('siteUrl')
     sMovieTitle = oInputParameterHandler.getValue('sMovieTitle')

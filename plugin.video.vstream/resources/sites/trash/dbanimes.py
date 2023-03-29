@@ -4,7 +4,7 @@
 import re
 
 from resources.lib.gui.hoster import cHosterGui
-from resources.lib.gui.gui import cGui
+from resources.lib.gui.gui import Gui
 from resources.lib.handler.inputParameterHandler import cInputParameterHandler
 from resources.lib.handler.outputParameterHandler import cOutputParameterHandler
 from resources.lib.handler.requestHandler import cRequestHandler
@@ -35,7 +35,7 @@ FUNCTION_SEARCH = 'showAnimes'
 
 
 def load():
-    oGui = cGui()
+    oGui = Gui()
 
     oOutputParameterHandler = cOutputParameterHandler()
     oOutputParameterHandler.addParameter('siteUrl', 'siteUrl')
@@ -71,7 +71,7 @@ def load():
 
 
 def showGenres():
-    oGui = cGui()
+    oGui = Gui()
 
     liste = [['Action & aventure', 'action-adventure'], ['Aventure', 'aventure'], ['Comédie', 'comedie'],
              ['Crime', 'crime'], ['Drame', 'drame'], ['Fantasy', 'fantasy']]
@@ -85,7 +85,7 @@ def showGenres():
 
 
 def showAlpha():
-    oGui = cGui()
+    oGui = Gui()
     oInputParameterHandler = cInputParameterHandler()
     sUrl = oInputParameterHandler.getValue('siteUrl')
 
@@ -117,7 +117,7 @@ def showAlpha():
 
 
 def showSearchMovie():
-    oGui = cGui()
+    oGui = Gui()
     sSearchText = oGui.showKeyBoard()
     if sSearchText:
         sUrl = URL_INTERNALSEARCH_MOVIES[0] + sSearchText
@@ -127,7 +127,7 @@ def showSearchMovie():
 
 
 def showSearchSerie():
-    oGui = cGui()
+    oGui = Gui()
     sSearchText = oGui.showKeyBoard()
     if sSearchText:
         sUrl = URL_INTERNALSEARCH_SERIES[0] + sSearchText
@@ -137,7 +137,7 @@ def showSearchSerie():
 
 
 def showSearch():
-    oGui = cGui()
+    oGui = Gui()
     sSearchText = oGui.showKeyBoard()
     if sSearchText:
         sUrl = URL_SEARCH[0] + sSearchText
@@ -147,7 +147,7 @@ def showSearch():
 
 
 def showAnimes(sSearch=''):
-    oGui = cGui()
+    oGui = Gui()
     if sSearch:
         sUrl = sSearch.replace(' ', '+') + '&post_type=anime&submit='
     else:
@@ -235,7 +235,7 @@ def __checkForNextPage(sHtmlContent):
 
 
 def showEpisodes():
-    oGui = cGui()
+    oGui = Gui()
     oParser = cParser()
     oInputParameterHandler = cInputParameterHandler()
     sUrl = oInputParameterHandler.getValue('siteUrl')
@@ -287,7 +287,7 @@ def showEpisodes():
 
 
 def showHosters():
-    oGui = cGui()
+    oGui = Gui()
     oParser = cParser()
     oInputParameterHandler = cInputParameterHandler()
     sUrl = oInputParameterHandler.getValue('siteUrl')

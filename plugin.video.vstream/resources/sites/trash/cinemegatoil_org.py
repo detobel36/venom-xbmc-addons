@@ -9,7 +9,7 @@ from resources.lib.parser import cParser
 from resources.lib.handler.requestHandler import cRequestHandler
 from resources.lib.handler.outputParameterHandler import cOutputParameterHandler
 from resources.lib.handler.inputParameterHandler import cInputParameterHandler
-from resources.lib.gui.gui import cGui
+from resources.lib.gui.gui import Gui
 from resources.lib.gui.hoster import cHosterGui
 import xbmcgui
 import xbmc
@@ -35,7 +35,7 @@ URL_SEARCH_MOVIES = (URL_MAIN + '?do=search&mode=advanced&subaction=search&title
 
 
 def load():
-    oGui = cGui()
+    oGui = Gui()
 
     oOutputParameterHandler = cOutputParameterHandler()
     oOutputParameterHandler.addParameter('siteUrl', 'http://venom/')
@@ -54,7 +54,7 @@ def load():
 
 
 def showSearch():
-    oGui = cGui()
+    oGui = Gui()
     sSearchText = oGui.showKeyBoard()
     if (sSearchText):
         sUrl = sSearchText
@@ -64,7 +64,7 @@ def showSearch():
 
 
 def showGenres():
-    oGui = cGui()
+    oGui = Gui()
 
     liste = []
     liste.append(['Action', URL_MAIN + 'action'])
@@ -100,7 +100,7 @@ def showGenres():
 
 
 def showYears():
-    oGui = cGui()
+    oGui = Gui()
     oOutputParameterHandler = cOutputParameterHandler()
     for i in reversed(range(2005, 2023)):
         Year = str(i)
@@ -111,7 +111,7 @@ def showYears():
 
 
 def showMovies(sSearch=''):
-    oGui = cGui()
+    oGui = Gui()
     oParser = cParser()
 
     if sSearch:
@@ -192,7 +192,7 @@ def __checkForNextPage(sHtmlContent):
 
 
 def showHosters():
-    oGui = cGui()
+    oGui = Gui()
     oParser = cParser()
     oInputParameterHandler = cInputParameterHandler()
     sUrl = oInputParameterHandler.getValue('siteUrl')
@@ -250,7 +250,7 @@ def showHosters():
 
 
 def Display_protected_link():
-    oGui = cGui()
+    oGui = Gui()
     oParser = cParser()
     oInputParameterHandler = cInputParameterHandler()
     sMovieTitle = oInputParameterHandler.getValue('sMovieTitle')

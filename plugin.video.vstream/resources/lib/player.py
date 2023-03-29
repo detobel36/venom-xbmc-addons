@@ -3,7 +3,7 @@
 #
 from resources.lib.handler.inputParameterHandler import cInputParameterHandler
 from resources.lib.handler.pluginHandler import cPluginHandler
-from resources.lib.gui.gui import cGui
+from resources.lib.gui.gui import Gui
 from resources.lib.upnext import UpNext
 from resources.lib.comaddon import addon, dialog, xbmc, isKrypton, VSlog, addonManager, isMatrix
 from resources.lib.db import cDb
@@ -68,7 +68,7 @@ class cPlayer(xbmc.Player):
         return xbmc.PlayList(xbmc.PLAYLIST_VIDEO)
 
     def addItemToPlaylist(self, oGuiElement):
-        oGui = cGui()
+        oGui = Gui()
         oListItem = oGui.createListItem(oGuiElement)
         self.__addItemToPlaylist(oGuiElement, oListItem)
 
@@ -101,7 +101,7 @@ class cPlayer(xbmc.Player):
 
         sPluginHandle = cPluginHandler().getPluginHandle()
 
-        oGui = cGui()
+        oGui = Gui()
         item = oGui._createListItem(oGuiElement)
         item.setPath(oGuiElement.getMediaUrl())
 

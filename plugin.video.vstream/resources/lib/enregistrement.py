@@ -1,5 +1,5 @@
 # -*- coding: utf-8 -*-
-from resources.lib.gui.gui import cGui
+from resources.lib.gui.gui import Gui
 from resources.lib.comaddon import progress, addon, xbmcgui, VSlog, dialog, VSPath
 import xbmcvfs
 import datetime
@@ -14,7 +14,7 @@ SITE_NAME = 'enregistrement'
 class cEnregistremement:
 
     def programmation_enregistrement(self, sUrl):
-        oGui = cGui()
+        oGui = Gui()
         ADDON = addon()
         if '.m3u8' in sUrl:
             header = '-fflags +genpts+igndts -y -i "' + sUrl + '"'

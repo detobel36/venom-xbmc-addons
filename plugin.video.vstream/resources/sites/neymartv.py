@@ -4,7 +4,7 @@
 import re
 
 from resources.lib.comaddon import siteManager, isMatrix
-from resources.lib.gui.gui import cGui
+from resources.lib.gui.gui import Gui
 from resources.lib.gui.hoster import cHosterGui
 from resources.lib.handler.inputParameterHandler import cInputParameterHandler
 from resources.lib.handler.outputParameterHandler import cOutputParameterHandler
@@ -65,7 +65,7 @@ channels = {
 
 
 def load():
-    oGui = cGui()
+    oGui = Gui()
     oOutputParameterHandler = cOutputParameterHandler()
 
     oOutputParameterHandler.addParameter('siteUrl', SPORT_GENRES[0])
@@ -78,7 +78,7 @@ def load():
 
 
 def showTV():
-    oGui = cGui()
+    oGui = Gui()
     oOutputParameterHandler = cOutputParameterHandler()
 
     for sDisplayTitle in channels:
@@ -94,7 +94,7 @@ def showTV():
 
 
 def showGenres():
-    oGui = cGui()
+    oGui = Gui()
 
     oInputParameterHandler = cInputParameterHandler()
     sUrl = oInputParameterHandler.getValue('siteUrl')
@@ -135,7 +135,7 @@ def showGenres():
 
 
 def showMovies():
-    oGui = cGui()
+    oGui = Gui()
     oParser = cParser()
 
     oInputParameterHandler = cInputParameterHandler()
@@ -170,7 +170,7 @@ def showMovies():
 
 
 def showMoviesLinks():
-    oGui = cGui()
+    oGui = Gui()
     oParser = cParser()
 
     oInputParameterHandler = cInputParameterHandler()
@@ -203,7 +203,7 @@ def showMoviesLinks():
 
 
 def showHoster():
-    oGui = cGui()
+    oGui = Gui()
     oParser = cParser()
 
     oInputParameterHandler = cInputParameterHandler()
@@ -248,7 +248,7 @@ def showHoster():
 
 
 def showLink():
-    oGui = cGui()
+    oGui = Gui()
 
     oInputParameterHandler = cInputParameterHandler()
     sUrl = oInputParameterHandler.getValue('siteUrl')

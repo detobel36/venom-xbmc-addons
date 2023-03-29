@@ -9,7 +9,7 @@ from resources.lib.parser import cParser
 from resources.lib.handler.requestHandler import cRequestHandler
 from resources.lib.handler.outputParameterHandler import cOutputParameterHandler
 from resources.lib.handler.inputParameterHandler import cInputParameterHandler
-from resources.lib.gui.gui import cGui
+from resources.lib.gui.gui import Gui
 from resources.lib.gui.hoster import cHosterGui
 return False
 # from resources.lib.util import cUtil
@@ -49,7 +49,7 @@ FUNCTION_SEARCH = 'showMovies'
 
 
 def load():
-    oGui = cGui()
+    oGui = Gui()
 
     oOutputParameterHandler = cOutputParameterHandler()
     oOutputParameterHandler.addParameter('siteUrl', 'http://venom/')
@@ -107,7 +107,7 @@ def load():
 
 
 def showSearch():
-    oGui = cGui()
+    oGui = Gui()
 
     sSearchText = oGui.showKeyBoard()
     if (sSearchText):
@@ -118,7 +118,7 @@ def showSearch():
 
 
 def ReplayTV():
-    oGui = cGui()
+    oGui = Gui()
 
     liste = []
     liste.append(['Concert', URL_MAIN + 'category/television/concert/'])
@@ -140,7 +140,7 @@ def ReplayTV():
 
 
 def showGenres():
-    oGui = cGui()
+    oGui = Gui()
 
     liste = []
     liste.append(['Action', URL_MAIN + 'category/films-vf/action-films/'])
@@ -176,7 +176,7 @@ def showGenres():
 
 def showMovies(sSearch=''):
     oParser = cParser()
-    oGui = cGui()
+    oGui = Gui()
     if sSearch:
         sUrl = sSearch
 
@@ -243,7 +243,7 @@ def __checkForNextPage(sHtmlContent):
 
 
 def showSeries(sLoop=False):
-    oGui = cGui()
+    oGui = Gui()
     oParser = cParser()
     oInputParameterHandler = cInputParameterHandler()
     sUrl = oInputParameterHandler.getValue('siteUrl')
@@ -292,7 +292,7 @@ def showSeries(sLoop=False):
 
 
 def showHosters(sLoop=False):
-    oGui = cGui()
+    oGui = Gui()
     oParser = cParser()
     oInputParameterHandler = cInputParameterHandler()
     sUrl = oInputParameterHandler.getValue('siteUrl')

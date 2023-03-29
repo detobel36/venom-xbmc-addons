@@ -10,7 +10,7 @@ import xbmcvfs
 import xbmc
 
 from resources.lib.comaddon import addon, dialog, VSPath
-from resources.lib.gui.gui import cGui
+from resources.lib.gui.gui import Gui
 from resources.lib.handler.inputParameterHandler import cInputParameterHandler
 from resources.lib.handler.outputParameterHandler import cOutputParameterHandler
 from resources.lib.util import cUtil, QuotePlus
@@ -106,7 +106,7 @@ class cLibrary:
             dialog().VSinfo('Rajout impossible')
 
     def getLibrary(self):
-        oGui = cGui()
+        oGui = Gui()
         oOutputParameterHandler = cOutputParameterHandler()
 
         folder = self.ADDON.getSetting('Library_folder_Movies')
@@ -120,7 +120,7 @@ class cLibrary:
         oGui.setEndOfDirectory()
 
     def getRecords(self):
-        oGui = cGui()
+        oGui = Gui()
 
         folder = self.ADDON.getSetting('path_enregistrement')
         if not folder:
@@ -132,7 +132,7 @@ class cLibrary:
         oGui.setEndOfDirectory()
 
     def openLibrary(self):
-        oGui = cGui()
+        oGui = Gui()
         oInputParameterHandler = cInputParameterHandler()
         sFile = oInputParameterHandler.getValue('siteUrl')
 

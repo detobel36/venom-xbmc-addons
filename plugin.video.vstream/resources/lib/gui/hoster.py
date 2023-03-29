@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 # https://github.com/Kodi-vStream/venom-xbmc-addons
 # Venom.
-from resources.lib.gui.gui import cGui
+from resources.lib.gui.gui import Gui
 from resources.lib.gui.guiElement import cGuiElement
 from resources.lib.gui.contextElement import cContextElement
 from resources.lib.handler.inputParameterHandler import cInputParameterHandler
@@ -312,7 +312,7 @@ class cHosterGui:
         return klass()
 
     def play(self):
-        oGui = cGui()
+        oGui = Gui()
         oDialog = dialog()
 
         oInputParameterHandler = cInputParameterHandler()
@@ -389,7 +389,7 @@ class cHosterGui:
         oGui.setEndOfDirectory()
 
     def addToPlaylist(self):
-        oGui = cGui()
+        oGui = Gui()
         oInputParameterHandler = cInputParameterHandler()
         sHosterIdentifier = oInputParameterHandler.getValue('sHosterIdentifier')
         sMediaUrl = oInputParameterHandler.getValue('sMediaUrl')

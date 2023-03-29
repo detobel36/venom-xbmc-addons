@@ -4,7 +4,7 @@
 import requests
 
 from resources.lib.gui.hoster import cHosterGui
-from resources.lib.gui.gui import cGui
+from resources.lib.gui.gui import Gui
 from resources.lib.handler.inputParameterHandler import cInputParameterHandler
 from resources.lib.handler.outputParameterHandler import cOutputParameterHandler
 from resources.lib.handler.requestHandler import cRequestHandler
@@ -19,7 +19,7 @@ ITEM_PAR_PAGE = 20
 
 
 def load():
-    oGui = cGui()
+    oGui = Gui()
     oAddon = addon()
 
     URL_HOST = oAddon.getSetting('urlmain_alldebrid')
@@ -46,7 +46,7 @@ def load():
 
 
 def showLiens(sSearch=''):
-    oGui = cGui()
+    oGui = Gui()
 
     oInputParameterHandler = cInputParameterHandler()
     sUrl = oInputParameterHandler.getValue('siteUrl')
@@ -114,7 +114,7 @@ def showLiens(sSearch=''):
 
 
 def showMagnets(sSearch=''):
-    oGui = cGui()
+    oGui = Gui()
 
     oInputParameterHandler = cInputParameterHandler()
     sUrl = oInputParameterHandler.getValue('siteUrl')
@@ -198,7 +198,7 @@ def showMagnets(sSearch=''):
 
 
 def showseriesHoster(sSearch=''):
-    oGui = cGui()
+    oGui = Gui()
 
     oInputParameterHandler = cInputParameterHandler()
     sUrl = oInputParameterHandler.getValue('siteUrl')
@@ -282,7 +282,7 @@ def showseriesHoster(sSearch=''):
 
 
 def showHosters():
-    oGui = cGui()
+    oGui = Gui()
     oInputParameterHandler = cInputParameterHandler()
     sUrl = oInputParameterHandler.getValue('siteUrl')
     sMovieTitle = oInputParameterHandler.getValue('sMovieTitle')
@@ -298,7 +298,7 @@ def showHosters():
 
 
 def showInfo():
-    oGui = cGui()
+    oGui = Gui()
 
     oInputParameterHandler = cInputParameterHandler()
     sUrl = oInputParameterHandler.getValue('siteUrl')

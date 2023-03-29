@@ -12,7 +12,7 @@ from resources.lib.config import cConfig
 from resources.lib.handler.requestHandler import cRequestHandler
 from resources.lib.handler.outputParameterHandler import cOutputParameterHandler
 from resources.lib.handler.inputParameterHandler import cInputParameterHandler
-from resources.lib.gui.gui import cGui
+from resources.lib.gui.gui import Gui
 from resources.lib.gui.hoster import cHosterGui
 return False
 # https://github.com/Kodi-vStream/venom-xbmc-addons
@@ -46,7 +46,7 @@ def CleanTitle(title):
 
 
 def load():
-    oGui = cGui()
+    oGui = Gui()
 
     oOutputParameterHandler = cOutputParameterHandler()
     oOutputParameterHandler.addParameter('siteUrl', 'http://venom/')
@@ -64,7 +64,7 @@ def load():
 
 
 def AlphaSearch():
-    oGui = cGui()
+    oGui = Gui()
     oInputParameterHandler = cInputParameterHandler()
     sUrl = oInputParameterHandler.getValue('siteUrl')
 
@@ -99,7 +99,7 @@ def AlphaSearch():
 
 
 def AlphaDisplay():
-    oGui = cGui()
+    oGui = Gui()
 
     oInputParameterHandler = cInputParameterHandler()
     sUrl = oInputParameterHandler.getValue('siteUrl')
@@ -134,7 +134,7 @@ def AlphaDisplay():
 
 
 def showSearch():
-    oGui = cGui()
+    oGui = Gui()
 
     sSearchText = oGui.showKeyBoard()
     if (sSearchText):
@@ -145,7 +145,7 @@ def showSearch():
 
 
 def showMovies(sSearch=''):
-    oGui = cGui()
+    oGui = Gui()
 
     if sSearch:
         sUrl = sSearch
@@ -195,7 +195,7 @@ def showMovies(sSearch=''):
 
 
 def showLasts():
-    oGui = cGui()
+    oGui = Gui()
 
     oInputParameterHandler = cInputParameterHandler()
     sUrl = oInputParameterHandler.getValue('siteUrl')
@@ -242,7 +242,7 @@ def showLasts():
 
 
 def ShowSaisons():
-    oGui = cGui()
+    oGui = Gui()
 
     oInputParameterHandler = cInputParameterHandler()
     sUrl = oInputParameterHandler.getValue('siteUrl')
@@ -289,7 +289,7 @@ def ShowSaisons():
 
 
 def showEpisode():
-    oGui = cGui()
+    oGui = Gui()
 
     oInputParameterHandler = cInputParameterHandler()
     sUrl = oInputParameterHandler.getValue('siteUrl')
@@ -338,7 +338,7 @@ def showEpisode():
 
 
 def showHosters():
-    oGui = cGui()
+    oGui = Gui()
 
     oInputParameterHandler = cInputParameterHandler()
     sUrl = oInputParameterHandler.getValue('siteUrl')
@@ -379,7 +379,7 @@ def showHosters():
 
 
 def GetLink():
-    oGui = cGui()
+    oGui = Gui()
 
     oInputParameterHandler = cInputParameterHandler()
     sUrl = oInputParameterHandler.getValue('siteUrl')

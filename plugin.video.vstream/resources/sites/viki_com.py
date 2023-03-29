@@ -9,7 +9,7 @@ import re
 import time
 
 from resources.lib.comaddon import progress, isMatrix, dialog, siteManager
-from resources.lib.gui.gui import cGui
+from resources.lib.gui.gui import Gui
 from resources.lib.gui.hoster import cHosterGui
 from resources.lib.handler.inputParameterHandler import cInputParameterHandler
 from resources.lib.handler.outputParameterHandler import cOutputParameterHandler
@@ -58,7 +58,7 @@ se = 'true'
 
 
 def load():
-    oGui = cGui()
+    oGui = Gui()
 
     oOutputParameterHandler = cOutputParameterHandler()
     oOutputParameterHandler.addParameter('siteUrl', 'http://venom/')
@@ -74,7 +74,7 @@ def load():
 
 
 def showMenuMovies():
-    oGui = cGui()
+    oGui = Gui()
 
     oOutputParameterHandler = cOutputParameterHandler()
     oOutputParameterHandler.addParameter('siteUrl', MOVIE_NEWS[0])
@@ -90,7 +90,7 @@ def showMenuMovies():
 
 
 def showMenuSeries():
-    oGui = cGui()
+    oGui = Gui()
 
     oOutputParameterHandler = cOutputParameterHandler()
     oOutputParameterHandler.addParameter('siteUrl', DRAMA_NEWS[0])
@@ -115,7 +115,7 @@ def showMenuSeries():
 
 
 def showSearch():
-    oGui = cGui()
+    oGui = Gui()
     sSearchText = oGui.showKeyBoard()
     if sSearchText:
         sUrl = URL_SEARCH[0] + sSearchText
@@ -125,7 +125,7 @@ def showSearch():
 
 
 def showMovies(sSearch=''):
-    oGui = cGui()
+    oGui = Gui()
 
     oInputParameterHandler = cInputParameterHandler()
     sUrl = oInputParameterHandler.getValue('siteUrl')
@@ -226,7 +226,7 @@ def showMovies(sSearch=''):
 
 
 def showSaisons():
-    oGui = cGui()
+    oGui = Gui()
 
     oInputParameterHandler = cInputParameterHandler()
     sUrl = oInputParameterHandler.getValue('siteUrl')
@@ -283,7 +283,7 @@ def showSaisons():
 
 
 def showMovieGenre():
-    oGui = cGui()
+    oGui = Gui()
 
     sGenre = 'movies'
     url = URL_API + 'videos/genres.json?app=' + _APP + ''
@@ -305,7 +305,7 @@ def showMovieGenre():
 
 
 def showSerieGenre():
-    oGui = cGui()
+    oGui = Gui()
 
     sGenre = 'series'
     url = URL_API + 'videos/genres.json?app=' + _APP + ''
@@ -335,7 +335,7 @@ def showSeriePays():
 
 
 def showPays(genre):
-    oGui = cGui()
+    oGui = Gui()
     url = URL_API + 'videos/countries.json?app=' + _APP + ''
     oRequestHandler = cRequestHandler(url)
     oRequestHandler.addHeaderEntry('User-Agent', UA)
@@ -400,7 +400,7 @@ def GET_URLS_STREAM(url):
 
 
 def showLinks():
-    oGui = cGui()
+    oGui = Gui()
 
     oInputParameterHandler = cInputParameterHandler()
     sUrl = oInputParameterHandler.getValue('siteUrl')

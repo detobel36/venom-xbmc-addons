@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 # Vstream https://github.com/Kodi-vStream/venom-xbmc-addons
 from resources.lib.gui.hoster import cHosterGui
-from resources.lib.gui.gui import cGui
+from resources.lib.gui.gui import Gui
 from resources.lib.handler.inputParameterHandler import cInputParameterHandler
 from resources.lib.handler.outputParameterHandler import cOutputParameterHandler
 from resources.lib.handler.requestHandler import cRequestHandler
@@ -44,7 +44,7 @@ headers = {'User-Agent': UA}
 
 
 def load():
-    oGui = cGui()
+    oGui = Gui()
 
     oOutputParameterHandler = cOutputParameterHandler()
     oOutputParameterHandler.addParameter('siteUrl', 'http://venom/')
@@ -66,7 +66,7 @@ def load():
 
 
 def showMenuFilms():
-    oGui = cGui()
+    oGui = Gui()
 
     oOutputParameterHandler = cOutputParameterHandler()
     oOutputParameterHandler.addParameter('siteUrl', MOVIE_NEWS[0])
@@ -98,7 +98,7 @@ def showMenuFilms():
 
 
 def showMenuSeries():
-    oGui = cGui()
+    oGui = Gui()
 
     oOutputParameterHandler = cOutputParameterHandler()
     oOutputParameterHandler.addParameter('siteUrl', SERIE_SERIES[0])
@@ -126,7 +126,7 @@ def showMenuSeries():
 
 
 def showGenres():
-    oGui = cGui()
+    oGui = Gui()
 
     liste = []
     liste.append(['Action', URL_MAIN + 'category/action/'])
@@ -162,7 +162,7 @@ def showGenres():
 
 
 def showMSearch():
-    oGui = cGui()
+    oGui = Gui()
     sSearchText = oGui.showKeyBoard()
     if (sSearchText):
         sUrl = URL_SEARCH[0] + sSearchText
@@ -172,7 +172,7 @@ def showMSearch():
 
 
 def showSSearch():
-    oGui = cGui()
+    oGui = Gui()
     sSearchText = oGui.showKeyBoard()
     if (sSearchText):
         sUrl = URL_SEARCH2[0] + sSearchText
@@ -182,7 +182,7 @@ def showSSearch():
 
 
 def showMovies(sSearch=''):
-    oGui = cGui()
+    oGui = Gui()
     if sSearch:
         sUrl = sSearch
     else:
@@ -244,7 +244,7 @@ def __checkForNextPage(sHtmlContent):
 
 
 def showSeries(sSearch=''):
-    oGui = cGui()
+    oGui = Gui()
     if sSearch:
         sUrl = sSearch
     else:
@@ -291,7 +291,7 @@ def showSeries(sSearch=''):
 
 
 def showSaisons():
-    oGui = cGui()
+    oGui = Gui()
     oInputParameterHandler = cInputParameterHandler()
     sUrl = oInputParameterHandler.getValue('siteUrl')
     sMovieTitle = oInputParameterHandler.getValue('sMovieTitle')
@@ -338,7 +338,7 @@ def showSaisons():
 
 
 def showEpisodes():
-    oGui = cGui()
+    oGui = Gui()
     oInputParameterHandler = cInputParameterHandler()
     sUrl = oInputParameterHandler.getValue('siteUrl')
     sMovieTitle = oInputParameterHandler.getValue('sMovieTitle')
@@ -380,7 +380,7 @@ def showEpisodes():
 
 def showHosters():
 
-    oGui = cGui()
+    oGui = Gui()
     oInputParameterHandler = cInputParameterHandler()
     sUrl = oInputParameterHandler.getValue('siteUrl')
     sMovieTitle = oInputParameterHandler.getValue('sMovieTitle')
@@ -440,7 +440,7 @@ def showHosters():
 
 
 def ShowPapyLink():
-    oGui = cGui()
+    oGui = Gui()
     oInputParameterHandler = cInputParameterHandler()
     sUrl = oInputParameterHandler.getValue('siteUrl')
     sMovieTitle = oInputParameterHandler.getValue('sMovieTitle')

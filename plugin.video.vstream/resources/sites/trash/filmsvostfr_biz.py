@@ -10,7 +10,7 @@ from resources.lib.parser import cParser
 from resources.lib.handler.requestHandler import cRequestHandler
 from resources.lib.handler.outputParameterHandler import cOutputParameterHandler
 from resources.lib.handler.inputParameterHandler import cInputParameterHandler
-from resources.lib.gui.gui import cGui
+from resources.lib.gui.gui import Gui
 from resources.lib.gui.hoster import cHosterGui
 return False
 
@@ -41,7 +41,7 @@ URL_SEARCH_SERIES = (URL_MAIN + 'recherche.htm?q=', 'showMovies')
 
 
 def load():
-    oGui = cGui()
+    oGui = Gui()
 
     oOutputParameterHandler = cOutputParameterHandler()
     oOutputParameterHandler.addParameter('siteUrl', 'http://venom/')
@@ -87,7 +87,7 @@ def load():
 
 
 def showSearch():
-    oGui = cGui()
+    oGui = Gui()
 
     sSearchText = oGui.showKeyBoard()
     if (sSearchText):
@@ -98,7 +98,7 @@ def showSearch():
 
 
 def showMovieGenres():
-    oGui = cGui()
+    oGui = Gui()
 
     liste = []
     liste.append(['Action', URL_MAIN + '1_1_action.html'])
@@ -141,7 +141,7 @@ def showMovieGenres():
 
 
 def showGenres():
-    oGui = cGui()
+    oGui = Gui()
     oInputParameterHandler = cInputParameterHandler()
     sUrl = oInputParameterHandler.getValue('siteUrl')
     if 'serie' in sUrl:
@@ -184,7 +184,7 @@ def showGenres():
 
 
 def showMoviesYears():
-    oGui = cGui()
+    oGui = Gui()
 
     for i in reversed(xrange(1921, 2019)):
         Year = str(i)
@@ -196,7 +196,7 @@ def showMoviesYears():
 
 
 def showSeriesYears():
-    oGui = cGui()
+    oGui = Gui()
 
     for i in reversed(xrange(1940, 2019)):
         Year = str(i)
@@ -208,7 +208,7 @@ def showSeriesYears():
 
 
 def showAnimsYears():
-    oGui = cGui()
+    oGui = Gui()
 
     for i in reversed(xrange(1969, 2019)):
         Year = str(i)
@@ -220,7 +220,7 @@ def showAnimsYears():
 
 
 def showMovies(sSearch=''):
-    oGui = cGui()
+    oGui = Gui()
 
     if sSearch:
         sUrl = sSearch
@@ -300,7 +300,7 @@ def __checkForNextPage(sHtmlContent):
 
 
 def showEpisode():
-    oGui = cGui()
+    oGui = Gui()
     oParser = cParser()
     oInputParameterHandler = cInputParameterHandler()
     sUrl = oInputParameterHandler.getValue('siteUrl')
@@ -357,7 +357,7 @@ def showEpisode():
 
 
 def showLinks():
-    oGui = cGui()
+    oGui = Gui()
     oParser = cParser()
     oInputParameterHandler = cInputParameterHandler()
     sUrl = oInputParameterHandler.getValue('siteUrl')
@@ -415,7 +415,7 @@ def showLinks():
 
 
 def showHosters():
-    oGui = cGui()
+    oGui = Gui()
     oInputParameterHandler = cInputParameterHandler()
     sUrl = oInputParameterHandler.getValue('siteUrl')
     sMovieTitle = oInputParameterHandler.getValue('sMovieTitle')

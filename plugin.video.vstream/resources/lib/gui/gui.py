@@ -17,9 +17,9 @@ from resources.lib.parser import cParser
 from resources.lib.util import QuotePlus
 
 
-class cGui:
+class Gui:
 
-    SITE_NAME = 'cGui'
+    SITE_NAME = 'Gui'
     CONTENT = ''
     listing = []
     thread_listing = []
@@ -28,10 +28,10 @@ class cGui:
     displaySeason = addon().getSetting('display_season_title')
 
     # Gérer les résultats de la recherche
-    searchResults = {}
-    searchResultsSemaphore = threading.Semaphore()
+    search_results = {}
+    search_results_semaphore = threading.Semaphore()
 
-    def getEpisodeListing(self):
+    def get_episode_listing(self):
         return self.episodeListing
 
     def addNewDir(
@@ -49,7 +49,7 @@ class cGui:
         oGuiElement = cGuiElement()
         # dir ou link => CONTENT par défaut = files
         if Type != 'dir' and Type != 'link':
-            cGui.CONTENT = Type
+            Gui.CONTENT = Type
         oGuiElement.setSiteName(sId)
         oGuiElement.setFunction(sFunction)
         oGuiElement.setTitle(sLabel)
@@ -333,7 +333,7 @@ class cGui:
     # afficher les liens non playable
     def addFolder(self, oGuiElement, oOutputParameterHandler='', _isFolder=True):
         if _isFolder is False:
-            cGui.CONTENT = 'files'
+            Gui.CONTENT = 'files'
 
         # recherche append les reponses
         if window(10101).getProperty('search') == 'true':
@@ -375,7 +375,7 @@ class cGui:
 
         sCat = oGuiElement.getCat()
         if sCat:
-            cGui.sCat = sCat
+            Gui.sCat = sCat
             oOutputParameterHandler.addParameter('sCat', sCat)
 
         sItemUrl = self.__createItemUrl(oGuiElement, oOutputParameterHandler)
@@ -529,15 +529,15 @@ class cGui:
         self.createSimpleMenu(
             oGuiElement,
             oOutputParameterHandler,
-            'cGui',
+            'Gui',
             oGuiElement.getSiteName(),
             'setWatched',
             self.ADDON.VSlang(30206))
 
     def createContexMenuPageSelect(self, oGuiElement, oOutputParameterHandler):
         oContext = cContextElement()
-        oContext.setFile('cGui')
-        oContext.setSiteName('cGui')
+        oContext.setFile('Gui')
+        oContext.setSiteName('Gui')
         oContext.setFunction('selectPage')
         oContext.setTitle(self.ADDON.VSlang(30017))
         oOutputParameterHandler.addParameter('OldFunction', oGuiElement.getFunction())
@@ -547,8 +547,8 @@ class cGui:
 
     def createContexMenuViewBack(self, oGuiElement, oOutputParameterHandler):
         oContext = cContextElement()
-        oContext.setFile('cGui')
-        oContext.setSiteName('cGui')
+        oContext.setFile('Gui')
+        oContext.setSiteName('Gui')
         oContext.setFunction('viewBack')
         oContext.setTitle(self.ADDON.VSlang(30018))
         oOutputParameterHandler.addParameter('sId', oGuiElement.getSiteName())
@@ -575,7 +575,7 @@ class cGui:
         oOutputParameterHandler.addParameter('sTmdbId', oGuiElement.getTmdbId())
         oOutputParameterHandler.addParameter('sFileName', oGuiElement.getFileName())
 
-        sType = cGui.CONTENT.replace('tvshows', 'shows')
+        sType = Gui.CONTENT.replace('tvshows', 'shows')
         oOutputParameterHandler.addParameter('sType', sType)
         self.createSimpleMenu(
             oGuiElement,
@@ -663,7 +663,7 @@ class cGui:
         self.createSimpleMenu(
             oGuiElement,
             oOutputParameterHandler,
-            'cGui',
+            'Gui',
             oGuiElement.getSiteName(),
             'viewInfo',
             self.ADDON.VSlang(30208))
@@ -680,7 +680,7 @@ class cGui:
         self.createSimpleMenu(
             oGuiElement,
             oOutputParameterHandler,
-            'cGui',
+            'Gui',
             oGuiElement.getSiteName(),
             'viewBA',
             self.ADDON.VSlang(30212))
@@ -695,7 +695,7 @@ class cGui:
         self.createSimpleMenu(
             oGuiElement,
             oOutputParameterHandler,
-            'cGui',
+            'Gui',
             oGuiElement.getSiteName(),
             'viewSimil',
             self.ADDON.VSlang(30213))
@@ -777,7 +777,7 @@ class cGui:
         iHandler = cPluginHandler().getPluginHandle()
 
         if not self.listing:
-            self.addText('cGui')
+            self.addText('Gui')
 
         # attendre l'arret des thread utilisés pour récupérer les métadonnées
         total = len(self.thread_listing)
@@ -792,8 +792,8 @@ class cGui:
 
         xbmcplugin.addDirectoryItems(iHandler, self.listing, len(self.listing))
         xbmcplugin.setPluginCategory(iHandler, '')
-        xbmcplugin.setContent(iHandler, cGui.CONTENT)
-        if cGui.CONTENT == 'episodes':
+        xbmcplugin.setContent(iHandler, Gui.CONTENT)
+        if Gui.CONTENT == 'episodes':
             xbmcplugin.addSortMethod(iHandler, xbmcplugin.SORT_METHOD_EPISODE)
         else:
             xbmcplugin.addSortMethod(iHandler, xbmcplugin.SORT_METHOD_NONE)
@@ -804,12 +804,12 @@ class cGui:
             xbmc.executebuiltin('Container.SetViewMode(' + str(forceViewMode) + ')')
         else:
             if self.ADDON.getSetting('active-view') == 'true':
-                if cGui.CONTENT == 'movies' or cGui.CONTENT == 'artists':
+                if Gui.CONTENT == 'movies' or Gui.CONTENT == 'artists':
                     # xbmc.executebuiltin('Container.SetViewMode(507)')
                     xbmc.executebuiltin('Container.SetViewMode(%s)' % self.ADDON.getSetting('movies-view'))
-                elif cGui.CONTENT in ['tvshows', 'seasons', 'episodes']:
-                    xbmc.executebuiltin('Container.SetViewMode(%s)' % self.ADDON.getSetting(cGui.CONTENT + '-view'))
-                elif cGui.CONTENT == 'files':
+                elif Gui.CONTENT in ['tvshows', 'seasons', 'episodes']:
+                    xbmc.executebuiltin('Container.SetViewMode(%s)' % self.ADDON.getSetting(Gui.CONTENT + '-view'))
+                elif Gui.CONTENT == 'files':
                     xbmc.executebuiltin('Container.SetViewMode(%s)' % self.ADDON.getSetting('default-view'))
 
         del self.episodeListing[:]  # Pour l'enchainement des episodes
@@ -1013,25 +1013,25 @@ class cGui:
         return False
 
     def getSearchResult(self):
-        cGui.searchResultsSemaphore.acquire()
-        result = copy.deepcopy(cGui.searchResults)
-        cGui.searchResultsSemaphore.release()
+        Gui.search_results_semaphore.acquire()
+        result = copy.deepcopy(Gui.search_results)
+        Gui.search_results_semaphore.release()
         return result
 
     def addSearchResult(self, oGuiElement, oOutputParameterHandler):
-        cGui.searchResultsSemaphore.acquire()
+        Gui.search_results_semaphore.acquire()
         searchSiteId = oOutputParameterHandler.getValue('searchSiteId')
         if not searchSiteId:
             searchSiteId = oGuiElement.getSiteName()
 
-        if searchSiteId not in cGui.searchResults:
-            cGui.searchResults[searchSiteId] = []
+        if searchSiteId not in Gui.search_results:
+            Gui.search_results[searchSiteId] = []
 
-        cGui.searchResults[searchSiteId].append({'guiElement': oGuiElement,
+        Gui.search_results[searchSiteId].append({'guiElement': oGuiElement,
                                                  'params': copy.deepcopy(oOutputParameterHandler)})
-        cGui.searchResultsSemaphore.release()
+        Gui.search_results_semaphore.release()
 
     def resetSearchResult(self):
-        cGui.searchResultsSemaphore.acquire()
-        cGui.searchResults = {}
-        cGui.searchResultsSemaphore.release()
+        Gui.search_results_semaphore.acquire()
+        Gui.search_results = {}
+        Gui.search_results_semaphore.release()

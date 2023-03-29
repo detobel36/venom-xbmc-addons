@@ -7,7 +7,7 @@ from resources.lib.parser import cParser
 from resources.lib.handler.requestHandler import cRequestHandler
 from resources.lib.handler.outputParameterHandler import cOutputParameterHandler
 from resources.lib.handler.inputParameterHandler import cInputParameterHandler
-from resources.lib.gui.gui import cGui
+from resources.lib.gui.gui import Gui
 from resources.lib.gui.hoster import cHosterGui
 import time
 import base64
@@ -55,7 +55,7 @@ def Decode(chain):
 
 
 def load():
-    oGui = cGui()
+    oGui = Gui()
 
     oOutputParameterHandler = cOutputParameterHandler()
     oOutputParameterHandler.addParameter('siteUrl', 'http://venom/')
@@ -83,7 +83,7 @@ def load():
 
 
 def showMenuMovies():
-    oGui = cGui()
+    oGui = Gui()
 
     oOutputParameterHandler = cOutputParameterHandler()
     oOutputParameterHandler.addParameter('siteUrl', 'http://venom/')
@@ -108,7 +108,7 @@ def showMenuMovies():
 
 
 def showMenuTvShows():
-    oGui = cGui()
+    oGui = Gui()
 
     oOutputParameterHandler = cOutputParameterHandler()
     oOutputParameterHandler.addParameter('siteUrl', 'http://venom/')
@@ -121,7 +121,7 @@ def showMenuTvShows():
 
 
 def showAlpha():
-    oGui = cGui()
+    oGui = Gui()
 
     liste = []
     liste.append(['#', URL_MAIN + 'letter/0-9/'])
@@ -168,7 +168,7 @@ def showAlpha():
 
 
 def showSearch():
-    oGui = cGui()
+    oGui = Gui()
     sSearchText = oGui.showKeyBoard()
     if (sSearchText):
         sUrl = URL_SEARCH[0] + sSearchText
@@ -178,7 +178,7 @@ def showSearch():
 
 
 def showMovieGenres():
-    oGui = cGui()
+    oGui = Gui()
 
     oInputParameterHandler = cInputParameterHandler()
     siteUrl = oInputParameterHandler.getValue('siteUrl')
@@ -207,7 +207,7 @@ def showMovieGenres():
 
 
 def showMovies(sSearch=''):
-    oGui = cGui()
+    oGui = Gui()
 
     if sSearch:
         sUrl = sSearch.replace(' ', '+')
@@ -297,7 +297,7 @@ def __checkForNextPage(sHtmlContent):
 
 
 def ShowSaisonEpisodes():
-    oGui = cGui()
+    oGui = Gui()
     oInputParameterHandler = cInputParameterHandler()
     sUrl = oInputParameterHandler.getValue('siteUrl')
     sDesc = oInputParameterHandler.getValue('sDesc')
@@ -334,7 +334,7 @@ def ShowSaisonEpisodes():
 
 def showHosters():
     # UA = 'Mozilla/5.0 (Windows NT 6.1; Win64; x64; rv:70.0) Gecko/20100101 Firefox/70.0'
-    oGui = cGui()
+    oGui = Gui()
     oParser = cParser()
 
     oInputParameterHandler = cInputParameterHandler()

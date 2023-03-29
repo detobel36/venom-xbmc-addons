@@ -11,7 +11,7 @@ from resources.lib.parser import cParser
 from resources.lib.handler.requestHandler import cRequestHandler
 from resources.lib.handler.outputParameterHandler import cOutputParameterHandler
 from resources.lib.handler.inputParameterHandler import cInputParameterHandler
-from resources.lib.gui.gui import cGui
+from resources.lib.gui.gui import Gui
 from resources.lib.gui.hoster import cHosterGui
 return False
 
@@ -68,7 +68,7 @@ SERIES_GENRES_HD = (True, 'showGenreSeriesHD')
 
 
 def load():
-    oGui = cGui()
+    oGui = Gui()
 
     oOutputParameterHandler = cOutputParameterHandler()
     oOutputParameterHandler.addParameter('siteUrl', 'http://venom/')
@@ -98,7 +98,7 @@ def load():
 
 
 def showMenuFilms():
-    oGui = cGui()
+    oGui = Gui()
 
     oOutputParameterHandler = cOutputParameterHandler()
     oOutputParameterHandler.addParameter('siteUrl', 'http://venom/')
@@ -144,7 +144,7 @@ def showMenuFilms():
 
 
 def showMenuSeries():
-    oGui = cGui()
+    oGui = Gui()
 
     oOutputParameterHandler = cOutputParameterHandler()
     oOutputParameterHandler.addParameter('siteUrl', 'http://venom/')
@@ -182,7 +182,7 @@ def showMenuSeries():
 
 
 def showMenuDessinsAnimes():
-    oGui = cGui()
+    oGui = Gui()
 
     oOutputParameterHandler = cOutputParameterHandler()
     oOutputParameterHandler.addParameter('siteUrl', 'http://venom/')
@@ -201,7 +201,7 @@ def showMenuDessinsAnimes():
 
 
 def showMenuMangas():
-    oGui = cGui()
+    oGui = Gui()
 
     oOutputParameterHandler = cOutputParameterHandler()
     oOutputParameterHandler.addParameter('siteUrl', 'http://venom/')
@@ -215,7 +215,7 @@ def showMenuMangas():
 
 
 def showMenuSpectacles():
-    oGui = cGui()
+    oGui = Gui()
 
     oOutputParameterHandler = cOutputParameterHandler()
     oOutputParameterHandler.addParameter('siteUrl', 'http://venom/')
@@ -234,7 +234,7 @@ def showMenuSpectacles():
 
 
 def showMenuEmissionsTV():
-    oGui = cGui()
+    oGui = Gui()
 
     oOutputParameterHandler = cOutputParameterHandler()
     oOutputParameterHandler.addParameter('siteUrl', 'http://venom/')
@@ -253,7 +253,7 @@ def showMenuEmissionsTV():
 
 
 def showSearchMovies():
-    oGui = cGui()
+    oGui = Gui()
     sSearchText = oGui.showKeyBoard()
     if (sSearchText):
         sUrl = URL_SEARCH_MOVIES[0] + sSearchText
@@ -263,7 +263,7 @@ def showSearchMovies():
 
 
 def showSearchSeries():
-    oGui = cGui()
+    oGui = Gui()
     sSearchText = oGui.showKeyBoard()
     if (sSearchText):
         sUrl = URL_SEARCH_SERIES[0] + sSearchText
@@ -273,7 +273,7 @@ def showSearchSeries():
 
 
 def showSearchAnimes():
-    oGui = cGui()
+    oGui = Gui()
     sSearchText = oGui.showKeyBoard()
     if (sSearchText):
         sUrl = URL_SEARCH_ANIMES[0] + sSearchText
@@ -283,7 +283,7 @@ def showSearchAnimes():
 
 
 def showSearchMangas():
-    oGui = cGui()
+    oGui = Gui()
     sSearchText = oGui.showKeyBoard()
     if (sSearchText):
         sUrl = URL_SEARCH_MANGAS[0] + sSearchText
@@ -293,7 +293,7 @@ def showSearchMangas():
 
 
 def showSearchSpectacles():
-    oGui = cGui()
+    oGui = Gui()
     sSearchText = oGui.showKeyBoard()
     if (sSearchText):
         sUrl = URL_SEARCH_SPECTACLES[0] + sSearchText
@@ -303,7 +303,7 @@ def showSearchSpectacles():
 
 
 def showSearchEmissionsTV():
-    oGui = cGui()
+    oGui = Gui()
     sSearchText = oGui.showKeyBoard()
     if (sSearchText):
         sUrl = URL_SEARCH_EMISSIONS_TV[0] + sSearchText
@@ -329,7 +329,7 @@ def showGenreSeriesHD():
 
 
 def showGenres(basePath):
-    oGui = cGui()
+    oGui = Gui()
 
     liste = []
     liste.append(['Action', URL_MAIN + 'telechargement+5/' + basePath])
@@ -401,7 +401,7 @@ def getIdFromUrl(sUrl):
 
 
 def showMovies(sSearch=''):
-    oGui = cGui()
+    oGui = Gui()
     bGlobal_Search = False
     if sSearch:
 
@@ -544,7 +544,7 @@ def __checkForNextPage(sHtmlContent):
 
 
 def showMoviesReleases():
-    oGui = cGui()
+    oGui = Gui()
     oParser = cParser()
     oInputParameterHandler = cInputParameterHandler()
     sMovieTitle = oInputParameterHandler.getValue('sMovieTitle')
@@ -588,7 +588,7 @@ def showMoviesReleases():
 
 
 def showSaisons():
-    oGui = cGui()
+    oGui = Gui()
 
     oInputParameterHandler = cInputParameterHandler()
     sMovieTitle = oInputParameterHandler.getValue('sMovieTitle')
@@ -644,7 +644,7 @@ def showSeriesReleases():
     oRequestHandler = cRequestHandler(sUrl)
     sHtmlContent = oRequestHandler.request()
 
-    oGui = cGui()
+    oGui = Gui()
 
     oParser = cParser()
     # cut de la zone des releases
@@ -685,7 +685,7 @@ def showSeriesReleases():
 
 
 def showHosters():
-    oGui = cGui()
+    oGui = Gui()
     oInputParameterHandler = cInputParameterHandler()
     sMovieTitle = oInputParameterHandler.getValue('sMovieTitle')
     sUrl = oInputParameterHandler.getValue('siteUrl')
@@ -737,7 +737,7 @@ def showHosters():
 
 def Display_protected_link():
     # VSlog('Display_protected_link')
-    oGui = cGui()
+    oGui = Gui()
     oParser = cParser()
     oInputParameterHandler = cInputParameterHandler()
     sMovieTitle = oInputParameterHandler.getValue('sMovieTitle')
@@ -864,7 +864,7 @@ def DecryptDlProtecte(url):
         return
 
     # tempo pas necessaire
-    # cGui().showInfo("Patientez", 'Décodage en cours', 2)
+    # Gui().showInfo("Patientez", 'Décodage en cours', 2)
     # xbmc.sleep(1000)
 
     # Ancienne methode avec POST

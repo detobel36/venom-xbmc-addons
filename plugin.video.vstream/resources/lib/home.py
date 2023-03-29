@@ -2,7 +2,7 @@
 # vStream https://github.com/Kodi-vStream/venom-xbmc-addons
 # Venom.
 from resources.lib.gui.hoster import cHosterGui
-from resources.lib.gui.gui import cGui
+from resources.lib.gui.gui import Gui
 from resources.lib.gui.guiElement import cGuiElement
 from resources.lib.search import cSearch
 from resources.lib.handler.pluginHandler import cPluginHandler
@@ -19,7 +19,7 @@ class cHome:
     addons = addon()
 
     def load(self):
-        oGui = cGui()
+        oGui = Gui()
 
         oOutputParameterHandler = cOutputParameterHandler()
         oOutputParameterHandler.addParameter('siteUrl', 'http://venom')
@@ -44,7 +44,7 @@ class cHome:
         oGui.setEndOfDirectory(view)
 
     def showVOD(self):
-        oGui = cGui()
+        oGui = Gui()
 
         oOutputParameterHandler = cOutputParameterHandler()
         oOutputParameterHandler.addParameter('siteUrl', 'http://venom')
@@ -72,7 +72,7 @@ class cHome:
         oGui.setEndOfDirectory()
 
     def showMyVideos(self):
-        oGui = cGui()
+        oGui = Gui()
 
         oOutputParameterHandler = cOutputParameterHandler()
         oOutputParameterHandler.addParameter('siteUrl', 'http://venom')
@@ -99,7 +99,7 @@ class cHome:
         oGui.setEndOfDirectory()
 
     def showMenuSearch(self):
-        oGui = cGui()
+        oGui = Gui()
 
         oOutputParameterHandler = cOutputParameterHandler()
 
@@ -128,7 +128,7 @@ class cHome:
         oGui.setEndOfDirectory()
 
     def showSearchText(self):
-        oGui = cGui()
+        oGui = Gui()
         oInputParameterHandler = cInputParameterHandler()
         sSearchText = oGui.showKeyBoard(heading=self.addons.VSlang(30076))
         if not sSearchText:
@@ -140,7 +140,7 @@ class cHome:
         oGui.setEndOfDirectory()
 
     def showMovies(self):
-        oGui = cGui()
+        oGui = Gui()
 
         oOutputParameterHandler = cOutputParameterHandler()
         oOutputParameterHandler.addParameter('sCat', '1')
@@ -248,7 +248,7 @@ class cHome:
         oGui.setEndOfDirectory()
 
     def showSeries(self):
-        oGui = cGui()
+        oGui = Gui()
 
         oOutputParameterHandler = cOutputParameterHandler()
         oOutputParameterHandler.addParameter('sCat', '2')
@@ -330,7 +330,7 @@ class cHome:
         oGui.setEndOfDirectory()
 
     def showAnimes(self):
-        oGui = cGui()
+        oGui = Gui()
 
         oOutputParameterHandler = cOutputParameterHandler()
         oOutputParameterHandler.addParameter('sCat', '3')
@@ -409,7 +409,7 @@ class cHome:
         oGui.setEndOfDirectory()
 
     def showDramas(self):
-        oGui = cGui()
+        oGui = Gui()
 
         # Affiche les Nouveautés Dramas
         oOutputParameterHandler = cOutputParameterHandler()
@@ -481,7 +481,7 @@ class cHome:
         oGui.setEndOfDirectory()
 
     def showDocs(self):
-        oGui = cGui()
+        oGui = Gui()
 
         # Affiche les Nouveautés Documentaires
         oOutputParameterHandler = cOutputParameterHandler()
@@ -523,7 +523,7 @@ class cHome:
         oGui.setEndOfDirectory()
 
     def showSports(self):
-        oGui = cGui()
+        oGui = Gui()
 
         # Affiche les live Sportifs
         oOutputParameterHandler = cOutputParameterHandler()
@@ -572,7 +572,7 @@ class cHome:
         oGui.setEndOfDirectory()
 
     def showDirect(self):
-        oGui = cGui()
+        oGui = Gui()
         oOutputParameterHandler = cOutputParameterHandler()
         oGui.addDir(SITE_IDENTIFIER, 'showSports', self.addons.VSlang(30113), 'sport.png', oOutputParameterHandler)
         oGui.addDir(SITE_IDENTIFIER, 'showMenuTV', self.addons.VSlang(30115), 'tv.png', oOutputParameterHandler)
@@ -580,7 +580,7 @@ class cHome:
         oGui.setEndOfDirectory()
 
     def showMenuTV(self):
-        oGui = cGui()
+        oGui = Gui()
 
         oOutputParameterHandler = cOutputParameterHandler()
 
@@ -615,7 +615,7 @@ class cHome:
         oGui.setEndOfDirectory()
 
     def showReplay(self):
-        oGui = cGui()
+        oGui = Gui()
 
         oOutputParameterHandler = cOutputParameterHandler()
         oOutputParameterHandler.addParameter('sCat', '6')
@@ -664,7 +664,7 @@ class cHome:
         oGui.setEndOfDirectory()
 
     def showNets(self):
-        oGui = cGui()
+        oGui = Gui()
 
         # Affiche les Nouveautés Vidéos
         oOutputParameterHandler = cOutputParameterHandler()
@@ -703,7 +703,7 @@ class cHome:
         oGui.setEndOfDirectory()
 
     def showUsers(self):
-        oGui = cGui()
+        oGui = Gui()
 
         oOutputParameterHandler = cOutputParameterHandler()
         oOutputParameterHandler.addParameter('siteUrl', 'http://')
@@ -726,7 +726,7 @@ class cHome:
         oGui.setEndOfDirectory()
 
     def ShowTools(self):
-        oGui = cGui()
+        oGui = Gui()
 
         oOutputParameterHandler = cOutputParameterHandler()
         oOutputParameterHandler.addParameter('siteUrl', 'http://venom')
@@ -750,7 +750,7 @@ class cHome:
         addon().openSettings()
 
     def showHistory(self):
-        oGui = cGui()
+        oGui = Gui()
 
         from resources.lib.db import cDb
         with cDb() as db:
@@ -802,7 +802,7 @@ class cHome:
         return True
 
     def callpluging(self):
-        oGui = cGui()
+        oGui = Gui()
 
         oInputParameterHandler = cInputParameterHandler()
         sSiteUrl = oInputParameterHandler.getValue('siteUrl')
@@ -821,7 +821,7 @@ class cHome:
         oGui.setEndOfDirectory()
 
     def showHostDirect(self):  # fonction de recherche
-        oGui = cGui()
+        oGui = Gui()
         sUrl = oGui.showKeyBoard(heading=self.addons.VSlang(30045))
         if (sUrl):
 

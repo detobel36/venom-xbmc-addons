@@ -2,7 +2,7 @@
 # vStream https://github.com/Kodi-vStream/venom-xbmc-addons
 # Makoto
 from resources.lib.gui.hoster import cHosterGui
-from resources.lib.gui.gui import cGui
+from resources.lib.gui.gui import Gui
 from resources.lib.handler.inputParameterHandler import cInputParameterHandler
 from resources.lib.handler.outputParameterHandler import cOutputParameterHandler
 from resources.lib.handler.requestHandler import cRequestHandler
@@ -32,7 +32,7 @@ DRAMA_GENRES = (True, 'showGenresD')
 
 
 def load():
-    oGui = cGui()
+    oGui = Gui()
 
     oOutputParameterHandler = cOutputParameterHandler()
     oOutputParameterHandler.addParameter('siteUrl', ANIM_ANIMS[0])
@@ -45,7 +45,7 @@ def load():
 
 
 def showMenuAnims():
-    oGui = cGui()
+    oGui = Gui()
 
     oOutputParameterHandler = cOutputParameterHandler()
     oOutputParameterHandler.addParameter('siteUrl', URL_SEARCH_ANIMS[0])
@@ -69,7 +69,7 @@ def showMenuAnims():
 
 
 def showMenuDramas():
-    oGui = cGui()
+    oGui = Gui()
 
     oOutputParameterHandler = cOutputParameterHandler()
     oOutputParameterHandler.addParameter('siteUrl', URL_SEARCH_ANIMS[0])
@@ -94,7 +94,7 @@ def showMenuDramas():
 
 
 def showGenresA():
-    oGui = cGui()
+    oGui = Gui()
     oParser = cParser()
 
     sUrl = URL_MAIN + 'streaming-animes-en-cours'
@@ -125,7 +125,7 @@ def showGenresA():
 
 
 def showGenresD():
-    oGui = cGui()
+    oGui = Gui()
     oParser = cParser()
 
     sUrl = URL_MAIN + 'download-dramas-en-cours?p=-1'
@@ -156,7 +156,7 @@ def showGenresD():
 
 
 def showSearch():
-    oGui = cGui()
+    oGui = Gui()
     oInputParameterHandler = cInputParameterHandler()
     sUrl = oInputParameterHandler.getValue('siteUrl')
 
@@ -169,7 +169,7 @@ def showSearch():
 
 
 def showSeries():
-    oGui = cGui()
+    oGui = Gui()
     oInputParameterHandler = cInputParameterHandler()
     sUrl = oInputParameterHandler.getValue('siteUrl').replace('+', '%2B').replace('é', 'e').replace('ô', 'o')\
                                                      .replace('É', 'E').replace('ï', 'i').replace('è', 'e')
@@ -215,7 +215,7 @@ def showSeries():
 
 
 def showEpisode(sSearch=''):
-    oGui = cGui()
+    oGui = Gui()
 
     oInputParameterHandler = cInputParameterHandler()
     sUrl = oInputParameterHandler.getValue('siteUrl')
@@ -277,7 +277,7 @@ def showEpisode(sSearch=''):
 
 
 def showHosters():
-    oGui = cGui()
+    oGui = Gui()
     oInputParameterHandler = cInputParameterHandler()
     sUrl = oInputParameterHandler.getValue('siteUrl')
     sMovieTitle = oInputParameterHandler.getValue('sMovieTitle')

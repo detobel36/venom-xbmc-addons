@@ -5,7 +5,7 @@ import re
 import string
 
 from resources.lib.gui.hoster import cHosterGui
-from resources.lib.gui.gui import cGui
+from resources.lib.gui.gui import Gui
 from resources.lib.handler.inputParameterHandler import cInputParameterHandler
 from resources.lib.handler.outputParameterHandler import cOutputParameterHandler
 from resources.lib.handler.requestHandler import cRequestHandler
@@ -29,7 +29,7 @@ URL_SEARCH = (URL_MAIN + '?s=', 'showAnims')
 
 
 def load():
-    oGui = cGui()
+    oGui = Gui()
 
     oOutputParameterHandler = cOutputParameterHandler()
     oOutputParameterHandler.addParameter('siteUrl', 'http://venom/')
@@ -45,7 +45,7 @@ def load():
 
 
 def showAlpha():
-    oGui = cGui()
+    oGui = Gui()
     sAlpha = string.ascii_lowercase
     listAlpha = list(sAlpha)
     liste = []
@@ -93,7 +93,7 @@ def showAlpha():
 
 
 def showSearch():
-    oGui = cGui()
+    oGui = Gui()
 
     sSearchText = oGui.showKeyBoard()
     if sSearchText:
@@ -104,7 +104,7 @@ def showSearch():
 
 
 def showAnims(sSearch=''):
-    oGui = cGui()
+    oGui = Gui()
 
     bSearchGlobal = False
     if sSearch:
@@ -201,7 +201,7 @@ def __checkForNextPage(sHtmlContent):
 
 
 def showSaisons():
-    oGui = cGui()
+    oGui = Gui()
 
     oInputParameterHandler = cInputParameterHandler()
     sUrl = oInputParameterHandler.getValue('siteUrl')
@@ -240,7 +240,7 @@ def showSaisons():
 
 
 def showEpisodes():
-    oGui = cGui()
+    oGui = Gui()
 
     oInputParameterHandler = cInputParameterHandler()
     sUrl = oInputParameterHandler.getValue('siteUrl')
@@ -295,7 +295,7 @@ def showEpisodes():
 
 
 def seriesHosters():
-    oGui = cGui()
+    oGui = Gui()
 
     oInputParameterHandler = cInputParameterHandler()
     sUrl = oInputParameterHandler.getValue('siteUrl')
@@ -347,7 +347,7 @@ def getHostName(url):
 
 
 def hostersLink():
-    oGui = cGui()
+    oGui = Gui()
 
     oInputParameterHandler = cInputParameterHandler()
     sUrl = oInputParameterHandler.getValue('siteUrl')

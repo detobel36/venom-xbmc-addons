@@ -4,7 +4,7 @@
 import re
 
 from resources.lib.gui.hoster import cHosterGui
-from resources.lib.gui.gui import cGui
+from resources.lib.gui.gui import Gui
 from resources.lib.handler.inputParameterHandler import cInputParameterHandler
 from resources.lib.handler.outputParameterHandler import cOutputParameterHandler
 from resources.lib.handler.requestHandler import cRequestHandler
@@ -54,7 +54,7 @@ UA = 'Mozilla/5.0 (Windows NT 6.1; WOW64; rv:70.0) Gecko/20100101 Firefox/70.0'
 
 
 def load():
-    oGui = cGui()
+    oGui = Gui()
 
     oOutputParameterHandler = cOutputParameterHandler()
     oOutputParameterHandler.addParameter('siteUrl', 'siteUrl')
@@ -152,7 +152,7 @@ def showSerieAlpha():
 
 
 def showAllAlpha(sfilter=''):
-    oGui = cGui()
+    oGui = Gui()
     import string
     sAlpha = string.ascii_lowercase
     listalpha = list(sAlpha)
@@ -186,7 +186,7 @@ def showSerieYears():
 
 
 def showAllYears(sfilter=''):
-    oGui = cGui()
+    oGui = Gui()
 
     oOutputParameterHandler = cOutputParameterHandler()
     for i in reversed(range(1983, 2023)):
@@ -206,7 +206,7 @@ def showSerieGenre():
 
 
 def showAllGenre(sfilter=''):
-    oGui = cGui()
+    oGui = Gui()
 
     listegenre = ['action', 'aventure', 'comedie', 'drame', 'fantastique', 'horreur', 'policier', 'romance',
                   'science-fiction', 'sexy', 'sport']
@@ -224,7 +224,7 @@ def showAllGenre(sfilter=''):
 
 
 def showSearch():
-    oGui = cGui()
+    oGui = Gui()
     sSearchText = oGui.showKeyBoard()
     if (sSearchText):
         sUrl = URL_SEARCH[0] + sSearchText
@@ -234,7 +234,7 @@ def showSearch():
 
 
 def showSearchMovie():
-    oGui = cGui()
+    oGui = Gui()
     sSearchText = oGui.showKeyBoard()
     if (sSearchText):
         sUrl = URL_INTERNALSEARCH_MOVIES[0] + sSearchText
@@ -244,7 +244,7 @@ def showSearchMovie():
 
 
 def showSearchSerie():
-    oGui = cGui()
+    oGui = Gui()
     sSearchText = oGui.showKeyBoard()
     if (sSearchText):
         sUrl = URL_INTERNALSEARCH_SERIES[0] + sSearchText
@@ -255,7 +255,7 @@ def showSearchSerie():
 
 def showMovies(sSearch=''):
 
-    oGui = cGui()
+    oGui = Gui()
 
     oInputParameterHandler = cInputParameterHandler()
     sUrl = oInputParameterHandler.getValue('siteUrl')
@@ -335,7 +335,7 @@ def __checkForNextPage(sHtmlContent, sUrl):
 
 
 def showEpisodesxMovies():
-    oGui = cGui()
+    oGui = Gui()
     oParser = cParser()
     oInputParameterHandler = cInputParameterHandler()
     sUrl = oInputParameterHandler.getValue('siteUrl')
@@ -385,7 +385,7 @@ def showEpisodesxMovies():
 
 
 def showLinks():
-    oGui = cGui()
+    oGui = Gui()
     oParser = cParser()
     oInputParameterHandler = cInputParameterHandler()
     sUrl = oInputParameterHandler.getValue('siteUrl')
@@ -422,7 +422,7 @@ def showLinks():
 
 
 def showHosters():
-    oGui = cGui()
+    oGui = Gui()
     oParser = cParser()
     oInputParameterHandler = cInputParameterHandler()
     sUrl = oInputParameterHandler.getValue('siteUrl')

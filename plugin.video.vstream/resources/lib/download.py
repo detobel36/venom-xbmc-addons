@@ -16,7 +16,7 @@ import xbmc
 
 from resources.lib.comaddon import addon, dialog, progress, VSlog, VSupdate, VSPath, isMatrix
 from resources.lib.db import cDb
-from resources.lib.gui.gui import cGui
+from resources.lib.gui.gui import Gui
 from resources.lib.gui.guiElement import cGuiElement
 from resources.lib.handler.inputParameterHandler import cInputParameterHandler
 from resources.lib.handler.outputParameterHandler import cOutputParameterHandler
@@ -340,7 +340,7 @@ class cDownload:
         item.setArt({'icon': 'special://home/addons/plugin.video.vstream/resources/art/download.png'})
         xbmcplugin.addDirectoryItem(sPluginHandle, sItemUrl, item, isFolder=False)
 
-        oGui = cGui()
+        oGui = Gui()
         oOutputParameterHandler = cOutputParameterHandler()
         oGui.addDir(SITE_IDENTIFIER, 'StopDownloadList', self.ADDON.VSlang(30025), 'none.png', oOutputParameterHandler)
         oGui.addDir(SITE_IDENTIFIER, 'getDownloadList', self.ADDON.VSlang(30039), 'listes.png', oOutputParameterHandler)
@@ -485,7 +485,7 @@ class cDownload:
         return
 
     def getDownloadList(self):
-        oGui = cGui()
+        oGui = Gui()
         with cDb() as db:
             row = db.get_download()
 
@@ -591,7 +591,7 @@ class cDownload:
         # titre fichier
         sTitle = self.__createTitle(sUrl, sTitle)
         sTitle = self.__createDownloadFilename(sTitle)
-        sTitle = cGui().showKeyBoard(sTitle)
+        sTitle = Gui().showKeyBoard(sTitle)
 
         if sTitle:
 

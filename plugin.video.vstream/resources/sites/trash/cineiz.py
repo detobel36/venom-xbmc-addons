@@ -2,7 +2,7 @@
 # Vstream https://github.com/Kodi-vStream/venom-xbmc-addons
 #
 from resources.lib.gui.hoster import cHosterGui
-from resources.lib.gui.gui import cGui
+from resources.lib.gui.gui import Gui
 from resources.lib.handler.inputParameterHandler import cInputParameterHandler
 from resources.lib.handler.outputParameterHandler import cOutputParameterHandler
 from resources.lib.handler.requestHandler import cRequestHandler
@@ -44,7 +44,7 @@ ANIM_LIST = (True, 'showAnimesList')
 
 
 def load():
-    oGui = cGui()
+    oGui = Gui()
 
     oOutputParameterHandler = cOutputParameterHandler()
     oOutputParameterHandler.addParameter('siteUrl', 'http://venom/')
@@ -102,7 +102,7 @@ def load():
 
 
 def showSearch():
-    oGui = cGui()
+    oGui = Gui()
 
     sSearchText = oGui.showKeyBoard()
     if (sSearchText):
@@ -113,7 +113,7 @@ def showSearch():
 
 
 def showGenres():
-    oGui = cGui()
+    oGui = Gui()
     oInputParameterHandler = cInputParameterHandler()
     sUrl = oInputParameterHandler.getValue('siteUrl')
 
@@ -167,7 +167,7 @@ def showGenres():
 
 
 def showList():
-    oGui = cGui()
+    oGui = Gui()
     oInputParameterHandler = cInputParameterHandler()
     sUrl = oInputParameterHandler.getValue('siteUrl')
 
@@ -231,7 +231,7 @@ def showList():
 
 
 def showAnimesList():
-    oGui = cGui()
+    oGui = Gui()
 
     liste = []
     liste.append(['09', URL_MAIN + 'animes/alphabet/09'])
@@ -279,7 +279,7 @@ def showAnimesList():
 
 
 def showMovieYears():
-    oGui = cGui()
+    oGui = Gui()
 
     for i in reversed(xrange(1921, 2019)):
         Year = str(i)
@@ -291,7 +291,7 @@ def showMovieYears():
 
 
 def showSerieYears():
-    oGui = cGui()
+    oGui = Gui()
 
     for i in reversed(xrange(1961, 2019)):
         Year = str(i)
@@ -303,7 +303,7 @@ def showSerieYears():
 
 
 def showMovieSearch(sSearch=''):
-    oGui = cGui()
+    oGui = Gui()
 
     if not sSearch:
         return
@@ -359,7 +359,7 @@ def showMovieSearch(sSearch=''):
 
 
 def showMovies(sSearch=''):
-    oGui = cGui()
+    oGui = Gui()
     if sSearch:
         sUrl = sSearch
     else:
@@ -438,7 +438,7 @@ def __checkForNextPage(sHtmlContent):
 
 
 def showSaisons():
-    oGui = cGui()
+    oGui = Gui()
 
     oInputParameterHandler = cInputParameterHandler()
     sUrl = oInputParameterHandler.getValue('siteUrl')
@@ -478,7 +478,7 @@ def showSaisons():
 
 
 def showEpisodes():
-    oGui = cGui()
+    oGui = Gui()
 
     oInputParameterHandler = cInputParameterHandler()
     sUrl = oInputParameterHandler.getValue('siteUrl')
@@ -520,7 +520,7 @@ def showEpisodes():
 
 
 def showLinks():
-    oGui = cGui()
+    oGui = Gui()
     import threading
     threads = []
 
@@ -572,7 +572,7 @@ def showLinks():
 
 
 def showHosters():
-    oGui = cGui()
+    oGui = Gui()
     oInputParameterHandler = cInputParameterHandler()
     sUrl = oInputParameterHandler.getValue('siteUrl').replace('https://streamcomplet.cineiz.io', URL_MAIN)
     sMovieTitle = oInputParameterHandler.getValue('sMovieTitle')

@@ -2,7 +2,7 @@
 # Venom.
 from resources.lib.gui.hoster import cHosterGui  # system de recherche pour l'hote
 from resources.lib.handler.hosterHandler import cHosterHandler  # system de recherche pour l'hote
-from resources.lib.gui.gui import cGui  # system d'affichage pour xbmc
+from resources.lib.gui.gui import Gui  # system d'affichage pour xbmc
 from resources.lib.gui.guiElement import cGuiElement  # system d'affichage pour xbmc
 from resources.lib.handler.inputParameterHandler import cInputParameterHandler  # entrer des parametres
 from resources.lib.handler.outputParameterHandler import cOutputParameterHandler  # sortis des parametres
@@ -95,7 +95,7 @@ def _DecryptProtectStream(url):
 
 
 def load():  # function charger automatiquement par l'addon l'index de votre navigation.
-    oGui = cGui()  # ouvre l'affichage
+    oGui = Gui()  # ouvre l'affichage
 
     oOutputParameterHandler = cOutputParameterHandler()  # apelle la function pour sortir un parametre
     # sortis du parametres siteUrl oublier pas la Majuscule
@@ -118,7 +118,7 @@ def load():  # function charger automatiquement par l'addon l'index de votre nav
 
 
 def showSearch():
-    oGui = cGui()
+    oGui = Gui()
 
     sSearchText = oGui.showKeyBoard()
     if (sSearchText):
@@ -128,7 +128,7 @@ def showSearch():
 
 
 def showAlpha(sLettre=''):
-    oGui = cGui()
+    oGui = Gui()
 
     oInputParameterHandler = cInputParameterHandler()
     sUrl = oInputParameterHandler.getValue('siteUrl')
@@ -198,7 +198,7 @@ def showAlpha(sLettre=''):
 
 
 def showMovies(sSearch=''):
-    oGui = cGui()
+    oGui = Gui()
 
     oInputParameterHandler = cInputParameterHandler()
 
@@ -323,7 +323,7 @@ def __checkForNextPage(sHtmlContent):
 
 
 def showEpisode():
-    oGui = cGui()  # ouvre l'affichage
+    oGui = Gui()  # ouvre l'affichage
 
     oInputParameterHandler = cInputParameterHandler()
     sUrl = oInputParameterHandler.getValue('siteUrl')
@@ -420,7 +420,7 @@ def showEpisode():
 
 
 def showListHosters():
-    oGui = cGui()  # ouvre l'affichage
+    oGui = Gui()  # ouvre l'affichage
 
     oInputParameterHandler = cInputParameterHandler()
     sUrl = oInputParameterHandler.getValue('siteUrl')
@@ -483,7 +483,7 @@ def showListHosters():
 
 
 def showHosters():
-    oGui = cGui()
+    oGui = Gui()
 
     oInputParameterHandler = cInputParameterHandler()
     sUrl = oInputParameterHandler.getValue('siteUrl')

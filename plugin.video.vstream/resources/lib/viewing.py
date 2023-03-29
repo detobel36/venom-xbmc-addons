@@ -5,7 +5,7 @@ from resources.lib.comaddon import dialog, addon, xbmc, isMatrix
 from resources.lib.db import cDb
 from resources.lib.handler.inputParameterHandler import cInputParameterHandler
 from resources.lib.handler.outputParameterHandler import cOutputParameterHandler
-from resources.lib.gui.gui import cGui
+from resources.lib.gui.gui import Gui
 from resources.lib.util import UnquotePlus
 
 SITE_IDENTIFIER = 'cViewing'
@@ -35,7 +35,7 @@ class cViewing:
         with cDb() as db:
             if db.del_viewing(meta):
                 self.DIALOG.VSinfo(addon().VSlang(30072))
-                cGui().updateDirectory()
+                Gui().updateDirectory()
             return True
 
     # Suppression d'un bookmark depuis un Widget
@@ -51,12 +51,12 @@ class cViewing:
         with cDb() as db:
             if db.del_viewing(meta):
                 self.DIALOG.VSinfo(addon().VSlang(30072))
-                cGui().updateDirectory()
+                Gui().updateDirectory()
 
             return True
 
     def showMenu(self):
-        oGui = cGui()
+        oGui = Gui()
         addons = addon()
 
         oOutputParameterHandler = cOutputParameterHandler()
@@ -82,7 +82,7 @@ class cViewing:
         oGui.setEndOfDirectory()
 
     def getViewing(self):
-        oGui = cGui()
+        oGui = Gui()
 
         oInputParameterHandler = cInputParameterHandler()
         catFilter = oInputParameterHandler.getValue('sCat')

@@ -2,7 +2,7 @@
 # Venom.
 from resources.lib.config import cConfig
 from resources.lib.db import cDb
-from resources.lib.gui.gui import cGui
+from resources.lib.gui.gui import Gui
 from resources.lib.gui.guiElement import cGuiElement
 from resources.lib.gui.hoster import cHosterGui
 from resources.lib.handler.requestHandler import cRequestHandler
@@ -79,7 +79,7 @@ class cBseries:
     def getLoad(self):
 
         # self.getToken()
-        oGui = cGui()
+        oGui = Gui()
 
         if cConfig().getSetting("bstoken") == '':
             self.getToken()
@@ -159,7 +159,7 @@ class cBseries:
         import datetime
         import time
         # self.getToken()
-        oGui = cGui()
+        oGui = Gui()
 
         oInputParameterHandler = cInputParameterHandler()
         userID = oInputParameterHandler.getValue('userID')
@@ -201,7 +201,7 @@ class cBseries:
         oInputParameterHandler = cInputParameterHandler()
         sUrl = oInputParameterHandler.getValue('siteUrl')
 
-        oGui = cGui()
+        oGui = Gui()
 
         oRequestHandler = cRequestHandler(sUrl)
         oRequestHandler.addHeaderEntry('X-BetaSeries-Key', API_KEY)
@@ -227,7 +227,7 @@ class cBseries:
         sUrl = oInputParameterHandler.getValue('siteUrl')
         sParam = oInputParameterHandler.getValue('param')
 
-        oGui = cGui()
+        oGui = Gui()
 
         oRequestHandler = cRequestHandler(sUrl)
         oRequestHandler.addHeaderEntry('X-BetaSeries-Key', API_KEY)
@@ -284,7 +284,7 @@ class cBseries:
         return
 
     def getBseries2(self):
-        oGui = cGui()
+        oGui = Gui()
 
         oInputParameterHandler = cInputParameterHandler()
         sUrl = oInputParameterHandler.getValue('siteUrl')

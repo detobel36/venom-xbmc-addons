@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 # https://github.com/Kodi-vStream/venom-xbmc-addons
 
-from resources.lib.gui.gui import cGui
+from resources.lib.gui.gui import Gui
 from resources.lib.gui.guiElement import cGuiElement
 from resources.lib.handler.inputParameterHandler import cInputParameterHandler
 from resources.lib.handler.outputParameterHandler import cOutputParameterHandler
@@ -30,7 +30,7 @@ tmdb_account = ''
 
 
 def load():
-    oGui = cGui()
+    oGui = Gui()
     addons = addon()
 
     oOutputParameterHandler = cOutputParameterHandler()
@@ -80,7 +80,7 @@ def load():
 
 
 def showMyTmdb():
-    oGui = cGui()
+    oGui = Gui()
     grab = cTMDb()
     addons = addon()
 
@@ -233,7 +233,7 @@ def getCat():
 
 
 def getAction():
-    oGui = cGui()
+    oGui = Gui()
     grab = cTMDb()
     dialogs = dialog()
     addons = addon()
@@ -392,7 +392,7 @@ def getToken():
 
 
 def showSearchMovie():
-    oGui = cGui()
+    oGui = Gui()
 
     sSearchText = oGui.showKeyBoard()
     if sSearchText:
@@ -402,7 +402,7 @@ def showSearchMovie():
 
 
 def showSearchSerie():
-    oGui = cGui()
+    oGui = Gui()
 
     sSearchText = oGui.showKeyBoard()
     if sSearchText:
@@ -412,7 +412,7 @@ def showSearchSerie():
 
 
 def showSearchActor():
-    oGui = cGui()
+    oGui = Gui()
 
     sSearchText = oGui.showKeyBoard()
     if sSearchText:
@@ -422,7 +422,7 @@ def showSearchActor():
 
 
 def showGenreMovie():
-    oGui = cGui()
+    oGui = Gui()
     grab = cTMDb()
 
     oInputParameterHandler = cInputParameterHandler()
@@ -445,7 +445,7 @@ def showGenreMovie():
 
 
 def showGenreTV():
-    oGui = cGui()
+    oGui = Gui()
     grab = cTMDb()
 
     oInputParameterHandler = cInputParameterHandler()
@@ -470,7 +470,7 @@ def showGenreTV():
 
 
 def showUserLists():
-    oGui = cGui()
+    oGui = Gui()
     grab = cTMDb()
 
     oInputParameterHandler = cInputParameterHandler()
@@ -504,7 +504,7 @@ def showUserLists():
 
 
 def showFolderList():
-    oGui = cGui()
+    oGui = Gui()
 
     liste = []
     liste.append(['Top 50 des plus grands films', '10'])
@@ -531,7 +531,7 @@ def showFolderList():
 
 
 def showMovies(sSearch=''):
-    oGui = cGui()
+    oGui = Gui()
     grab = cTMDb()
     addons = addon()
 
@@ -588,7 +588,7 @@ def showMovies(sSearch=''):
                 else:
                     oOutputParameterHandler.addParameter('searchtext', cUtil().CleanName(sTitle))
 
-                cGui.CONTENT = "movies"
+                Gui.CONTENT = "movies"
                 oGuiElement = cGuiElement()
                 oGuiElement.setTmdbId(sId)
                 oGuiElement.setSiteName('globalSearch')
@@ -657,7 +657,7 @@ def showSeries(sSearch=''):
 
         result = grab.getUrl(sUrl, iPage, term)
 
-    oGui = cGui()
+    oGui = Gui()
 
     try:
         total = len(result)
@@ -694,7 +694,7 @@ def showSeries(sSearch=''):
                 else:
                     oOutputParameterHandler.addParameter('searchtext', cUtil().CleanName(sTitle))
 
-                cGui.CONTENT = "tvshows"
+                Gui.CONTENT = "tvshows"
                 oGuiElement = cGuiElement()
                 oGuiElement.setTmdbId(sId)
                 oGuiElement.setSiteName(SITE_IDENTIFIER)  # à activer pour saisons
@@ -736,7 +736,7 @@ def showSeries(sSearch=''):
 
 
 def showSeriesSaison():
-    oGui = cGui()
+    oGui = Gui()
     grab = cTMDb()
     addons = addon()
 
@@ -802,7 +802,7 @@ def showSeriesSaison():
             oOutputParameterHandler.addParameter('sFanart', sFanart)
             oOutputParameterHandler.addParameter('sTmdbId', sTmdbId)
 
-            cGui.CONTENT = "tvshows"
+            Gui.CONTENT = "tvshows"
             oGuiElement = cGuiElement()
             oGuiElement.setTmdbId(sTmdbId)
             oGuiElement.setSiteName(SITE_IDENTIFIER)
@@ -847,7 +847,7 @@ def showSeriesEpisode():
     if sFanart is False:
         sFanart = ''
 
-    oGui = cGui()
+    oGui = Gui()
 
     # recherche saison complète
     oOutputParameterHandler = cOutputParameterHandler()
@@ -910,7 +910,7 @@ def showSeriesEpisode():
             else:
                 oOutputParameterHandler.addParameter('searchtext', sMovieTitle)
 
-            cGui.CONTENT = "tvshows"
+            Gui.CONTENT = "tvshows"
             oGuiElement = cGuiElement()
             oGuiElement.setTmdbId(sTmdbId)
             oGuiElement.setSiteName('globalSearch')
@@ -936,7 +936,7 @@ def showSeriesEpisode():
 
 
 def showActors(sSearch=''):
-    oGui = cGui()
+    oGui = Gui()
     grab = cTMDb()
     addons = addon()
 
@@ -1023,7 +1023,7 @@ def showActors(sSearch=''):
 
 
 def showFilmActor():
-    oGui = cGui()
+    oGui = Gui()
     grab = cTMDb()
     addons = addon()
 
@@ -1067,7 +1067,7 @@ def showFilmActor():
             else:
                 oOutputParameterHandler.addParameter('searchtext', sTitle)
 
-            cGui.CONTENT = "movies"
+            Gui.CONTENT = "movies"
             oGuiElement = cGuiElement()
             oGuiElement.setTmdbId(sId)
             oGuiElement.setSiteName('globalSearch')
@@ -1095,7 +1095,7 @@ def showFilmActor():
 
 
 def showLists():
-    oGui = cGui()
+    oGui = Gui()
     grab = cTMDb()
     addons = addon()
 
@@ -1141,7 +1141,7 @@ def showLists():
             else:
                 oOutputParameterHandler.addParameter('searchtext', cUtil().CleanName(sTitle))
 
-            cGui.CONTENT = "movies"
+            Gui.CONTENT = "movies"
             oGuiElement = cGuiElement()
             oGuiElement.setTmdbId(sId)
             oGuiElement.setSiteName('globalSearch')

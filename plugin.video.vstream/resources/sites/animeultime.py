@@ -5,7 +5,7 @@ import re
 
 from resources.lib.comaddon import addon, isMatrix, siteManager
 from resources.lib.gui.hoster import cHosterGui
-from resources.lib.gui.gui import cGui
+from resources.lib.gui.gui import Gui
 from resources.lib.handler.inputParameterHandler import cInputParameterHandler
 from resources.lib.handler.outputParameterHandler import cOutputParameterHandler
 from resources.lib.handler.requestHandler import cRequestHandler
@@ -41,7 +41,7 @@ adulteContent = addon().getSetting('contenu_adulte')
 
 
 def load():
-    oGui = cGui()
+    oGui = Gui()
 
     oOutputParameterHandler = cOutputParameterHandler()
     oOutputParameterHandler.addParameter('siteUrl', URL_SEARCH_DRAMAS[0])
@@ -60,7 +60,7 @@ def load():
 
 
 def showMenuAnimes():
-    oGui = cGui()
+    oGui = Gui()
 
     oOutputParameterHandler = cOutputParameterHandler()
     oOutputParameterHandler.addParameter('siteUrl', ANIM_ALPHA[0])
@@ -76,7 +76,7 @@ def showMenuAnimes():
 
 
 def showMenuDramas():
-    oGui = cGui()
+    oGui = Gui()
 
     oOutputParameterHandler = cOutputParameterHandler()
     oOutputParameterHandler.addParameter('siteUrl', DRAMA_ALPHA[0])
@@ -92,7 +92,7 @@ def showMenuDramas():
 
 
 def showMenuTokusatsu():
-    oGui = cGui()
+    oGui = Gui()
 
     oOutputParameterHandler = cOutputParameterHandler()
     oOutputParameterHandler.addParameter('siteUrl', TOKUSATSU[0])
@@ -154,7 +154,7 @@ def ShowGenreDramas():
 
 
 def ShowGenre(typemovie):
-    oGui = cGui()
+    oGui = Gui()
     list_listgenre = loadTypelist(typemovie, 'genre')
     oOutputParameterHandler = cOutputParameterHandler()
     for ilist in list_listgenre:
@@ -175,7 +175,7 @@ def ShowYearsDramas():
 
 
 def ShowYears(typemovie):
-    oGui = cGui()
+    oGui = Gui()
     list_year = loadTypelist(typemovie, 'year')
     # http://www.anime-ultime.net/series-0-1/anime/--626--    2019
     oOutputParameterHandler = cOutputParameterHandler()
@@ -201,7 +201,7 @@ def ShowAlphaTokusatsu():
 
 
 def ShowAlpha(typemovie):
-    oGui = cGui()
+    oGui = Gui()
 
     import string
     # http://www.anime-ultime.net/series-0-1/tokusatsu/c---
@@ -227,7 +227,7 @@ def ShowAlpha(typemovie):
 
 
 def showSearch():
-    oGui = cGui()
+    oGui = Gui()
     oInputParameterHandler = cInputParameterHandler()
     sUrl = oInputParameterHandler.getValue('siteUrl')
 
@@ -240,7 +240,7 @@ def showSearch():
 
 
 def showSeries(sSearch=''):
-    oGui = cGui()
+    oGui = Gui()
     if sSearch:
         oUtil = cUtil()
         sSearchText = sSearch.replace(URL_SEARCH_DRAMAS[0], '')
@@ -343,7 +343,7 @@ def showSeries(sSearch=''):
 
 
 def showEpisode():
-    oGui = cGui()
+    oGui = Gui()
     oInputParameterHandler = cInputParameterHandler()
     sUrl = oInputParameterHandler.getValue('siteUrl')
     sThumb = oInputParameterHandler.getValue('sThumb')
@@ -421,7 +421,7 @@ def showEpisode():
 
 
 def showHosters():
-    oGui = cGui()
+    oGui = Gui()
     oParser = cParser()
     oInputParameterHandler = cInputParameterHandler()
     sUrl = oInputParameterHandler.getValue('siteUrl')

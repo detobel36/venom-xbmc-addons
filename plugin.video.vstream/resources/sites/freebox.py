@@ -6,7 +6,7 @@ import string
 from resources.lib.comaddon import progress, addon, dialog, siteManager
 from resources.lib.enregistrement import cEnregistremement
 from resources.lib.epg import cePg
-from resources.lib.gui.gui import cGui
+from resources.lib.gui.gui import Gui
 from resources.lib.gui.guiElement import cGuiElement
 from resources.lib.gui.hoster import cHosterGui
 from resources.lib.handler.inputParameterHandler import cInputParameterHandler
@@ -44,7 +44,7 @@ class track:
 
 
 def load():
-    oGui = cGui()
+    oGui = Gui()
     addons = addon()
 
     oOutputParameterHandler = cOutputParameterHandler()
@@ -54,7 +54,7 @@ def load():
 
 
 def showMenuTV():
-    oGui = cGui()
+    oGui = Gui()
     addons = addon()
 
     oOutputParameterHandler = cOutputParameterHandler()
@@ -64,7 +64,7 @@ def showMenuTV():
 
 
 def showMenuMusic():
-    oGui = cGui()
+    oGui = Gui()
     addons = addon()
 
     oOutputParameterHandler = cOutputParameterHandler()
@@ -117,7 +117,7 @@ def parseM3U(sUrl=None):  # Traite les m3u local
 
 
 def showWeb():  # Code qui s'occupe de liens TV du Web
-    oGui = cGui()
+    oGui = Gui()
 
     oInputParameterHandler = cInputParameterHandler()
     sUrl = oInputParameterHandler.getValue('siteUrl')
@@ -240,7 +240,7 @@ def enregistrement():  # Code qui gerent l'enregistrement
 
 
 def showAZ():
-    oGui = cGui()
+    oGui = Gui()
     oInputParameterHandler = cInputParameterHandler()
     sUrl = oInputParameterHandler.getValue('siteUrl')
 
@@ -259,7 +259,7 @@ def showAZ():
 
 
 def showAZRadio():
-    oGui = cGui()
+    oGui = Gui()
     oInputParameterHandler = cInputParameterHandler()
     sUrl = oInputParameterHandler.getValue('siteUrl')
 
@@ -278,7 +278,7 @@ def showAZRadio():
 
 
 def showTV():
-    oGui = cGui()
+    oGui = Gui()
     oInputParameterHandler = cInputParameterHandler()
     sUrl = oInputParameterHandler.getValue('siteUrl')
 
@@ -346,7 +346,7 @@ def showTV():
 
 
 def play__():  # Lancer les liens
-    oGui = cGui()
+    oGui = Gui()
     oInputParameterHandler = cInputParameterHandler()
     sUrl = oInputParameterHandler.getValue('siteUrl').replace('P_L_U_S', '+')
     sTitle = oInputParameterHandler.getValue('sMovieTitle')

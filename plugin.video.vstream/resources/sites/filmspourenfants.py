@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 # vStream https://github.com/Kodi-vStream/venom-xbmc-addons
 from resources.lib.gui.hoster import cHosterGui
-from resources.lib.gui.gui import cGui
+from resources.lib.gui.gui import Gui
 from resources.lib.handler.inputParameterHandler import cInputParameterHandler
 from resources.lib.handler.outputParameterHandler import cOutputParameterHandler
 from resources.lib.handler.requestHandler import cRequestHandler
@@ -26,7 +26,7 @@ ALL_ALL = (URL_MAIN + 'tous-les-films-pour-enfants.html', 'showMovies')
 
 
 def load():
-    oGui = cGui()
+    oGui = Gui()
 
     oOutputParameterHandler = cOutputParameterHandler()
     oOutputParameterHandler.addParameter('siteUrl', AGE_3ANS[0])
@@ -54,7 +54,7 @@ def load():
 
 
 def showThemes():
-    oGui = cGui()
+    oGui = Gui()
     oParser = cParser()
     oRequestHandler = cRequestHandler('siteUrl')
     sHtmlContent = oRequestHandler.request()
@@ -80,7 +80,7 @@ def showThemes():
 
 
 def showMovies():
-    oGui = cGui()
+    oGui = Gui()
     oParser = cParser()
 
     oInputParameterHandler = cInputParameterHandler()
@@ -117,7 +117,7 @@ def showMovies():
 
 
 def showHosters():
-    oGui = cGui()
+    oGui = Gui()
     oInputParameterHandler = cInputParameterHandler()
     sUrl = oInputParameterHandler.getValue('siteUrl')
     sMovieTitle = oInputParameterHandler.getValue('sMovieTitle')

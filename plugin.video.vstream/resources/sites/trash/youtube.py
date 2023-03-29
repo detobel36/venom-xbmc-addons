@@ -13,7 +13,7 @@ from resources.lib.handler.requestHandler import cRequestHandler
 from resources.lib.handler.outputParameterHandler import cOutputParameterHandler
 from resources.lib.handler.inputParameterHandler import cInputParameterHandler
 from resources.lib.gui.guiElement import cGuiElement
-from resources.lib.gui.gui import cGui
+from resources.lib.gui.gui import Gui
 import ssl
 import re
 import sys
@@ -109,7 +109,7 @@ class youtube:
 
 
 def load():
-    oGui = cGui()
+    oGui = Gui()
     addons = addon()
 
     oOutputParameterHandler = cOutputParameterHandler()
@@ -137,7 +137,7 @@ def load():
 
 def showGenres():
 
-    oGui = cGui()
+    oGui = Gui()
 
     liste = []
     liste.append(['1', 'Film & Animation'])
@@ -183,7 +183,7 @@ def showGenres():
 
 
 def showLinks():
-    oGui = cGui()
+    oGui = Gui()
     oInputParameterHandler = cInputParameterHandler()
     sCatID = oInputParameterHandler.getValue('videoCategoryId')
     sNext = oInputParameterHandler.getValue('pageToken')
@@ -263,7 +263,7 @@ def __checkForNextPage(sHtmlContent):  # Affiche les page suivant si il y en a
 
 
 def showHosters():
-    oGui = cGui()
+    oGui = Gui()
     oInputParameterHandler = cInputParameterHandler()
     sUrl = oInputParameterHandler.getValue('siteUrl')
     sMovieTitle = oInputParameterHandler.getValue('sMovieTitle')
@@ -279,7 +279,7 @@ def showHosters():
 
 
 def showAllPlaylist():  # On recupere les differentes playlist si il y en a
-    oGui = cGui()
+    oGui = Gui()
 
     oInputParameterHandler = cInputParameterHandler()
     sUrl = oInputParameterHandler.getValue('siteUrl')
@@ -415,7 +415,7 @@ def showAllPlaylist():  # On recupere les differentes playlist si il y en a
 
 
 def showWorldIptvGratuit():  # On recupere les liens qui sont dans les playlist 'World' de IptvGratuit
-    oGui = cGui()
+    oGui = Gui()
 
     oInputParameterHandler = cInputParameterHandler()
     sUrl = oInputParameterHandler.getValue('siteUrl')
@@ -539,7 +539,7 @@ def getHtml(sUrl, data=None):  # S'occupe des requetes
 
 
 def parseM3U(infile):  # Traite les m3u local
-    oGui = cGui()
+    oGui = Gui()
     oInputParameterHandler = cInputParameterHandler()
     sUrl = oInputParameterHandler.getValue('siteUrl')
 
@@ -607,7 +607,7 @@ def parseM3U(infile):  # Traite les m3u local
 
 
 def showWeb():  # Code qui s'occupe de liens TV du Web
-    oGui = cGui()
+    oGui = Gui()
     oInputParameterHandler = cInputParameterHandler()
     sUrl = oInputParameterHandler.getValue('siteUrl')
 
@@ -728,7 +728,7 @@ def enregistrement():  # Code qui gere l'epg
 def showAZ():
 
     import string
-    oGui = cGui()
+    oGui = Gui()
     oInputParameterHandler = cInputParameterHandler()
     sUrl = oInputParameterHandler.getValue('siteUrl')
 
@@ -750,7 +750,7 @@ def showAZ():
 def showAZRadio():
 
     import string
-    oGui = cGui()
+    oGui = Gui()
     oInputParameterHandler = cInputParameterHandler()
     oInputParameterHandler = cInputParameterHandler()
     sUrl = oInputParameterHandler.getValue('siteUrl')
@@ -771,7 +771,7 @@ def showAZRadio():
 
 
 def showTV():
-    oGui = cGui()
+    oGui = Gui()
     oInputParameterHandler = cInputParameterHandler()
     sUrl = oInputParameterHandler.getValue('siteUrl')
 
@@ -846,7 +846,7 @@ def showTV():
 
 
 def play__():  # Lancer les liens
-    oGui = cGui()
+    oGui = Gui()
 
     oInputParameterHandler = cInputParameterHandler()
     sUrl = oInputParameterHandler.getValue('siteUrl').replace('P_L_U_S', '+')

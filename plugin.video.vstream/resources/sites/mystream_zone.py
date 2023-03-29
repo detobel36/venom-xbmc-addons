@@ -4,7 +4,7 @@
 # return False
 from resources.lib.comaddon import siteManager
 from resources.lib.gui.hoster import cHosterGui
-from resources.lib.gui.gui import cGui
+from resources.lib.gui.gui import Gui
 from resources.lib.handler.inputParameterHandler import cInputParameterHandler
 from resources.lib.handler.outputParameterHandler import cOutputParameterHandler
 from resources.lib.handler.requestHandler import cRequestHandler
@@ -56,7 +56,7 @@ SERIE_NEWS_SAISONS = (URL_MAIN + 'seasons/', 'showMovies')
 
 
 def load():
-    oGui = cGui()
+    oGui = Gui()
 
     oOutputParameterHandler = cOutputParameterHandler()
     oOutputParameterHandler.addParameter('siteUrl', 'http://venom/')
@@ -84,7 +84,7 @@ def load():
 
 
 def showMenuMovies():
-    oGui = cGui()
+    oGui = Gui()
 
     oOutputParameterHandler = cOutputParameterHandler()
     oOutputParameterHandler.addParameter('siteUrl', MY_SEARCH_MOVIES[0])
@@ -103,7 +103,7 @@ def showMenuMovies():
 
 
 def showMenuTvShows():
-    oGui = cGui()
+    oGui = Gui()
 
     oOutputParameterHandler = cOutputParameterHandler()
     oOutputParameterHandler.addParameter('siteUrl', MY_SEARCH_SERIES[0])
@@ -130,7 +130,7 @@ def showMenuTvShows():
 
 
 def showSearch():
-    oGui = cGui()
+    oGui = Gui()
     sSearchText = oGui.showKeyBoard()
     if sSearchText:
         sUrl = URL_SEARCH[0] + sSearchText.replace(' ', '%20')
@@ -140,7 +140,7 @@ def showSearch():
 
 
 def showSearchSerie():
-    oGui = cGui()
+    oGui = Gui()
     sSearchText = oGui.showKeyBoard()
     if sSearchText:
         sUrl = URL_SEARCH[0] + key_search_series + sSearchText.replace(' ', '%20')
@@ -150,7 +150,7 @@ def showSearchSerie():
 
 
 def showSearchMovie():
-    oGui = cGui()
+    oGui = Gui()
     sSearchText = oGui.showKeyBoard()
     if sSearchText:
         sUrl = URL_SEARCH[0] + key_search_movies + sSearchText.replace(' ', '%20')
@@ -160,7 +160,7 @@ def showSearchMovie():
 
 
 def showGenres():
-    oGui = cGui()
+    oGui = Gui()
 
     liste = [['Action', 'action'], ['Action & Adventure', 'action-adventure'], ['Adventure', 'adventure'],
              ['Animation', 'animation'], ['Aventure', 'aventure'], ['Comedie', 'comedie'], ['Comedy', 'comedie'],
@@ -190,7 +190,7 @@ def showAlphaSeries():
 
 
 def showAlpha(stype):
-    oGui = cGui()
+    oGui = Gui()
     # requete json 20 resultat max
     # https://www3.mystream.zone/wp-json/dooplay/glossary/?term=g&nonce=2132c17353&type=tvshows
     url1 = URL_MAIN + 'wp-json/dooplay/glossary/?term='
@@ -220,7 +220,7 @@ def showAlpha(stype):
 
 
 def showYears():
-    oGui = cGui()
+    oGui = Gui()
     # https://www3.mystream.zone/release/2020
     oOutputParameterHandler = cOutputParameterHandler()
     for i in reversed(range(1982, 2023)):
@@ -232,7 +232,7 @@ def showYears():
 
 
 def showMovies(sSearch=''):
-    oGui = cGui()
+    oGui = Gui()
 
     bSearchMovie = False
     bSearchSerie = False
@@ -474,7 +474,7 @@ def __checkForNextPage(sHtmlContent):
 
 
 def showSaisons():
-    oGui = cGui()
+    oGui = Gui()
 
     oInputParameterHandler = cInputParameterHandler()
     sUrl = oInputParameterHandler.getValue('siteUrl')
@@ -525,7 +525,7 @@ def showSaisons():
 
 def showListEpisodes():  # plus utilisé
     # parent https://www3.mystream.zone/tvshows
-    oGui = cGui()
+    oGui = Gui()
 
     oInputParameterHandler = cInputParameterHandler()
     sThumb = oInputParameterHandler.getValue('sThumb')
@@ -569,7 +569,7 @@ def showListEpisodes():  # plus utilisé
 
 def showEpisodes():
     # parents https://www3.mystream.zone/saisons/    # SERIE_NEWS_SAISONS
-    oGui = cGui()
+    oGui = Gui()
 
     oInputParameterHandler = cInputParameterHandler()
     sUrl = oInputParameterHandler.getValue('siteUrl')
@@ -616,7 +616,7 @@ def showEpisodes():
 
 
 def showHosters():
-    oGui = cGui()
+    oGui = Gui()
 
     oInputParameterHandler = cInputParameterHandler()
     sUrl = oInputParameterHandler.getValue('siteUrl')
@@ -665,7 +665,7 @@ def showHosters():
 
 
 def hostersLink():
-    oGui = cGui()
+    oGui = Gui()
     oInputParameterHandler = cInputParameterHandler()
     sUrl = oInputParameterHandler.getValue('siteUrl')
     referer = oInputParameterHandler.getValue('referer')

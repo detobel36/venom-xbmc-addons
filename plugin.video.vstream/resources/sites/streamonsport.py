@@ -9,7 +9,7 @@ import time
 from datetime import datetime, timedelta
 
 from resources.lib.comaddon import siteManager
-from resources.lib.gui.gui import cGui
+from resources.lib.gui.gui import Gui
 from resources.lib.gui.hoster import cHosterGui
 from resources.lib.handler.inputParameterHandler import cInputParameterHandler
 from resources.lib.handler.outputParameterHandler import cOutputParameterHandler
@@ -56,7 +56,7 @@ def GetUrlMain():
 
 
 def load():
-    oGui = cGui()
+    oGui = Gui()
 
     oOutputParameterHandler = cOutputParameterHandler()
 
@@ -76,7 +76,7 @@ def load():
 
 
 def showGenres():
-    oGui = cGui()
+    oGui = Gui()
     urlMain = GetUrlMain()
 
     genreURL = '-foot-rugby-tennis-basket-f1-moto-hand-en-streaming-direct.html'
@@ -94,7 +94,7 @@ def showGenres():
 
 
 def showMovies(sSearch=''):
-    oGui = cGui()
+    oGui = Gui()
     oInputParameterHandler = cInputParameterHandler()
     sUrl = oInputParameterHandler.getValue('siteUrl')
     urlMain = GetUrlMain()
@@ -158,7 +158,7 @@ def showMovies(sSearch=''):
 
 
 def showLive():
-    oGui = cGui()
+    oGui = Gui()
     oInputParameterHandler = cInputParameterHandler()
     sUrl = oInputParameterHandler.getValue('siteUrl')
     sThumb = oInputParameterHandler.getValue('sThumb')
@@ -208,7 +208,7 @@ def showLive():
 
 
 def showLink():
-    oGui = cGui()
+    oGui = Gui()
 
     oInputParameterHandler = cInputParameterHandler()
     sUrl = oInputParameterHandler.getValue('siteUrl')

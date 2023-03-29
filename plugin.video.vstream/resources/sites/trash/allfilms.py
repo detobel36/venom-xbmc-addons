@@ -5,7 +5,7 @@ from resources.lib.parser import cParser
 from resources.lib.handler.requestHandler import cRequestHandler
 from resources.lib.handler.outputParameterHandler import cOutputParameterHandler
 from resources.lib.handler.inputParameterHandler import cInputParameterHandler
-from resources.lib.gui.gui import cGui
+from resources.lib.gui.gui import Gui
 from resources.lib.gui.hoster import cHosterGui
 import re
 return False
@@ -29,7 +29,7 @@ MOVIE_ANNEES = (True, 'showYears')
 
 
 def load():
-    oGui = cGui()
+    oGui = Gui()
 
     oOutputParameterHandler = cOutputParameterHandler()
     oOutputParameterHandler.addParameter('siteUrl', 'http://venom/')
@@ -51,7 +51,7 @@ def load():
 
 
 def showSearch():
-    oGui = cGui()
+    oGui = Gui()
 
     sSearchText = oGui.showKeyBoard()
     if (sSearchText):
@@ -62,7 +62,7 @@ def showSearch():
 
 
 def showGenres():
-    oGui = cGui()
+    oGui = Gui()
 
     liste = []
     liste.append(['Action', URL_MAIN + 'recherche-Action-1.html'])
@@ -95,7 +95,7 @@ def showGenres():
 
 
 def showYears():
-    oGui = cGui()
+    oGui = Gui()
 
     from itertools import chain
     generator = chain([1922, 1929, 1934, 1936, 1939, 1942, 1943, 1944, 1945, 1947,
@@ -111,7 +111,7 @@ def showYears():
 
 
 def showMovies(sSearch=''):
-    oGui = cGui()
+    oGui = Gui()
     oParser = cParser()
     if sSearch:
         sUrl = sSearch.replace(' ', '-') + '.html'
@@ -178,7 +178,7 @@ def showMovies(sSearch=''):
 
 
 def showHosters():
-    oGui = cGui()
+    oGui = Gui()
     oInputParameterHandler = cInputParameterHandler()
     sUrl = oInputParameterHandler.getValue('siteUrl')
     sMovieTitle = oInputParameterHandler.getValue('sMovieTitle')

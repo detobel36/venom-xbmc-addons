@@ -5,7 +5,7 @@ import traceback
 
 # from resources.lib.statistic import cStatistic
 from resources.lib.home import cHome
-from resources.lib.gui.gui import cGui
+from resources.lib.gui.gui import Gui
 from resources.lib.handler.pluginHandler import cPluginHandler
 from resources.lib.handler.inputParameterHandler import cInputParameterHandler
 from resources.lib.handler.outputParameterHandler import cOutputParameterHandler
@@ -89,7 +89,7 @@ class Main:
         VSlog('load site ' + self.site_name + ' and call function ' + self.function_name)
         list_action = {
             'cHosterGui': 'resources.lib.gui.hoster',
-            'cGui': 'resources.lib.gui.gui',
+            'Gui': 'resources.lib.gui.gui',
             'cFav': 'resources.lib.bookmark',
             'cViewing': 'resources.lib.viewing',
             'cLibrary': 'resources.lib.library',
@@ -109,7 +109,7 @@ class Main:
                 # function()
                 return
             elif self.site_name == 'globalSources':
-                gui = cGui()
+                gui = Gui()
                 list_plugins = self.plugin_handler.getAvailablePlugins(force=(self.function_name == 'globalSources'))
 
                 sites_manager = siteManager()

@@ -4,7 +4,7 @@
 # Ne marche pas, ne marchera que sous kodi V17
 from resources.lib.handler.requestHandler import cRequestHandler
 from resources.lib.parser import cParser
-from resources.lib.gui.gui import cGui
+from resources.lib.gui.gui import Gui
 from resources.hosters.hoster import iHoster
 from resources.lib.comaddon import dialog
 

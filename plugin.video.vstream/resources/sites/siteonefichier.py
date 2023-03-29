@@ -5,7 +5,7 @@ import xbmcgui
 
 from resources.lib.comaddon import progress, addon, siteManager
 from resources.lib.config import GestionCookie
-from resources.lib.gui.gui import cGui
+from resources.lib.gui.gui import Gui
 from resources.lib.gui.hoster import cHosterGui
 from resources.lib.handler.inputParameterHandler import cInputParameterHandler
 from resources.lib.handler.outputParameterHandler import cOutputParameterHandler
@@ -27,7 +27,7 @@ def load():
 
     if (addons.getSetting('hoster_onefichier_username') == '') and (
             addons.getSetting('hoster_onefichier_password') == ''):
-        oGui = cGui()
+        oGui = Gui()
         oGui.addText(SITE_IDENTIFIER, '[COLOR %s]%s[/COLOR]' %
                      ('red', 'Nécessite un Compte 1Fichier Premium ou Gratuit'))
 
@@ -43,7 +43,7 @@ def load():
             oPremiumHandler = cPremiumHandler('onefichier')
             Connection = oPremiumHandler.Authentificate()
             if Connection is False:
-                oGui = cGui()
+                oGui = Gui()
                 oGui.addText(SITE_IDENTIFIER, '[COLOR %s]%s[/COLOR]' % ('red', 'Connexion refusée'))
                 oGui.setEndOfDirectory()
 
@@ -56,7 +56,7 @@ def opensetting():
 
 
 def showFile(sFileTree=''):
-    oGui = cGui()
+    oGui = Gui()
     oInputParameterHandler = cInputParameterHandler()
     # sUrl = oInputParameterHandler.getValue('siteUrl')
     if oInputParameterHandler.exist('siteUrl'):
@@ -102,7 +102,7 @@ def showFile(sFileTree=''):
 
 
 def showHosters():
-    oGui = cGui()
+    oGui = Gui()
     oParser = cParser()
     oInputParameterHandler = cInputParameterHandler()
     sUrl = oInputParameterHandler.getValue('siteUrl')

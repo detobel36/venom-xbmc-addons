@@ -5,7 +5,7 @@ import re
 import unicodedata
 
 from resources.lib.comaddon import progress
-from resources.lib.gui.gui import cGui
+from resources.lib.gui.gui import Gui
 from resources.lib.handler.inputParameterHandler import cInputParameterHandler
 from resources.lib.handler.outputParameterHandler import cOutputParameterHandler
 from resources.lib.handler.requestHandler import cRequestHandler
@@ -58,7 +58,7 @@ def unescape(text):
 
 
 def load():
-    oGui = cGui()
+    oGui = Gui()
 
     oOutputParameterHandler = cOutputParameterHandler()
     oOutputParameterHandler.addParameter('siteUrl', MOVIE_WORLD[0])
@@ -74,7 +74,7 @@ def load():
 
 
 def showMovieYears():
-    oGui = cGui()
+    oGui = Gui()
 
     import datetime
     now = datetime.datetime.now()
@@ -95,7 +95,7 @@ def showMovieYears():
 
 
 def showMovies(sSearch=''):
-    oGui = cGui()
+    oGui = Gui()
     oParser = cParser()
     # bGlobal_Search = False
 

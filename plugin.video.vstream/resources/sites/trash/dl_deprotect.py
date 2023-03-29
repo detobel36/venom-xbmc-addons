@@ -1,5 +1,5 @@
 # -*- coding: utf-8 -*-
-from resources.lib.gui.gui import cGui
+from resources.lib.gui.gui import Gui
 from time import time
 from socket import timeout
 import base64
@@ -135,9 +135,9 @@ def get_response(img, cookie):
         if (kb.isConfirmed()):
             solution = kb.getText()
             if solution == '':
-                cGui().showInfo("Erreur", 'Vous devez taper le captcha', 4)
+                Gui().showInfo("Erreur", 'Vous devez taper le captcha', 4)
         else:
-            cGui().showInfo("Erreur", 'Vous devez taper le captcha', 4)
+            Gui().showInfo("Erreur", 'Vous devez taper le captcha', 4)
     finally:
         wdlg.removeControl(img)
         wdlg.close()
@@ -165,18 +165,18 @@ def DecryptDlProtect(url):
     try:
         reponse = urllib2.urlopen(request, timeout=5)
     except urllib2.URLError as e:
-        cGui().showInfo("Erreur", 'Site Dl-Protect HS', 5)
+        Gui().showInfo("Erreur", 'Site Dl-Protect HS', 5)
         print e.read()
         print e.reason
         return ''
     except urllib2.HTTPError as e:
-        cGui().showInfo("Erreur", 'Site Dl-Protect HS', 5)
+        Gui().showInfo("Erreur", 'Site Dl-Protect HS', 5)
         print e.read()
         print e.reason
         return ''
     except timeout:
         print 'timeout'
-        cGui().showInfo("Erreur", 'Site Dl-Protect HS', 5)
+        Gui().showInfo("Erreur", 'Site Dl-Protect HS', 5)
         return ''
 
     # Si redirection
@@ -194,13 +194,13 @@ def DecryptDlProtect(url):
     # site out ?
     if 'A technical problem occurred' in sHtmlContent:
         print 'Dl-protect HS'
-        cGui().showInfo("Erreur", 'Site Dl-Protect HS', 5)
+        Gui().showInfo("Erreur", 'Site Dl-Protect HS', 5)
         return ''
 
     # lien HS ?
     if 'the link you are looking for is not found' in sHtmlContent:
         print 'lien Dl-protect HS'
-        cGui().showInfo("Erreur", 'Lien non disponible', 5)
+        Gui().showInfo("Erreur", 'Lien non disponible', 5)
         return ''
 
     # Recuperatioen et traitement cookies ???
@@ -242,7 +242,7 @@ def DecryptDlProtect(url):
         b64time = "_" + base64.urlsafe_b64encode(str(mstime)).replace("=", "%3D")
 
         # tempo necessaire
-        cGui().showInfo("Patientez", 'Decodage en cours', 2)
+        Gui().showInfo("Patientez", 'Decodage en cours', 2)
         xbmc.sleep(1000)
 
         query_args = (('submitform', ''), ('key', key[0]), ('i', b64time), ('submitform', 'Continue'))
@@ -310,7 +310,7 @@ def ClassicCaptcha(sHtmlContent, cookies, url, headers):
     reponse.close()
 
     if '<td align=center> Please enter the characters from the picture to see the links </td>' in sHtmlContent:
-        cGui().showInfo("Erreur", 'Mauvais Captcha', 5)
+        Gui().showInfo("Erreur", 'Mauvais Captcha', 5)
         return 'rate'
 
     return sHtmlContent

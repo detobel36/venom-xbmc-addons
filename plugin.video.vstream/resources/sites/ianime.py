@@ -5,7 +5,7 @@ import re
 import unicodedata
 
 from resources.lib.comaddon import VSlog, isMatrix, siteManager
-from resources.lib.gui.gui import cGui
+from resources.lib.gui.gui import Gui
 from resources.lib.gui.hoster import cHosterGui
 from resources.lib.handler.inputParameterHandler import cInputParameterHandler
 from resources.lib.handler.outputParameterHandler import cOutputParameterHandler
@@ -149,7 +149,7 @@ def GetHost(_url):
 
 
 def load():
-    oGui = cGui()
+    oGui = Gui()
 
     oOutputParameterHandler = cOutputParameterHandler()
     oOutputParameterHandler.addParameter('siteUrl', URL_SEARCH_MOVIES[0])
@@ -192,7 +192,7 @@ def load():
 
 
 def showSearch():
-    oGui = cGui()
+    oGui = Gui()
     oInputParameterHandler = cInputParameterHandler()
     sUrl = oInputParameterHandler.getValue('siteUrl')
 
@@ -204,7 +204,7 @@ def showSearch():
 
 
 def showGenresMovies():
-    oGui = cGui()
+    oGui = Gui()
 
     liste = []
     liste.append(['Action', 'categorie_action_page1.html'])
@@ -233,7 +233,7 @@ def showGenresMovies():
 
 # Retrouve les genres en dynamique dans la page
 def showGenres():
-    oGui = cGui()
+    oGui = Gui()
 
     oInputParameterHandler = cInputParameterHandler()
     sUrl = oInputParameterHandler.getValue('siteUrl')
@@ -305,7 +305,7 @@ def showAlpha2():
 
 
 def showAlpha(url=None):
-    oGui = cGui()
+    oGui = Gui()
 
     oInputParameterHandler = cInputParameterHandler()
     if url is None:
@@ -349,7 +349,7 @@ def showAlpha(url=None):
 
 
 def showMovies(sSearch=''):
-    oGui = cGui()
+    oGui = Gui()
     oParser = cParser()
 
     if sSearch:
@@ -529,7 +529,7 @@ def __checkForNextPage(sHtmlContent):
 
 
 def showSaison():
-    oGui = cGui()
+    oGui = Gui()
     oParser = cParser()
     oInputParameterHandler = cInputParameterHandler()
     sUrl = oInputParameterHandler.getValue('siteUrl')
@@ -570,7 +570,7 @@ def showSaison():
 
 
 def showEpisode():
-    oGui = cGui()
+    oGui = Gui()
     oParser = cParser()
     oInputParameterHandler = cInputParameterHandler()
     sMovieTitle = oInputParameterHandler.getValue('sMovieTitle')
@@ -683,7 +683,7 @@ def extractLink(html):
 
 
 def showHosters():
-    oGui = cGui()
+    oGui = Gui()
     oParser = cParser()
     oInputParameterHandler = cInputParameterHandler()
     sUrl = oInputParameterHandler.getValue('siteUrl')

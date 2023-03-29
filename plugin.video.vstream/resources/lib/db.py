@@ -197,8 +197,8 @@ class cDb(object):
             return None
 
     def del_history(self):
-        from resources.lib.gui.gui import cGui
-        oGui = cGui()
+        from resources.lib.gui.gui import Gui
+        oGui = Gui()
         oInputParameterHandler = cInputParameterHandler()
         if oInputParameterHandler.exist('searchtext'):
             sql_delete = "DELETE FROM history WHERE title = '%s'" % (oInputParameterHandler.getValue('searchtext'))
@@ -426,7 +426,7 @@ class cDb(object):
             sql_delete = "DELETE FROM favorite WHERE cat in %s" % str(catList)
 
         if sql_delete:
-            from resources.lib.gui.gui import cGui
+            from resources.lib.gui.gui import Gui
             try:
                 self.dbcur.execute(sql_delete)
                 self.db.commit()
@@ -437,7 +437,7 @@ class cDb(object):
                     return self.del_bookmark(sSiteUrl)
 
                 dialog().VSinfo(addon().VSlang(30044))
-                cGui().updateDirectory()
+                Gui().updateDirectory()
                 return True
             except Exception as e:
                 VSlog('SQL ERROR %s' % sql_delete)

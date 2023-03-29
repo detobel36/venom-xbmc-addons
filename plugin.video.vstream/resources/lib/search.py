@@ -4,7 +4,7 @@ import traceback
 import threading
 import xbmc
 
-from resources.lib.gui.gui import cGui
+from resources.lib.gui.gui import Gui
 from resources.lib.handler.rechercheHandler import cRechercheHandler
 from resources.lib.handler.inputParameterHandler import cInputParameterHandler
 from resources.lib.comaddon import progress, VSlog, addon, window
@@ -33,7 +33,7 @@ class cSearch:
             listThread = self._launchSearch(listPlugins, self._pluginSearch, [Quote(sSearchText), True])
             self._finishSearch(listThread)
 
-            oGui = cGui()
+            oGui = Gui()
             oGui.addText('globalSearch', self.addons.VSlang(30081) % sSearchText, 'search.png')
 
             total = count = 0
@@ -69,7 +69,7 @@ class cSearch:
             else:  # aucune source ne retourne de résultat
                 oGui.addText('globalSearch')  # "Aucune information"
 
-            cGui.CONTENT = 'files'
+            Gui.CONTENT = 'files'
 
             oGui.setEndOfDirectory()
 
@@ -84,7 +84,7 @@ class cSearch:
         self.progress_ = progress().VScreate(large=True)
 
     def _progressUpdate(self):
-        searchResults = cGui().getSearchResult()
+        searchResults = Gui().getSearchResult()
         numberResult = 0
         values = searchResults.values()
         for result in values:
@@ -119,7 +119,7 @@ class cSearch:
             self._progressInit()
 
             self.listRemainingPlugins = [plugin['name'] for plugin in listPlugins]
-            cGui().resetSearchResult()
+            Gui().resetSearchResult()
             return listPlugins
         except Exception as error:
             VSlog('Error when search is initiate: ' + str(error))

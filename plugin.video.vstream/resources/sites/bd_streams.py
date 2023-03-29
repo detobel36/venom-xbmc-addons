@@ -2,7 +2,7 @@
 # vStream https://github.com/Kodi-vStream/venom-xbmc-addons
 
 from resources.lib.comaddon import siteManager
-from resources.lib.gui.gui import cGui
+from resources.lib.gui.gui import Gui
 from resources.lib.gui.hoster import cHosterGui
 from resources.lib.handler.inputParameterHandler import cInputParameterHandler
 from resources.lib.handler.outputParameterHandler import cOutputParameterHandler
@@ -23,7 +23,7 @@ TV_TV = ('/', 'load')
 
 
 def load():
-    oGui = cGui()
+    oGui = Gui()
     sUrl = URL_MAIN
 
     oParser = cParser()
@@ -55,7 +55,7 @@ def load():
 
 
 def showGenres():
-    oGui = cGui()
+    oGui = Gui()
     oOutputParameterHandler = cOutputParameterHandler()
     oOutputParameterHandler.addParameter('siteUrl', SPORT_GENRES[0])
     oGui.addDir(SITE_IDENTIFIER, 'load', 'Football', 'genres.png', oOutputParameterHandler)
@@ -63,7 +63,7 @@ def showGenres():
 
 
 def showLink():
-    oGui = cGui()
+    oGui = Gui()
     oParser = cParser()
 
     oInputParameterHandler = cInputParameterHandler()

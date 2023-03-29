@@ -7,7 +7,7 @@ import xbmc
 import xbmcvfs
 
 from resources.lib.comaddon import addon
-from resources.lib.gui.gui import cGui
+from resources.lib.gui.gui import Gui
 from resources.lib.gui.guiElement import cGuiElement
 from resources.lib.handler.inputParameterHandler import cInputParameterHandler
 from resources.lib.handler.outputParameterHandler import cOutputParameterHandler
@@ -38,7 +38,7 @@ class track:
 
 
 def load():
-    oGui = cGui()
+    oGui = Gui()
     addons = addon()
 
     oOutputParameterHandler = cOutputParameterHandler()
@@ -61,7 +61,7 @@ def load():
 
 
 def showGenres():
-    oGui = cGui()
+    oGui = Gui()
 
     liste = [['70', '70'], ['80', '80'], ['90', '90'], ['Clubbing', 'Clubbing'],
              ['Dance', 'Dance'], ['Electronic', 'Electronic'], ['Funk', 'Funk'], ['Hip-Hop', 'Hip-hop'],
@@ -105,7 +105,7 @@ def parseWebM3U():  # Traite les m3u
 
 
 def showWeb():  # Code qui s'occupe de liens TV du Web
-    oGui = cGui()
+    oGui = Gui()
     oInputParameterHandler = cInputParameterHandler()
     playlist = parseWebM3U()
 
@@ -154,7 +154,7 @@ def showWeb():  # Code qui s'occupe de liens TV du Web
 
 def showAZ():
 
-    oGui = cGui()
+    oGui = Gui()
     oInputParameterHandler = cInputParameterHandler()
     sUrl = oInputParameterHandler.getValue('siteUrl')
 

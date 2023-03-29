@@ -1,6 +1,6 @@
 from resources.lib.handler.requestHandler import cRequestHandler
 from resources.lib.parser import cParser
-from resources.lib.gui.gui import cGui
+from resources.lib.gui.gui import Gui
 from resources.hosters.hoster import iHoster
 import time
 import random

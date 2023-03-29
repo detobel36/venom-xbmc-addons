@@ -3,7 +3,7 @@
 
 import re
 from resources.lib.comaddon import siteManager, VSlog
-from resources.lib.gui.gui import cGui
+from resources.lib.gui.gui import Gui
 from resources.lib.gui.hoster import cHosterGui
 from resources.lib.handler.inputParameterHandler import cInputParameterHandler
 from resources.lib.handler.outputParameterHandler import cOutputParameterHandler
@@ -37,7 +37,7 @@ SERIE_SERIES = (True, 'showMenuSeries')
 
 
 def load():
-    oGui = cGui()
+    oGui = Gui()
 
     oOutputParameterHandler = cOutputParameterHandler()
     oOutputParameterHandler.addParameter('siteUrl', 'http://venom/')
@@ -74,7 +74,7 @@ def load():
 
 
 def showMenuMovies():
-    oGui = cGui()
+    oGui = Gui()
 
     oOutputParameterHandler = cOutputParameterHandler()
     oOutputParameterHandler.addParameter('siteUrl', 'http://venom/')
@@ -96,7 +96,7 @@ def showMenuMovies():
 
 
 def showMenuSeries():
-    oGui = cGui()
+    oGui = Gui()
 
     oOutputParameterHandler = cOutputParameterHandler()
     oOutputParameterHandler.addParameter('siteUrl', SERIE_NEWS[0])
@@ -115,7 +115,7 @@ def showMenuSeries():
 
 
 def showSearch():
-    oGui = cGui()
+    oGui = Gui()
     sSearchText = oGui.showKeyBoard()
     if sSearchText:
         showMovies(sSearchText)
@@ -128,7 +128,7 @@ def showGenresTVShow():
 
 
 def showGenres(sTypeSerie=''):
-    oGui = cGui()
+    oGui = Gui()
 
     listegenre = ['action', 'action-adventure', 'animation', 'aventure', 'comedie', 'crime', 'documentaire', 'drame',
                   'familial', 'fantastique', 'guerre', 'histoire', 'horreur', 'kids', 'musique', 'musical', 'mystere',
@@ -151,7 +151,7 @@ def showAlphaTVShow():
 
 
 def showAlpha(sTypeSerie=''):
-    oGui = cGui()
+    oGui = Gui()
     oInputParameterHandler = cInputParameterHandler()
     sType = oInputParameterHandler.getValue('siteUrl')
 
@@ -180,7 +180,7 @@ def showMovieYearsTVShow():
 
 
 def showMovieYears(sTypeSerie=''):
-    oGui = cGui()
+    oGui = Gui()
     oOutputParameterHandler = cOutputParameterHandler()
     for i in reversed(range(2001, 2023)):  # pas grand chose 32 - 90
         Year = str(i)
@@ -191,7 +191,7 @@ def showMovieYears(sTypeSerie=''):
 
 
 def showMovies(sSearch=''):
-    oGui = cGui()
+    oGui = Gui()
     oParser = cParser()
 
     if sSearch:
@@ -284,7 +284,7 @@ def __checkForNextPage(sHtmlContent):
 
 
 def showSelectType():
-    oGui = cGui()
+    oGui = Gui()
 
     oInputParameterHandler = cInputParameterHandler()
     sUrl = oInputParameterHandler.getValue('siteUrl')
@@ -319,7 +319,7 @@ def showSelectType():
 
 
 def showSaison():
-    oGui = cGui()
+    oGui = Gui()
 
     oInputParameterHandler = cInputParameterHandler()
     sUrl = oInputParameterHandler.getValue('siteUrl')
@@ -354,7 +354,7 @@ def showSaison():
 
 
 def showSXE():
-    oGui = cGui()
+    oGui = Gui()
 
     oInputParameterHandler = cInputParameterHandler()
     sUrl = oInputParameterHandler.getValue('siteUrl')
@@ -399,7 +399,7 @@ def showSXE():
 
 
 def showLink():
-    oGui = cGui()
+    oGui = Gui()
 
     oInputParameterHandler = cInputParameterHandler()
     sUrl = oInputParameterHandler.getValue('siteUrl')
@@ -464,7 +464,7 @@ def showLink():
 
 
 def showHosters():
-    oGui = cGui()
+    oGui = Gui()
 
     oInputParameterHandler = cInputParameterHandler()
     sUrl = oInputParameterHandler.getValue('siteUrl')

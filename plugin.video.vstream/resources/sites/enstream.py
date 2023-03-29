@@ -4,7 +4,7 @@
 import re
 
 from resources.lib.comaddon import siteManager
-from resources.lib.gui.gui import cGui
+from resources.lib.gui.gui import Gui
 from resources.lib.gui.hoster import cHosterGui
 from resources.lib.handler.inputParameterHandler import cInputParameterHandler
 from resources.lib.handler.outputParameterHandler import cOutputParameterHandler
@@ -30,7 +30,7 @@ SERIE_LIST = (True, 'showAlpha')
 
 
 def load():
-    oGui = cGui()
+    oGui = Gui()
 
     oOutputParameterHandler = cOutputParameterHandler()
     oOutputParameterHandler.addParameter('siteUrl', URL_SEARCH[0])
@@ -52,7 +52,7 @@ def load():
 
 
 def showSearch():
-    oGui = cGui()
+    oGui = Gui()
     sSearchText = oGui.showKeyBoard()
     if sSearchText:
         showSeries(URL_SEARCH[0] + sSearchText)
@@ -61,7 +61,7 @@ def showSearch():
 
 
 def showGenres():
-    oGui = cGui()
+    oGui = Gui()
 
     liste = [['Action', 'action'], ['Animation', 'animation'], ['Aventure', 'aventure'], ['Biopic', 'biopic'],
              ['Comédie', 'comedie'], ['Drame', 'drame'], ['Epouvante Horreur', 'epouvante-horreur'],
@@ -79,7 +79,7 @@ def showGenres():
 
 
 def showYears():
-    oGui = cGui()
+    oGui = Gui()
     oOutputParameterHandler = cOutputParameterHandler()
     for i in reversed(range(1997, 2023)):
         Year = str(i)
@@ -90,7 +90,7 @@ def showYears():
 
 
 def showAlpha():
-    oGui = cGui()
+    oGui = Gui()
 
     liste = [['0', str('0')], ['1', str('1')], ['2', str('2')], ['3', str('3')], ['4', str('4')], ['5', str('5')],
              ['6', str('6')], ['7', str('7')], ['8', str('8')], ['9', str('9')],
@@ -114,7 +114,7 @@ def showAlpha():
 
 
 def showSeries(sSearch=''):
-    oGui = cGui()
+    oGui = Gui()
 
     if sSearch:
         oUtil = cUtil()
@@ -175,7 +175,7 @@ def __checkForNextPage(sHtmlContent):
 
 
 def showSaisons():
-    oGui = cGui()
+    oGui = Gui()
     oParser = cParser()
     oInputParameterHandler = cInputParameterHandler()
     sUrl = oInputParameterHandler.getValue('siteUrl')
@@ -215,7 +215,7 @@ def showSaisons():
 
 
 def showEpisodes():
-    oGui = cGui()
+    oGui = Gui()
     oParser = cParser()
     oInputParameterHandler = cInputParameterHandler()
     sUrl = oInputParameterHandler.getValue('siteUrl')
@@ -248,7 +248,7 @@ def showEpisodes():
 
 
 def showHoster():
-    oGui = cGui()
+    oGui = Gui()
 
     oInputParameterHandler = cInputParameterHandler()
     sUrl = oInputParameterHandler.getValue('siteUrl')
@@ -294,7 +294,7 @@ def showHoster():
 
 
 def showHostersLinks():
-    oGui = cGui()
+    oGui = Gui()
     oInputParameterHandler = cInputParameterHandler()
     sUrl = oInputParameterHandler.getValue('siteUrl')
     sMovieTitle = oInputParameterHandler.getValue('sMovieTitle')

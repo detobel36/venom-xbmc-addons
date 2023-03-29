@@ -3,7 +3,7 @@ import random
 
 from resources.lib.handler.requestHandler import cRequestHandler
 from resources.lib.parser import cParser
-from resources.lib.gui.gui import cGui
+from resources.lib.gui.gui import Gui
 from resources.hosters.hoster import iHoster
 
 
@@ -31,7 +31,7 @@ class cHoster(iHoster):
             if aResult[0] is True:
                 sCode = aResult[1][0]
 
-                oGui = cGui()
+                oGui = Gui()
                 oGui.showNofication(sSecondsForWait, 3)
                 time.sleep(sSecondsForWait)
 

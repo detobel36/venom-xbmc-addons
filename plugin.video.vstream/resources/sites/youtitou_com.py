@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 # vStream https://github.com/Kodi-vStream/venom-xbmc-addons
 from resources.lib.comaddon import siteManager
-from resources.lib.gui.gui import cGui
+from resources.lib.gui.gui import Gui
 from resources.lib.gui.hoster import cHosterGui
 from resources.lib.handler.inputParameterHandler import cInputParameterHandler
 from resources.lib.handler.outputParameterHandler import cOutputParameterHandler
@@ -32,7 +32,7 @@ COMPIL = (URL_MAIN + 'videos/compilations-longues/', 'showEpisode')
 
 
 def load():
-    oGui = cGui()
+    oGui = Gui()
 
     oOutputParameterHandler = cOutputParameterHandler()
     oOutputParameterHandler.addParameter('siteUrl', AGE_2A4ANS[0])
@@ -60,7 +60,7 @@ def load():
 
 
 def showMovies():
-    oGui = cGui()
+    oGui = Gui()
     oParser = cParser()
 
     oInputParameterHandler = cInputParameterHandler()
@@ -86,7 +86,7 @@ def showMovies():
 
 
 def showEpisode():
-    oGui = cGui()
+    oGui = Gui()
     oHosterGui = cHosterGui()
     oParser = cParser()
     oInputParameterHandler = cInputParameterHandler()

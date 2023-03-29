@@ -5,7 +5,7 @@ import json
 import re
 
 from resources.lib.comaddon import progress, addon, dialog
-from resources.lib.gui.gui import cGui
+from resources.lib.gui.gui import Gui
 from resources.lib.gui.hoster import cHosterGui
 from resources.lib.handler.inputParameterHandler import cInputParameterHandler
 from resources.lib.handler.outputParameterHandler import cOutputParameterHandler
@@ -20,7 +20,7 @@ URL_HOST = "https://debrid-link.fr"
 
 
 def load():
-    oGui = cGui()
+    oGui = Gui()
     oAddon = addon()
 
     URL_HOST = "https://debrid-link.fr"
@@ -47,7 +47,7 @@ def load():
 
 
 def showLiens(sSearch=''):
-    oGui = cGui()
+    oGui = Gui()
 
     oInputParameterHandler = cInputParameterHandler()
     sUrl = oInputParameterHandler.getValue('siteUrl')
@@ -109,7 +109,7 @@ def showLiens(sSearch=''):
 
 
 def showHosters():
-    oGui = cGui()
+    oGui = Gui()
     oInputParameterHandler = cInputParameterHandler()
     sUrl = oInputParameterHandler.getValue('siteUrl')
     sMovieTitle = oInputParameterHandler.getValue('sMovieTitle')
@@ -125,7 +125,7 @@ def showHosters():
 
 
 def showInfo():
-    oGui = cGui()
+    oGui = Gui()
 
     oInputParameterHandler = cInputParameterHandler()
     sUrl = oInputParameterHandler.getValue('siteUrl')

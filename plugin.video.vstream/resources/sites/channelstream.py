@@ -7,7 +7,7 @@ import resources.sites.freebox
 
 from resources.lib.packer import cPacker
 from resources.lib.comaddon import isMatrix, siteManager
-from resources.lib.gui.gui import cGui
+from resources.lib.gui.gui import Gui
 from resources.lib.gui.guiElement import cGuiElement
 from resources.lib.handler.inputParameterHandler import cInputParameterHandler
 from resources.lib.handler.outputParameterHandler import cOutputParameterHandler
@@ -29,7 +29,7 @@ UA = 'Mozilla/5.0 (Windows NT 6.1; Win64; x64; rv:56.0) Gecko/20100101 Firefox/5
 
 
 def load():
-    oGui = cGui()
+    oGui = Gui()
 
     oOutputParameterHandler = cOutputParameterHandler()
     oOutputParameterHandler.addParameter('siteUrl', SPORT_LIVE[0])
@@ -39,7 +39,7 @@ def load():
 
 
 def showMovies():
-    oGui = cGui()
+    oGui = Gui()
     oParser = cParser()
 
     oInputParameterHandler = cInputParameterHandler()
@@ -97,7 +97,7 @@ def showMovies():
 
 
 def showHoster():
-    oGui = cGui()
+    oGui = Gui()
     oParser = cParser()
 
     oInputParameterHandler = cInputParameterHandler()
@@ -154,7 +154,7 @@ def showHoster():
             oGuiElement.setFunction('play')
             oGuiElement.setSiteName('cHosterGui')
             oGui.addHost(oGuiElement, oOutputParameterHandler)  # addHost absent ???? del 20/08/2021
-            cGui.CONTENT = 'movies'
+            Gui.CONTENT = 'movies'
             oGui.setEndOfDirectory()
             return
 
@@ -198,7 +198,7 @@ def showHoster():
             oOutputParameterHandler.addParameter('siteUrl', sHosterUrl)
             oGui.addFolder(oGuiElement, oOutputParameterHandler)
 
-    cGui.CONTENT = 'files'
+    Gui.CONTENT = 'files'
     oGui.setEndOfDirectory()
 
 

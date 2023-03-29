@@ -5,7 +5,7 @@ from resources.lib.config import cConfig
 from resources.lib.gui.hoster import cHosterGui
 from resources.lib.handler.rechercheHandler import cRechercheHandler
 from resources.lib.handler.hosterHandler import cHosterHandler
-from resources.lib.gui.gui import cGui
+from resources.lib.gui.gui import Gui
 from resources.lib.favourite import cFav
 from resources.lib.gui.guiElement import cGuiElement
 from resources.lib.handler.inputParameterHandler import cInputParameterHandler
@@ -71,7 +71,7 @@ BLURAY_NEWS = (URL_MAIN + 'films-hd/full-bluray', 'showMovies')  # derniers Blu-
 
 
 def load():
-    oGui = cGui()
+    oGui = Gui()
 
     oOutputParameterHandler = cOutputParameterHandler()
     oOutputParameterHandler.addParameter('siteUrl', 'http://venom/')
@@ -158,7 +158,7 @@ def load():
 
 
 def showSearchMovies():
-    oGui = cGui()
+    oGui = Gui()
     sSearchText = oGui.showKeyBoard()
     if (sSearchText):
         sUrl = URL_SEARCH_MOVIES[0] + sSearchText + \
@@ -169,7 +169,7 @@ def showSearchMovies():
 
 
 def showSearchSeries():
-    oGui = cGui()
+    oGui = Gui()
     sSearchText = oGui.showKeyBoard()
     if (sSearchText):
         sUrl = URL_SEARCH_SERIES[0] + sSearchText + \
@@ -180,7 +180,7 @@ def showSearchSeries():
 
 
 def showGenre():
-    oGui = cGui()
+    oGui = Gui()
 
     liste = []
     liste.append(['Action', URL_MAIN + 'tags/Action'])
@@ -214,7 +214,7 @@ def showGenre():
 
 
 def showMovies(sSearch=''):
-    oGui = cGui()
+    oGui = Gui()
     if sSearch:
         sUrl = sSearch
 
@@ -314,7 +314,7 @@ def showLinks():
 def showMoviesLinks(sHtmlContent):
     xbmc.log('mode film')
 
-    oGui = cGui()
+    oGui = Gui()
 
     oInputParameterHandler = cInputParameterHandler()
     sUrl = oInputParameterHandler.getValue('siteUrl')
@@ -397,7 +397,7 @@ def showMoviesLinks(sHtmlContent):
 def showSeriesLinks(sHtmlContent):
     xbmc.log('mode serie')
 
-    oGui = cGui()
+    oGui = Gui()
     oInputParameterHandler = cInputParameterHandler()
     sUrl = oInputParameterHandler.getValue('siteUrl')
     sMovieTitle = oInputParameterHandler.getValue('sMovieTitle')
@@ -488,7 +488,7 @@ def showSeriesLinks(sHtmlContent):
 def showHosters():  # recherche et affiche les hotes
     # print "ZT:showHosters"
 
-    oGui = cGui()
+    oGui = Gui()
     oInputParameterHandler = cInputParameterHandler()  # apelle l'entree de paramettre
     sMovieTitle = oInputParameterHandler.getValue('sMovieTitle')
     sUrl = oInputParameterHandler.getValue('siteUrl')
@@ -561,7 +561,7 @@ def showHosters():  # recherche et affiche les hotes
 
 def showSeriesHosters():  # recherche et affiche les hotes
     # print "ZT:showSeriesHosters"
-    oGui = cGui()
+    oGui = Gui()
     oInputParameterHandler = cInputParameterHandler()  # apelle l'entree de paramettre
     sMovieTitle = oInputParameterHandler.getValue('sMovieTitle')
     sUrl = oInputParameterHandler.getValue('siteUrl')
@@ -629,7 +629,7 @@ def showSeriesHosters():  # recherche et affiche les hotes
 
 def Display_protected_link():
 
-    oGui = cGui()
+    oGui = Gui()
     oInputParameterHandler = cInputParameterHandler()
     sMovieTitle = oInputParameterHandler.getValue('sMovieTitle')
     sUrl = oInputParameterHandler.getValue('siteUrl')

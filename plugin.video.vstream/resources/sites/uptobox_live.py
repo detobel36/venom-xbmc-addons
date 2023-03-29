@@ -4,7 +4,7 @@ import json
 import re
 
 from resources.lib.comaddon import addon, isMatrix, siteManager
-from resources.lib.gui.gui import cGui
+from resources.lib.gui.gui import Gui
 from resources.lib.handler.inputParameterHandler import cInputParameterHandler
 from resources.lib.handler.outputParameterHandler import cOutputParameterHandler
 from resources.lib.handler.premiumHandler import cPremiumHandler
@@ -27,7 +27,7 @@ SERIE_SERIES = ('series', 'load')
 
 
 def load():
-    oGui = cGui()
+    oGui = Gui()
     oOutputParameterHandler = cOutputParameterHandler()
 
     oInputParameterHandler = cInputParameterHandler()
@@ -51,7 +51,7 @@ def opensetting():
 
 
 def showSearch(path='//'):
-    oGui = cGui()
+    oGui = Gui()
 
     oInputParameterHandler = cInputParameterHandler()
     sUrl = oInputParameterHandler.getValue('siteUrl')
@@ -99,7 +99,7 @@ def getContent(sUrl):
 
 
 def showMovies(sSearch='', searchLocal=False):
-    oGui = cGui()
+    oGui = Gui()
     oUtil = cUtil()
 
     if not sSearch:
@@ -189,7 +189,7 @@ def showAnims(sSearch=''):
 
 
 def showSeries(sSearch='', searchLocal=False, isAnime=False):
-    oGui = cGui()
+    oGui = Gui()
     oUtil = cUtil()
 
     sSearchTitle = sSearch.replace(URL_SEARCH_SERIES[0], '')
@@ -266,7 +266,7 @@ def showSeries(sSearch='', searchLocal=False, isAnime=False):
 
 def showSaisons():
     # deux url pour plus de résultats
-    oGui = cGui()
+    oGui = Gui()
     saisons = {}
     oUtil = cUtil()
 
@@ -356,7 +356,7 @@ def showSaisons():
 
 def showEpisodes():
 
-    oGui = cGui()
+    oGui = Gui()
     oUtil = cUtil()
 
     oInputParameterHandler = cInputParameterHandler()
@@ -437,7 +437,7 @@ def showEpisodes():
 def showHosters():
 
     from resources.lib.gui.hoster import cHosterGui
-    oGui = cGui()
+    oGui = Gui()
     oHosterGui = cHosterGui()
     hoster = oHosterGui.getHoster('lien_direct')
     oUtil = cUtil()

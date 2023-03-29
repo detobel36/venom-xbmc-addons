@@ -7,7 +7,7 @@ import sys
 import re
 from base64 import b64encode
 from resources.lib.comaddon import dialog, addon, addonManager, VSlog, isMatrix
-from resources.lib.gui.gui import cGui
+from resources.lib.gui.gui import Gui
 from resources.lib.gui.hoster import cHosterGui
 from resources.lib.handler.inputParameterHandler import cInputParameterHandler
 from resources.lib.handler.outputParameterHandler import cOutputParameterHandler
@@ -186,7 +186,7 @@ class UpNext:
             return None, None, None, None, None
 
         sMediaUrl = ''
-        for sUrl, listItem, isFolder in cGui().getEpisodeListing():
+        for sUrl, listItem, isFolder in Gui().get_episode_listing():
             sParams = sUrl.split('?', 1)[1]
             aParams = dict(param.split('=') for param in sParams.split('&'))
             sFunction = aParams['function']

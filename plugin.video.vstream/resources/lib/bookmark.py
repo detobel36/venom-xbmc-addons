@@ -3,7 +3,7 @@
 import xbmc
 
 from resources.lib.db import cDb
-from resources.lib.gui.gui import cGui
+from resources.lib.gui.gui import Gui
 from resources.lib.gui.guiElement import cGuiElement
 from resources.lib.gui.hoster import cHosterGui
 from resources.lib.handler.inputParameterHandler import cInputParameterHandler
@@ -48,7 +48,7 @@ class cFav:
         return True
 
     def getBookmarks(self):
-        oGui = cGui()
+        oGui = Gui()
 
         # Comptages des marque-pages
         with cDb() as db:
@@ -110,7 +110,7 @@ class cFav:
         oGui.setEndOfDirectory()
 
     def getFav(self):
-        oGui = cGui()
+        oGui = Gui()
         oInputParameterHandler = cInputParameterHandler()
 
         # Comptages des marque-pages
@@ -124,15 +124,15 @@ class cFav:
             catList = ('2', '3', '4', '8', '9')
             if sCat in catList:
                 sCat = 2
-                cGui.CONTENT = 'tvshows'
+                Gui.CONTENT = 'tvshows'
             else:
                 catList = ('1', '7')    # films, saga
-                cGui.CONTENT = 'movies'
+                Gui.CONTENT = 'movies'
                 if sCat in catList:
                     sCat = 1
                 else:
                     catList = sCat
-                    cGui.CONTENT = 'videos'
+                    Gui.CONTENT = 'videos'
             gen = (x for x in row if x['cat'] in catList)
         else:
             oGui.setEndOfDirectory()

@@ -6,7 +6,7 @@ import re
 import xbmc
 
 from resources.lib.comaddon import progress, isMatrix, siteManager
-from resources.lib.gui.gui import cGui
+from resources.lib.gui.gui import Gui
 from resources.lib.gui.hoster import cHosterGui
 from resources.lib.handler.inputParameterHandler import cInputParameterHandler
 from resources.lib.handler.outputParameterHandler import cOutputParameterHandler
@@ -33,7 +33,7 @@ SPORT_SPORTS = (True, 'load')
 
 
 def load():
-    oGui = cGui()
+    oGui = Gui()
     oOutputParameterHandler = cOutputParameterHandler()
 
     oOutputParameterHandler.addParameter('siteUrl', SPORT_GENRES[0])
@@ -46,7 +46,7 @@ def load():
 
 
 def showLive():
-    oGui = cGui()
+    oGui = Gui()
     oInputParameterHandler = cInputParameterHandler()
     sUrl = oInputParameterHandler.getValue('siteUrl')
 
@@ -93,7 +93,7 @@ def showLive():
 
 
 def showMovies():  # affiche les catégories qui ont des lives'
-    oGui = cGui()
+    oGui = Gui()
 
     oInputParameterHandler = cInputParameterHandler()
     sUrl = oInputParameterHandler.getValue('siteUrl')
@@ -133,7 +133,7 @@ def showMovies():  # affiche les catégories qui ont des lives'
 
 def showMovies2():  # affiche les matchs en direct depuis la section showMovie
 
-    oGui = cGui()
+    oGui = Gui()
     oInputParameterHandler = cInputParameterHandler()
     sUrl2 = oInputParameterHandler.getValue('siteUrl2')
 
@@ -220,7 +220,7 @@ def showMovies2():  # affiche les matchs en direct depuis la section showMovie
 
 
 def showMovies3():  # affiche les videos disponible du live
-    oGui = cGui()
+    oGui = Gui()
     oInputParameterHandler = cInputParameterHandler()
     sUrl3 = oInputParameterHandler.getValue('siteUrl3')
 
@@ -270,7 +270,7 @@ def showMovies3():  # affiche les videos disponible du live
 
 
 def showHosters():  # affiche les videos disponible du live
-    oGui = cGui()
+    oGui = Gui()
     UA = 'Mozilla/5.0 (Windows NT 6.1; Win64; x64; rv:56.0) Gecko/20100101 Firefox/56.0'
     oInputParameterHandler = cInputParameterHandler()
     sUrl4 = oInputParameterHandler.getValue('siteUrl4')

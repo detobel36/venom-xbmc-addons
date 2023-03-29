@@ -7,7 +7,7 @@ import unicodedata
 import xbmc
 
 from resources.lib.comaddon import addon, dialog, progress, VSlog
-from resources.lib.gui.gui import cGui
+from resources.lib.gui.gui import Gui
 from resources.lib.gui.guiElement import cGuiElement
 from resources.lib.handler.inputParameterHandler import cInputParameterHandler
 from resources.lib.handler.outputParameterHandler import cOutputParameterHandler
@@ -74,7 +74,7 @@ class cTrakt:
         return
 
     def search(self):
-        oGui = cGui()
+        oGui = Gui()
 
         oOutputParameterHandler = cOutputParameterHandler()
         oOutputParameterHandler.addParameter('siteUrl', 'https://')
@@ -94,7 +94,7 @@ class cTrakt:
     def getLoad(self):
         # pour regen le token()
         # self.getToken()
-        oGui = cGui()
+        oGui = Gui()
 
         oOutputParameterHandler = cOutputParameterHandler()
         if self.ADDON.getSetting('bstoken') == '':
@@ -152,7 +152,7 @@ class cTrakt:
         oGui.setEndOfDirectory()
 
     def menuList(self):
-        oGui = cGui()
+        oGui = Gui()
 
         oOutputParameterHandler = cOutputParameterHandler()
         oOutputParameterHandler.addParameter('siteUrl', 'https://')
@@ -171,7 +171,7 @@ class cTrakt:
         oGui.setEndOfDirectory()
 
     def getCalendrier(self):
-        oGui = cGui()
+        oGui = Gui()
 
         today_date = str(datetime.datetime.now().date())
 
@@ -190,7 +190,7 @@ class cTrakt:
         oGui.setEndOfDirectory()
 
     def getLists(self):
-        oGui = cGui()
+        oGui = Gui()
 
         oInputParameterHandler = cInputParameterHandler()
         sType = oInputParameterHandler.getValue('type')
@@ -348,7 +348,7 @@ class cTrakt:
             return elem.encode('utf-8')
 
     def getTrakt(self, url2=None):
-        oGui = cGui()
+        oGui = Gui()
 
         oInputParameterHandler = cInputParameterHandler()
         if url2:
@@ -691,7 +691,7 @@ class cTrakt:
         oGui.setEndOfDirectory()
 
     def getBseasons(self):
-        oGui = cGui()
+        oGui = Gui()
 
         oInputParameterHandler = cInputParameterHandler()
         sUrl = oInputParameterHandler.getValue('siteUrl')
@@ -767,7 +767,7 @@ class cTrakt:
                 return item['show']['title']
 
     def getBepisodes(self):
-        oGui = cGui()
+        oGui = Gui()
 
         oInputParameterHandler = cInputParameterHandler()
         sUrl = oInputParameterHandler.getValue('siteUrl')
@@ -831,11 +831,11 @@ class cTrakt:
         if cTrakt.CONTENT == '2':
             oGuiElement.setMeta(2)
             oGuiElement.setCat(2)
-            cGui.CONTENT = 'tvshows'
+            Gui.CONTENT = 'tvshows'
         else:
             oGuiElement.setMeta(1)
             oGuiElement.setCat(1)
-            cGui.CONTENT = 'movies'
+            Gui.CONTENT = 'movies'
 
         oGui.addFolder(oGuiElement, oOutputParameterHandler)
 
@@ -1068,7 +1068,7 @@ class cTrakt:
         self.vStreamSearch(sMovieTitle)
 
     def vStreamSearch(self, sMovieTitle):
-        oGui = cGui()
+        oGui = Gui()
 
         oHandler = cRechercheHandler()
         oHandler.setText(sMovieTitle)

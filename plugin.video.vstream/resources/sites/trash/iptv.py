@@ -3,7 +3,7 @@
 
 import re
 
-from resources.lib.gui.gui import cGui
+from resources.lib.gui.gui import Gui
 from resources.lib.handler.inputParameterHandler import cInputParameterHandler
 from resources.lib.handler.outputParameterHandler import cOutputParameterHandler
 from resources.lib.parser import cParser
@@ -19,7 +19,7 @@ FREE_M3U = URL_MAIN + 'home-passion-for-iptv-free-m3u-links-working-and-updated/
 
 
 def load():
-    oGui = cGui()
+    oGui = Gui()
 
     oOutputParameterHandler = cOutputParameterHandler()
     oOutputParameterHandler.addParameter('siteUrl', FREE_M3U)
@@ -32,7 +32,7 @@ def load():
 
 
 def showPays():
-    oGui = cGui()
+    oGui = Gui()
     oInputParameterHandler = cInputParameterHandler()
     sUrl = oInputParameterHandler.getValue('siteUrl')
 
@@ -67,7 +67,7 @@ def showPays():
 
 
 def showDailyList():
-    oGui = cGui()
+    oGui = Gui()
     oInputParameterHandler = cInputParameterHandler()
     sUrl = oInputParameterHandler.getValue('siteUrl')
 
@@ -122,7 +122,7 @@ def __checkForNextPage(sHtmlContent):
 
 
 def showDailyIptvList():
-    oGui = cGui()
+    oGui = Gui()
 
     oInputParameterHandler = cInputParameterHandler()
     sUrl = oInputParameterHandler.getValue('siteUrl')

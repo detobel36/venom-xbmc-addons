@@ -1,7 +1,7 @@
 from resources.lib.handler.requestHandler import cRequestHandler
 from resources.lib.handler.premiumHandler import cPremiumHandler
 from resources.lib.parser import cParser
-from resources.lib.gui.gui import cGui
+from resources.lib.gui.gui import Gui
 from resources.hosters.hoster import iHoster
 import time
 import random
@@ -76,7 +76,7 @@ class cHoster(iHoster):
             sTicketValue = str(aResult[1][0]).replace(' ', '')
             sSecondsForWait = int(sTicketValue) + 2
 
-            oGui = cGui()
+            oGui = Gui()
             oGui.showNofication(sSecondsForWait, 3)
             time.sleep(sSecondsForWait)
 

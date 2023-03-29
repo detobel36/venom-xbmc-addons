@@ -15,7 +15,7 @@ except ImportError:  # Python 3
 
 from resources.lib.comaddon import VSlog, dialog, addon, isMatrix, siteManager
 from resources.lib.config import GestionCookie
-from resources.lib.gui.gui import cGui
+from resources.lib.gui.gui import Gui
 from resources.lib.gui.hoster import cHosterGui
 from resources.lib.handler.inputParameterHandler import cInputParameterHandler
 from resources.lib.handler.outputParameterHandler import cOutputParameterHandler
@@ -39,7 +39,7 @@ headers = {'User-Agent': UA}
 
 
 def load():
-    oGui = cGui()
+    oGui = Gui()
     addons = addon()
 
     # Même avec un token, on verifies les identifiants
@@ -67,7 +67,7 @@ def opensetting():
 
 
 def showSearch(path='//'):
-    oGui = cGui()
+    oGui = Gui()
 
     oInputParameterHandler = cInputParameterHandler()
     sPath = oInputParameterHandler.getValue('siteUrl')
@@ -92,7 +92,7 @@ def showSearch(path='//'):
 
 def showFile(sSearch=''):
 
-    oGui = cGui()
+    oGui = Gui()
     oInputParameterHandler = cInputParameterHandler()
     sUrl = oInputParameterHandler.getValue('siteUrl')
 
@@ -187,7 +187,7 @@ def showFile(sSearch=''):
 
 def showMedias(sSearch='', sType=None):
 
-    oGui = cGui()
+    oGui = Gui()
     oInputParameterHandler = cInputParameterHandler()
     sMovieTitle = oInputParameterHandler.getValue('sMovieTitle')
 
@@ -663,7 +663,7 @@ def searchEpisode(sTitle):
 
 def searchSeries(searchName):
 
-    oGui = cGui()
+    oGui = Gui()
     sToken = cPremiumHandler('uptobox').getToken()
     sUrl = API_URL.replace('none', sToken) + '&offset=0&limit=20&path='
 
@@ -704,7 +704,7 @@ def searchSerie(oGui, sUrl, path, searchName):
 
 
 def showHosters():
-    oGui = cGui()
+    oGui = Gui()
     oInputParameterHandler = cInputParameterHandler()
     sHosterUrl = oInputParameterHandler.getValue('siteUrl')
     sTitle = oInputParameterHandler.getValue('sMovieTitle')
