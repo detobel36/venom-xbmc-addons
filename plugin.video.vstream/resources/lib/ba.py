@@ -19,7 +19,7 @@ SITE_IDENTIFIER = 'cBA'
 SITE_NAME = 'BA'
 
 
-class cShowBA:
+class ShowBA:
     def __init__(self):
         self.sTrailerUrl = ''  # fournie par les metadata
         self.search = ''
@@ -27,14 +27,14 @@ class cShowBA:
         self.metaType = 'movie'
         self.key = 'AIzaSyC5grY-gOPMpUM_tn0sfTKV3pKUtf9---M'
 
-    def SetSearch(self, search):
+    def set_search(self, search):
         self.search = search
 
-    def SetYear(self, year):
+    def set_year(self, year):
         if year:
             self.year = year
 
-    def SetTrailerUrl(self, sTrailerUrl):
+    def set_trailer_url(self, sTrailerUrl):
         if sTrailerUrl:
             try:
                 trailer_id = sTrailerUrl.split('=')[1]
@@ -42,11 +42,11 @@ class cShowBA:
             except BaseException:
                 pass
 
-    def SetMetaType(self, metaType):
+    def set_meta_type(self, metaType):
         self.metaType = str(metaType).replace('1', 'movie').replace('2', 'tvshow').replace('3', 'movie')\
                                      .replace('4', 'tvshow').replace('5', 'tvshow').replace('6', 'tvshow')
 
-    def SearchBA(self, window=False):
+    def search_ba(self, window=False):
 
         sSearchTitle = self.search + ' - Bande Annonce VF'
         if self.year:
@@ -60,7 +60,7 @@ class cShowBA:
             from resources.lib.tmdb import cTMDb
             meta = cTMDb().get_meta(self.metaType, self.search, year=self.year)
             if 'trailer' in meta and meta['trailer']:
-                self.SetTrailerUrl(meta['trailer'])
+                self.set_trailer_url(meta['trailer'])
                 urlTrailer = self.sTrailerUrl
 
         # Sinon recherche dans youtube

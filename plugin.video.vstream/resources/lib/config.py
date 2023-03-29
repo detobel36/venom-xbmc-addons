@@ -346,11 +346,11 @@ def WindowsBoxes(sTitle, siteUrl, metaType, year, sSite, sFav, sCat):
                 year = self.meta['year']
                 from resources.lib.ba import cShowBA
                 cBA = cShowBA()
-                cBA.SetSearch(sTitle)
-                cBA.SetYear(year)
-                cBA.SetMetaType(metaType)
-                cBA.SetTrailerUrl(self.getProperty('trailer'))
-                cBA.SearchBA(True)
+                cBA.set_search(sTitle)
+                cBA.set_year(year)
+                cBA.set_meta_type(metaType)
+                cBA.set_trailer_url(self.getProperty('trailer'))
+                cBA.search_ba(True)
                 return
 
             elif controlId == 30:

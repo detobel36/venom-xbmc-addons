@@ -830,11 +830,11 @@ class Gui:
 
         from resources.lib.ba import cShowBA
         cBA = cShowBA()
-        cBA.SetSearch(sFileName)
-        cBA.SetYear(sYear)
-        cBA.SetTrailerUrl(sTrailerUrl)
-        cBA.SetMetaType(sMeta)
-        cBA.SearchBA()
+        cBA.set_search(sFileName)
+        cBA.set_year(sYear)
+        cBA.set_trailer_url(sTrailerUrl)
+        cBA.set_meta_type(sMeta)
+        cBA.search_ba()
 
     def viewBack(self):
         sPluginPath = cPluginHandler().getPluginPath()
