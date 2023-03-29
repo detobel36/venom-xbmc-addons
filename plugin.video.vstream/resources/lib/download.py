@@ -18,7 +18,7 @@ from resources.lib.comaddon import addon, dialog, progress, VSlog, VSupdate, VSP
 from resources.lib.db import Db
 from resources.lib.gui.gui import Gui
 from resources.lib.gui.guiElement import cGuiElement
-from resources.lib.handler.inputParameterHandler import cInputParameterHandler
+from resources.lib.handler.inputParameterHandler import InputParameterHandler
 from resources.lib.handler.outputParameterHandler import cOutputParameterHandler
 from resources.lib.handler.pluginHandler import cPluginHandler
 from resources.lib.player import cPlayer
@@ -375,7 +375,7 @@ class cDownload:
         return self.StartDownload(meta)
 
     def ResetDownload(self):
-        oInputParameterHandler = cInputParameterHandler()
+        oInputParameterHandler = InputParameterHandler()
         url = oInputParameterHandler.getValue('sUrl')
         meta = {}
         meta['url'] = url
@@ -391,7 +391,7 @@ class cDownload:
         return
 
     def ReadDownload(self):
-        oInputParameterHandler = cInputParameterHandler()
+        oInputParameterHandler = InputParameterHandler()
         path = oInputParameterHandler.getValue('sPath')
         sTitle = oInputParameterHandler.getValue('sMovieTitle')
 
@@ -406,7 +406,7 @@ class cDownload:
         oPlayer.startPlayer()
 
     def DelFile(self):
-        oInputParameterHandler = cInputParameterHandler()
+        oInputParameterHandler = InputParameterHandler()
         path = oInputParameterHandler.getValue('sPath')
 
         oDialog = self.DIALOG.VSyesno(self.ADDON.VSlang(30074))
@@ -438,7 +438,7 @@ class cDownload:
         return None
 
     def GetOnefile(self):
-        oInputParameterHandler = cInputParameterHandler()
+        oInputParameterHandler = InputParameterHandler()
         url = oInputParameterHandler.getValue('sUrl')
 
         meta = {}
@@ -558,7 +558,7 @@ class cDownload:
         return
 
     def delDownload(self):
-        oInputParameterHandler = cInputParameterHandler()
+        oInputParameterHandler = InputParameterHandler()
         url = oInputParameterHandler.getValue('sUrl')
         meta = {}
         meta['url'] = url
@@ -627,7 +627,7 @@ class cDownload:
         return False
 
     def AddtoDownloadList(self):
-        oInputParameterHandler = cInputParameterHandler()
+        oInputParameterHandler = InputParameterHandler()
         sMediaUrl = oInputParameterHandler.getValue('sMediaUrl')
         sFileName = oInputParameterHandler.getValue('sFileName')
 
@@ -651,7 +651,7 @@ class cDownload:
         return
 
     def AddtoDownloadListandview(self):
-        oInputParameterHandler = cInputParameterHandler()
+        oInputParameterHandler = InputParameterHandler()
         sMediaUrl = oInputParameterHandler.getValue('sMediaUrl')
         sFileName = oInputParameterHandler.getValue('sFileName')
 

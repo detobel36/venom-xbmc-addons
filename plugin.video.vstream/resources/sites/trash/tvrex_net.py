@@ -4,7 +4,7 @@
 from resources.lib.parser import cParser
 from resources.lib.handler.requestHandler import cRequestHandler
 from resources.lib.handler.outputParameterHandler import cOutputParameterHandler
-from resources.lib.handler.inputParameterHandler import cInputParameterHandler
+from resources.lib.handler.inputParameterHandler import InputParameterHandler
 from resources.lib.gui.hoster import cHosterGui
 from resources.lib.gui.gui import Gui
 from resources.lib.comaddon import progress
@@ -175,7 +175,7 @@ def showGenres():
 
 def showMovies(sSearch=''):
     oGui = Gui()
-    oInputParameterHandler = cInputParameterHandler()
+    oInputParameterHandler = InputParameterHandler()
     sUrl = oInputParameterHandler.getValue('siteUrl')
 
     if sSearch:
@@ -346,7 +346,7 @@ def __checkForNextPage(sHtmlContent, sUrl):
 
 def showHosters():
     oGui = Gui()
-    oInputParameterHandler = cInputParameterHandler()
+    oInputParameterHandler = InputParameterHandler()
     sUrl = oInputParameterHandler.getValue('siteUrl')
     sMovieTitle = oInputParameterHandler.getValue('sMovieTitle')
     sThumb = oInputParameterHandler.getValue('sThumb')
@@ -496,7 +496,7 @@ def showLiveNbatv():
 # recuperation lecture m3u8 nba livestream - ok sauf si geoIP (USA) ou lien secu ou regex a maj
 def showLiveHosters():
     oGui = Gui()
-    oInputParameterHandler = cInputParameterHandler()
+    oInputParameterHandler = InputParameterHandler()
     sUrl = oInputParameterHandler.getValue('siteUrl')
     sTitle = oInputParameterHandler.getValue('sMovieTitle')
     sThumb = oInputParameterHandler.getValue('sThumb')
@@ -545,7 +545,7 @@ def showLiveHosters():
 
 def showHosters4():
     oGui = Gui()
-    oInputParameterHandler = cInputParameterHandler()
+    oInputParameterHandler = InputParameterHandler()
     sUrl = oInputParameterHandler.getValue('siteUrl')
     sMovieTitle = oInputParameterHandler.getValue('sMovieTitle')
     sThumbnail = oInputParameterHandler.getValue('sThumbnail')

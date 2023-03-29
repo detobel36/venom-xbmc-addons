@@ -5,7 +5,7 @@ from resources.lib.comaddon import progress
 from resources.lib.parser import cParser
 from resources.lib.handler.requestHandler import cRequestHandler
 from resources.lib.handler.outputParameterHandler import cOutputParameterHandler
-from resources.lib.handler.inputParameterHandler import cInputParameterHandler
+from resources.lib.handler.inputParameterHandler import InputParameterHandler
 from resources.lib.gui.gui import Gui
 from resources.lib.gui.hoster import cHosterGui
 import re
@@ -163,7 +163,7 @@ def showMovieYears():
 def showMovies(sSearch=''):
     oGui = Gui()
     oParser = cParser()
-    oInputParameterHandler = cInputParameterHandler()
+    oInputParameterHandler = InputParameterHandler()
     sUrl = oInputParameterHandler.getValue('siteUrl')
 
     if sSearch:
@@ -260,7 +260,7 @@ def __checkForNextPage(sHtmlContent):
 def showSaisons():
     oGui = Gui()
     oParser = cParser()
-    oInputParameterHandler = cInputParameterHandler()
+    oInputParameterHandler = InputParameterHandler()
     sUrl = oInputParameterHandler.getValue('siteUrl')
     sMovieTitle = oInputParameterHandler.getValue('sMovieTitle')
     sYear = oInputParameterHandler.getValue('sYear')
@@ -305,7 +305,7 @@ def showSaisons():
 def ShowEpisodes():
     oGui = Gui()
     oParser = cParser()
-    oInputParameterHandler = cInputParameterHandler()
+    oInputParameterHandler = InputParameterHandler()
     sUrl = oInputParameterHandler.getValue('siteUrl')
     sMovieTitle = oInputParameterHandler.getValue('sMovieTitle')
     sThumb = oInputParameterHandler.getValue('sThumb')
@@ -342,7 +342,7 @@ def ShowEpisodes():
 def showHosters():
     oGui = Gui()
 
-    oInputParameterHandler = cInputParameterHandler()
+    oInputParameterHandler = InputParameterHandler()
     sUrl = oInputParameterHandler.getValue('siteUrl')
     sMovieTitle = oInputParameterHandler.getValue('sMovieTitle')
     sThumb = oInputParameterHandler.getValue('sThumb')
@@ -386,7 +386,7 @@ def showHosters():
 def hostersLink():
     oGui = Gui()
     oParser = cParser()
-    oInputParameterHandler = cInputParameterHandler()
+    oInputParameterHandler = InputParameterHandler()
     sUrl = oInputParameterHandler.getValue('siteUrl')
     referer = oInputParameterHandler.getValue('referer')
     pdata = oInputParameterHandler.getValue('pdata')

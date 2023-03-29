@@ -11,7 +11,7 @@ import xbmc
 
 from resources.lib.comaddon import addon, dialog, VSPath
 from resources.lib.gui.gui import Gui
-from resources.lib.handler.inputParameterHandler import cInputParameterHandler
+from resources.lib.handler.inputParameterHandler import InputParameterHandler
 from resources.lib.handler.outputParameterHandler import cOutputParameterHandler
 from resources.lib.util import cUtil, QuotePlus
 
@@ -43,7 +43,7 @@ class cLibrary:
         self.__sTitle = ''
 
     def setLibrary(self):
-        oInputParameterHandler = cInputParameterHandler()
+        oInputParameterHandler = InputParameterHandler()
         sHosterIdentifier = oInputParameterHandler.getValue('sHosterIdentifier')
         sFileName = oInputParameterHandler.getValue('sFileName')
         sMediaUrl = oInputParameterHandler.getValue('sMediaUrl')
@@ -133,7 +133,7 @@ class cLibrary:
 
     def openLibrary(self):
         oGui = Gui()
-        oInputParameterHandler = cInputParameterHandler()
+        oInputParameterHandler = InputParameterHandler()
         sFile = oInputParameterHandler.getValue('siteUrl')
 
         listDir = xbmcvfs.listdir(sFile)
@@ -166,7 +166,7 @@ class cLibrary:
             oGui.setEndOfDirectory()
 
     def Delfile(self):
-        oInputParameterHandler = cInputParameterHandler()
+        oInputParameterHandler = InputParameterHandler()
         sFile = oInputParameterHandler.getValue('sFile')
 
         xbmcvfs.delete(sFile)
@@ -180,7 +180,7 @@ class cLibrary:
         xbmc.executebuiltin('CleanLibrary(video)')
 
     def ShowContent(self):
-        oInputParameterHandler = cInputParameterHandler()
+        oInputParameterHandler = InputParameterHandler()
         sFolder = oInputParameterHandler.getValue('folder')
         xbmc.executebuiltin('Container.Update(' + sFolder + ')')
 

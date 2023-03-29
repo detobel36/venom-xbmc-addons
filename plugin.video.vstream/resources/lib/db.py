@@ -6,7 +6,7 @@ import xbmcvfs
 import xbmc
 
 from resources.lib.comaddon import dialog, addon, VSlog, VSPath, isMatrix, VSProfil
-from resources.lib.handler.inputParameterHandler import cInputParameterHandler
+from resources.lib.handler.inputParameterHandler import InputParameterHandler
 from resources.lib.util import QuotePlus, Unquote
 
 SITE_IDENTIFIER = 'Db'
@@ -199,7 +199,7 @@ class Db(object):
     def del_history(self):
         from resources.lib.gui.gui import Gui
         oGui = Gui()
-        oInputParameterHandler = cInputParameterHandler()
+        oInputParameterHandler = InputParameterHandler()
         if oInputParameterHandler.exist('searchtext'):
             sql_delete = "DELETE FROM history WHERE title = '%s'" % (oInputParameterHandler.getValue('searchtext'))
         else:

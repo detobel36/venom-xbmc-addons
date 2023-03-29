@@ -5,7 +5,7 @@ import time
 
 from resources.lib.gui.hoster import cHosterGui
 from resources.lib.gui.gui import Gui
-from resources.lib.handler.inputParameterHandler import cInputParameterHandler
+from resources.lib.handler.inputParameterHandler import InputParameterHandler
 from resources.lib.handler.outputParameterHandler import cOutputParameterHandler
 from resources.lib.handler.requestHandler import cRequestHandler
 from resources.lib.parser import cParser
@@ -110,7 +110,7 @@ def showYears():
 def showMovies(sSearch=''):
     oGui = Gui()
 
-    oInputParameterHandler = cInputParameterHandler()
+    oInputParameterHandler = InputParameterHandler()
     sUrl = oInputParameterHandler.getValue('siteUrl')
 
     bGlobal_Search = False
@@ -206,7 +206,7 @@ def __checkForNextPage(sHtmlContent):
 def ShowSxE():
     oGui = Gui()
 
-    oInputParameterHandler = cInputParameterHandler()
+    oInputParameterHandler = InputParameterHandler()
     sUrl = oInputParameterHandler.getValue('siteUrl')
     sThumb = oInputParameterHandler.getValue('sThumb')
     sDesc = oInputParameterHandler.getValue('sDesc')
@@ -258,7 +258,7 @@ def ShowSxE():
 def seriesHosters():
     oGui = Gui()
 
-    oInputParameterHandler = cInputParameterHandler()
+    oInputParameterHandler = InputParameterHandler()
     sUrl = oInputParameterHandler.getValue('siteUrl')
     sThumb = oInputParameterHandler.getValue('sThumb')
     sMovieTitle = oInputParameterHandler.getValue('sMovieTitle')

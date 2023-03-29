@@ -9,7 +9,7 @@ from resources.lib.epg import cePg
 from resources.lib.gui.gui import Gui
 from resources.lib.gui.guiElement import cGuiElement
 from resources.lib.gui.hoster import cHosterGui
-from resources.lib.handler.inputParameterHandler import cInputParameterHandler
+from resources.lib.handler.inputParameterHandler import InputParameterHandler
 from resources.lib.handler.outputParameterHandler import cOutputParameterHandler
 from resources.lib.handler.requestHandler import cRequestHandler
 from resources.lib.parser import cParser
@@ -83,7 +83,7 @@ def showMenuMusic():
 def parseM3U(sUrl=None):  # Traite les m3u local
 
     if not sUrl:
-        oInputParameterHandler = cInputParameterHandler()
+        oInputParameterHandler = InputParameterHandler()
         sUrl = oInputParameterHandler.getValue('siteUrl')
 
     oRequestHandler = cRequestHandler(sUrl)
@@ -119,7 +119,7 @@ def parseM3U(sUrl=None):  # Traite les m3u local
 def showWeb():  # Code qui s'occupe de liens TV du Web
     oGui = Gui()
 
-    oInputParameterHandler = cInputParameterHandler()
+    oInputParameterHandler = InputParameterHandler()
     sUrl = oInputParameterHandler.getValue('siteUrl')
     if sUrl == 'TV':
         sUrl = URL_WEB
@@ -206,7 +206,7 @@ def showWeb():  # Code qui s'occupe de liens TV du Web
 
 def direct_epg():  # Code qui gerent l'epg
     # oGuiElement = cGuiElement()
-    oInputParameterHandler = cInputParameterHandler()
+    oInputParameterHandler = InputParameterHandler()
     # aParams = oInputParameterHandler.getAllParameter()
     sTitle = oInputParameterHandler.getValue('sMovieTitle')
     text = oInputParameterHandler.getValue('EpgData')
@@ -215,14 +215,14 @@ def direct_epg():  # Code qui gerent l'epg
 
 def soir_epg():  # Code qui gerent l'epg
     # oGuiElement = cGuiElement()
-    oInputParameterHandler = cInputParameterHandler()
+    oInputParameterHandler = InputParameterHandler()
     sTitle = oInputParameterHandler.getValue('sMovieTitle')
     cePg().view_epg(sTitle, 'soir')
 
 
 def enregistrement():  # Code qui gerent l'enregistrement
     # oGuiElement = cGuiElement()
-    oInputParameterHandler = cInputParameterHandler()
+    oInputParameterHandler = InputParameterHandler()
     sUrl = oInputParameterHandler.getValue('siteUrl').replace('P_L_U_S', '+')
 
     enregistrementIsActif = ADDON.getSetting('enregistrement_activer')
@@ -241,7 +241,7 @@ def enregistrement():  # Code qui gerent l'enregistrement
 
 def showAZ():
     oGui = Gui()
-    oInputParameterHandler = cInputParameterHandler()
+    oInputParameterHandler = InputParameterHandler()
     sUrl = oInputParameterHandler.getValue('siteUrl')
 
     oOutputParameterHandler = cOutputParameterHandler()
@@ -260,7 +260,7 @@ def showAZ():
 
 def showAZRadio():
     oGui = Gui()
-    oInputParameterHandler = cInputParameterHandler()
+    oInputParameterHandler = InputParameterHandler()
     sUrl = oInputParameterHandler.getValue('siteUrl')
 
     oOutputParameterHandler = cOutputParameterHandler()
@@ -279,7 +279,7 @@ def showAZRadio():
 
 def showTV():
     oGui = Gui()
-    oInputParameterHandler = cInputParameterHandler()
+    oInputParameterHandler = InputParameterHandler()
     sUrl = oInputParameterHandler.getValue('siteUrl')
 
     oRequestHandler = cRequestHandler(sUrl)
@@ -347,7 +347,7 @@ def showTV():
 
 def play__():  # Lancer les liens
     oGui = Gui()
-    oInputParameterHandler = cInputParameterHandler()
+    oInputParameterHandler = InputParameterHandler()
     sUrl = oInputParameterHandler.getValue('siteUrl').replace('P_L_U_S', '+')
     sTitle = oInputParameterHandler.getValue('sMovieTitle')
     sThumbnail = oInputParameterHandler.getValue('sThumbnail')

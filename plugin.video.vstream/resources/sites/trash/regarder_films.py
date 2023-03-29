@@ -6,7 +6,7 @@ from resources.lib.util import cUtil
 from resources.lib.parser import cParser
 from resources.lib.handler.requestHandler import cRequestHandler
 from resources.lib.handler.outputParameterHandler import cOutputParameterHandler
-from resources.lib.handler.inputParameterHandler import cInputParameterHandler
+from resources.lib.handler.inputParameterHandler import InputParameterHandler
 from resources.lib.gui.gui import Gui
 from resources.lib.gui.hoster import cHosterGui
 return False
@@ -99,7 +99,7 @@ def showAlpha():
 def showList():
     oGui = Gui()
     oParser = cParser()
-    oInputParameterHandler = cInputParameterHandler()
+    oInputParameterHandler = InputParameterHandler()
     oRequestHandler = cRequestHandler(SERIE_LIST[0])
     dAZ = oInputParameterHandler.getValue('dAZ')
     sHtmlContent = oRequestHandler.request()
@@ -165,7 +165,7 @@ def showSeries(sSearch=''):
         sUrl = sSearch
 
     else:
-        oInputParameterHandler = cInputParameterHandler()
+        oInputParameterHandler = InputParameterHandler()
         sUrl = oInputParameterHandler.getValue('siteUrl')
         sMovieTitle = oInputParameterHandler.getValue('sMovieTitle')
 
@@ -224,7 +224,7 @@ def __checkForNextPage(sHtmlContent):
 
 def serieHosters():
     oGui = Gui()
-    oInputParameterHandler = cInputParameterHandler()
+    oInputParameterHandler = InputParameterHandler()
     sUrl = oInputParameterHandler.getValue('siteUrl')
     sMovieTitle = oInputParameterHandler.getValue('sMovieTitle')
 

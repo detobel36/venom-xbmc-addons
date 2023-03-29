@@ -3,7 +3,7 @@
 
 from resources.lib.gui.gui import Gui
 from resources.lib.gui.guiElement import cGuiElement
-from resources.lib.handler.inputParameterHandler import cInputParameterHandler
+from resources.lib.handler.inputParameterHandler import InputParameterHandler
 from resources.lib.handler.outputParameterHandler import cOutputParameterHandler
 from resources.lib.comaddon import progress, addon, dialog, VSupdate, isMatrix, siteManager
 from resources.lib.parser import cParser
@@ -238,7 +238,7 @@ def getAction():
     dialogs = dialog()
     addons = addon()
 
-    oInputParameterHandler = cInputParameterHandler()
+    oInputParameterHandler = InputParameterHandler()
 
     sAction = ''
     if not sAction:
@@ -352,7 +352,7 @@ def getWatchlist():
     if not tmdb_account:
         return
 
-    oInputParameterHandler = cInputParameterHandler()
+    oInputParameterHandler = InputParameterHandler()
     sCat = oInputParameterHandler.getValue('sCat')
     if not sCat:
         return
@@ -425,7 +425,7 @@ def showGenreMovie():
     oGui = Gui()
     grab = cTMDb()
 
-    oInputParameterHandler = cInputParameterHandler()
+    oInputParameterHandler = InputParameterHandler()
     sUrl = oInputParameterHandler.getValue('siteUrl')
 
     result = grab.getUrl(sUrl)
@@ -448,7 +448,7 @@ def showGenreTV():
     oGui = Gui()
     grab = cTMDb()
 
-    oInputParameterHandler = cInputParameterHandler()
+    oInputParameterHandler = InputParameterHandler()
     sUrl = oInputParameterHandler.getValue('siteUrl')
 
     result = grab.getUrl(sUrl)
@@ -473,7 +473,7 @@ def showUserLists():
     oGui = Gui()
     grab = cTMDb()
 
-    oInputParameterHandler = cInputParameterHandler()
+    oInputParameterHandler = InputParameterHandler()
 
     iPage = 1
     term = ''
@@ -535,7 +535,7 @@ def showMovies(sSearch=''):
     grab = cTMDb()
     addons = addon()
 
-    oInputParameterHandler = cInputParameterHandler()
+    oInputParameterHandler = InputParameterHandler()
 
     iPage = 1
     term = ''
@@ -632,7 +632,7 @@ def showSeries(sSearch=''):
     grab = cTMDb()
     addons = addon()
 
-    oInputParameterHandler = cInputParameterHandler()
+    oInputParameterHandler = InputParameterHandler()
 
     iPage = 1
     term = ''
@@ -740,7 +740,7 @@ def showSeriesSaison():
     grab = cTMDb()
     addons = addon()
 
-    oInputParameterHandler = cInputParameterHandler()
+    oInputParameterHandler = InputParameterHandler()
 
     sUrl = oInputParameterHandler.getValue('siteUrl')
     sMovieTitle = oInputParameterHandler.getValue('sMovieTitle')
@@ -833,7 +833,7 @@ def showSeriesEpisode():
     grab = cTMDb()
     addons = addon()
 
-    oInputParameterHandler = cInputParameterHandler()
+    oInputParameterHandler = InputParameterHandler()
     sUrl = oInputParameterHandler.getValue('siteUrl')
     sMovieTitle = oInputParameterHandler.getValue('sMovieTitle')
     sFanart = oInputParameterHandler.getValue('sFanart')
@@ -940,7 +940,7 @@ def showActors(sSearch=''):
     grab = cTMDb()
     addons = addon()
 
-    oInputParameterHandler = cInputParameterHandler()
+    oInputParameterHandler = InputParameterHandler()
     sUrl = oInputParameterHandler.getValue('siteUrl')
 
     iPage = 1
@@ -1027,7 +1027,7 @@ def showFilmActor():
     grab = cTMDb()
     addons = addon()
 
-    oInputParameterHandler = cInputParameterHandler()
+    oInputParameterHandler = InputParameterHandler()
     sUrl = oInputParameterHandler.getValue('siteUrl')
 
     iPage = 1
@@ -1099,7 +1099,7 @@ def showLists():
     grab = cTMDb()
     addons = addon()
 
-    oInputParameterHandler = cInputParameterHandler()
+    oInputParameterHandler = InputParameterHandler()
 
     iPage = 1
     if oInputParameterHandler.exist('page'):

@@ -17,7 +17,7 @@ from resources.lib.comaddon import VSlog, dialog, addon, isMatrix, siteManager
 from resources.lib.config import GestionCookie
 from resources.lib.gui.gui import Gui
 from resources.lib.gui.hoster import cHosterGui
-from resources.lib.handler.inputParameterHandler import cInputParameterHandler
+from resources.lib.handler.inputParameterHandler import InputParameterHandler
 from resources.lib.handler.outputParameterHandler import cOutputParameterHandler
 from resources.lib.handler.premiumHandler import cPremiumHandler
 from resources.lib.handler.requestHandler import cRequestHandler, MPencode
@@ -69,7 +69,7 @@ def opensetting():
 def showSearch(path='//'):
     oGui = Gui()
 
-    oInputParameterHandler = cInputParameterHandler()
+    oInputParameterHandler = InputParameterHandler()
     sPath = oInputParameterHandler.getValue('siteUrl')
     sType = oInputParameterHandler.getValue('sMovieTitle')
 
@@ -93,7 +93,7 @@ def showSearch(path='//'):
 def showFile(sSearch=''):
 
     oGui = Gui()
-    oInputParameterHandler = cInputParameterHandler()
+    oInputParameterHandler = InputParameterHandler()
     sUrl = oInputParameterHandler.getValue('siteUrl')
 
     offset = 0
@@ -188,7 +188,7 @@ def showFile(sSearch=''):
 def showMedias(sSearch='', sType=None):
 
     oGui = Gui()
-    oInputParameterHandler = cInputParameterHandler()
+    oInputParameterHandler = InputParameterHandler()
     sMovieTitle = oInputParameterHandler.getValue('sMovieTitle')
 
     if sSearch:
@@ -705,7 +705,7 @@ def searchSerie(oGui, sUrl, path, searchName):
 
 def showHosters():
     oGui = Gui()
-    oInputParameterHandler = cInputParameterHandler()
+    oInputParameterHandler = InputParameterHandler()
     sHosterUrl = oInputParameterHandler.getValue('siteUrl')
     sTitle = oInputParameterHandler.getValue('sMovieTitle')
     oHoster = cHosterGui().checkHoster(sHosterUrl)
@@ -816,7 +816,7 @@ def upToMyAccount():
     if (addons.getSetting('hoster_uptobox_username') == '') and (addons.getSetting('hoster_uptobox_password') == ''):
         return
 
-    oInputParameterHandler = cInputParameterHandler()
+    oInputParameterHandler = InputParameterHandler()
     sMediaUrl = oInputParameterHandler.getValue('sMediaUrl')
     sMovieTitle = oInputParameterHandler.getValue('sTitle')
 

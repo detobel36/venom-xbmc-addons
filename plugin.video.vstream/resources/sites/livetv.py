@@ -8,7 +8,7 @@ import xbmc
 from resources.lib.comaddon import progress, isMatrix, siteManager
 from resources.lib.gui.gui import Gui
 from resources.lib.gui.hoster import cHosterGui
-from resources.lib.handler.inputParameterHandler import cInputParameterHandler
+from resources.lib.handler.inputParameterHandler import InputParameterHandler
 from resources.lib.handler.outputParameterHandler import cOutputParameterHandler
 from resources.lib.handler.requestHandler import cRequestHandler
 from resources.lib.packer import cPacker
@@ -47,7 +47,7 @@ def load():
 
 def showLive():
     oGui = Gui()
-    oInputParameterHandler = cInputParameterHandler()
+    oInputParameterHandler = InputParameterHandler()
     sUrl = oInputParameterHandler.getValue('siteUrl')
 
     oRequestHandler = cRequestHandler(sUrl)
@@ -95,7 +95,7 @@ def showLive():
 def showMovies():  # affiche les catégories qui ont des lives'
     oGui = Gui()
 
-    oInputParameterHandler = cInputParameterHandler()
+    oInputParameterHandler = InputParameterHandler()
     sUrl = oInputParameterHandler.getValue('siteUrl')
 
     oRequestHandler = cRequestHandler(sUrl)
@@ -134,7 +134,7 @@ def showMovies():  # affiche les catégories qui ont des lives'
 def showMovies2():  # affiche les matchs en direct depuis la section showMovie
 
     oGui = Gui()
-    oInputParameterHandler = cInputParameterHandler()
+    oInputParameterHandler = InputParameterHandler()
     sUrl2 = oInputParameterHandler.getValue('siteUrl2')
 
     oRequestHandler = cRequestHandler(sUrl2)
@@ -221,7 +221,7 @@ def showMovies2():  # affiche les matchs en direct depuis la section showMovie
 
 def showMovies3():  # affiche les videos disponible du live
     oGui = Gui()
-    oInputParameterHandler = cInputParameterHandler()
+    oInputParameterHandler = InputParameterHandler()
     sUrl3 = oInputParameterHandler.getValue('siteUrl3')
 
     oRequestHandler = cRequestHandler(sUrl3)
@@ -272,7 +272,7 @@ def showMovies3():  # affiche les videos disponible du live
 def showHosters():  # affiche les videos disponible du live
     oGui = Gui()
     UA = 'Mozilla/5.0 (Windows NT 6.1; Win64; x64; rv:56.0) Gecko/20100101 Firefox/56.0'
-    oInputParameterHandler = cInputParameterHandler()
+    oInputParameterHandler = InputParameterHandler()
     sUrl4 = oInputParameterHandler.getValue('siteUrl4')
     sMovieTitle2 = oInputParameterHandler.getValue('sMovieTitle2')
     sThumb = oInputParameterHandler.getValue('sThumb')

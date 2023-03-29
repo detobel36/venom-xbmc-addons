@@ -9,7 +9,7 @@ import xbmc
 from resources.lib.comaddon import addon, dialog, progress, VSlog
 from resources.lib.gui.gui import Gui
 from resources.lib.gui.guiElement import cGuiElement
-from resources.lib.handler.inputParameterHandler import cInputParameterHandler
+from resources.lib.handler.inputParameterHandler import InputParameterHandler
 from resources.lib.handler.outputParameterHandler import cOutputParameterHandler
 from resources.lib.handler.rechercheHandler import cRechercheHandler
 from resources.lib.handler.requestHandler import cRequestHandler
@@ -192,7 +192,7 @@ class cTrakt:
     def getLists(self):
         oGui = Gui()
 
-        oInputParameterHandler = cInputParameterHandler()
+        oInputParameterHandler = InputParameterHandler()
         sType = oInputParameterHandler.getValue('type')
 
         # stats user
@@ -308,7 +308,7 @@ class cTrakt:
         oGui.setEndOfDirectory()
 
     def getBsout(self):
-        oInputParameterHandler = cInputParameterHandler()
+        oInputParameterHandler = InputParameterHandler()
         sUrl = oInputParameterHandler.getValue('siteUrl')
 
         oRequestHandler = cRequestHandler(sUrl)
@@ -350,7 +350,7 @@ class cTrakt:
     def getTrakt(self, url2=None):
         oGui = Gui()
 
-        oInputParameterHandler = cInputParameterHandler()
+        oInputParameterHandler = InputParameterHandler()
         if url2:
             sUrl = url2
         else:
@@ -693,7 +693,7 @@ class cTrakt:
     def getBseasons(self):
         oGui = Gui()
 
-        oInputParameterHandler = cInputParameterHandler()
+        oInputParameterHandler = InputParameterHandler()
         sUrl = oInputParameterHandler.getValue('siteUrl')
         sFile = oInputParameterHandler.getValue('file')
         sKey = oInputParameterHandler.getValue('key')
@@ -769,7 +769,7 @@ class cTrakt:
     def getBepisodes(self):
         oGui = Gui()
 
-        oInputParameterHandler = cInputParameterHandler()
+        oInputParameterHandler = InputParameterHandler()
         sUrl = oInputParameterHandler.getValue('siteUrl')
         sTitle = oInputParameterHandler.getValue('title')
         sFile = oInputParameterHandler.getValue('file')
@@ -885,7 +885,7 @@ class cTrakt:
             self.DIALOG.VSinfo('Vous devez être connecté')
             return
 
-        oInputParameterHandler = cInputParameterHandler()
+        oInputParameterHandler = InputParameterHandler()
 
         if not Action == "SetWatched":
             sAction = oInputParameterHandler.getValue('sAction')
@@ -1051,7 +1051,7 @@ class cTrakt:
 
     def showHosters(self):
 
-        oInputParameterHandler = cInputParameterHandler()
+        oInputParameterHandler = InputParameterHandler()
         sMovieTitle = oInputParameterHandler.getValue('file')
         sMovieTitle = self.decode(sMovieTitle, Unicode=True).lower()  # on repasse en utf-8
         sMovieTitle = Quote(sMovieTitle)
@@ -1111,7 +1111,7 @@ class cTrakt:
 
     def getTmdbID(self, sTitle, sType):
 
-        oInputParameterHandler = cInputParameterHandler()
+        oInputParameterHandler = InputParameterHandler()
 
         from resources.lib.tmdb import cTMDb
         grab = cTMDb()

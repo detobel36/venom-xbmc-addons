@@ -3,7 +3,7 @@
 # Venom.
 from resources.lib.comaddon import dialog, addon, xbmc, isMatrix
 from resources.lib.db import Db
-from resources.lib.handler.inputParameterHandler import cInputParameterHandler
+from resources.lib.handler.inputParameterHandler import InputParameterHandler
 from resources.lib.handler.outputParameterHandler import cOutputParameterHandler
 from resources.lib.gui.gui import Gui
 from resources.lib.util import UnquotePlus
@@ -19,7 +19,7 @@ class cViewing:
 
     # Suppression d'un bookmark, d'une catégorie, ou tous les bookmarks
     def delViewing(self):
-        oInputParameterHandler = cInputParameterHandler()
+        oInputParameterHandler = InputParameterHandler()
         sTitleWatched = oInputParameterHandler.getValue('sTitleWatched')
         sCat = oInputParameterHandler.getValue('sCat')
 
@@ -84,7 +84,7 @@ class cViewing:
     def getViewing(self):
         oGui = Gui()
 
-        oInputParameterHandler = cInputParameterHandler()
+        oInputParameterHandler = InputParameterHandler()
         catFilter = oInputParameterHandler.getValue('sCat')
 
         with Db() as DB:

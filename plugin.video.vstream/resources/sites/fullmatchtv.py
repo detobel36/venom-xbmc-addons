@@ -3,7 +3,7 @@
 
 from resources.lib.gui.hoster import cHosterGui
 from resources.lib.gui.gui import Gui
-from resources.lib.handler.inputParameterHandler import cInputParameterHandler
+from resources.lib.handler.inputParameterHandler import InputParameterHandler
 from resources.lib.handler.outputParameterHandler import cOutputParameterHandler
 from resources.lib.handler.requestHandler import cRequestHandler
 from resources.lib.parser import cParser
@@ -82,7 +82,7 @@ def showMovies(sSearch=''):
         sUrl = sSearch
         sPattern = '(?:<div class="td_module_16 td_module_wrap td-animation-stack">|<div class="td-module-container td-category-pos-image">.+?<div class="td-module-thumb">).+?href="([^"]+).+?title="([^"]+).+?.+?(?:src="([^"]+)|url.+?([^\']+))'
     else:
-        oInputParameterHandler = cInputParameterHandler()
+        oInputParameterHandler = InputParameterHandler()
         sUrl = oInputParameterHandler.getValue('siteUrl')
         sPattern = '(?:<div class="td_module_mx7 td_module_wrap td-animation-stack">|<div class="td-module-container td-category-pos-image">.+?<div class="td-module-thumb">).+?href="([^"]+).+?title="([^"]+).+?.+?(?:src="([^"]+)|url.+?([^\']+))'
 
@@ -121,7 +121,7 @@ def showMovies(sSearch=''):
 def showLink():
     oGui = Gui()
 
-    oInputParameterHandler = cInputParameterHandler()
+    oInputParameterHandler = InputParameterHandler()
     sUrl = oInputParameterHandler.getValue('siteUrl')
     sThumb = oInputParameterHandler.getValue('sThumb')
     sMovieTitle = oInputParameterHandler.getValue('sMovieTitle')

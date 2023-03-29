@@ -9,7 +9,7 @@ import xbmc
 import xbmcvfs
 
 from resources.lib.comaddon import progress, addon, dialog, VSlog, VSPath, isMatrix, siteManager
-from resources.lib.handler.inputParameterHandler import cInputParameterHandler
+from resources.lib.handler.inputParameterHandler import InputParameterHandler
 from resources.lib.handler.outputParameterHandler import cOutputParameterHandler
 from resources.lib.util import cUtil, Unquote
 from resources.lib.gui.gui import Gui
@@ -588,7 +588,7 @@ def showMenu():
     addons = addon()
     oGui = Gui()
 
-    oInputParameterHandler = cInputParameterHandler()
+    oInputParameterHandler = InputParameterHandler()
     pasteID = oInputParameterHandler.getValue('pasteID')
     sMedia = oInputParameterHandler.getValue('sMedia')
 
@@ -893,7 +893,7 @@ def getPasteBin(pbContent, pasteBin):
 def showMenuFilms():
     oGui = Gui()
     addons = addon()
-    oInputParameterHandler = cInputParameterHandler()
+    oInputParameterHandler = InputParameterHandler()
     sUrl = oInputParameterHandler.getValue('siteUrl')
 
     sRes = 'sRes=' in sUrl
@@ -1144,7 +1144,7 @@ def showGenreMovieTMDB():
     grab = cTMDb()
     oGui = Gui()
 
-    oInputParameterHandler = cInputParameterHandler()
+    oInputParameterHandler = InputParameterHandler()
     sUrl = oInputParameterHandler.getValue('siteUrl')
 
     result = grab.getUrl(sUrl)
@@ -1169,7 +1169,7 @@ def showGenreMovie():
     from resources.lib.tmdb import cTMDb
     grab = cTMDb()
     oGui = Gui()
-    oInputParameterHandler = cInputParameterHandler()
+    oInputParameterHandler = InputParameterHandler()
     siteUrl = oInputParameterHandler.getValue('siteUrl')
 
     result = grab.getUrl('genre/movie/list')
@@ -1190,7 +1190,7 @@ def showGenreTV():
     from resources.lib.tmdb import cTMDb
     grab = cTMDb()
     oGui = Gui()
-    oInputParameterHandler = cInputParameterHandler()
+    oInputParameterHandler = InputParameterHandler()
     sUrl = oInputParameterHandler.getValue('siteUrl')
 
     result = grab.getUrl(sUrl)
@@ -1214,7 +1214,7 @@ def showTMDB():
     oGui = Gui()
     addons = addon()
 
-    oInputParameterHandler = cInputParameterHandler()
+    oInputParameterHandler = InputParameterHandler()
     siteUrl = oInputParameterHandler.getValue('siteUrl')
     numPage = oInputParameterHandler.getValue('numPage')
     if not numPage:
@@ -1344,7 +1344,7 @@ def showTMDB():
 def showSearch():
     from resources.lib.util import Quote
     oGui = Gui()
-    oInputParameterHandler = cInputParameterHandler()
+    oInputParameterHandler = InputParameterHandler()
     sUrl = oInputParameterHandler.getValue('siteUrl')
 
     sSearchText = oGui.showKeyBoard()
@@ -1371,7 +1371,7 @@ def showActors(sSearch=''):
     oGui = Gui()
     addons = addon()
 
-    oInputParameterHandler = cInputParameterHandler()
+    oInputParameterHandler = InputParameterHandler()
     sUrl = oInputParameterHandler.getValue('siteUrl')
 
     iPage = 1
@@ -1445,7 +1445,7 @@ def showGenres():
     from resources.lib.tmdb import cTMDb
     tmdb = cTMDb()
     oGui = Gui()
-    oInputParameterHandler = cInputParameterHandler()
+    oInputParameterHandler = InputParameterHandler()
     siteUrl = oInputParameterHandler.getValue('siteUrl')
 
     sUrl, params = siteUrl.split('&', 1)
@@ -1499,7 +1499,7 @@ def showGenres():
 
 def showNetwork():
     oGui = Gui()
-    oInputParameterHandler = cInputParameterHandler()
+    oInputParameterHandler = InputParameterHandler()
     siteUrl = oInputParameterHandler.getValue('siteUrl')
 
     sUrl, params = siteUrl.split('&', 1)
@@ -1546,7 +1546,7 @@ def showNetwork():
 
 def showRealisateur():
     oGui = Gui()
-    oInputParameterHandler = cInputParameterHandler()
+    oInputParameterHandler = InputParameterHandler()
     siteUrl = oInputParameterHandler.getValue('siteUrl')
 
     sUrl, params = siteUrl.split('&', 1)
@@ -1622,7 +1622,7 @@ def showRealisateur():
 
 def showCast():
     oGui = Gui()
-    oInputParameterHandler = cInputParameterHandler()
+    oInputParameterHandler = InputParameterHandler()
     siteUrl = oInputParameterHandler.getValue('siteUrl')
     numItem = oInputParameterHandler.getValue('numItem')
     numPage = oInputParameterHandler.getValue('numPage')
@@ -1706,7 +1706,7 @@ def showCast():
 def showGroupes():
     oGui = Gui()
 
-    oInputParameterHandler = cInputParameterHandler()
+    oInputParameterHandler = InputParameterHandler()
     siteUrl = oInputParameterHandler.getValue('siteUrl')
 
     sUrl, params = siteUrl.split('&', 1)
@@ -1757,7 +1757,7 @@ def showGroupes():
 def showGroupeDetails():
     oGui = Gui()
 
-    oInputParameterHandler = cInputParameterHandler()
+    oInputParameterHandler = InputParameterHandler()
     siteUrl = oInputParameterHandler.getValue('siteUrl')
 
     sUrl, params = siteUrl.split('&', 1)
@@ -1796,7 +1796,7 @@ def showGroupeDetails():
 
 def showSaga():
     oGui = Gui()
-    oInputParameterHandler = cInputParameterHandler()
+    oInputParameterHandler = InputParameterHandler()
     siteUrl = oInputParameterHandler.getValue('siteUrl')
     numItem = oInputParameterHandler.getValue('numItem')
     numPage = oInputParameterHandler.getValue('numPage')
@@ -1894,7 +1894,7 @@ def showSaga():
 
 def showYears():
     oGui = Gui()
-    oInputParameterHandler = cInputParameterHandler()
+    oInputParameterHandler = InputParameterHandler()
     siteUrl = oInputParameterHandler.getValue('siteUrl')
 
     sUrl, params = siteUrl.split('&', 1)
@@ -1953,7 +1953,7 @@ def trie_res(key):
 
 def showResolution():
     oGui = Gui()
-    oInputParameterHandler = cInputParameterHandler()
+    oInputParameterHandler = InputParameterHandler()
     siteUrl = oInputParameterHandler.getValue('siteUrl')
     oOutputParameterHandler = cOutputParameterHandler()
     resolutions = [('DOLBY VISION', 'DOLBY VISION'), ('4K', '4K [2160p]'),
@@ -1968,7 +1968,7 @@ def showResolution():
 
 def alphaList():
     oGui = Gui()
-    oInputParameterHandler = cInputParameterHandler()
+    oInputParameterHandler = InputParameterHandler()
     siteUrl = oInputParameterHandler.getValue('siteUrl')
     oOutputParameterHandler = cOutputParameterHandler()
     for i in range(48, 84):
@@ -1988,7 +1988,7 @@ def alphaList():
 
 def showMovies(sSearch=''):
     oGui = Gui()
-    oInputParameterHandler = cInputParameterHandler()
+    oInputParameterHandler = InputParameterHandler()
     siteUrl = oInputParameterHandler.getValue('siteUrl')
     numItem = oInputParameterHandler.getValue('numItem')
     numPage = oInputParameterHandler.getValue('numPage')
@@ -2352,7 +2352,7 @@ def showMovies(sSearch=''):
 
 def showSerieSaisons():
     oGui = Gui()
-    oInputParameterHandler = cInputParameterHandler()
+    oInputParameterHandler = InputParameterHandler()
     siteUrl = oInputParameterHandler.getValue('siteUrl')
     searchTitle = oInputParameterHandler.getValue('sMovieTitle')
     searchYear = oInputParameterHandler.getValue('sYear')
@@ -2473,7 +2473,7 @@ def showEpisodesLinks(siteUrl=''):
     oGui = Gui()
 
     if not siteUrl:
-        oInputParameterHandler = cInputParameterHandler()
+        oInputParameterHandler = InputParameterHandler()
         siteUrl = oInputParameterHandler.getValue('siteUrl')
 
     # Pour supporter les caractères '&' et '+' dans les noms alors qu'ils sont réservés
@@ -2520,7 +2520,7 @@ def showHosters():
     from resources.lib.gui.hoster import cHosterGui
     oHosterGui = cHosterGui()
     oGui = Gui()
-    oInputParameterHandler = cInputParameterHandler()
+    oInputParameterHandler = InputParameterHandler()
     sTitle = oInputParameterHandler.getValue('sMovieTitle').replace(' | ', ' & ')
     siteUrl = oInputParameterHandler.getValue('siteUrl')
     listRes = getHosterList(siteUrl)
@@ -2764,7 +2764,7 @@ def deletePasteName():
         return
 
     cache = PasteCache()
-    oInputParameterHandler = cInputParameterHandler()
+    oInputParameterHandler = InputParameterHandler()
     pasteID = oInputParameterHandler.getValue('pasteID')
 
     labelSetting = SETTING_PASTE_LABEL + pasteID
@@ -2810,7 +2810,7 @@ def renamePasteName():
         return
 
     # Mettre à jour Label
-    oInputParameterHandler = cInputParameterHandler()
+    oInputParameterHandler = InputParameterHandler()
     pasteID = oInputParameterHandler.getValue('pasteID')
     labelSetting = SETTING_PASTE_LABEL + pasteID
     addons.setSetting(labelSetting, sLabel)
@@ -2902,7 +2902,7 @@ def addPasteID():
     oGui = Gui()
     addons = addon()
 
-    oInputParameterHandler = cInputParameterHandler()
+    oInputParameterHandler = InputParameterHandler()
     pasteID = oInputParameterHandler.getValue('pasteID')
 
     # Recherche d'un setting de libre
@@ -2968,7 +2968,7 @@ def adminPasteID():
 
     oGui.addText(SITE_IDENTIFIER, '[COLOR coral]Valider le code à retirer[/COLOR]', 'trash.png')
 
-    oInputParameterHandler = cInputParameterHandler()
+    oInputParameterHandler = InputParameterHandler()
     pasteID = oInputParameterHandler.getValue('pasteID')  # Numéro du dossier
     prefixID = SETTING_PASTE_ID + str(pasteID)
 
@@ -3009,7 +3009,7 @@ def deletePasteID():
         return
 
     cache = PasteCache()
-    oInputParameterHandler = cInputParameterHandler()
+    oInputParameterHandler = InputParameterHandler()
     pasteID = oInputParameterHandler.getValue('pasteID')    # Numéro du dossier
     pasteDel = oInputParameterHandler.getValue('pasteBin')  # Paste
 

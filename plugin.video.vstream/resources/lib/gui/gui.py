@@ -10,7 +10,7 @@ import sys
 from resources.lib.comaddon import listitem, addon, dialog, window, isNexus, progress, VSlog
 from resources.lib.gui.contextElement import cContextElement
 from resources.lib.gui.guiElement import cGuiElement
-from resources.lib.handler.inputParameterHandler import cInputParameterHandler
+from resources.lib.handler.inputParameterHandler import InputParameterHandler
 from resources.lib.handler.outputParameterHandler import cOutputParameterHandler
 from resources.lib.handler.pluginHandler import cPluginHandler
 from resources.lib.parser import cParser
@@ -68,7 +68,7 @@ class Gui:
 
         # Pour addLink on recupere le sCat et sMeta precedent.
         if Type == 'link':
-            oInputParameterHandler = cInputParameterHandler()
+            oInputParameterHandler = InputParameterHandler()
             sCat = oInputParameterHandler.getValue('sCat')
             if sCat:
                 oGuiElement.setCat(sCat)
@@ -82,7 +82,7 @@ class Gui:
 
         # Si pas d'id TMDB pour un episode, on recupère le précédent qui vient de la série
         if sCat and not oOutputParameterHandler.getValue('sTmdbId'):
-            oInputParameterHandler = cInputParameterHandler()
+            oInputParameterHandler = InputParameterHandler()
             sPreviousMeta = int(oInputParameterHandler.getValue('sMeta'))
             if 0 < sPreviousMeta < 7:
                 sTmdbID = oInputParameterHandler.getValue('sTmdbId')
@@ -206,7 +206,7 @@ class Gui:
 
     def addLink(self, sId, sFunction, sLabel, sThumbnail, sDesc, oOutputParameterHandler=''):
         # Pour gérer l'enchainement des épisodes
-        oInputParameterHandler = cInputParameterHandler()
+        oInputParameterHandler = InputParameterHandler()
         oOutputParameterHandler.addParameter('saisonUrl', oInputParameterHandler.getValue('saisonUrl'))
         oOutputParameterHandler.addParameter('nextSaisonFunc', oInputParameterHandler.getValue('nextSaisonFunc'))
         oOutputParameterHandler.addParameter('movieUrl', oInputParameterHandler.getValue('movieUrl'))
@@ -248,7 +248,7 @@ class Gui:
 
     def addEpisode(self, sId, sFunction, sLabel, sIcon, sThumbnail, sDesc, oOutputParameterHandler=''):
         # Pour gérer l'enchainement des épisodes, l'URL de la saison
-        oInputParameterHandler = cInputParameterHandler()
+        oInputParameterHandler = InputParameterHandler()
         saisonUrl = oInputParameterHandler.getValue('saisonUrl')
         if saisonUrl:   # Retenu depuis "addSeason"
             oOutputParameterHandler.addParameter('saisonUrl', saisonUrl)
@@ -822,7 +822,7 @@ class Gui:
         xbmc.sleep(600)    # Nécessaire pour laisser le temps du refresh
 
     def viewBA(self):
-        oInputParameterHandler = cInputParameterHandler()
+        oInputParameterHandler = InputParameterHandler()
         sFileName = oInputParameterHandler.getValue('sFileName')
         sYear = oInputParameterHandler.getValue('sYear')
         sTrailerUrl = oInputParameterHandler.getValue('sTrailerUrl')
@@ -838,7 +838,7 @@ class Gui:
 
     def viewBack(self):
         sPluginPath = cPluginHandler().getPluginPath()
-        oInputParameterHandler = cInputParameterHandler()
+        oInputParameterHandler = InputParameterHandler()
         # sParams = oInputParameterHandler.getAllParameter()
         sId = oInputParameterHandler.getValue('sId')
         sTest = '%s?site=%s' % (sPluginPath, sId)
@@ -849,7 +849,7 @@ class Gui:
         if addon().getSetting('information-view') == "false":
             from resources.lib.config import WindowsBoxes
 
-            oInputParameterHandler = cInputParameterHandler()
+            oInputParameterHandler = InputParameterHandler()
             sCleanTitle = oInputParameterHandler.getValue('sTitle') if oInputParameterHandler.exist(
                 'sTitle') else xbmc.getInfoLabel('ListItem.Title')
             sMeta = oInputParameterHandler.getValue('sMeta') if oInputParameterHandler.exist(
@@ -873,7 +873,7 @@ class Gui:
     def viewSimil(self):
         sPluginPath = cPluginHandler().getPluginPath()
 
-        oInputParameterHandler = cInputParameterHandler()
+        oInputParameterHandler = InputParameterHandler()
         sCleanTitle = oInputParameterHandler.getValue('sTitle') if oInputParameterHandler.exist(
             'sTitle') else xbmc.getInfoLabel('ListItem.Title')
         sCat = oInputParameterHandler.getValue('sCat') if oInputParameterHandler.exist(
@@ -897,7 +897,7 @@ class Gui:
 
     def selectPage(self):
         sPluginPath = cPluginHandler().getPluginPath()
-        oInputParameterHandler = cInputParameterHandler()
+        oInputParameterHandler = InputParameterHandler()
         # sParams = oInputParameterHandler.getAllParameter()
         sId = oInputParameterHandler.getValue('sId')
         sFunction = oInputParameterHandler.getValue('OldFunction')
@@ -931,7 +931,7 @@ class Gui:
 
     def selectPage2(self):
         sPluginPath = cPluginHandler().getPluginPath()
-        oInputParameterHandler = cInputParameterHandler()
+        oInputParameterHandler = InputParameterHandler()
         sId = oInputParameterHandler.getValue('sId')
         sFunction = oInputParameterHandler.getValue('OldFunction')
         siteUrl = oInputParameterHandler.getValue('siteUrl')
@@ -949,7 +949,7 @@ class Gui:
     def setWatched(self):
         if True:
             # Use vStream database
-            oInputParameterHandler = cInputParameterHandler()
+            oInputParameterHandler = InputParameterHandler()
             sSite = oInputParameterHandler.getValue('siteUrl')
             sTitle = oInputParameterHandler.getValue('sTitleWatched')
             sCat = oInputParameterHandler.getValue('sCat')

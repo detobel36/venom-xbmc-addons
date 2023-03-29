@@ -5,7 +5,7 @@
 from resources.lib.comaddon import siteManager
 from resources.lib.gui.hoster import cHosterGui
 from resources.lib.gui.gui import Gui
-from resources.lib.handler.inputParameterHandler import cInputParameterHandler
+from resources.lib.handler.inputParameterHandler import InputParameterHandler
 from resources.lib.handler.outputParameterHandler import cOutputParameterHandler
 from resources.lib.handler.requestHandler import cRequestHandler
 from resources.lib.parser import cParser
@@ -250,7 +250,7 @@ def showMovies(sSearch=''):
         oUtil = cUtil()
         sSearchText = oUtil.CleanName(sUrl.split(URL_SEARCH[0])[1])
     else:
-        oInputParameterHandler = cInputParameterHandler()
+        oInputParameterHandler = InputParameterHandler()
         sUrl = oInputParameterHandler.getValue('siteUrl')
 
     if 'wp-json' in sUrl and not sSearch:
@@ -476,7 +476,7 @@ def __checkForNextPage(sHtmlContent):
 def showSaisons():
     oGui = Gui()
 
-    oInputParameterHandler = cInputParameterHandler()
+    oInputParameterHandler = InputParameterHandler()
     sUrl = oInputParameterHandler.getValue('siteUrl')
     sThumb = oInputParameterHandler.getValue('sThumb')
     sDesc = oInputParameterHandler.getValue('sDesc')
@@ -527,7 +527,7 @@ def showListEpisodes():  # plus utilisé
     # parent https://www3.mystream.zone/tvshows
     oGui = Gui()
 
-    oInputParameterHandler = cInputParameterHandler()
+    oInputParameterHandler = InputParameterHandler()
     sThumb = oInputParameterHandler.getValue('sThumb')
     sDesc = oInputParameterHandler.getValue('sDesc')
     sYear = oInputParameterHandler.getValue('sYear')
@@ -571,7 +571,7 @@ def showEpisodes():
     # parents https://www3.mystream.zone/saisons/    # SERIE_NEWS_SAISONS
     oGui = Gui()
 
-    oInputParameterHandler = cInputParameterHandler()
+    oInputParameterHandler = InputParameterHandler()
     sUrl = oInputParameterHandler.getValue('siteUrl')
     sThumb = oInputParameterHandler.getValue('sThumb')
     sDesc = oInputParameterHandler.getValue('sDesc')
@@ -618,7 +618,7 @@ def showEpisodes():
 def showHosters():
     oGui = Gui()
 
-    oInputParameterHandler = cInputParameterHandler()
+    oInputParameterHandler = InputParameterHandler()
     sUrl = oInputParameterHandler.getValue('siteUrl')
     sTitle = oInputParameterHandler.getValue('sMovieTitle')
     sThumb = oInputParameterHandler.getValue('sThumb')
@@ -666,7 +666,7 @@ def showHosters():
 
 def hostersLink():
     oGui = Gui()
-    oInputParameterHandler = cInputParameterHandler()
+    oInputParameterHandler = InputParameterHandler()
     sUrl = oInputParameterHandler.getValue('siteUrl')
     referer = oInputParameterHandler.getValue('referer')
     pdata = oInputParameterHandler.getValue('pdata')

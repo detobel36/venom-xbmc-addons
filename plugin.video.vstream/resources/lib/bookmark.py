@@ -6,7 +6,7 @@ from resources.lib.db import Db
 from resources.lib.gui.gui import Gui
 from resources.lib.gui.guiElement import cGuiElement
 from resources.lib.gui.hoster import cHosterGui
-from resources.lib.handler.inputParameterHandler import cInputParameterHandler
+from resources.lib.handler.inputParameterHandler import InputParameterHandler
 from resources.lib.handler.outputParameterHandler import cOutputParameterHandler
 from resources.lib.comaddon import dialog, addon, isMatrix
 from resources.lib.util import UnquotePlus
@@ -22,7 +22,7 @@ class Fav:
 
     # Suppression d'un bookmark, d'une catégorie, ou tous les bookmarks
     def delBookmark(self):
-        oInputParameterHandler = cInputParameterHandler()
+        oInputParameterHandler = InputParameterHandler()
         if not self.DIALOG.VSyesno(self.ADDON.VSlang(30456)):
             return False
 
@@ -111,7 +111,7 @@ class Fav:
 
     def getFav(self):
         oGui = Gui()
-        oInputParameterHandler = cInputParameterHandler()
+        oInputParameterHandler = InputParameterHandler()
 
         # Comptages des marque-pages
         with Db() as db:
@@ -249,7 +249,7 @@ class Fav:
         return
 
     def setBookmark(self):
-        oInputParameterHandler = cInputParameterHandler()
+        oInputParameterHandler = InputParameterHandler()
 
         sCat = oInputParameterHandler.getValue('sCat') if oInputParameterHandler.exist(
             'sCat') else xbmc.getInfoLabel('ListItem.Property(sCat)')

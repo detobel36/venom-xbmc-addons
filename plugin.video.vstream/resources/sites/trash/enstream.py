@@ -5,7 +5,7 @@ from resources.lib.util import Unquote
 from resources.lib.parser import cParser
 from resources.lib.handler.requestHandler import cRequestHandler
 from resources.lib.handler.outputParameterHandler import cOutputParameterHandler
-from resources.lib.handler.inputParameterHandler import cInputParameterHandler
+from resources.lib.handler.inputParameterHandler import InputParameterHandler
 from resources.lib.gui.gui import Gui
 from resources.lib.gui.hoster import cHosterGui
 import xbmc
@@ -124,7 +124,7 @@ def showMovies(sSearch=''):
         oRequestHandler.setRequestType(cRequestHandler.REQUEST_TYPE_POST)
         oRequestHandler.addParameters('q', Unquote(sSearch))
     else:
-        oInputParameterHandler = cInputParameterHandler()
+        oInputParameterHandler = InputParameterHandler()
         sUrl = oInputParameterHandler.getValue('siteUrl')
         oRequestHandler = cRequestHandler(sUrl)
 
@@ -219,7 +219,7 @@ def __checkForNextPage(sHtmlContent):
 def showHoster():
     oGui = Gui()
 
-    oInputParameterHandler = cInputParameterHandler()
+    oInputParameterHandler = InputParameterHandler()
     sUrl = oInputParameterHandler.getValue('siteUrl')
     sThumb = oInputParameterHandler.getValue('sThumb')
     sMovieTitle = oInputParameterHandler.getValue('sMovieTitle')
@@ -287,7 +287,7 @@ def showHoster():
 
 def showHostersLinks():
     oGui = Gui()
-    oInputParameterHandler = cInputParameterHandler()
+    oInputParameterHandler = InputParameterHandler()
     sUrl = oInputParameterHandler.getValue('siteUrl')
     sMovieTitle = oInputParameterHandler.getValue('sMovieTitle')
     sThumb = oInputParameterHandler.getValue('sThumb')

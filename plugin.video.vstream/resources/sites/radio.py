@@ -9,7 +9,7 @@ import xbmcvfs
 from resources.lib.comaddon import addon
 from resources.lib.gui.gui import Gui
 from resources.lib.gui.guiElement import cGuiElement
-from resources.lib.handler.inputParameterHandler import cInputParameterHandler
+from resources.lib.handler.inputParameterHandler import InputParameterHandler
 from resources.lib.handler.outputParameterHandler import cOutputParameterHandler
 from resources.lib.handler.requestHandler import cRequestHandler
 from resources.lib.parser import cParser
@@ -106,7 +106,7 @@ def parseWebM3U():  # Traite les m3u
 
 def showWeb():  # Code qui s'occupe de liens TV du Web
     oGui = Gui()
-    oInputParameterHandler = cInputParameterHandler()
+    oInputParameterHandler = InputParameterHandler()
     playlist = parseWebM3U()
 
     if oInputParameterHandler.exist('AZ'):
@@ -155,7 +155,7 @@ def showWeb():  # Code qui s'occupe de liens TV du Web
 def showAZ():
 
     oGui = Gui()
-    oInputParameterHandler = cInputParameterHandler()
+    oInputParameterHandler = InputParameterHandler()
     sUrl = oInputParameterHandler.getValue('siteUrl')
 
     oOutputParameterHandler = cOutputParameterHandler()
@@ -174,7 +174,7 @@ def showAZ():
 
 
 def play__():  # Lancer les liens
-    oInputParameterHandler = cInputParameterHandler()
+    oInputParameterHandler = InputParameterHandler()
     sUrl = oInputParameterHandler.getValue('siteUrl').replace('P_L_U_S', '+')
     sTitle = oInputParameterHandler.getValue('sMovieTitle')
     sThumbnail = oInputParameterHandler.getValue('sThumbnail')

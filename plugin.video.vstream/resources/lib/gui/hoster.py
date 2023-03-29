@@ -4,7 +4,7 @@
 from resources.lib.gui.gui import Gui
 from resources.lib.gui.guiElement import cGuiElement
 from resources.lib.gui.contextElement import cContextElement
-from resources.lib.handler.inputParameterHandler import cInputParameterHandler
+from resources.lib.handler.inputParameterHandler import InputParameterHandler
 from resources.lib.handler.outputParameterHandler import cOutputParameterHandler
 from resources.lib.comaddon import dialog, addon, VSlog
 
@@ -16,7 +16,7 @@ class cHosterGui:
     # step 1 - bGetRedirectUrl in ein extra optionsObject verpacken
     def showHoster(self, oGui, oHoster, sMediaUrl, sThumbnail, bGetRedirectUrl=False):
         oOutputParameterHandler = cOutputParameterHandler()
-        oInputParameterHandler = cInputParameterHandler()
+        oInputParameterHandler = InputParameterHandler()
 
         # Gestion NextUp
         siteUrl = oInputParameterHandler.getValue('siteUrl')
@@ -120,7 +120,7 @@ class cHosterGui:
             self.ADDON.VSlang(30324))
 
         # Upload menu uptobox
-        if cInputParameterHandler().getValue('site') != 'siteuptobox' and self.ADDON.getSetting('hoster_uptobox_premium') == 'true':
+        if InputParameterHandler().getValue('site') != 'siteuptobox' and self.ADDON.getSetting('hoster_uptobox_premium') == 'true':
             host = oHoster.getPluginIdentifier()
             accept = ['uptobox', 'uptostream', '1fichier', 'uploaded', 'uplea']
             for i in accept:
@@ -135,7 +135,7 @@ class cHosterGui:
                     break
 
         # onefichier
-        if cInputParameterHandler().getValue('site') != 'siteonefichier' and self.ADDON.getSetting('hoster_onefichier_premium') == 'true':
+        if InputParameterHandler().getValue('site') != 'siteonefichier' and self.ADDON.getSetting('hoster_onefichier_premium') == 'true':
             host = oHoster.getPluginIdentifier()
             accept = '1fichier'  # les autres ne fonctionnent pas
             if host == accept:
@@ -315,7 +315,7 @@ class cHosterGui:
         oGui = Gui()
         oDialog = dialog()
 
-        oInputParameterHandler = cInputParameterHandler()
+        oInputParameterHandler = InputParameterHandler()
         sHosterIdentifier = oInputParameterHandler.getValue('sHosterIdentifier')
         sMediaUrl = oInputParameterHandler.getValue('sMediaUrl')
         bGetRedirectUrl = oInputParameterHandler.getValue('bGetRedirectUrl')
@@ -390,7 +390,7 @@ class cHosterGui:
 
     def addToPlaylist(self):
         oGui = Gui()
-        oInputParameterHandler = cInputParameterHandler()
+        oInputParameterHandler = InputParameterHandler()
         sHosterIdentifier = oInputParameterHandler.getValue('sHosterIdentifier')
         sMediaUrl = oInputParameterHandler.getValue('sMediaUrl')
         bGetRedirectUrl = oInputParameterHandler.getValue('bGetRedirectUrl')

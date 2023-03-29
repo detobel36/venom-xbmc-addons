@@ -4,7 +4,7 @@
 import re
 
 from resources.lib.gui.gui import Gui
-from resources.lib.handler.inputParameterHandler import cInputParameterHandler
+from resources.lib.handler.inputParameterHandler import InputParameterHandler
 from resources.lib.handler.outputParameterHandler import cOutputParameterHandler
 from resources.lib.parser import cParser
 from resources.sites.freebox import getHtml, showWeb, play__
@@ -92,7 +92,7 @@ def listePerContry():
 
 def showDailyList():
     oGui = Gui()
-    oInputParameterHandler = cInputParameterHandler()
+    oInputParameterHandler = InputParameterHandler()
     sUrl = oInputParameterHandler.getValue('siteUrl')
 
     oParser = cParser()
@@ -142,7 +142,7 @@ def __checkForNextPage(sHtmlContent):
 def showAllPlaylist():  # On recupere les differentes playlist si il y en a
     oGui = Gui()
 
-    oInputParameterHandler = cInputParameterHandler()
+    oInputParameterHandler = InputParameterHandler()
     sUrl = oInputParameterHandler.getValue('siteUrl')
     sTitle = oInputParameterHandler.getValue('sMovieTitle')
 

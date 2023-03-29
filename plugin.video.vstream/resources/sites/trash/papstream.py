@@ -4,7 +4,7 @@ from resources.lib.comaddon import progress
 from resources.lib.parser import cParser
 from resources.lib.handler.requestHandler import cRequestHandler
 from resources.lib.handler.outputParameterHandler import cOutputParameterHandler
-from resources.lib.handler.inputParameterHandler import cInputParameterHandler
+from resources.lib.handler.inputParameterHandler import InputParameterHandler
 from resources.lib.gui.gui import Gui
 from resources.lib.gui.hoster import cHosterGui
 import re
@@ -122,7 +122,7 @@ def showSearch():
 
 def showGenres():
     oGui = Gui()
-    oInputParameterHandler = cInputParameterHandler()
+    oInputParameterHandler = InputParameterHandler()
     sUrl = oInputParameterHandler.getValue('siteUrl')
 
     liste = []
@@ -205,7 +205,7 @@ def showMovies(sSearch=''):
         oRequestHandler = cRequestHandler(sUrl)
 
     else:
-        oInputParameterHandler = cInputParameterHandler()
+        oInputParameterHandler = InputParameterHandler()
         sUrl = oInputParameterHandler.getValue('siteUrl')
         oRequestHandler = cRequestHandler(sUrl)
 
@@ -286,7 +286,7 @@ def __checkForNextPage(sHtmlContent):
 def showSaisons():
     oGui = Gui()
     oParser = cParser()
-    oInputParameterHandler = cInputParameterHandler()
+    oInputParameterHandler = InputParameterHandler()
     sUrl = oInputParameterHandler.getValue('siteUrl')
     sMovieTitle = oInputParameterHandler.getValue('sMovieTitle')
     sThumb = oInputParameterHandler.getValue('sThumb')
@@ -332,7 +332,7 @@ def showSaisons():
 
 def ShowEpisodes():
     oGui = Gui()
-    oInputParameterHandler = cInputParameterHandler()
+    oInputParameterHandler = InputParameterHandler()
     sUrl = oInputParameterHandler.getValue('siteUrl')
     sDesc = oInputParameterHandler.getValue('sDesc')
     sThumb = oInputParameterHandler.getValue('sThumb')
@@ -365,7 +365,7 @@ def ShowEpisodes():
 def showLink():
     oGui = Gui()
     oParser = cParser()
-    oInputParameterHandler = cInputParameterHandler()
+    oInputParameterHandler = InputParameterHandler()
     sUrl = oInputParameterHandler.getValue('siteUrl')
     sMovieTitle = oInputParameterHandler.getValue('sMovieTitle')
     sThumb = oInputParameterHandler.getValue('sThumb')
@@ -413,7 +413,7 @@ def showLink():
 
 def showHosters():
     oGui = Gui()
-    oInputParameterHandler = cInputParameterHandler()
+    oInputParameterHandler = InputParameterHandler()
     refUrl = oInputParameterHandler.getValue('refUrl')
     sUrl = oInputParameterHandler.getValue('sUrl')
     sMovieTitle = oInputParameterHandler.getValue('sMovieTitle')

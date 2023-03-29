@@ -2,7 +2,7 @@
 # https://github.com/Kodi-vStream/venom-xbmc-addons
 from resources.lib.gui.hoster import cHosterGui  # systeme de recherche pour l'hote
 from resources.lib.gui.gui import Gui  # systeme d'affichage pour xbmc
-from resources.lib.handler.inputParameterHandler import cInputParameterHandler  # entree des parametres
+from resources.lib.handler.inputParameterHandler import InputParameterHandler  # entree des parametres
 from resources.lib.handler.outputParameterHandler import cOutputParameterHandler  # sortie des parametres
 from resources.lib.handler.requestHandler import cRequestHandler  # requete url
 from resources.lib.parser import cParser  # recherche de code
@@ -68,7 +68,7 @@ def showMovies(sSearch=''):
     if sSearch:  # si une url et envoyer directement grace a la function showSearch
         sUrl = sSearch
     else:
-        oInputParameterHandler = cInputParameterHandler()
+        oInputParameterHandler = InputParameterHandler()
         sUrl = oInputParameterHandler.getValue('siteUrl')  # recupere l'url sortie en parametre
 
     oRequestHandler = cRequestHandler(sUrl)  # envoye une requete a l'url
@@ -141,7 +141,7 @@ def showMovies2(sSearch=''):
     if sSearch:
         sUrl = sSearch
     else:
-        oInputParameterHandler = cInputParameterHandler()
+        oInputParameterHandler = InputParameterHandler()
         sUrl = oInputParameterHandler.getValue('siteUrl')
 
     oRequestHandler = cRequestHandler(sUrl)
@@ -185,7 +185,7 @@ def __checkForNextPage(sHtmlContent):  # cherche la page suivante
 
 def showHosters():  # recherche et affiche les hotes
     oGui = Gui()  # ouvre l'affichage
-    oInputParameterHandler = cInputParameterHandler()  # apelle l'entree de paramettre
+    oInputParameterHandler = InputParameterHandler()  # apelle l'entree de paramettre
     sUrl = oInputParameterHandler.getValue('siteUrl')  # apelle siteUrl
     sMovieTitle = oInputParameterHandler.getValue('sMovieTitle')  # apelle le titre
     sThumbnail = oInputParameterHandler.getValue('sThumbnail')  # apelle le poster
@@ -222,7 +222,7 @@ def showHosters():  # recherche et affiche les hotes
 
 def seriesListEpisodes():  # cherche les episode de series
     oGui = Gui()
-    oInputParameterHandler = cInputParameterHandler()
+    oInputParameterHandler = InputParameterHandler()
     sUrl = oInputParameterHandler.getValue('siteUrl')
     sMovieTitle = oInputParameterHandler.getValue('sMovieTitle')
     sThumbnail = oInputParameterHandler.getValue('sThumbnail')

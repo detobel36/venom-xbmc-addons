@@ -6,7 +6,7 @@ import re
 from resources.lib.comaddon import siteManager, isMatrix
 from resources.lib.gui.gui import Gui
 from resources.lib.gui.hoster import cHosterGui
-from resources.lib.handler.inputParameterHandler import cInputParameterHandler
+from resources.lib.handler.inputParameterHandler import InputParameterHandler
 from resources.lib.handler.outputParameterHandler import cOutputParameterHandler
 from resources.lib.handler.requestHandler import cRequestHandler
 from resources.lib.parser import cParser
@@ -96,7 +96,7 @@ def showTV():
 def showGenres():
     oGui = Gui()
 
-    oInputParameterHandler = cInputParameterHandler()
+    oInputParameterHandler = InputParameterHandler()
     sUrl = oInputParameterHandler.getValue('siteUrl')
     oRequestHandler = cRequestHandler(URL_MAIN + sUrl)
     sHtmlContent = oRequestHandler.request()
@@ -138,7 +138,7 @@ def showMovies():
     oGui = Gui()
     oParser = cParser()
 
-    oInputParameterHandler = cInputParameterHandler()
+    oInputParameterHandler = InputParameterHandler()
     sTitle = oInputParameterHandler.getValue('sMovieTitle')
     sUrl = URL_MAIN + oInputParameterHandler.getValue('siteUrl')
 
@@ -173,7 +173,7 @@ def showMoviesLinks():
     oGui = Gui()
     oParser = cParser()
 
-    oInputParameterHandler = cInputParameterHandler()
+    oInputParameterHandler = InputParameterHandler()
     sTitle = oInputParameterHandler.getValue('sMovieTitle')
     sUrl = oInputParameterHandler.getValue('siteUrl')
 
@@ -206,7 +206,7 @@ def showHoster():
     oGui = Gui()
     oParser = cParser()
 
-    oInputParameterHandler = cInputParameterHandler()
+    oInputParameterHandler = InputParameterHandler()
     sTitle = oInputParameterHandler.getValue('sMovieTitle')
     sThumb = oInputParameterHandler.getValue('sThumb')
     sUrl = URL_MAIN + oInputParameterHandler.getValue('siteUrl')
@@ -250,7 +250,7 @@ def showHoster():
 def showLink():
     oGui = Gui()
 
-    oInputParameterHandler = cInputParameterHandler()
+    oInputParameterHandler = InputParameterHandler()
     sUrl = oInputParameterHandler.getValue('siteUrl')
     sThumb = oInputParameterHandler.getValue('sThumb')
     sMovieTitle = oInputParameterHandler.getValue('sMovieTitle')

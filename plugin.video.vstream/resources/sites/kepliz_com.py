@@ -3,7 +3,7 @@
 
 from resources.lib.gui.hoster import cHosterGui
 from resources.lib.gui.gui import Gui
-from resources.lib.handler.inputParameterHandler import cInputParameterHandler
+from resources.lib.handler.inputParameterHandler import InputParameterHandler
 from resources.lib.handler.outputParameterHandler import cOutputParameterHandler
 from resources.lib.handler.requestHandler import cRequestHandler
 from resources.lib.parser import cParser
@@ -129,7 +129,7 @@ def showMovies(sSearch=''):
         oRequestHandler.addParameters('searchword', sSearch.replace(' ', '+'))
         sABPattern = '<div class="column24"'
     else:
-        oInputParameterHandler = cInputParameterHandler()
+        oInputParameterHandler = InputParameterHandler()
         sUrl = oInputParameterHandler.getValue('siteUrl')
         if sUrl == URL_MAIN:  # page d'accueil
             sABPattern = '<div class="column1"'
@@ -188,7 +188,7 @@ def __checkForNextPage(sHtmlContent):
 def showHosters():
     oGui = Gui()
     oParser = cParser()
-    oInputParameterHandler = cInputParameterHandler()
+    oInputParameterHandler = InputParameterHandler()
     sUrl = oInputParameterHandler.getValue('siteUrl')
     sMovieTitle = oInputParameterHandler.getValue('sMovieTitle')
 

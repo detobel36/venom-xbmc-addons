@@ -4,7 +4,7 @@ from resources.lib.gui.hoster import cHosterGui  # system de recherche pour l'ho
 from resources.lib.handler.hosterHandler import cHosterHandler  # system de recherche pour l'hote
 from resources.lib.gui.gui import Gui  # system d'affichage pour xbmc
 from resources.lib.gui.guiElement import cGuiElement  # system d'affichage pour xbmc
-from resources.lib.handler.inputParameterHandler import cInputParameterHandler  # entrer des parametres
+from resources.lib.handler.inputParameterHandler import InputParameterHandler  # entrer des parametres
 from resources.lib.handler.outputParameterHandler import cOutputParameterHandler  # sortis des parametres
 from resources.lib.handler.requestHandler import cRequestHandler  # requete url
 from resources.lib.config import cConfig  # config
@@ -130,7 +130,7 @@ def showSearch():
 def showAlpha(sLettre=''):
     oGui = Gui()
 
-    oInputParameterHandler = cInputParameterHandler()
+    oInputParameterHandler = InputParameterHandler()
     sUrl = oInputParameterHandler.getValue('siteUrl')
     sTitle = oInputParameterHandler.getValue('sMovieTitle')
     sLettre = oInputParameterHandler.getValue('sLettre')
@@ -200,7 +200,7 @@ def showAlpha(sLettre=''):
 def showMovies(sSearch=''):
     oGui = Gui()
 
-    oInputParameterHandler = cInputParameterHandler()
+    oInputParameterHandler = InputParameterHandler()
 
     if sSearch:
         # on redecode la recherhce codé il y a meme pas une seconde par l'addon
@@ -325,7 +325,7 @@ def __checkForNextPage(sHtmlContent):
 def showEpisode():
     oGui = Gui()  # ouvre l'affichage
 
-    oInputParameterHandler = cInputParameterHandler()
+    oInputParameterHandler = InputParameterHandler()
     sUrl = oInputParameterHandler.getValue('siteUrl')
     sTitle = oInputParameterHandler.getValue('sMovieTitle')
     sThumbnail = oInputParameterHandler.getValue('sThumbnail')
@@ -422,7 +422,7 @@ def showEpisode():
 def showListHosters():
     oGui = Gui()  # ouvre l'affichage
 
-    oInputParameterHandler = cInputParameterHandler()
+    oInputParameterHandler = InputParameterHandler()
     sUrl = oInputParameterHandler.getValue('siteUrl')
     sTitle = oInputParameterHandler.getValue('sMovieTitle')
     sThumbnail = oInputParameterHandler.getValue('sThumbnail')
@@ -485,7 +485,7 @@ def showListHosters():
 def showHosters():
     oGui = Gui()
 
-    oInputParameterHandler = cInputParameterHandler()
+    oInputParameterHandler = InputParameterHandler()
     sUrl = oInputParameterHandler.getValue('siteUrl')
     sMovieTitle = oInputParameterHandler.getValue('sMovieTitle')
     sThumbnail = oInputParameterHandler.getValue('sThumbnail')

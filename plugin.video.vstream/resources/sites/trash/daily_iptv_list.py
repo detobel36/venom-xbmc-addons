@@ -4,7 +4,7 @@
 import re
 
 from resources.lib.gui.gui import Gui
-from resources.lib.handler.inputParameterHandler import cInputParameterHandler
+from resources.lib.handler.inputParameterHandler import InputParameterHandler
 from resources.lib.handler.outputParameterHandler import cOutputParameterHandler
 from resources.lib.parser import cParser
 from resources.sites.freebox import getHtml, showWeb, play__
@@ -52,7 +52,7 @@ def load():
 
 def showPays():
     oGui = Gui()
-    oInputParameterHandler = cInputParameterHandler()
+    oInputParameterHandler = InputParameterHandler()
     sUrl = oInputParameterHandler.getValue('siteUrl')
 
     oParser = cParser()
@@ -84,7 +84,7 @@ def showPays():
 
 def showDailyList():
     oGui = Gui()
-    oInputParameterHandler = cInputParameterHandler()
+    oInputParameterHandler = InputParameterHandler()
     sUrl = oInputParameterHandler.getValue('siteUrl')
 
     oParser = cParser()
@@ -135,7 +135,7 @@ def __checkForNextPage(sHtmlContent):
 
 def showAllPlaylist():
     oGui = Gui()
-    oInputParameterHandler = cInputParameterHandler()
+    oInputParameterHandler = InputParameterHandler()
     sUrl = oInputParameterHandler.getValue('siteUrl')
 
     oParser = cParser()

@@ -7,7 +7,7 @@ from resources.lib.comaddon import progress, addon, siteManager
 from resources.lib.config import GestionCookie
 from resources.lib.gui.gui import Gui
 from resources.lib.gui.hoster import cHosterGui
-from resources.lib.handler.inputParameterHandler import cInputParameterHandler
+from resources.lib.handler.inputParameterHandler import InputParameterHandler
 from resources.lib.handler.outputParameterHandler import cOutputParameterHandler
 from resources.lib.handler.premiumHandler import cPremiumHandler
 from resources.lib.parser import cParser
@@ -57,7 +57,7 @@ def opensetting():
 
 def showFile(sFileTree=''):
     oGui = Gui()
-    oInputParameterHandler = cInputParameterHandler()
+    oInputParameterHandler = InputParameterHandler()
     # sUrl = oInputParameterHandler.getValue('siteUrl')
     if oInputParameterHandler.exist('siteUrl'):
         sUrl = oInputParameterHandler.getValue('siteUrl')
@@ -104,7 +104,7 @@ def showFile(sFileTree=''):
 def showHosters():
     oGui = Gui()
     oParser = cParser()
-    oInputParameterHandler = cInputParameterHandler()
+    oInputParameterHandler = InputParameterHandler()
     sUrl = oInputParameterHandler.getValue('siteUrl')
     sCode = oInputParameterHandler.getValue('sCode')
 
@@ -127,7 +127,7 @@ def showHosters():
 
 
 def upToMyAccount():
-    oInputParameterHandler = cInputParameterHandler()
+    oInputParameterHandler = InputParameterHandler()
     sMediaUrl = oInputParameterHandler.getValue('sMediaUrl')
 
     oPremiumHandler = cPremiumHandler('onefichier')

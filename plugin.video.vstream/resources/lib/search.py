@@ -6,7 +6,7 @@ import xbmc
 
 from resources.lib.gui.gui import Gui
 from resources.lib.handler.rechercheHandler import cRechercheHandler
-from resources.lib.handler.inputParameterHandler import cInputParameterHandler
+from resources.lib.handler.inputParameterHandler import InputParameterHandler
 from resources.lib.comaddon import progress, VSlog, addon, window
 from resources.lib.util import Quote
 
@@ -19,7 +19,7 @@ class cSearch:
     def searchGlobal(self, sSearchText='', sCat=''):
         try:
             if not sSearchText:
-                oInputParameterHandler = cInputParameterHandler()
+                oInputParameterHandler = InputParameterHandler()
                 sSearchText = oInputParameterHandler.getValue('searchtext')
                 sCat = oInputParameterHandler.getValue('sCat')
 

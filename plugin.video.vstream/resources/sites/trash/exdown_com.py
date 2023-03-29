@@ -8,7 +8,7 @@ from resources.lib.handler.hosterHandler import cHosterHandler
 from resources.lib.gui.gui import Gui
 from resources.lib.favourite import Fav
 from resources.lib.gui.guiElement import cGuiElement
-from resources.lib.handler.inputParameterHandler import cInputParameterHandler
+from resources.lib.handler.inputParameterHandler import InputParameterHandler
 from resources.lib.handler.outputParameterHandler import cOutputParameterHandler
 from resources.lib.handler.requestHandler import cRequestHandler
 from resources.lib.parser import cParser
@@ -219,7 +219,7 @@ def showMovies(sSearch=''):
         sUrl = sSearch
 
     else:
-        oInputParameterHandler = cInputParameterHandler()
+        oInputParameterHandler = InputParameterHandler()
         sUrl = oInputParameterHandler.getValue('siteUrl')
 
     oRequestHandler = cRequestHandler(sUrl)
@@ -289,7 +289,7 @@ def __checkForNextPage(sHtmlContent):
 
 def showLinks():
 
-    oInputParameterHandler = cInputParameterHandler()
+    oInputParameterHandler = InputParameterHandler()
     sUrl = oInputParameterHandler.getValue('siteUrl')
 
     # print sUrl
@@ -316,7 +316,7 @@ def showMoviesLinks(sHtmlContent):
 
     oGui = Gui()
 
-    oInputParameterHandler = cInputParameterHandler()
+    oInputParameterHandler = InputParameterHandler()
     sUrl = oInputParameterHandler.getValue('siteUrl')
     sMovieTitle = oInputParameterHandler.getValue('sMovieTitle')
     sThumbnail = oInputParameterHandler.getValue('sThumbnail')
@@ -398,7 +398,7 @@ def showSeriesLinks(sHtmlContent):
     xbmc.log('mode serie')
 
     oGui = Gui()
-    oInputParameterHandler = cInputParameterHandler()
+    oInputParameterHandler = InputParameterHandler()
     sUrl = oInputParameterHandler.getValue('siteUrl')
     sMovieTitle = oInputParameterHandler.getValue('sMovieTitle')
     sThumbnail = oInputParameterHandler.getValue('sThumbnail')
@@ -489,7 +489,7 @@ def showHosters():  # recherche et affiche les hotes
     # print "ZT:showHosters"
 
     oGui = Gui()
-    oInputParameterHandler = cInputParameterHandler()  # apelle l'entree de paramettre
+    oInputParameterHandler = InputParameterHandler()  # apelle l'entree de paramettre
     sMovieTitle = oInputParameterHandler.getValue('sMovieTitle')
     sUrl = oInputParameterHandler.getValue('siteUrl')
     sThumbnail = oInputParameterHandler.getValue('sThumbnail')
@@ -562,7 +562,7 @@ def showHosters():  # recherche et affiche les hotes
 def showSeriesHosters():  # recherche et affiche les hotes
     # print "ZT:showSeriesHosters"
     oGui = Gui()
-    oInputParameterHandler = cInputParameterHandler()  # apelle l'entree de paramettre
+    oInputParameterHandler = InputParameterHandler()  # apelle l'entree de paramettre
     sMovieTitle = oInputParameterHandler.getValue('sMovieTitle')
     sUrl = oInputParameterHandler.getValue('siteUrl')
     sThumbnail = oInputParameterHandler.getValue('sThumbnail')
@@ -630,7 +630,7 @@ def showSeriesHosters():  # recherche et affiche les hotes
 def Display_protected_link():
 
     oGui = Gui()
-    oInputParameterHandler = cInputParameterHandler()
+    oInputParameterHandler = InputParameterHandler()
     sMovieTitle = oInputParameterHandler.getValue('sMovieTitle')
     sUrl = oInputParameterHandler.getValue('siteUrl')
     sThumbnail = oInputParameterHandler.getValue('sThumbnail')
@@ -736,7 +736,7 @@ def CutPremiumlinks(sHtmlContent):
 
 
 def ShowBA():
-    oInputParameterHandler = cInputParameterHandler()
+    oInputParameterHandler = InputParameterHandler()
     sUrl = oInputParameterHandler.getValue('sUrl')
 
     oRequestHandler = cRequestHandler(sUrl)

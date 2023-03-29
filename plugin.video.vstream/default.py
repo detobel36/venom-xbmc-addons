@@ -7,7 +7,7 @@ import traceback
 from resources.lib.home import cHome
 from resources.lib.gui.gui import Gui
 from resources.lib.handler.pluginHandler import cPluginHandler
-from resources.lib.handler.inputParameterHandler import cInputParameterHandler
+from resources.lib.handler.inputParameterHandler import InputParameterHandler
 from resources.lib.handler.outputParameterHandler import cOutputParameterHandler
 from resources.lib.comaddon import progress, VSlog, addon, window, siteManager
 from resources.lib.search import cSearch
@@ -59,7 +59,7 @@ class Main:
         if plugin_path == 'plugin://plugin.video.vstream/extrafanart/':
             return
 
-        input_parameter_handler = cInputParameterHandler()
+        input_parameter_handler = InputParameterHandler()
 
         # Get SiteName
         if input_parameter_handler.exist('site'):

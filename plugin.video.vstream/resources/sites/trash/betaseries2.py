@@ -6,7 +6,7 @@ from resources.lib.gui.gui import Gui
 from resources.lib.gui.guiElement import cGuiElement
 from resources.lib.gui.hoster import cHosterGui
 from resources.lib.handler.requestHandler import cRequestHandler
-from resources.lib.handler.inputParameterHandler import cInputParameterHandler
+from resources.lib.handler.inputParameterHandler import InputParameterHandler
 from resources.lib.handler.outputParameterHandler import cOutputParameterHandler
 
 import urllib
@@ -62,7 +62,7 @@ class cBseries:
 
     def delFavourites(self):
 
-        oInputParameterHandler = cInputParameterHandler()
+        oInputParameterHandler = InputParameterHandler()
         siteUrl = oInputParameterHandler.getValue('siteUrl')
         sMovieTitle = oInputParameterHandler.getValue('sMovieTitle')
 
@@ -161,7 +161,7 @@ class cBseries:
         # self.getToken()
         oGui = Gui()
 
-        oInputParameterHandler = cInputParameterHandler()
+        oInputParameterHandler = InputParameterHandler()
         userID = oInputParameterHandler.getValue('userID')
 
         # timeline
@@ -198,7 +198,7 @@ class cBseries:
 
     def getBsout(self):
 
-        oInputParameterHandler = cInputParameterHandler()
+        oInputParameterHandler = InputParameterHandler()
         sUrl = oInputParameterHandler.getValue('siteUrl')
 
         oGui = Gui()
@@ -223,7 +223,7 @@ class cBseries:
 
     def getBseries(self):
 
-        oInputParameterHandler = cInputParameterHandler()
+        oInputParameterHandler = InputParameterHandler()
         sUrl = oInputParameterHandler.getValue('siteUrl')
         sParam = oInputParameterHandler.getValue('param')
 
@@ -286,7 +286,7 @@ class cBseries:
     def getBseries2(self):
         oGui = Gui()
 
-        oInputParameterHandler = cInputParameterHandler()
+        oInputParameterHandler = InputParameterHandler()
         sUrl = oInputParameterHandler.getValue('siteUrl')
 
         # aParams = oInputParameterHandler.getAllParameter()
@@ -361,7 +361,7 @@ class cBseries:
         return
 
     def setFavorite(self):
-        oInputParameterHandler = cInputParameterHandler()
+        oInputParameterHandler = InputParameterHandler()
         # xbmc.log(str(oInputParameterHandler.getAllParameter()))
 
         if int(oInputParameterHandler.getValue('sCat')) < 1:

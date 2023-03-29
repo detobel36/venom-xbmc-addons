@@ -5,7 +5,7 @@ import re
 
 from resources.lib.comaddon import addon, isMatrix, siteManager
 from resources.lib.gui.gui import Gui
-from resources.lib.handler.inputParameterHandler import cInputParameterHandler
+from resources.lib.handler.inputParameterHandler import InputParameterHandler
 from resources.lib.handler.outputParameterHandler import cOutputParameterHandler
 from resources.lib.handler.premiumHandler import cPremiumHandler
 from resources.lib.handler.requestHandler import cRequestHandler
@@ -30,7 +30,7 @@ def load():
     oGui = Gui()
     oOutputParameterHandler = cOutputParameterHandler()
 
-    oInputParameterHandler = cInputParameterHandler()
+    oInputParameterHandler = InputParameterHandler()
     sUrl = oInputParameterHandler.getValue('siteUrl')
 
     if 'series' not in sUrl:
@@ -53,7 +53,7 @@ def opensetting():
 def showSearch(path='//'):
     oGui = Gui()
 
-    oInputParameterHandler = cInputParameterHandler()
+    oInputParameterHandler = InputParameterHandler()
     sUrl = oInputParameterHandler.getValue('siteUrl')
     sTitle = oInputParameterHandler.getValue('sMovieTitle')
 
@@ -69,7 +69,7 @@ def showSearch(path='//'):
 
 def getAuthorizedID():
     oParser = cParser()
-    oInputParameterHandler = cInputParameterHandler()
+    oInputParameterHandler = InputParameterHandler()
     oRequest = cRequestHandler(URL_MAIN)
     sHtmlContent = oRequest.request()
     sPattern = "Authorization': '(.+?)'"
@@ -104,7 +104,7 @@ def showMovies(sSearch='', searchLocal=False):
 
     if not sSearch:
         searchLocal = True
-        oInputParameterHandler = cInputParameterHandler()
+        oInputParameterHandler = InputParameterHandler()
         sSearch = oInputParameterHandler.getValue('siteUrl')
     sSearchText = sSearch.replace(URL_SEARCH_MOVIES[0], '')
     sSearchText = Unquote(sSearchText)
@@ -270,7 +270,7 @@ def showSaisons():
     saisons = {}
     oUtil = cUtil()
 
-    oInputParameterHandler = cInputParameterHandler()
+    oInputParameterHandler = InputParameterHandler()
     # sUrl = oInputParameterHandler.getValue('siteUrl')
     sSearchTitle = oInputParameterHandler.getValue('sMovieTitle')
     sSearchYear, pos = getYear(sSearchTitle, len(sSearchTitle))
@@ -359,7 +359,7 @@ def showEpisodes():
     oGui = Gui()
     oUtil = cUtil()
 
-    oInputParameterHandler = cInputParameterHandler()
+    oInputParameterHandler = InputParameterHandler()
     sUrl, sSearchSaison = oInputParameterHandler.getValue('siteUrl').split('|')
     sSearchTitle = oInputParameterHandler.getValue('sMovieTitle')
     sSearchTitle = sSearchTitle.replace(' S%s' % sSearchSaison, '')
@@ -442,7 +442,7 @@ def showHosters():
     hoster = oHosterGui.getHoster('lien_direct')
     oUtil = cUtil()
 
-    oInputParameterHandler = cInputParameterHandler()
+    oInputParameterHandler = InputParameterHandler()
     # sSearchTmdbId = oInputParameterHandler.getValue('sTmdbId')
     sSearchTitle = oInputParameterHandler.getValue('sMovieTitle')
     sSearchYear, pos = getYear(sSearchTitle, len(sSearchTitle))

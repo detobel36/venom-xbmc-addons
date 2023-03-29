@@ -11,7 +11,7 @@ from resources.lib.util import urlEncode, Unquote, Quote, QuotePlus
 from resources.lib.parser import cParser
 from resources.lib.handler.requestHandler import cRequestHandler
 from resources.lib.handler.outputParameterHandler import cOutputParameterHandler
-from resources.lib.handler.inputParameterHandler import cInputParameterHandler
+from resources.lib.handler.inputParameterHandler import InputParameterHandler
 from resources.lib.gui.guiElement import cGuiElement
 from resources.lib.gui.gui import Gui
 import ssl
@@ -184,7 +184,7 @@ def showGenres():
 
 def showLinks():
     oGui = Gui()
-    oInputParameterHandler = cInputParameterHandler()
+    oInputParameterHandler = InputParameterHandler()
     sCatID = oInputParameterHandler.getValue('videoCategoryId')
     sNext = oInputParameterHandler.getValue('pageToken')
 
@@ -240,7 +240,7 @@ def showLinks():
 
 
 def __checkForNextPage(sHtmlContent):  # Affiche les page suivant si il y en a
-    oInputParameterHandler = cInputParameterHandler()
+    oInputParameterHandler = InputParameterHandler()
     sUrl = oInputParameterHandler.getValue('siteUrl')
 
     if 'myfree-tivi' in sUrl:
@@ -264,7 +264,7 @@ def __checkForNextPage(sHtmlContent):  # Affiche les page suivant si il y en a
 
 def showHosters():
     oGui = Gui()
-    oInputParameterHandler = cInputParameterHandler()
+    oInputParameterHandler = InputParameterHandler()
     sUrl = oInputParameterHandler.getValue('siteUrl')
     sMovieTitle = oInputParameterHandler.getValue('sMovieTitle')
     sThumb = oInputParameterHandler.getValue('sThumb')
@@ -281,7 +281,7 @@ def showHosters():
 def showAllPlaylist():  # On recupere les differentes playlist si il y en a
     oGui = Gui()
 
-    oInputParameterHandler = cInputParameterHandler()
+    oInputParameterHandler = InputParameterHandler()
     sUrl = oInputParameterHandler.getValue('siteUrl')
     sTitle = oInputParameterHandler.getValue('sMovieTitle')
     sThumb = oInputParameterHandler.getValue('sThumbnail')
@@ -417,7 +417,7 @@ def showAllPlaylist():  # On recupere les differentes playlist si il y en a
 def showWorldIptvGratuit():  # On recupere les liens qui sont dans les playlist 'World' de IptvGratuit
     oGui = Gui()
 
-    oInputParameterHandler = cInputParameterHandler()
+    oInputParameterHandler = InputParameterHandler()
     sUrl = oInputParameterHandler.getValue('siteUrl')
 
     sHtmlContent = getHtml(sUrl)
@@ -540,7 +540,7 @@ def getHtml(sUrl, data=None):  # S'occupe des requetes
 
 def parseM3U(infile):  # Traite les m3u local
     oGui = Gui()
-    oInputParameterHandler = cInputParameterHandler()
+    oInputParameterHandler = InputParameterHandler()
     sUrl = oInputParameterHandler.getValue('siteUrl')
 
     if 'iptv4sat' in sUrl or '.zip' in sUrl:
@@ -608,7 +608,7 @@ def parseM3U(infile):  # Traite les m3u local
 
 def showWeb():  # Code qui s'occupe de liens TV du Web
     oGui = Gui()
-    oInputParameterHandler = cInputParameterHandler()
+    oInputParameterHandler = InputParameterHandler()
     sUrl = oInputParameterHandler.getValue('siteUrl')
 
     playlist = parseM3U(sUrl)
@@ -692,7 +692,7 @@ def showWeb():  # Code qui s'occupe de liens TV du Web
 
 def direct_epg():  # Code qui gere l'epg
     oGuiElement = cGuiElement()
-    oInputParameterHandler = cInputParameterHandler()
+    oInputParameterHandler = InputParameterHandler()
     # aParams = oInputParameterHandler.getAllParameter()
     sTitle = oInputParameterHandler.getValue('sMovieTitle')
     sCom = cePg().view_epg(sTitle, 'direct')
@@ -700,7 +700,7 @@ def direct_epg():  # Code qui gere l'epg
 
 def soir_epg():  # Code qui gere l'epg
     oGuiElement = cGuiElement()
-    oInputParameterHandler = cInputParameterHandler()
+    oInputParameterHandler = InputParameterHandler()
 
     sTitle = oInputParameterHandler.getValue('sMovieTitle')
     sCom = cePg().view_epg(sTitle, 'soir')
@@ -708,7 +708,7 @@ def soir_epg():  # Code qui gere l'epg
 
 def enregistrement():  # Code qui gere l'epg
     oGuiElement = cGuiElement()
-    oInputParameterHandler = cInputParameterHandler()
+    oInputParameterHandler = InputParameterHandler()
     sUrl = oInputParameterHandler.getValue('siteUrl').replace('P_L_U_S', '+')
 
     enregistrementIsActif = ADDON.getSetting('enregistrement_activer')
@@ -729,7 +729,7 @@ def showAZ():
 
     import string
     oGui = Gui()
-    oInputParameterHandler = cInputParameterHandler()
+    oInputParameterHandler = InputParameterHandler()
     sUrl = oInputParameterHandler.getValue('siteUrl')
 
     for i in string.digits:
@@ -751,8 +751,8 @@ def showAZRadio():
 
     import string
     oGui = Gui()
-    oInputParameterHandler = cInputParameterHandler()
-    oInputParameterHandler = cInputParameterHandler()
+    oInputParameterHandler = InputParameterHandler()
+    oInputParameterHandler = InputParameterHandler()
     sUrl = oInputParameterHandler.getValue('siteUrl')
 
     for i in string.digits:
@@ -772,7 +772,7 @@ def showAZRadio():
 
 def showTV():
     oGui = Gui()
-    oInputParameterHandler = cInputParameterHandler()
+    oInputParameterHandler = InputParameterHandler()
     sUrl = oInputParameterHandler.getValue('siteUrl')
 
     oRequestHandler = cRequestHandler(sUrl)
@@ -848,7 +848,7 @@ def showTV():
 def play__():  # Lancer les liens
     oGui = Gui()
 
-    oInputParameterHandler = cInputParameterHandler()
+    oInputParameterHandler = InputParameterHandler()
     sUrl = oInputParameterHandler.getValue('siteUrl').replace('P_L_U_S', '+')
     sTitle = oInputParameterHandler.getValue('sMovieTitle')
     sThumbnail = oInputParameterHandler.getValue('sThumbnail')

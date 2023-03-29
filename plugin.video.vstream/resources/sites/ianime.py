@@ -7,7 +7,7 @@ import unicodedata
 from resources.lib.comaddon import VSlog, isMatrix, siteManager
 from resources.lib.gui.gui import Gui
 from resources.lib.gui.hoster import cHosterGui
-from resources.lib.handler.inputParameterHandler import cInputParameterHandler
+from resources.lib.handler.inputParameterHandler import InputParameterHandler
 from resources.lib.handler.outputParameterHandler import cOutputParameterHandler
 from resources.lib.handler.requestHandler import cRequestHandler
 from resources.lib.parser import cParser
@@ -193,7 +193,7 @@ def load():
 
 def showSearch():
     oGui = Gui()
-    oInputParameterHandler = cInputParameterHandler()
+    oInputParameterHandler = InputParameterHandler()
     sUrl = oInputParameterHandler.getValue('siteUrl')
 
     sSearchText = oGui.showKeyBoard()
@@ -235,7 +235,7 @@ def showGenresMovies():
 def showGenres():
     oGui = Gui()
 
-    oInputParameterHandler = cInputParameterHandler()
+    oInputParameterHandler = InputParameterHandler()
     sUrl = oInputParameterHandler.getValue('siteUrl')
 
     oRequestHandler = cRequestHandler(sUrl)
@@ -276,7 +276,7 @@ def showGenres():
 
 
 def showAlpha2():
-    oInputParameterHandler = cInputParameterHandler()
+    oInputParameterHandler = InputParameterHandler()
     sUrl = oInputParameterHandler.getValue('siteUrl')
 
     sUrl2 = URL_MAIN + 'animes.php?liste=' + RandomKey
@@ -307,7 +307,7 @@ def showAlpha2():
 def showAlpha(url=None):
     oGui = Gui()
 
-    oInputParameterHandler = cInputParameterHandler()
+    oInputParameterHandler = InputParameterHandler()
     if url is None:
         sUrl = oInputParameterHandler.getValue('siteUrl')
     else:
@@ -373,7 +373,7 @@ def showMovies(sSearch=''):
         sHtmlContent = cutSearch(sHtmlContent, typeSearch)
 
     else:
-        oInputParameterHandler = cInputParameterHandler()
+        oInputParameterHandler = InputParameterHandler()
         sUrl = oInputParameterHandler.getValue('siteUrl')
 
         oRequestHandler = cRequestHandler(sUrl)
@@ -531,7 +531,7 @@ def __checkForNextPage(sHtmlContent):
 def showSaison():
     oGui = Gui()
     oParser = cParser()
-    oInputParameterHandler = cInputParameterHandler()
+    oInputParameterHandler = InputParameterHandler()
     sUrl = oInputParameterHandler.getValue('siteUrl')
     sMovieTitle = oInputParameterHandler.getValue('sMovieTitle')
     sThumb = oInputParameterHandler.getValue('sThumb')
@@ -572,7 +572,7 @@ def showSaison():
 def showEpisode():
     oGui = Gui()
     oParser = cParser()
-    oInputParameterHandler = cInputParameterHandler()
+    oInputParameterHandler = InputParameterHandler()
     sMovieTitle = oInputParameterHandler.getValue('sMovieTitle')
     sUrl, sSearchSeason = oInputParameterHandler.getValue('siteUrl').split('&season=')
     sThumb = oInputParameterHandler.getValue('sThumb')
@@ -685,7 +685,7 @@ def extractLink(html):
 def showHosters():
     oGui = Gui()
     oParser = cParser()
-    oInputParameterHandler = cInputParameterHandler()
+    oInputParameterHandler = InputParameterHandler()
     sUrl = oInputParameterHandler.getValue('siteUrl')
     sMovieTitle = oInputParameterHandler.getValue('sMovieTitle')
     sThumb = oInputParameterHandler.getValue('sThumb')

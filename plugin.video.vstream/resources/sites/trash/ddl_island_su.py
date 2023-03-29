@@ -10,7 +10,7 @@ from resources.lib.comaddon import progress, dialog, xbmc, xbmcgui, VSlog
 from resources.lib.parser import cParser
 from resources.lib.handler.requestHandler import cRequestHandler
 from resources.lib.handler.outputParameterHandler import cOutputParameterHandler
-from resources.lib.handler.inputParameterHandler import cInputParameterHandler
+from resources.lib.handler.inputParameterHandler import InputParameterHandler
 from resources.lib.gui.gui import Gui
 from resources.lib.gui.hoster import cHosterGui
 return False
@@ -412,7 +412,7 @@ def showMovies(sSearch=''):
             bGlobal_Search = True
 
         # partie en test
-        oInputParameterHandler = cInputParameterHandler()
+        oInputParameterHandler = InputParameterHandler()
         sType = oInputParameterHandler.getValue('type')
 
         if sType:
@@ -424,7 +424,7 @@ def showMovies(sSearch=''):
                 sUrl = sUrl.replace(URL_SEARCH[0], URL_SEARCH_ANIMS[0])
 
     else:
-        oInputParameterHandler = cInputParameterHandler()
+        oInputParameterHandler = InputParameterHandler()
         sUrl = oInputParameterHandler.getValue('siteUrl')
 
     # print sUrl
@@ -526,7 +526,7 @@ def showMovies(sSearch=''):
 
 
 def __checkForNextPage(sHtmlContent):
-    oInputParameterHandler = cInputParameterHandler()
+    oInputParameterHandler = InputParameterHandler()
     sUrl = oInputParameterHandler.getValue('siteUrl')
     oParser = cParser()
     sPattern = '<div class="page">.+?</div></td><td align="center"><a href="([^"]+)">'
@@ -546,7 +546,7 @@ def __checkForNextPage(sHtmlContent):
 def showMoviesReleases():
     oGui = Gui()
     oParser = cParser()
-    oInputParameterHandler = cInputParameterHandler()
+    oInputParameterHandler = InputParameterHandler()
     sMovieTitle = oInputParameterHandler.getValue('sMovieTitle')
     sThumb = oInputParameterHandler.getValue('sThumb')
     sDesc = oInputParameterHandler.getValue('sDesc')
@@ -590,7 +590,7 @@ def showMoviesReleases():
 def showSaisons():
     oGui = Gui()
 
-    oInputParameterHandler = cInputParameterHandler()
+    oInputParameterHandler = InputParameterHandler()
     sMovieTitle = oInputParameterHandler.getValue('sMovieTitle')
     sThumb = oInputParameterHandler.getValue('sThumb')
     sUrl = oInputParameterHandler.getValue('siteUrl')
@@ -634,7 +634,7 @@ def showSaisons():
 
 
 def showSeriesReleases():
-    oInputParameterHandler = cInputParameterHandler()
+    oInputParameterHandler = InputParameterHandler()
     sMovieTitle = oInputParameterHandler.getValue('sMovieTitle')
     sThumb = oInputParameterHandler.getValue('sThumb')
     sDesc = oInputParameterHandler.getValue('sDesc')
@@ -686,7 +686,7 @@ def showSeriesReleases():
 
 def showHosters():
     oGui = Gui()
-    oInputParameterHandler = cInputParameterHandler()
+    oInputParameterHandler = InputParameterHandler()
     sMovieTitle = oInputParameterHandler.getValue('sMovieTitle')
     sUrl = oInputParameterHandler.getValue('siteUrl')
     sThumb = oInputParameterHandler.getValue('sThumb')
@@ -739,7 +739,7 @@ def Display_protected_link():
     # VSlog('Display_protected_link')
     oGui = Gui()
     oParser = cParser()
-    oInputParameterHandler = cInputParameterHandler()
+    oInputParameterHandler = InputParameterHandler()
     sMovieTitle = oInputParameterHandler.getValue('sMovieTitle')
     sUrl = oInputParameterHandler.getValue('siteUrl')
     sThumb = oInputParameterHandler.getValue('sThumb')

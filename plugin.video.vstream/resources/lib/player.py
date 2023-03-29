@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 # https://github.com/Kodi-vStream/venom-xbmc-addons
 #
-from resources.lib.handler.inputParameterHandler import cInputParameterHandler
+from resources.lib.handler.inputParameterHandler import InputParameterHandler
 from resources.lib.handler.pluginHandler import cPluginHandler
 from resources.lib.gui.gui import Gui
 from resources.lib.upnext import UpNext
@@ -35,7 +35,7 @@ class cPlayer(xbmc.Player):
         self.Subtitles_file = []
         self.SubtitleActive = False
 
-        oInputParameterHandler = cInputParameterHandler()
+        oInputParameterHandler = InputParameterHandler()
         self.sHosterIdentifier = oInputParameterHandler.getValue('sHosterIdentifier')
         self.sTitle = oInputParameterHandler.getValue('sFileName')
         if self.sTitle:

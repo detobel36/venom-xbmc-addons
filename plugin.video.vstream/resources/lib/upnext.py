@@ -9,7 +9,7 @@ from base64 import b64encode
 from resources.lib.comaddon import dialog, addon, addonManager, VSlog, isMatrix
 from resources.lib.gui.gui import Gui
 from resources.lib.gui.hoster import cHosterGui
-from resources.lib.handler.inputParameterHandler import cInputParameterHandler
+from resources.lib.handler.inputParameterHandler import InputParameterHandler
 from resources.lib.handler.outputParameterHandler import cOutputParameterHandler
 from resources.lib.util import UnquotePlus
 
@@ -30,7 +30,7 @@ class UpNext:
             return
 
         # La source
-        oInputParameterHandler = cInputParameterHandler()
+        oInputParameterHandler = InputParameterHandler()
         sSiteName = oInputParameterHandler.getValue('sourceName')
         if not sSiteName:
             return
