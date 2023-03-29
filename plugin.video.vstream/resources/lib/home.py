@@ -3,7 +3,7 @@
 # Venom.
 from resources.lib.gui.hoster import HosterGui
 from resources.lib.gui.gui import Gui
-from resources.lib.gui.guiElement import cGuiElement
+from resources.lib.gui.guiElement import GuiElement
 from resources.lib.search import cSearch
 from resources.lib.handler.pluginHandler import cPluginHandler
 from resources.lib.handler.inputParameterHandler import InputParameterHandler
@@ -768,7 +768,7 @@ class cHome:
             oOutputParameterHandler.addParameter('siteUrl', 'http://venom')
             oOutputParameterHandler.addParameter('searchtext', sTitle)
 
-            oGuiElement = cGuiElement()
+            oGuiElement = GuiElement()
             oGuiElement.setSiteName('globalSearch')
             oGuiElement.setFunction('globalSearch')
 

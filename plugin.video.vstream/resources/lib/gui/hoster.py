@@ -2,7 +2,7 @@
 # https://github.com/Kodi-vStream/venom-xbmc-addons
 # Venom.
 from resources.lib.gui.gui import Gui
-from resources.lib.gui.guiElement import cGuiElement
+from resources.lib.gui.guiElement import GuiElement
 from resources.lib.gui.contextElement import cContextElement
 from resources.lib.handler.inputParameterHandler import InputParameterHandler
 from resources.lib.handler.outputParameterHandler import OutputParameterHandler
@@ -32,7 +32,7 @@ class HosterGui:
         if not sFav:
             sFav = oInputParameterHandler.getValue('function')
 
-        oGuiElement = cGuiElement()
+        oGuiElement = GuiElement()
         oGuiElement.setSiteName(self.SITE_NAME)
         oGuiElement.setFunction('play')
         oGuiElement.setTitle(oHoster.getDisplayName())
@@ -358,7 +358,7 @@ class HosterGui:
                         aLink = oHoster.getMediaLink()
 
                 if aLink[0]:
-                    oGuiElement = cGuiElement()
+                    oGuiElement = GuiElement()
                     oGuiElement.setSiteName(self.SITE_NAME)
                     oGuiElement.setSiteUrl(siteUrl)
                     oGuiElement.setMediaUrl(aLink[1])
@@ -407,7 +407,7 @@ class HosterGui:
         aLink = oHoster.getMediaLink()
 
         if aLink[0]:
-            oGuiElement = cGuiElement()
+            oGuiElement = GuiElement()
             oGuiElement.setSiteName(self.SITE_NAME)
             oGuiElement.setMediaUrl(aLink[1])
             oGuiElement.setTitle(oHoster.getFileName())

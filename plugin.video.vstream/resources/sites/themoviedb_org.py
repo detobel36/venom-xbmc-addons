@@ -2,7 +2,7 @@
 # https://github.com/Kodi-vStream/venom-xbmc-addons
 
 from resources.lib.gui.gui import Gui
-from resources.lib.gui.guiElement import cGuiElement
+from resources.lib.gui.guiElement import GuiElement
 from resources.lib.handler.inputParameterHandler import InputParameterHandler
 from resources.lib.handler.outputParameterHandler import OutputParameterHandler
 from resources.lib.comaddon import progress, addon, dialog, VSupdate, isMatrix, siteManager
@@ -589,7 +589,7 @@ def showMovies(sSearch=''):
                     oOutputParameterHandler.addParameter('searchtext', cUtil().CleanName(sTitle))
 
                 Gui.CONTENT = "movies"
-                oGuiElement = cGuiElement()
+                oGuiElement = GuiElement()
                 oGuiElement.setTmdbId(sId)
                 oGuiElement.setSiteName('globalSearch')
                 oGuiElement.setFunction('showSearch')
@@ -695,7 +695,7 @@ def showSeries(sSearch=''):
                     oOutputParameterHandler.addParameter('searchtext', cUtil().CleanName(sTitle))
 
                 Gui.CONTENT = "tvshows"
-                oGuiElement = cGuiElement()
+                oGuiElement = GuiElement()
                 oGuiElement.setTmdbId(sId)
                 oGuiElement.setSiteName(SITE_IDENTIFIER)  # à activer pour saisons
                 oGuiElement.setFunction('showSeriesSaison')
@@ -764,7 +764,7 @@ def showSeriesSaison():
     else:
         oOutputParameterHandler.addParameter('searchtext', sMovieTitle)
 
-    oGuiElement = cGuiElement()
+    oGuiElement = GuiElement()
     oGuiElement.setSiteName('globalSearch')
     oGuiElement.setFunction('searchMovie')
     oGuiElement.setTitle(addons.VSlang(30414))
@@ -803,7 +803,7 @@ def showSeriesSaison():
             oOutputParameterHandler.addParameter('sTmdbId', sTmdbId)
 
             Gui.CONTENT = "tvshows"
-            oGuiElement = cGuiElement()
+            oGuiElement = GuiElement()
             oGuiElement.setTmdbId(sTmdbId)
             oGuiElement.setSiteName(SITE_IDENTIFIER)
             oGuiElement.setFunction('showSeriesEpisode')
@@ -861,7 +861,7 @@ def showSeriesEpisode():
     else:
         oOutputParameterHandler.addParameter('searchtext', search)
 
-    oGuiElement = cGuiElement()
+    oGuiElement = GuiElement()
     oGuiElement.setSiteName('globalSearch')
     oGuiElement.setFunction('searchMovie')
     oGuiElement.setTitle(addons.VSlang(30415))
@@ -911,7 +911,7 @@ def showSeriesEpisode():
                 oOutputParameterHandler.addParameter('searchtext', sMovieTitle)
 
             Gui.CONTENT = "tvshows"
-            oGuiElement = cGuiElement()
+            oGuiElement = GuiElement()
             oGuiElement.setTmdbId(sTmdbId)
             oGuiElement.setSiteName('globalSearch')
             oGuiElement.setFunction('showSearch')
@@ -990,7 +990,7 @@ def showActors(sSearch=''):
             oOutputParameterHandler.addParameter('siteUrl', 'person/' + str(i['id']) + '/movie_credits')
             sTitle = str(sName)
 
-            oGuiElement = cGuiElement()
+            oGuiElement = GuiElement()
             oGuiElement.setSiteName(SITE_IDENTIFIER)
             oGuiElement.setFunction('showFilmActor')
             oGuiElement.setTitle(sTitle)
@@ -1068,7 +1068,7 @@ def showFilmActor():
                 oOutputParameterHandler.addParameter('searchtext', sTitle)
 
             Gui.CONTENT = "movies"
-            oGuiElement = cGuiElement()
+            oGuiElement = GuiElement()
             oGuiElement.setTmdbId(sId)
             oGuiElement.setSiteName('globalSearch')
             oGuiElement.setFunction('showSearch')
@@ -1142,7 +1142,7 @@ def showLists():
                 oOutputParameterHandler.addParameter('searchtext', cUtil().CleanName(sTitle))
 
             Gui.CONTENT = "movies"
-            oGuiElement = cGuiElement()
+            oGuiElement = GuiElement()
             oGuiElement.setTmdbId(sId)
             oGuiElement.setSiteName('globalSearch')
             oGuiElement.setFunction('showSearch')

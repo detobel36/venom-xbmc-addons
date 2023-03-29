@@ -4,7 +4,7 @@ import xbmc
 
 from resources.lib.db import Db
 from resources.lib.gui.gui import Gui
-from resources.lib.gui.guiElement import cGuiElement
+from resources.lib.gui.guiElement import GuiElement
 from resources.lib.gui.hoster import HosterGui
 from resources.lib.handler.inputParameterHandler import InputParameterHandler
 from resources.lib.handler.outputParameterHandler import OutputParameterHandler
@@ -181,7 +181,7 @@ class Fav:
                     oOutputParameterHandler.addParameter('sFileName', oHoster.getFileName())
                     oOutputParameterHandler.addParameter('sMediaUrl', siteurl)
 
-                oGuiElement = cGuiElement()
+                oGuiElement = GuiElement()
                 oGuiElement.setSiteName(site)
                 oGuiElement.setFunction(function)
                 oGuiElement.setTitle(title)

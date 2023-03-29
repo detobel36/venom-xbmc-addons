@@ -12,7 +12,7 @@ from resources.lib.parser import cParser
 from resources.lib.handler.requestHandler import cRequestHandler
 from resources.lib.handler.outputParameterHandler import OutputParameterHandler
 from resources.lib.handler.inputParameterHandler import InputParameterHandler
-from resources.lib.gui.guiElement import cGuiElement
+from resources.lib.gui.guiElement import GuiElement
 from resources.lib.gui.gui import Gui
 import ssl
 import re
@@ -372,7 +372,7 @@ def showAllPlaylist():  # On recupere les differentes playlist si il y en a
             if 'iptvgratuit' and 'world-iptv-links' in sUrl:
                 oGui.addDir(SITE_IDENTIFIER, 'showWorldIptvGratuit', sTitle, '', oOutputParameterHandler)
             elif 'firstonetv' in sUrl or 'myfree-tivi' in sUrl:
-                oGuiElement = cGuiElement()
+                oGuiElement = GuiElement()
                 oGuiElement.setSiteName(SITE_IDENTIFIER)
                 oGuiElement.setFunction('play__')
                 oGuiElement.setTitle(sTitle)
@@ -651,7 +651,7 @@ def showWeb():  # Code qui s'occupe de liens TV du Web
 
             # oGui.addDirectTV(SITE_IDENTIFIER, 'play__', track.title, 'tv.png' , sRootArt + '/tv/' + sThumb, oOutputParameterHandler)
 
-            oGuiElement = cGuiElement()
+            oGuiElement = GuiElement()
             oGuiElement.setSiteName(SITE_IDENTIFIER)
             oGuiElement.setFunction('play__')
             oGuiElement.setTitle(track.title)
@@ -691,7 +691,7 @@ def showWeb():  # Code qui s'occupe de liens TV du Web
 
 
 def direct_epg():  # Code qui gere l'epg
-    oGuiElement = cGuiElement()
+    oGuiElement = GuiElement()
     oInputParameterHandler = InputParameterHandler()
     # aParams = oInputParameterHandler.getAllParameter()
     sTitle = oInputParameterHandler.getValue('sMovieTitle')
@@ -699,7 +699,7 @@ def direct_epg():  # Code qui gere l'epg
 
 
 def soir_epg():  # Code qui gere l'epg
-    oGuiElement = cGuiElement()
+    oGuiElement = GuiElement()
     oInputParameterHandler = InputParameterHandler()
 
     sTitle = oInputParameterHandler.getValue('sMovieTitle')
@@ -707,7 +707,7 @@ def soir_epg():  # Code qui gere l'epg
 
 
 def enregistrement():  # Code qui gere l'epg
-    oGuiElement = cGuiElement()
+    oGuiElement = GuiElement()
     oInputParameterHandler = InputParameterHandler()
     sUrl = oInputParameterHandler.getValue('siteUrl').replace('P_L_U_S', '+')
 
@@ -805,7 +805,7 @@ def showTV():
             oOutputParameterHandler.addParameter('sMovieTitle', aEntry[0])
             oOutputParameterHandler.addParameter('sThumbnail', 'tv.png')
 
-            oGuiElement = cGuiElement()
+            oGuiElement = GuiElement()
             oGuiElement.setSiteName(SITE_IDENTIFIER)
             oGuiElement.setFunction('play__')
             oGuiElement.setTitle(aEntry[0])
@@ -889,7 +889,7 @@ def play__():  # Lancer les liens
         xbmc.executebuiltin('XBMC.RunPlugin(' + sUrl + ')')
         return
     else:
-        oGuiElement = cGuiElement()
+        oGuiElement = GuiElement()
         oGuiElement.setSiteName(SITE_IDENTIFIER)
         oGuiElement.setTitle(sTitle)
         sUrl = sUrl.replace(' ', '%20')

@@ -1078,7 +1078,7 @@ def showMenuMisc():
 
 
 def showMenuFolder():
-    from resources.lib.gui.guiElement import cGuiElement
+    from resources.lib.gui.guiElement import GuiElement
     oGui = Gui()
     addons = addon()
 
@@ -1098,7 +1098,7 @@ def showMenuFolder():
         pasteLabel = pasteBin[0]
         pasteID = pasteBin[1]
 
-        oGuiElement = cGuiElement()
+        oGuiElement = GuiElement()
         oGuiElement.setSiteName(SITE_IDENTIFIER)
         oGuiElement.setFunction('showMenu')
         oGuiElement.setTitle(pasteLabel)

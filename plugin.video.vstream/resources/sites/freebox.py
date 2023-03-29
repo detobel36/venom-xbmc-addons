@@ -7,7 +7,7 @@ from resources.lib.comaddon import progress, addon, dialog, siteManager
 from resources.lib.enregistrement import cEnregistremement
 from resources.lib.epg import cePg
 from resources.lib.gui.gui import Gui
-from resources.lib.gui.guiElement import cGuiElement
+from resources.lib.gui.guiElement import GuiElement
 from resources.lib.gui.hoster import HosterGui
 from resources.lib.handler.inputParameterHandler import InputParameterHandler
 from resources.lib.handler.outputParameterHandler import OutputParameterHandler
@@ -169,7 +169,7 @@ def showWeb():  # Code qui s'occupe de liens TV du Web
             oOutputParameterHandler.addParameter('sDesc', sDesc)
             oOutputParameterHandler.addParameter('EpgData', EPG)
 
-            oGuiElement = cGuiElement()
+            oGuiElement = GuiElement()
             oGuiElement.setSiteName(SITE_IDENTIFIER)
             oGuiElement.setFunction('play__')
             oGuiElement.setDescription(sDesc)
@@ -205,7 +205,7 @@ def showWeb():  # Code qui s'occupe de liens TV du Web
 
 
 def direct_epg():  # Code qui gerent l'epg
-    # oGuiElement = cGuiElement()
+    # oGuiElement = GuiElement()
     oInputParameterHandler = InputParameterHandler()
     # aParams = oInputParameterHandler.getAllParameter()
     sTitle = oInputParameterHandler.getValue('sMovieTitle')
@@ -214,14 +214,14 @@ def direct_epg():  # Code qui gerent l'epg
 
 
 def soir_epg():  # Code qui gerent l'epg
-    # oGuiElement = cGuiElement()
+    # oGuiElement = GuiElement()
     oInputParameterHandler = InputParameterHandler()
     sTitle = oInputParameterHandler.getValue('sMovieTitle')
     cePg().view_epg(sTitle, 'soir')
 
 
 def enregistrement():  # Code qui gerent l'enregistrement
-    # oGuiElement = cGuiElement()
+    # oGuiElement = GuiElement()
     oInputParameterHandler = InputParameterHandler()
     sUrl = oInputParameterHandler.getValue('siteUrl').replace('P_L_U_S', '+')
 
@@ -311,7 +311,7 @@ def showTV():
             oOutputParameterHandler.addParameter('sMovieTitle', aEntry[0])
             oOutputParameterHandler.addParameter('sThumbnail', 'tv.png')
 
-            oGuiElement = cGuiElement()
+            oGuiElement = GuiElement()
             oGuiElement.setSiteName(SITE_IDENTIFIER)
             oGuiElement.setFunction('play__')
             oGuiElement.setTitle(aEntry[0])
@@ -360,7 +360,7 @@ def play__():  # Lancer les liens
     # Bug specifique au flux france TV
     # eof detectedL
     if 'ftven.fr' in sUrl:
-        oGuiElement = cGuiElement()
+        oGuiElement = GuiElement()
         oGuiElement.setSiteName(SITE_IDENTIFIER)
         oGuiElement.setTitle(sTitle)
         sUrl = sUrl.replace(' ', '%20')

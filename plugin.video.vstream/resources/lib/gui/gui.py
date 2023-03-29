@@ -9,7 +9,7 @@ import sys
 
 from resources.lib.comaddon import listitem, addon, dialog, window, isNexus, progress, VSlog
 from resources.lib.gui.contextElement import cContextElement
-from resources.lib.gui.guiElement import cGuiElement
+from resources.lib.gui.guiElement import GuiElement
 from resources.lib.handler.inputParameterHandler import InputParameterHandler
 from resources.lib.handler.outputParameterHandler import OutputParameterHandler
 from resources.lib.handler.pluginHandler import cPluginHandler
@@ -46,7 +46,7 @@ class Gui:
             oOutputParameterHandler='',
             sMeta=0,
             sCat=None):
-        oGuiElement = cGuiElement()
+        oGuiElement = GuiElement()
         # dir ou link => CONTENT par défaut = files
         if Type != 'dir' and Type != 'link':
             Gui.CONTENT = Type
@@ -295,7 +295,7 @@ class Gui:
         return self.addNewDir('', sId, sFunction, sLabel, sIcon, sThumbnail, sDesc, oOutputParameterHandler, 8, None)
 
     def addNext(self, sId, sFunction, sLabel, oOutputParameterHandler):
-        oGuiElement = cGuiElement()
+        oGuiElement = GuiElement()
         oGuiElement.setSiteName(sId)
         oGuiElement.setFunction(sFunction)
         oGuiElement.setTitle('[COLOR teal]' + sLabel + ' >>>[/COLOR]')
@@ -317,7 +317,7 @@ class Gui:
         if window(10101).getProperty('search') == 'true':
             return
 
-        oGuiElement = cGuiElement()
+        oGuiElement = GuiElement()
         oGuiElement.setSiteName(sId)
         oGuiElement.setFunction('DoNothing')
         if not sLabel:

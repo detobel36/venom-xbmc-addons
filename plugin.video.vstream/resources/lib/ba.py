@@ -4,7 +4,7 @@ import re
 import requests
 
 from resources.hosters.youtube import cHoster
-from resources.lib.gui.guiElement import cGuiElement
+from resources.lib.gui.guiElement import GuiElement
 from resources.lib.player import cPlayer
 from resources.lib.config import GestionCookie
 
@@ -95,7 +95,7 @@ class ShowBA:
             if not api_call:
                 return
 
-            oGuiElement = cGuiElement()
+            oGuiElement = GuiElement()
             oGuiElement.setSiteName(SITE_IDENTIFIER)
             oGuiElement.setTitle(sSearchTitle)
             oGuiElement.setMediaUrl(api_call)

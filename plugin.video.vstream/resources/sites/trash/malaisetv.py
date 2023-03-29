@@ -4,7 +4,7 @@
 # ne fonctionne plus : une reprise depuis twitter vraiment utile ?
 import xbmcgui
 from resources.lib.player import cPlayer
-from resources.lib.gui.guiElement import cGuiElement
+from resources.lib.gui.guiElement import GuiElement
 import xbmc
 from resources.lib import util
 from resources.lib.parser import cParser
@@ -126,7 +126,7 @@ def showLinks():
         sUrl = str(aResult[1][0])
 
         # on lance video directement
-        oGuiElement = cGuiElement()
+        oGuiElement = GuiElement()
         oGuiElement.setSiteName(SITE_IDENTIFIER)
         oGuiElement.setTitle(sMovieTitle)
         oGuiElement.setMediaUrl(sUrl)

@@ -14,7 +14,7 @@ from resources.lib.util import cUtil, QuoteSafe
 # bleu foncé 08435A / non utilisé
 
 
-class cGuiElement:
+class GuiElement:
 
     DEFAULT_FOLDER_ICON = 'icon.png'
 
@@ -73,7 +73,7 @@ class cGuiElement:
     # def __len__(self): return self.__sCount
 
     # def getCount(self):
-    #     return cGuiElement.COUNT
+    #     return GuiElement.COUNT
 
     def setType(self, sType):
         self.__sType = sType

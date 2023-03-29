@@ -8,7 +8,7 @@ import resources.sites.freebox
 from resources.lib.packer import cPacker
 from resources.lib.comaddon import isMatrix, siteManager
 from resources.lib.gui.gui import Gui
-from resources.lib.gui.guiElement import cGuiElement
+from resources.lib.gui.guiElement import GuiElement
 from resources.lib.handler.inputParameterHandler import InputParameterHandler
 from resources.lib.handler.outputParameterHandler import OutputParameterHandler
 from resources.lib.handler.requestHandler import cRequestHandler
@@ -133,7 +133,7 @@ def showHoster():
         oOutputParameterHandler.addParameter('sThumbnail', sThumb)
         oOutputParameterHandler.addParameter('sDesc', sDesc)
 
-        oGuiElement = cGuiElement()
+        oGuiElement = GuiElement()
         oGuiElement.setTitle(sMovieTitle)
         oGuiElement.setDescription(sDesc)
         oGuiElement.setFileName(sMovieTitle)

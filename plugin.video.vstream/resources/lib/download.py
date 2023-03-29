@@ -17,7 +17,7 @@ import xbmc
 from resources.lib.comaddon import addon, dialog, progress, VSlog, VSupdate, VSPath, isMatrix
 from resources.lib.db import Db
 from resources.lib.gui.gui import Gui
-from resources.lib.gui.guiElement import cGuiElement
+from resources.lib.gui.guiElement import GuiElement
 from resources.lib.handler.inputParameterHandler import InputParameterHandler
 from resources.lib.handler.outputParameterHandler import OutputParameterHandler
 from resources.lib.handler.pluginHandler import cPluginHandler
@@ -395,7 +395,7 @@ class cDownload:
         path = oInputParameterHandler.getValue('sPath')
         sTitle = oInputParameterHandler.getValue('sMovieTitle')
 
-        oGuiElement = cGuiElement()
+        oGuiElement = GuiElement()
         oGuiElement.setSiteName(SITE_IDENTIFIER)
         oGuiElement.setMediaUrl(path)
         oGuiElement.setTitle(sTitle)
@@ -533,7 +533,7 @@ class cDownload:
             else:
                 sTitle = sStatus + title
 
-            oGuiElement = cGuiElement()
+            oGuiElement = GuiElement()
 
             if not thumbnail or thumbnail == 'False':
                 thumbnail = 'mark.png'
@@ -688,7 +688,7 @@ class cDownload:
 
                         progress_.VSclose(progress_)
 
-                        oGuiElement = cGuiElement()
+                        oGuiElement = GuiElement()
                         oGuiElement.setSiteName(SITE_IDENTIFIER)
                         oGuiElement.setMediaUrl(path)
                         oGuiElement.setTitle(title)

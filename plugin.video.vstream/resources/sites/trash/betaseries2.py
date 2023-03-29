@@ -3,7 +3,7 @@
 from resources.lib.config import cConfig
 from resources.lib.db import Db
 from resources.lib.gui.gui import Gui
-from resources.lib.gui.guiElement import cGuiElement
+from resources.lib.gui.guiElement import GuiElement
 from resources.lib.gui.hoster import HosterGui
 from resources.lib.handler.requestHandler import cRequestHandler
 from resources.lib.handler.inputParameterHandler import InputParameterHandler
@@ -262,7 +262,7 @@ class cBseries:
                 oOutputParameterHandler = OutputParameterHandler()
                 oOutputParameterHandler.addParameter('siteUrl', 'http://')
 
-                oGuiElement = cGuiElement()
+                oGuiElement = GuiElement()
 
                 oGuiElement.setSiteName(SITE_IDENTIFIER)
                 oGuiElement.setFunction('load')
@@ -336,7 +336,7 @@ class cBseries:
                     oOutputParameterHandler.addParameter('sMediaUrl', siteurl)
 
                 if (cat == sCat):
-                    oGuiElement = cGuiElement()
+                    oGuiElement = GuiElement()
 
                     oGuiElement.setSiteName(site)
                     oGuiElement.setFunction(function)

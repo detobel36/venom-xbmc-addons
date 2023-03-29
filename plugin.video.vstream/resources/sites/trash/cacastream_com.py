@@ -3,7 +3,7 @@
 from resources.lib.gui.hoster import HosterGui  # system de recherche pour l'hote
 from resources.lib.handler.hosterHandler import cHosterHandler  # system de recherche pour l'hote
 from resources.lib.gui.gui import Gui  # system d'affichage pour xbmc
-from resources.lib.gui.guiElement import cGuiElement  # system d'affichage pour xbmc
+from resources.lib.gui.guiElement import GuiElement  # system d'affichage pour xbmc
 from resources.lib.handler.inputParameterHandler import InputParameterHandler  # entrer des parametres
 from resources.lib.handler.outputParameterHandler import OutputParameterHandler  # sortis des parametres
 from resources.lib.handler.requestHandler import cRequestHandler  # requete url

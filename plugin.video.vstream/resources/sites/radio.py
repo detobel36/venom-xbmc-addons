@@ -8,7 +8,7 @@ import xbmcvfs
 
 from resources.lib.comaddon import addon
 from resources.lib.gui.gui import Gui
-from resources.lib.gui.guiElement import cGuiElement
+from resources.lib.gui.guiElement import GuiElement
 from resources.lib.handler.inputParameterHandler import InputParameterHandler
 from resources.lib.handler.outputParameterHandler import OutputParameterHandler
 from resources.lib.handler.requestHandler import cRequestHandler
@@ -135,7 +135,7 @@ def showWeb():  # Code qui s'occupe de liens TV du Web
             oOutputParameterHandler.addParameter('sMovieTitle', track.title)
             oOutputParameterHandler.addParameter('sThumbnail', sThumb)
 
-            oGuiElement = cGuiElement()
+            oGuiElement = GuiElement()
             oGuiElement.setSiteName(SITE_IDENTIFIER)
             oGuiElement.setFunction('play__')
             oGuiElement.setTitle(track.title)
@@ -187,7 +187,7 @@ def play__():  # Lancer les liens
         xbmc.executebuiltin('XBMC.RunPlugin(' + sUrl + ')')
         return
     else:
-        oGuiElement = cGuiElement()
+        oGuiElement = GuiElement()
         oGuiElement.setSiteName(SITE_IDENTIFIER)
         oGuiElement.setTitle(sTitle)
         sUrl = sUrl.replace(' ', '%20')
