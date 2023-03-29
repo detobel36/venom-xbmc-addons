@@ -297,7 +297,8 @@ def showAlpha2():
         sHtmlContent = FullUnescape(sHtmlContent)
 
     oParser = cParser()
-    sPattern = '<a href=.(listing_(?:vf|vostfr)\\.php\\?affichage=[^<>"]+?). class=.button black pastel light. alt="Voir la liste des animes en ' + sType + '"'
+    sPattern = '<a href=.(listing_(?:vf|vostfr)\\.php\\?affichage=[^<>"]+?).' + \
+               'class=.button black pastel light. alt="Voir la liste des animes en ' + sType + '"'
     aResult = oParser.parse(sHtmlContent, sPattern)
 
     if aResult[0]:
@@ -324,7 +325,8 @@ def showAlpha(url=None):
     if sHtmlContent.startswith('<script type="text/javascript">'):
         sHtmlContent = FullUnescape(sHtmlContent)
 
-    sPattern = "<a href=.([^<>]+?). class=.button (?:red )*light.><headline6>(?:<font color=.black.>)*([A-Z#])(?:</font>)*</headline6></a>"
+    sPattern = "<a href=.([^<>]+?). class=.button (?:red )*light.>" + \
+               "<headline6>(?:<font color=.black.>)*([A-Z#])(?:</font>)*</headline6></a>"
 
     oParser = cParser()
     aResult = oParser.parse(sHtmlContent, sPattern)
@@ -389,9 +391,11 @@ def showMovies(sSearch=''):
         sHtmlContent = FullUnescape(sHtmlContent)
 
     if sSearch or 'categorie.php' in sUrl or 'categorie_' in sUrl or 'listing3.php?' in sUrl or 'drama.php' in sUrl:
-        sPattern = '<center><div style="background: url\\(\'([^\'].+?)\'\\); background-size.+?alt="(.+?)" title.+?<a href=["\']*(.+?)[\'"]* class=.button'
+        sPattern = '<center><div style="background: url\\(\'([^\'].+?)\'\\); ' + \
+                   'background-size.+?alt="(.+?)" title.+?<a href=["\']*(.+?)[\'"]* class=.button'
     else:
-        sPattern = '<center><div style="background: url\\(\'([^\'].+?)\'\\); background-size.+?<a href="([^"]+)".+?alt="(.+?)"'
+        sPattern = '<center><div style="background: url\\(\'([^\'].+?)\'\\); ' + \
+                   'background-size.+?<a href="([^"]+)".+?alt="(.+?)"'
 
     sHtmlContent = re.sub('<a\\s*href=\"categorie.php\\?watch=\"\\s*class="genre\\s*\"', '', sHtmlContent, re.DOTALL)
 
@@ -409,7 +413,8 @@ def showMovies(sSearch=''):
             if not sThumb.startswith('http'):
                 sThumb = URL_MAIN + sThumb
 
-            if sSearch or 'categorie.php' in sUrl or 'categorie_' in sUrl or 'listing3.php?' in sUrl or 'drama.php' in sUrl:
+            if sSearch or 'categorie.php' in sUrl or 'categorie_' in sUrl or \
+                    'listing3.php?' in sUrl or 'drama.php' in sUrl:
                 sTitle = aEntry[1]
                 sUrl2 = aEntry[2]
             else:

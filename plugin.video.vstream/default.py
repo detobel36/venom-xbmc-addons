@@ -140,9 +140,9 @@ class Main:
                     plugins = __import__('resources.sites.%s' % self.site_name, fromlist=[self.site_name])
                     function = getattr(plugins, self.function_name)
                     function()
-                except Exception as error:
+                except Exception as exception:
                     progress().VSclose()  # Referme le dialogue en cas d'exception, sinon blocage de Kodi
-                    VSlog('could not load site: ' + self.site_name + ' error: ' + str(error))
+                    VSlog('could not load site: ' + self.site_name + ' error: ' + str(exception))
                     traceback.print_exc()
                 return
 
