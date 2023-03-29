@@ -962,8 +962,8 @@ class Gui:
             meta['site'] = sSite
             meta['cat'] = sCat
 
-            from resources.lib.db import cDb
-            with cDb() as db:
+            from resources.lib.db import Db
+            with Db() as db:
                 row = db.get_watched(meta)
                 if row:
                     db.del_watched(meta)

@@ -2,7 +2,7 @@
 # https://github.com/Kodi-vStream/venom-xbmc-addons
 import xbmc
 
-from resources.lib.db import cDb
+from resources.lib.db import Db
 from resources.lib.gui.gui import Gui
 from resources.lib.gui.guiElement import cGuiElement
 from resources.lib.gui.hoster import cHosterGui
@@ -31,7 +31,7 @@ class Fav:
         siteUrl = oInputParameterHandler.getValue('siteUrl')
         sTitle = oInputParameterHandler.getValue('sCleanTitle')
         # sTitle = cUtil().CleanName(sTitle)
-        with cDb() as db:
+        with Db() as db:
             db.del_bookmark(siteUrl, sTitle, sCat, sAll)
         return True
 
@@ -42,7 +42,7 @@ class Fav:
 
         sTitle = xbmc.getInfoLabel('ListItem.Property(sCleanTitle)')
         siteUrl = xbmc.getInfoLabel('ListItem.Property(siteUrl)')
-        with cDb() as db:
+        with Db() as db:
             db.del_bookmark(siteUrl, sTitle)
 
         return True
@@ -51,7 +51,7 @@ class Fav:
         oGui = Gui()
 
         # Comptages des marque-pages
-        with cDb() as db:
+        with Db() as db:
             row = db.get_bookmark()
 
         compt = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
@@ -114,7 +114,7 @@ class Fav:
         oInputParameterHandler = cInputParameterHandler()
 
         # Comptages des marque-pages
-        with cDb() as db:
+        with Db() as db:
             row = db.get_bookmark()
 
         if (oInputParameterHandler.exist('sCat')):
@@ -285,7 +285,7 @@ class Fav:
         meta['fanart'] = xbmc.getInfoLabel('ListItem.Art(fanart)')
         try:
             # Comptages des marque-pages
-            with cDb() as db:
+            with Db() as db:
                 db.insert_bookmark(meta)
         except BaseException:
             pass

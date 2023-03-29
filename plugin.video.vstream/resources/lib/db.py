@@ -9,7 +9,7 @@ from resources.lib.comaddon import dialog, addon, VSlog, VSPath, isMatrix, VSPro
 from resources.lib.handler.inputParameterHandler import cInputParameterHandler
 from resources.lib.util import QuotePlus, Unquote
 
-SITE_IDENTIFIER = 'cDb'
+SITE_IDENTIFIER = 'Db'
 SITE_NAME = 'DB'
 
 try:
@@ -18,7 +18,7 @@ except BaseException:
     from pysqlite2 import dbapi2 as sqlite
 
 
-class cDb(object):
+class Db(object):
     def __enter__(self):
         name = VSProfil()
 

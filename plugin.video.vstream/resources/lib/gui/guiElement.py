@@ -4,7 +4,7 @@ import re
 import xbmc
 
 from resources.lib.comaddon import addon, isMatrix, isNexus
-from resources.lib.db import cDb
+from resources.lib.db import Db
 from resources.lib.util import cUtil, QuoteSafe
 
 # rouge E26543
@@ -421,7 +421,7 @@ class cGuiElement:
                 'cat': self.getCat()
                 }
 
-        with cDb() as db:
+        with Db() as db:
             data = db.get_watched(meta)
         return data
 

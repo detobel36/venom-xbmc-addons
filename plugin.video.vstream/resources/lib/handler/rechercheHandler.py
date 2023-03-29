@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 # vStream https://github.com/Kodi-vStream/venom-xbmc-addons
 from resources.lib.comaddon import addon, VSlog, siteManager
-from resources.lib.db import cDb
+from resources.lib.db import Db
 
 import sys
 import xbmcvfs
@@ -119,7 +119,7 @@ class cRechercheHandler:
         try:
             if (addons.getSetting("history-view") == 'true'):
                 meta = {'title': sText, 'disp': sCat}
-                with cDb() as db:
+                with Db() as db:
                     db.insert_history(meta)
         except Exception as e:
             VSlog(str(e))

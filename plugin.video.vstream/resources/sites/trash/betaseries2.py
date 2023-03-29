@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 # Venom.
 from resources.lib.config import cConfig
-from resources.lib.db import cDb
+from resources.lib.db import Db
 from resources.lib.gui.gui import Gui
 from resources.lib.gui.guiElement import cGuiElement
 from resources.lib.gui.hoster import cHosterGui
@@ -70,7 +70,7 @@ class cBseries:
         meta['title'] = xbmc.getInfoLabel('ListItem.title')
         meta['siteurl'] = siteUrl
         try:
-            cDb().del_favorite(meta)
+            Db().del_favorite(meta)
         except BaseException:
             pass
 
@@ -309,7 +309,7 @@ class cBseries:
         total = len(sHtmlContent)
 
         try:
-            row = cDb().get_favorite()
+            row = Db().get_favorite()
 
             for data in row:
 
@@ -378,6 +378,6 @@ class cBseries:
         meta['icon'] = xbmc.getInfoLabel('ListItem.Art(thumb)')
         meta['fanart'] = xbmc.getInfoLabel('ListItem.Art(fanart)')
         try:
-            cDb().insert_favorite(meta)
+            Db().insert_favorite(meta)
         except BaseException:
             pass

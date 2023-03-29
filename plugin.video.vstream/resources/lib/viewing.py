@@ -2,7 +2,7 @@
 # https://github.com/Kodi-vStream/venom-xbmc-addons
 # Venom.
 from resources.lib.comaddon import dialog, addon, xbmc, isMatrix
-from resources.lib.db import cDb
+from resources.lib.db import Db
 from resources.lib.handler.inputParameterHandler import cInputParameterHandler
 from resources.lib.handler.outputParameterHandler import cOutputParameterHandler
 from resources.lib.gui.gui import Gui
@@ -32,7 +32,7 @@ class cViewing:
         if sCat:
             meta['cat'] = sCat
 
-        with cDb() as db:
+        with Db() as db:
             if db.del_viewing(meta):
                 self.DIALOG.VSinfo(addon().VSlang(30072))
                 Gui().updateDirectory()
@@ -48,7 +48,7 @@ class cViewing:
         meta = {}
         meta['titleWatched'] = sTitle
         meta['cat'] = sCat
-        with cDb() as db:
+        with Db() as db:
             if db.del_viewing(meta):
                 self.DIALOG.VSinfo(addon().VSlang(30072))
                 Gui().updateDirectory()
@@ -87,7 +87,7 @@ class cViewing:
         oInputParameterHandler = cInputParameterHandler()
         catFilter = oInputParameterHandler.getValue('sCat')
 
-        with cDb() as DB:
+        with Db() as DB:
             row = DB.get_viewing()
             if not row:
                 oGui.setEndOfDirectory()

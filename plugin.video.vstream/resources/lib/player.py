@@ -6,7 +6,7 @@ from resources.lib.handler.pluginHandler import cPluginHandler
 from resources.lib.gui.gui import Gui
 from resources.lib.upnext import UpNext
 from resources.lib.comaddon import addon, dialog, xbmc, isKrypton, VSlog, addonManager, isMatrix
-from resources.lib.db import cDb
+from resources.lib.db import Db
 from resources.lib.util import cUtil, Unquote
 import xbmcplugin
 
@@ -211,7 +211,7 @@ class cPlayer(xbmc.Player):
     def _setWatched(self, sEpisode=''):
 
         try:
-            with cDb() as db:
+            with Db() as db:
                 if self.isPlaying():
                     self.totalTime = self.getTotalTime()
                     self.currentTime = self.getTime()
@@ -317,7 +317,7 @@ class cPlayer(xbmc.Player):
 
         self.playBackEventReceived = True
 
-        with cDb() as db:
+        with Db() as db:
             # Reprendre la lecture
             if self.isPlayingVideo() and self.getTime() < 180:  # si supérieur à 3 minutes, la gestion de la reprise est assuré par KODI
                 self.infotag = self.getVideoInfoTag()

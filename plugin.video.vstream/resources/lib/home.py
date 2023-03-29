@@ -752,8 +752,8 @@ class cHome:
     def showHistory(self):
         oGui = Gui()
 
-        from resources.lib.db import cDb
-        with cDb() as db:
+        from resources.lib.db import Db
+        with Db() as db:
             row = db.get_history()
 
         if row:
@@ -796,8 +796,8 @@ class cHome:
         oGui.setEndOfDirectory()
 
     def delSearch(self):
-        from resources.lib.db import cDb
-        with cDb() as db:
+        from resources.lib.db import Db
+        with Db() as db:
             db.del_history()
         return True
 

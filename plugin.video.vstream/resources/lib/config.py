@@ -432,8 +432,8 @@ def WindowsBoxes(sTitle, siteUrl, metaType, year, sSite, sFav, sCat):
                 metaBM['icon'] = self.meta['poster_path']
                 metaBM['fanart'] = self.meta['backdrop_path']
                 try:
-                    from resources.lib.db import cDb
-                    with cDb() as db:
+                    from resources.lib.db import Db
+                    with Db() as db:
                         db.insert_bookmark(metaBM)
                 except BaseException:
                     pass
