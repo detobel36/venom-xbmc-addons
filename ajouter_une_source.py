@@ -3,7 +3,7 @@
 
 import re
 from resources.lib.gui.hoster import cHosterGui  # systeme de recherche pour l'hôte
-from resources.lib.gui.gui import cGui  # systeme d'affichage pour xbmc
+from resources.lib.gui.gui import Gui  # systeme d'affichage pour xbmc
 from resources.lib.handler.inputParameterHandler import cInputParameterHandler  # entree des parametres
 from resources.lib.handler.outputParameterHandler import cOutputParameterHandler  # sortie des parametres
 from resources.lib.handler.requestHandler import cRequestHandler  # requête url
@@ -88,7 +88,7 @@ REPLAYTV_GENRES = (True, 'showGenres')  # Replay Genre
 
 
 def load():  # fonction chargée automatiquement par l'addon, acceuil de la source.
-    oGui = cGui()  # ouvre l'affichage
+    oGui = Gui()  # ouvre l'affichage
 
     oOutputParameterHandler = cOutputParameterHandler()  # appelle la fonction pour sortir un paramètre
     oOutputParameterHandler.addParameter('siteUrl', 'http://venom/')  # sortie du parametres siteUrl n'oubliez pas la Majuscule
@@ -167,7 +167,7 @@ def load():  # fonction chargée automatiquement par l'addon, acceuil de la sour
 
 
 def showMenuMovies():
-    oGui = cGui()
+    oGui = Gui()
 
     oOutputParameterHandler = cOutputParameterHandler()
     oOutputParameterHandler.addParameter('siteUrl', MY_SEARCH_MOVIES[0])
@@ -189,7 +189,7 @@ def showMenuMovies():
 
 
 def showMenuTvShows():
-    oGui = cGui()
+    oGui = Gui()
 
     oOutputParameterHandler = cOutputParameterHandler()
     oOutputParameterHandler.addParameter('siteUrl', MY_SEARCH_SERIES[0])
@@ -211,7 +211,7 @@ def showMenuTvShows():
 
 
 def showMenuAnims():
-    oGui = cGui()
+    oGui = Gui()
 
     oOutputParameterHandler = cOutputParameterHandler()
     oOutputParameterHandler.addParameter('siteUrl', MY_SEARCH_SERIES[0])
@@ -233,7 +233,7 @@ def showMenuAnims():
 
 
 def showSearch():  # fonction de recherche
-    oGui = cGui()
+    oGui = Gui()
 
     sSearchText = oGui.showKeyBoard()  # appelle le clavier xbmc
     if sSearchText:
@@ -244,7 +244,7 @@ def showSearch():  # fonction de recherche
 
 
 def showGenres():  # affiche les genres
-    oGui = cGui()
+    oGui = Gui()
 
     # juste à entrer les categories et les liens qui vont bien
     liste = []
@@ -285,7 +285,7 @@ def showGenres():  # affiche les genres
 
 
 def showMovieYears():  # creer une liste inversée d'annees
-    oGui = cGui()
+    oGui = Gui()
 
     oOutputParameterHandler = cOutputParameterHandler()
     for i in reversed(range(1913, 2021)):
@@ -297,7 +297,7 @@ def showMovieYears():  # creer une liste inversée d'annees
 
 
 def showSerieYears():
-    oGui = cGui()
+    oGui = Gui()
 
     oOutputParameterHandler = cOutputParameterHandler()
     for i in reversed(range(1936, 2021)):
@@ -309,7 +309,7 @@ def showSerieYears():
 
 
 def showMovies(sSearch=''):
-    oGui = cGui()  # ouvre l'affichage
+    oGui = Gui()  # ouvre l'affichage
 
     oInputParameterHandler = cInputParameterHandler()
     sUrl = oInputParameterHandler.getValue('siteUrl')  # recupere l'url sortie en paramètre
@@ -424,7 +424,7 @@ def __checkForNextPage(sHtmlContent):  # cherche la page suivante
 
 
 def showHosters():  # recherche et affiche les hôtes
-    oGui = cGui()  # ouvre l'affichage
+    oGui = Gui()  # ouvre l'affichage
     oInputParameterHandler = cInputParameterHandler()  # apelle l'entree de paramètre
     sUrl = oInputParameterHandler.getValue('siteUrl')  # apelle siteUrl
     sMovieTitle = oInputParameterHandler.getValue('sMovieTitle')  # appelle le titre
@@ -459,7 +459,7 @@ def showHosters():  # recherche et affiche les hôtes
 
 # Pour les series, il y a généralement une étape en plus pour la selection des episodes ou saisons.
 def ShowSerieSaisonEpisodes():
-    oGui = cGui()
+    oGui = Gui()
 
     oInputParameterHandler = cInputParameterHandler()
     sUrl = oInputParameterHandler.getValue('siteUrl')
@@ -503,7 +503,7 @@ def ShowSerieSaisonEpisodes():
 
 
 def seriesHosters():  # cherche les episodes de series
-    oGui = cGui()
+    oGui = Gui()
     oInputParameterHandler = cInputParameterHandler()
     sUrl = oInputParameterHandler.getValue('siteUrl')
     sMovieTitle = oInputParameterHandler.getValue('sMovieTitle')
