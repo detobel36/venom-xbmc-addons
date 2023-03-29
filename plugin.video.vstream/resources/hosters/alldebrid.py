@@ -36,7 +36,7 @@ class cHoster(iHoster):
         try:
             mediaDisplay = HostURL.split('/')
             VSlog('Hoster Alldebrid - play : %s/ ... /%s' % ('/'.join(mediaDisplay[0:3]), mediaDisplay[-1]))
-        except:
+        except BaseException:
             VSlog('Hoster Alldebrid - play : ' + HostURL)
 
         if api_call:

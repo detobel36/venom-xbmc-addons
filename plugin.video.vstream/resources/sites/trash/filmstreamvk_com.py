@@ -141,7 +141,7 @@ def showMovies(sSearch=''):
         sUrl = sSearch
         oUtil = cUtil()
         sSearch = oUtil.CleanName(sSearch.replace(URL_SEARCH[0], ''))
-        sPattern = 'class="image">.*?<a href="([^"]+)">\s*<img src="([^"]+)" alt="([^"]+)".+?<p>([^<]*)'
+        sPattern = 'class="image">.*?<a href="([^"]+)">\\s*<img src="([^"]+)" alt="([^"]+)".+?<p>([^<]*)'
     elif 'episodes' in sUrl:
         sPattern = 'class="poster">.*?<img src="([^"]+)" alt="([^"]+)".+?<a href="([^"]+)'
     else:
@@ -191,9 +191,9 @@ def showMovies(sSearch=''):
             # si utile il faut retirer oOutputParameterHandler.addParameter(sDesc)
             # if sDesc:  # désactivé le 17/06/2020,
                 # try:
-                    # sDesc = cUtil().unescape(sDesc.decode('utf8'))
+                # sDesc = cUtil().unescape(sDesc.decode('utf8'))
                 # except AttributeError:
-                    # sDesc = cUtil().unescape(sDesc)
+                # sDesc = cUtil().unescape(sDesc)
 
             oOutputParameterHandler.addParameter('siteUrl', sUrl)
             oOutputParameterHandler.addParameter('sMovieTitle', sTitle)
@@ -220,7 +220,7 @@ def showMovies(sSearch=''):
 
 
 def __checkForNextPage(sHtmlContent):
-    sPattern = 'Page \d+ de ([^<]+).+?arrow_pag\' *href="([^"]+)"><i id=\'nextpagination'
+    sPattern = 'Page \\d+ de ([^<]+).+?arrow_pag\' *href="([^"]+)"><i id=\'nextpagination'
     oParser = cParser()
     aResult = oParser.parse(sHtmlContent, sPattern)
     if aResult[0]:
@@ -256,10 +256,11 @@ def showSxE():
 
             else:
                 sUrl = aEntry[2]
-                SxE = re.sub('(\d+) - (\d+)', 'saison \g<1> Episode \g<2>', aEntry[1])
+                SxE = re.sub('(\\d+) - (\\d+)', 'saison \\g<1> Episode \\g<2>', aEntry[1])
                 sTitle = sMovieTitle + ' ' + SxE
 
-                sDisplaytitle = sTitle # "MARQUER LU" à besoin de la saison et de l'épisode # sMovieTitle + ' ' + re.sub('saison \d+ ', '', SxE)
+                # "MARQUER LU" à besoin de la saison et de l'épisode # sMovieTitle + ' ' + re.sub('saison \d+ ', '', SxE)
+                sDisplaytitle = sTitle
 
                 oOutputParameterHandler.addParameter('siteUrl', sUrl)
                 oOutputParameterHandler.addParameter('sMovieTitle', sTitle)
@@ -282,9 +283,9 @@ def showLinks():
     sHtmlContent = oRequest.request()
 
     if 'episodes' in sUrl:
-        sPattern = 'dooplay_player_option.+?data-post="(\d+)".+?data-nume="([^"]+).+?title">([^<]+)'
+        sPattern = 'dooplay_player_option.+?data-post="(\\d+)".+?data-nume="([^"]+).+?title">([^<]+)'
     else:
-        sPattern = "dooplay_player_option.+?data-post='(\d+)'.+?data-nume='([^']+).+?title'>([^<]+)"
+        sPattern = "dooplay_player_option.+?data-post='(\\d+)'.+?data-nume='([^']+).+?title'>([^<]+)"
     oParser = cParser()
     aResult = oParser.parse(sHtmlContent, sPattern)
 

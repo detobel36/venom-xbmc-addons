@@ -99,7 +99,12 @@ def showMenuTokusatsu():
     oGui.addDir(SITE_IDENTIFIER, TOKUSATSU[1], 'Tokusatsu', 'films.png', oOutputParameterHandler)
 
     oOutputParameterHandler.addParameter('siteUrl', TOKUSATSU_ALPHA[0])
-    oGui.addDir(SITE_IDENTIFIER, TOKUSATSU_ALPHA[1], 'Tokusatsu (Ordre alphabétique)', 'az.png', oOutputParameterHandler)
+    oGui.addDir(
+        SITE_IDENTIFIER,
+        TOKUSATSU_ALPHA[1],
+        'Tokusatsu (Ordre alphabétique)',
+        'az.png',
+        oOutputParameterHandler)
 
     oGui.setEndOfDirectory()
 
@@ -209,7 +214,14 @@ def ShowAlpha(typemovie):
     oOutputParameterHandler = cOutputParameterHandler()
     for sTitle, sUrl in liste:
         oOutputParameterHandler.addParameter('siteUrl', sUrl)
-        oGui.addDir(SITE_IDENTIFIER, 'showSeries', 'Lettre [COLOR coral]' + sTitle + '[/COLOR]', 'listes.png', oOutputParameterHandler)
+        oGui.addDir(
+            SITE_IDENTIFIER,
+            'showSeries',
+            'Lettre [COLOR coral]' +
+            sTitle +
+            '[/COLOR]',
+            'listes.png',
+            oOutputParameterHandler)
 
     oGui.setEndOfDirectory()
 
@@ -244,9 +256,9 @@ def showSeries(sSearch=''):
 
     oParser = cParser()
     if sSearch:
-        sPattern = '<td class=".+?<a href="([^"]+)".+?<img src=.+?img=([^>]+)\/>.+?onMouseOut.+?>(.+?)<\/a>.+?<td class="" align="center">([^<]+)<'
+        sPattern = '<td class=".+?<a href="([^"]+)".+?<img src=.+?img=([^>]+)\\/>.+?onMouseOut.+?>(.+?)<\\/a>.+?<td class="" align="center">([^<]+)<'
     else:
-        sPattern = '<td class=".+?<a href="([^"]+)".+?<img src=([^>]+)\/>.+?alt="([^"]+).+?align="center">([^<]+)<'
+        sPattern = '<td class=".+?<a href="([^"]+)".+?<img src=([^>]+)\\/>.+?alt="([^"]+).+?align="center">([^<]+)<'
 
     aResult = oParser.parse(sHtmlContent, sPattern)
 
@@ -257,7 +269,7 @@ def showSeries(sSearch=''):
             sTitle = ''
             try:
                 sTitle = re.search('<h1>([^<]+)', sHtmlContent).group(1)
-            except:
+            except BaseException:
                 pass
             if sTitle:
                 sUrl2 = sUrl
@@ -291,12 +303,12 @@ def showSeries(sSearch=''):
                 # Enleve les balise.
                 try:
                     sTitle = re.sub('<.*?>', '', sTitle)
-                except:
+                except BaseException:
                     pass
 
             try:
                 sTitle = sTitle.decode('iso-8859-1').encode('utf8')
-            except:
+            except BaseException:
                 pass
 
             sUrl2 = URL_MAIN + aEntry[0]
@@ -354,9 +366,9 @@ def showEpisode():
             # Enleve les balises.
             try:
                 sDesc = re.sub('<.*?>', '', sDesc)
-            except:
+            except BaseException:
                 pass
-    except:
+    except BaseException:
         pass
 
     sPattern = '<tr.+?align="left">.+?align="left">([^"]+)</td>.+?nowrap>+?<.+?</td>.+?<.+?/td>.+?<.+?<a href="([^"]+)'
@@ -368,7 +380,7 @@ def showEpisode():
             sTitle = aEntry[0]
             try:
                 sTitle = sTitle.decode('iso-8859-1').encode('utf8')
-            except:
+            except BaseException:
                 pass
 
             sLang = ''
@@ -376,13 +388,27 @@ def showEpisode():
                 sLang = 'VOSTFR'
             if ' vf' in sTitle:
                 sLang = 'VF'
-            sTitle = aEntry[0].replace('[', '').replace(']', '').replace('FHD', '').replace('vostfr', '').replace('vf', '').replace('HD', '').replace('HQ', '').strip()
-            if '(saison' in sTitle: 
+            sTitle = aEntry[0].replace(
+                '[',
+                '').replace(
+                ']',
+                '').replace(
+                'FHD',
+                '').replace(
+                'vostfr',
+                '').replace(
+                    'vf',
+                    '').replace(
+                        'HD',
+                        '').replace(
+                            'HQ',
+                '').strip()
+            if '(saison' in sTitle:
                 sTitle = sTitle.replace('(', '').replace(')', '')
             sEpisode = sTitle.split(' ')[-1]
             sTitle = sTitle.replace(sEpisode, ' Episode ' + sEpisode).strip()
             sDisplayTtitle = sTitle + ' [' + sLang + ']'
-                
+
             sUrl2 = URL_MAIN + aEntry[1]
 
             oOutputParameterHandler.addParameter('siteUrl', sUrl2)
@@ -416,7 +442,7 @@ def showHosters():
             if ' vf' in sTitle:
                 sLang = 'VF'
             sTitle = ('%s - [%s]') % (sMovieTitle, sLang)
-            
+
             sThumb = aEntry[1]
             sHosterUrl = aEntry[2]
             oHoster = cHosterGui().checkHoster(sHosterUrl)

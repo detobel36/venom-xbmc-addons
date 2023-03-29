@@ -10,7 +10,7 @@ from resources.lib.handler.inputParameterHandler import cInputParameterHandler
 from resources.lib.handler.outputParameterHandler import cOutputParameterHandler
 from resources.lib.handler.requestHandler import cRequestHandler
 from resources.lib.parser import cParser
-from resources.lib.comaddon import progress, siteManager  #, isMatrix
+from resources.lib.comaddon import progress, siteManager  # , isMatrix
 from resources.lib.util import cUtil
 
 
@@ -51,7 +51,7 @@ def load():
     oGui.addDir(SITE_IDENTIFIER, DRAMA_SERIES[1], 'Dramas (VOSTFR)', 'dramas.png', oOutputParameterHandler)
 
     oOutputParameterHandler.addParameter('siteUrl', OST_ANIME[0])
-    oGui.addDir(SITE_IDENTIFIER, OST_ANIME[1], 'Musicbox (OST)', 'music.png',  oOutputParameterHandler)
+    oGui.addDir(SITE_IDENTIFIER, OST_ANIME[1], 'Musicbox (OST)', 'music.png', oOutputParameterHandler)
 
     oGui.setEndOfDirectory()
 
@@ -225,8 +225,8 @@ def showEpisodes():
     sHtmlContent = oRequestHandler.request()
 
     # On recupere l'id de l'anime dans l'url
-    serieID = re.search('fiche-.+?-(\d+)-.+?.html', sUrl).group(1)
-    sPattern = 'class="(?:download cell_impaire|download)" id="([^"]+)".+?(\d+).+?class="cell".+?>([^<]+)</td'
+    serieID = re.search('fiche-.+?-(\\d+)-.+?.html', sUrl).group(1)
+    sPattern = 'class="(?:download cell_impaire|download)" id="([^"]+)".+?(\\d+).+?class="cell".+?>([^<]+)</td'
 
     aResult = oParser.parse(sHtmlContent, sPattern)
 
@@ -239,22 +239,22 @@ def showEpisodes():
             sQual = aEntry[2]
 
             # if isMatrix():  # plante sous matrix !!!!!!
-                # sQual = sQual.encode('latin-1').decode()
+            # sQual = sQual.encode('latin-1').decode()
 
             # Changemement de formats ...x... -> ....P
             if '1920×' in sQual or '1440×' in sQual or '1904×' in sQual:
-                sQual = re.sub('(\d+×\d+)px', '[1080P]', sQual)
+                sQual = re.sub('(\\d+×\\d+)px', '[1080P]', sQual)
             elif '1728×' in sQual:
-                sQual = re.sub('(\d+×\d+)px', '[800P]', sQual)
+                sQual = re.sub('(\\d+×\\d+)px', '[800P]', sQual)
             elif '1280×' in sQual:
                 # VSlog(sQual)
-                sQual = re.sub('(\d+×\d+)px', '[720P]', sQual)
+                sQual = re.sub('(\\d+×\\d+)px', '[720P]', sQual)
             elif '1024×' in sQual:
-                sQual = re.sub('(\d+×\d+)px', '[600P]', sQual)
+                sQual = re.sub('(\\d+×\\d+)px', '[600P]', sQual)
             elif '480×' in sQual:
-                sQual = re.sub('(\d+×\d+)px', '[360P]', sQual)
+                sQual = re.sub('(\\d+×\\d+)px', '[360P]', sQual)
             else:
-                sQual = re.sub('(\d+×\d+)px', '[480P]', sQual)
+                sQual = re.sub('(\\d+×\\d+)px', '[480P]', sQual)
 
             sTitle = 'E' + aEntry[1] + ' ' + sMovieTitle
             sDisplayTitle = sTitle + ' ' + sQual

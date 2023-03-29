@@ -67,7 +67,14 @@ class cViewing:
         oGui.addDir(SITE_IDENTIFIER, 'getViewing', addons.VSlang(30120), 'films.png', oOutputParameterHandler)
 
         oOutputParameterHandler.addParameter('sCat', '4')       # saisons
-        oGui.addDir(SITE_IDENTIFIER, 'getViewing', '%s/%s' % (self.ADDON.VSlang(30121), self.ADDON.VSlang(30122)), 'series.png', oOutputParameterHandler)
+        oGui.addDir(
+            SITE_IDENTIFIER,
+            'getViewing',
+            '%s/%s' %
+            (self.ADDON.VSlang(30121),
+             self.ADDON.VSlang(30122)),
+            'series.png',
+            oOutputParameterHandler)
 
         oOutputParameterHandler.addParameter('sCat', '5')       # Divers
         oGui.addDir(SITE_IDENTIFIER, 'getViewing', self.ADDON.VSlang(30410), 'buzz.png', oOutputParameterHandler)
@@ -90,13 +97,13 @@ class cViewing:
 
                 try:
                     title = data['title'].encode('utf-8')
-                except:
+                except BaseException:
                     title = data['title']
 
                 try:
                     try:
                         siteurl = data['siteurl'].encode('utf-8')
-                    except:
+                    except BaseException:
                         siteurl = data['siteurl']
 
                     if isMatrix():
@@ -132,9 +139,11 @@ class cViewing:
                     oOutputParameterHandler.addParameter('TotalTime', totaltime)
 
                     if cat == '1':
-                        oListItem = oGui.addMovie(site, function, title, 'films.png', '', title, oOutputParameterHandler)
+                        oListItem = oGui.addMovie(site, function, title, 'films.png',
+                                                  '', title, oOutputParameterHandler)
                     elif cat == '4':
-                        oListItem = oGui.addSeason(site, function, title, 'series.png', '', title, oOutputParameterHandler)
+                        oListItem = oGui.addSeason(site, function, title, 'series.png',
+                                                   '', title, oOutputParameterHandler)
                     elif cat == '5':
                         oListItem = oGui.addMisc(site, function, title, 'buzz.png', '', title, oOutputParameterHandler)
                     else:

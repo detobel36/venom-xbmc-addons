@@ -4,6 +4,7 @@ from resources.lib.handler.requestHandler import cRequestHandler
 from resources.lib.util import cUtil
 from resources.hosters.hoster import iHoster
 
+
 class cHoster(iHoster):
 
     def __init__(self):
@@ -22,7 +23,7 @@ class cHoster(iHoster):
 
             oRequest = cRequestHandler(self._url)
             oRequest.setRequestType(cRequestHandler.REQUEST_TYPE_POST)
-            oRequest.addParameters('dl_free12','DivX Stream')
+            oRequest.addParameters('dl_free12', 'DivX Stream')
             oRequest.addParameters('uid', sUid)
             sHtmlContent = oRequest.request()
 
@@ -35,9 +36,9 @@ class cHoster(iHoster):
 
                 oRequest = cRequestHandler(self._url)
                 oRequest.setRequestType(cRequestHandler.REQUEST_TYPE_POST)
-                oRequest.addParameters('captcha','ok')
-                oRequest.addParameters('filetype','divx')
-                oRequest.addParameters('submit','Download')
+                oRequest.addParameters('captcha', 'ok')
+                oRequest.addParameters('filetype', 'divx')
+                oRequest.addParameters('submit', 'Download')
                 oRequest.addParameters('uid', sUid)
                 sHtmlContent = oRequest.request()
 
@@ -50,4 +51,3 @@ class cHoster(iHoster):
                     return True, sMediaFile
 
         return False, aResult
-

@@ -166,7 +166,7 @@ def resolveUrl(url):
 
         url2 = url2 + hAsh
         return url2
-    except:
+    except BaseException:
         return ''
     return ''
 
@@ -442,7 +442,7 @@ def showSeries(sSearch=''):
 
 def __checkForNextPage(sHtmlContent):
     oParser = cParser()
-    sPattern = 'href="([^"]+)">>></a>.+?>(\d+)<'
+    sPattern = 'href="([^"]+)">>></a>.+?>(\\d+)<'
     aResult = oParser.parse(sHtmlContent, sPattern)
     if aResult[0]:
         sNextPage = URL_MAIN[:-1] + aResult[1][0][0]
@@ -451,7 +451,7 @@ def __checkForNextPage(sHtmlContent):
         sPaging = sNumberNext + '/' + sNumberMax
         return sNextPage, sPaging
 
-    sPattern = '>([^<]+)</a>\s*<a href="([^"]+)">>>'
+    sPattern = '>([^<]+)</a>\\s*<a href="([^"]+)">>>'
     aResult = oParser.parse(sHtmlContent, sPattern)
     if aResult[0]:
         sNumberMax = aResult[1][0][0]
@@ -508,7 +508,7 @@ def showEpisode():
         aResult = oParser.parse(sHtmlContent, sPattern)
         if aResult[0]:
             sDesc = re.sub('Résumé.+?$', '', aResult[1][0])
-    except:
+    except BaseException:
         pass
 
     sPattern = '</i> *(VF|VOSTFR) *</div>|<a id="([^"]+)".+?target="seriePlayer".+?"([^"]+)" data-rel="([^"]+)"'
@@ -536,7 +536,14 @@ def showEpisode():
                 oOutputParameterHandler.addParameter('sDesc', sDesc)
                 oOutputParameterHandler.addParameter('sLang', sLang)
 
-                oGui.addEpisode(SITE_IDENTIFIER, 'showSeriesHosters', sDisplayTitle, '', sThumb, sDesc, oOutputParameterHandler)
+                oGui.addEpisode(
+                    SITE_IDENTIFIER,
+                    'showSeriesHosters',
+                    sDisplayTitle,
+                    '',
+                    sThumb,
+                    sDesc,
+                    oOutputParameterHandler)
 
     oGui.setEndOfDirectory()
 
@@ -551,7 +558,7 @@ def showSeriesHosters():
     sData = oInputParameterHandler.getValue('sData')
 
     # if sData == 'episode1': #episode final au lieu du 1er donc pour le moment
-        # return
+    # return
     oRequestHandler = cRequestHandler(sUrl)
     sHtmlContent = oRequestHandler.request()
 
@@ -574,7 +581,7 @@ def showSeriesHosters():
                 tmp = ''
                 try:
                     tmp = re.search('input id="tmp".+?value="([^"]+)"', sHtmlContent, re.DOTALL).group(1)
-                except:
+                except BaseException:
                     pass
 
                 if '/embed' in url or 'opsktp' in url or 'videovard' in url or 'iframe' in url or 'jetload' in url:

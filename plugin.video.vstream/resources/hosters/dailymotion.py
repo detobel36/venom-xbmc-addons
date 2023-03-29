@@ -39,7 +39,7 @@ class cHoster(iHoster):
             oRequest.addHeaderEntry('Accept-Language', 'fr,fr-FR;q=0.8,en-US;q=0.5,en;q=0.3')
             sHtmlContent = oRequest.request()
 
-            sPattern = 'NAME="([^"]+)"(,PROGRESSIVE-URI="([^"]+)"|http(.+?)\#)'
+            sPattern = 'NAME="([^"]+)"(,PROGRESSIVE-URI="([^"]+)"|http(.+?)\\#)'
             aResult = oParser.parse(sHtmlContent, sPattern)
             if aResult[0] is True:
                 for aEntry in reversed(aResult[1]):

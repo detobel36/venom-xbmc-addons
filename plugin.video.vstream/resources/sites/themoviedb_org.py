@@ -195,12 +195,12 @@ def getContext():
     disp.append('addtolist')
     fow.append('addtolist')
     yn.append(True)
-    lang.append(addons.VSlang(31211))    
+    lang.append(addons.VSlang(31211))
 
     disp.append('addtonewlist')
     fow.append('addtonewlist')
     yn.append(True)
-    lang.append(addons.VSlang(31210))  
+    lang.append(addons.VSlang(31210))
 
     disp.append('account/%s/watchlist' % tmdb_account)
     fow.append('watchlist')
@@ -269,7 +269,7 @@ def getAction():
         # /tv/{tv_id}/rating
         # /tv/{tv_id}/season/{season_number}/episode/{episode_number}/rating
         numboard = oGui.showNumBoard('Min 0.5 - Max 10')
-        if numboard != None:
+        if numboard is not None:
             if sSeason is not False and sEpisode is not False:
                 sAction = '%s/%s/season/%s/episode/%s/rating' % (sCat, sTMDB, sSeason, sEpisode)
             else:
@@ -282,7 +282,11 @@ def getAction():
         if sCat == 'tv':
             dialogs.VSinfo("Vous ne pouvez pas ajouter une série à une liste de films tmdb")
             return
-        result = grab.getUrl('account/%s/lists' % addons.getSetting('tmdb_account'), term='session_id=%s' % addons.getSetting('tmdb_session'))
+        result = grab.getUrl(
+            'account/%s/lists' %
+            addons.getSetting('tmdb_account'),
+            term='session_id=%s' %
+            addons.getSetting('tmdb_session'))
         total = len(result)
         if total == 0:
             return
@@ -290,9 +294,9 @@ def getAction():
         for i in result['results']:
             labels.append(i['name'])
         idliste = dialogs.VSselect(labels, addons.VSlang(31212))
-        if idliste == -1 :
+        if idliste == -1:
             return
-        
+
         idliste = result['results'][idliste]['id']
         sAction = 'list/%s/add_item' % (idliste)
         sPost = {"media_id": sTMDB}
@@ -300,7 +304,7 @@ def getAction():
     elif sAction == 'addtonewlist':
         if sCat == 'tv':
             dialogs.VSinfo("Vous ne pouvez pas ajouter une série à une liste de films tmdb")
-            return        
+            return
         # nom de la nouvelle liste
         listname = oGui.showKeyBoard()
         if listname == '':
@@ -308,10 +312,10 @@ def getAction():
         # creation de la liste
         sAction = 'list'
         sPost = {
-                "name": listname,
-                "description": " ",
-                "language": "fr"
-                }
+            "name": listname,
+            "description": " ",
+            "language": "fr"
+        }
         rep = grab.getPostUrl(sAction, sPost)
         # recuperer son id
         if 'success' in rep:
@@ -331,6 +335,7 @@ def getAction():
         dialogs.VSinfo(data['status_message'])
 
     return
+
 
 """
 # comme le cat change pour le type ont refait
@@ -360,8 +365,8 @@ def getWatchlist():
 
 # import re
 #     if sCat == "tv":
-#         sSeason = re.search('aison (\d+)',sTitle).group(1)
-#         sEpisode = re.search('pisode (\d+)',sTitle).group(1)
+#         sSeason = re.search('aison (\\d+)',sTitle).group(1)
+#         sEpisode = re.search('pisode (\\d+)',sTitle).group(1)
 
     if not sTMDB:
         sTMDB = grab.get_idbyname(sTitle, '', sCat)
@@ -379,6 +384,8 @@ def getWatchlist():
     return
 
 """
+
+
 def getToken():
     grab = cTMDb()
     return grab.getToken()
@@ -563,7 +570,8 @@ def showMovies(sSearch=''):
                 # Mise en forme des infos (au format meta imdb)
                 i = grab._format(i, '', "movie")
 
-                sId, sTitle, sGenre, sThumb, sFanart, sDesc, sYear = i['tmdb_id'], i['title'], i['genre'], i['poster_path'], i['backdrop_path'], i['plot'], i['year']
+                sId, sTitle, sGenre, sThumb, sFanart, sDesc, sYear = i['tmdb_id'], i['title'], i[
+                    'genre'], i['poster_path'], i['backdrop_path'], i['plot'], i['year']
 
                 if not isMatrix():
                     sTitle = sTitle.encode("utf-8")
@@ -665,7 +673,8 @@ def showSeries(sSearch=''):
 
                 # Mise en forme des infos (au format meta imdb)
                 i = grab._format(i, '', "tvshow")
-                sId, sTitle, sGenre, sThumb, sFanart, sDesc, sYear = i['tmdb_id'], i['title'], i['genre'], i['poster_path'], i['backdrop_path'], i['plot'], i['year']
+                sId, sTitle, sGenre, sThumb, sFanart, sDesc, sYear = i['tmdb_id'], i['title'], i[
+                    'genre'], i['poster_path'], i['backdrop_path'], i['plot'], i['year']
 
                 if not isMatrix():
                     sTitle = sTitle.encode("utf-8")
@@ -887,7 +896,8 @@ def showSeriesEpisode():
 
             sExtraTitle = ' S' + "%02d" % int(sSeason) + 'E' + "%02d" % int(sEpNumber)
 
-            oOutputParameterHandler.addParameter('siteUrl', sMovieTitle + '|' + sExtraTitle)  # Pour compatibilite Favoris
+            oOutputParameterHandler.addParameter(
+                'siteUrl', sMovieTitle + '|' + sExtraTitle)  # Pour compatibilite Favoris
             oOutputParameterHandler.addParameter('sMovieTitle', sMovieTitle)
             oOutputParameterHandler.addParameter('sThumb', sThumb)
             oOutputParameterHandler.addParameter('sTmdbId', sTmdbId)
@@ -1040,7 +1050,8 @@ def showFilmActor():
             # Mise en forme des infos (au format meta imdb)
             i = grab._format(i, '', "person")
 
-            sId, sTitle, sGenre, sThumb, sFanart, sDesc, sYear = i['tmdb_id'], i['title'], i['genre'], i['poster_path'], i['backdrop_path'], i['plot'], i['year']
+            sId, sTitle, sGenre, sThumb, sFanart, sDesc, sYear = i['tmdb_id'], i['title'], i[
+                'genre'], i['poster_path'], i['backdrop_path'], i['plot'], i['year']
 
             if not isMatrix():
                 sTitle = sTitle.encode("utf-8")
@@ -1110,7 +1121,8 @@ def showLists():
             # Mise en forme des infos (au format meta imdb)
             i = grab._format(i, '')
 
-            sId, sTitle, sType, sThumb, sFanart, sVote, sDesc, sYear = i['tmdb_id'], i['title'], i['media_type'], i['poster_path'], i['backdrop_path'], i['rating'], i['plot'], i['year']
+            sId, sTitle, sType, sThumb, sFanart, sVote, sDesc, sYear = i['tmdb_id'], i['title'], i[
+                'media_type'], i['poster_path'], i['backdrop_path'], i['rating'], i['plot'], i['year']
 
             if not isMatrix():
                 sTitle = sTitle.encode("utf-8")

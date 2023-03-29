@@ -48,7 +48,7 @@ class cHoster(iHoster):
 
         try:
             sHtmlContent = sHtmlContent.decode('utf8')
-        except:
+        except BaseException:
             pass
 
         oParser = cParser()
@@ -56,7 +56,7 @@ class cHoster(iHoster):
         possible = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789"
         fin_url = ''.join(random.choice(possible) for _ in range(10))
 
-        sPattern = 'return a\+"(\?token=[^"]+)"'
+        sPattern = 'return a\\+"(\\?token=[^"]+)"'
         aResult = oParser.parse(sHtmlContent, sPattern)
 
         if not aResult[0]:
@@ -64,9 +64,9 @@ class cHoster(iHoster):
 
         d = aResult[1][0]
 
-        fin_url = fin_url + d + str(int(1000*time.time()))
+        fin_url = fin_url + d + str(int(1000 * time.time()))
 
-        sPattern = "\$\.get\('(\/pass_md5[^']+)"
+        sPattern = "\\$\\.get\\('(\\/pass_md5[^']+)"
         aResult = oParser.parse(sHtmlContent, sPattern)
         url2 = 'https://' + urlDownload.split('/')[2] + aResult[1][0]
 
@@ -78,7 +78,7 @@ class cHoster(iHoster):
 
         try:
             sHtmlContent = sHtmlContent.decode('utf8')
-        except:
+        except BaseException:
             pass
 
         api_call = sHtmlContent + fin_url

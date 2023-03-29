@@ -75,7 +75,7 @@ channels = {
     30: ['France 2', 'https://www.ffp.asso.fr/wp-content/uploads/2018/10/France-2.png'],
     38: ['France 3', 'https://static.wikia.nocookie.net/hdl-logopedia/images/0/0a/Logo-france-3.png/revision/latest/scale-to-width-down/220?cb=20180220171302&path-prefix=fr'],
     39: ['TMC', 'https://upload.wikimedia.org/wikipedia/commons/e/e2/Tmc_2016.png']
-    }
+}
 
 
 def load():
@@ -108,7 +108,7 @@ def showGenres():
 
     # Besoin des saut de ligne
     sHtmlContent = sHtmlContent.replace('\n', '@')
-    sPattern = '\d+-\d+-\d+ \(.+?\) (.+?) : .+?@'
+    sPattern = '\\d+-\\d+-\\d+ \\(.+?\\) (.+?) : .+?@'
 
     oParser = cParser()
     aResult = oParser.parse(sHtmlContent, sPattern)
@@ -130,7 +130,14 @@ def showGenres():
         oOutputParameterHandler.addParameter('siteUrl', 'genre=' + sGenre)
         oOutputParameterHandler.addParameter('sMovieTitle', sTitle)
         oOutputParameterHandler.addParameter('sDesc', sDisplayTitle)
-        oGui.addMisc(SITE_IDENTIFIER, 'showMovies', sDisplayTitle, 'sport.png', '', sDisplayTitle, oOutputParameterHandler)
+        oGui.addMisc(
+            SITE_IDENTIFIER,
+            'showMovies',
+            sDisplayTitle,
+            'sport.png',
+            '',
+            sDisplayTitle,
+            oOutputParameterHandler)
 
     oGui.setEndOfDirectory()
 
@@ -142,8 +149,9 @@ def showTV():
     sUrl = oInputParameterHandler.getValue('siteUrl')
 
     if 'sport' in sUrl:
-        chaines = [1, 4, 21, 20, 5, 6, 7, 8, 18, 19, 9, 2, 3, 10, 11, 12, 13, 14, 15, 16, 22, 23, 24, 25, 26, 27, 28, 37, 31, 32, 33, 34, 35, 36]
-    else: # Chaines ciné
+        chaines = [1, 4, 21, 20, 5, 6, 7, 8, 18, 19, 9, 2, 3, 10, 11, 12, 13,
+                   14, 15, 16, 22, 23, 24, 25, 26, 27, 28, 37, 31, 32, 33, 34, 35, 36]
+    else:  # Chaines ciné
         chaines = [29, 30, 38, 5, 17, 39]
 
     oOutputParameterHandler = cOutputParameterHandler()
@@ -172,7 +180,7 @@ def showMovies():
 
     # Besoin des saut de ligne
     sHtmlContent = sHtmlContent.replace('\n', '@')
-    sPattern = '(\d+-\d+-\d+ \(.+?\)) (.+?) : (.+?)\(CH(.+?)@'
+    sPattern = '(\\d+-\\d+-\\d+ \\(.+?\\)) (.+?) : (.+?)\\(CH(.+?)@'
 
     oParser = cParser()
     aResult = oParser.parse(sHtmlContent, sPattern)
@@ -194,7 +202,14 @@ def showMovies():
             oOutputParameterHandler.addParameter('siteUrl', sUrl2)
             oOutputParameterHandler.addParameter('sMovieTitle', sTitle)
             oOutputParameterHandler.addParameter('sDesc', sDisplayTitle)
-            oGui.addMisc(SITE_IDENTIFIER, 'showLive', sDisplayTitle, 'sport.png', '', sDisplayTitle, oOutputParameterHandler)
+            oGui.addMisc(
+                SITE_IDENTIFIER,
+                'showLive',
+                sDisplayTitle,
+                'sport.png',
+                '',
+                sDisplayTitle,
+                oOutputParameterHandler)
 
     oGui.setEndOfDirectory()
 
@@ -214,7 +229,7 @@ def showLive():
 
     oOutputParameterHandler = cOutputParameterHandler()
     for link in links:
-        aEntry = re.findall('(\d+)(.+)', link)
+        aEntry = re.findall('(\\d+)(.+)', link)
         iChannel = aEntry[0][0]
         sLang = aEntry[0][1]
         channel = channels.get(int(iChannel))
@@ -246,11 +261,11 @@ def showLink():
 # alternative    sHoster = 'https://1rowsports.com/player/%d/%s'
 
     oOutputParameterHandler = cOutputParameterHandler()
-    
+
     # jusqu'à 6 hosters, mais on vStream ne sait décoder que le 1 et le 5.
     hosters = [1, 5]
 #    for numHost in range(1, 7):
-    i=0
+    i = 0
     for numHost in hosters:
         i += 1
         sDisplayTitle = '%s [Lien %d]' % (sMovieTitle, i)
@@ -258,7 +273,14 @@ def showLink():
         oOutputParameterHandler.addParameter('siteUrl', sHosterUrl)
         oOutputParameterHandler.addParameter('sMovieTitle', sMovieTitle)
         oOutputParameterHandler.addParameter('sThumb', sThumb)
-        oGui.addMisc(SITE_IDENTIFIER, 'showHoster', sDisplayTitle, 'sport.png', sThumb, sDisplayTitle, oOutputParameterHandler)
+        oGui.addMisc(
+            SITE_IDENTIFIER,
+            'showHoster',
+            sDisplayTitle,
+            'sport.png',
+            sThumb,
+            sDisplayTitle,
+            oOutputParameterHandler)
 
     oGui.setEndOfDirectory()
 
@@ -303,7 +325,7 @@ def Hoster_Leet365(url, referer):
             return Hoster_Laylow(hostUrl, url)
         return Hoster_Wigistream(hostUrl, url)
 
-    sPattern = '<script>fid="(.+?)".+?src="\/\/fclecteur\.com\/footy\.js">'
+    sPattern = '<script>fid="(.+?)".+?src="\\/\\/fclecteur\\.com\\/footy\\.js">'
     aResult = oParser.parse(sHtmlContent, sPattern)
     if aResult[0]:
         referer = url
@@ -314,7 +336,7 @@ def Hoster_Leet365(url, referer):
 
 
 def Hoster_Wigistream(url, referer):
-    
+
     if not url.startswith('http'):
         url = 'https:' + url
     oRequestHandler = cRequestHandler(url)
@@ -322,7 +344,7 @@ def Hoster_Wigistream(url, referer):
     oRequestHandler.addHeaderEntry('Referer', referer)
     sHtmlContent = oRequestHandler.request()
 
-    sPattern = '(\s*eval\s*\(\s*function(?:.|\s)+?{}\)\))'
+    sPattern = '(\\s*eval\\s*\\(\\s*function(?:.|\\s)+?{}\\)\\))'
     aResult = re.findall(sPattern, sHtmlContent)
 
     if aResult:
@@ -350,7 +372,7 @@ def Hoster_Pkcast(url, referer):
     sHtmlContent = oRequestHandler.request()
 
     oParser = cParser()
-    sPattern = 'play\(\).+?return\((.+?)\.join'
+    sPattern = 'play\\(\\).+?return\\((.+?)\\.join'
     aResult = oParser.parse(sHtmlContent, sPattern)
 
     if aResult:

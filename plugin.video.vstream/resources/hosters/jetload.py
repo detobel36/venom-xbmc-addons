@@ -68,8 +68,8 @@ class cHoster(iHoster):
             # sPattern = '<input type="hidden" id="srv" value="([^"]+)">'
             # aResult = oParser.parse(sHtmlContent, sPattern)
             # if (aResult1[0] == True):
-                # Host = aResult[1][0]
-                # api_call = Host + '/v2/schema/' + FN + '/master.m3u8'
+            # Host = aResult[1][0]
+            # api_call = Host + '/v2/schema/' + FN + '/master.m3u8'
 
         if api_call:
             return True, api_call

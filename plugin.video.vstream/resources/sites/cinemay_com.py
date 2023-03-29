@@ -125,7 +125,7 @@ def showMovies(sSearch=''):
             oOutputParameterHandler.addParameter('sThumb', sThumb)
 
             if '/serie' in sUrl:
-                sMovieTitle = re.sub('  S\d+', '', sTitle)
+                sMovieTitle = re.sub('  S\\d+', '', sTitle)
                 oOutputParameterHandler.addParameter('sMovieTitle', sMovieTitle)
                 oGui.addSeason(SITE_IDENTIFIER, 'showSeries', sTitle, '', sThumb, '', oOutputParameterHandler)
             else:
@@ -144,7 +144,7 @@ def showMovies(sSearch=''):
 def __checkForNextPage(sHtmlContent):
     oParser = cParser()
     # jusqu'au 5 dernières pages on utilise cette regex
-    sPattern = 'href="([^"]+)">>><.+?">(\d+)</a></div>'
+    sPattern = 'href="([^"]+)">>><.+?">(\\d+)</a></div>'
     aResult = oParser.parse(sHtmlContent, sPattern)
     if aResult[0]:
         sNextPage = URL_MAIN[:-1] + aResult[1][0][0]
@@ -181,9 +181,9 @@ def showSeriesNews():
         oOutputParameterHandler = cOutputParameterHandler()
         for aEntry in aResult[1]:
             sUrl = aEntry[0]
-            sTitle = re.sub('(\d+)&#215;(\d+)', 'S\g<1>E\g<2>', aEntry[1])
+            sTitle = re.sub('(\\d+)&#215;(\\d+)', 'S\\g<1>E\\g<2>', aEntry[1])
             sTitle = sTitle.replace(':', '')
-            cCleantitle = re.sub('- Saison \d+', '', sTitle)
+            cCleantitle = re.sub('- Saison \\d+', '', sTitle)
 
             oOutputParameterHandler.addParameter('siteUrl', sUrl)
             oOutputParameterHandler.addParameter('sMovieTitle', cCleantitle)
@@ -240,7 +240,7 @@ def showSeries():
         aResult = oParser.parse(sHtmlContent, sPattern)
         if aResult[0]:
             sDesc = aResult[1][0].split('Résumé')[0]
-    except:
+    except BaseException:
         pass
 
     sPattern = 'class="episodios" style="([^"]+)">|class="numerando" style="margin: 0">([^<]+)<.+?data-target="([^"]+)"'
@@ -266,7 +266,14 @@ def showSeries():
                 oOutputParameterHandler.addParameter('sThumb', sThumb)
                 oOutputParameterHandler.addParameter('sData', sData)
                 oOutputParameterHandler.addParameter('sLang', sLang)
-                oGui.addEpisode(SITE_IDENTIFIER, 'showSeriesHosters', sDisplayTitle, '', sThumb, sDesc, oOutputParameterHandler)
+                oGui.addEpisode(
+                    SITE_IDENTIFIER,
+                    'showSeriesHosters',
+                    sDisplayTitle,
+                    '',
+                    sThumb,
+                    sDesc,
+                    oOutputParameterHandler)
 
     oGui.setEndOfDirectory()
 
@@ -288,7 +295,7 @@ def showLinks():
         aResult = oParser.parse(sHtmlContent, sPattern)
         if aResult[0]:
             sDesc = aResult[1][0]
-    except:
+    except BaseException:
         pass
 
     sPattern = 'var movie.+?id.+?"(.+?)"'
@@ -304,7 +311,7 @@ def showLinks():
         head = oRequestHandler.getResponseHeader()
         cookies = getCookie(head)
 
-    sPattern = 'hidden" name="videov" id="videov" value="([^"]+).+?</b>([^<]+)<span class="dt_flag">.+?/flags/(.+?)\.'
+    sPattern = 'hidden" name="videov" id="videov" value="([^"]+).+?</b>([^<]+)<span class="dt_flag">.+?/flags/(.+?)\\.'
     aResult = oParser.parse(sHtmlContent, sPattern)
     if aResult[0]:
         oHosterGui = cHosterGui()
@@ -313,7 +320,7 @@ def showLinks():
 
             sUrl = URL_MAIN[:-1] + aEntry[0]
             sHost = aEntry[1].replace(' ', '').replace('.ok.ru', 'ok.ru')
-            sHost = re.sub('\.\w+', '', sHost)
+            sHost = re.sub('\\.\\w+', '', sHost)
             sHost = sHost.capitalize()
             if not oHosterGui.checkHoster(sHost):
                 continue
@@ -397,7 +404,7 @@ def getCookie(head):
     cookies = ''
     if 'Set-Cookie' in head:
         oParser = cParser()
-        sPattern = '(?:^|,) *([^;,]+?)=([^;,\/]+?);'
+        sPattern = '(?:^|,) *([^;,]+?)=([^;,\\/]+?);'
         aResult = oParser.parse(str(head['Set-Cookie']), sPattern)
         if aResult[0]:
             for cook in aResult[1]:
@@ -439,7 +446,7 @@ def decode_js(k, i, s, e):
         localvar = -1
         if ord(secondstr[incerement2]) % 2:
             localvar = 1
-        finaltab.append(chr(int(firststr[varinc: varinc+2], base=36) - localvar))
+        finaltab.append(chr(int(firststr[varinc: varinc + 2], base=36) - localvar))
         incerement2 = incerement2 + 1
         if incerement2 >= len(secondtab):
             incerement2 = 0

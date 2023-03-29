@@ -20,7 +20,7 @@ class cHoster(iHoster):
         sHtmlContent = oRequestHandler.request()
         cookies = oRequestHandler.GetCookies() + ";"
 
-        data = re.search('Mhoa_URL\((.+?)\);', sHtmlContent).group(1)
+        data = re.search('Mhoa_URL\\((.+?)\\);', sHtmlContent).group(1)
         data = re.findall("'(.+?)'", data)
 
         part1 = data[0]
@@ -29,11 +29,11 @@ class cHoster(iHoster):
         size = data[3]
 
         cidken = ''
-        d1p1 = part1[0:len(part1)//4]
+        d1p1 = part1[0:len(part1) // 4]
         cidken += d1p1[::-1]
-        d1p2 = part1[len(part1)//4*2:len(part1)//4*3]
+        d1p2 = part1[len(part1) // 4 * 2:len(part1) // 4 * 3]
         cidken += d1p2[::-1]
-        d2p1 = part2[3:(len(part2)+3)//2]
+        d2p1 = part2[3:(len(part2) + 3) // 2]
         cidken += d2p1[::-1]
 
         time.sleep(6)
@@ -43,7 +43,7 @@ class cHoster(iHoster):
         oRequestHandler.addHeaderEntry('User-Agent', UA)
         sHtmlContent = oRequestHandler.request()
 
-        la = re.search('window\.location\.replace\("(.+?)"', sHtmlContent).group(1)
+        la = re.search('window\\.location\\.replace\\("(.+?)"', sHtmlContent).group(1)
 
         oRequestHandler = cRequestHandler(la)
         oRequestHandler.disableRedirect()

@@ -23,7 +23,7 @@ class cHoster(iHoster):
         oRequest = cRequestHandler(self._url)
         sHtmlContent = oRequest.request()
 
-        sPattern = "(\s*eval\s*\(\s*function(?:.|\s)+?)<\/script>"
+        sPattern = "(\\s*eval\\s*\\(\\s*function(?:.|\\s)+?)<\\/script>"
         aResult = re.findall(sPattern, sHtmlContent)
 
         if aResult:
@@ -33,7 +33,7 @@ class cHoster(iHoster):
             if sHtmlContent:
 
                 oParser = cParser()
-                sPattern = "replace\(.*'(.+?)'"
+                sPattern = "replace\\(.*'(.+?)'"
                 aResult = oParser.parse(sHtmlContent, sPattern)
 
                 if aResult[0] is True:

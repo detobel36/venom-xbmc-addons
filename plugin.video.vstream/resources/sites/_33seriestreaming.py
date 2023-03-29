@@ -118,7 +118,14 @@ def showAlpha():
     listalpha.extend(list(string.ascii_lowercase))
     for alpha in listalpha:
         oOutputParameterHandler.addParameter('siteUrl', URL_MAIN + 'catalog/' + alpha + '/')
-        oGui.addDir(SITE_IDENTIFIER, 'showMovies', 'Lettre [COLOR coral]' + str(alpha).upper() + '[/COLOR]', 'az.png', oOutputParameterHandler)
+        oGui.addDir(
+            SITE_IDENTIFIER,
+            'showMovies',
+            'Lettre [COLOR coral]' +
+            str(alpha).upper() +
+            '[/COLOR]',
+            'az.png',
+            oOutputParameterHandler)
 
     oGui.setEndOfDirectory()
 
@@ -251,7 +258,7 @@ def showMovies(sSearch=''):
 
 def __checkForNextPage(sHtmlContent):
     oParser = cParser()
-    sPattern = 'id="pagination".+?\d+</span>.<a href="([^"]+)">(\d+)(</a> *</div|<.+?(\d+)</a> *</div)'
+    sPattern = 'id="pagination".+?\\d+</span>.<a href="([^"]+)">(\\d+)(</a> *</div|<.+?(\\d+)</a> *</div)'
     aResult = oParser.parse(sHtmlContent, sPattern)
     if aResult[0]:
         nextPage = aResult[1][0]
@@ -277,7 +284,7 @@ def showSaisons():
     oRequestHandler = cRequestHandler(sUrl)
     sHtmlContent = oRequestHandler.request()
 
-    sPattern = 'grid-item" href="([^"]+).+?-src="([^"]*).+?(saison \d+)'
+    sPattern = 'grid-item" href="([^"]+).+?-src="([^"]*).+?(saison \\d+)'
     aResult = oParser.parse(sHtmlContent, sPattern)
 
     if aResult[0]:
@@ -318,7 +325,7 @@ def showEpisodes():
     sEnd = 'pmovie__bottom-btns'
     sHtmlContent = oParser.abParse(sHtmlContent, sStart, sEnd)
 
-    sPattern = 'href="([^"]+).+?(épisode \d+)'
+    sPattern = 'href="([^"]+).+?(épisode \\d+)'
     aResult = oParser.parse(sHtmlContent, sPattern)
 
     if not aResult[0]:
@@ -361,9 +368,9 @@ def showHosters():
     sHtmlContent = oRequestHandler.request()
 
     if isSerie:  # episode d'une série
-        sPattern = 'class="ser_pl" data-name="([^"]+)" data-hash="([^"]+)" data-episode="(\d+)".+?">([^<]+).+?img src="([^\.]+)'
+        sPattern = 'class="ser_pl" data-name="([^"]+)" data-hash="([^"]+)" data-episode="(\\d+)".+?">([^<]+).+?img src="([^\\.]+)'
     else:        # Film
-        sPattern = 'class="nopl" data-id="(\d+)" data-name="([^"]+)" data-hash="([^"]+).+?">([^<]+).+?img src="([^\.]+)'
+        sPattern = 'class="nopl" data-id="(\\d+)" data-name="([^"]+)" data-hash="([^"]+).+?">([^<]+).+?img src="([^\\.]+)'
 
     aResult = oParser.parse(sHtmlContent, sPattern)
 
@@ -383,7 +390,7 @@ def showHosters():
                 dataName = aEntry[1]
                 dataHash = aEntry[2]
                 # pdata = 'mod=xfield_ajax&hash=' + dataHash + '&id=' + dataId + '&name=' + dataName
-                pdata = {'mod': 'xfield_ajax', 'hash': dataHash, 'id': dataId, 'name' :  dataName}
+                pdata = {'mod': 'xfield_ajax', 'hash': dataHash, 'id': dataId, 'name': dataName}
                 pdata = str(pdata)
 
             sHost = aEntry[3].strip()

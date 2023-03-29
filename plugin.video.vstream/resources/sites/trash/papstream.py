@@ -1,15 +1,15 @@
 # -*- coding: utf-8 -*-
 # vStream https://github.com/Kodi-vStream/venom-xbmc-addons
+from resources.lib.comaddon import progress
+from resources.lib.parser import cParser
+from resources.lib.handler.requestHandler import cRequestHandler
+from resources.lib.handler.outputParameterHandler import cOutputParameterHandler
+from resources.lib.handler.inputParameterHandler import cInputParameterHandler
+from resources.lib.gui.gui import cGui
+from resources.lib.gui.hoster import cHosterGui
+import re
 return False  # 06/02/2021
 
-import re
-from resources.lib.gui.hoster import cHosterGui
-from resources.lib.gui.gui import cGui
-from resources.lib.handler.inputParameterHandler import cInputParameterHandler
-from resources.lib.handler.outputParameterHandler import cOutputParameterHandler
-from resources.lib.handler.requestHandler import cRequestHandler
-from resources.lib.parser import cParser
-from resources.lib.comaddon import progress
 
 SITE_IDENTIFIER = 'papstream'
 SITE_NAME = 'PapStream'
@@ -210,7 +210,7 @@ def showMovies(sSearch=''):
         oRequestHandler = cRequestHandler(sUrl)
 
     sHtmlContent = oRequestHandler.request()
-    sPattern = 'class="short-images-link".+?img src="([^"]+)".+?<a.+?>([^<]+).+?.+?<a.+?>([^<]+).+?short-link">\s*<a href="([^"]+)".+?>([^<]+)<\/a>'
+    sPattern = 'class="short-images-link".+?img src="([^"]+)".+?<a.+?>([^<]+).+?.+?<a.+?>([^<]+).+?short-link">\\s*<a href="([^"]+)".+?>([^<]+)<\\/a>'
     oParser = cParser()
     aResult = oParser.parse(sHtmlContent, sPattern)
 
@@ -227,10 +227,11 @@ def showMovies(sSearch=''):
                 break
 
             sThumb = URL_MAIN[:-1] + aEntry[0]
-            sUrl2 = URL_MAIN[:-1] + aEntry[3].replace('/animes/films/', '/films/').replace('/animes/series/', '/series/')
+            sUrl2 = URL_MAIN[:-1] + aEntry[3].replace('/animes/films/',
+                                                      '/films/').replace('/animes/series/', '/series/')
             sTitle = aEntry[4]
             sQual = aEntry[1]
-            sLang = aEntry[2].replace('French' , 'VF')
+            sLang = aEntry[2].replace('French', 'VF')
 
             if bSearchMovie:
                 if '/series/' in sUrl2:
@@ -238,8 +239,8 @@ def showMovies(sSearch=''):
             if bSearchSerie:
                 if '/films/' in sUrl2:
                     continue
-            sDisplayTitle = ('%s (%s) [%s]') % (sTitle, sQual,sLang)
-            
+            sDisplayTitle = ('%s (%s) [%s]') % (sTitle, sQual, sLang)
+
             oOutputParameterHandler.addParameter('siteUrl', sUrl2)
             oOutputParameterHandler.addParameter('sMovieTitle', sTitle)
             oOutputParameterHandler.addParameter('sThumb', sThumb)
@@ -249,7 +250,14 @@ def showMovies(sSearch=''):
             elif '/series/' in sUrl2:
                 oGui.addTV(SITE_IDENTIFIER, 'showSaisons', sTitle, 'series.png', sThumb, '', oOutputParameterHandler)
             else:
-                oGui.addMovie(SITE_IDENTIFIER, 'showLink', sDisplayTitle, 'films.png', sThumb, '', oOutputParameterHandler)
+                oGui.addMovie(
+                    SITE_IDENTIFIER,
+                    'showLink',
+                    sDisplayTitle,
+                    'films.png',
+                    sThumb,
+                    '',
+                    oOutputParameterHandler)
 
         progress_.VSclose(progress_)
 
@@ -287,7 +295,7 @@ def showSaisons():
     sHtmlContent = oRequestHandler.request()
 
     sDesc = ''
-    sPattern = '</a>\s*:\s*</h2>\s*(.+?)<div'
+    sPattern = '</a>\\s*:\\s*</h2>\\s*(.+?)<div'
     aResult = oParser.parse(sHtmlContent, sPattern)
     if aResult[0]:
         sDesc = aResult[1][0]
@@ -298,7 +306,7 @@ def showSaisons():
     if aResult[0]:
         sHtmlContent = aResult
 
-    sPattern = '<a href="([^"]+)" title=".+?(saison\s\d+)'
+    sPattern = '<a href="([^"]+)" title=".+?(saison\\s\\d+)'
     aResult = oParser.parse(sHtmlContent, sPattern)
 
     if not aResult[0]:
@@ -331,7 +339,7 @@ def ShowEpisodes():
 
     oRequestHandler = cRequestHandler(sUrl)
     sHtmlContent = oRequestHandler.request()
-    sPattern = 'class="saision_LI2">\s*<a title="(.+?)"\s*href=["\']([^"\']+)'
+    sPattern = 'class="saision_LI2">\\s*<a title="(.+?)"\\s*href=["\']([^"\']+)'
     oParser = cParser()
     aResult = oParser.parse(sHtmlContent, sPattern)
 
@@ -367,12 +375,12 @@ def showLink():
     sHtmlContent = oRequestHandler.request()
 
     if (not sDesc):
-        sPattern = '</a>\s*:\s*</h2>\s*(.+?)<div'
+        sPattern = '</a>\\s*:\\s*</h2>\\s*(.+?)<div'
         aResult = oParser.parse(sHtmlContent, sPattern)
         if aResult[0]:
             sDesc = aResult[1][0].replace(' en Streaming Complet ', ': ')
 
-    sPattern = '"#"\srel="([^"]+).+?class="server.+?<img src="([^"]+).+?<span style=".+?">([^<]+)'
+    sPattern = '"#"\\srel="([^"]+).+?class="server.+?<img src="([^"]+).+?<span style=".+?">([^<]+)'
     aResult = oParser.parse(sHtmlContent, sPattern)
 
     if aResult[0]:
@@ -434,10 +442,10 @@ def GetHostname(url):
 
     try:
         if 'www' not in url:
-            sHost = re.search('http.*?\/\/([^.]*)', url).group(1)
+            sHost = re.search('http.*?\\/\\/([^.]*)', url).group(1)
         else:
-            sHost = re.search('htt.+?\/\/(?:www).([^.]*)', url).group(1)
-    except:
+            sHost = re.search('htt.+?\\/\\/(?:www).([^.]*)', url).group(1)
+    except BaseException:
         sHost = url
 
     return sHost.capitalize()

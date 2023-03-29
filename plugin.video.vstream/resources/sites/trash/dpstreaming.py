@@ -1,19 +1,18 @@
 # -*- coding: utf-8 -*-
 # vStream https://github.com/Kodi-vStream/venom-xbmc-addons
+from resources.lib.comaddon import progress, dialog
+from resources.lib.util import cUtil
+from resources.lib.parser import cParser
+from resources.lib.handler.requestHandler import cRequestHandler
+from resources.lib.handler.outputParameterHandler import cOutputParameterHandler
+from resources.lib.handler.inputParameterHandler import cInputParameterHandler
+from resources.lib.gui.gui import cGui
+from resources.lib.gui.hoster import cHosterGui
+import xbmc
+import requests
+import re
 return False  # Cloudflare 15/01/2021
 
-import re
-import requests
-import xbmc
-
-from resources.lib.gui.hoster import cHosterGui
-from resources.lib.gui.gui import cGui
-from resources.lib.handler.inputParameterHandler import cInputParameterHandler
-from resources.lib.handler.outputParameterHandler import cOutputParameterHandler
-from resources.lib.handler.requestHandler import cRequestHandler
-from resources.lib.parser import cParser
-from resources.lib.util import cUtil
-from resources.lib.comaddon import progress, dialog
 
 SITE_IDENTIFIER = 'dpstreaming'
 SITE_NAME = 'DP Streaming'
@@ -158,7 +157,10 @@ def showMovies(sSearch=''):
 
     oRequestHandler = cRequestHandler(sUrl)
     sHtmlContent = oRequestHandler.request()
-    sHtmlContent = re.sub('src="https://dpstreaming.to/wp-content/plugins/wp-fastest-cache-premium/pro/images/blank.gif"', '', sHtmlContent)
+    sHtmlContent = re.sub(
+        'src="https://dpstreaming.to/wp-content/plugins/wp-fastest-cache-premium/pro/images/blank.gif"',
+        '',
+        sHtmlContent)
     sPattern = '<div class="moviefilm".+?<a href="([^"]+)".+?<img.+?src="([^"]+)" alt="([^"]+)".+?<p>(.+?)</p>'
     oParser = cParser()
     aResult = oParser.parse(sHtmlContent, sPattern)
@@ -228,7 +230,7 @@ def showSeries():
         if aResult[0]:
             sDesc = aResult[1][0].decode('utf-8')
             sDesc = cUtil().unescape(sDesc).encode('utf-8')
-    except:
+    except BaseException:
         pass
 
     sPattern = '<a href="([^"]+)" class.+?><span>([^<]+)</span></a>'

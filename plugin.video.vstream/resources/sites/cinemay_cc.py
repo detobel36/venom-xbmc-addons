@@ -163,7 +163,14 @@ def showAlpha(sTypeSerie=''):
     oOutputParameterHandler = cOutputParameterHandler()
     for sTitle, sUrl in liste:
         oOutputParameterHandler.addParameter('siteUrl', URL_MAIN + 'letter/' + sUrl + str(sType) + sTypeSerie)
-        oGui.addDir(SITE_IDENTIFIER, 'showMovies', 'Lettre [COLOR coral]' + sTitle + '[/COLOR]', 'listes.png', oOutputParameterHandler)
+        oGui.addDir(
+            SITE_IDENTIFIER,
+            'showMovies',
+            'Lettre [COLOR coral]' +
+            sTitle +
+            '[/COLOR]',
+            'listes.png',
+            oOutputParameterHandler)
 
     oGui.setEndOfDirectory()
 
@@ -226,7 +233,7 @@ def showMovies(sSearch=''):
         oOutputParameterHandler = cOutputParameterHandler()
         for aEntry in aResult[1]:
             sDesc = ''
-            sThumb = re.sub('/w\d+/', '/w342/', aEntry[0])
+            sThumb = re.sub('/w\\d+/', '/w342/', aEntry[0])
             sTitle = aEntry[1].replace('film en streaming', '').replace('série en streaming', '')
 
             # Titre recherché
@@ -323,7 +330,7 @@ def showSaison():
     oRequestHandler = cRequestHandler(sUrl)
     sHtmlContent = oRequestHandler.request()
     oParser = cParser()
-    sPattern = '<a href="#season.+?class.+?saison (\d+)'
+    sPattern = '<a href="#season.+?class.+?saison (\\d+)'
     aResult = oParser.parse(sHtmlContent, sPattern)
 
     if aResult[0]:
@@ -369,7 +376,7 @@ def showSXE():
     if aResult[0]:
         sDesc = ('[I][COLOR grey]%s[/COLOR][/I] %s') % ('Synopsis :', aResult[1][0])
 
-    sPattern = 'class="num-epi">\d+x([^<]+).+?href="([^"]+)'
+    sPattern = 'class="num-epi">\\d+x([^<]+).+?href="([^"]+)'
     aResult = oParser.parse(sHtmlContent, sPattern)
 
     if aResult[0]:
@@ -407,7 +414,7 @@ def showLink():
     oParser = cParser()
     sPattern = 'class="description">.*?<br>([^<]+)'
     aResult = oParser.parse(sHtmlContent, sPattern)
-    
+
     if aResult[0]:
         sDesc = ('[I][COLOR grey]%s[/COLOR][/I] %s') % ('Synopsis :', aResult[1][0])
 
@@ -426,7 +433,7 @@ def showLink():
 
     sPattern = 'data-url="([^"]+).+?server.+?alt="([^"]+).+?alt="([^"]+)'
     aResult = oParser.parse(sHtmlContent, sPattern)
-    
+
     if not aResult[0]:
         oGui.addText(SITE_IDENTIFIER)
 
@@ -436,7 +443,7 @@ def showLink():
         for aEntry in aResult[1]:
             sKey = aEntry[0]
             sHost = aEntry[1].replace('www.', '').replace('embed.mystream.to', 'mystream')
-            sHost = re.sub('\.\w+', '', sHost).capitalize()
+            sHost = re.sub('\\.\\w+', '', sHost).capitalize()
             if not oHosterGui.checkHoster(sHost):
                 continue
 
@@ -467,7 +474,7 @@ def showHosters():
     oRequestHandler = cRequestHandler(sUrl)
     sHtmlContent = oRequestHandler.request()
 
-    sPattern = '<iframe.*?src=([^\s]+)'
+    sPattern = '<iframe.*?src=([^\\s]+)'
     aResult = re.findall(sPattern, sHtmlContent)
     if aResult:
         sHosterUrl = aResult[0]

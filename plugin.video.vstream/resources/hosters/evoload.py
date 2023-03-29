@@ -44,7 +44,7 @@ class cHoster(iHoster):
         html = s.get(self._url, headers=headers1).text
         passe = re.search('<div id="captcha_pass" value="(.+?)"></div>', html).group(1)
 
-        post = '{"code":"' + code + '","csrv_token":"'+crsv+'","pass":"' + passe + '","token":"ok"}'
+        post = '{"code":"' + code + '","csrv_token":"' + crsv + '","pass":"' + passe + '","token":"ok"}'
 
         req = s.post(sUrlSecurePlayer, data=post, headers=headers2)
         response = str(req.content)

@@ -57,7 +57,7 @@ class cHosterGui:
         if sThumbnail:
             oGuiElement.setThumbnail(sThumbnail)
             oGuiElement.setPoster(sThumbnail)
-            
+
         title = oGuiElement.getCleanTitle()
 
         oOutputParameterHandler.addParameter('sMediaUrl', sMediaUrl)
@@ -111,7 +111,13 @@ class cHosterGui:
         oGuiElement.addContextItem(oContext)
 
         # Dossier Media
-        oGui.createSimpleMenu(oGuiElement, oOutputParameterHandler, 'cLibrary', 'cLibrary', 'setLibrary', self.ADDON.VSlang(30324))
+        oGui.createSimpleMenu(
+            oGuiElement,
+            oOutputParameterHandler,
+            'cLibrary',
+            'cLibrary',
+            'setLibrary',
+            self.ADDON.VSlang(30324))
 
         # Upload menu uptobox
         if cInputParameterHandler().getValue('site') != 'siteuptobox' and self.ADDON.getSetting('hoster_uptobox_premium') == 'true':
@@ -119,7 +125,13 @@ class cHosterGui:
             accept = ['uptobox', 'uptostream', '1fichier', 'uploaded', 'uplea']
             for i in accept:
                 if host == i:
-                    oGui.createSimpleMenu(oGuiElement, oOutputParameterHandler, 'siteuptobox', 'siteuptobox', 'upToMyAccount', self.ADDON.VSlang(30325))
+                    oGui.createSimpleMenu(
+                        oGuiElement,
+                        oOutputParameterHandler,
+                        'siteuptobox',
+                        'siteuptobox',
+                        'upToMyAccount',
+                        self.ADDON.VSlang(30325))
                     break
 
         # onefichier
@@ -127,7 +139,13 @@ class cHosterGui:
             host = oHoster.getPluginIdentifier()
             accept = '1fichier'  # les autres ne fonctionnent pas
             if host == accept:
-                oGui.createSimpleMenu(oGuiElement, oOutputParameterHandler, 'siteonefichier', 'siteonefichier', 'upToMyAccount', '1fichier')
+                oGui.createSimpleMenu(
+                    oGuiElement,
+                    oOutputParameterHandler,
+                    'siteonefichier',
+                    'siteonefichier',
+                    'upToMyAccount',
+                    '1fichier')
 
         oGui.addFolder(oGuiElement, oOutputParameterHandler, False)
 
@@ -136,7 +154,6 @@ class cHosterGui:
         if not sHosterUrl:
             return False
 
-        
         # Petit nettoyage
         sHosterUrl = sHosterUrl.split('|')[0]
         sHosterUrl = sHosterUrl.split('?')[0]
@@ -149,7 +166,7 @@ class cHosterGui:
         # Recuperation du host
         try:
             sHostName = sHosterUrl.split('/')[2]
-        except:
+        except BaseException:
             sHostName = sHosterUrl
 
         if debrid:
@@ -188,7 +205,7 @@ class cHosterGui:
         # Gestion classique
         if ('vidbm' in sHostName) or ('vedbom' in sHostName):
             return self.getHoster('vidbm')
-            
+
         if ('youtube' in sHostName) or ('youtu.be' in sHostName):
             return self.getHoster('youtube')
 
@@ -216,7 +233,7 @@ class cHosterGui:
             try:
                 if 'stream' in sHosterUrl:
                     return self.getHoster('lien_direct')
-            except:
+            except BaseException:
                 pass
             else:
                 return self.getHoster('dailymotion')
@@ -262,7 +279,8 @@ class cHosterGui:
         if ('voe' in sHostName):
             return self.getHoster('voe')
 
-        if ('goo.gl' in sHostName) or ('bit.ly' in sHostName) or ('streamcrypt' in sHostName) or ('opsktp' in sHosterUrl):
+        if ('goo.gl' in sHostName) or ('bit.ly' in sHostName) or (
+                'streamcrypt' in sHostName) or ('opsktp' in sHosterUrl):
             return self.getHoster('allow_redirects')
 
         # frenchvid et clone
@@ -316,7 +334,7 @@ class cHosterGui:
         try:
             mediaDisplay = sMediaUrl.split('/')
             VSlog('Hoster - play : %s/ ... /%s' % ('/'.join(mediaDisplay[0:3]), mediaDisplay[-1]))
-        except:
+        except BaseException:
             VSlog('Hoster - play : ' + sMediaUrl)
 
         oHoster = self.getHoster(sHosterIdentifier)

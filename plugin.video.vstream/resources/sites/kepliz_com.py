@@ -140,7 +140,7 @@ def showMovies(sSearch=''):
 
     sHtmlContent = oRequestHandler.request()
     sHtmlContent = oParser.abParse(sHtmlContent, sABPattern, '<div class="column2"')
-    sPattern = '<span style="list-style-type:none;".+? href="\/[0-9a-zA-Z]+\/([^"]+)">(.+?)\((.+?)\).+?>(<i>(.+?)</i>|)'
+    sPattern = '<span style="list-style-type:none;".+? href="\\/[0-9a-zA-Z]+\\/([^"]+)">(.+?)\\((.+?)\\).+?>(<i>(.+?)</i>|)'
     aResult = oParser.parse(sHtmlContent, sPattern)
 
     if not aResult[0]:

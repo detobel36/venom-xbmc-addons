@@ -25,7 +25,7 @@ class cHoster(iHoster):
 
     def setUrl(self, url):
         self._url = str(url)
-        sPattern = 'https*:\/\/speedvideo.[a-z]{3}\/(?:embed-)?([0-9a-zA-Z]+)'
+        sPattern = 'https*:\\/\\/speedvideo.[a-z]{3}\\/(?:embed-)?([0-9a-zA-Z]+)'
         oParser = cParser()
         aResult = oParser.parse(url, sPattern)
         if aResult[0] is True:
@@ -38,7 +38,7 @@ class cHoster(iHoster):
 
         oRequest = cRequestHandler(self._url)
         sHtmlContent = oRequest.request()
-        sPattern = 'var linkfile\s*=\s*"([^"]+)"'
+        sPattern = 'var linkfile\\s*=\\s*"([^"]+)"'
 
         oParser = cParser()
         aResult = oParser.parse(sHtmlContent, sPattern)

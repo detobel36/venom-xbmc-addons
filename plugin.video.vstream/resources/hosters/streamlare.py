@@ -22,14 +22,14 @@ class cHoster(iHoster):
         oRequestHandler.addHeaderEntry('User-Agent', UA)
         oRequestHandler.addParameters('id', self._url.split('/')[4])
         sHtmlContent = oRequestHandler.request()
-        
+
         oParser = cParser()
         sPattern = 'label":"([^"]+).*?file":"([^"]+)'
         aResult = oParser.parse(sHtmlContent, sPattern)
 
         if aResult[0] is True:
-            url=[]
-            qua=[] 
+            url = []
+            qua = []
             for aEntry in aResult[1]:
                 qua.append(aEntry[0])
                 url.append(aEntry[1])

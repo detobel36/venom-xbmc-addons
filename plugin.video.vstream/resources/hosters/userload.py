@@ -34,13 +34,13 @@ class cHoster(iHoster):
         sHtmlContent1 = requests.get(urlapi).content.decode('utf-8')
 
         oParser = cParser()
-        sPattern = '(ﾟωﾟ.+?\(\'_\'\);)'
+        sPattern = '(ﾟωﾟ.+?\\(\'_\'\\);)'
         aResult = oParser.parse(sHtmlContent1, sPattern)
 
         if aResult[0] is True:
             sdecode = AADecoder(aResult[1][0]).decode()
 
-            sPattern = 'morocco=".([^\W]+).+?"&mycountry=".([^\W]+)'
+            sPattern = 'morocco=".([^\\W]+).+?"&mycountry=".([^\\W]+)'
             aResult_2 = oParser.parse(sdecode, sPattern)
 
             if aResult_2[0] is True:
@@ -54,7 +54,7 @@ class cHoster(iHoster):
         oRequestHandler.addHeaderEntry('Referer', referer)
         sHtmlContent1 = oRequestHandler.request()
 
-        sPattern2 = '<script type="text/javascript">(\s*eval\s*\(\s*function(?:.|\s)+?{}\)\))'
+        sPattern2 = '<script type="text/javascript">(\\s*eval\\s*\\(\\s*function(?:.|\\s)+?{}\\)\\))'
         aResult = re.findall(sPattern2, sHtmlContent1)
 
         if aResult:
@@ -65,7 +65,7 @@ class cHoster(iHoster):
             strs = cPacker().unpack(str2)
 
             oParser = cParser()
-            sPattern = 'var\s(.+?)="([^"]*)'
+            sPattern = 'var\\s(.+?)="([^"]*)'
             aResult = oParser.parse(strs, sPattern)
 
             if aResult[0] is True:

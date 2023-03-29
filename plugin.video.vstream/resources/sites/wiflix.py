@@ -122,7 +122,8 @@ def showMovies(sSearch=''):
         oUtil = cUtil()
         sSearchText = oUtil.CleanName(sSearch.replace('%20', ' '))
 
-        pdata = 'do=search&subaction=search&story=' + sSearchText.replace(' ', '+') + '&titleonly=3&all_word_seach=1&catlist[]=1'
+        pdata = 'do=search&subaction=search&story=' + \
+            sSearchText.replace(' ', '+') + '&titleonly=3&all_word_seach=1&catlist[]=1'
 
         oRequest = cRequestHandler(URL_SEARCH[0])
         # oRequest.setRequestType(1)
@@ -158,7 +159,7 @@ def showMovies(sSearch=''):
             sQual = aEntry[4]
             sYear = aEntry[5]
             if sYear in sTitle:  # double affichage de l'année
-                sTitle = re.sub('\(' + sYear + '\)', '', sTitle)
+                sTitle = re.sub('\\(' + sYear + '\\)', '', sTitle)
 
             # Filtre de recherche
             if sSearch and not oUtil.CheckOccurence(sSearchText, sTitle):
@@ -190,7 +191,14 @@ def showMovies(sSearch=''):
             oOutputParameterHandler.addParameter('sYear', sYear)
 
             if 'serie-en-streaming' in sUrl:
-                oGui.addSeason(SITE_IDENTIFIER, 'showEpisodes', sDisplayTitle, '', sThumb, sDesc, oOutputParameterHandler)
+                oGui.addSeason(
+                    SITE_IDENTIFIER,
+                    'showEpisodes',
+                    sDisplayTitle,
+                    '',
+                    sThumb,
+                    sDesc,
+                    oOutputParameterHandler)
             else:
                 oGui.addMovie(SITE_IDENTIFIER, 'showHosters', sDisplayTitle, '', sThumb, sDesc, oOutputParameterHandler)
 
@@ -259,11 +267,11 @@ def showSeries(sSearch=''):
                 sThumb = URL_MAIN[:-1] + aEntry[0]
 
             sTitle = aEntry[1].replace('- Saison', 'saison').replace(' wiflix', '')
-            
+
             # Filtre de recherche
             if sSearch and not oUtil.CheckOccurence(sSearchText, sTitle):
                 continue
-            
+
             # sLang = re.sub('Saison \d+', '', aEntry[3]).replace(' ', '')
             sDisplayTitle = sTitle
             sUrl = aEntry[2]
@@ -343,7 +351,7 @@ def showHosters():
     oParser = cParser()
     oRequestHandler = cRequestHandler(sUrl)
     sHtmlContent = oRequestHandler.request()
-    sPattern = '<a href="\/vd.php\?u=([^"]+)"[^<>]+target="x_player_wfx"><span>([^<]+)'
+    sPattern = '<a href="\\/vd.php\\?u=([^"]+)"[^<>]+target="x_player_wfx"><span>([^<]+)'
     aResult = oParser.parse(sHtmlContent, sPattern)
 
     if aResult[0]:

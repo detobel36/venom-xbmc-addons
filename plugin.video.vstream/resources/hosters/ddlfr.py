@@ -23,7 +23,7 @@ class cHoster(iHoster):
         sHtmlContent = oRequest.request()
         # VSlog(sHtmlContent)
         oParser = cParser()
-        sPattern = 'JuicyCodes\.Run\("(.+?)"\);'
+        sPattern = 'JuicyCodes\\.Run\\("(.+?)"\\);'
         aResult = oParser.parse(sHtmlContent, sPattern)
         # VSlog(aResult)
         if aResult[0] is True:

@@ -26,7 +26,7 @@ class cHoster(iHoster):
         oRequest.addHeaderEntry('Cookie', 'hds2=1')
         sHtmlContent = oRequest.request()
 
-        sPattern = '(\s*eval\s*\(\s*function(?:.|\s)+?)<\/script>'
+        sPattern = '(\\s*eval\\s*\\(\\s*function(?:.|\\s)+?)<\\/script>'
         aResult = oParser.parse(sHtmlContent, sPattern)
 
         if aResult[0] is True:

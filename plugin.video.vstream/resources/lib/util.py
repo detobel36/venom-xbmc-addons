@@ -26,7 +26,7 @@ class cUtil:
             label = unicodedata.normalize('NFKD', label).encode('ASCII', 'ignore')
             for i in label:
                 count += ord(i)
-        except:
+        except BaseException:
             pass
 
         return count
@@ -48,7 +48,7 @@ class cUtil:
 
         if nbWord == 0:
             return False
-        return 100*nbOccurence/nbWord >= percent
+        return 100 * nbOccurence / nbWord >= percent
 
     def removeHtmlTags(self, sValue, sReplace=''):
         p = re.compile(r'<.*?>')
@@ -68,7 +68,7 @@ class cUtil:
 
     def unescape(self, text):
 
-        # determine si conversion en unicode nécessaire        
+        # determine si conversion en unicode nécessaire
         isStr = isinstance(text, str)
 
         def fixup(m):
@@ -94,7 +94,7 @@ class cUtil:
 
             return text  # leave as is
 
-        return re.sub('&#?\w+;', fixup, text)
+        return re.sub('&#?\\w+;', fixup, text)
 
     def titleWatched(self, title):
         # enlève les accents, si nécessaire
@@ -116,8 +116,19 @@ class cUtil:
         title = re.sub(r'\[.*\]|\(.*\)', r'', str(title))
         title = title.replace('VF', '').replace('VOSTFR', '').replace('FR', '')
         # title = re.sub(r'[0-9]+?', r'', str(title))
-        title = title.replace('-', ' ')  # on garde un espace pour que Orient-express ne devienne pas Orientexpress pour la recherche tmdb
-        title = title.replace('Saison', '').replace('saison', '').replace('Season', '').replace('Episode', '').replace('episode', '')
+        # on garde un espace pour que Orient-express ne devienne pas Orientexpress pour la recherche tmdb
+        title = title.replace('-', ' ')
+        title = title.replace(
+            'Saison',
+            '').replace(
+            'saison',
+            '').replace(
+            'Season',
+            '').replace(
+                'Episode',
+                '').replace(
+                    'episode',
+            '')
         title = re.sub('[^%s]' % (string.ascii_lowercase + string.digits), ' ', title.lower())
         # title = QuotePlus(title)
         # title = title.decode('string-escape')
@@ -130,18 +141,18 @@ class cUtil:
 
         # on cherche l'annee
         annee = ''
-        m = re.search('(\([0-9]{4}\))', name)
+        m = re.search('(\\([0-9]{4}\\))', name)
         if m:
             annee = str(m.group(0))
             name = name.replace(annee, '')
 
         # Suppression des ponctuations
-        name = re.sub("[\’\'\-\–\:\+\._]", ' ', name)
-        name = re.sub("[\,\&\?\!]", '', name)
+        name = re.sub("[\\’\'\\-\\–\\:\\+\\._]", ' ', name)
+        name = re.sub("[\\,\\&\\?\\!]", '', name)
 
         # vire tag
-        name = re.sub('[\(\[].+?[\)\]]', '', name)
-        name = name.replace('[', '').replace(']', '') # crochet orphelin
+        name = re.sub('[\\(\\[].+?[\\)\\]]', '', name)
+        name = name.replace('[', '').replace(']', '')  # crochet orphelin
 
         # enlève les accents, si nécessaire
         n2 = re.sub('[^a-zA-Z0-9 ]', '', name)
@@ -178,7 +189,7 @@ class cUtil:
         return serieTitle
 
     def getEpisodeTitre(self, sTitle):
-        string = re.search('(?i)(e(?:[a-z]+sode\s?)*([0-9]+))', sTitle)
+        string = re.search('(?i)(e(?:[a-z]+sode\\s?)*([0-9]+))', sTitle)
         if string:
             sTitle = sTitle.replace(string.group(1), '')
             self.__Episode = ('%02d' % int(string.group(2)))
@@ -198,7 +209,7 @@ class cUtil:
                 s = s[1:]
             val = int(eval(s))
             return val
-        except:
+        except BaseException:
             return 0
 
 

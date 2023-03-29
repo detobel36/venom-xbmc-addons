@@ -25,7 +25,7 @@ class cHoster(iHoster):
 
         oParser = cParser()
 
-        sPattern = "<script type='text\/javascript'>(eval\(function\(p,a,c,k,e,d.+?)<\/script>"
+        sPattern = "<script type='text\\/javascript'>(eval\\(function\\(p,a,c,k,e,d.+?)<\\/script>"
         aResult = oParser.parse(sHtmlContent, sPattern)
 
         if aResult[0] is True:

@@ -46,7 +46,12 @@ def load():
     oGui.addDir(SITE_IDENTIFIER, 'showSearch', "Recherche d'animés", 'search.png', oOutputParameterHandler)
 
     oOutputParameterHandler.addParameter('siteUrl', ANIM_FILM[0])
-    oGui.addDir(SITE_IDENTIFIER, ANIM_FILM[1], "Film d'animation japonais (Derniers ajouts)", 'animes.png', oOutputParameterHandler)
+    oGui.addDir(
+        SITE_IDENTIFIER,
+        ANIM_FILM[1],
+        "Film d'animation japonais (Derniers ajouts)",
+        'animes.png',
+        oOutputParameterHandler)
 
     oOutputParameterHandler.addParameter('siteUrl', ANIM_NEWS[0])
     oGui.addDir(SITE_IDENTIFIER, ANIM_NEWS[1], 'Animés (Dernier ajouts)', 'news.png', oOutputParameterHandler)
@@ -114,7 +119,8 @@ def showMovies(sSearch=''):
             bGlobal_Search = True
             sSearch = sSearch.replace(URL_SEARCH[0], '')
 
-        query_args = (('do', 'search'), ('subaction', 'search'), ('story', sSearch), ('titleonly', '0'), ('full_search', '1'))
+        query_args = (('do', 'search'), ('subaction', 'search'),
+                      ('story', sSearch), ('titleonly', '0'), ('full_search', '1'))
         data = urlEncode(query_args)
 
         oRequestHandler = cRequestHandler(URL_SEARCH[0])
@@ -160,7 +166,7 @@ def showMovies(sSearch=''):
                 sLang = ""
             else:
                 sLang = aEntry[2].split(" ")[-1]
-                sTitle = re.sub('Saison \d+', '', aEntry[2][:aEntry[2].rfind('')].replace(sLang, "")) + " " + aEntry[4]
+                sTitle = re.sub('Saison \\d+', '', aEntry[2][:aEntry[2].rfind('')].replace(sLang, "")) + " " + aEntry[4]
                 sQual = aEntry[3]
                 sDesc = aEntry[5]
 
@@ -235,7 +241,14 @@ def ShowSxE():
             oOutputParameterHandler.addParameter('sDesc', sDesc)
             oOutputParameterHandler.addParameter('id', sID)
 
-            oGui.addAnime(SITE_IDENTIFIER, 'seriesHosters', sTitle, 'animes.png', sThumb, sDesc, oOutputParameterHandler)
+            oGui.addAnime(
+                SITE_IDENTIFIER,
+                'seriesHosters',
+                sTitle,
+                'animes.png',
+                sThumb,
+                sDesc,
+                oOutputParameterHandler)
 
         progress_.VSclose(progress_)
 

@@ -113,7 +113,12 @@ def showMenuTvShows():
     oGui.addDir(SITE_IDENTIFIER, SERIE_NEWS[1], 'Séries (Derniers ajouts)', 'news.png', oOutputParameterHandler)
 
     oOutputParameterHandler.addParameter('siteUrl', SERIE_NEWS_SAISONS[0])
-    oGui.addDir(SITE_IDENTIFIER, SERIE_NEWS_SAISONS[1], 'Séries (Saisons récentes)', 'news.png', oOutputParameterHandler)
+    oGui.addDir(
+        SITE_IDENTIFIER,
+        SERIE_NEWS_SAISONS[1],
+        'Séries (Saisons récentes)',
+        'news.png',
+        oOutputParameterHandler)
 
     oOutputParameterHandler.addParameter('siteUrl', SERIE_TOP_IMD[0])
     oGui.addDir(SITE_IDENTIFIER, SERIE_TOP_IMD[1], 'Séries (Top IMDd)', 'tmdb.png', oOutputParameterHandler)
@@ -202,7 +207,14 @@ def showAlpha(stype):
     oOutputParameterHandler = cOutputParameterHandler()
     for sTitle, sUrl in liste:
         oOutputParameterHandler.addParameter('siteUrl', sUrl)
-        oGui.addDir(SITE_IDENTIFIER, 'showMovies', 'Lettre [COLOR coral]' + sTitle + '[/COLOR]', 'listes.png', oOutputParameterHandler)
+        oGui.addDir(
+            SITE_IDENTIFIER,
+            'showMovies',
+            'Lettre [COLOR coral]' +
+            sTitle +
+            '[/COLOR]',
+            'listes.png',
+            oOutputParameterHandler)
 
     oGui.setEndOfDirectory()
 
@@ -258,7 +270,12 @@ def showMovies(sSearch=''):
 
         oOutputParameterHandler = cOutputParameterHandler()
         for i, idict in jsonrsp.items():
-            sTitle = str(jsonrsp[i]['title'].encode('utf-8', 'ignore')).replace(' mystream', '')  # I Know This Much Is True mystream
+            sTitle = str(
+                jsonrsp[i]['title'].encode(
+                    'utf-8',
+                    'ignore')).replace(
+                ' mystream',
+                '')  # I Know This Much Is True mystream
             sTitle = sTitle[2:-1]
             sUrl2 = str(jsonrsp[i]['url'])
             sThumb = str(jsonrsp[i]['img'])
@@ -295,13 +312,13 @@ def showMovies(sSearch=''):
         sPattern = 'animation-2".+?href="([^"]+).+?alt="([^"]+).+?src="([^"]+)" .+?(?:|year">([^<]*)<.+?)<p>(.*?)<'
 
     elif '/genre/' in sUrl or '/release/' in sUrl:  # thumb; url; title; year; desc #regex ok
-        sPattern = 'class="item (?:movies|tvshows)".+?alt="([^"]+).+?src="([^"]+).+?href="([^"]+).+?span>(\d+)<.+?texto">(.+?)<'
+        sPattern = 'class="item (?:movies|tvshows)".+?alt="([^"]+).+?src="([^"]+).+?href="([^"]+).+?span>(\\d+)<.+?texto">(.+?)<'
 
     elif '/imdb/' in sUrl:  # url; thumb; title; rate #regex ok
         sPattern = "poster'.+?ref='([^']*).+?src='(h[^']*).+?alt='([^']*).+?rating'>([^<]*)"
 
     elif '/tvshows/' in sUrl or '/movies/' in sUrl:  # thumb; title; url; year; desc #regex ok
-        sPattern = 'noscript>.+?src="([^"]+).+?alt="([^"]+).+?href="([^"]+).+?class="metadata".+?<span>(\d+).+?class="texto">([^<]*)'
+        sPattern = 'noscript>.+?src="([^"]+).+?alt="([^"]+).+?href="([^"]+).+?class="metadata".+?<span>(\\d+).+?class="texto">([^<]*)'
 
     oRequestHandler = cRequestHandler(sUrl)
     oRequestHandler.setTimeout(TimeOut)
@@ -314,7 +331,7 @@ def showMovies(sSearch=''):
     # pour les sThumb
     # sHtmlContent = re.sub('https:..ml2o99dkuow5.i.optimole.+?/https', 'https', sHtmlContent)
 
-    if sSearch and 'no-result animation-2' in sHtmlContent: # Pas de résultats
+    if sSearch and 'no-result animation-2' in sHtmlContent:  # Pas de résultats
         oGui.addText(SITE_IDENTIFIER)
         return
 
@@ -334,7 +351,7 @@ def showMovies(sSearch=''):
                 sUrl2 = aEntry[2]
                 sYear = aEntry[3]
                 if sYear != '':
-                    sYear = re.search('(\d{4})', sYear).group(1)
+                    sYear = re.search('(\\d{4})', sYear).group(1)
                 sDisplayTitle = sTitle + ' (' + sYear + ')'
 
             elif sUrl == URL_MAIN:  # thumb; title; url; year
@@ -393,7 +410,7 @@ def showMovies(sSearch=''):
                 sUrl2 = aEntry[2]
                 sYear = aEntry[3]
                 if sYear != '':
-                    sYear = re.search('(\d{4})', sYear).group(1)
+                    sYear = re.search('(\\d{4})', sYear).group(1)
                 sDesc = aEntry[4]
                 sDisplayTitle = sTitle + ' (' + sYear + ')'
 
@@ -418,7 +435,7 @@ def showMovies(sSearch=''):
             if sSearch:
                 if not oUtil.CheckOccurence(sSearchText, sTitle):
                     continue    # Filtre les résultats
-            
+
             oOutputParameterHandler.addParameter('siteUrl', sUrl2)
             oOutputParameterHandler.addParameter('sMovieTitle', sTitle)
             oOutputParameterHandler.addParameter('sThumb', sThumb)
@@ -444,7 +461,7 @@ def showMovies(sSearch=''):
 
 def __checkForNextPage(sHtmlContent):
     oParser = cParser()
-    sPattern = 'pagination"><span>Page \d+ de (\d+)</span>.+?current">\d+</span><ahref=.([^"|\']+)'
+    sPattern = 'pagination"><span>Page \\d+ de (\\d+)</span>.+?current">\\d+</span><ahref=.([^"|\']+)'
     aResult = oParser.parse(sHtmlContent, sPattern)
     if aResult[0]:
         sNumberMax = aResult[1][0][0]
@@ -479,12 +496,12 @@ def showSaisons():
             aResult = oParser.parse(sHtmlContent, sPattern)
             if aResult[0]:
                 sDesc = aResult[1][0]
-        except:
+        except BaseException:
             pass
 
     # '2 - 11'   href   title
     # class='numerando'>([^<]*).+?href='([^']*).>([^<]*) #
-    sPattern = "class='numerando'>(\d+) - (\d+)<.+?href='([^']*)"
+    sPattern = "class='numerando'>(\\d+) - (\\d+)<.+?href='([^']*)"
     aResult = oParser.parse(sHtmlContent, sPattern)
 
     if aResult[0]:
@@ -571,7 +588,7 @@ def showEpisodes():
             aResult = oParser.parse(sHtmlContent, sPattern)
             if aResult[0]:
                 sDesc = aResult[1][0]
-        except:
+        except BaseException:
             pass
     # '2 - 11'   url
     sPattern = "class='numerando'>([^<]*).+?href='([^']*)"
@@ -618,7 +635,7 @@ def showHosters():
             aResult = oParser.parse(sHtmlContent, sPattern)
             if aResult[0]:
                 sDesc = aResult[1][0]
-        except:
+        except BaseException:
             pass
 
     sPattern = "data-type='([^']*).*?post='([^']*).*?nume='([^']*).*?title'>([^<]*)"

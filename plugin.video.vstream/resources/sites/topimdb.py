@@ -54,7 +54,7 @@ def unescape(text):
             except KeyError:
                 pass
         return text  # leave as is
-    return re.sub("&#?\w+;", fixup, text)
+    return re.sub("&#?\\w+;", fixup, text)
 
 
 def load():
@@ -80,8 +80,15 @@ def showMovieYears():
     now = datetime.datetime.now()
 
     oOutputParameterHandler = cOutputParameterHandler()
-    for i in reversed(xrange(1903, int(now.year)+1)):
-        oOutputParameterHandler.addParameter('siteUrl', URL_MAIN + 'search/title?year=' + str(i) + ',' + str(i) + '&title_type=feature&explore=languages')
+    for i in reversed(xrange(1903, int(now.year) + 1)):
+        oOutputParameterHandler.addParameter(
+            'siteUrl',
+            URL_MAIN +
+            'search/title?year=' +
+            str(i) +
+            ',' +
+            str(i) +
+            '&title_type=feature&explore=languages')
         oGui.addDir(SITE_IDENTIFIER, 'showMovies', str(i), 'annees.png', oOutputParameterHandler)
 
     oGui.setEndOfDirectory()
@@ -104,7 +111,7 @@ def showMovies(sSearch=''):
     oRequestHandler.addHeaderEntry('Accept-Language', 'fr,fr-FR;q=0.8,en-US;q=0.5,en;q=0.3')
     sHtmlContent = oRequestHandler.request()
 
-    sPattern = 'img alt="([^"]+).+?loadlate="([^"]+).+?primary">([^<]+).+?unbold">([^<]+).+?(?:|rated this(.+?)\s.+?)muted">([^<]+)'
+    sPattern = 'img alt="([^"]+).+?loadlate="([^"]+).+?primary">([^<]+).+?unbold">([^<]+).+?(?:|rated this(.+?)\\s.+?)muted">([^<]+)'
     aResult = oParser.parse(sHtmlContent, sPattern)
 
     if aResult[0]:

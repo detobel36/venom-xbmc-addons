@@ -1,6 +1,7 @@
 from resources.hosters.hoster import iHoster
 from resources.lib.handler.hosterHandler import cHosterHandler
 
+
 class cHoster(iHoster):
 
     def __init__(self):

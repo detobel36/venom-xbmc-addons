@@ -6,6 +6,7 @@ from resources.lib.parser import cParser
 from resources.lib.gui.gui import cGui
 from resources.hosters.hoster import iHoster
 
+
 class cHoster(iHoster):
 
     def __init__(self):
@@ -34,8 +35,8 @@ class cHoster(iHoster):
                 oGui.showNofication(sSecondsForWait, 3)
                 time.sleep(sSecondsForWait)
 
-                rndX = random.randint(1, 99999999-10000000)+10000000
-                rndY = random.randint(1, 999999999-100001000)+100000000
+                rndX = random.randint(1, 99999999 - 10000000) + 10000000
+                rndY = random.randint(1, 999999999 - 100001000) + 100000000
                 ts1 = float(time.time())
                 ts2 = float(time.time())
                 ts3 = float(time.time())
@@ -46,9 +47,9 @@ class cHoster(iHoster):
                     str(ts3) + '; '
                 sCookieValue = sCookieValue + '__utmz=' + str(rndY) + '.' + str(ts4) + \
                     '.1.1.utmcsr=(direct)|utmccn=(direct)|utmcmd=(none); '
-                sCookieValue = sCookieValue + sPhpSessionId +'; '
+                sCookieValue = sCookieValue + sPhpSessionId + '; '
                 sCookieValue = sCookieValue + '__utmc=' + str(rndY) + "; "
-                sCookieValue = sCookieValue + '__utmb=' + str(rndY) + '.7.10.' +  str(ts5) + "; ADBLOCK=1"
+                sCookieValue = sCookieValue + '__utmb=' + str(rndY) + '.7.10.' + str(ts5) + "; ADBLOCK=1"
 
                 oRequest = cRequestHandler(self._url)
                 oRequest.setRequestType(cRequestHandler.REQUEST_TYPE_POST)
@@ -64,7 +65,6 @@ class cHoster(iHoster):
                     return True, aResult[1][0]
 
         return False, aResult
-
 
     def __getPhpSessionId(self, aHeader):
         sReponseCookie = aHeader.getheader("Set-Cookie")

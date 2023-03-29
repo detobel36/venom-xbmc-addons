@@ -57,7 +57,7 @@ class cHoster(iHoster):
                 list_url = []
                 list_q = []
                 oParser = cParser()
-                sPattern = 'PROGRAM.*?BANDWIDTH.*?RESOLUTION=(\d+x\d+).*?(https.*?m3u8)'
+                sPattern = 'PROGRAM.*?BANDWIDTH.*?RESOLUTION=(\\d+x\\d+).*?(https.*?m3u8)'
                 aResult = oParser.parse(response, sPattern)
                 if aResult[0] is True:
                     for aEntry in aResult[1]:
@@ -87,7 +87,7 @@ def get_token(site_key, co, loc):
     req = s.get(url1, headers=headers1)
     data = req.text
 
-    aresult = re.findall("releases\/(.*?)\/", data)
+    aresult = re.findall("releases\\/(.*?)\\/", data)
     if aresult:
         v = aresult[0]
     else:

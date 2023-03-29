@@ -20,13 +20,13 @@ class cHoster(iHoster):
         oParser = cParser()
 
         # Dean Edwards Packer
-        sPattern = '(eval\(function\(p,a,c,k,e(?:.|\s)+?\))<\/script>'
+        sPattern = '(eval\\(function\\(p,a,c,k,e(?:.|\\s)+?\\))<\\/script>'
         aResult = oParser.parse(sHtmlContent, sPattern)
 
         if aResult[0] is True:
             sHtmlContent = cPacker().unpack(aResult[1][0])
 
-            sPattern = '{file:"([^"]+)"\,label:"([^"]+)"}'
+            sPattern = '{file:"([^"]+)"\\,label:"([^"]+)"}'
             aResult = oParser.parse(sHtmlContent, sPattern)
 
         if aResult[0] is True:

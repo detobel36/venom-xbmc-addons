@@ -26,7 +26,7 @@ class cHoster(iHoster):
         sId = self.__getIdFromUrl(self._url)
         url = 'https://vcstream.to/player?fid=%s&page=embed' % sId
 
-        sPattern = 'file.+?\\"([^<]+)\\"\}'
+        sPattern = 'file.+?\\"([^<]+)\\"\\}'
         oRequest = cRequestHandler(url)
         sHtmlContent = oRequest.request()
 

@@ -100,7 +100,8 @@ def showMovies(sSearch=''):
 
     if sSearch:
         idx = sSearch.rfind("/") + 1
-        sUrl = sSearch[:idx] + "".join([i for i in sSearch[idx:] if i.isalpha() or i in [" ", "/"]]).replace(" ", "-") + '-s0-r1.html'.replace(' ', '+')
+        sUrl = sSearch[:idx] + "".join([i for i in sSearch[idx:] if i.isalpha() or i in [" ", "/"]]
+                                       ).replace(" ", "-") + '-s0-r1.html'.replace(' ', '+')
     else:
         oInputParameterHandler = cInputParameterHandler()
         sUrl = oInputParameterHandler.getValue('siteUrl')
@@ -174,7 +175,7 @@ def showHosters():
 
     # lien dailymotion
     if not aResult[0]:
-        sPattern = 'src="([^"]+)\?.+?" allowfullscreen></iframe>'
+        sPattern = 'src="([^"]+)\\?.+?" allowfullscreen></iframe>'
         aResult = oParser.parse(sHtmlContent, sPattern)
 
     if aResult[0]:

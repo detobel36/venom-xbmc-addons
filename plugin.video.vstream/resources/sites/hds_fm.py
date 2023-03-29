@@ -290,7 +290,7 @@ def showMovies(sSearch=''):
             # if not ('/serie' in sUrl or ' saison ' in sTitle.lower()):
                 # idmovie = get_id_int_Movie(sUrl2)
                 # if idmovie  <= 18729:
-                    # sDisplayTitle = sDisplayTitle + ' *'
+                # sDisplayTitle = sDisplayTitle + ' *'
 
             oOutputParameterHandler.addParameter('siteUrl', sUrl2)
             oOutputParameterHandler.addParameter('sMovieTitle', sTitle)
@@ -323,9 +323,9 @@ def __checkForNextPage(sHtmlContent):
         return False, 'none', 'none'
 
     if 'class="end"' in sHtmlContent:
-        sPattern = 'class="end".+?">(\d+)'
+        sPattern = 'class="end".+?">(\\d+)'
     else:
-        sPattern = '(\d+)<.a>\s*<a\sclass="next"'
+        sPattern = '(\\d+)<.a>\\s*<a\\sclass="next"'
 
     aResult = oParser.parse(sHtmlContent, sPattern)
     if aResult[0]:
@@ -340,8 +340,8 @@ def __checkForNextPage(sHtmlContent):
             if '/31/32/' in sNextPage:  # bug page 31
                 sNextPage = re.sub('/31', '', sNextPage)
         try:
-            sNumberNext = re.search('/(\d+)/', sNextPage).group(1)
-        except:
+            sNumberNext = re.search('/(\\d+)/', sNextPage).group(1)
+        except BaseException:
             pass
 
         if sNumberNext:
@@ -367,7 +367,7 @@ def showEpisodes():
     sHtmlContent = oRequestHandler.request()
 
     if 'saison' not in sMovieTitle.lower():
-        sPattern = 'saison-(\d+)'
+        sPattern = 'saison-(\\d+)'
         aResult = oParser.parse(sUrl, sPattern)
         if aResult[0]:
             sMovieTitle = sMovieTitle + ' Saison ' + aResult[1][0]
@@ -378,7 +378,7 @@ def showEpisodes():
     if aResult[0]:
         sDesc = ('[I][COLOR grey]%s[/COLOR][/I] %s') % ('Synopsis :', cleanDesc(aResult[1][0]))
 
-    sPattern = 'fa-play-circle-o">.+?(VOSTFR|VF)|id="(?:honey|yoyo)(?:\d+)"\s*href="([^"]+).+?title="([^"]+).+?data-rel="([^"]+)'
+    sPattern = 'fa-play-circle-o">.+?(VOSTFR|VF)|id="(?:honey|yoyo)(?:\\d+)"\\s*href="([^"]+).+?title="([^"]+).+?data-rel="([^"]+)'
     aResult = oParser.parse(sHtmlContent, sPattern)
 
     bFind = ''
@@ -409,7 +409,14 @@ def showEpisodes():
                 oOutputParameterHandler.addParameter('sRel_Episode', sRel_Episode)
                 oOutputParameterHandler.addParameter('sFirst_Url', sFirst_Url)
 
-                oGui.addEpisode(SITE_IDENTIFIER, 'showSeriesHosters', sDisplayTitle, '', sThumb, sDesc, oOutputParameterHandler)
+                oGui.addEpisode(
+                    SITE_IDENTIFIER,
+                    'showSeriesHosters',
+                    sDisplayTitle,
+                    '',
+                    sThumb,
+                    sDesc,
+                    oOutputParameterHandler)
 
     if not validEntry:
         oGui.addText(SITE_IDENTIFIER, '# Aucune vidéo trouvée #')
@@ -527,9 +534,9 @@ def showHosters():
 def get_id_int_Movie(url):
 
     try:
-        number = re.search('https.+?\/(\d+)', url).group(1)
+        number = re.search('https.+?\\/(\\d+)', url).group(1)
         return int(number)
-    except:
+    except BaseException:
         return 20000
         pass
     return 20000
@@ -539,13 +546,13 @@ def getHostName(url):
 
     try:
         if 'opsktp' in url:
-            sHost = re.search('http.+?opsktp.+?\/([^\/]+)', url).group(1)
+            sHost = re.search('http.+?opsktp.+?\\/([^\\/]+)', url).group(1)
 
         elif 'www' not in url:
-            sHost = re.search('http.*?\/\/([^.]*)', url).group(1)
+            sHost = re.search('http.*?\\/\\/([^.]*)', url).group(1)
         else:
-            sHost = re.search('htt.+?\/\/(?:www).([^.]*)', url).group(1)
-    except:
+            sHost = re.search('htt.+?\\/\\/(?:www).([^.]*)', url).group(1)
+    except BaseException:
         sHost = url
 
     return sHost.capitalize()

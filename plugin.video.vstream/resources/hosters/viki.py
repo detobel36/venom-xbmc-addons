@@ -25,7 +25,7 @@ class cHoster(iHoster):
             link = []
             qual = []
             for a in url:
-                q = re.search('max_res=(\d+)',a)
+                q = re.search('max_res=(\\d+)', a)
                 if q:
                     link.append(a)
                     qu = q.group(1)

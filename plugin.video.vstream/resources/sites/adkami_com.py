@@ -175,14 +175,26 @@ def showAZ():
     # pas d'url pour les non alpha, on utilise l'ancienne méthode épurée.
     oOutputParameterHandler = cOutputParameterHandler()
     oOutputParameterHandler.addParameter('siteUrl', sUrl)
-    oGui.addDir(SITE_IDENTIFIER, 'showNoAlpha', '[COLOR teal] Lettre [COLOR red]123[/COLOR]', 'az.png', oOutputParameterHandler)
+    oGui.addDir(
+        SITE_IDENTIFIER,
+        'showNoAlpha',
+        '[COLOR teal] Lettre [COLOR red]123[/COLOR]',
+        'az.png',
+        oOutputParameterHandler)
 
     import string
     for i in string.ascii_lowercase:
         sUrl2 = sUrl + str(i)
 
         oOutputParameterHandler.addParameter('siteUrl', sUrl2)
-        oGui.addDir(SITE_IDENTIFIER, 'showSeries', '[COLOR teal] Lettre [COLOR red]' + str(i).upper() + '[/COLOR]', 'az.png', oOutputParameterHandler)
+        oGui.addDir(
+            SITE_IDENTIFIER,
+            'showSeries',
+            '[COLOR teal] Lettre [COLOR red]' +
+            str(i).upper() +
+            '[/COLOR]',
+            'az.png',
+            oOutputParameterHandler)
 
     oGui.setEndOfDirectory()
 
@@ -322,7 +334,7 @@ def showSaison():
         if aResult[0]:
             sDesc = aResult[1][0]
             sDesc = sDesc.replace('<br />', '').replace('&apos;', '\'')
-    except:
+    except BaseException:
         pass
 
     sPattern = 'line-height:200px;font-size:26px;text-align:center;">L.anime est licencié<.p>'
@@ -332,7 +344,7 @@ def showSaison():
         oGui.addText(SITE_IDENTIFIER, '[COLOR red]Animé licencié[/COLOR]')
 
     else:
-        sPattern = '<li class="saison">.+?(\d+)<\/li>'
+        sPattern = '<li class="saison">.+?(\\d+)<\\/li>'
         aResult = oParser.parse(sHtmlContent, sPattern)
         if aResult[0]:
             oOutputParameterHandler = cOutputParameterHandler()
@@ -349,7 +361,14 @@ def showSaison():
                 oOutputParameterHandler.addParameter('sThumb', sThumb)
                 oOutputParameterHandler.addParameter('sDesc', sDesc)
 
-                oGui.addSeason(SITE_IDENTIFIER, 'showEpisode', sDisplayTitle, 'series.png', sThumb, sDesc, oOutputParameterHandler)
+                oGui.addSeason(
+                    SITE_IDENTIFIER,
+                    'showEpisode',
+                    sDisplayTitle,
+                    'series.png',
+                    sThumb,
+                    sDesc,
+                    oOutputParameterHandler)
 
     oGui.setEndOfDirectory()
 
@@ -378,7 +397,7 @@ def showEpisode():
         sStart = 'class="saison">saison ' + sNumSaison
         sEnd = '<div class="saison-container">'
         sHtmlContent = oParser.abParse(sHtmlContent, sStart, sEnd)
-        sPattern = '<a href="(https://www\.adkami\.com[^"]+)"[^<>]+>([^<]+)</a></li>'
+        sPattern = '<a href="(https://www\\.adkami\\.com[^"]+)"[^<>]+>([^<]+)</a></li>'
         aResult = oParser.parse(sHtmlContent, sPattern)
         if aResult[0]:
             oOutputParameterHandler = cOutputParameterHandler()
@@ -404,7 +423,14 @@ def showEpisode():
                 oOutputParameterHandler.addParameter('sDesc', sDesc)
                 oOutputParameterHandler.addParameter('sLang', sLang)
 
-                oGui.addEpisode(SITE_IDENTIFIER, 'showHosters', sDisplayTitle, 'series.png', sThumb, sDesc, oOutputParameterHandler)
+                oGui.addEpisode(
+                    SITE_IDENTIFIER,
+                    'showHosters',
+                    sDisplayTitle,
+                    'series.png',
+                    sThumb,
+                    sDesc,
+                    oOutputParameterHandler)
 
     oGui.setEndOfDirectory()
 
@@ -427,7 +453,8 @@ def showHosters():
         sPattern = 'class="video-video">.+?src="([^"]+)"'
         aResult = oParser.parse(sHtmlContent, sPattern)
 
-    if "crunchyroll" in str(sHtmlContent) or "wakanim" in str(sHtmlContent) or "animedigitalnetwork" in str(sHtmlContent):
+    if "crunchyroll" in str(sHtmlContent) or "wakanim" in str(
+            sHtmlContent) or "animedigitalnetwork" in str(sHtmlContent):
         sPattern = 'encrypted-media.+?src="([^"]+)"'
         aResult2 = oParser.parse(sHtmlContent, sPattern)
 
@@ -481,7 +508,7 @@ def decodex(x):
                 t += chr(int(175 ^ ord(y[0])) - ord(r[a]))
             a = 0 if a > len(r) - 2 else a + 1
         return t
-    except:
+    except BaseException:
         return ''
 
     return ''

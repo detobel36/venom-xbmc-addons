@@ -33,7 +33,7 @@ SERIE_DISNEY = (URL_MAIN + 'networks/disney/', 'showMovies')
 SERIE_APPLE = (URL_MAIN + 'networks/apple-tv/', 'showMovies')
 SERIE_YOUTUBE = (URL_MAIN + 'networks/youtube-premium/', 'showMovies')
 SERIE_ARTE = (URL_MAIN + 'networks/arte/', 'showMovies')
-#SERIE_ANNEES = (True, 'showSeriesYears')
+# SERIE_ANNEES = (True, 'showSeriesYears')
 
 URL_SEARCH = (URL_MAIN + '?s=', 'showMovies')
 URL_SEARCH_MOVIES = (URL_MAIN + '?sType=movie&s=', 'showMovies')
@@ -150,7 +150,12 @@ def showNetwork():
 
     oOutputParameterHandler.addParameter('siteUrl', SERIE_YOUTUBE[0])
     oOutputParameterHandler.addParameter('sTmdbId', 1436)    # Utilisé par TMDB
-    oGui.addNetwork(SITE_IDENTIFIER, SERIE_YOUTUBE[1], 'Séries (YouTube Originals)', 'host.png', oOutputParameterHandler)
+    oGui.addNetwork(
+        SITE_IDENTIFIER,
+        SERIE_YOUTUBE[1],
+        'Séries (YouTube Originals)',
+        'host.png',
+        oOutputParameterHandler)
 
     oOutputParameterHandler.addParameter('siteUrl', SERIE_ARTE[0])
     oOutputParameterHandler.addParameter('sTmdbId', 1628)    # Utilisé par TMDB
@@ -245,7 +250,7 @@ def showMovies(sSearch=''):
         sUrl = oInputParameterHandler.getValue('siteUrl')
         sType = oInputParameterHandler.getValue('sType')
 
-    sPattern = 'data-movie-id="\d+".+?href="([^"]+).+?oldtitle="([^"]+).+?data-original="([^ "]+).+?desc"><p>([^<]+)'
+    sPattern = 'data-movie-id="\\d+".+?href="([^"]+).+?oldtitle="([^"]+).+?data-original="([^ "]+).+?desc"><p>([^<]+)'
 
     oRequestHandler = cRequestHandler(sUrl)
     sHtmlContent = oRequestHandler.request()
@@ -268,13 +273,13 @@ def showMovies(sSearch=''):
                 continue    # Filtre de recherche
 
             sThumb = aEntry[2]
-            sThumb = re.sub('/w\d+', '/w342', sThumb)
+            sThumb = re.sub('/w\\d+', '/w342', sThumb)
 
             sDesc = aEntry[3]
             try:
                 sDesc = unicode(sDesc, 'utf-8')  # converti en unicode
                 sDesc = oUtil.unescape(sDesc).encode('utf-8')    # retire les balises HTML
-            except:
+            except BaseException:
                 pass
 
             oOutputParameterHandler.addParameter('siteUrl', sUrl)
@@ -292,14 +297,14 @@ def showMovies(sSearch=''):
         if sNextPage:
             oOutputParameterHandler = cOutputParameterHandler()
             oOutputParameterHandler.addParameter('siteUrl', sNextPage)
-            oGui.addNext(SITE_IDENTIFIER, 'showMovies',  'Page ' + sPaging, oOutputParameterHandler)
+            oGui.addNext(SITE_IDENTIFIER, 'showMovies', 'Page ' + sPaging, oOutputParameterHandler)
 
         oGui.setEndOfDirectory()
 
 
 def __checkForNextPage(sHtmlContent):
     oParser = cParser()
-    sPattern = '<li class=\'active\'>.+?href=\'([^\']+).+?/(\d+)/\'>Dernière'
+    sPattern = '<li class=\'active\'>.+?href=\'([^\']+).+?/(\\d+)/\'>Dernière'
     aResult = oParser.parse(sHtmlContent, sPattern)
     if aResult[0]:
         sNextPage = aResult[1][0][0]
@@ -309,7 +314,7 @@ def __checkForNextPage(sHtmlContent):
         return sNextPage, sPaging
 
     # for the tvshows and the last page of movies
-    sPattern = "class=''>\d+</a></li><li><a rel='nofollow' class='page larger' href='([^']+).+?>(\d+)</a></li></ul"
+    sPattern = "class=''>\\d+</a></li><li><a rel='nofollow' class='page larger' href='([^']+).+?>(\\d+)</a></li></ul"
     aResult = oParser.parse(sHtmlContent, sPattern)
     if aResult[0]:
         sNextPage = aResult[1][0][0]
@@ -353,7 +358,6 @@ def showSaisons():
     oGui.setEndOfDirectory()
 
 
-
 def showEpisodes():
     oGui = cGui()
     oInputParameterHandler = cInputParameterHandler()
@@ -384,7 +388,7 @@ def showEpisodes():
 
             sUrl = aEntry[1]
             SxE = aEntry[2]
-            sTitle = sMovieTitle #+ ' ' + sSaison
+            sTitle = sMovieTitle  # + ' ' + sSaison
             sTitle += ' ' + SxE
 
             oOutputParameterHandler.addParameter('siteUrl', sUrl)
@@ -412,13 +416,13 @@ def showHosters():
     if aResult[0]:
 
         tab = aResult[1]
-        n = len(tab)//3
+        n = len(tab) // 3
 
         for i in range(n):
 
             sHosterUrl = tab[i][0]
-            sLang = tab[2*i+n][1]
-            sQual = tab[2*i+(n+1)][1]
+            sLang = tab[2 * i + n][1]
+            sQual = tab[2 * i + (n + 1)][1]
 
             sTitle = ('%s [%s] (%s)') % (sMovieTitle, sQual, sLang)
 
@@ -426,7 +430,7 @@ def showHosters():
             # necessaire pour userload.
             if 'userload' in sHosterUrl:
                 sHosterUrl = sHosterUrl + "|Referer=" + URL_MAIN
-        
+
             oHoster = cHosterGui().checkHoster(sHosterUrl)
             if oHoster:
                 oHoster.setDisplayName(sTitle)

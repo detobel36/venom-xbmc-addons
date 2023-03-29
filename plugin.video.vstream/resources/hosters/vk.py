@@ -18,7 +18,7 @@ class cHoster(iHoster):
         oRequest = cRequestHandler(self._url)
         sHtmlContent = oRequest.request()
 
-        sPattern = '"url.+?":"(.+?)\.(\d+).mp4'
+        sPattern = '"url.+?":"(.+?)\\.(\\d+).mp4'
 
         oParser = cParser()
         aResult = oParser.parse(sHtmlContent, sPattern)

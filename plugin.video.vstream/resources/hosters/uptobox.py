@@ -82,7 +82,8 @@ class cHoster(iHoster):
             elif statusCode == 7:  # Invalid parameter
                 status = dict_liens["message"] + ' : ' + dict_liens["data"]
             else:
-                status = 'Erreur inconnue : %s, message = %s : %s' % (str(statusCode), dict_liens["message"], str(dict_liens["data"]))
+                status = 'Erreur inconnue : %s, message = %s : %s' % (
+                    str(statusCode), dict_liens["message"], str(dict_liens["data"]))
         except Exception as e:
             status = e
 

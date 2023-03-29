@@ -1,19 +1,18 @@
 # -*- coding: utf-8 -*-
 # vStream https://github.com/Kodi-vStream/venom-xbmc-addons
+from resources.lib.util import Unquote
+from resources.lib.comaddon import progress
+from resources.lib.parser import cParser
+from resources.lib.handler.requestHandler import cRequestHandler
+from resources.lib.handler.outputParameterHandler import cOutputParameterHandler
+from resources.lib.handler.inputParameterHandler import cInputParameterHandler
+from resources.lib.gui.gui import cGui
+from resources.lib.gui.hoster import cHosterGui
+import base64
+import requests
+import re
 return False  # 09/02/22 - NPAI
 
-import re
-import requests
-import base64
-
-from resources.lib.gui.hoster import cHosterGui
-from resources.lib.gui.gui import cGui
-from resources.lib.handler.inputParameterHandler import cInputParameterHandler
-from resources.lib.handler.outputParameterHandler import cOutputParameterHandler
-from resources.lib.handler.requestHandler import cRequestHandler
-from resources.lib.parser import cParser
-from resources.lib.comaddon import progress
-from resources.lib.util import Unquote
 
 UA = 'Mozilla/5.0 (Windows NT 6.1; Win64; x64; rv:56.0) Gecko/20100101 Firefox/56.0'
 
@@ -128,7 +127,12 @@ def showMenuMovies():
     oGui.addDir(SITE_IDENTIFIER, MOVIE_VOSTFR[1], 'Films en VOSTFR', 'vostfr.png', oOutputParameterHandler)
 
     oOutputParameterHandler.addParameter('siteUrl', MOVIE_VOSTFR_MKV[0])
-    oGui.addDir(SITE_IDENTIFIER, MOVIE_VOSTFR_MKV[1], 'Films en VOSTFR (format mkv)', 'films.png', oOutputParameterHandler)
+    oGui.addDir(
+        SITE_IDENTIFIER,
+        MOVIE_VOSTFR_MKV[1],
+        'Films en VOSTFR (format mkv)',
+        'films.png',
+        oOutputParameterHandler)
 
     oOutputParameterHandler.addParameter('siteUrl', MOVIE_CAM[0])
     oGui.addDir(SITE_IDENTIFIER, MOVIE_CAM[1], 'Films (CAM)', 'films.png', oOutputParameterHandler)
@@ -171,13 +175,28 @@ def showMenuSeries():
     oGui.addDir(SITE_IDENTIFIER, SERIE_VOSTFRS_720[1], 'Séries 720p (VOSTFR)', 'series.png', oOutputParameterHandler)
 
     oOutputParameterHandler.addParameter('siteUrl', PACK_SERIE_VOSTFRS[0])
-    oGui.addDir(SITE_IDENTIFIER, PACK_SERIE_VOSTFRS[1], 'Saison complète (VOSTFR)', 'series.png', oOutputParameterHandler)
+    oGui.addDir(
+        SITE_IDENTIFIER,
+        PACK_SERIE_VOSTFRS[1],
+        'Saison complète (VOSTFR)',
+        'series.png',
+        oOutputParameterHandler)
 
     oOutputParameterHandler.addParameter('siteUrl', PACK_SERIE_VOSTFRS_720[0])
-    oGui.addDir(SITE_IDENTIFIER, PACK_SERIE_VOSTFRS_720[1], 'Saison complet en 720p (VOSTFR)', 'series.png', oOutputParameterHandler)
+    oGui.addDir(
+        SITE_IDENTIFIER,
+        PACK_SERIE_VOSTFRS_720[1],
+        'Saison complet en 720p (VOSTFR)',
+        'series.png',
+        oOutputParameterHandler)
 
     oOutputParameterHandler.addParameter('siteUrl', PACK_SERIE_VOSTFRS_1080[0])
-    oGui.addDir(SITE_IDENTIFIER, PACK_SERIE_VOSTFRS_1080[1], 'Saison complet en 1080p (VOSTFR)', 'series.png', oOutputParameterHandler)
+    oGui.addDir(
+        SITE_IDENTIFIER,
+        PACK_SERIE_VOSTFRS_1080[1],
+        'Saison complet en 1080p (VOSTFR)',
+        'series.png',
+        oOutputParameterHandler)
 
     oGui.setEndOfDirectory()
 
@@ -274,7 +293,7 @@ def showMovies(sSearch=''):
     oRequestHandler = cRequestHandler(sUrl)
     oRequestHandler.addHeaderEntry('User-Agent', UA)
     sHtmlContent = oRequestHandler.request()
-    sPattern = 'th-in" href="([^"]+).+?src="([^"]+)" alt="([^"]+).+?th-tip-meta.+?(?:|<span>([^\D]+).+?)#aaa;">([^<]+)'
+    sPattern = 'th-in" href="([^"]+).+?src="([^"]+)" alt="([^"]+).+?th-tip-meta.+?(?:|<span>([^\\D]+).+?)#aaa;">([^<]+)'
 
     aResult = oParser.parse(sHtmlContent, sPattern)
 
@@ -317,15 +336,50 @@ def showMovies(sSearch=''):
             oOutputParameterHandler.addParameter('sYear', sYear)
 
             if sMisc:
-                oGui.addMisc(SITE_IDENTIFIER, 'showSeriesHosters', sDisplayTitle, '', sThumb, sDesc, oOutputParameterHandler)
-            elif 'animes' in sUrl and not 'films' in sUrl:
-                oGui.addAnime(SITE_IDENTIFIER, 'showSeriesHosters', sDisplayTitle, '', sThumb, sDesc, oOutputParameterHandler)
+                oGui.addMisc(
+                    SITE_IDENTIFIER,
+                    'showSeriesHosters',
+                    sDisplayTitle,
+                    '',
+                    sThumb,
+                    sDesc,
+                    oOutputParameterHandler)
+            elif 'animes' in sUrl and 'films' not in sUrl:
+                oGui.addAnime(
+                    SITE_IDENTIFIER,
+                    'showSeriesHosters',
+                    sDisplayTitle,
+                    '',
+                    sThumb,
+                    sDesc,
+                    oOutputParameterHandler)
             elif '/series/' in sUrl or 'emissions-tv' in sUrl:
-                oGui.addTV(SITE_IDENTIFIER, 'showSeriesHosters', sDisplayTitle, '', sThumb, sDesc, oOutputParameterHandler)
+                oGui.addTV(
+                    SITE_IDENTIFIER,
+                    'showSeriesHosters',
+                    sDisplayTitle,
+                    '',
+                    sThumb,
+                    sDesc,
+                    oOutputParameterHandler)
             elif '-saison-' in sUrl2:
-                oGui.addTV(SITE_IDENTIFIER, 'showSeriesHosters', sDisplayTitle, '', sThumb, sDesc, oOutputParameterHandler)
+                oGui.addTV(
+                    SITE_IDENTIFIER,
+                    'showSeriesHosters',
+                    sDisplayTitle,
+                    '',
+                    sThumb,
+                    sDesc,
+                    oOutputParameterHandler)
             else:
-                oGui.addMovie(SITE_IDENTIFIER, 'showMoviesLinks', sDisplayTitle, '', sThumb, sDesc, oOutputParameterHandler)
+                oGui.addMovie(
+                    SITE_IDENTIFIER,
+                    'showMoviesLinks',
+                    sDisplayTitle,
+                    '',
+                    sThumb,
+                    sDesc,
+                    oOutputParameterHandler)
 
         progress_.VSclose(progress_)
 
@@ -349,7 +403,10 @@ def __checkForNextPage(sUrl, sHtmlContent):
         pageNext = 2
 
     try:
-        extractPageList = re.search('<div class="navigation">(.+?)</div>', sHtmlContent, re.MULTILINE | re.DOTALL).group(1)
+        extractPageList = re.search(
+            '<div class="navigation">(.+?)</div>',
+            sHtmlContent,
+            re.MULTILINE | re.DOTALL).group(1)
 
         oParser = cParser()
         sPattern = '<a href="([^"]+)">' + str(pageNext) + '</a>'
@@ -519,7 +576,7 @@ def showSeriesHosters():
         for aEntry in aResult[1]:
             if aEntry[0]:
                 sHoster = aEntry[0]
-                oGui.addText(SITE_IDENTIFIER, '[COLOR red]' + re.sub('\.\w+', '', sHoster) + '[/COLOR]')
+                oGui.addText(SITE_IDENTIFIER, '[COLOR red]' + re.sub('\\.\\w+', '', sHoster) + '[/COLOR]')
 
             else:
                 sUrl2 = aEntry[1]
@@ -538,7 +595,14 @@ def showSeriesHosters():
                     oOutputParameterHandler.addParameter('sMovieTitle', sTitle)
                     oOutputParameterHandler.addParameter('sHost', sHoster)
                     oOutputParameterHandler.addParameter('sThumb', sThumb)
-                    oGui.addEpisode(SITE_IDENTIFIER, 'Display_protected_link', sTitle, '', sThumb, sDesc, oOutputParameterHandler)
+                    oGui.addEpisode(
+                        SITE_IDENTIFIER,
+                        'Display_protected_link',
+                        sTitle,
+                        '',
+                        sThumb,
+                        sDesc,
+                        oOutputParameterHandler)
 
         oGui.setEndOfDirectory()
     else:   # certains films mals classés apparaissent dans les séries
@@ -571,7 +635,7 @@ def Display_protected_link():
 
     try:
         sHosterUrl = sHosterUrl.decode('utf-8')
-    except:
+    except BaseException:
         pass
 
     oHoster = cHosterGui().checkHoster(sHosterUrl)

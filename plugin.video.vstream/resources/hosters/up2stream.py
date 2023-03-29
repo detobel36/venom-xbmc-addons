@@ -19,14 +19,14 @@ class cHoster(iHoster):
         sHtmlContent = oRequest.request()
 
         oParser = cParser()
-        sPattern = '(eval\(function\(p,a,c,k,e(?:.|\s)+?\))<\/script>'
+        sPattern = '(eval\\(function\\(p,a,c,k,e(?:.|\\s)+?\\))<\\/script>'
 
         aResult = oParser.parse(sHtmlContent, sPattern)
 
         if aResult[0] is True:
             sHtmlContent = cPacker().unpack(aResult[1][0])
 
-        sPattern = '\("src","([^"]+)"\)'
+        sPattern = '\\("src","([^"]+)"\\)'
         aResult = oParser.parse(sHtmlContent, sPattern)
         if aResult[0]:
             api_call = aResult[1][0]

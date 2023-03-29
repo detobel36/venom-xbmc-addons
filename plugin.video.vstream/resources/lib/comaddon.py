@@ -36,7 +36,7 @@ class addon(xbmcaddon.Addon):
 
 L'utilisation de subclass peut provoquer des fuites de mémoire, signalé par ce message :
 
-the python script "\plugin.video.vstream\default.py" has left several classes in memory that we couldn't clean up. The classes include: class XBMCAddon::xbmcaddon::Addon
+the python script "\\plugin.video.vstream\\default.py" has left several classes in memory that we couldn't clean up. The classes include: class XBMCAddon::xbmcaddon::Addon
 
 # https://stackoverflow.com/questions/26588266/xbmc-addon-memory-leak
 """
@@ -61,7 +61,10 @@ class addon:
         return xbmcaddon.Addon(self.addonId).getAddonInfo(info) if self.addonId else ADDONVS.getAddonInfo(info)
 
     def VSlang(self, lang):
-        return VSPath(xbmcaddon.Addon(self.addonId).getLocalizedString(lang)) if self.addonId else VSPath(ADDONVS.getLocalizedString(lang))
+        return VSPath(
+            xbmcaddon.Addon(
+                self.addonId).getLocalizedString(lang)) if self.addonId else VSPath(
+            ADDONVS.getLocalizedString(lang))
 
 
 """
@@ -117,7 +120,8 @@ class dialog:
         return self.DIALOG.notification(str(title), str(desc), xbmcgui.NOTIFICATION_INFO, iseconds, sound)
 
     def VSerror(self, e):
-        return self.DIALOG.notification('vStream', 'Erreur: ' + str(e), xbmcgui.NOTIFICATION_ERROR, 2000), VSlog('Erreur: ' + str(e))
+        return self.DIALOG.notification('vStream', 'Erreur: ' + str(e),
+                                        xbmcgui.NOTIFICATION_ERROR, 2000), VSlog('Erreur: ' + str(e))
 
     def VStextView(self, desc, title='vStream'):
         return self.DIALOG.textviewer(title, desc)
@@ -155,6 +159,8 @@ class empty:
         return 100  # simuler la fin de la progression
 
 # Basé sur UrlResolver
+
+
 class CountdownDialog(object):
     __INTERVALS = 5
 
@@ -257,10 +263,10 @@ class progress:
         if dlgId != 9999 and dlgId != 10138:  # 9999 = None
             return empty()
 
-        if self.PROGRESS == None:
+        if self.PROGRESS is None:
             if not title:
                 title = addon().VSlang(30140)
-            
+
             if large:
                 self.PROGRESS = xbmcgui.DialogProgress()
             elif ADDONVS.getSetting('spinner_small') == 'true':
@@ -279,15 +285,15 @@ class progress:
             return
 
         if not text:
-            text= addon().VSlang(30140)
+            text = addon().VSlang(30140)
 
         self.COUNT += 1
         iPercent = int(float(self.COUNT * 100) / total)
         text += ' : ' + str(self.COUNT) + '/' + str(total) + '\n'
         if isinstance(self.PROGRESS, xbmcgui.DialogProgress):
-            self.PROGRESS.update(iPercent, text )
+            self.PROGRESS.update(iPercent, text)
         else:
-            self.PROGRESS.update(iPercent, message = text )
+            self.PROGRESS.update(iPercent, message=text)
 
     def iscanceled(self):
         if isinstance(self.PROGRESS, xbmcgui.DialogProgress):
@@ -369,7 +375,7 @@ def VSlog(e, level=xbmc.LOGDEBUG):
                 level = xbmc.LOGNOTICE
         xbmc.log('\t[PLUGIN] vStream: ' + str(e), level)
 
-    except:
+    except BaseException:
         pass
 
 
@@ -394,7 +400,7 @@ def isKrypton():
             return True
         else:
             return False
-    except:
+    except BaseException:
         return False
 
 
@@ -405,7 +411,7 @@ def isMatrix():
             return True
         else:
             return False
-    except:
+    except BaseException:
         return False
 
 
@@ -416,7 +422,7 @@ def isNexus():
             return True
         else:
             return False
-    except:
+    except BaseException:
         return False
 
 
@@ -448,7 +454,7 @@ def VSProfil():
     return name
 
 
-# Gestion des sources : activer/désactiver, libellé, url, ... 
+# Gestion des sources : activer/désactiver, libellé, url, ...
 class siteManager:
 
     SITES = 'sites'
@@ -457,18 +463,18 @@ class siteManager:
     URL_MAIN = 'url'
 
     def __init__(self):
-        
+
         # Propriétés par défaut
         self.defaultPath = VSPath('special://home/addons/plugin.video.vstream/resources/sites.json')
         self.defaultData = None
 
-        # Propriétés selon le profil        
+        # Propriétés selon le profil
         name = VSProfil()
         if name == 'Master user':   # Le cas par defaut
             path = VSPath('special://home/userdata/addon_data/plugin.video.vstream/sites.json')
         else:
             path = VSPath('special://home/userdata/profiles/' + name + '/addon_data/plugin.video.vstream/sites.json')
-        
+
         # Résolution du chemin
         try:
             self.propertiesPath = VSPath(path).decode('utf-8')
@@ -482,23 +488,23 @@ class siteManager:
             # le fichier n'existe pas, on le crée à partir des settings par défaut
             xbmcvfs.copy(self.defaultPath, path)
             self.data = json.load(open(self.propertiesPath))
-            
 
     # sites désactivé par la team
+
     def isEnable(self, sourceName):
         return self.getDefaultProperty(sourceName, self.ACTIVE) == 'True'
 
-    
     # sites désactivé par l'utilisateur
+
     def isActive(self, sourceName):
         return self.getProperty(sourceName, self.ACTIVE) == 'True'
-    
+
     def setActive(self, sourceName, state):
         self.setProperty(sourceName, self.ACTIVE, state)
 
     def getUrlMain(self, sourceName):
         return str(self.getDefaultProperty(sourceName, self.URL_MAIN))
-    
+
     def disableAll(self):
         for sourceName in self.data[self.SITES]:
             self.setActive(sourceName, False)
@@ -509,13 +515,11 @@ class siteManager:
             self.setActive(sourceName, True)
         return
 
-
     def getDefaultProperty(self, sourceName, propName):
         defaultProps = self._getDefaultProp(sourceName)
         if propName not in defaultProps:
             return False
         return defaultProps.get(propName)
-
 
     def getProperty(self, sourceName, propName):
         sourceData = self._getDataSource(sourceName)
@@ -534,7 +538,6 @@ class siteManager:
             self.save()
             return value
 
-
     def setProperty(self, sourceName, propName, value):
         sourceData = self._getDataSource(sourceName)
         if sourceData:
@@ -549,7 +552,7 @@ class siteManager:
 
         # userSettings
         sourceData = self.data[self.SITES].get(sourceName)
-        
+
         # pas de user Settings, on recherche dans les default Settings
         if not sourceData:
             sourceData = self._getDefaultProp(sourceName)
@@ -558,8 +561,8 @@ class siteManager:
             if sourceData:
                 self.data[self.SITES][sourceName] = sourceData
 
-        return sourceData 
-        
+        return sourceData
+
     # Récupérer les propriétés par défaut d'une source
     def _getDefaultProp(self, sourceName):
 
@@ -568,14 +571,15 @@ class siteManager:
             self.defaultData = json.load(open(self.defaultPath))
 
         # Retrouver la prop par défaut
-        sourceData = self.defaultData[self.SITES].get(sourceName) if self.defaultData and self.SITES in self.defaultData else None
-        
+        sourceData = self.defaultData[self.SITES].get(
+            sourceName) if self.defaultData and self.SITES in self.defaultData else None
+
         # pas de valeurs par défaut, on en crée à la volée
         if not sourceData:
             return {}
 
         return sourceData
-    
+
     # Sauvegarder les propriétés modifiées
     def save(self):
         with open(self.propertiesPath, 'w') as f:
@@ -586,7 +590,6 @@ class siteManager:
         with open(self.defaultPath, 'w') as f:
             f.write(json.dumps(self.defaultData, indent=4))
 
-    
 
 class addonManager:
     # Demande l'installation d'un addon

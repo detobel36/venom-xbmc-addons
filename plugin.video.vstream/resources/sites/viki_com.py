@@ -16,7 +16,7 @@ from resources.lib.handler.outputParameterHandler import cOutputParameterHandler
 from resources.lib.handler.requestHandler import cRequestHandler
 from resources.lib.util import cUtil
 
-#_DEVICE_ID = '86085977d'  # used for android api
+# _DEVICE_ID = '86085977d'  # used for android api
 # inspiré de github.com / yt-dlp / yt-dlp / blob / master / yt_dlp / extractor / viki.py
 _DEVICE_ID = '112395910d'
 _APP = '100005a'
@@ -161,32 +161,33 @@ def showMovies(sSearch=''):
             if jsonrsp['response'][movie]['type'] == "movie":
                 try:
                     sTitle = jsonrsp['response'][movie]['container']['titles']['fr']
-                except:
+                except BaseException:
                     sTitle = jsonrsp['response'][movie]['container']['titles']['en']
 
                 try:
                     sThumb = jsonrsp['response'][movie]['container']['images']['atv_cover']['url']
-                except:
+                except BaseException:
                     sThumb = jsonrsp['response'][movie]['container']['images']['poster']['url']
 
                 sUrl2 = jsonrsp['response'][movie]['id']
 
             else:
-                sUrl2 = URL_API + 'series/' + jsonrsp['response'][movie]['id'] + '/episodes.json?page=1&per_page=50&app=' + _APP + '&t=' + str(timestamp)
+                sUrl2 = URL_API + 'series/' + jsonrsp['response'][movie]['id'] + \
+                    '/episodes.json?page=1&per_page=50&app=' + _APP + '&t=' + str(timestamp)
 
                 try:
                     sTitle = jsonrsp['response'][movie]['titles']['fr']
-                except:
+                except BaseException:
                     sTitle = jsonrsp['response'][movie]['titles']['en']
 
                 try:
                     sThumb = jsonrsp['response'][movie]['images']['atv_cover']['url']
-                except:
+                except BaseException:
                     sThumb = jsonrsp['response'][movie]['images']['poster']['url']
 
             try:
                 sDesc = str(jsonrsp['response'][movie]['descriptions']['fr'])
-            except:
+            except BaseException:
                 sDesc = ''
 
             oOutputParameterHandler.addParameter('siteUrl', sUrl2)
@@ -247,10 +248,11 @@ def showSaisons():
                 et = ''
                 try:
                     et = jsonrsp['response'][episode]['titles']['en']
-                except:
+                except BaseException:
                     pass
 
-                sTitle = jsonrsp['response'][episode]['container']['titles']['en'] + ' Episode ' + str(jsonrsp['response'][episode]['number'])
+                sTitle = jsonrsp['response'][episode]['container']['titles']['en'] + \
+                    ' Episode ' + str(jsonrsp['response'][episode]['number'])
                 sUrl = jsonrsp['response'][episode]['id']
                 sThumb = jsonrsp['response'][episode]['images']['poster']['url'] + '@' + et
 
@@ -262,7 +264,7 @@ def showSaisons():
             else:
                 pass
 
-        except:
+        except BaseException:
             pass
 
     if len(jsonrsp['response']) == 0:
@@ -293,7 +295,8 @@ def showMovieGenre():
     oOutputParameterHandler = cOutputParameterHandler()
     for genre in range(0, len(jsonrsp)):
         typeGenre = jsonrsp[genre]['name']['fr']  # or jsonrsp[genre]['name']['en']
-        urlGenre = URL_API + sGenre + '.json?sort=newest_video&page=1&per_page=50&app=' + _APP + '&genre=' + jsonrsp[genre]['id'] + '&t='
+        urlGenre = URL_API + sGenre + '.json?sort=newest_video&page=1&per_page=50&app=' + \
+            _APP + '&genre=' + jsonrsp[genre]['id'] + '&t='
 
         oOutputParameterHandler.addParameter('siteUrl', urlGenre)
         oGui.addDir(SITE_IDENTIFIER, 'showMovies', typeGenre.capitalize(), 'genres.png', oOutputParameterHandler)
@@ -313,7 +316,8 @@ def showSerieGenre():
 
     oOutputParameterHandler = cOutputParameterHandler()
     for genre in range(0, len(jsonrsp)):
-        urlGenre = URL_API + sGenre + '.json?sort=newest_video&page=1&per_page=50&app=' + _APP + '&genre=' + jsonrsp[genre]['id'] + '&t='
+        urlGenre = URL_API + sGenre + '.json?sort=newest_video&page=1&per_page=50&app=' + \
+            _APP + '&genre=' + jsonrsp[genre]['id'] + '&t='
         typeGenre = jsonrsp[genre]['name']['fr']
 
         oOutputParameterHandler.addParameter('siteUrl', urlGenre)
@@ -352,8 +356,9 @@ def showPays(genre):
 def SIGN(pth, version=4):
     timestamp = int(time.time())
     rawtxt = '/v%d/%s?drms=dt3&device_id=%s&app=%s' % (version, pth, _DEVICE_ID, _APP)
-    sig = hmac.new(_APP_SECRET.encode('ascii'), ('%s&t=%d' % (rawtxt, timestamp)).encode('ascii'), hashlib.sha1).hexdigest()
-    
+    sig = hmac.new(_APP_SECRET.encode('ascii'), ('%s&t=%d' %
+                                                 (rawtxt, timestamp)).encode('ascii'), hashlib.sha1).hexdigest()
+
     # syntaxe reservée au Python 3
     # rawtxt = f'/v{version}/{pth}?drms=dt3&device_id={_DEVICE_ID}&app={_APP}'
     # sig = hmac.new(_APP_SECRET.encode('ascii'), f'{rawtxt}&t={timestamp}'.encode('ascii'), hashlib.sha1).hexdigest()
@@ -381,7 +386,7 @@ def GET_URLS_STREAM(url):
 
     try:
         jsonrsp = jsonrsp['main']
-    except:
+    except BaseException:
         dialog().VSinfo("Contenu payant", 'An error occurred')
         return False
 

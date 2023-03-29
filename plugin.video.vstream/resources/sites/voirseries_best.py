@@ -42,10 +42,20 @@ def load():
     oGui.addDir(SITE_IDENTIFIER, SERIE_NEWS[1], 'Séries (Derniers ajouts)', 'news.png', oOutputParameterHandler)
 
     oOutputParameterHandler.addParameter('siteUrl', SERIE_NEWS_SAISONS[0])
-    oGui.addDir(SITE_IDENTIFIER, SERIE_NEWS_SAISONS[1], 'Séries (Dernières saisons)', 'news.png', oOutputParameterHandler)
+    oGui.addDir(
+        SITE_IDENTIFIER,
+        SERIE_NEWS_SAISONS[1],
+        'Séries (Dernières saisons)',
+        'news.png',
+        oOutputParameterHandler)
 
     oOutputParameterHandler.addParameter('siteUrl', SERIE_NEWS_EPISODES[0])
-    oGui.addDir(SITE_IDENTIFIER, SERIE_NEWS_EPISODES[1], 'Séries (Derniers épisodes)', 'news.png', oOutputParameterHandler)
+    oGui.addDir(
+        SITE_IDENTIFIER,
+        SERIE_NEWS_EPISODES[1],
+        'Séries (Derniers épisodes)',
+        'news.png',
+        oOutputParameterHandler)
 
     oOutputParameterHandler.addParameter('siteUrl', SERIE_GENRES[0])
     oGui.addDir(SITE_IDENTIFIER, SERIE_GENRES[1], 'Séries (Genres)', 'genres.png', oOutputParameterHandler)
@@ -100,7 +110,14 @@ def showAlpha():
     for sTitle, sUrl in liste:
 
         oOutputParameterHandler.addParameter('siteUrl', URL_MAIN + 'liste/' + sUrl + '/')
-        oGui.addDir(SITE_IDENTIFIER, 'showSeries', 'Lettre [COLOR coral]' + sTitle + '[/COLOR]', 'az.png', oOutputParameterHandler)
+        oGui.addDir(
+            SITE_IDENTIFIER,
+            'showSeries',
+            'Lettre [COLOR coral]' +
+            sTitle +
+            '[/COLOR]',
+            'az.png',
+            oOutputParameterHandler)
 
     oGui.setEndOfDirectory()
 
@@ -143,9 +160,9 @@ def showSaisonsEpisodesNews():
     sHtmlContent = oParser.abParse(sHtmlContent, sStart, sEnd)
 
     if sUrl == SERIE_NEWS_EPISODES[0]:  # ne pas réduire les regex
-        sPattern = '<li>\s*<a href=([^ ]+) title=".+?>([^<]+)<span> <i class="langue ([^"]+)'
+        sPattern = '<li>\\s*<a href=([^ ]+) title=".+?>([^<]+)<span> <i class="langue ([^"]+)'
     else:
-        sPattern = '<li>\s*<a href=([^ ]+) title="([^"]+)">[^<]+<span class'
+        sPattern = '<li>\\s*<a href=([^ ]+) title="([^"]+)">[^<]+<span class'
 
     aResult = oParser.parse(sHtmlContent, sPattern)
 
@@ -197,7 +214,7 @@ def showSeries(sSearch=''):
             sUrl = aEntry[0]
             sThumb = aEntry[1]
             sTitle = aEntry[2]
-            
+
             if sSearch:
                 if not oUtil.CheckOccurence(sSearchText, sTitle):
                     continue    # Filtre de recherche
@@ -222,7 +239,7 @@ def showSeries(sSearch=''):
 
 
 def __checkForNextPage(sHtmlContent):
-    sPattern = '>(\d+)</a> <a class="next page-numbers" href=([^ ]+) >Suivant'
+    sPattern = '>(\\d+)</a> <a class="next page-numbers" href=([^ ]+) >Suivant'
     oParser = cParser()
     aResult = oParser.parse(sHtmlContent, sPattern)
     if aResult[0]:
@@ -245,7 +262,7 @@ def showSaisons():
     sHtmlContent = oRequestHandler.request()
 
     sDesc = ''
-    sPattern = 'fsynopsis>\s*<p>([^<]+)'
+    sPattern = 'fsynopsis>\\s*<p>([^<]+)'
     aResult = oParser.parse(sHtmlContent, sPattern)
     if aResult[0]:
         sDesc = ('[I][COLOR grey]%s[/COLOR][/I] %s') % ('Synopsis : ', aResult[1][0])
@@ -288,12 +305,12 @@ def showEpisodes():
             sThumb = aResult[1][0]
 
     if not sDesc:
-        sPattern = 'fsynopsis>\s*<p>([^<]+)'
+        sPattern = 'fsynopsis>\\s*<p>([^<]+)'
         aResult = oParser.parse(sHtmlContent, sPattern)
         if aResult[0]:
             sDesc = ('[I][COLOR grey]%s[/COLOR][/I] %s') % ('Synopsis : ', aResult[1][0])
 
-    sPattern = 'class=saision_LI2>\s*<a href=([^ ]+).+?span>([^<]+)'
+    sPattern = 'class=saision_LI2>\\s*<a href=([^ ]+).+?span>([^<]+)'
     aResult = oParser.parse(sHtmlContent, sPattern)
 
     if not aResult[0]:
@@ -327,13 +344,13 @@ def showLinks():
     sHtmlContent = oRequest.request()
 
     if 'storage/icon/' in sThumb:
-        sPattern = 'poster image">\s*<img src="([^"]+)'
+        sPattern = 'poster image">\\s*<img src="([^"]+)'
         aResult = oParser.parse(sHtmlContent, sPattern)
         if aResult[0]:
             sThumb = aResult[1][0]
 
     if not sDesc:
-        sPattern = 'fsynopsis>\s*<p>([^<]+)'
+        sPattern = 'fsynopsis>\\s*<p>([^<]+)'
         aResult = oParser.parse(sHtmlContent, sPattern)
         if aResult[0]:
             sDesc = ('[I][COLOR grey]%s[/COLOR][/I] %s') % ('Synopsis : ', aResult[1][0])

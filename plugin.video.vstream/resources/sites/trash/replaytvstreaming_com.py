@@ -1,17 +1,17 @@
-return False # Désactivé le 08/04/2020
+from resources.lib.comaddon import progress  # , VSlog
+from resources.lib.util import cUtil
+from resources.lib.parser import cParser
+from resources.lib.handler.requestHandler import cRequestHandler
+from resources.lib.handler.outputParameterHandler import cOutputParameterHandler
+from resources.lib.handler.inputParameterHandler import cInputParameterHandler
+from resources.lib.gui.gui import cGui
+from resources.lib.gui.hoster import cHosterGui
+return False  # Désactivé le 08/04/2020
 
 # -*- coding: utf-8 -*-
 # vStream https://github.com/Kodi-vStream/venom-xbmc-addons
 #
-from resources.lib.gui.hoster import cHosterGui
-from resources.lib.gui.gui import cGui
-from resources.lib.handler.inputParameterHandler import cInputParameterHandler
-from resources.lib.handler.outputParameterHandler import cOutputParameterHandler
-from resources.lib.handler.requestHandler import cRequestHandler
-from resources.lib.parser import cParser
-from resources.lib.util import cUtil
 
-from resources.lib.comaddon import progress#, VSlog
 
 SITE_IDENTIFIER = 'replaytvstreaming_com'
 SITE_NAME = 'Replay Tv Streaming'
@@ -25,8 +25,14 @@ REPLAYTV_NEWS = (URL_MAIN, 'showMovies')
 REPLAYTV_REPLAYTV = ('http://', 'load')
 REPLAYTV_GENRES = (True, 'showGenres')
 
-URL_SEARCH = (URL_MAIN + 'index.php?do=search&subaction=search&search_start=0&full_search=0&result_from=1&story=', 'showMovies')
-URL_SEARCH_MISC = (URL_MAIN + 'index.php?do=search&subaction=search&search_start=0&full_search=0&result_from=1&story=', 'showMovies')
+URL_SEARCH = (
+    URL_MAIN +
+    'index.php?do=search&subaction=search&search_start=0&full_search=0&result_from=1&story=',
+    'showMovies')
+URL_SEARCH_MISC = (
+    URL_MAIN +
+    'index.php?do=search&subaction=search&search_start=0&full_search=0&result_from=1&story=',
+    'showMovies')
 FUNCTION_SEARCH = 'showMovies'
 
 
@@ -101,7 +107,7 @@ def showMovies(sSearch=''):
 
         oRequestHandler = cRequestHandler(sUrl)
         sHtmlContent = oRequestHandler.request()
-        sPattern = '<div class="item-box"><a class="item-link" href="([^"]+)">.+?<img src="([^"]+)".+?<div class="item-title">([^<]+)<\/div><div class="item-info clearfix">([^<]+)<\/div>'
+        sPattern = '<div class="item-box"><a class="item-link" href="([^"]+)">.+?<img src="([^"]+)".+?<div class="item-title">([^<]+)<\\/div><div class="item-info clearfix">([^<]+)<\\/div>'
 
     aResult = oParser.parse(sHtmlContent, sPattern)
 
@@ -146,7 +152,7 @@ def showMovies(sSearch=''):
 
 
 def __checkForNextPage(sHtmlContent):
-    sPattern = '<span class="pnext"><a href="([^"]+)">SUIVANT<\/a>'
+    sPattern = '<span class="pnext"><a href="([^"]+)">SUIVANT<\\/a>'
     oParser = cParser()
     aResult = oParser.parse(sHtmlContent, sPattern)
     if aResult[0]:
@@ -191,7 +197,7 @@ def showHosters():
 
             sTitle = aEntry[2]
 
-            if not 'Lecteur' in sTitle and sTest != sTitle:
+            if 'Lecteur' not in sTitle and sTest != sTitle:
                 oGui.addText(SITE_IDENTIFIER, '[COLOR olive]' + sTitle + '[/COLOR]')
                 sTest = sTitle
 

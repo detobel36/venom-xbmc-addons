@@ -14,6 +14,7 @@ from resources.lib.comaddon import VSlog
 
 import xbmcaddon
 
+
 class cHoster(iHoster):
 
     def __init__(self):
@@ -30,18 +31,18 @@ class cHoster(iHoster):
 
         try:
             xbmcaddon.Addon('plugin.video.invidious')
-        except:
+        except BaseException:
             VSlog('Plugin Invidious non installe')
             MODE = 1
 
         try:
             if (MODE == 1):
                 xbmcaddon.Addon('plugin.video.youtube')
-        except:
+        except BaseException:
             VSlog('Plugin YouTube non installe')
             return False, False
 
-        if 'plugin'  in self._url:
+        if 'plugin' in self._url:
             api_call = self._url
         else:
             videoID = self.__getIdFromUrl(self._url)
@@ -69,5 +70,5 @@ class cHoster(iHoster):
             id = str(id)
         else:
             id = sUrl
- 
+
         return id

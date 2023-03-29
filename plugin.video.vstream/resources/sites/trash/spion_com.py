@@ -1,16 +1,16 @@
 # -*- coding: utf-8 -*-
 # vStream https://github.com/Kodi-vStream/venom-xbmc-addons
 # Par jojotango
-return False
-import re
-
-from resources.lib.gui.hoster import cHosterGui
-from resources.lib.gui.gui import cGui
-from resources.lib.handler.inputParameterHandler import cInputParameterHandler
-from resources.lib.handler.outputParameterHandler import cOutputParameterHandler
-from resources.lib.handler.requestHandler import cRequestHandler
-from resources.lib.parser import cParser
 from resources.lib.comaddon import dialog
+from resources.lib.parser import cParser
+from resources.lib.handler.requestHandler import cRequestHandler
+from resources.lib.handler.outputParameterHandler import cOutputParameterHandler
+from resources.lib.handler.inputParameterHandler import cInputParameterHandler
+from resources.lib.gui.gui import cGui
+from resources.lib.gui.hoster import cHosterGui
+import re
+return False
+
 
 SITE_IDENTIFIER = 'spion_com'
 SITE_NAME = 'Spi0n'
@@ -142,7 +142,7 @@ def showMovies(sSearch=''):
                 oOutputParameterHandler.addParameter('sMovieTitle', sTitle)
                 oOutputParameterHandler.addParameter('sThumb', sPoster)
 
-                if (SPION_CENSURE == True):
+                if (SPION_CENSURE):
                     if (sCat == 'NSFW') or (sCat == 'Trash'):
                         sPoster = LOGO_CSA
                         oGui.addMisc(SITE_IDENTIFIER, 'showCensure', sTitle, '', sPoster, '', oOutputParameterHandler)

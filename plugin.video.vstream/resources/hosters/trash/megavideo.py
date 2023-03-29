@@ -6,6 +6,7 @@ from resources.lib.handler.requestHandler import cRequestHandler
 from resources.lib.parser import cParser
 from resources.hosters.hoster import iHoster
 
+
 class cHoster(iHoster):
 
     def __init__(self):
@@ -28,16 +29,16 @@ class cHoster(iHoster):
             self._url = sRealUrl
             return self.__getIdFromUrl()
 
-        return url;
+        return url
 
     def getMediaLink(self):
         oPremiumHandler = cPremiumHandler(self.getPluginIdentifier())
         if (oPremiumHandler.isPremiumModeAvailable()):
             sUsername = oPremiumHandler.getUsername()
             sPassword = oPremiumHandler.getPassword()
-            return self._getMediaLinkByPremiumUser(sUsername, sPassword);
+            return self._getMediaLinkByPremiumUser(sUsername, sPassword)
 
-        return self._getMediaLinkForGuest();
+        return self._getMediaLinkForGuest()
 
     def __getIdFromUrl(self):
         sPattern = "v=([^&]+)"
@@ -77,7 +78,6 @@ class cHoster(iHoster):
         aResult.append('')
         return aResult
 
-
     def _getMediaLinkByPremiumUser(self, sUsername, sPassword):
         oRequestHandler = cRequestHandler('http://www.megavideo.com/?s=account')
         oRequestHandler.setRequestType(cRequestHandler.REQUEST_TYPE_POST)
@@ -86,7 +86,7 @@ class cHoster(iHoster):
         oRequestHandler.addParameters('password', sPassword)
         oRequestHandler.request()
 
-        aHeader = oRequestHandler.getResponseHeader();
+        aHeader = oRequestHandler.getResponseHeader()
         sReponseCookie = aHeader.getheader("Set-Cookie")
 
         self._url = self.__getIdFromUrl()
@@ -201,7 +201,6 @@ class cHoster(iHoster):
             __reg9 = __reg12[__reg3:__reg3 + 4]
             __reg7.append(__reg9)
             __reg3 = __reg3 + 4
-
 
         __reg2 = []
         __reg3 = 0

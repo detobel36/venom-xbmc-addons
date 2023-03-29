@@ -1,16 +1,16 @@
 # -*- coding: utf-8 -*-
 # vStream https://github.com/Kodi-vStream/venom-xbmc-addons
 # source 27 https://cinemey.com/
+from resources.lib.parser import cParser
+from resources.lib.handler.requestHandler import cRequestHandler
+from resources.lib.handler.outputParameterHandler import cOutputParameterHandler
+from resources.lib.handler.inputParameterHandler import cInputParameterHandler
+from resources.lib.gui.gui import cGui
+from resources.lib.gui.hoster import cHosterGui
+import xbmc
+import re
 return False  # HS voir https://cinemay.cc/ memes films et series
 
-import re
-import xbmc
-from resources.lib.gui.hoster import cHosterGui
-from resources.lib.gui.gui import cGui
-from resources.lib.handler.inputParameterHandler import cInputParameterHandler
-from resources.lib.handler.outputParameterHandler import cOutputParameterHandler
-from resources.lib.handler.requestHandler import cRequestHandler
-from resources.lib.parser import cParser
 
 SITE_IDENTIFIER = 'cinemey'
 SITE_NAME = 'Cinemey'
@@ -171,7 +171,7 @@ def showMovies(sSearch=''):
         sHtmlContent = oRequestHandler.request()
 
     # title img year surl
-    sPattern = '<article class.+?data-url.+?title="([^"]*).+?img src=([^\s]*).+?year">([^<]+).+?href="([^"]+)'
+    sPattern = '<article class.+?data-url.+?title="([^"]*).+?img src=([^\\s]*).+?year">([^<]+).+?href="([^"]+)'
 
     aResult = oParser.parse(sHtmlContent, sPattern)
 
@@ -351,12 +351,12 @@ def showLink():
         for aEntry in aResult[1]:
             sKey = aEntry[0]
             sHost = aEntry[1].replace('www.', '').replace('embed.mystream.to', 'mystream')
-            sHost = re.sub('\.\w+', '', sHost).capitalize()
+            sHost = re.sub('\\.\\w+', '', sHost).capitalize()
 
             oHoster = oHosterGui.checkHoster(sHost)
             if not oHoster:
                 continue
-            
+
             sLang = aEntry[2].upper()
             sUrl2 = URL_MAIN + 'll/captcha?hash=' + sKey
 
@@ -386,7 +386,7 @@ def showHosters():
     oRequestHandler = cRequestHandler(sUrl)
     sHtmlContent = oRequestHandler.request()
 
-    sPattern = '<iframe.*?src=([^\s]+)'
+    sPattern = '<iframe.*?src=([^\\s]+)'
     aResult = re.findall(sPattern, sHtmlContent)
     if aResult:
         sHosterUrl = aResult[0]

@@ -1,13 +1,13 @@
-#-*- coding: utf-8 -*-
+# -*- coding: utf-8 -*-
 # https://github.com/Kodi-vStream/venom-xbmc-addons
-return false
-from resources.lib.gui.hoster import cHosterGui
-from resources.lib.gui.gui import cGui
-from resources.lib.handler.inputParameterHandler import cInputParameterHandler
-from resources.lib.handler.outputParameterHandler import cOutputParameterHandler
-from resources.lib.handler.requestHandler import cRequestHandler
-from resources.lib.comaddon import progress#, VSlog
+from resources.lib.comaddon import progress  # , VSlog
 from resources.lib.parser import cParser
+from resources.lib.handler.requestHandler import cRequestHandler
+from resources.lib.handler.outputParameterHandler import cOutputParameterHandler
+from resources.lib.handler.inputParameterHandler import cInputParameterHandler
+from resources.lib.gui.gui import cGui
+from resources.lib.gui.hoster import cHosterGui
+return false
 
 
 SITE_IDENTIFIER = 'film_vf_gratuit'
@@ -23,9 +23,10 @@ FUNCTION_SEARCH = 'showMovies'
 MOVIE_NEWS = (URL_MAIN + 'films/', 'showMovies')
 MOVIE_MOVIE = ('http://', 'load')
 MOVIE_VIEWS = (URL_MAIN + 'tendance/', 'showMovies')
-#MOVIE_NOTES = (URL_MAIN + 'evaluation/', 'showMovies') #plante kodi
+# MOVIE_NOTES = (URL_MAIN + 'evaluation/', 'showMovies') #plante kodi
 MOVIE_GENRES = (True, 'showGenres')
 MOVIE_ANNEES = (True, 'showMovieYears')
+
 
 def load():
     oGui = cGui()
@@ -56,6 +57,7 @@ def load():
 
     oGui.setEndOfDirectory()
 
+
 def showSearch():
     oGui = cGui()
 
@@ -74,7 +76,7 @@ def showGenres():
     oRequestHandler = cRequestHandler(MOVIE_NEWS[0])
     sHtmlContent = oRequestHandler.request()
 
-    sPattern = '<li class="cat-item cat-item.+?"><a href="([^"]+)".+?>([^<]+)<\/a> *<i>([^<]+)<\/i>'
+    sPattern = '<li class="cat-item cat-item.+?"><a href="([^"]+)".+?>([^<]+)<\\/a> *<i>([^<]+)<\\/i>'
     aResult = oParser.parse(sHtmlContent, sPattern)
     if aResult[0]:
         for aEntry in aResult[1]:
@@ -111,12 +113,11 @@ def showMovieYears():
     oGui.setEndOfDirectory()
 
 
-
-def showMovies(sSearch = ''):
+def showMovies(sSearch=''):
     oGui = cGui()
     oParser = cParser()
     if sSearch:
-      sUrl = sSearch.replace(' ', '+')
+        sUrl = sSearch.replace(' ', '+')
     else:
         oInputParameterHandler = cInputParameterHandler()
         sUrl = oInputParameterHandler.getValue('siteUrl')
@@ -125,8 +126,8 @@ def showMovies(sSearch = ''):
     sHtmlContent = oRequestHandler.request()
 
     sPattern = 'class="(?:image|poster)".+?img src="([^"]+)" alt="([^"]+)".+?(?:|class="quality">([^<]+)<.+?)<a href="([^"]+)">'
-    #pattern pour le synopsis
-    if not 'tendance/' in sUrl and not 'evaluations/' in sUrl:
+    # pattern pour le synopsis
+    if 'tendance/' not in sUrl and 'evaluations/' not in sUrl:
         sPattern = sPattern + '.+?(?:<div class="texto">|<p>)(.+?)<'
     aResult = oParser.parse(sHtmlContent, sPattern)
 
@@ -147,7 +148,7 @@ def showMovies(sSearch = ''):
             sQual = aEntry[2]
             sUrl2 = aEntry[3]
             sDesc = ''
-            if not 'tendance/' in sUrl and not 'evaluation/' in sUrl:
+            if 'tendance/' not in sUrl and 'evaluation/' not in sUrl:
                 sDesc = aEntry[4].replace('&#38;', '&')
 
             sDisplayTitle = ('%s [%s]') % (sTitle, sQual)
@@ -210,26 +211,28 @@ def showHosters():
                 cHosterGui().showHoster(oGui, oHoster, sHosterUrl, sThumb)
 
     oGui.setEndOfDirectory()
-    
+
+
 def geturl(aEntry):
     oParser = cParser()
-    
+
     sPost = aEntry[1]
     sNume = aEntry[2]
     sType = aEntry[0]
-    
-    pdata = 'action=doo_player_ajax&post='+ sPost + '&nume=' + sNume + '&type=' + sType
-    
+
+    pdata = 'action=doo_player_ajax&post=' + sPost + '&nume=' + sNume + '&type=' + sType
+
     sUrl = URL_MAIN + 'wp-admin/admin-ajax.php'
 
     oRequest = cRequestHandler(sUrl)
     oRequest.setRequestType(1)
-    oRequest.addHeaderEntry('User-Agent', 'Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:62.0) Gecko/20100101 Firefox/62.0')
+    oRequest.addHeaderEntry(
+        'User-Agent',
+        'Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:62.0) Gecko/20100101 Firefox/62.0')
     oRequest.addHeaderEntry('Content-Type', 'application/x-www-form-urlencoded; charset=UTF-8')
     oRequest.addParametersLine(pdata)
 
     sHtmlContent = oRequest.request()
-
 
     sPattern = "<iframe.+?src='([^']+)'"
     aResult = oParser.parse(sHtmlContent, sPattern)

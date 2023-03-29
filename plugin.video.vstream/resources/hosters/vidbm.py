@@ -34,7 +34,7 @@ class cHoster(iHoster):
         sHtmlContent = oRequest.request()
 
         oParser = cParser()
-        sPattern = 'sources: *\[{file:"([^"]+)"'
+        sPattern = 'sources: *\\[{file:"([^"]+)"'
         aResult = oParser.parse(sHtmlContent, sPattern)
         api_call = aResult[1][0] + '|User-Agent=' + UA
 

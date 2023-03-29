@@ -118,7 +118,7 @@ def showMovies(sSearch=''):
 
     oRequestHandler = cRequestHandler(sUrl)
     sHtmlContent = oRequestHandler.request()
-    sPattern = '<a href="([^"]+)">\s*<time datetime=.+?</time>\s*<span class=".+?<i class=".+?></i>\s*([^"]+)</a>'
+    sPattern = '<a href="([^"]+)">\\s*<time datetime=.+?</time>\\s*<span class=".+?<i class=".+?></i>\\s*([^"]+)</a>'
 
     oParser = cParser()
     aResult = oParser.parse(sHtmlContent, sPattern)
@@ -196,7 +196,7 @@ def showEvents():
 
     oRequestHandler = cRequestHandler(sUrl)
     sHtmlContent = oRequestHandler.request()
-    sPattern = '<i class=".+?"></i>\s* <a href="([^"]+)">\s*([^"]+)\s*</a>'
+    sPattern = '<i class=".+?"></i>\\s* <a href="([^"]+)">\\s*([^"]+)\\s*</a>'
 
     oParser = cParser()
     aResult = oParser.parse(sHtmlContent, sPattern)
@@ -238,7 +238,7 @@ def showShows():
 
     oRequestHandler = cRequestHandler(sUrl)
     sHtmlContent = oRequestHandler.request()
-    sPattern = '<i class=".+?"></i>\s* <a href="([^"]+)">\s*([^"]+)\s*</a>'
+    sPattern = '<i class=".+?"></i>\\s* <a href="([^"]+)">\\s*([^"]+)\\s*</a>'
 
     oParser = cParser()
     aResult = oParser.parse(sHtmlContent, sPattern)
@@ -280,7 +280,7 @@ def showPodcast():
 
     oRequestHandler = cRequestHandler(sUrl)
     sHtmlContent = oRequestHandler.request()
-    sPattern = '<i class=".+?"></i>\s* <a href="([^"]+)">\s*([^"]+)\s*</a>'
+    sPattern = '<i class=".+?"></i>\\s* <a href="([^"]+)">\\s*([^"]+)\\s*</a>'
 
     oParser = cParser()
     aResult = oParser.parse(sHtmlContent, sPattern)
@@ -322,7 +322,7 @@ def showPromo():
 
     oRequestHandler = cRequestHandler(sUrl)
     sHtmlContent = oRequestHandler.request()
-    sPattern = '<i class=".+?"></i>\s* <a href="([^"]+)">\s*([^"]+)\s*</a>'
+    sPattern = '<i class=".+?"></i>\\s* <a href="([^"]+)">\\s*([^"]+)\\s*</a>'
 
     oParser = cParser()
     aResult = oParser.parse(sHtmlContent, sPattern)
@@ -359,7 +359,7 @@ def showPromo():
 
 def __checkForNextPage(sHtmlContent):
     oParser = cParser()
-    sPattern = 'class="active"><a href="".+?href="([^"]+).+?>(\d+)</a></li>\s*</ul>'
+    sPattern = 'class="active"><a href="".+?href="([^"]+).+?>(\\d+)</a></li>\\s*</ul>'
     aResult = oParser.parse(sHtmlContent, sPattern)
     if aResult[0]:
         sNextPage = URL_MAIN + aResult[1][0][0]
@@ -382,7 +382,7 @@ def showHosters():
     sHtmlContent = oRequestHandler.request()
 
     oParser = cParser()
-    sPattern = '<br />\s*<a href="([^"]+)">.+?</a>.+?<br />'
+    sPattern = '<br />\\s*<a href="([^"]+)">.+?</a>.+?<br />'
 
     aResult = oParser.parse(sHtmlContent, sPattern)
 

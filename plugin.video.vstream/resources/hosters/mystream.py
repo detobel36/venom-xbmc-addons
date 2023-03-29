@@ -24,12 +24,12 @@ class cHoster(iHoster):
 
         api_call = False
 
-        sPattern = '(\$=.+?;)\s*<'
+        sPattern = '(\\$=.+?;)\\s*<'
         aResult = re.search(sPattern, sHtmlContent, re.DOTALL)
         if aResult:
             decoded = temp_decode(aResult.group(1))
             if decoded:
-                r = re.search("setAttribute\(\'src\', *\'([^']+)\'\)", decoded, re.DOTALL)
+                r = re.search("setAttribute\\(\'src\', *\'([^']+)\'\\)", decoded, re.DOTALL)
                 if r:
                     api_call = r.group(1)
 
@@ -81,10 +81,10 @@ def temp_decode(data):
 
             first_group = first_group.replace('\\"', '\\').replace("\"\\\\\\\\\"", "\\\\")\
                                      .replace('\\"', '\\').replace('"', '').replace("+", "")
-            first_group = re.sub('(\(\!\[\]\)\[.+?\]+)', 'l', first_group)
+            first_group = re.sub('(\\(\\!\\[\\]\\)\\[.+?\\]+)', 'l', first_group)
         try:
             final_data = first_group.encode('ascii').decode('unicode-escape').encode('ascii')\
                 .decode('unicode-escape')
             return final_data
-        except:
+        except BaseException:
             return False

@@ -33,12 +33,12 @@ def load():
     oInputParameterHandler = cInputParameterHandler()
     sUrl = oInputParameterHandler.getValue('siteUrl')
 
-    if not 'series' in sUrl:
+    if 'series' not in sUrl:
         oOutputParameterHandler.addParameter('siteUrl', URL_SEARCH_MOVIES[0])
         oOutputParameterHandler.addParameter('sMovieTitle', 'movie')
         oGui.addDir(SITE_IDENTIFIER, 'showSearch', 'Recherche (Films)', 'search.png', oOutputParameterHandler)
 
-    if not 'films' in sUrl:
+    if 'films' not in sUrl:
         oOutputParameterHandler.addParameter('siteUrl', URL_SEARCH_SERIES[0])
         oOutputParameterHandler.addParameter('sMovieTitle', 'tv')
         oGui.addDir(SITE_IDENTIFIER, 'showSearch', 'Recherche (Séries)', 'search.png', oOutputParameterHandler)
@@ -50,7 +50,7 @@ def opensetting():
     addon().openSettings()
 
 
-def showSearch(path = '//'):
+def showSearch(path='//'):
     oGui = cGui()
 
     oInputParameterHandler = cInputParameterHandler()
@@ -98,7 +98,7 @@ def getContent(sUrl):
     return []
 
 
-def showMovies(sSearch='', searchLocal = False):
+def showMovies(sSearch='', searchLocal=False):
     oGui = cGui()
     oUtil = cUtil()
 
@@ -110,7 +110,7 @@ def showMovies(sSearch='', searchLocal = False):
     sSearchText = Unquote(sSearchText)
     sSearchText = oUtil.CleanName(sSearchText)
 
-    sUrl = sSearch.replace('-', '\-').replace('.', '%20')
+    sUrl = sSearch.replace('-', '\\-').replace('.', '%20')
     content = getContent(sUrl)
 
     oOutputParameterHandler = cOutputParameterHandler()
@@ -158,11 +158,11 @@ def showMovies(sSearch='', searchLocal = False):
             continue    # Filtre de recherche
 
         # lien de recherche spécifique à chaque film
-        siteUrl = URL_SEARCH_MOVIES[0] + sMovieTitle.replace('-', '\-')
+        siteUrl = URL_SEARCH_MOVIES[0] + sMovieTitle.replace('-', '\\-')
         startWith = sMovieTitle[0].upper()
         if startWith.isdigit():
             startWith = 'number'
-        siteUrl += '&start\-with=' + startWith
+        siteUrl += '&start\\-with=' + startWith
 
         sSearchTitle = oUtil.CleanName(sMovieTitle)
         if sYear:
@@ -172,7 +172,7 @@ def showMovies(sSearch='', searchLocal = False):
             continue                # film déjà proposé
 
         movies.add(sSearchTitle)
-        
+
         oOutputParameterHandler.clearParameter()
         oOutputParameterHandler.addParameter('siteUrl', siteUrl)
         oOutputParameterHandler.addParameter('sMovieTitle', sSearchTitle)
@@ -184,11 +184,11 @@ def showMovies(sSearch='', searchLocal = False):
         oGui.setEndOfDirectory()
 
 
-def showAnims(sSearch = ''):
+def showAnims(sSearch=''):
     showSeries(sSearch, False, True)
 
 
-def showSeries(sSearch = '', searchLocal = False, isAnime = False):
+def showSeries(sSearch='', searchLocal=False, isAnime=False):
     oGui = cGui()
     oUtil = cUtil()
 
@@ -196,11 +196,11 @@ def showSeries(sSearch = '', searchLocal = False, isAnime = False):
     sSearchTitle = Unquote(sSearchTitle)
     sSearchTitle = oUtil.CleanName(sSearchTitle)
 
-    sUrl = sSearch.replace('-', '\-')
+    sUrl = sSearch.replace('-', '\\-')
 
     series = set()
     oOutputParameterHandler = cOutputParameterHandler()
-    
+
     # deux url pour plus de résultats
     urls = [sUrl, sUrl.replace('order=asc', 'order=desc')]
     bMatrix = isMatrix()
@@ -239,17 +239,17 @@ def showSeries(sSearch = '', searchLocal = False, isAnime = False):
                 sTitle = sTitle[:pos]
                 sDisplayTitle = oUtil.unescape(sTitle).strip()
                 sDisplayTitle = sDisplayTitle.replace('.', ' ')
-                
+
                 if not oUtil.CheckOccurence(sSearchTitle, sDisplayTitle):
                     continue    # Filtre de recherche
-                
+
                 sMovieTitle = oUtil.CleanName(sDisplayTitle)
                 if sYear:
                     sMovieTitle += ' (%s)' % sYear
                 if sMovieTitle in series:
                     continue
                 series.add(sMovieTitle)
-    
+
                 oOutputParameterHandler.clearParameter()
                 oOutputParameterHandler.addParameter('siteUrl', sUrl)
                 oOutputParameterHandler.addParameter('sMovieTitle', sMovieTitle)
@@ -280,11 +280,11 @@ def showSaisons():
         sSearchYear = oInputParameterHandler.getValue('sYear')
 
     # recherche depuis le titre sélectionné, pas depuis les mots clefs recherchés
-    sUrl = URL_SEARCH_SERIES[0] + sSearchTitle.replace('-', '\-')
+    sUrl = URL_SEARCH_SERIES[0] + sSearchTitle.replace('-', '\\-')
     startWith = sSearchTitle[0].upper()
     if startWith.isdigit():
         startWith = 'number'
-    sUrl += '&start\-with=' + startWith
+    sUrl += '&start\\-with=' + startWith
 
     # deux url pour plus de résultats
     urls = [sUrl, sUrl.replace('order=asc', 'order=desc')]
@@ -360,7 +360,7 @@ def showEpisodes():
     oUtil = cUtil()
 
     oInputParameterHandler = cInputParameterHandler()
-    sUrl, sSearchSaison  = oInputParameterHandler.getValue('siteUrl').split('|')
+    sUrl, sSearchSaison = oInputParameterHandler.getValue('siteUrl').split('|')
     sSearchTitle = oInputParameterHandler.getValue('sMovieTitle')
     sSearchTitle = sSearchTitle.replace(' S%s' % sSearchSaison, '')
 
@@ -459,7 +459,7 @@ def showHosters():
     sSearchTitle = oUtil.CleanName(sSearchTitle)
 
     content = getContent(sUrl)
-    oHoster = oHosterGui.checkHoster('uptobox') # retourne le bon débrideur en fonction de son compte premmium
+    oHoster = oHosterGui.checkHoster('uptobox')  # retourne le bon débrideur en fonction de son compte premmium
 
     # Recherche les liens
     bMatrix = isMatrix()
@@ -497,7 +497,7 @@ def showHosters():
                 continue
             if not episode or episode != sSearchEpisode:
                 continue
-        else: # recherche de film
+        else:  # recherche de film
             if saison or episode:
                 continue
 
@@ -533,30 +533,32 @@ def showHosters():
         oHoster.setFileName(sMovieTitle)
         oHosterGui.showHoster(oGui, oHoster, sHosterUrl, '')
 
-
     oGui.setEndOfDirectory()
 
 
 # Recherche saisons et episodes
-def getSaisonEpisode(sTitle, pos = 0):
+def getSaisonEpisode(sTitle, pos=0):
     sTitle = sTitle.replace('x264', '').replace('x265', '').strip()
     sa = ep = terme = ''
-    m = re.search('(^S| S|\.S|\[S|saison|\s+|\.)(\s?|\.)(\d+)( *- *|\s?|\.)(E|Ep|x|\wpisode|Épisode)(\s?|\.)(\d+)', sTitle, re.UNICODE | re.IGNORECASE)
+    m = re.search(
+        '(^S| S|\\.S|\\[S|saison|\\s+|\\.)(\\s?|\\.)(\\d+)( *- *|\\s?|\\.)(E|Ep|x|\\wpisode|Épisode)(\\s?|\\.)(\\d+)',
+        sTitle,
+        re.UNICODE | re.IGNORECASE)
     if m:
         sa = m.group(3)
-        if int(sa) <100:
+        if int(sa) < 100:
             ep = m.group(7)
             terme = m.group(0)
         else:
             sa = ''
     else:  # Juste l'épisode
-        m = re.search('(^|\s|\.)(E|Ep|\wpisode)(\s?|\.)(\d+)', sTitle, re.UNICODE | re.IGNORECASE)
+        m = re.search('(^|\\s|\\.)(E|Ep|\\wpisode)(\\s?|\\.)(\\d+)', sTitle, re.UNICODE | re.IGNORECASE)
         if m:
             ep = m.group(4)
-            sa = '01' # si la saison n'est pas précisée, c'est qu'il n'y a sans doute qu'une saison
+            sa = '01'  # si la saison n'est pas précisée, c'est qu'il n'y a sans doute qu'une saison
             terme = m.group(0)
         else:  # juste la saison
-            m = re.search('( S|\.S|\[S|saison)(\s?|\.)(\d+)', sTitle, re.UNICODE | re.IGNORECASE)
+            m = re.search('( S|\\.S|\\[S|saison)(\\s?|\\.)(\\d+)', sTitle, re.UNICODE | re.IGNORECASE)
             if m:
                 sa = m.group(3)
                 if int(sa) > 100:
@@ -566,8 +568,8 @@ def getSaisonEpisode(sTitle, pos = 0):
 
     if terme:
         p = sTitle.index(terme)
-        
-        if p<5:             # au début, on retire directement l'élement recherché
+
+        if p < 5:             # au début, on retire directement l'élement recherché
             sTitle = sTitle.replace(terme, '')
             if pos:
                 pos -= len(terme)
@@ -583,25 +585,48 @@ def getSaisonEpisode(sTitle, pos = 0):
 
 
 def getYear(sTitle, pos):
-    sPattern = ['[^\w]([0-9]{4})[^\w]']
+    sPattern = ['[^\\w]([0-9]{4})[^\\w]']
     return _getTag(sTitle, sPattern, pos)
 
 
 def getLang(sMovieTitle, pos):
-    sPattern = ['VFI', 'VFF', 'VFQ', 'SUBFRENCH', 'TRUEFRENCH', 'FRENCH', 'VF', 'VOSTFR', '[^\w](VOST)[^\w]', '[^\w](VO)[^\w]', 'QC', '[^\w](MULTI)[^\w]', 'FASTSUB']
+    sPattern = ['VFI', 'VFF', 'VFQ', 'SUBFRENCH', 'TRUEFRENCH', 'FRENCH', 'VF', 'VOSTFR',
+                '[^\\w](VOST)[^\\w]', '[^\\w](VO)[^\\w]', 'QC', '[^\\w](MULTI)[^\\w]', 'FASTSUB']
     return _getTag(sMovieTitle, sPattern, pos)
 
 
 def getReso(sMovieTitle, pos):
-    sPattern = ['HDCAM', '[^\w](CAM)[^\w]', '[^\w](R5)[^\w]', '.(3D)', '.(DVDSCR)', '.(TVRIP)', '.(FHD)', '.(HDLIGHT)', '\d{3,4}P', '.(4K)', '.(UHD)', '.(BDRIP)', '.(BRRIP)', '.(DVDRIP)', '.(HDTV)', '.(BLURAY)', '.(WEB-DL)', '.(WEBRIP)', '[^\w](WEB)[^\w]', '.(DVDRIP)']
+    sPattern = [
+        'HDCAM',
+        '[^\\w](CAM)[^\\w]',
+        '[^\\w](R5)[^\\w]',
+        '.(3D)',
+        '.(DVDSCR)',
+        '.(TVRIP)',
+        '.(FHD)',
+        '.(HDLIGHT)',
+        '\\d{3,4}P',
+        '.(4K)',
+        '.(UHD)',
+        '.(BDRIP)',
+        '.(BRRIP)',
+        '.(DVDRIP)',
+        '.(HDTV)',
+        '.(BLURAY)',
+        '.(WEB-DL)',
+        '.(WEBRIP)',
+        '[^\\w](WEB)[^\\w]',
+        '.(DVDRIP)']
     sRes, pos = _getTag(sMovieTitle, sPattern, pos)
     if sRes:
         sRes = sRes.replace('2160P', '4K')
     return sRes, pos
 
+
 def getIdTMDB(sMovieTitle, pos):
-    sPattern = ['.TM(\d+)TM.']
+    sPattern = ['.TM(\\d+)TM.']
     return _getTag(sMovieTitle, sPattern, pos)
+
 
 def _getTag(sMovieTitle, tags, pos):
     for t in tags:
@@ -610,10 +635,10 @@ def _getTag(sMovieTitle, tags, pos):
             l = len(aResult.groups())
             ret = aResult.group(l)
             if not ret and l > 1:
-                ret = aResult.group(l-1)
+                ret = aResult.group(l - 1)
             terme = aResult.group(0)
             p = sMovieTitle.index(terme)
-            if pos > p > 2: # si ce n'est pas au début
+            if pos > p > 2:  # si ce n'est pas au début
                 pos = p
             return ret.upper(), pos
     return False, pos

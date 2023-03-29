@@ -77,7 +77,8 @@ def showGenres():
         for aEntry in aResult[1]:
             sUrl = aEntry[0]
             sTitle = aEntry[1]
-            if 'Accueil' in sTitle: continue
+            if 'Accueil' in sTitle:
+                continue
 
             oOutputParameterHandler.addParameter('siteUrl', sUrl)
             oGui.addDir(SITE_IDENTIFIER, 'showMovies', sTitle, 'replay.png', oOutputParameterHandler)
@@ -130,7 +131,8 @@ def showMovies(sSearch=''):
     oRequestHandler = cRequestHandler(sUrl)
     sHtmlContent = oRequestHandler.request()
 
-    sPattern = '<article.+?href="([^"]+)">([^<]+).+?img.+?src="([^"]+).+?<div class="entry"><p>(.+?)Vous pouvez toujours regarder'#&hellip'
+    # &hellip'
+    sPattern = '<article.+?href="([^"]+)">([^<]+).+?img.+?src="([^"]+).+?<div class="entry"><p>(.+?)Vous pouvez toujours regarder'
     oParser = cParser()
     aResult = oParser.parse(sHtmlContent, sPattern)
 
@@ -161,7 +163,7 @@ def showMovies(sSearch=''):
 
 def __checkForNextPage(sHtmlContent):
     oParser = cParser()
-    sPattern = 'title>TopReplay - Page [\d+] sur (\d+).+?href="([^"]+)"\s*>Chargez plus'
+    sPattern = 'title>TopReplay - Page [\\d+] sur (\\d+).+?href="([^"]+)"\\s*>Chargez plus'
     aResult = oParser.parse(sHtmlContent, sPattern)
     if aResult[0]:
         sNumberMax = aResult[1][0][0]
@@ -171,7 +173,7 @@ def __checkForNextPage(sHtmlContent):
         return sNextPage, sPaging
 
     # premiere page
-    sPattern = 'href="([^"]+)"\s*>Chargez plus'
+    sPattern = 'href="([^"]+)"\\s*>Chargez plus'
     aResult = oParser.parse(sHtmlContent, sPattern)
     if aResult[0]:
         sNextPage = aResult[1][0]

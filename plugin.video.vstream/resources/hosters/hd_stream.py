@@ -20,7 +20,7 @@ class cHoster(iHoster):
         sHtmlContent = oRequestHandler.request()
 
         oParser = cParser()
-        sPattern = '(\s*eval\s*\(\s*function(?:.|\s)+?{}\)\))'
+        sPattern = '(\\s*eval\\s*\\(\\s*function(?:.|\\s)+?{}\\)\\))'
         aResult = oParser.parse(sHtmlContent, sPattern)
 
         if aResult[0] is True:

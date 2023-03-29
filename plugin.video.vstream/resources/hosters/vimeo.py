@@ -13,7 +13,7 @@ class cHoster(iHoster):
         iHoster.__init__(self, 'vimeo', 'Vimeo')
 
     def __getIdFromUrl(self, sUrl):
-        sPattern = 'vimeo\.com\/(?:video\/)?([0-9]+)'
+        sPattern = 'vimeo\\.com\\/(?:video\\/)?([0-9]+)'
         oParser = cParser()
         aResult = oParser.parse(sUrl, sPattern)
         if aResult[0] is True:

@@ -236,7 +236,7 @@ def showMovies(sSearch=''):
 
 def __checkForNextPage(sHtmlContent):
     oParser = cParser()
-    sPattern = '>Page \d+ de (\d+)</span>.*?<span class="current.+?href=["\']([^"\']+/page/\d+)/["\'] class="inactive'
+    sPattern = '>Page \\d+ de (\\d+)</span>.*?<span class="current.+?href=["\']([^"\']+/page/\\d+)/["\'] class="inactive'
     aResult = oParser.parse(sHtmlContent, sPattern)
 
     if aResult[0]:
@@ -259,7 +259,7 @@ def showSxE():
 
     oRequestHandler = cRequestHandler(sUrl)
     sHtmlContent = oRequestHandler.request()
-    sPattern = "span class='title'>([^<]+)|class='numerando'>\d - ([^<]+).+?class='episodiotitle'><a href='([^']+)'>([^<]+)"
+    sPattern = "span class='title'>([^<]+)|class='numerando'>\\d - ([^<]+).+?class='episodiotitle'><a href='([^']+)'>([^<]+)"
     oParser = cParser()
     aResult = oParser.parse(sHtmlContent, sPattern)
 
@@ -281,7 +281,14 @@ def showSxE():
                 oOutputParameterHandler.addParameter('sMovieTitle', sTitle)
                 oOutputParameterHandler.addParameter('sThumb', sThumb)
                 oOutputParameterHandler.addParameter('sDesc', sDesc)
-                oGui.addEpisode(SITE_IDENTIFIER, 'showSeriesHosters', sDisplayTitle, '', sThumb, sDesc, oOutputParameterHandler)
+                oGui.addEpisode(
+                    SITE_IDENTIFIER,
+                    'showSeriesHosters',
+                    sDisplayTitle,
+                    '',
+                    sThumb,
+                    sDesc,
+                    oOutputParameterHandler)
 
     oGui.setEndOfDirectory()
 

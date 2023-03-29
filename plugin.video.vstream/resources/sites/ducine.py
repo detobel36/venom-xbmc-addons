@@ -195,7 +195,7 @@ def showMovies(sSearch=''):
 
 def __checkForNextPage(sHtmlContent):
     oParser = cParser()
-    sPattern = '<span>[\d+]</span><a href="([^"]+).+?>(\d+)</a>\s*</div'
+    sPattern = '<span>[\\d+]</span><a href="([^"]+).+?>(\\d+)</a>\\s*</div'
     aResult = oParser.parse(sHtmlContent, sPattern)
     if aResult[0]:
         sNextPage = aResult[1][0][0]
@@ -225,7 +225,7 @@ def showSaisons():
         aResult = oParser.parse(sHtmlContent, sPattern)
         if aResult[0]:
             sDesc = aResult[1][0]
-    except:
+    except BaseException:
         pass
 
     sPattern = '([^"]+)" title="[^"]+" class="part13">Tous les épisodes.+?part12">([^<]+)'

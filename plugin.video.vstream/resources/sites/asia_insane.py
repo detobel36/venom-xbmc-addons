@@ -163,12 +163,13 @@ def showMovies(sSearch=''):
         oUtil = cUtil()
         sSearchText = oUtil.CleanName(sSearch)
 
-        sPattern = '<a class=\'asp_res_image_url\' href=\'([^>]+)\'.+?url\("([^"]+)"\).+?\'>([^.]+)d{2}.+?<span.+?class="asp_res_text">([^<]+)'
+        sPattern = '<a class=\'asp_res_image_url\' href=\'([^>]+)\'.+?url\\("([^"]+)"\\).+?\'>([^.]+)d{2}.+?<span.+?class="asp_res_text">([^<]+)'
 
         oRequestHandler = cRequestHandler(URL_SEARCH[0])
         oRequestHandler.setRequestType(1)
         oRequestHandler.addHeaderEntry('User-Agent', UA)
-        oRequestHandler.addHeaderEntry('Accept', 'text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,*/*;q=0.8')
+        oRequestHandler.addHeaderEntry(
+            'Accept', 'text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,*/*;q=0.8')
         oRequestHandler.addHeaderEntry('Accept-Language', 'fr,fr-FR;q=0.8,en-US;q=0.5,en;q=0.3')
         oRequestHandler.addHeaderEntry('Accept-Encoding', 'gzip, deflate')
         oRequestHandler.addHeaderEntry('Referer', URL_MAIN + "recherche-avancee-asia-insane/")
@@ -178,7 +179,9 @@ def showMovies(sSearch=''):
         oRequestHandler.addParameters('asid', "1")
         oRequestHandler.addParameters('aspp', sSearch)
         oRequestHandler.addParameters('asp_inst_id', "1_1")
-        oRequestHandler.addParameters('options', "current_page_id=413&qtranslate_lang=0&asp_gen%5B%5D=title&customset%5B%5D=amy_movie&customset%5B%5D=amy_tvshow&termset%5Bamy_director%5D%5B%5D=-1&termset%5Bamy_actor%5D%5B%5D=-1")
+        oRequestHandler.addParameters(
+            'options',
+            "current_page_id=413&qtranslate_lang=0&asp_gen%5B%5D=title&customset%5B%5D=amy_movie&customset%5B%5D=amy_tvshow&termset%5Bamy_director%5D%5B%5D=-1&termset%5Bamy_actor%5D%5B%5D=-1")
         sHtmlContent = oRequestHandler.request()
 
     elif '/amy_genre/' in sUrl or '/date/' in sUrl:
@@ -243,7 +246,14 @@ def showMovies(sSearch=''):
             oOutputParameterHandler.addParameter('sThumb', sThumb)
 
             if '/dramas/' in sUrl2:
-                oGui.addDrama(SITE_IDENTIFIER, 'showSerieEpisodes', sDisplayTitle, '', sThumb, sDesc, oOutputParameterHandler)
+                oGui.addDrama(
+                    SITE_IDENTIFIER,
+                    'showSerieEpisodes',
+                    sDisplayTitle,
+                    '',
+                    sThumb,
+                    sDesc,
+                    oOutputParameterHandler)
             else:
                 oGui.addMovie(SITE_IDENTIFIER, 'showHosters', sDisplayTitle, '', sThumb, sDesc, oOutputParameterHandler)
 

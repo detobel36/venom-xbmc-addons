@@ -210,7 +210,7 @@ def showHosters():
 
                 sPattern = 'txt = \'<b><a href="([^"]+)"'
                 aResult = oParser.parse(sHtmlContent, sPattern)[1][0]
-                aEntry = Unquote(re.search('url=(.+?)&',aResult).group(1))
+                aEntry = Unquote(re.search('url=(.+?)&', aResult).group(1))
 
             if "ReviveLink" in aEntry:
                 url2 = 'http://' + (aEntry.split('/')[2]).lower() + '/qcap/Qaptcha.jquery.php'

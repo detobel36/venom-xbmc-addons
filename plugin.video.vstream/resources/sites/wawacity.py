@@ -128,7 +128,12 @@ def showMenuMovies():
     oGui.addDir(SITE_IDENTIFIER, VIEUX_FILM[1], 'Films ancien', 'news.png', oOutputParameterHandler)
 
     oOutputParameterHandler.addParameter('siteUrl', MOVIE_MALENTENDANTS[0])
-    oGui.addDir(SITE_IDENTIFIER, MOVIE_MALENTENDANTS[1], 'Films sourds et malentendants', 'news.png', oOutputParameterHandler)
+    oGui.addDir(
+        SITE_IDENTIFIER,
+        MOVIE_MALENTENDANTS[1],
+        'Films sourds et malentendants',
+        'news.png',
+        oOutputParameterHandler)
 
     oOutputParameterHandler.addParameter('siteUrl', MOVIE_LISTS[0])
     oGui.addDir(SITE_IDENTIFIER, MOVIE_LISTS[1], 'Liste des films', 'listes.png', oOutputParameterHandler)
@@ -481,15 +486,44 @@ def showMovies(sSearch=''):
 
             if 'p=autre' in sUrl:
                 if ' Saison ' in sTitle:
-                    oGui.addTV(SITE_IDENTIFIER, 'showSeriesLinks', sDisplayTitle, sDesc, sThumb, '', oOutputParameterHandler)
+                    oGui.addTV(
+                        SITE_IDENTIFIER,
+                        'showSeriesLinks',
+                        sDisplayTitle,
+                        sDesc,
+                        sThumb,
+                        '',
+                        oOutputParameterHandler)
                 else:
-                    oGui.addMovie(SITE_IDENTIFIER, 'showHosters', sDisplayTitle, sDesc, sThumb, '', oOutputParameterHandler)
+                    oGui.addMovie(SITE_IDENTIFIER, 'showHosters', sDisplayTitle,
+                                  sDesc, sThumb, '', oOutputParameterHandler)
             elif 'p=series' in sUrl:
-                oGui.addTV(SITE_IDENTIFIER, 'showSeriesLinks', sDisplayTitle, sDesc, sThumb, '', oOutputParameterHandler)
+                oGui.addTV(
+                    SITE_IDENTIFIER,
+                    'showSeriesLinks',
+                    sDisplayTitle,
+                    sDesc,
+                    sThumb,
+                    '',
+                    oOutputParameterHandler)
             elif 'p=mangas' in sUrl:
-                oGui.addAnime(SITE_IDENTIFIER, 'showSeriesLinks', sDisplayTitle, sDesc, sThumb, '', oOutputParameterHandler)
+                oGui.addAnime(
+                    SITE_IDENTIFIER,
+                    'showSeriesLinks',
+                    sDisplayTitle,
+                    sDesc,
+                    sThumb,
+                    '',
+                    oOutputParameterHandler)
             else:
-                oGui.addMovie(SITE_IDENTIFIER, 'showMoviesLinks', sDisplayTitle, sDesc, sThumb, '', oOutputParameterHandler)
+                oGui.addMovie(
+                    SITE_IDENTIFIER,
+                    'showMoviesLinks',
+                    sDisplayTitle,
+                    sDesc,
+                    sThumb,
+                    '',
+                    oOutputParameterHandler)
 
         progress_.VSclose(progress_)
 
@@ -540,11 +574,11 @@ def showMoviesLinks():
             sDesc = aResult[1][0]
             sDesc = sDesc.replace('<span>', '').replace('<b><i>', '').replace('</i></b>', '').replace('</span>', '')
             sDesc = sDesc.replace('<br>', ' ').replace('<br /><br />', ' ')
-    except:
+    except BaseException:
         pass
 
     # on recherche d'abord la qualité courante
-    sPattern = '<i class="fa fa-folder-open"></i>\s*.+?<i>([^"]+)</i>'
+    sPattern = '<i class="fa fa-folder-open"></i>\\s*.+?<i>([^"]+)</i>'
     aResult = oParser.parse(sHtmlContent, sPattern)
 
     if aResult[0]:
@@ -611,7 +645,7 @@ def showSeriesLinks():
             sDesc = aResult[1][0]
             sDesc = sDesc.replace('<span>', '').replace('<b><i>', '').replace('</i></b>', '').replace('</span>', '')\
                          .replace('<br>', ' ').replace('<br />', '')
-    except:
+    except BaseException:
         pass
 
     # Mise à jour du titre
@@ -624,7 +658,7 @@ def showSeriesLinks():
         sMovieTitle = sMovieTitle.replace('Télécharger ', '').replace('TÃ©lÃ©charger', '')
 
     # on recherche d'abord la langue courante
-    sPattern = '<i class="fa fa-folder-open"></i>\s*.+?<i>([^"]+)</i>'
+    sPattern = '<i class="fa fa-folder-open"></i>\\s*.+?<i>([^"]+)</i>'
     aResult = oParser.parse(sHtmlContent, sPattern)
 
     sLang = ''
@@ -660,7 +694,14 @@ def showSeriesLinks():
             oOutputParameterHandler.addParameter('siteUrl', sUrl)
             oOutputParameterHandler.addParameter('sMovieTitle', sMovieTitle)
             oOutputParameterHandler.addParameter('sThumb', sThumb)
-            oGui.addEpisode(SITE_IDENTIFIER, 'showSeriesHosters', sDisplayTitle, '', sThumb, sDesc, oOutputParameterHandler)
+            oGui.addEpisode(
+                SITE_IDENTIFIER,
+                'showSeriesHosters',
+                sDisplayTitle,
+                '',
+                sThumb,
+                sDesc,
+                oOutputParameterHandler)
 
         progress_.VSclose(progress_)
 
@@ -681,7 +722,14 @@ def showSeriesLinks():
             oOutputParameterHandler.addParameter('siteUrl', sUrl)
             oOutputParameterHandler.addParameter('sMovieTitle', sMovieTitle)
             oOutputParameterHandler.addParameter('sThumb', sThumb)
-            oGui.addEpisode(SITE_IDENTIFIER, 'showSeriesLinks', sTitle, 'series.png', sThumb, sDesc, oOutputParameterHandler)
+            oGui.addEpisode(
+                SITE_IDENTIFIER,
+                'showSeriesLinks',
+                sTitle,
+                'series.png',
+                sThumb,
+                sDesc,
+                oOutputParameterHandler)
 
     oGui.setEndOfDirectory()
 
@@ -696,7 +744,7 @@ def showHosters():
     oRequestHandler = cRequestHandler(sUrl)
     sHtmlContent = oRequestHandler.request()
     oParser = cParser()
-    sPattern = '<a rel="external nofollow" href="([^"]+)" target="_blank" class="link">\s*<.+?a>\s*</td>\s*.+?>(.+?)<'
+    sPattern = '<a rel="external nofollow" href="([^"]+)" target="_blank" class="link">\\s*<.+?a>\\s*</td>\\s*.+?>(.+?)<'
     aResult = oParser.parse(sHtmlContent, sPattern)
 
     if aResult[0]:
@@ -758,7 +806,14 @@ def showSeriesHosters():
                 oOutputParameterHandler.addParameter('siteUrl', sUrl2)
                 oOutputParameterHandler.addParameter('sMovieTitle', sTitle)
                 oOutputParameterHandler.addParameter('sThumb', sThumb)
-                oGui.addEpisode(SITE_IDENTIFIER, 'recapchaByPass', sDisplayTitle, '', sThumb, '', oOutputParameterHandler)
+                oGui.addEpisode(
+                    SITE_IDENTIFIER,
+                    'recapchaByPass',
+                    sDisplayTitle,
+                    '',
+                    sThumb,
+                    '',
+                    oOutputParameterHandler)
 
         progress_.VSclose(progress_)
 
@@ -801,7 +856,8 @@ def recapchaByPass():
     oRequestHandler = cRequestHandler(sUrl)
     oRequestHandler.setRequestType(1)
     oRequestHandler.addHeaderEntry('User-Agent', UA)
-    oRequestHandler.addHeaderEntry('Accept', 'text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,*/*;q=0.8')
+    oRequestHandler.addHeaderEntry(
+        'Accept', 'text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,*/*;q=0.8')
     oRequestHandler.addHeaderEntry('Accept-Language', 'fr,fr-FR;q=0.8,en-US;q=0.5,en;q=0.3')
     oRequestHandler.addHeaderEntry('Accept-Encoding', 'gzip')
     oRequestHandler.addHeaderEntry('Referer', sUrl)

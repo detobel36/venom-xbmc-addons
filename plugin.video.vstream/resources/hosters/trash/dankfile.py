@@ -3,6 +3,7 @@ from resources.lib.parser import cParser
 from resources.lib.handler.requestHandler import cRequestHandler
 from resources.hosters.hoster import iHoster
 
+
 class cHoster(iHoster):
 
     def __init__(self):
@@ -15,7 +16,7 @@ class cHoster(iHoster):
         return self.__getUrlFromJavascriptCode(sHtmlContent)
 
     def __getUrlFromJavascriptCode(self, sHtmlContent):
-        sPattern = "<script type='text/javascript'>eval.*?return p}\((.*?)</script>"
+        sPattern = "<script type='text/javascript'>eval.*?return p}\\((.*?)</script>"
         oParser = cParser()
         aResult = oParser.parse(sHtmlContent, sPattern)
 
@@ -23,7 +24,7 @@ class cHoster(iHoster):
             sJavascript = aResult[1][0]
 
             sUnpacked = cJsUnpacker().unpackByString(sJavascript)
-            sPattern = ".addVariable\('file','([^']+)'"
+            sPattern = ".addVariable\\('file','([^']+)'"
             oParser = cParser()
             aResultLink = oParser.parse(sUnpacked, sPattern)
 
@@ -34,4 +35,3 @@ class cHoster(iHoster):
                 return aResult
 
         return False, ''
-

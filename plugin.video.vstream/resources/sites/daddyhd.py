@@ -32,7 +32,7 @@ channels = {
     120: ['RMC Sport 2', 'https://i0.wp.com/www.planetecsat.com/wp-content/uploads/2018/07/RMC_SPORT2_PNG_500x500px.png?fit=500%2C500&ssl=1'],
     121: ['Canal+', 'https://thumb.canalplus.pro/http/unsafe/epg.canal-plus.com/mycanal/img/CHN43FN/PNG/213X160/CHN43FB_301.PNG'],
     122: ['Canal+ sport', 'https://thumb.canalplus.pro/http/unsafe/epg.canal-plus.com/mycanal/img/CHN43FN/PNG/213X160/CHN43FB_177.PNG']
-    }
+}
 
 
 def load():
@@ -124,7 +124,7 @@ def showMovies():
     sPattern = '<h2 style="background-color:cyan">%s</h2>' % sTitle
     sHtmlContent = oParser.abParse(sHtmlContent, sPattern, '<h2 style="background-color:cyan">')
 
-    sPattern = '<hr>(<strong>|)(\d+:\d+) (.+?)<'#span.+?href="([^"]+)'
+    sPattern = '<hr>(<strong>|)(\\d+:\\d+) (.+?)<'  # span.+?href="([^"]+)'
     aResult = oParser.parse(sHtmlContent, sPattern)
 
     if not aResult[0]:
@@ -165,7 +165,7 @@ def showHoster():
 
     sHtmlContent = oParser.abParse(sHtmlContent, sPattern, '<br')
 
-    sPattern = 'href="([^"]+).+?rel=".+?>([^\(]+)'
+    sPattern = 'href="([^"]+).+?rel=".+?>([^\\(]+)'
     sHtmlContent = oParser.abParse(sHtmlContent, sPattern, '</p>')
     aResult = oParser.parse(sHtmlContent, sPattern)
 
@@ -204,7 +204,6 @@ def showLink():
     if bvalid:
         sHosterUrl = shosterurl
 
-
     if sHosterUrl:
         sHosterUrl = sHosterUrl.strip()
         oHoster = cHosterGui().checkHoster(sHosterUrl)
@@ -229,7 +228,7 @@ def getHosterIframe(url, referer):
     if not sHtmlContent:
         return False, False
 
-    sPattern = '(\s*eval\s*\(\s*function(?:.|\s)+?{}\)\))'
+    sPattern = '(\\s*eval\\s*\\(\\s*function(?:.|\\s)+?{}\\)\\))'
     aResult = re.findall(sPattern, sHtmlContent)
     if aResult:
         from resources.lib.packer import cPacker
@@ -238,7 +237,7 @@ def getHosterIframe(url, referer):
             sstr = sstr + ';'
         sHtmlContent = cPacker().unpack(sstr)
 
-    sPattern = '.atob\("(.+?)"'
+    sPattern = '.atob\\("(.+?)"'
     aResult = re.findall(sPattern, sHtmlContent)
     if aResult:
         import base64

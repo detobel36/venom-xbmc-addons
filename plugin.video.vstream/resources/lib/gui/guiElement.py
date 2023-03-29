@@ -202,33 +202,33 @@ class cGuiElement:
 
             if not isMatrix():
                 sTitle = sTitle.decode('utf-8')
-        except:
+        except BaseException:
             pass
 
         """ Début du nettoyage du titre """
         # vire doubles espaces et double points
         sTitle = re.sub(' +', ' ', sTitle)
-        sTitle = re.sub('\.+', '.', sTitle)
+        sTitle = re.sub('\\.+', '.', sTitle)
 
         # enleve les crochets et les parentheses si elles sont vides
         sTitle = sTitle.replace('()', '').replace('[]', '').replace('- -', '-')
 
         # vire espace et - a la fin
-        sTitle = re.sub('[- –_\.]+$', '', sTitle)
+        sTitle = re.sub('[- –_\\.]+$', '', sTitle)
         # et au debut
-        sTitle = re.sub('^[- –_\.]+', '', sTitle)
+        sTitle = re.sub('^[- –_\\.]+', '', sTitle)
 
         """ Fin du nettoyage du titre """
 
         # recherche l'année, uniquement si entre caractere special a cause de 2001 odysse de l'espace ou k2000
-        string = re.search('[^\w ]([0-9]{4})[^\w ]', sTitle)
+        string = re.search('[^\\w ]([0-9]{4})[^\\w ]', sTitle)
         if string:
             sTitle = sTitle.replace(string.group(0), '')
             self.__Year = str(string.group(1))
             self.addItemValues('year', self.__Year)
 
         # recherche une date
-        string = re.search('([\d]{2}[\/|-]\d{2}[\/|-]\d{4})', sTitle)
+        string = re.search('([\\d]{2}[\\/|-]\\d{2}[\\/|-]\\d{4})', sTitle)
         if string:
             sTitle = sTitle.replace(string.group(0), '')
             self.__Date = str(string.group(0))
@@ -236,22 +236,23 @@ class cGuiElement:
 
         # recherche les Tags restant : () ou [] sauf tag couleur
         sDecoColor = self.addons.getSetting('deco_color')
-        sTitle = re.sub('([\(|\[](?!\/*COLOR)[^\)\(\]\[]+?[\]|\)])', '[COLOR ' + sDecoColor + ']\\1[/COLOR]', sTitle)
+        sTitle = re.sub('([\\(|\\[](?!\\/*COLOR)[^\\)\\(\\]\\[]+?[\\]|\\)])',
+                        '[COLOR ' + sDecoColor + ']\\1[/COLOR]', sTitle)
 
         # Recherche saisons et episodes
         sa = ep = ''
-        m = re.search('(|S|saison)(\s?|\.)(\d+)(\s?|\.)(E|Ep|x|\wpisode)(\s?|\.)(\d+)', sTitle, re.UNICODE)
+        m = re.search('(|S|saison)(\\s?|\\.)(\\d+)(\\s?|\\.)(E|Ep|x|\\wpisode)(\\s?|\\.)(\\d+)', sTitle, re.UNICODE)
         if m:
             sTitle = sTitle.replace(m.group(0), '')
             sa = m.group(3)
             ep = m.group(7)
         else:  # Juste l'épisode
-            m = re.search('(^|\s|\.)(E|Ep|\wpisode)(\s?|\.)(\d+)', sTitle, re.UNICODE)
+            m = re.search('(^|\\s|\\.)(E|Ep|\\wpisode)(\\s?|\\.)(\\d+)', sTitle, re.UNICODE)
             if m:
                 sTitle = sTitle.replace(m.group(0), '')
                 ep = m.group(4)
             else:  # juste la saison
-                m = re.search('( S|saison)(\s?|\.)(\d+)', sTitle, re.UNICODE)
+                m = re.search('( S|saison)(\\s?|\\.)(\\d+)', sTitle, re.UNICODE)
                 if m:
                     sTitle = sTitle.replace(m.group(0), '')
                     sa = m.group(3)
@@ -271,7 +272,7 @@ class cGuiElement:
         if not isMatrix():
             try:
                 sTitle = sTitle.encode('utf-8')
-            except:
+            except BaseException:
                 pass
 
         # on reformate SXXEXX Titre [tag] (Annee)
@@ -300,9 +301,9 @@ class cGuiElement:
 
     def setTitle(self, sTitle):
         # Nom en clair sans les langues, qualités, et autres décorations
-        self.__sCleanTitle = re.sub('\[.*\]|\(.*\)', '', sTitle)
+        self.__sCleanTitle = re.sub('\\[.*\\]|\\(.*\\)', '', sTitle)
         if not self.__sCleanTitle:
-            self.__sCleanTitle = re.sub('\[.+?\]|\(.+?\)', '', sTitle)
+            self.__sCleanTitle = re.sub('\\[.+?\\]|\\(.+?\\)', '', sTitle)
             if not self.__sCleanTitle:
                 self.__sCleanTitle = sTitle.replace('[', '').replace(']', '').replace('(', '').replace(')', '')
 
@@ -310,12 +311,12 @@ class cGuiElement:
             # Python 3 decode sTitle
             try:
                 sTitle = str(sTitle.encode('latin-1'), 'utf-8')
-            except:
+            except BaseException:
                 pass
         else:
             try:
                 sTitle = str(sTitle.strip().decode('utf-8'))
-            except:
+            except BaseException:
                 pass
 
         if not sTitle.startswith('[COLOR'):
@@ -343,7 +344,7 @@ class cGuiElement:
                     self.__sDescription = str(sDescription.encode('latin-1'), 'utf-8')
                 else:
                     self.__sDescription = sDescription
-            except:
+            except BaseException:
                 self.__sDescription = sDescription
         else:
             self.__sDescription = sDescription
@@ -388,7 +389,7 @@ class cGuiElement:
             return
         try:
             self.__sIcon = unicode(sIcon, 'utf-8')
-        except:
+        except BaseException:
             self.__sIcon = sIcon
         self.__sIcon = self.__sIcon.encode('utf-8')
         self.__sIcon = QuoteSafe(self.__sIcon)
@@ -545,7 +546,7 @@ class cGuiElement:
                     return
             else:
                 return
-        except:
+        except BaseException:
             return
 
         if 'media_type' in meta:
@@ -688,7 +689,7 @@ class cGuiElement:
             if sCat and int(sCat) in (1, 2, 3, 4, 5, 8, 9):  # Vérifier seulement si de type média
                 if self.getWatched():
                     self.addItemValues('playcount', 1)
-        except:
+        except BaseException:
             sCat = False
 
         self.addItemProperties('siteUrl', self.getSiteUrl())

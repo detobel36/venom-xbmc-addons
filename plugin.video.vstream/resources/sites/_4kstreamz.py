@@ -213,7 +213,7 @@ def __checkForNextPage(sHtmlContent):
     elif 'CurrentPage' in sHtmlContent:  # film année serie
         sPattern = "CurrentPage.+?href='([^']+).+?>([^<]+)</a></div"
     else:  # film année à partir de la page 8
-        sPattern = "</a><span>.+?<a href='([^']+).+?</span>.+?>([^<]+)</a></div></div>\s*</div>\s*</div>"
+        sPattern = "</a><span>.+?<a href='([^']+).+?</span>.+?>([^<]+)</a></div></div>\\s*</div>\\s*</div>"
 
     aResult = oParser.parse(sHtmlContent, sPattern)
     if aResult[0]:
@@ -359,7 +359,7 @@ def showLinks():
             if aEntry[1]:
                 dataUrl = aEntry[1]
                 dataCode = aEntry[2]
-                if "/thumbnail/" in dataCode :
+                if "/thumbnail/" in dataCode:
                     continue
                 sHost = aEntry[3].capitalize()
                 if not oHosterGui.checkHoster(sHost):

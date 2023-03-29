@@ -4,10 +4,11 @@
 
 from resources.lib.comaddon import addon, siteManager
 from resources.lib.handler.requestHandler import cRequestHandler
-import datetime, time
+import datetime
+import time
+
 
 class cUpdate:
-
 
     def getUpdateSetting(self):
         addons = addon()
@@ -20,7 +21,7 @@ class cUpdate:
         # delai mise a jour
         time_now = datetime.datetime.now()
         time_service = self.__strptime(setting_time)
-        time_sleep = datetime.timedelta(hours = 72)
+        time_sleep = datetime.timedelta(hours=72)
         if time_now - time_service > time_sleep:
             sUrl = 'https://raw.githubusercontent.com/Kodi-vStream/venom-xbmc-addons/Beta/plugin.video.vstream/resources/sites.json'
             oRequestHandler = cRequestHandler(sUrl)
@@ -32,8 +33,8 @@ class cUpdate:
 
             addons.setSetting('setting_time', str(time_now))
 
-
     # formattage date (bug python)
+
     def __strptime(self, date):
         if len(date) > 19:
             format = '%Y-%m-%d %H:%M:%S.%f'

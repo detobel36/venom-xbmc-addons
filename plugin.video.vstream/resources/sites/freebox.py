@@ -81,7 +81,7 @@ def showMenuMusic():
 
 
 def parseM3U(sUrl=None):  # Traite les m3u local
-    
+
     if not sUrl:
         oInputParameterHandler = cInputParameterHandler()
         sUrl = oInputParameterHandler.getValue('siteUrl')
@@ -101,7 +101,7 @@ def parseM3U(sUrl=None):  # Traite les m3u local
             try:
                 licon = line.split('#EXTINF:')[1].partition('tvg-logo=')[2]
                 icon = licon.split('"')[1]
-            except:
+            except BaseException:
                 icon = 'tv.png'
             ValidEntry = True
             song = track(length, title, None, icon)
@@ -142,7 +142,7 @@ def showWeb():  # Code qui s'occupe de liens TV du Web
 
     else:
         cEpg = cePg()
-        EPG = cEpg.getEpg('', 'direct',noTextBox=True)
+        EPG = cEpg.getEpg('', 'direct', noTextBox=True)
 
         total = len(playlist)
         progress_ = progress().VScreate(SITE_NAME)
@@ -154,7 +154,7 @@ def showWeb():  # Code qui s'occupe de liens TV du Web
             if not sThumb:
                 sThumb = 'tv.png'
 
-            channelName = track.title.replace('sport','sports').replace('(en clair)','')
+            channelName = track.title.replace('sport', 'sports').replace('(en clair)', '')
             sDesc = cEpg.getChannelEpg(EPG, channelName)
 
             # les + ne peuvent pas passer
@@ -175,15 +175,27 @@ def showWeb():  # Code qui s'occupe de liens TV du Web
             oGuiElement.setDescription(sDesc)
             oGuiElement.setTitle(track.title)
             oGuiElement.setFileName(track.title)
-            
+
             oGuiElement.setIcon('tv.png')
             oGuiElement.setMeta(0)
             oGuiElement.setThumbnail(thumb)
             oGuiElement.setDirectTvFanart()
             oGuiElement.setCat(6)
 
-            oGui.createSimpleMenu(oGuiElement, oOutputParameterHandler, SITE_IDENTIFIER, SITE_IDENTIFIER, 'direct_epg', 'Guide tv Direct')
-            oGui.createSimpleMenu(oGuiElement, oOutputParameterHandler, SITE_IDENTIFIER, SITE_IDENTIFIER, 'soir_epg', 'Guide tv Soir')
+            oGui.createSimpleMenu(
+                oGuiElement,
+                oOutputParameterHandler,
+                SITE_IDENTIFIER,
+                SITE_IDENTIFIER,
+                'direct_epg',
+                'Guide tv Direct')
+            oGui.createSimpleMenu(
+                oGuiElement,
+                oOutputParameterHandler,
+                SITE_IDENTIFIER,
+                SITE_IDENTIFIER,
+                'soir_epg',
+                'Guide tv Soir')
             # oGui.createSimpleMenu(oGuiElement, oOutputParameterHandler, SITE_IDENTIFIER, SITE_IDENTIFIER, 'enregistrement', 'Enregistrement')
             oGui.addFolder(oGuiElement, oOutputParameterHandler)
 
@@ -310,8 +322,20 @@ def showTV():
             oGuiElement.setDirectTvFanart()
             oGuiElement.setCat(6)
 
-            oGui.createSimpleMenu(oGuiElement, oOutputParameterHandler, SITE_IDENTIFIER, SITE_IDENTIFIER, 'direct_epg', 'Guide tv Direct')
-            oGui.createSimpleMenu(oGuiElement, oOutputParameterHandler, SITE_IDENTIFIER, SITE_IDENTIFIER, 'soir_epg', 'Guide tv Soir')
+            oGui.createSimpleMenu(
+                oGuiElement,
+                oOutputParameterHandler,
+                SITE_IDENTIFIER,
+                SITE_IDENTIFIER,
+                'direct_epg',
+                'Guide tv Direct')
+            oGui.createSimpleMenu(
+                oGuiElement,
+                oOutputParameterHandler,
+                SITE_IDENTIFIER,
+                SITE_IDENTIFIER,
+                'soir_epg',
+                'Guide tv Soir')
             # oGui.createSimpleMenu(oGuiElement, oOutputParameterHandler, SITE_IDENTIFIER, SITE_IDENTIFIER, 'enregistrement', 'Enregistrement')
             oGui.createContexMenuBookmark(oGuiElement, oOutputParameterHandler)
             oGui.addFolder(oGuiElement, oOutputParameterHandler)
@@ -378,32 +402,32 @@ def getRealUrl(chain):
     param = ""
     head = None
 
-    r = re.search('\[[DECODENRJ]+\](.+?)(?:(?:\[[A-Z]+\])|$)', chain)
+    r = re.search('\\[[DECODENRJ]+\\](.+?)(?:(?:\\[[A-Z]+\\])|$)', chain)
     if r:
         url = decodeNrj(r.group(1))
 
-    r = re.search('\[[BRIGHTCOVEKEY]+\](.+?)(?:(?:\[[A-Z]+\])|$)', chain)
+    r = re.search('\\[[BRIGHTCOVEKEY]+\\](.+?)(?:(?:\\[[A-Z]+\\])|$)', chain)
     if r:
         url = getBrightcoveKey(r.group(1))
 
-    r = re.search('\[[REGEX]+\](.+?)(?:(?:\[[A-Z]+\])|$)', chain)
+    r = re.search('\\[[REGEX]+\\](.+?)(?:(?:\\[[A-Z]+\\])|$)', chain)
     if r:
         regex = r.group(1)
 
-    r = re.search('\[[UA]+\](.+?)(?:(?:\[[A-Z]+\])|$)', chain)
+    r = re.search('\\[[UA]+\\](.+?)(?:(?:\\[[A-Z]+\\])|$)', chain)
     if r:
         UA2 = r.group(1)
 
-    r = re.search('\[[URL]+\](.+?)(?:(?:\[[A-Z]+\])|$)', chain)
+    r = re.search('\\[[URL]+\\](.+?)(?:(?:\\[[A-Z]+\\])|$)', chain)
     if r:
         url = r.group(1)
 
-    r = re.search('\[[HEAD]+\](.+?)(?:(?:\[[A-Z]+\])|$)',chain)
+    r = re.search('\\[[HEAD]+\\](.+?)(?:(?:\\[[A-Z]+\\])|$)', chain)
     if r:
         head = r.group(1)
 
     # post metehod ?
-    r = re.search('\[[POSTFORM]+\](.+?)(?:(?:\[[A-Z]+\])|$)', chain)
+    r = re.search('\\[[POSTFORM]+\\](.+?)(?:(?:\\[[A-Z]+\\])|$)', chain)
     if r:
         param = r.group(1)
 
@@ -416,7 +440,7 @@ def getRealUrl(chain):
         import json
         head = json.loads(head)
         for a in head:
-            oRequestHandler.addHeaderEntry(a,head[a])
+            oRequestHandler.addHeaderEntry(a, head[a])
     sHtmlContent = oRequestHandler.request()
 
     if regex:
@@ -455,7 +479,7 @@ def getBrightcoveKey(sUrl):
 
         oRequestHandler = cRequestHandler("https://" + sUrl.split('/')[2] + url)
         sHtmlContent = oRequestHandler.request()
-        result = re.search('N="([^"]+)",y="([^"]+)"\)', sHtmlContent)
+        result = re.search('N="([^"]+)",y="([^"]+)"\\)', sHtmlContent)
         player = result.group(1)
         video = result.group(2)
 
@@ -466,7 +490,9 @@ def getBrightcoveKey(sUrl):
         account = re.search("\n(.+?): '" + ID + "'", sHtmlContent).group(1).replace('            ', '')
 
     else:
-        result = re.search('<div class="video_block" id="video_player_.+?" accountid="([^"]+)" playerid="([^"]+)" videoid="([^"]+)"', sHtmlContent)
+        result = re.search(
+            '<div class="video_block" id="video_player_.+?" accountid="([^"]+)" playerid="([^"]+)" videoid="([^"]+)"',
+            sHtmlContent)
 
         account = result.group(1)
         player = result.group(2)

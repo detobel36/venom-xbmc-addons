@@ -105,7 +105,7 @@ def showMovies(sSearch=''):
     oRequestHandler = cRequestHandler(sUrl)
     sHtmlContent = oRequestHandler.request()
 
-    sPattern = '<div class="video\s.+?href="([^"]+).+?class="izimg".+?src="([^"]+).+?title="([^"]+)'
+    sPattern = '<div class="video\\s.+?href="([^"]+).+?class="izimg".+?src="([^"]+).+?title="([^"]+)'
     aResult = oParser.parse(sHtmlContent, sPattern)
 
     if not aResult[0]:
@@ -181,7 +181,7 @@ def showEpisodes():
         if aResult[0]:
             sDesc = aResult[1][0]
             sDesc = sDesc.replace('\\', '')
-    except:
+    except BaseException:
         pass
 
     sPattern = '<a href="([^"]+)" class="post-page-numbers".+?<span>([^<>]+)</span></a>'

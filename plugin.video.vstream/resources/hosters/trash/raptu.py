@@ -1,5 +1,5 @@
-#-*- coding: utf-8 -*-
-#Vstream https://github.com/Kodi-vStream/venom-xbmc-addons
+# -*- coding: utf-8 -*-
+# Vstream https://github.com/Kodi-vStream/venom-xbmc-addons
 from resources.lib.handler.requestHandler import cRequestHandler
 from resources.hosters.hoster import iHoster
 from resources.lib.parser import cParser
@@ -20,12 +20,12 @@ class cHoster(iHoster):
         oRequest = cRequestHandler(sUrl)
         sHtmlContent = oRequest.request()
 
-        if 'rapidvideo' in sUrl:#qual site film illimite
-            sPattern = '<a href="([^"]+&q=\d+p)"'
+        if 'rapidvideo' in sUrl:  # qual site film illimite
+            sPattern = '<a href="([^"]+&q=\\d+p)"'
             aResult = oParser.parse(sHtmlContent, sPattern)
             if aResult[0] is True:
-                url=[]
-                qua=[]
+                url = []
+                qua = []
                 for i in aResult[1]:
                     url.append(str(i))
                     qua.append(str(i.rsplit('&q=', 1)[1]))
@@ -35,7 +35,6 @@ class cHoster(iHoster):
                     aResult = oParser.parse(sHtmlContent, sPattern)
                     if aResult[0] is True:
                         api_call = aResult[1][0]
-
 
                 elif len(url) > 1:
                     dialog2 = xbmcgui.Dialog()
@@ -54,23 +53,23 @@ class cHoster(iHoster):
                 sPattern = '<source src="([^"]+)" type="video/.+?" label="([^"]+)"'
                 aResult = oParser.parse(sHtmlContent, sPattern)
 
-                url=[]
-                qua=[]
+                url = []
+                qua = []
                 api_call = False
 
                 for aEntry in aResult[1]:
                     url.append(aEntry[0])
                     qua.append(aEntry[1])
 
-                #Affichage du tableau
+                # Affichage du tableau
                 api_call = dialog().VSselectqual(qua, url)
 
         else:
             sPattern = '{"file":"([^"]+)","label":"([^"]+)"'
             aResult = oParser.parse(sHtmlContent, sPattern)
             if aResult[0] is True:
-                url=[]
-                qua=[]
+                url = []
+                qua = []
                 for i in aResult[1]:
                     url.append(str(i[0]))
                     qua.append(str(i[1]))

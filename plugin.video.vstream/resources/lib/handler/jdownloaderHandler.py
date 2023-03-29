@@ -68,7 +68,8 @@ class cJDownloaderHandler:
         if bAutomaticDownload is True:
             sAutomaticStart = '1'
 
-        sUrl = 'http://' + str(sHost) + ':' + str(sPort) + '/action/add/links/grabber' + str(sGrabber) + '/start' + str(sAutomaticStart) + '/' + sFileUrl
+        sUrl = 'http://' + str(sHost) + ':' + str(sPort) + '/action/add/links/grabber' + \
+            str(sGrabber) + '/start' + str(sAutomaticStart) + '/' + sFileUrl
         return sUrl
 
     def __checkConnection(self):

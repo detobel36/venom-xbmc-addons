@@ -40,10 +40,20 @@ def load():
     oGui.addDir(SITE_IDENTIFIER, REPLAYTV_NEWS[1], 'Toutes les emissions', 'news.png', oOutputParameterHandler)
 
     oOutputParameterHandler.addParameter('siteUrl', REPLAYTV_DIVERTISSEMENT[0])
-    oGui.addDir(SITE_IDENTIFIER, REPLAYTV_DIVERTISSEMENT[1], 'Emissions de Divertissements/Téléréalité', 'tv.png', oOutputParameterHandler)
+    oGui.addDir(
+        SITE_IDENTIFIER,
+        REPLAYTV_DIVERTISSEMENT[1],
+        'Emissions de Divertissements/Téléréalité',
+        'tv.png',
+        oOutputParameterHandler)
 
     oOutputParameterHandler.addParameter('siteUrl', REPLAYTV_INVESTIGATION[0])
-    oGui.addDir(SITE_IDENTIFIER, REPLAYTV_INVESTIGATION[1], 'Emissions de Reportages/Investigations', 'tv.png', oOutputParameterHandler)
+    oGui.addDir(
+        SITE_IDENTIFIER,
+        REPLAYTV_INVESTIGATION[1],
+        'Emissions de Reportages/Investigations',
+        'tv.png',
+        oOutputParameterHandler)
 
     oGui.setEndOfDirectory()
 
@@ -115,7 +125,7 @@ def showMovies(sSearch=''):
 
 def __checkForNextPage(sHtmlContent):
     oParser = cParser()
-    sPattern = 'class="next" href="([^"]+)".+?<\/a><a class="last" href="https.+?page\/(\d+)'
+    sPattern = 'class="next" href="([^"]+)".+?<\\/a><a class="last" href="https.+?page\\/(\\d+)'
     aResult = oParser.parse(sHtmlContent, sPattern)
 
     if aResult[0]:

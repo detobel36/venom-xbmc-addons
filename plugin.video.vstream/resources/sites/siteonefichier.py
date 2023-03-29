@@ -25,9 +25,11 @@ URL_VERIF = URL_MAIN + 'check_links.pl?links[]='
 def load():
     addons = addon()
 
-    if (addons.getSetting('hoster_onefichier_username') == '') and (addons.getSetting('hoster_onefichier_password') == ''):
+    if (addons.getSetting('hoster_onefichier_username') == '') and (
+            addons.getSetting('hoster_onefichier_password') == ''):
         oGui = cGui()
-        oGui.addText(SITE_IDENTIFIER, '[COLOR %s]%s[/COLOR]' % ('red', 'Nécessite un Compte 1Fichier Premium ou Gratuit'))
+        oGui.addText(SITE_IDENTIFIER, '[COLOR %s]%s[/COLOR]' %
+                     ('red', 'Nécessite un Compte 1Fichier Premium ou Gratuit'))
 
         oOutputParameterHandler = cOutputParameterHandler()
         oOutputParameterHandler.addParameter('siteUrl', 'http://venom/')
@@ -81,7 +83,9 @@ def showFile(sFileTree=''):
                 break
 
             if aEntry[0]:
-                oOutputParameterHandler.addParameter('siteUrl', '%s%s%s%s' % (URL_FILE, '?dir_id=', aEntry[1], '&oby=0&search='))
+                oOutputParameterHandler.addParameter(
+                    'siteUrl', '%s%s%s%s' %
+                    (URL_FILE, '?dir_id=', aEntry[1], '&oby=0&search='))
                 oOutputParameterHandler.addParameter('sCode', '')
                 oOutputParameterHandler.addParameter('sTitle', aEntry[2])
                 oGui.addDir(SITE_IDENTIFIER, 'showFile', aEntry[2], 'genres.png', oOutputParameterHandler)

@@ -36,7 +36,7 @@ class cHoster(iHoster):
             sHtmlContent = oRequest.request()
             sHtmlContent = sHtmlContent.replace('file:""', '')
 
-            sPattern = '(eval\(function\(p,a,c,k,e(?:.|\s)+?\))<\/script>'
+            sPattern = '(eval\\(function\\(p,a,c,k,e(?:.|\\s)+?\\))<\\/script>'
             aResult = oParser.parse(sHtmlContent, sPattern)
             if aResult[0] is True:
                 sHtmlContent = cPacker().unpack(aResult[1][0])
@@ -45,7 +45,7 @@ class cHoster(iHoster):
                 if aResult[0] is True:
                     return True, aResult[1][0]
             else:
-                sPattern = '{file:"([^"]+)",label:"(\d+p)"}'
+                sPattern = '{file:"([^"]+)",label:"(\\d+p)"}'
                 aResult = oParser.parse(sHtmlContent, sPattern)
                 if aResult[0] is True:
                     url = []

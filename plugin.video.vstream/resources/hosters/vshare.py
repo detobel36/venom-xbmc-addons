@@ -20,7 +20,7 @@ class cHoster(iHoster):
 
     def setUrl(self, url):
         self._url = str(url)
-        self._url = re.sub('-*\d{3,4}x\d{3,4}', '', self._url)
+        self._url = re.sub('-*\\d{3,4}x\\d{3,4}', '', self._url)
         self._url = self._url.replace('https', 'http')
 
     def _getMediaLinkForGuest(self):
@@ -36,7 +36,7 @@ class cHoster(iHoster):
         if aResult[0] is True:
             api_call = aResult[1][0]
         else:
-            sPattern = '(eval\(function\(p,a,c,k,e(?:.|\s)+?\))<\/script>'
+            sPattern = '(eval\\(function\\(p,a,c,k,e(?:.|\\s)+?\\))<\\/script>'
             aResult = oParser.parse(sHtmlContent, sPattern)
             if aResult[0] is True:
                 sHtmlContent = cPacker().unpack(aResult[1][0])

@@ -149,7 +149,7 @@ def showMovies(sSearch=''):
             if sSearch:
                 if not oUtil.CheckOccurence(sSearchText, sTitle):
                     continue
-            
+
             sDisplayTitle = sTitle
             sDesc = ''
 
@@ -177,7 +177,7 @@ def showMovies(sSearch=''):
 
 def __checkForNextPage(sHtmlContent):
     # &raquo; est réécris par vStream en >>
-    sPattern = 'pages\'>.age.+?sur (\d+).+?current\'>.+?href="([^"]+)">>>'
+    sPattern = 'pages\'>.age.+?sur (\\d+).+?current\'>.+?href="([^"]+)">>>'
     oParser = cParser()
     aResult = oParser.parse(sHtmlContent, sPattern)
     if aResult[0]:
@@ -208,10 +208,10 @@ def showSaisons():
         aResult = oParser.parse(sHtmlContent, sPattern)
         if aResult[0]:
             sDesc = aResult[1][0]
-    except:
+    except BaseException:
         pass
 
-    sPattern = '<div class="unepetitesaisons">\s*<a href="([^"]+)" title="([^"]+)"'
+    sPattern = '<div class="unepetitesaisons">\\s*<a href="([^"]+)" title="([^"]+)"'
     aResult = oParser.parse(sHtmlContent, sPattern)
 
     if aResult[0]:
@@ -223,7 +223,7 @@ def showSaisons():
                 sUrl = URL_MAIN + sUrl
 
             sTitle = aEntry[1]
-            sTitle = re.sub('- Saison \d+', '', sTitle)  # double affichage de la saison
+            sTitle = re.sub('- Saison \\d+', '', sTitle)  # double affichage de la saison
 
             oOutputParameterHandler.addParameter('siteUrl', sUrl)
             oOutputParameterHandler.addParameter('sThumb', sThumb)
@@ -251,7 +251,7 @@ def showEpisodes():
         aResult = oParser.parse(sHtmlContent, sPattern)
         if aResult[0]:
             sDesc = aResult[1][0]
-    except:
+    except BaseException:
         pass
 
     # recuperation du premier épisode

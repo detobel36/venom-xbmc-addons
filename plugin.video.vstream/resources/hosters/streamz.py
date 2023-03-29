@@ -48,7 +48,7 @@ class cHoster(iHoster):
 
         JScode = JScode.replace(' ', '')
 
-        r = "if\(\$\.adblock!=null\){\$\.get\('([^']+)',{([^}]+)}"
+        r = "if\\(\\$\\.adblock!=null\\){\\$\\.get\\('([^']+)',{([^}]+)}"
         aResult = oParser.parse(JScode, r)
 
         if not aResult[0]:
@@ -62,9 +62,9 @@ class cHoster(iHoster):
         oRequest.addHeaderEntry('User-Agent', UA)
         try:
             tmp = oRequest.request()
-        except:
+        except BaseException:
             pass
-        sPattern = '(\s*eval\s*\(\s*function(?:.|\s)+?)<\/script>'
+        sPattern = '(\\s*eval\\s*\\(\\s*function(?:.|\\s)+?)<\\/script>'
         aResult = oParser.parse(sHtmlContent, sPattern)
         if aResult[0]:
             for i in aResult[1]:

@@ -268,7 +268,7 @@ def showMovies(sSearch=''):
 def __checkForNextPage(sHtmlContent):
     oParser = cParser()
 
-    sPattern = 'navigation.+?<span>\d+</span> <a href="([^"]+).+?>([^<]+)</a></div>'
+    sPattern = 'navigation.+?<span>\\d+</span> <a href="([^"]+).+?>([^<]+)</a></div>'
     aResult = oParser.parse(sHtmlContent, sPattern)
     if aResult[0]:
         sNextPage = aResult[1][0][0]
@@ -458,7 +458,7 @@ def showMovieLinks():
     if aResult[0]:
         sDesc = ('[I][COLOR grey]%s[/COLOR][/I] %s') % ('Synopsis : ', aResult[1][0])
 
-    sPattern = "lien fx-row.+?\"getxfield.+?(\d+).+?\'([^\']*).+?'([^\']*).+?images.([^\.]+).+?pl-5\">([^<]+)"
+    sPattern = "lien fx-row.+?\"getxfield.+?(\\d+).+?\'([^\']*).+?'([^\']*).+?images.([^\\.]+).+?pl-5\">([^<]+)"
     aResult = oParser.parse(sHtmlContent, sPattern)
 
     if aResult[0]:
@@ -483,7 +483,14 @@ def showMovieLinks():
             oOutputParameterHandler.addParameter('sYear', sYear)
             oOutputParameterHandler.addParameter('referer', sUrl)
             oOutputParameterHandler.addParameter('cook', cook)
-            oGui.addMovie(SITE_IDENTIFIER, 'showMovieHosters', sDisplayTitle, '', sThumb, sDesc, oOutputParameterHandler)
+            oGui.addMovie(
+                SITE_IDENTIFIER,
+                'showMovieHosters',
+                sDisplayTitle,
+                '',
+                sThumb,
+                sDesc,
+                oOutputParameterHandler)
 
     oGui.setEndOfDirectory()
 

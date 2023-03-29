@@ -83,7 +83,7 @@ def showMovies():
 
 
 def __checkForNextPage(sHtmlContent):
-    sPattern = '>(\d+)</a></li><li><a href="([^"]+)"><i class="fa fa-angle-right'
+    sPattern = '>(\\d+)</a></li><li><a href="([^"]+)"><i class="fa fa-angle-right'
     oParser = cParser()
     aResult = oParser.parse(sHtmlContent, sPattern)
     if aResult[0]:

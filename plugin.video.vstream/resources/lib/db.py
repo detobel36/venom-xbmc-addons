@@ -14,7 +14,7 @@ SITE_NAME = 'DB'
 
 try:
     from sqlite3 import dbapi2 as sqlite
-except:
+except BaseException:
     from pysqlite2 import dbapi2 as sqlite
 
 
@@ -45,8 +45,8 @@ class cDb(object):
             if self.dbcur.fetchone() is None:
                 self._create_tables()
             return self
-            
-        except:
+
+        except BaseException:
             VSlog('Error: Unable to access to %s' % REALDB)
             pass
 
@@ -55,7 +55,7 @@ class cDb(object):
         try:
             self.dbcur.close()
             self.db.close()
-        except:
+        except BaseException:
             pass
 
     def _create_tables(self, dropTable=''):
@@ -149,7 +149,7 @@ class cDb(object):
 
             try:
                 data = data.decode('string-escape')  # ATTENTION: bugs pour les chemins a cause du caractere '/'
-            except:
+            except BaseException:
                 pass
 
         else:
@@ -175,7 +175,8 @@ class cDb(object):
             VSlog('SQL INSERT history Successfully')
         except Exception as e:
             if 'UNIQUE constraint failed' in str(e):
-                ex = "UPDATE history set title = '%s', disp = '%s', icone= '%s' WHERE title = '%s'" % (title, disp, icon, title)
+                ex = "UPDATE history set title = '%s', disp = '%s', icone= '%s' WHERE title = '%s'" % (
+                    title, disp, icon, title)
                 self.dbcur.execute(ex)
                 self.db.commit()
                 VSlog('SQL UPDATE history Successfully')
@@ -365,7 +366,7 @@ class cDb(object):
 
         try:
             sIcon = meta['icon'].decode('UTF-8')
-        except:
+        except BaseException:
             sIcon = meta['icon']
 
         try:
@@ -479,7 +480,17 @@ class cDb(object):
                 VSlog('Table recreated : viewing')
 
                 # Deuxieme tentative
-                self.dbcur.execute(ex, (meta['sTmdbId'], titleWatched, title, siteurl, meta['site'], meta['fav'], meta['cat'], saison, episode))
+                self.dbcur.execute(
+                    ex,
+                    (meta['sTmdbId'],
+                     titleWatched,
+                     title,
+                     siteurl,
+                     meta['site'],
+                        meta['fav'],
+                        meta['cat'],
+                        saison,
+                        episode))
                 self.db.commit()
             else:
                 VSlog('SQL ERROR INSERT : %s' % e)
@@ -505,7 +516,7 @@ class cDb(object):
             if 'cat' in meta:
                 sql_delete += " where cat = '%s'" % meta['cat']
         else:
-            sql_delete= "DELETE FROM viewing WHERE title_id = '%s'" % sTitleWatched
+            sql_delete = "DELETE FROM viewing WHERE title_id = '%s'" % sTitleWatched
             if 'cat' in meta:
                 sql_delete += " and cat = '%s'" % meta['cat']
 
@@ -623,7 +634,8 @@ class cDb(object):
         totalsize = meta['totalsize']
         status = meta['status']
 
-        sql_select = "UPDATE download set size = '%s', totalsize = '%s', status= '%s' WHERE path = '%s'" % (size, totalsize, status, path)
+        sql_select = "UPDATE download set size = '%s', totalsize = '%s', status= '%s' WHERE path = '%s'" % (
+            size, totalsize, status, path)
 
         try:
             self.dbcur.execute(sql_select)

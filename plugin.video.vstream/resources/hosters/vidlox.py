@@ -12,7 +12,7 @@ class cHoster(iHoster):
     def __init__(self):
         iHoster.__init__(self, 'vidlox', 'Vidlox')
         if not isKrypton():
-            self._defaultDisplayName = '(Windows\Android Nécessite Kodi17)' + ' Vidlox'
+            self._defaultDisplayName = '(Windows\\Android Nécessite Kodi17)' + ' Vidlox'
 
     def setUrl(self, url):
         url = url.replace('embed-dlox.me/', 'embed-')
@@ -27,7 +27,7 @@ class cHoster(iHoster):
         # accelère le traitement
         sHtmlContent = oParser.abParse(sHtmlContent, 'var player', 'vvplay')
 
-        sPattern = '([^"]+\.mp4)'
+        sPattern = '([^"]+\\.mp4)'
         oParser = cParser()
         aResult = oParser.parse(sHtmlContent, sPattern)
         if aResult[0] is True:

@@ -34,7 +34,7 @@ class cHoster(iHoster):
         list_q = []
         oParser = cParser()
 
-        sPattern = '(?:[>;]\s*)(ﾟωﾟ.+?\(\'_\'\);)'
+        sPattern = '(?:[>;]\\s*)(ﾟωﾟ.+?\\(\'_\'\\);)'
         aResult = oParser.parse(sHtmlContent, sPattern)
 
         if aResult[0] is True:  # 1 seul à vérifier ici ?

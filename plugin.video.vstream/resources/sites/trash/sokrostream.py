@@ -1,15 +1,15 @@
 # -*- coding: utf-8 -*-
 # vStream https://github.com/Kodi-vStream/venom-xbmc-addons
-return False  # 02/10/21
-import re
-
-from resources.lib.gui.hoster import cHosterGui
-from resources.lib.gui.gui import cGui
-from resources.lib.handler.inputParameterHandler import cInputParameterHandler
-from resources.lib.handler.outputParameterHandler import cOutputParameterHandler
-from resources.lib.handler.requestHandler import cRequestHandler
-from resources.lib.parser import cParser
 from resources.lib.comaddon import progress
+from resources.lib.parser import cParser
+from resources.lib.handler.requestHandler import cRequestHandler
+from resources.lib.handler.outputParameterHandler import cOutputParameterHandler
+from resources.lib.handler.inputParameterHandler import cInputParameterHandler
+from resources.lib.gui.gui import cGui
+from resources.lib.gui.hoster import cHosterGui
+import re
+return False  # 02/10/21
+
 
 SITE_IDENTIFIER = 'sokrostream'
 SITE_NAME = 'Sokrostream'
@@ -121,7 +121,7 @@ def showMovies(sSearch=''):
             sYear = None
             if len(sTitle) > 4 and sTitle[-4:].isdigit():
                 sYear = sTitle[-4:]
-                sTitle = sTitle[0:len(sTitle)-4]
+                sTitle = sTitle[0:len(sTitle) - 4]
             sDisplayTitle = sTitle
             if sYear:
                 sDisplayTitle = sDisplayTitle + '(' + sYear + ')'
@@ -145,7 +145,7 @@ def showMovies(sSearch=''):
 
 
 def __checkForNextPage(sHtmlContent):
-    sPattern = '>(\d+)</a></li><li><a href="([^"]+)">Page suivante'
+    sPattern = '>(\\d+)</a></li><li><a href="([^"]+)">Page suivante'
     oParser = cParser()
     aResult = oParser.parse(sHtmlContent, sPattern)
     if aResult[0]:

@@ -165,9 +165,23 @@ def showMovies(sSearch=''):
             oOutputParameterHandler.addParameter('sYear', sYear)
 
             if '/serie' in sUrl2:
-                oGui.addTV(SITE_IDENTIFIER, 'showSaisons', sDisplayTitle, 'series.png', sThumb, '', oOutputParameterHandler)
+                oGui.addTV(
+                    SITE_IDENTIFIER,
+                    'showSaisons',
+                    sDisplayTitle,
+                    'series.png',
+                    sThumb,
+                    '',
+                    oOutputParameterHandler)
             else:
-                oGui.addMovie(SITE_IDENTIFIER, 'showLinks', sDisplayTitle, 'films.png', sThumb, '', oOutputParameterHandler)
+                oGui.addMovie(
+                    SITE_IDENTIFIER,
+                    'showLinks',
+                    sDisplayTitle,
+                    'films.png',
+                    sThumb,
+                    '',
+                    oOutputParameterHandler)
 
         progress_.VSclose(progress_)
 
@@ -182,7 +196,7 @@ def showMovies(sSearch=''):
 
 def __checkForNextPage(sHtmlContent):
     oParser = cParser()
-    sPattern = '>([^<]+)</a><a href="([^"]+)"\s*>SUIVANT</a>'
+    sPattern = '>([^<]+)</a><a href="([^"]+)"\\s*>SUIVANT</a>'
     aResult = oParser.parse(sHtmlContent, sPattern)
     if aResult[0]:
         sNumberMax = aResult[1][0][0]
@@ -215,7 +229,7 @@ def showSaisons():
         aResult = oParser.parse(sHtmlContent, sPattern)
         if aResult[0]:
             sDesc = aResult[1][0]
-    except:
+    except BaseException:
         pass
 
     sPattern = 'choose-season"><a href="([^"]+).+?inline">([^<]+)'
@@ -259,7 +273,7 @@ def showEpisodes():
             sTitle = aEntry[0]
             sUrl = aEntry[1]
             # if sUrl.startswith('/'):
-                # sUrl = URL_MAIN + sUrl
+            # sUrl = URL_MAIN + sUrl
 
             # sTitle = re.sub('- Saison \d+', '', sTitle)  # double affichage de la saison
 
@@ -293,7 +307,7 @@ def showLinks():
             aResult = oParser.parse(sHtmlContent, sPattern)
             if aResult[0]:
                 sDesc = aResult[1][0]
-        except:
+        except BaseException:
             pass
 
     sPatternUrl = '<iframe (?:data-)*src="([^"]+)"'

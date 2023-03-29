@@ -1,5 +1,5 @@
-#-*- coding: utf-8 -*-
-#Vstream https://github.com/Kodi-vStream/venom-xbmc-addons
+# -*- coding: utf-8 -*-
+# Vstream https://github.com/Kodi-vStream/venom-xbmc-addons
 import re
 
 from resources.lib.handler.requestHandler import cRequestHandler
@@ -22,14 +22,14 @@ class cHoster(iHoster):
 
         oParser = cParser()
 
-        sPattern = "(\s*eval\s*\(\s*function(?:.|\s)+?)<\/script>"
+        sPattern = "(\\s*eval\\s*\\(\\s*function(?:.|\\s)+?)<\\/script>"
         aResult = re.findall(sPattern, sHtmlContent)
 
         if (aResult):
             sUnpacked = cPacker().unpack(aResult[0])
             sHtmlContent = sUnpacked
 
-            sPattern = "'([^<>']+?\.mp4)"
+            sPattern = "'([^<>']+?\\.mp4)"
             aResult = oParser.parse(sHtmlContent, sPattern)
             if aResult[0] is True:
                 api_call = aResult[1][0]

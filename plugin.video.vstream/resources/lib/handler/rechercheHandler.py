@@ -19,13 +19,13 @@ class cRechercheHandler:
     def getPluginHandle(self):
         try:
             return int(sys.argv[1])
-        except:
+        except BaseException:
             return 0
 
     def getPluginPath(self):
         try:
             return sys.argv[0]
-        except:
+        except BaseException:
             return ''
 
     def setText(self, sText):
@@ -65,7 +65,7 @@ class cRechercheHandler:
             sFilePath = "/".join([sFolder, sItemName])
             sFilePath = sFilePath.replace('\\', '/')
 
-            if (xbmcvfs.exists(sFilePath) == True):
+            if (xbmcvfs.exists(sFilePath)):
                 if (sFilePath.lower().endswith('py')):
                     sItemName = sItemName.replace('.py', '')
                     aNameList.append(sItemName)

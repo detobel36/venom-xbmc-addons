@@ -16,7 +16,7 @@ class cHoster(iHoster):
 
         api_call = ''
 
-        sPattern = 'id="videolink">([^<>]+)<\/p>'
+        sPattern = 'id="videolink">([^<>]+)<\\/p>'
         aResult = re.findall(sPattern, sHtmlContent)
 
         if aResult:

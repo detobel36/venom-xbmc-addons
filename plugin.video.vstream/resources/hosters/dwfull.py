@@ -18,7 +18,7 @@ class cHoster(iHoster):
         sHtmlContent = oRequest.request()
 
         oParser = cParser()
-        sPattern = 'sources: \["([^"]+)"'
+        sPattern = 'sources: \\["([^"]+)"'
         aResult = oParser.parse(sHtmlContent, sPattern)
 
         if aResult[0]:

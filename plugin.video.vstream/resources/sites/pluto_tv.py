@@ -33,7 +33,13 @@ def getData():
     else:
         sid = str(uuid.uuid1().hex)
         deviceID = str(uuid.uuid4().hex)
-        clientID = Quote(''.join(random.choice(string.ascii_uppercase + string.ascii_lowercase + string.digits + '=+') for _ in range(24)))
+        clientID = Quote(
+            ''.join(
+                random.choice(
+                    string.ascii_uppercase +
+                    string.ascii_lowercase +
+                    string.digits +
+                    '=+') for _ in range(24)))
 
         addon().setSetting("PlutoTV_deviceID", deviceID)
         addon().setSetting("PlutoTV_clientID", clientID)
@@ -194,7 +200,14 @@ def showSerieSxE():
                 oOutputParameterHandler.addParameter('siteUrl', siteUrl)
                 oOutputParameterHandler.addParameter('sMovieTitle', sTitle)
                 oOutputParameterHandler.addParameter('sThumb', sThumb)
-                oGui.addEpisode(SITE_IDENTIFIER, 'seriesHosters', sTitle, 'series.png', sThumb, sDesc, oOutputParameterHandler)
+                oGui.addEpisode(
+                    SITE_IDENTIFIER,
+                    'seriesHosters',
+                    sTitle,
+                    'series.png',
+                    sThumb,
+                    sDesc,
+                    oOutputParameterHandler)
 
     oGui.setEndOfDirectory()
 

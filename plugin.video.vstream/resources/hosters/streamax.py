@@ -37,7 +37,7 @@ class cHoster(iHoster):
         oRequest.addHeaderEntry('Referer', 'https://streamax.club/public/dist/index.html?id=' + urlId)
         sHtmlContent = oRequest.request()
 
-        sPattern = 'RESOLUTION=(\d+x\d+)(.+?.m3u8)'
+        sPattern = 'RESOLUTION=(\\d+x\\d+)(.+?.m3u8)'
         aResult = oParser.parse(sHtmlContent, sPattern)
         if aResult[0] is True:
             for aEntry in aResult[1]:

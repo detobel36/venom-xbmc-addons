@@ -57,10 +57,10 @@ class cHoster(iHoster):
                 qua.append(str(i[0]))
 
             headers = {
-                       "User-Agent": Quote("Mozilla/5.0 (Linux; Android 6.0.1; SM-G930V Build/MMB29M) " +
-                                           "AppleWebKit/537.36 (KHTML, like Gecko) Chrome/50.0.2661.89 Mobile Safari/537.36"),
-                       "Referer": "https://lb.toonanime.xyz/"
-                       }
+                "User-Agent": Quote("Mozilla/5.0 (Linux; Android 6.0.1; SM-G930V Build/MMB29M) " +
+                                    "AppleWebKit/537.36 (KHTML, like Gecko) Chrome/50.0.2661.89 Mobile Safari/537.36"),
+                "Referer": "https://lb.toonanime.xyz/"
+            }
 
             # Affichage du tableau
             api_call = "http://127.0.0.1:2424?u=https://lb.toonanime.xyz" + dialog().VSselectqual(qua, url) + \

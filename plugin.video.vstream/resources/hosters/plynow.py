@@ -5,7 +5,7 @@
 import re
 try:
     import urllib.parse as urllib
-except:
+except BaseException:
     import urllib
 
 from resources.lib.handler.requestHandler import cRequestHandler
@@ -25,7 +25,7 @@ class cHoster(iHoster):
         sHtmlContent = oRequest.request()
 
         # On récupere l'array
-        sPattern = '<script>\s*\(function\(\).+?=(.+?)var player'
+        sPattern = '<script>\\s*\\(function\\(\\).+?=(.+?)var player'
         aResult = oParser.parse(sHtmlContent, sPattern)
         if aResult:
             for aEntry in aResult[1]:

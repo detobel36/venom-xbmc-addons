@@ -18,7 +18,7 @@ class cHoster(iHoster):
         oRequest = cRequestHandler(self._url)
         sHtmlContent = oRequest.request()
 
-        sPattern1 = 'ById\(\'ideoo.+?=\s*["\']([^"\']+)[\'"].+?["\']([^"\']+)\'\)'
+        sPattern1 = 'ById\\(\'ideoo.+?=\\s*["\']([^"\']+)[\'"].+?["\']([^"\']+)\'\\)'
 
         aResult = oParser.parse(sHtmlContent, sPattern1)
 

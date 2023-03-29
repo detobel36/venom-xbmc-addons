@@ -95,7 +95,14 @@ def showAlpha():
     oOutputParameterHandler = cOutputParameterHandler()
     for sTitle, sUrl in liste:
         oOutputParameterHandler.addParameter('siteUrl', URL_MAIN + 'alphabet/' + sUrl)
-        oGui.addDir(SITE_IDENTIFIER, 'showSeries', 'Lettre [COLOR coral]' + sTitle + '[/COLOR]', 'az.png', oOutputParameterHandler)
+        oGui.addDir(
+            SITE_IDENTIFIER,
+            'showSeries',
+            'Lettre [COLOR coral]' +
+            sTitle +
+            '[/COLOR]',
+            'az.png',
+            oOutputParameterHandler)
 
     oGui.setEndOfDirectory()
 
@@ -157,7 +164,7 @@ def showSeries(sSearch=''):
     if aResult[0]:
         oOutputParameterHandler = cOutputParameterHandler()
         for aEntry in aResult[1]:
-            sThumb = re.sub('/w\d+/', '/w342/', aEntry[0])
+            sThumb = re.sub('/w\\d+/', '/w342/', aEntry[0])
             sUrl2 = aEntry[1]
             if sUrl2.startswith('/'):
                 sUrl2 = URL_MAIN[:-1] + sUrl2
@@ -183,7 +190,7 @@ def showSeries(sSearch=''):
 
 def __checkForNextPage(sHtmlContent):
     oParser = cParser()
-    sPattern = '> \d+ </span><a href="([^"]+).+?>([^<]+)</a></div></div>'
+    sPattern = '> \\d+ </span><a href="([^"]+).+?>([^<]+)</a></div></div>'
     aResult = oParser.parse(sHtmlContent, sPattern)
     if aResult[0]:
         sNextPage = aResult[1][0][0]
@@ -212,7 +219,7 @@ def showSaisons():
         aResult = oParser.parse(sHtmlContent, sPattern)
         if aResult[0]:
             sDesc = aResult[1][0]
-    except:
+    except BaseException:
         pass
 
     sPattern = 'link"><img src=([^ ]+).+?href="([^"]+).+?>([^<]+)'
@@ -289,7 +296,7 @@ def showLinks():
         for aEntry in aResult[1]:
 
             sHost = aEntry[1].replace('www.', '')
-            sHost = re.sub('\..+', '', sHost).capitalize()
+            sHost = re.sub('\\..+', '', sHost).capitalize()
             if not cHosterGui().checkHoster(sHost):
                 continue
 

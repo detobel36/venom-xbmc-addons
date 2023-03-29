@@ -49,14 +49,14 @@ class cHoster(iHoster):
 
             sHtmlContent = oRequest.request()
 
-            sPattern = "(\s*eval\s*\(\s*function(?:.|\s)+?)<\/script>"
+            sPattern = "(\\s*eval\\s*\\(\\s*function(?:.|\\s)+?)<\\/script>"
             aResult = re.findall(sPattern, sHtmlContent)
 
             if aResult:
                 sUnpacked = cPacker().unpack(aResult[0])
                 sHtmlContent = sUnpacked
                 if sHtmlContent:
-                    sPattern = "replace\(.*'(.+?)'"
+                    sPattern = "replace\\(.*'(.+?)'"
                     aResult = oParser.parse(sHtmlContent, sPattern)
 
                     if aResult[0] is True:

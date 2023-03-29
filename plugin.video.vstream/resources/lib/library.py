@@ -57,7 +57,7 @@ class cLibrary:
             sCat = '2'
 
         sMediaUrl = QuotePlus(sMediaUrl)
-        #sFileName = QuotePlus(sFileName)
+        # sFileName = QuotePlus(sFileName)
 
         sLink = 'plugin://plugin.video.vstream/?function=play&site=cHosterGui&sFileName='
         sLink += sFileName + '&sMediaUrl=' + sMediaUrl + '&sHosterIdentifier=' + sHosterIdentifier
@@ -65,7 +65,7 @@ class cLibrary:
         sTitle = sFileName
 
         if sCat == '1':  # film
-            #sTitle = cUtil().CleanName(sTitle)
+            # sTitle = cUtil().CleanName(sTitle)
             sTitle = self.showKeyBoard(sTitle, 'Nom du fichier')
 
             try:
@@ -75,11 +75,11 @@ class cLibrary:
                     xbmcvfs.mkdir(sPath)
 
                 self.MakeFile(sPath, sTitle, sLink)
-            except:
+            except BaseException:
                 dialog().VSinfo('Rajout impossible')
 
         elif sCat == '2':  # serie
-            #sTitle = cUtil().CleanName(sTitle)
+            # sTitle = cUtil().CleanName(sTitle)
             sFTitle = self.showKeyBoard(sTitle, 'Saison : Recommandé NomDeSerie/Saison01')
 
             try:
@@ -92,7 +92,7 @@ class cLibrary:
                 sTitle = self.showKeyBoard(sTitle, 'Épisode : Recommandé NomDeSerie S01E01')
 
                 self.MakeFile(sPath, sTitle, sLink)
-            except:
+            except BaseException:
                 dialog().VSinfo('Rajout impossible')
 
     def MakeFile(self, folder, name, content):
@@ -118,7 +118,6 @@ class cLibrary:
         oGui.addDir(SITE_IDENTIFIER, 'openLibrary', self.ADDON.VSlang(30121), 'series.png', oOutputParameterHandler)
 
         oGui.setEndOfDirectory()
-
 
     def getRecords(self):
         oGui = cGui()
@@ -172,7 +171,9 @@ class cLibrary:
 
         xbmcvfs.delete(sFile)
 
-        runClean = self.DIALOG.VSyesno('Voulez vous mettre à jour la librairie maintenant (non conseillé)', 'Fichier supprimé')
+        runClean = self.DIALOG.VSyesno(
+            'Voulez vous mettre à jour la librairie maintenant (non conseillé)',
+            'Fichier supprimé')
         if not runClean:
             return
 

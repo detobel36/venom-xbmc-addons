@@ -15,7 +15,7 @@ SITE_DESC = 'Sports Replay'
 
 URL_MAIN = siteManager().getUrlMain(SITE_IDENTIFIER)
 
-#SPORT_SPORTS = (True, 'load')
+# SPORT_SPORTS = (True, 'load')
 SPORT_REPLAY = (True, 'load')
 REPLAYTV_REPLAYTV = (True, 'load')
 
@@ -132,7 +132,7 @@ def showLink():
     sStart = '<div class="td-post-content tagdiv-type">'
     sEnd = '<div class="td-post-source-tags">'
     sHtmlContent = oParser.abParse(sHtmlContent, sStart, sEnd)
-    sPattern = 'Part (\d).+?<iframe.+?src="([^"]+)"'
+    sPattern = 'Part (\\d).+?<iframe.+?src="([^"]+)"'
 
     aResult = oParser.parse(sHtmlContent, sPattern)
 

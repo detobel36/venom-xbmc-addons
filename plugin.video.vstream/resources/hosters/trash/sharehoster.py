@@ -5,6 +5,7 @@ from resources.hosters.hoster import iHoster
 import time
 import random
 
+
 class cHoster(iHoster):
 
     def __init__(self):
@@ -19,7 +20,7 @@ class cHoster(iHoster):
         oRequest = cRequestHandler(sUrl)
         sHtmlContent = oRequest.request()
 
-        sPattern = "playlist': \[.*?},.*?'url': '(.*?)'"
+        sPattern = "playlist': \\[.*?},.*?'url': '(.*?)'"
         oParser = cParser()
         aResult = oParser.parse(sHtmlContent, sPattern)
 

@@ -143,7 +143,7 @@ def showMovies(sSearch=''):
 
 def __checkForNextPage(sHtmlContent):
     oParser = cParser()
-    sPattern = '>([^<]+)</a>\s*</div>\s*<a href="([^"]+)">\s*<span class="next-page">Suivant</span>'
+    sPattern = '>([^<]+)</a>\\s*</div>\\s*<a href="([^"]+)">\\s*<span class="next-page">Suivant</span>'
     aResult = oParser.parse(sHtmlContent, sPattern)
 
     if aResult[0]:
@@ -206,7 +206,8 @@ def seriesHosters():
                 playerData = oParser.parse(sHtmlContent, sPattern)[1][0]
 
                 if 'http' not in playerData:
-                    sPattern = 'player_type[^;]*=="new_player_' + aEntry1[1].lower() + '"\|.+?(?:src=\\\\")([^"]*).*?player_content.*?"([^\\\\"]*)'
+                    sPattern = 'player_type[^;]*=="new_player_' + aEntry1[1].lower() + \
+                        '"\\|.+?(?:src=\\\\")([^"]*).*?player_content.*?"([^\\\\"]*)'
                     aResult2 = oParser.parse(playerContent, sPattern)
                     if aResult2[0] is True:
                         sHosterUrl = aResult2[1][0][0] + playerData + aResult2[1][0][1]
@@ -261,7 +262,10 @@ def DecryptOuo():
     Cookie = oRequestHandler.GetCookies()
 
     key = re.search('sitekey: "([^"]+)', str(sHtmlContent)).group(1)
-    OuoToken = re.search('<input name="_token" type="hidden" value="([^"]+).+?id="v-token" name="v-token" type="hidden" value="([^"]+)', str(sHtmlContent), re.MULTILINE | re.DOTALL)
+    OuoToken = re.search(
+        '<input name="_token" type="hidden" value="([^"]+).+?id="v-token" name="v-token" type="hidden" value="([^"]+)',
+        str(sHtmlContent),
+        re.MULTILINE | re.DOTALL)
 
     gToken = ResolveCaptcha(key, urlOuo)
 
@@ -281,7 +285,9 @@ def DecryptOuo():
     oRequestHandler.addParametersLine(params)
     sHtmlContent = oRequestHandler.request()
 
-    final = re.search('<form method="POST" action="(.+?)" accept-charset=.+?<input name="_token" type="hidden" value="(.+?)">', str(sHtmlContent))
+    final = re.search(
+        '<form method="POST" action="(.+?)" accept-charset=.+?<input name="_token" type="hidden" value="(.+?)">',
+        str(sHtmlContent))
 
     url = final.group(1)
     params = '_token=' + final.group(2) + '&x-token=' + ''

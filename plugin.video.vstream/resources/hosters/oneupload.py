@@ -24,6 +24,6 @@ class cHoster(iHoster):
             api_call = aResult[1][0]
 
         if api_call:
-            return True, api_call #+ '|User-Agent=' + UA + '&Referer=' + self._url + '&Origin=https://vidfast.co'
+            return True, api_call  # + '|User-Agent=' + UA + '&Referer=' + self._url + '&Origin=https://vidfast.co'
 
         return False, False

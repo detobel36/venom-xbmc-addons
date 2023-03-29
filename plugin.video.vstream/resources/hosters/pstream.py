@@ -13,7 +13,7 @@ from resources.lib.util import urlEncode
 try:
     # python2
     from urlparse import urlparse
-except:
+except BaseException:
     # python3
     from urllib.parse import urlparse
 
@@ -48,7 +48,7 @@ class cHoster(iHoster):
         oRequest.addHeaderEntry('Accept-Language', 'fr,fr-FR;q=0.8,en-US;q=0.5,en;q=0.3')
         sHtmlContent = oRequest.request()
 
-        sPattern = 'atob.+?\}\("(.+?)"'
+        sPattern = 'atob.+?\\}\\("(.+?)"'
         code = oParser.parse(sHtmlContent, sPattern)
 
         for i in code[1]:
@@ -58,7 +58,7 @@ class cHoster(iHoster):
                 else:
                     code = base64.b64decode(i)
                 break
-            except:
+            except BaseException:
                 pass
 
         jsonCall = json.loads(code[code.rfind("{"):])
@@ -71,7 +71,7 @@ class cHoster(iHoster):
                     d = base64.b64decode(jsonCall[a].split('/')[4].split('.')[0])
                 api_call = jsonCall[a]
                 break
-            except:
+            except BaseException:
                 pass
 
         if api_call:

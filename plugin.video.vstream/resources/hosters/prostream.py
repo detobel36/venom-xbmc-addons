@@ -18,12 +18,12 @@ class cHoster(iHoster):
         oRequest = cRequestHandler(self._url)
         sHtmlContent = oRequest.request()
 
-        sPattern = '<script type=\'text/javascript\'>(.+?)<\/script>'
+        sPattern = '<script type=\'text/javascript\'>(.+?)<\\/script>'
         aResult = oParser.parse(sHtmlContent, sPattern)
 
         if aResult[0] is True:
             html = cPacker().unpack(aResult[1][0])
-            sPattern = 'sources:\["([^"]+)"\]'
+            sPattern = 'sources:\\["([^"]+)"\\]'
             aResult = oParser.parse(html, sPattern)
             if aResult[0] is True:
                 api_call = aResult[1][0]

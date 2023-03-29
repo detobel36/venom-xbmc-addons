@@ -88,7 +88,12 @@ def load():
     oGui.addDir(SITE_IDENTIFIER, ANIM_SERIE_NEWS[1], 'Animés Séries (Récents)', 'news.png', oOutputParameterHandler)
 
     oOutputParameterHandler.addParameter('siteUrl', ANIM_SERIE_POPULAR[0])
-    oGui.addDir(SITE_IDENTIFIER, ANIM_SERIE_POPULAR[1], 'Animés Séries (Populaires)', 'views.png', oOutputParameterHandler)
+    oGui.addDir(
+        SITE_IDENTIFIER,
+        ANIM_SERIE_POPULAR[1],
+        'Animés Séries (Populaires)',
+        'views.png',
+        oOutputParameterHandler)
 
     oOutputParameterHandler.addParameter('siteUrl', ANIM_SERIE_ANNEES[0])
     oGui.addDir(SITE_IDENTIFIER, ANIM_SERIE_ANNEES[1], 'Animés Séries (Années)', 'annees.png', oOutputParameterHandler)
@@ -112,7 +117,12 @@ def load():
     oGui.addDir(SITE_IDENTIFIER, ANIM_MOVIE_NEWS[1], 'Animés Films (Récents)', 'news.png', oOutputParameterHandler)
 
     oOutputParameterHandler.addParameter('siteUrl', ANIM_MOVIE_POPULAR[0])
-    oGui.addDir(SITE_IDENTIFIER, ANIM_MOVIE_POPULAR[1], 'Animés Films (Populaires)', 'views.png', oOutputParameterHandler)
+    oGui.addDir(
+        SITE_IDENTIFIER,
+        ANIM_MOVIE_POPULAR[1],
+        'Animés Films (Populaires)',
+        'views.png',
+        oOutputParameterHandler)
 
     oOutputParameterHandler.addParameter('siteUrl', ANIM_MOVIE_ANNEES[0])
     oGui.addDir(SITE_IDENTIFIER, ANIM_MOVIE_ANNEES[1], 'Animés Films (Années)', 'annees.png', oOutputParameterHandler)
@@ -153,9 +163,16 @@ def showAllAlpha(sfilter=''):
     oOutputParameterHandler = cOutputParameterHandler()
     for alpha in listalpha:
         sTitle = str(alpha).upper()
-        sUrl = URL_MAIN + url1 + alpha + url2 
+        sUrl = URL_MAIN + url1 + alpha + url2
         oOutputParameterHandler.addParameter('siteUrl', sUrl)
-        oGui.addDir(SITE_IDENTIFIER, 'showMovies', 'Lettre [COLOR coral]' + sTitle + '[/COLOR]', 'listes.png', oOutputParameterHandler)
+        oGui.addDir(
+            SITE_IDENTIFIER,
+            'showMovies',
+            'Lettre [COLOR coral]' +
+            sTitle +
+            '[/COLOR]',
+            'listes.png',
+            oOutputParameterHandler)
 
     oGui.setEndOfDirectory()
 
@@ -249,7 +266,7 @@ def showMovies(sSearch=''):
     sHtmlContent = oRequestHandler.request()
     oParser = cParser()
 
-    sPattern = "col-sm-4 col-md-3\">.+?href=\"([^\"]+).+?url\(\'([^']+).+?<span class=.anime-label.+?uppercase.>([^<]+).+?anime-header.>([^<]+)"
+    sPattern = "col-sm-4 col-md-3\">.+?href=\"([^\"]+).+?url\\(\'([^']+).+?<span class=.anime-label.+?uppercase.>([^<]+).+?anime-header.>([^<]+)"
 
     aResult = oParser.parse(sHtmlContent, sPattern)
 
@@ -267,14 +284,21 @@ def showMovies(sSearch=''):
 
             sUrl2 = URL_MAIN[:-1] + aEntry[0]
             sThumb = URL_MAIN[:-1] + aEntry[1]
-            sType = aEntry[2] 
-            sTitle = aEntry[3] 
+            sType = aEntry[2]
+            sTitle = aEntry[3]
             sDisplayTitle = sTitle + ' [' + sType + ']'
 
             oOutputParameterHandler.addParameter('siteUrl', sUrl2)
             oOutputParameterHandler.addParameter('sMovieTitle', sTitle)
             oOutputParameterHandler.addParameter('sThumb', sThumb)
-            oGui.addAnime(SITE_IDENTIFIER, 'showEpisodesxMovies', sDisplayTitle, '', sThumb, '', oOutputParameterHandler)
+            oGui.addAnime(
+                SITE_IDENTIFIER,
+                'showEpisodesxMovies',
+                sDisplayTitle,
+                '',
+                sThumb,
+                '',
+                oOutputParameterHandler)
         progress_.VSclose(progress_)
 
     if not sSearch:
@@ -288,13 +312,13 @@ def showMovies(sSearch=''):
 
 def __checkForNextPage(sHtmlContent, sUrl):
     sNumberMax = ''
-    sPattern = '"text-muted">page.+?sur\s*(\d+)'
+    sPattern = '"text-muted">page.+?sur\\s*(\\d+)'
     oParser = cParser()
     aResult = oParser.parse(sHtmlContent, sPattern)
     if aResult[0]:
         sNumberMax = aResult[1][0]
 
-    sPattern = '&p=(\d+)'
+    sPattern = '&p=(\\d+)'
     aResult = oParser.parse(sUrl, sPattern)
     if aResult[0]:
         sNumberCurrent = aResult[1][0]
@@ -372,7 +396,7 @@ def showLinks():
     oRequestHandler = cRequestHandler(sUrl)
     sHtmlContent = oRequestHandler.request()
 
-    sPattern = '<div class="subsection">.+?label-default">\D*(\d+)([^<]+)'
+    sPattern = '<div class="subsection">.+?label-default">\\D*(\\d+)([^<]+)'
     aResult = oParser.parse(sHtmlContent, sPattern)
 
     if aResult[0]:
@@ -380,9 +404,9 @@ def showLinks():
         for aEntry in aResult[1]:
             sId = aEntry[0]
             sHost = aEntry[1].replace(' ', '').replace('-', '')
-            sHost = re.sub('\.\w+', '', sHost)
+            sHost = re.sub('\\.\\w+', '', sHost)
             pdata = 'id=' + sId
-            sMovieTitle = re.sub('\[.+?\]', '', sMovieTitle)
+            sMovieTitle = re.sub('\\[.+?\\]', '', sMovieTitle)
             sDisplayTitle = ('%s [COLOR coral]%s[/COLOR]') % (sMovieTitle, sHost)
             sUrl2 = URL_MAIN + 'remote/ajax-load_video'
 
@@ -414,7 +438,7 @@ def showHosters():
     oRequestHandler.addHeaderEntry('Content-Type', 'application/x-www-form-urlencoded')
     oRequestHandler.addParametersLine(pdata)
     sHtmlContent = oRequestHandler.request()
- 
+
     sPattern = 'frame.+?src="([^"]+)'
     aResult = oParser.parse(sHtmlContent, sPattern)
 

@@ -26,14 +26,14 @@ class cHoster(iHoster):
         oRequest.addHeaderEntry("User-Agent", UA)
         sHtmlContent = oRequest.request()
 
-        sPattern = "(\s*eval\s*\(\s*function(?:.|\s)+?)<\/script>"
+        sPattern = "(\\s*eval\\s*\\(\\s*function(?:.|\\s)+?)<\\/script>"
         aResult_1 = re.findall(sPattern, sHtmlContent)
 
         if aResult_1:
             sUnpacked = cPacker().unpack(aResult_1[0])
             sHtmlContent = sUnpacked
 
-        sPattern = 'sources: *\[\{file:"([^"]+)"'
+        sPattern = 'sources: *\\[\\{file:"([^"]+)"'
         oParser = cParser()
         aResult = oParser.parse(sHtmlContent, sPattern)
 
@@ -42,7 +42,7 @@ class cHoster(iHoster):
         elif len(aResult_1) > 1:
             sUnpacked = cPacker().unpack(aResult_1[1])
             sHtmlContent = sUnpacked
-            sPattern = 'sources: *\[\{file:"([^"]+)"'
+            sPattern = 'sources: *\\[\\{file:"([^"]+)"'
             oParser = cParser()
             aResult = oParser.parse(sHtmlContent, sPattern)
             if aResult[0] is True:

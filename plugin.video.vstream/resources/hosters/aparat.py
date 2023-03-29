@@ -25,7 +25,7 @@ class cHoster(iHoster):
             sHtmlContent = oRequestHandler.request()
 
             oParser = cParser()
-            sPattern = 'src:\s+"([^"]+)'
+            sPattern = 'src:\\s+"([^"]+)'
             aResult = oParser.parse(sHtmlContent, sPattern)
 
             if aResult[0] is True:
@@ -37,7 +37,7 @@ class cHoster(iHoster):
                 # sPattern = 'RESOLUTION=(\w+).+?(https.+?m3u8)'
 
                 # limite les formats
-                sPattern = 'PROGRAM-ID.+?RESOLUTION=(\w+).+?(https.+?m3u8)'
+                sPattern = 'PROGRAM-ID.+?RESOLUTION=(\\w+).+?(https.+?m3u8)'
                 aResult = oParser.parse(sHtmlContent2, sPattern)
                 for aEntry in aResult[1]:
                     list_q.append(aEntry[0])
@@ -53,7 +53,7 @@ class cHoster(iHoster):
             sHtmlContent = oRequestHandler.request()
 
             oParser = cParser()
-            sPattern = 'file_code=(\w+)&hash=([^&]+)'
+            sPattern = 'file_code=(\\w+)&hash=([^&]+)'
             aResult = oParser.parse(sHtmlContent, sPattern)
 
             if aResult[0] is True:

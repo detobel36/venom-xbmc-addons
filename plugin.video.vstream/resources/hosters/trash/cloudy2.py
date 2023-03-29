@@ -1,10 +1,11 @@
-#-*- coding: utf-8 -*-
+# -*- coding: utf-8 -*-
 # https://github.com/Kodi-vStream/venom-xbmc-addons
 import urllib
 
 from resources.lib.handler.requestHandler import cRequestHandler
 from resources.lib.parser import cParser
 from resources.hosters.hoster import iHoster
+
 
 class cHoster(iHoster):
 
@@ -27,7 +28,7 @@ class cHoster(iHoster):
         oParser = cParser()
         aResult = oParser.parse(sHtmlContent, sPattern)
         if aResult[0] is True:
-            aResult = aResult[1][0].replace('.','%2E')
+            aResult = aResult[1][0].replace('.', '%2E')
             return aResult
 
         return ''
@@ -38,17 +39,16 @@ class cHoster(iHoster):
         self._url = self._url.replace('embed.php?id=', '')
         self._url = 'https://www.cloudy.ec/embed.php?id=' + str(self._url)
 
-
     def _getMediaLinkForGuest(self):
-        #api_call = ('http://www.nowvideo.sx/api/player.api.php?key=%s&file=%s') % (self.__getKey(),
+        # api_call = ('http://www.nowvideo.sx/api/player.api.php?key=%s&file=%s') % (self.__getKey(),
         #           self.__getIdFromUrl())
-        api_call = ('http://www.cloudy.ec/api/player.api.php?user=undefined&codes=1&file=%s' + \
-            '&pass=undefined&key=%s') % (self.__getIdFromUrl(), self.__getKey())
+        api_call = ('http://www.cloudy.ec/api/player.api.php?user=undefined&codes=1&file=%s' +
+                    '&pass=undefined&key=%s') % (self.__getIdFromUrl(), self.__getKey())
 
         oRequest = cRequestHandler(api_call)
         sHtmlContent = oRequest.request()
 
-        sPattern =  'url=(.+?)&title'
+        sPattern = 'url=(.+?)&title'
         oParser = cParser()
         aResult = oParser.parse(sHtmlContent, sPattern)
         if aResult[0] is True:

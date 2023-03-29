@@ -1,16 +1,16 @@
 # -*- coding: utf-8 -*-
 # vStream https://github.com/Kodi-vStream/venom-xbmc-addons
 # source 45 07022021
-return False # voir https://01seriestreaming.com/
-import re
-
-from resources.lib.gui.hoster import cHosterGui
-from resources.lib.gui.gui import cGui
-from resources.lib.handler.inputParameterHandler import cInputParameterHandler
-from resources.lib.handler.outputParameterHandler import cOutputParameterHandler
-from resources.lib.handler.requestHandler import cRequestHandler
-from resources.lib.parser import cParser
 from resources.lib.comaddon import progress
+from resources.lib.parser import cParser
+from resources.lib.handler.requestHandler import cRequestHandler
+from resources.lib.handler.outputParameterHandler import cOutputParameterHandler
+from resources.lib.handler.inputParameterHandler import cInputParameterHandler
+from resources.lib.gui.gui import cGui
+from resources.lib.gui.hoster import cHosterGui
+import re
+return False  # voir https://01seriestreaming.com/
+
 
 SITE_IDENTIFIER = 'hds_streamingvf'
 SITE_NAME = 'Hds-Streamingvf'
@@ -170,7 +170,7 @@ def showMovies(sSearch=''):
         sUrl = sSearch.replace(' ', '+').replace('%20 ', '+')
         sPattern = 'class="result-item".+?href="([^"]+).+?src="([^"]+).+?alt="([^"]+).+?class="year">([^<]+).+?contenido"><p>([^<]*)'
     else:
-        sPattern = 'class="item.(?:movies|tvshows).+?src="([^"]+).+?alt="([^"]+).+?class="rating.+?<.span>([^<]*).+?href="([^"]+).+?<span>(\d{4}).+?class="texto">([^<]*)'
+        sPattern = 'class="item.(?:movies|tvshows).+?src="([^"]+).+?alt="([^"]+).+?class="rating.+?<.span>([^<]*).+?href="([^"]+).+?<span>(\\d{4}).+?class="texto">([^<]*)'
 
     oRequestHandler = cRequestHandler(sUrl)
     sHtmlContent = oRequestHandler.request()
@@ -246,7 +246,7 @@ def showMovies(sSearch=''):
 
 def __checkForNextPage(sHtmlContent):
     oParser = cParser()
-    sPattern = "class=\"pagination\"><span>.+?de.(\d+)</span>.+?class=\"current\".+?a href='([^']*)"
+    sPattern = "class=\"pagination\"><span>.+?de.(\\d+)</span>.+?class=\"current\".+?a href='([^']*)"
     aResult = oParser.parse(sHtmlContent, sPattern)
     if aResult[0]:
         sNumberMax = aResult[1][0][0]
@@ -362,7 +362,7 @@ def showHosters():
             datatype = aEntry[0]
             datapost = aEntry[1]
             datanum = aEntry[2]
-            sHost = re.sub('\.\w+', '', aEntry[3])
+            sHost = re.sub('\\.\\w+', '', aEntry[3])
             sLang = str(aEntry[4]).upper()
 
             if 'lecteur hd' in sHost.lower():

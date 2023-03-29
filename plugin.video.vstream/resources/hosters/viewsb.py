@@ -42,7 +42,7 @@ class cHoster(iHoster):
         sHtmlContent = oRequest.request()
 
         if MODE == 1:  # Non terminé encore
-            sPattern = 'download_video([^"]+)[^\d]+\d+x(\d+)'
+            sPattern = 'download_video([^"]+)[^\\d]+\\d+x(\\d+)'
             oParser = cParser()
             aResult = oParser.parse(sHtmlContent, sPattern)
             if aResult[0] is True:

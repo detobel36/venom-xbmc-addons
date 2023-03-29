@@ -110,7 +110,7 @@ def showMovies(sSearch=''):
         oOutputParameterHandler = cOutputParameterHandler()
         for aEntry in aResult[1]:
             sUrl2 = aEntry[0]
-            sThumb = re.sub('/w\d+/', '/w342/', aEntry[1])
+            sThumb = re.sub('/w\\d+/', '/w342/', aEntry[1])
             sTitle = aEntry[2].replace('en streaming', '').replace('en steaming', '')
             sQual = aEntry[3] if not sSearch else ''
             sDesc = aEntry[4]
@@ -174,7 +174,7 @@ def showHosters():
     oRequestHandler = cRequestHandler(sUrl)
     sHtmlContent = oRequestHandler.request()
 
-    sPattern = 'id="tab\d".+?data-(|litespeed-)src="([^"]+)'
+    sPattern = 'id="tab\\d".+?data-(|litespeed-)src="([^"]+)'
     aResult = oParser.parse(sHtmlContent, sPattern)
 
     if aResult[0]:

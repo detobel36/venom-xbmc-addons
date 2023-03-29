@@ -101,7 +101,10 @@ class cHoster(iHoster):
                 import pyqrcode
                 qr = pyqrcode.create(r['data']['user_url'])
                 qr.png(VSPath('special://home/userdata/addon_data/plugin.video.vstream/qrcode.png'), scale=5)
-                oSolver = cInputWindowYesNo(captcha='special://home/userdata/addon_data/plugin.video.vstream/qrcode.png', msg="Scanner le QRCode pour acceder au lien d'autorisation", roundnum=1)
+                oSolver = cInputWindowYesNo(
+                    captcha='special://home/userdata/addon_data/plugin.video.vstream/qrcode.png',
+                    msg="Scanner le QRCode pour acceder au lien d'autorisation",
+                    roundnum=1)
                 retArg = oSolver.get()
                 DIALOG = dialog()
                 if retArg == "N":
@@ -111,7 +114,7 @@ class cHoster(iHoster):
 
         # Deux modes de fonctionnement different.
         if js_result.get("streamLinks").get('src'):
-            api_call = js_result['streamLinks']['src']#.replace(".m3u8", ".mpd")
+            api_call = js_result['streamLinks']['src']  # .replace(".m3u8", ".mpd")
         else:
             sPattern = "'(.+?)': {(.+?)}"
 
@@ -133,7 +136,7 @@ class cHoster(iHoster):
 
         try:
             SubTitle = self.checkSubtitle(js_result["subs"])
-        except:
+        except BaseException:
             VSlog("Pas de sous-titre")
 
         if api_call:

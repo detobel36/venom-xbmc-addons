@@ -164,7 +164,7 @@ def showMovies(sSearch=''):
         if sNextPage:
             oOutputParameterHandler = cOutputParameterHandler()
             oOutputParameterHandler.addParameter('siteUrl', sNextPage)
-            oGui.addNext(SITE_IDENTIFIER, 'showMovies',  sPagination, oOutputParameterHandler)
+            oGui.addNext(SITE_IDENTIFIER, 'showMovies', sPagination, oOutputParameterHandler)
 
         oGui.setEndOfDirectory()
 
@@ -200,7 +200,7 @@ def showSaison():
     if aResultDesc[0] is True:
         sDesc = ('[I][COLOR grey]%s[/COLOR][/I] %s') % ('Synopsis : ', aResultDesc[1][0])
 
-    sPattern = '(\d+)<\/a><\/h3>'
+    sPattern = '(\\d+)<\\/a><\\/h3>'
     aResult = oParser.parse(sHtmlContent, sPattern)
     sSaison = ''
 
@@ -235,11 +235,11 @@ def showSXE():
     oRequestHandler = cRequestHandler(sUrl)
     sHtmlContent = oRequestHandler.request()
     oParser = cParser()
-    sStart = 'id="saison-'+ sNumSaison
+    sStart = 'id="saison-' + sNumSaison
     sEnd = '<div id="alt">'
     sHtmlContent = oParser.abParse(sHtmlContent, sStart, sEnd)
 
-    sPattern = 'href="([^"]+)">épisode (\d+)'
+    sPattern = 'href="([^"]+)">épisode (\\d+)'
     aResult = oParser.parse(sHtmlContent, sPattern)
 
     if aResult[0]:
@@ -298,7 +298,7 @@ def showLinks():
             oOutputParameterHandler.addParameter('sHost', sHostname)
             oGui.addLink(SITE_IDENTIFIER, 'showHosters', sDisplayName, sThumb, sDesc, oOutputParameterHandler)
 
-    sPattern = '(?:class="players">|</a>)\s*<a href="([^"]+).+?<li class="player".+?langue-s">([^<]+).+?<span class="p-name">([^"]+)</span>'
+    sPattern = '(?:class="players">|</a>)\\s*<a href="([^"]+).+?<li class="player".+?langue-s">([^<]+).+?<span class="p-name">([^"]+)</span>'
     # avec href="([^"]+)"; '"' à garder  pour éviter oublie avec test reg101
     oParser = cParser()
     aResult = oParser.parse(sHtmlContent, sPattern)
@@ -421,7 +421,8 @@ def Hoster_shortn(url):
         oRequestHandler = cRequestHandler(url)
         oRequestHandler.setRequestType(1)
         oRequestHandler.addHeaderEntry('Referer', url)
-        oRequestHandler.addHeaderEntry('Accept', 'text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,*/*;q=0.8')
+        oRequestHandler.addHeaderEntry(
+            'Accept', 'text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,*/*;q=0.8')
         oRequestHandler.addHeaderEntry('User-Agent', UA)
         oRequestHandler.addHeaderEntry('Content-Type', "application/x-www-form-urlencoded")
         oRequestHandler.addHeaderEntry('Cookie', cookies)

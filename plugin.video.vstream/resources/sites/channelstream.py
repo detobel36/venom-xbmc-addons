@@ -51,11 +51,11 @@ def showMovies():
         sHtmlContent = sHtmlContent.replace('Ã®', 'î').replace('Ã©', 'é')
 
     # récupérer les drapeaux pour en faire des thumb
-    sPattern = "\.flag\.([^{]+){.+?url\(([^)]+)\)"
+    sPattern = "\\.flag\\.([^{]+){.+?url\\(([^)]+)\\)"
     aResult = oParser.parse(sHtmlContent, sPattern)
     flags = dict(aResult[1])
 
-    sPattern = "colspan=\"7\".+?<b>([^<]+)<\/b>.+?location\.href = '([^']+).+?text-align.+?>(.+?)<\/td>.+?<span class=\"flag ([^\"]+).+?text-align.+?>([^<]+).+?text-align: left.+?>([^<]+).+?<span class=\"t\">([^<]+)<\/span>"
+    sPattern = "colspan=\"7\".+?<b>([^<]+)<\\/b>.+?location\\.href = '([^']+).+?text-align.+?>(.+?)<\\/td>.+?<span class=\"flag ([^\"]+).+?text-align.+?>([^<]+).+?text-align: left.+?>([^<]+).+?<span class=\"t\">([^<]+)<\\/span>"
     aResult = oParser.parse(sHtmlContent, sPattern)
 
     if aResult[0]:
@@ -102,7 +102,7 @@ def showHoster():
 
     oInputParameterHandler = cInputParameterHandler()
     sUrl = oInputParameterHandler.getValue('siteUrl')
-    if not sUrl.startswith ('http'):
+    if not sUrl.startswith('http'):
         sUrl = URL_MAIN + sUrl
     sTitle = oInputParameterHandler.getValue('sMovieTitle')
     sDesc = oInputParameterHandler.getValue('sDesc')
@@ -114,7 +114,7 @@ def showHoster():
     sHtmlContent = oRequestHandler.request()
 
     # Double Iframe a passer.
-    sPattern = "document\.getElementById\('video'\)\.src='([^']+)'.+?>([^<]+)<"
+    sPattern = "document\\.getElementById\\('video'\\)\\.src='([^']+)'.+?>([^<]+)<"
     aResult = oParser.parse(sHtmlContent, sPattern)
 
     if not aResult[1]:  # Pas de flux
@@ -169,24 +169,24 @@ def showHoster():
         aResult2 = oParser.parse(sHtmlContent, sPattern)
 
         if not aResult2[0]:
-            sPattern = "playStream\('iframe','([^']+)'\)"
+            sPattern = "playStream\\('iframe','([^']+)'\\)"
             aResult2 = oParser.parse(sHtmlContent, sPattern)
 
         if aResult2[0]:
             iframeURL1 = aResult2[1][0]
-    
+
             if 'cloudstream' in iframeURL1:
                 sHosterUrl = getHosterWigistream(iframeURL1, sUrl)
-    
+
             if not sHosterUrl:
                 oRequestHandler = cRequestHandler(iframeURL1)
                 oRequestHandler.addHeaderEntry('User-Agent', UA)
                 sHtmlContent = oRequestHandler.request()
-    
+
                 oParser = cParser()
                 sPattern = '<iframe.+?src="([^"]+)'
                 aResult2 = oParser.parse(sHtmlContent, sPattern)
-    
+
                 if aResult2[0]:
                     urlHoster = aResult2[1][0]
                     if 'primetubsub' in urlHoster or 'sportcast' in urlHoster:
@@ -205,13 +205,13 @@ def showHoster():
 def getHosterWigistream(url, referer):
     url = url.strip()
     if not url.startswith('http'):
-        url = 'http:'+url
+        url = 'http:' + url
     oRequestHandler = cRequestHandler(url)
     oRequestHandler.addHeaderEntry('User-Agent', UA)
     oRequestHandler.addHeaderEntry('Referer', referer)
     sHtmlContent = oRequestHandler.request()
 
-    sPattern = '(\s*eval\s*\(\s*function(?:.|\s)+?{}\)\))'
+    sPattern = '(\\s*eval\\s*\\(\\s*function(?:.|\\s)+?{}\\)\\))'
     aResult = re.findall(sPattern, sHtmlContent)
 
     if aResult:

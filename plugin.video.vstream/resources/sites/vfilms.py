@@ -162,7 +162,7 @@ def showMovies(sSearch=''):
         for aEntry in aResult[1]:
             sUrl2 = aEntry[0]
             sTitle = aEntry[1]
-            sThumb = re.sub('/w\d+/', '/w342/', aEntry[2])
+            sThumb = re.sub('/w\\d+/', '/w342/', aEntry[2])
             if sThumb.startswith('/'):
                 sThumb = URL_MAIN[:-1] + sThumb
 
@@ -190,7 +190,7 @@ def showMovies(sSearch=''):
 
 def __checkForNextPage(sHtmlContent):
     oParser = cParser()
-    sPattern = '<span>[\d]+</span> <a href="([^"]+).+?">(\d+)</a></div'
+    sPattern = '<span>[\\d]+</span> <a href="([^"]+).+?">(\\d+)</a></div'
     aResult = oParser.parse(sHtmlContent, sPattern)
     if aResult[0]:
         sNextPage = aResult[1][0][0]
@@ -220,10 +220,10 @@ def showSaisons():
         aResult = oParser.parse(sHtmlContent, sPattern)
         if aResult[0]:
             sDesc = aResult[1][0]
-    except:
+    except BaseException:
         pass
 
-    sPattern = '<a href="([^"]+)"><div class="thumb"><div class="th-in"><div class="th-img img-resp-v"><img class=" ls-is-cached lazyloaded" src="([^"]+)" alt="\d+ Season"><figcaption>(Saison \d+)<\/figcaption>'
+    sPattern = '<a href="([^"]+)"><div class="thumb"><div class="th-in"><div class="th-img img-resp-v"><img class=" ls-is-cached lazyloaded" src="([^"]+)" alt="\\d+ Season"><figcaption>(Saison \\d+)<\\/figcaption>'
     aResult = oParser.parse(sHtmlContent, sPattern)
 
     if aResult[0]:
@@ -297,10 +297,10 @@ def showHosters():
 
             sHosterUrl = aEntry[0]
             sHost = aEntry[1]
-            if "VO" in sHost :
+            if "VO" in sHost:
                 sDisplayTitle = ('%s (%s)') % (sMovieTitle, sHost)
-            else :
-                sDisplayTitle = sMovieTitle           
+            else:
+                sDisplayTitle = sMovieTitle
             oHoster = cHosterGui().checkHoster(sHosterUrl)
             if oHoster:
                 oHoster.setDisplayName(sDisplayTitle)

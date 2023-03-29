@@ -31,7 +31,7 @@ class cHoster(iHoster):
             return False, False
 
         oParser = cParser()
-        sPattern = '(eval\(function\(p,a,c,k,e(?:.|\s)+?\))<\/script>'
+        sPattern = '(eval\\(function\\(p,a,c,k,e(?:.|\\s)+?\\))<\\/script>'
         aResult = oParser.parse(sHtmlContent, sPattern)
 
         if aResult[0] is True:
@@ -56,7 +56,7 @@ class cHoster(iHoster):
                     api_call = aResult[1][0].replace(',', '').replace('.urlset', '')
 
         if not api_call:
-            sPattern = 'sources: *\[{src: "([^"]+)", *type: "video/mp4"'
+            sPattern = 'sources: *\\[{src: "([^"]+)", *type: "video/mp4"'
             aResult = oParser.parse(sHtmlContent, sPattern)
             if aResult[0]:
                 api_call = aResult[1][0]

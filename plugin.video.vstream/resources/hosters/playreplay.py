@@ -21,7 +21,7 @@ class cHoster(iHoster):
         iHoster.__init__(self, 'playreplay', 'PlayReplay')
 
     def __getIdFromUrl(self, sUrl):
-        sPattern = 'http:..playreplay.net\/framevideo\/(.+?)\?'
+        sPattern = 'http:..playreplay.net\\/framevideo\\/(.+?)\\?'
         aResult = re.findall(sPattern, sUrl)
         if aResult:
             return aResult[0]

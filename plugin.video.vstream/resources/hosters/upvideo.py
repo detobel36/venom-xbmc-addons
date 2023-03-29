@@ -21,7 +21,7 @@ class cHoster(iHoster):
     def _getMediaLinkForGuest(self):
         api_call = False
         oParser = cParser()
-        sPattern = 'return decodeURIComponent\(escape\(r\)\)}\("([^,]+)",([^,]+),"([^,]+)",([^,]+),([^,]+),([^,\))]+)\)'
+        sPattern = 'return decodeURIComponent\\(escape\\(r\\)\\)}\\("([^,]+)",([^,]+),"([^,]+)",([^,]+),([^,]+),([^,\\))]+)\\)'
 
         oRequest = cRequestHandler(self._url)
         oRequest.addHeaderEntry('Cookie', 'popads2=opened')
@@ -43,7 +43,7 @@ class cHoster(iHoster):
         if aResult[0] is True:
             l = aResult[1]
             for j in l:
-                data = hunter(j[0],int(j[1]),j[2],int(j[3]),int(j[4]),int(j[5]))
+                data = hunter(j[0], int(j[1]), j[2], int(j[3]), int(j[4]), int(j[5]))
                 if "fcbbbdddebad" in data:
                     r = re.search('var fcbbbdddebad *= *"([^"]+)" *;', data)
                     if not r:

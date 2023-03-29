@@ -106,7 +106,8 @@ def showSearchResult(sSearch):
 
     oOutputParameterHandler = cOutputParameterHandler()
     for dicts in data:
-        if sSearch in dicts['title'].lower() or sSearch in dicts['title_english'].lower() or sSearch in dicts['others'].lower():
+        if sSearch in dicts['title'].lower() or sSearch in dicts['title_english'].lower(
+        ) or sSearch in dicts['others'].lower():
             sTitle = dicts['title']
             sUrl2 = URL_MAIN[:-1] + dicts['url']
             sThumb = dicts['url_image']
@@ -234,7 +235,7 @@ def showSaisonEpisodes():
         aResult = oParser.parse(sHtmlContent, sPattern)
         if aResult[0]:
             sDesc = aResult[1][0]
-    except:
+    except BaseException:
         pass
 
     sPattern = '"episode":"([^"]+)".+?"url":"([^"]+)","url_image":"([^"]+)"'
@@ -268,7 +269,7 @@ def showSeriesHosters():
     oRequestHandler = cRequestHandler(sUrl)
     sHtmlContent = oRequestHandler.request()
 
-    sPattern = "video\[\d+\] = \'([^']+)\'"
+    sPattern = "video\\[\\d+\\] = \'([^']+)\'"
     oParser = cParser()
     aResult = oParser.parse(sHtmlContent, sPattern)
 

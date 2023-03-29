@@ -70,7 +70,7 @@ def showLink():
     sUrl = oInputParameterHandler.getValue('siteUrl')
     sMovieTitle = oInputParameterHandler.getValue('sMovieTitle')
 
-    sPattern = 'player = new Clappr\.Player.+?source: "([^"]+)'
+    sPattern = 'player = new Clappr\\.Player.+?source: "([^"]+)'
     oRequestHandler = cRequestHandler(sUrl)
     sHtmlContent = oRequestHandler.request()
     aResult = oParser.parse(sHtmlContent, sPattern)

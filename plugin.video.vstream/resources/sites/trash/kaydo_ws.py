@@ -1,20 +1,19 @@
 # -*- coding: utf-8 -*-
 # vStream https://github.com/Kodi-vStream/venom-xbmc-addons
-#Il faut faire le code pour le nouvel hoster.
+# Il faut faire le code pour le nouvel hoster.
+from resources.lib.util import Noredirection
+from resources.lib.comaddon import progress, siteManager
+from resources.lib.parser import cParser
+from resources.lib.handler.requestHandler import cRequestHandler
+from resources.lib.handler.outputParameterHandler import cOutputParameterHandler
+from resources.lib.handler.inputParameterHandler import cInputParameterHandler
+from resources.lib.gui.gui import cGui
+from resources.lib.gui.hoster import cHosterGui
+import time
+import base64
+import re
 return False
 
-import re
-import base64
-import time
-
-from resources.lib.gui.hoster import cHosterGui
-from resources.lib.gui.gui import cGui
-from resources.lib.handler.inputParameterHandler import cInputParameterHandler
-from resources.lib.handler.outputParameterHandler import cOutputParameterHandler
-from resources.lib.handler.requestHandler import cRequestHandler
-from resources.lib.parser import cParser
-from resources.lib.comaddon import progress, siteManager
-from resources.lib.util import Noredirection
 
 # copie du site http://www.kaydo.ws/
 # copie du site https://www.hds.to/
@@ -51,7 +50,7 @@ def Decode(chain):
         chain = ''.join(chain.split('$'))
 
         return base64.b64decode(chain)
-    except:
+    except BaseException:
         return chain
 
 
@@ -156,7 +155,14 @@ def showAlpha():
     oOutputParameterHandler = cOutputParameterHandler()
     for sTitle, sUrl in liste:
         oOutputParameterHandler.addParameter('siteUrl', sUrl)
-        oGui.addDir(SITE_IDENTIFIER, 'showMovies', 'Lettre [COLOR coral]' + sTitle + '[/COLOR]', 'listes.png', oOutputParameterHandler)
+        oGui.addDir(
+            SITE_IDENTIFIER,
+            'showMovies',
+            'Lettre [COLOR coral]' +
+            sTitle +
+            '[/COLOR]',
+            'listes.png',
+            oOutputParameterHandler)
 
     oGui.setEndOfDirectory()
 
@@ -235,7 +241,7 @@ def showMovies(sSearch=''):
                 break
 
             siteUrl = aEntry[0]
-            sThumb = re.sub('/w\d+', '/w342', aEntry[1])
+            sThumb = re.sub('/w\\d+', '/w342', aEntry[1])
             if sThumb.startswith('//'):
                 sThumb = 'https:' + sThumb
             sTitle = aEntry[2]
@@ -255,7 +261,14 @@ def showMovies(sSearch=''):
             oOutputParameterHandler.addParameter('sDesc', sDesc)
 
             if '/serie/' in siteUrl:
-                oGui.addTV(SITE_IDENTIFIER, 'ShowSaisonEpisodes', sDisplayTitle, '', sThumb, sDesc, oOutputParameterHandler)
+                oGui.addTV(
+                    SITE_IDENTIFIER,
+                    'ShowSaisonEpisodes',
+                    sDisplayTitle,
+                    '',
+                    sThumb,
+                    sDesc,
+                    oOutputParameterHandler)
             else:
                 oGui.addMovie(SITE_IDENTIFIER, 'showHosters', sDisplayTitle, '', sThumb, sDesc, oOutputParameterHandler)
 
@@ -303,7 +316,7 @@ def ShowSaisonEpisodes():
             if aEntry[0]:
                 oGui.addText(SITE_IDENTIFIER, '[COLOR crimson]Saison: ' + aEntry[0] + '[/COLOR]')
             else:
-                sThumb = re.sub('/w\d+', '/w342', aEntry[1], 1)
+                sThumb = re.sub('/w\\d+', '/w342', aEntry[1], 1)
                 if sThumb.startswith('//'):
                     sThumb = 'https:' + sThumb
                 sUrl2 = aEntry[2]
@@ -333,7 +346,7 @@ def showHosters():
     sHtmlContent = oRequestHandler.request()
 
     # Recuperer variable pour url de base
-    sPattern = 'trembed=(\d+).+?trid=(\d+).+?trtype=(\d+)'
+    sPattern = 'trembed=(\\d+).+?trid=(\\d+).+?trtype=(\\d+)'
     aResult = oParser.parse(sHtmlContent, sPattern)
 
     if not aResult[0]:

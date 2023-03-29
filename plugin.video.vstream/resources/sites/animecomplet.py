@@ -57,10 +57,17 @@ def showAlpha():
     # on propose quand meme en premier la liste complete
     oOutputParameterHandler = cOutputParameterHandler()
     oOutputParameterHandler.addParameter('siteUrl', ANIM_LIST[0])
-    oGui.addDir(SITE_IDENTIFIER, ANIM_LIST[1], ' [COLOR coral]' + 'Animés (Liste complète)' + '[/COLOR]', 'listes.png', oOutputParameterHandler)
+    oGui.addDir(
+        SITE_IDENTIFIER,
+        ANIM_LIST[1],
+        ' [COLOR coral]' +
+        'Animés (Liste complète)' +
+        '[/COLOR]',
+        'listes.png',
+        oOutputParameterHandler)
 
     # récupere les chiffres dispos
-    sPattern = 'href="#gti_(\d+)'
+    sPattern = 'href="#gti_(\\d+)'
     oParser = cParser()
     aResult = oParser.parse(sHtmlContent, sPattern)
     if aResult[0]:
@@ -73,7 +80,14 @@ def showAlpha():
     # sUrl = 'tagalpha ;alpha'
     for sTitle, sUrl in liste:
         oOutputParameterHandler.addParameter('siteUrl', sUrl)
-        oGui.addDir(SITE_IDENTIFIER, 'showAnims', 'Lettre [COLOR coral]' + sTitle + '[/COLOR]', 'listes.png', oOutputParameterHandler)
+        oGui.addDir(
+            SITE_IDENTIFIER,
+            'showAnims',
+            'Lettre [COLOR coral]' +
+            sTitle +
+            '[/COLOR]',
+            'listes.png',
+            oOutputParameterHandler)
 
     oGui.setEndOfDirectory()
 
@@ -131,7 +145,7 @@ def showAnims(sSearch=''):
             sTitle = aEntry[2]
             try:
                 sTitle = sTitle.decode('ascii', errors='ignore')
-            except:
+            except BaseException:
                 pass
             sTitle = sTitle.replace(' - Episode', ' Episode').replace(' VOSTFR', '').replace(' VF', '')
             if sSearch and not oUtil.CheckOccurence(sSearchText, sTitle):
@@ -323,11 +337,11 @@ def seriesHosters():
 def getHostName(url):
     try:
         if 'www' not in url:
-            sHost = re.search('http.*?\/\/([^.]*)', url).group(1)
+            sHost = re.search('http.*?\\/\\/([^.]*)', url).group(1)
         else:
-            sHost = re.search('htt.+?\/\/(?:www).([^.]*)', url).group(1)
+            sHost = re.search('htt.+?\\/\\/(?:www).([^.]*)', url).group(1)
             sHost = str(sHost).capitalize()
-    except:
+    except BaseException:
         sHost = url
     return sHost
 
@@ -373,6 +387,6 @@ def similarTitle(s):
             for spe in list_spe:
                 snews = snews.replace(spe, '')
             return True, snews.lower()
-        except:
+        except BaseException:
             return False, False
     return False, False

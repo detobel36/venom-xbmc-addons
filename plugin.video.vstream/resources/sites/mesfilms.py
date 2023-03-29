@@ -108,7 +108,14 @@ def showList():
     oOutputParameterHandler = cOutputParameterHandler()
     for sTitle, sUrl in liste:
         oOutputParameterHandler.addParameter('siteUrl', URL_MAIN + '?letter=true&s=title-' + sUrl)
-        oGui.addDir(SITE_IDENTIFIER, 'showMovies', 'Lettre [COLOR coral]' + sTitle + '[/COLOR]', 'az.png', oOutputParameterHandler)
+        oGui.addDir(
+            SITE_IDENTIFIER,
+            'showMovies',
+            'Lettre [COLOR coral]' +
+            sTitle +
+            '[/COLOR]',
+            'az.png',
+            oOutputParameterHandler)
 
     oGui.setEndOfDirectory()
 
@@ -146,11 +153,11 @@ def showSearchResult(sSearch=''):
         oOutputParameterHandler = cOutputParameterHandler()
         for aEntry in aResult[1]:
             sUrl = aEntry[0]
-            sThumb = re.sub('/w\d+/', '/w342/', aEntry[1], 1)  # meilleure qualité
+            sThumb = re.sub('/w\\d+/', '/w342/', aEntry[1], 1)  # meilleure qualité
             sTitle = aEntry[2].replace(': Season', ' Saison')
             sYear = aEntry[3]
             if sYear != '':  # on ne récupere que l'année
-                sYear = re.search('(\d{4})', sYear).group(1)
+                sYear = re.search('(\\d{4})', sYear).group(1)
             sDesc = aEntry[4]
 
             # on ne recherche que des films même si séries et animés disponible
@@ -181,7 +188,7 @@ def showMovies(sSearch=''):
 
     oRequestHandler = cRequestHandler(sUrl)
     sHtmlContent = oRequestHandler.request()
-    sPattern = 'poster">\n*<[^<>]+src="([^"]+)" alt="([^"]+).+?(?:|quality">([^<]+).+?)href="([^"]+).+?<span>([^<]+).+?(texto">(.*?)<|<\/article)'
+    sPattern = 'poster">\n*<[^<>]+src="([^"]+)" alt="([^"]+).+?(?:|quality">([^<]+).+?)href="([^"]+).+?<span>([^<]+).+?(texto">(.*?)<|<\\/article)'
     aResult = oParser.parse(sHtmlContent, sPattern)
 
     if not aResult[0]:
@@ -190,7 +197,7 @@ def showMovies(sSearch=''):
     if aResult[0]:
         oOutputParameterHandler = cOutputParameterHandler()
         for aEntry in aResult[1]:
-            sThumb = re.sub('/w\d+/', '/w342/', aEntry[0], 1)  # ameliore la qualité
+            sThumb = re.sub('/w\\d+/', '/w342/', aEntry[0], 1)  # ameliore la qualité
             sTitle = aEntry[1]
             sQual = aEntry[2]
             sUrl2 = aEntry[3]
@@ -250,10 +257,10 @@ def showLinks():
         aResult = oParser.parse(sHtmlContent, sPattern)
         if aResult[0]:
             sDesc = aResult[1][0]
-    except:
+    except BaseException:
         pass
 
-    sPattern = "type='([^']+)' data-post='([^']+)' data-nume='([^']+).+?title'>([^<]+)</span>\s*<span class='server'>([^<]+)"
+    sPattern = "type='([^']+)' data-post='([^']+)' data-nume='([^']+).+?title'>([^<]+)</span>\\s*<span class='server'>([^<]+)"
     aResult = oParser.parse(sHtmlContent, sPattern)
 
     if not aResult[0]:
@@ -267,7 +274,7 @@ def showLinks():
             sPost = aEntry[1]
             sNume = aEntry[2]
             sQual = aEntry[3]
-            sHost = re.sub('\.\w+', '', aEntry[4]).capitalize()
+            sHost = re.sub('\\.\\w+', '', aEntry[4]).capitalize()
             if 'Youtube' in sHost:
                 continue
 

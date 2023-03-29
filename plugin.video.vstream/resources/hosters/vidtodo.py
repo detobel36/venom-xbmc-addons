@@ -46,13 +46,13 @@ class cHoster(iHoster):
         oRequest.addParameters('User-Agent', UA)
         sHtmlContent = oRequest.request()
 
-        sPattern = 'sources:* \[(?:{file:)*"([^"]+)"'
+        sPattern = 'sources:* \\[(?:{file:)*"([^"]+)"'
         aResult = oParser.parse(sHtmlContent, sPattern)
         if aResult[0] is True:
             api_call = aResult[1][0]
 
         else:
-            sPattern = '(eval\(function\(p,a,c,k,e(?:.|\s)+?\))<\/script>'
+            sPattern = '(eval\\(function\\(p,a,c,k,e(?:.|\\s)+?\\))<\\/script>'
             aResult = oParser.parse(sHtmlContent, sPattern)
             if aResult[0] is True:
                 sHtmlContent = cPacker().unpack(aResult[1][0])

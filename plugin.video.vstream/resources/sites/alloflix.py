@@ -266,7 +266,7 @@ def showSaisons():
     if aResult[0]:
         sDesc = ('[I][COLOR grey]%s[/COLOR][/I] %s') % ('Synopsis :', aResult[1][0])
 
-    sPattern = 'choose-season">.+?href=([^"]+\/).+?right">([^<]+).+?inline">([^<]+)'
+    sPattern = 'choose-season">.+?href=([^"]+\\/).+?right">([^<]+).+?inline">([^<]+)'
     aResult = oParser.parse(sHtmlContent, sPattern)
 
     if aResult[0]:
@@ -299,7 +299,7 @@ def showEpisodes():
 
     oRequestHandler = cRequestHandler(sUrl)
     sHtmlContent = oRequestHandler.request()
-    sPattern = '<span class=num-epi>\dx(\d+).+?href=(\S+)'
+    sPattern = '<span class=num-epi>\\dx(\\d+).+?href=(\\S+)'
     aResult = oParser.parse(sHtmlContent, sPattern)
 
     if not aResult[0]:
@@ -341,25 +341,25 @@ def showHosters():
 
     # récupération du Synopsis
     sDesc = ""
-    sPattern = 'class=description>(.+?)<\/'
+    sPattern = 'class=description>(.+?)<\\/'
     aResult = oParser.parse(sHtmlContent, sPattern)
     if aResult[0]:
         sDesc = ('[I][COLOR grey]%s[/COLOR][/I] %s') % ('Synopsis :', aResult[1][0])
-        sDesc = sDesc.replace('<p>', '') 
-     
-    sPattern = '(iframe src|iframe data-src)="([^"]+)|href=#options-(\d).+?server>([^<]+)'
+        sDesc = sDesc.replace('<p>', '')
+
+    sPattern = '(iframe src|iframe data-src)="([^"]+)|href=#options-(\\d).+?server>([^<]+)'
     aResult = oParser.parse(sHtmlContent, sPattern)
 
     if aResult[0]:
         oOutputParameterHandler = cOutputParameterHandler()
         sLang = None
         tab = aResult[1]
-        n = len(tab)//2
+        n = len(tab) // 2
 
         for i in range(n):
             sUrl2 = tab[i][1]
             # dataNum = tab[i+n][2]
-            sHost = tab[i+n][3]
+            sHost = tab[i + n][3]
             if ' -' in sHost:
                 sHost, sLang = sHost.split(' -')
 
@@ -399,7 +399,7 @@ def hostersLink():
     oRequest.addHeaderEntry('Accept-Language', 'fr-FR,fr;q=0.9,en-US;q=0.8,en;q=0.7')
     sHtmlContent = oRequest.request()
 
-    sPattern = 'src=(\S+)'
+    sPattern = 'src=(\\S+)'
     aResult = oParser.parse(sHtmlContent, sPattern)
 
     if aResult[0]:

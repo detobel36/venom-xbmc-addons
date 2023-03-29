@@ -30,9 +30,9 @@ channels = {
     'bein Sports 1': ['2023/01/bein-sports-1-full-hd-france.html', 'https://images.beinsports.com/n43EXNeoR62GvZlWW2SXKuQi0GA=/788708-HD1.png'],
 
     'Canal+': ['2023/01/canal-france-full-hd.html', 'https://thumb.canalplus.pro/http/unsafe/epg.canal-plus.com/mycanal/img/CHN43FN/PNG/213X160/CHN43FB_301.PNG'],
-#    'Canal+ sport': ['2022/03/canal-sport-full-hd.html', 'https://thumb.canalplus.pro/http/unsafe/epg.canal-plus.com/mycanal/img/CHN43FN/PNG/213X160/CHN43FB_177.PNG'],
+    #    'Canal+ sport': ['2022/03/canal-sport-full-hd.html', 'https://thumb.canalplus.pro/http/unsafe/epg.canal-plus.com/mycanal/img/CHN43FN/PNG/213X160/CHN43FB_177.PNG'],
     'Foot+': ['2022/03/foot-full-hd.html', 'https://matchpint-cdn.matchpint.cloud/shared/imagenes/channels/284_logo_1599851988.png'],
-#    'GOLF+': ['2022/06/golf-full-hd.html', 'https://thumb.canalplus.pro/http/unsafe/epg.canal-plus.com/mycanal/img/CHN43FN/PNG/213X160/CHN43FB_301.PNG'],
+    #    'GOLF+': ['2022/06/golf-full-hd.html', 'https://thumb.canalplus.pro/http/unsafe/epg.canal-plus.com/mycanal/img/CHN43FN/PNG/213X160/CHN43FB_301.PNG'],
 
     'RMC Sport 1': ['2023/01/rmc-sport-1-full-hd.html', 'https://i0.wp.com/www.planetecsat.com/wp-content/uploads/2018/07/RMC_SPORT1_PNG_500x500px.png?w=500&ssl=1'],
     'RMC Sport 2': ['2023/01/rmc-sport-2-full-hd.html', 'https://i0.wp.com/www.planetecsat.com/wp-content/uploads/2018/07/RMC_SPORT2_PNG_500x500px.png?fit=500%2C500&ssl=1'],
@@ -61,7 +61,7 @@ channels = {
     'RMC SPORT LIVE 9': ['2022/03/rmc-sport-live-9-full-hd.html', 'https://www.planetecsat.com/wp-content/uploads/2022/09/Entete-RMC-Sport.png'],
     'RMC SPORT LIVE 10': ['2022/03/rmc-sport-live-10-full-hd.html', 'https://www.planetecsat.com/wp-content/uploads/2022/09/Entete-RMC-Sport.png'],
 
-    }
+}
 
 
 def load():
@@ -102,7 +102,7 @@ def showGenres():
     sHtmlContent = oRequestHandler.request()
 
     oParser = cParser()
-    sPattern = '<h3> (.+?) <\/h3>.+?&#9989;'
+    sPattern = '<h3> (.+?) <\\/h3>.+?&#9989;'
     aResult = oParser.parse(sHtmlContent, sPattern)
 
     if not aResult[0]:
@@ -148,7 +148,7 @@ def showMovies():
     sPattern = '<h3> %s <' % sTitle
     sHtmlContent = oParser.abParse(sHtmlContent, sPattern, '<h3>')
 
-    sPattern = '(\d+:\d+) (.+?)<'
+    sPattern = '(\\d+:\\d+) (.+?)<'
     aResult = oParser.parse(sHtmlContent, sPattern)
 
     if not aResult[0]:
@@ -258,8 +258,8 @@ def showLink():
     sHosterUrl = ''
 
 # TODO
-#sUrl = "https://stream.crichd.vip/update/euro1.php"
-#sUrl = "https://www.tutelehd.com/online.php?a=3112"
+# sUrl = "https://stream.crichd.vip/update/euro1.php"
+# sUrl = "https://www.tutelehd.com/online.php?a=3112"
 
     bvalid, shosterurl = getHosterIframe(sUrl, siterefer)
     if bvalid:
@@ -292,7 +292,7 @@ def getHosterIframe(url, referer):
     if not sHtmlContent or sHtmlContent == 'False':
         return False, False
 
-    sPattern = '(\s*eval\s*\(\s*function(?:.|\s)+?{}\)\))'
+    sPattern = '(\\s*eval\\s*\\(\\s*function(?:.|\\s)+?{}\\)\\))'
     aResult = re.findall(sPattern, sHtmlContent)
     if aResult:
         from resources.lib.packer import cPacker
@@ -301,7 +301,7 @@ def getHosterIframe(url, referer):
             sstr = sstr + ';'
         sHtmlContent = cPacker().unpack(sstr)
 
-    sPattern = '.atob\("(.+?)"'
+    sPattern = '.atob\\("(.+?)"'
     aResult = re.findall(sPattern, sHtmlContent)
     if aResult:
         import base64
@@ -347,4 +347,3 @@ def getHosterIframe(url, referer):
         h = oRequestHandler.request()
         return True, sHosterUrl + '|referer=' + url
     return False, False
-

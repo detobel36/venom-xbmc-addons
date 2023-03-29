@@ -239,7 +239,7 @@ def showMovies(sSearch=''):
                 break
 
             sUrl2 = aEntry[0]
-            sThumb = re.sub('/w\d+/', '/w342/', aEntry[1])
+            sThumb = re.sub('/w\\d+/', '/w342/', aEntry[1])
             sTitle = aEntry[2].strip()  # .split(' en streaming')[0].split('streaming | ')[1]
             sYear = aEntry[3]
             sType = aEntry[4].lower()
@@ -290,7 +290,7 @@ def showMovies(sSearch=''):
 
 def __checkForNextPage(sHtmlContent):
     oParser = cParser()
-    sPattern = '>([^<]+)</a></li><li class="page-item"><a class="page-link" href="([^"]+)">(?!\d)'
+    sPattern = '>([^<]+)</a></li><li class="page-item"><a class="page-link" href="([^"]+)">(?!\\d)'
     aResult = oParser.parse(sHtmlContent, sPattern)
     if aResult[0]:
         sNumberMax = aResult[1][0][0]
@@ -358,7 +358,7 @@ def showSaisons():
     if aResult[0]:
         sDesc = ('[I][COLOR grey]%s[/COLOR][/I] %s') % ('Synopsis :', aResult[1][0])
 
-    sPattern = 'class="seasonbar.+?href="([^"]+).+?arrow-right.+?>(\d+)'
+    sPattern = 'class="seasonbar.+?href="([^"]+).+?arrow-right.+?>(\\d+)'
     aResult = oParser.parse(sHtmlContent, sPattern)
 
     if not aResult[0]:
@@ -465,7 +465,7 @@ def showLinks():
             sKey = aEntry[0]
             sHost = re.sub('www.', '', aEntry[1])
             sHost = re.sub('embed.mystream.to', 'mystream', sHost)
-            sHost = re.sub('\.\w+', '', sHost).capitalize()
+            sHost = re.sub('\\.\\w+', '', sHost).capitalize()
             sLang = aEntry[2].upper()
             sUrl2 = URL_MAIN + 'll/captcha?hash=' + sKey
 
@@ -494,7 +494,7 @@ def showHosters():
     oRequestHandler = cRequestHandler(sUrl)
     sHtmlContent = oRequestHandler.request()
 
-    sPattern = '<iframe.*?src=([^\s]+)'
+    sPattern = '<iframe.*?src=([^\\s]+)'
     aResult = re.findall(sPattern, sHtmlContent)
     if aResult:
         sHosterUrl = aResult[0]

@@ -1,16 +1,16 @@
-#-*- coding: utf-8 -*-
-#Vstream https://github.com/Kodi-vStream/venom-xbmc-addons
+# -*- coding: utf-8 -*-
+# Vstream https://github.com/Kodi-vStream/venom-xbmc-addons
 
-#site HS le 02/10/18
-return False
-from resources.lib.gui.hoster import cHosterGui
-from resources.lib.gui.gui import cGui
-from resources.lib.handler.inputParameterHandler import cInputParameterHandler
-from resources.lib.handler.outputParameterHandler import cOutputParameterHandler
-from resources.lib.handler.requestHandler import cRequestHandler
-from resources.lib.parser import cParser
-from resources.lib.util import cUtil
+# site HS le 02/10/18
 from resources.lib.comaddon import progress
+from resources.lib.util import cUtil
+from resources.lib.parser import cParser
+from resources.lib.handler.requestHandler import cRequestHandler
+from resources.lib.handler.outputParameterHandler import cOutputParameterHandler
+from resources.lib.handler.inputParameterHandler import cInputParameterHandler
+from resources.lib.gui.gui import cGui
+from resources.lib.gui.hoster import cHosterGui
+return False
 
 SITE_IDENTIFIER = 'fullstreaming'
 SITE_NAME = 'Full Streaming'
@@ -24,13 +24,14 @@ URL_SEARCH_SERIES = (URL_MAIN + '?s=', 'showMovies')
 URL_SEARCH_MISC = (URL_MAIN + '?s=', 'showMovies')
 FUNCTION_SEARCH = 'showMovies'
 
-MOVIE_NEWS = (URL_MAIN , 'showMovies')
-MOVIE_MOVIE = (URL_MAIN , '')
+MOVIE_NEWS = (URL_MAIN, 'showMovies')
+MOVIE_MOVIE = (URL_MAIN, '')
 MOVIE_GENRES = (True, 'showGenres')
 MOVIE_ANNEES = (True, 'showMovieYears')
 
 SERIE_NEWS = (URL_MAIN + 'serie-tv/', 'showMovies')
 SERIE_SERIES = (URL_MAIN + 'serie-tv/', 'showMovies')
+
 
 def load():
     oGui = cGui()
@@ -56,6 +57,7 @@ def load():
     oGui.addDir(SITE_IDENTIFIER, SERIE_NEWS[1], 'Séries', 'news.png', oOutputParameterHandler)
 
     oGui.setEndOfDirectory()
+
 
 def showSearch():
     oGui = cGui()
@@ -92,7 +94,7 @@ def showGenres():
 def showMovieYears():
     oGui = cGui()
 
-    for i in reversed (xrange(1964, 2019)):
+    for i in reversed(xrange(1964, 2019)):
         Year = str(i)
         oOutputParameterHandler = cOutputParameterHandler()
         oOutputParameterHandler.addParameter('siteUrl', URL_MAIN + '?filter-by=films&anne=' + Year)
@@ -101,10 +103,10 @@ def showMovieYears():
     oGui.setEndOfDirectory()
 
 
-def showMovies(sSearch = ''):
+def showMovies(sSearch=''):
     oGui = cGui()
     if sSearch:
-      sUrl = sSearch
+        sUrl = sSearch
     else:
         oInputParameterHandler = cInputParameterHandler()
         sUrl = oInputParameterHandler.getValue('siteUrl')
@@ -135,7 +137,7 @@ def showMovies(sSearch = ''):
             sQual = aEntry[3]
             sDesc = ''
 
-            #Si recherche et trop de resultat, on nettoye
+            # Si recherche et trop de resultat, on nettoye
             if sSearch and total > 2:
                 if cUtil().CheckOccurence(sSearch.replace(URL_SEARCH[0], ''), sTitle) == 0:
                     continue
@@ -186,7 +188,7 @@ def showHosters():
 
     oRequestHandler = cRequestHandler(sUrl)
     sHtmlContent = oRequestHandler.request()
-    #réécriture des liens beclic pour recuperer les bons hosters
+    # réécriture des liens beclic pour recuperer les bons hosters
     sHtmlContent = sHtmlContent.replace('https://beclic.pw/op.php?s=', 'https://oload.site/embed/')
     sHtmlContent = sHtmlContent.replace('http://beclic.pw/op.php?s=', 'https://oload.site/embed/')
     sHtmlContent = sHtmlContent.replace('https://beclic.pw/jaja.php?s=', 'https://jawcloud.co/embed-')
@@ -222,22 +224,20 @@ def seriesHosters():
     oRequestHandler = cRequestHandler(sUrl)
     sHtmlContent = oRequestHandler.request()
     sHtmlContent = sHtmlContent.replace(' class="selected"', '')
-    #réécriture des liens beclic
+    # réécriture des liens beclic
     sHtmlContent = sHtmlContent.replace('https://beclic.pw/op.php?s=', 'https://oload.site/embed/')
     sHtmlContent = sHtmlContent.replace('http://beclic.pw/op.php?s=', 'https://oload.site/embed/')
 
-    sEpisodesList= {}
+    sEpisodesList = {}
     sPattern = '<a href="#(div[0-9]+)">(.+?)</a>'
     aResult = oParser.parse(sHtmlContent, sPattern)
     if aResult[0]:
         for i in aResult[1]:
             sEpisodesList[i[0]] = i[1]
 
-
     sPattern = '<div id="(div[^"]+)">.+?<iframe.+?src="(.+?)"'
 
     aResult = oParser.parse(sHtmlContent, sPattern)
-
 
     if aResult[0]:
         for aEntry in aResult[1]:

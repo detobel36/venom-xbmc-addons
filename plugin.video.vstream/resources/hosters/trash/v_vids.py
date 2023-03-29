@@ -1,8 +1,9 @@
-#-*- coding: utf-8 -*-
+# -*- coding: utf-8 -*-
 # https://github.com/Kodi-vStream/venom-xbmc-addons
 from resources.lib.handler.requestHandler import cRequestHandler
 from resources.lib.parser import cParser
 from resources.hosters.hoster import iHoster
+
 
 class cHoster(iHoster):
 
@@ -13,7 +14,7 @@ class cHoster(iHoster):
         oRequest = cRequestHandler(self._url)
         sHtmlContent = oRequest.request()
 
-        sPattern =  "file: '(.+?)'"
+        sPattern = "file: '(.+?)'"
 
         oParser = cParser()
         aResult = oParser.parse(sHtmlContent, sPattern)

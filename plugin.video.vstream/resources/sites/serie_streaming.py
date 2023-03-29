@@ -89,7 +89,7 @@ def showSeries(sSearch=''):
         sSearchText = oUtil.CleanName(sSearchText)
         sUrl = sSearch.replace(' ', '+')
         reqType = cRequestHandler.REQUEST_TYPE_POST
-        sPattern = 'href="([^"]+).+?image: url\((.+?)"title">([^<]+)'
+        sPattern = 'href="([^"]+).+?image: url\\((.+?)"title">([^<]+)'
         idxUrl = 0
         idxThumb = 1
         idxTitle = 2
@@ -124,7 +124,7 @@ def showSeries(sSearch=''):
             oGui.addTV(SITE_IDENTIFIER, 'showSaisons', sTitle, '', sThumb, '', oOutputParameterHandler)
     else:
         oGui.addText(SITE_IDENTIFIER)
-        
+
     if not sSearch:
         sNextPage, sPaging = __checkForNextPage(sHtmlContent)
         if sNextPage:
@@ -138,7 +138,7 @@ def showSeries(sSearch=''):
 def __checkForNextPage(sHtmlContent):
     oParser = cParser()
 
-    sPattern = "<a>\d+</a></li><li><a href='([^']+).+?>([0-9]+)</a></li></ul>"
+    sPattern = "<a>\\d+</a></li><li><a href='([^']+).+?>([0-9]+)</a></li></ul>"
     aResult = oParser.parse(sHtmlContent, sPattern)
     if aResult[0]:
         sNextPage = URL_MAIN[:-1] + aResult[1][0][0]
@@ -147,7 +147,7 @@ def __checkForNextPage(sHtmlContent):
         sPaging = sNumberNext + '/' + sNumberMax
         return sNextPage, sPaging
 
-    sPattern = "<span>\d+</span><li><a href='([^']+).+?>([0-9]+)</a></li></ul>"
+    sPattern = "<span>\\d+</span><li><a href='([^']+).+?>([0-9]+)</a></li></ul>"
     aResult = oParser.parse(sHtmlContent, sPattern)
     if aResult[0]:
         sNextPage = URL_MAIN[:-1] + aResult[1][0][0]
@@ -176,7 +176,7 @@ def showSaisons():
         aResult = oParser.parse(sHtmlContent, sPattern)
         if aResult[0]:
             sDesc = aResult[1][0].split('streaming')[1]
-    except:
+    except BaseException:
         pass
 
     # pour ne pas prendre les propositions de la source

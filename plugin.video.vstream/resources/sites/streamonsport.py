@@ -32,18 +32,20 @@ SITE_DESC = 'Site pour regarder du sport en direct'
 SPORT_SPORTS = ('/', 'load')
 TV_TV = ('/', 'load')
 SPORT_TV = ('31-foot-rugby-tennis-basket-f1-moto-hand-en-streaming-direct.html', 'showMovies')
-#CHAINE_CINE = ('2370162-chaines-tv-streaming-tf1-france-2-canal-plus.html', 'showMovies')
+# CHAINE_CINE = ('2370162-chaines-tv-streaming-tf1-france-2-canal-plus.html', 'showMovies')
 SPORT_LIVE = ('/', 'showMovies')
 SPORT_GENRES = ('/', 'showGenres')
 
 
 URL_MAIN = siteManager().getUrlMain(SITE_IDENTIFIER)
 # URL_MAIN = ''
+
+
 def GetUrlMain():
     global URL_MAIN
     if URL_MAIN != '':
         return URL_MAIN
-    
+
     oRequestHandler = cRequestHandler(siteManager().getUrlMain(SITE_IDENTIFIER))
     sHtmlContent = oRequestHandler.request()
 
@@ -78,15 +80,16 @@ def showGenres():
     urlMain = GetUrlMain()
 
     genreURL = '-foot-rugby-tennis-basket-f1-moto-hand-en-streaming-direct.html'
-    genres = [('Basket', '3'), ('Football', '1'), ('Rugby', '2'), ('Tennis', '5'), ('Fomule1', '4'), ('Handball', '6'), ('Moto', '7')]
-    
+    genres = [('Basket', '3'), ('Football', '1'), ('Rugby', '2'), ('Tennis', '5'),
+              ('Fomule1', '4'), ('Handball', '6'), ('Moto', '7')]
+
     oOutputParameterHandler = cOutputParameterHandler()
     for title, url in genres:
         sUrl = urlMain + url + genreURL
         oOutputParameterHandler.addParameter('siteUrl', sUrl)
         oOutputParameterHandler.addParameter('sMovieTitle', title)
         oGui.addMisc(SITE_IDENTIFIER, 'showMovies', title, 'genres.png', '', title, oOutputParameterHandler)
-        
+
     oGui.setEndOfDirectory()
 
 
@@ -120,7 +123,7 @@ def showMovies(sSearch=''):
             sDesc1 = aEntry[4]
 
             # bChaine = False
-            #if sUrl != CHAINE_CINE[0] and sUrl != SPORT_TV[0]:
+            # if sUrl != CHAINE_CINE[0] and sUrl != SPORT_TV[0]:
             if sUrl != SPORT_TV[0]:
                 sDisplayTitle = sTitle
                 if sDesc1 and 'chaîne' not in sDesc1 and 'chaine' not in sDesc1:
@@ -179,7 +182,8 @@ def showLive():
                 sUrl2 = aEntry[1]
                 sLang1 = aEntry[2].upper()
                 sLang2 = aEntry[3].upper()
-                sDisplayTitle = '%s - Lien %d (%s)' % (sMovieTitle, i, sLang1 if len(sLang1) == 2 else sLang2 if len(sLang2) == 2 else '')
+                sDisplayTitle = '%s - Lien %d (%s)' % (sMovieTitle, i, sLang1 if len(sLang1)
+                                                       == 2 else sLang2 if len(sLang2) == 2 else '')
 
                 oOutputParameterHandler.addParameter('siteUrl', sUrl2)
                 oOutputParameterHandler.addParameter('sMovieTitle', sMovieTitle)
@@ -275,7 +279,6 @@ def showLink():
         bvalid, shosterurl = getHosterIframe(sUrl, siterefer)
         if bvalid:
             sHosterUrl = shosterurl
-        
 
     if sHosterUrl:
         sHosterUrl = sHosterUrl.strip()
@@ -465,20 +468,19 @@ def getTimer():
     return (datenow - epoch).total_seconds() // 1
 
 
-
 # Traitement générique
 def getHosterIframe(url, referer):
-    
+
     if not url.startswith('http'):
-        url = GetUrlMain( )+ url
-    
+        url = GetUrlMain() + url
+
     oRequestHandler = cRequestHandler(url)
     oRequestHandler.addHeaderEntry('Referer', referer)
     sHtmlContent = str(oRequestHandler.request())
     if not sHtmlContent:
         return False, False
 
-    sPattern = '(\s*eval\s*\(\s*function(?:.|\s)+?{}\)\))'
+    sPattern = '(\\s*eval\\s*\\(\\s*function(?:.|\\s)+?{}\\)\\))'
     aResult = re.findall(sPattern, sHtmlContent)
     if aResult:
         sstr = aResult[0]
@@ -486,7 +488,7 @@ def getHosterIframe(url, referer):
             sstr = sstr + ';'
         sHtmlContent = cPacker().unpack(sstr)
 
-    sPattern = '.atob\("(.+?)"'
+    sPattern = '.atob\\("(.+?)"'
     aResult = re.findall(sPattern, sHtmlContent)
     if aResult:
         import base64
@@ -499,7 +501,7 @@ def getHosterIframe(url, referer):
             return True, code + '|Referer=' + url
         except Exception as e:
             pass
-    
+
     sPattern = '<iframe.+?src=["\']([^"\']+)["\']'
     aResult = re.findall(sPattern, sHtmlContent)
     if aResult:
@@ -509,7 +511,7 @@ def getHosterIframe(url, referer):
                 url = url[1:]
             if not url.startswith("http"):
                 if not url.startswith("//"):
-                    url = '//'+referer.split('/')[2] + url  # ajout du nom de domaine
+                    url = '//' + referer.split('/')[2] + url  # ajout du nom de domaine
                 url = "https:" + url
             b, url = getHosterIframe(url, referer)
             if b:
@@ -520,7 +522,7 @@ def getHosterIframe(url, referer):
     if aResult:
         url = aResult[0]
         if '.m3u8' in url:
-            return True, url # + '|User-Agent=' + UA + '&Referer=' + referer
+            return True, url  # + '|User-Agent=' + UA + '&Referer=' + referer
 
     sPattern = '[^/]source.+?["\'](https.+?)["\']'
     aResult = re.findall(sPattern, sHtmlContent)
@@ -528,4 +530,3 @@ def getHosterIframe(url, referer):
         return True, aResult[0] + '|referer=' + url
 
     return False, False
-

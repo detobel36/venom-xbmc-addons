@@ -73,7 +73,7 @@ def showDailyList():
 
     oParser = cParser()
     sHtmlContent = getHtml(sUrl)
-    sPattern = '<div class="news-thumb col-md-6">\s*<a href=([^"]+) title="([^"]+)".+?\s*<img src=.+?uploads/.+?/.+?/([^"]+)\..+?'
+    sPattern = '<div class="news-thumb col-md-6">\\s*<a href=([^"]+) title="([^"]+)".+?\\s*<img src=.+?uploads/.+?/.+?/([^"]+)\\..+?'
     aResult = oParser.parse(sHtmlContent, sPattern)
 
     if aResult[0]:
@@ -128,7 +128,7 @@ def showDailyIptvList():
     sUrl = oInputParameterHandler.getValue('siteUrl')
 
     sHtmlContent = getHtml(sUrl)
-    clearHtml = re.search('null>([\s*\S*]+)</pre>', sHtmlContent).group(1)
+    clearHtml = re.search('null>([\\s*\\S*]+)</pre>', sHtmlContent).group(1)
     line = re.compile('http(.+?)\n').findall(clearHtml)
 
     for sUrl2 in line:

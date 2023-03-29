@@ -153,7 +153,7 @@ def showEpisodes():
         if aResult[0]:
             sDesc = aResult[1][0]
             sDesc = sDesc.replace('&#8220;', '\"').replace('&#8221;', '\"')
-    except:
+    except BaseException:
         pass
 
     # filtre pour ne prendre que sur une partie
@@ -168,7 +168,7 @@ def showEpisodes():
         oOutputParameterHandler = cOutputParameterHandler()
         for aEntry in aResult[1]:
             sUrl = aEntry[0]
-            sTitle = sMovieTitle + ' Episode ' + aEntry[1] 
+            sTitle = sMovieTitle + ' Episode ' + aEntry[1]
 
             oOutputParameterHandler.addParameter('siteUrl', sUrl)
             oOutputParameterHandler.addParameter('sMovieTitle', sTitle)

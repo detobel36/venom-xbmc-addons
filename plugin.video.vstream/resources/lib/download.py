@@ -78,8 +78,7 @@ class cDownloadProgressBar(threading.Thread):
         iTotalSize = -1
         if 'content-length' in headers:
             iTotalSize = int(headers['Content-Length'])
-            
-        
+
         chunk = 512 * 1024
         TotDown = 0
 
@@ -125,7 +124,7 @@ class cDownloadProgressBar(threading.Thread):
                     db.update_download(meta)
                 self.DIALOG.VSinfo(self.__sTitle, self.ADDON.VSlang(30003), 5)
                 self.RefreshDownloadList()
-            except:
+            except BaseException:
                 pass
         else:
             meta['status'] = 0
@@ -134,7 +133,7 @@ class cDownloadProgressBar(threading.Thread):
                     db.update_download(meta)
                 self.DIALOG.VSinfo(self.__sTitle, self.ADDON.VSlang(30004), 5)
                 self.RefreshDownloadList()
-            except:
+            except BaseException:
                 pass
             return
 
@@ -159,7 +158,7 @@ class cDownloadProgressBar(threading.Thread):
                 with cDb() as db:
                     db.update_download(meta)
                 self.RefreshDownloadList()
-            except:
+            except BaseException:
                 pass
 
     def __stateCallBackFunction(self, iDownsize, iTotalSize):
@@ -168,7 +167,13 @@ class cDownloadProgressBar(threading.Thread):
 
         # barre de préchargement
         iPercent = int(float(iDownsize * 100) / iTotalSize)
-        self.__oDialog.update(iPercent, self.__sTitle, self.__formatFileSize(float(iDownsize)) + '/' + self.__formatFileSize(iTotalSize))
+        self.__oDialog.update(
+            iPercent,
+            self.__sTitle,
+            self.__formatFileSize(
+                float(iDownsize)) +
+            '/' +
+            self.__formatFileSize(iTotalSize))
 
         if (self.__oDialog.isFinished()) and not (self.__processIsCanceled):
             self.__processIsCanceled = True
@@ -193,7 +198,7 @@ class cDownloadProgressBar(threading.Thread):
 
             self.oUrlHandler = urllib2.urlopen(req, timeout=30)
             self.file = xbmcvfs.File(self.__fPath, 'w')
-        except:
+        except BaseException:
             VSlog('download error ' + self.__sUrl)
             self.DIALOG.VSinfo(self.ADDON.VSlang(30011), 'Download error', 5)
             return
@@ -205,7 +210,7 @@ class cDownloadProgressBar(threading.Thread):
         if iBytes == 0:
             return '0 MB'
 
-        return "{:,.{}f} MB".format( iBytes/(1024*1024.0), 0 ).replace(',', ' ')
+        return "{:,.{}f} MB".format(iBytes / (1024 * 1024.0), 0).replace(',', ' ')
 
     def StopAll(self):
         self.processIsCanceled = True
@@ -213,7 +218,7 @@ class cDownloadProgressBar(threading.Thread):
         xbmcgui.Window(10101).setProperty('arret', '1')
         try:
             self.__oDialog.close()
-        except:
+        except BaseException:
             pass
 
         return
@@ -243,8 +248,8 @@ class cDownload:
         if iBytes == 0:
             return '0 MB'
 
-        return "{:,.{}f} MB".format( iBytes/(1024*1024.0), 0 ).replace(',', ' ')
-    
+        return "{:,.{}f} MB".format(iBytes / (1024 * 1024.0), 0).replace(',', ' ')
+
     def isDownloading(self):
         if not xbmc.getCondVisibility('Window.IsVisible(10151)'):
             return False
@@ -285,7 +290,7 @@ class cDownload:
 
             VSlog('Download Ok ' + sDownloadPath)
 
-        except:
+        except BaseException:
             self.DIALOG.VSinfo(sTitle, self.ADDON.VSlang(30024), 5)
             VSlog('Unable to download')
             return False
@@ -309,11 +314,11 @@ class cDownload:
         sTitle = cUtil().CleanName(sTitle)
         # sTitle = cUtil().FormatSerie(sTitle)
 
-        if type(sTitle) is bytes:
+        if isinstance(sTitle, bytes):
             sTitle = sTitle.decode('utf-8')
 
         if extension:
-            return sTitle + '.' +extension
+            return sTitle + '.' + extension
 
         # recherche d'une extension
         sUrl = sUrl.lower()
@@ -332,14 +337,19 @@ class cDownload:
         sPluginPath = cPluginHandler().getPluginPath()
         sItemUrl = '%s?site=%s&function=%s&title=%s' % (sPluginPath, SITE_IDENTIFIER, 'StartDownloadList', 'title')
         item = xbmcgui.ListItem('Démarrer la liste')
-        item.setArt({'icon':'special://home/addons/plugin.video.vstream/resources/art/download.png'})
+        item.setArt({'icon': 'special://home/addons/plugin.video.vstream/resources/art/download.png'})
         xbmcplugin.addDirectoryItem(sPluginHandle, sItemUrl, item, isFolder=False)
 
         oGui = cGui()
         oOutputParameterHandler = cOutputParameterHandler()
         oGui.addDir(SITE_IDENTIFIER, 'StopDownloadList', self.ADDON.VSlang(30025), 'none.png', oOutputParameterHandler)
         oGui.addDir(SITE_IDENTIFIER, 'getDownloadList', self.ADDON.VSlang(30039), 'listes.png', oOutputParameterHandler)
-        oGui.addDir(SITE_IDENTIFIER, 'CleanDownloadList', self.ADDON.VSlang(30040), 'trash.png', oOutputParameterHandler)
+        oGui.addDir(
+            SITE_IDENTIFIER,
+            'CleanDownloadList',
+            self.ADDON.VSlang(30040),
+            'trash.png',
+            oOutputParameterHandler)
         oGui.setEndOfDirectory()
 
     def CleanDownloadList(self):
@@ -347,7 +357,7 @@ class cDownload:
             with cDb() as db:
                 db.clean_download()
             self.DIALOG.VSinfo(self.ADDON.VSlang(30071), self.ADDON.VSlang(30224), 5)
-        except:
+        except BaseException:
             pass
 
         return
@@ -375,7 +385,7 @@ class cDownload:
                 db.reset_download(meta)
             self.DIALOG.VSinfo(self.ADDON.VSlang(30071), self.ADDON.VSlang(30224), 5)
             VSupdate()
-        except:
+        except BaseException:
             pass
 
         return
@@ -412,7 +422,7 @@ class cDownload:
                 xbmcvfs.delete(path)
                 self.DIALOG.VSinfo(self.ADDON.VSlang(30072), self.ADDON.VSlang(30224), 5)
                 VSupdate()
-            except:
+            except BaseException:
                 self.DIALOG.VSinfo(self.ADDON.VSlang(30073), self.ADDON.VSlang(30224), 5)
 
     def GetNextFile(self):
@@ -491,7 +501,7 @@ class cDownload:
             # The url is unicode format ? Not managed yet
             try:
                 thumbnail = str(thumbnail)
-            except:
+            except BaseException:
                 thumbnail = ''
 
             size = data[6]
@@ -515,10 +525,11 @@ class cDownload:
                 if isMatrix():
                     try:
                         title = title.decode()
-                    except:
+                    except BaseException:
                         pass
 
-                sTitle = sStatus + title + ' (' + self.__formatFileSize(size) + '/' + self.__formatFileSize(totalsize) + ')'
+                sTitle = sStatus + title + ' (' + self.__formatFileSize(size) + '/' + \
+                    self.__formatFileSize(totalsize) + ')'
             else:
                 sTitle = sStatus + title
 
@@ -558,7 +569,7 @@ class cDownload:
                 db.del_download(meta)
             self.DIALOG.VSinfo(self.ADDON.VSlang(30071), self.ADDON.VSlang(30224), 5)
             VSupdate()
-        except:
+        except BaseException:
             pass
 
         return
@@ -609,7 +620,7 @@ class cDownload:
                         db.insert_download(meta)
                     return True
 
-                except:
+                except BaseException:
                     self.DIALOG.VSinfo(sTitle, self.ADDON.VSlang(30084), 5)
                     VSlog('Unable to download')
 
@@ -692,5 +703,5 @@ class cDownload:
             else:
                 # notifier que la demande est prise en compte
                 self.DIALOG.VSinfo(self.ADDON.VSlang(30228), self.ADDON.VSlang(30083), 5)
-                
+
         return

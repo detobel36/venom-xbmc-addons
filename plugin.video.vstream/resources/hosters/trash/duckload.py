@@ -6,6 +6,7 @@ from resources.hosters.hoster import iHoster
 import time
 import random
 
+
 class cHoster(iHoster):
 
     def __init__(self):
@@ -19,13 +20,13 @@ class cHoster(iHoster):
         if (oPremiumHandler.isPremiumModeAvailable()):
             sUsername = oPremiumHandler.getUsername()
             sPassword = oPremiumHandler.getPassword()
-            return self._getMediaLinkByPremiumUser(sUsername, sPassword);
+            return self._getMediaLinkByPremiumUser(sUsername, sPassword)
 
-        return self._getMediaLinkForGuest();
+        return self._getMediaLinkForGuest()
 
     def _getMediaLinkByPremiumUser(self, sUsername, sPassword):
-        oRequestHandler = cRequestHandler('http://www.duckload.com/api/public/login&user=' + sUsername + '&pw=' + \
-            sPassword + '&fmt=json&source=WEB')
+        oRequestHandler = cRequestHandler('http://www.duckload.com/api/public/login&user=' + sUsername + '&pw=' +
+                                          sPassword + '&fmt=json&source=WEB')
         sHtmlContent = oRequestHandler.request()
 
         aHeader = oRequestHandler.getResponseHeader()
@@ -55,8 +56,8 @@ class cHoster(iHoster):
         aHeader = oRequest.getResponseHeader()
         sPhpSessionId = self.__getPhpSessionId(aHeader)
 
-        sPostName = '';
-        sPostValue = '';
+        sPostName = ''
+        sPostValue = ''
         sPostButtonName = ""
         sPattern = '<form onsubmit="return checkTimer.*?<input type="hidden" name="([^"]+)" ' + \
             'value="([^"]+)".*?<button name="([^"]+)"'
@@ -72,22 +73,22 @@ class cHoster(iHoster):
         oParser = cParser()
         aResult = oParser.parse(sHtmlContent, sPattern)
         if aResult[0] is True:
-                sTicketValue = str(aResult[1][0]).replace(' ', '');
-                sSecondsForWait = int(sTicketValue) + 2
+            sTicketValue = str(aResult[1][0]).replace(' ', '')
+            sSecondsForWait = int(sTicketValue) + 2
 
-                oGui = cGui()
-                oGui.showNofication(sSecondsForWait, 3)
-                time.sleep(sSecondsForWait)
+            oGui = cGui()
+            oGui.showNofication(sSecondsForWait, 3)
+            time.sleep(sSecondsForWait)
 
-                rndX = random.randint(1, 99999999-10000000)+10000000
-        rndY = random.randint(1, 999999999-100001000)+100000000
-            ts1 = float(time.time())
+            rndX = random.randint(1, 99999999 - 10000000) + 10000000
+        rndY = random.randint(1, 999999999 - 100001000) + 100000000
+        ts1 = float(time.time())
         ts2 = float(time.time())
         ts3 = float(time.time())
         ts4 = float(time.time())
         ts5 = float(time.time())
 
-        sCookieValue = sPhpSessionId +'; '
+        sCookieValue = sPhpSessionId + '; '
         sCookieValue = sCookieValue + '__utma=' + str(rndY) + '.' + str(rndX) + '.' + str(ts1) + '.' + \
             str(ts2) + '.' + str(ts3) + '; '
         sCookieValue = sCookieValue + '__utmb=' + str(rndY) + '.1.10.' + str(ts3) + '; '
@@ -104,11 +105,11 @@ class cHoster(iHoster):
         sHtmlContent = oRequest.request()
 
         sPattern = '<param name="src" value="([^"]+)"'
-                oParser = cParser()
-                aResult = oParser.parse(sHtmlContent, sPattern)
+        oParser = cParser()
+        aResult = oParser.parse(sHtmlContent, sPattern)
 
-                if aResult[0] is True:
-                    return True, aResult[1][0]
+        if aResult[0] is True:
+            return True, aResult[1][0]
 
         return False, aResult
 

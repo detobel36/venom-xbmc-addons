@@ -62,7 +62,7 @@ class cHoster(iHoster):
             realurl = red[0]
         else:
             VSlog("2")
-            red = re.findall('location\.assign *\( *"([^"]+)" \)', sHtmlContent)
+            red = re.findall('location\\.assign *\\( *"([^"]+)" \\)', sHtmlContent)
             if red:
                 realurl = red[0]
 
@@ -90,7 +90,7 @@ class cHoster(iHoster):
 
         api_call = ''
 
-        sPattern = '(eval\(function\(p,a,c,k,e(?:.|\s)+?\)\))<'
+        sPattern = '(eval\\(function\\(p,a,c,k,e(?:.|\\s)+?\\)\\))<'
         aResult = oParser.parse(sHtmlContent, sPattern)
         if aResult[0] is True:
             for packed in aResult[1]:
@@ -104,7 +104,7 @@ class cHoster(iHoster):
                         break
 
         else:
-            sPattern = "file\s*:\s*\'([^\']+.mp4)"
+            sPattern = "file\\s*:\\s*\'([^\']+.mp4)"
             aResult = oParser.parse(sHtmlContent, sPattern)
             if aResult[0] is True:
                 api_call = aResult[1][0]
@@ -121,7 +121,7 @@ class cHoster(iHoster):
 
 
 def checkCpacker(strToPack):
-    sPattern = '>([^>]+\(p,a,c,k,e(?:.|\s)+?\)\)\s*)<'
+    sPattern = '>([^>]+\\(p,a,c,k,e(?:.|\\s)+?\\)\\)\\s*)<'
     aResult = re.search(sPattern, strToPack, re.DOTALL | re.UNICODE)
     if aResult:
         # VSlog('Cpacker encryption')
@@ -139,12 +139,12 @@ def checkCpacker(strToPack):
         try:
             tmp = cPacker().unpack(str2)
             # tmp = tmp.replace("\\'", "'")
-        except:
+        except BaseException:
             tmp = ''
 
         # VSlog(tmp)
 
-        return strToPack[:(aResult.start() + 1)] + tmp + strToPack[(aResult.end()-1):]
+        return strToPack[:(aResult.start() + 1)] + tmp + strToPack[(aResult.end() - 1):]
 
     return strToPack
 
@@ -163,7 +163,7 @@ def checkCpacker(strToPack):
 
 
 def checkAADecoder(stringToDecode):
-    aResult = re.search('([>;]\s*)(ﾟωﾟ.+?\(\'_\'\);)', str, re.DOTALL | re.UNICODE)
+    aResult = re.search('([>;]\\s*)(ﾟωﾟ.+?\\(\'_\'\\);)', str, re.DOTALL | re.UNICODE)
     if aResult:
         VSlog('AA encryption')
 

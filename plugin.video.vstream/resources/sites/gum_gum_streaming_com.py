@@ -62,7 +62,7 @@ def showNews():
     sHtmlContent = oRequestHandler.request()
 
     # sPattern = 'Dernier (VF|VOSTFR|OAV|Film)\s*: (?:<a |<a title="([^"]+)" )href="([^"]+)" data-wpel-link="internal">([^<]+)'
-    sPattern = 'Dernier (VF|VOSTFR|OAV|Film)\s*: (<a|<a title="([^"]+)") href="([^"]+)" data-wpel-link="internal">([^<]+)'
+    sPattern = 'Dernier (VF|VOSTFR|OAV|Film)\\s*: (<a|<a title="([^"]+)") href="([^"]+)" data-wpel-link="internal">([^<]+)'
     aResult = oParser.parse(sHtmlContent, sPattern)
 
     if aResult[0]:
@@ -87,7 +87,7 @@ def showNews():
             sTitle = sTitle.replace(' VOSTFR', '').replace(' VF', '').replace(' vf', '')
             sDisplayTitle = ('%s (%s)') % (sTitle, sLang)
 
-            sFilter = re.search('(\d+)-(\d+)', sUrl)
+            sFilter = re.search('(\\d+)-(\\d+)', sUrl)
             if sFilter:
                 continue
 
@@ -125,8 +125,8 @@ def showAnimes():
 
             # traitement du titre pour compatibilite
             sTitle = sTitle.replace('(', ' ').replace(')', ' ')
-            sTitle = re.sub('([0-9]+) .. ([0-9\?]+)', '\\1-\\2', sTitle)
-            sTitle = re.sub('([0-9]+) & ([0-9\?]+)', '\\1-\\2', sTitle)
+            sTitle = re.sub('([0-9]+) .. ([0-9\\?]+)', '\\1-\\2', sTitle)
+            sTitle = re.sub('([0-9]+) & ([0-9\\?]+)', '\\1-\\2', sTitle)
 
             oOutputParameterHandler.addParameter('siteUrl', sUrl)
             oOutputParameterHandler.addParameter('sMovieTitle', sTitle)
@@ -165,7 +165,7 @@ def showEpisodes():
     if sThumbResult[0]:
         sThumb = sThumbResult[1][0]
 
-    sPattern = '<h2 style="color: #.+?">([^<]+)|href="http([^"]+)".+?>([^<]+)<\/a>'
+    sPattern = '<h2 style="color: #.+?">([^<]+)|href="http([^"]+)".+?>([^<]+)<\\/a>'
     aResult = oParser.parse(sUsentContent, sPattern)
 
     if not aResult[0]:
@@ -191,8 +191,8 @@ def showEpisodes():
                 sDisplayTitle = aEntry[2].replace('•', '').strip()
                 if sDisplayTitle.endswith(':'):
                     sDisplayTitle = sDisplayTitle[:-1]
-                
-                sTitle = sSerieTitle + ' ' + sDisplayTitle 
+
+                sTitle = sSerieTitle + ' ' + sDisplayTitle
 
                 oOutputParameterHandler.addParameter('siteUrl', aUrl)
                 oOutputParameterHandler.addParameter('sMovieTitle', sTitle)
@@ -231,9 +231,23 @@ def showMovies():
             oOutputParameterHandler.addParameter('siteUrl', sUrl)
             oOutputParameterHandler.addParameter('sMovieTitle', sTitle)
             if sTitle.lower().find('les films') != -1:
-                oGui.addMovie(SITE_IDENTIFIER, 'showMovieList', sTitle, 'animes.png', sThumb, sDesc, oOutputParameterHandler)
+                oGui.addMovie(
+                    SITE_IDENTIFIER,
+                    'showMovieList',
+                    sTitle,
+                    'animes.png',
+                    sThumb,
+                    sDesc,
+                    oOutputParameterHandler)
             else:
-                oGui.addMovie(SITE_IDENTIFIER, 'showHosters', sTitle, 'animes.png', sThumb, sDesc, oOutputParameterHandler)
+                oGui.addMovie(
+                    SITE_IDENTIFIER,
+                    'showHosters',
+                    sTitle,
+                    'animes.png',
+                    sThumb,
+                    sDesc,
+                    oOutputParameterHandler)
 
         progress_.VSclose(progress_)
     oGui.setEndOfDirectory()
@@ -339,7 +353,7 @@ def GetTinyUrl(url):
         reponse = oRequestHandler.request()
         UrlRedirect = reponse.GetRealUrl()
 
-        if not(UrlRedirect == url):
+        if not (UrlRedirect == url):
             url = UrlRedirect
         elif 'Location' in reponse.getResponseHeader():
             url = reponse.getResponseHeader()['Location']

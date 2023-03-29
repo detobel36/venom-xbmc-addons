@@ -1,18 +1,17 @@
 # -*- coding: utf-8 -*-
 # vStream https://github.com/Kodi-vStream/venom-xbmc-addons
 
-return False #l'adresse a changé mais plus du tout le meme site, le 06/06/22
-
-import re
-
-from resources.lib.comaddon import progress, siteManager
-from resources.lib.gui.gui import cGui
-from resources.lib.gui.hoster import cHosterGui
-from resources.lib.handler.inputParameterHandler import cInputParameterHandler
-from resources.lib.handler.outputParameterHandler import cOutputParameterHandler
-from resources.lib.handler.requestHandler import cRequestHandler
-from resources.lib.parser import cParser
 from resources.lib.util import cUtil
+from resources.lib.parser import cParser
+from resources.lib.handler.requestHandler import cRequestHandler
+from resources.lib.handler.outputParameterHandler import cOutputParameterHandler
+from resources.lib.handler.inputParameterHandler import cInputParameterHandler
+from resources.lib.gui.hoster import cHosterGui
+from resources.lib.gui.gui import cGui
+from resources.lib.comaddon import progress, siteManager
+import re
+return False  # l'adresse a changé mais plus du tout le meme site, le 06/06/22
+
 
 SITE_IDENTIFIER = 'zustream'
 SITE_NAME = 'ZuStream'
@@ -162,7 +161,12 @@ def showNetwork():
 
     oOutputParameterHandler.addParameter('siteUrl', SERIE_YOUTUBE[0])
     oOutputParameterHandler.addParameter('sTmdbId', 1436)    # Utilisé par TMDB
-    oGui.addNetwork(SITE_IDENTIFIER, SERIE_YOUTUBE[1], 'Séries (YouTube Originals)', 'host.png', oOutputParameterHandler)
+    oGui.addNetwork(
+        SITE_IDENTIFIER,
+        SERIE_YOUTUBE[1],
+        'Séries (YouTube Originals)',
+        'host.png',
+        oOutputParameterHandler)
 
     oGui.setEndOfDirectory()
 
@@ -215,7 +219,7 @@ def showMovies(sSearch=''):
     else:
         oInputParameterHandler = cInputParameterHandler()
         sUrl = oInputParameterHandler.getValue('siteUrl')
-        sPattern = 'article id="post-\d+".+?img src="([^"]+)" alt="([^"]+).+?(?:|class="quality">([^<]+).+?)(?:|class="dtyearfr">([^<]+).+?)href="([^"]+).+?class="texto">(.*?)</div>'
+        sPattern = 'article id="post-\\d+".+?img src="([^"]+)" alt="([^"]+).+?(?:|class="quality">([^<]+).+?)(?:|class="dtyearfr">([^<]+).+?)href="([^"]+).+?class="texto">(.*?)</div>'
 
     oRequestHandler = cRequestHandler(sUrl)
     sHtmlContent = oRequestHandler.request()
@@ -260,7 +264,7 @@ def showMovies(sSearch=''):
             try:
                 sDesc = unicode(sDesc, 'utf-8')  # converti en unicode
                 sDesc = oUtil.unescape(sDesc).encode('utf-8')    # retire les balises HTML
-            except:
+            except BaseException:
                 pass
 
             sDisplayTitle = ('%s (%s) (%s)') % (sTitle, sLang, sYear)
@@ -341,7 +345,7 @@ def showSxE():
 
     oRequestHandler = cRequestHandler(sUrl)
     sHtmlContent = oRequestHandler.request()
-    sPattern = "class='numerando'>(\d+) - (\d+)</div><div class='episodiotitle'><a href='([^']+)'"
+    sPattern = "class='numerando'>(\\d+) - (\\d+)</div><div class='episodiotitle'><a href='([^']+)'"
     oParser = cParser()
     aResult = oParser.parse(sHtmlContent, sPattern)
 
@@ -375,7 +379,7 @@ def showLink():
 
     oRequest = cRequestHandler(sUrl)
     sHtmlContent = oRequest.request()
-    sPattern = "dooplay_player_option.+?data-post='(\d+)'.+?data-nume='(.+?)'>.+?'title'>(.+?)<"
+    sPattern = "dooplay_player_option.+?data-post='(\\d+)'.+?data-nume='(.+?)'>.+?'title'>(.+?)<"
     oParser = cParser()
     aResult = oParser.parse(sHtmlContent, sPattern)
 

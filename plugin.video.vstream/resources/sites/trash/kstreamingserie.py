@@ -149,7 +149,7 @@ def showSeries(sSearch=''):
                 break
 
             sThumb = aEntry[0]
-            sTitle = re.sub('\(\d{4}\)', '', aEntry[1])
+            sTitle = re.sub('\\(\\d{4}\\)', '', aEntry[1])
             sUrl = aEntry[2]
 
             if sSearch:     # Filtre de recherche
@@ -237,7 +237,7 @@ def showEpisodes():
         aResult = oParser.parse(sHtmlContent, sPattern)
         if aResult[0]:
             sDesc = aResult[1][0].replace('<br />', '').replace('</div>', '')
-    except:
+    except BaseException:
         pass
 
     # recuperation du hoster de base
@@ -271,7 +271,15 @@ def showEpisodes():
         oOutputParameterHandler.addParameter('siteUrl', sUrl)
         oOutputParameterHandler.addParameter('sMovieTitle', sMovieTitle + ' episode 1')
         oOutputParameterHandler.addParameter('sThumb', sThumb)
-        oGui.addEpisode(SITE_IDENTIFIER, 'showHosters', sMovieTitle + ' episode 1', '', sThumb, '', oOutputParameterHandler)
+        oGui.addEpisode(
+            SITE_IDENTIFIER,
+            'showHosters',
+            sMovieTitle +
+            ' episode 1',
+            '',
+            sThumb,
+            '',
+            oOutputParameterHandler)
 
     oGui.setEndOfDirectory()
 
@@ -287,7 +295,7 @@ def showHosters():
     oRequestHandler = cRequestHandler(sUrl)
     sHtmlContent = oRequestHandler.request()
 
-    sPattern = '<h3>.+?(VF|VOSTFR)\s*<\/h3>\s*<p><\/p>|<iframe.+?src="([^"]+)"'
+    sPattern = '<h3>.+?(VF|VOSTFR)\\s*<\\/h3>\\s*<p><\\/p>|<iframe.+?src="([^"]+)"'
 
     oParser = cParser()
     aResult = oParser.parse(sHtmlContent, sPattern)

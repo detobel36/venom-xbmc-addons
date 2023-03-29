@@ -97,7 +97,14 @@ def showAlpha():
             oOutputParameterHandler.addParameter('siteUrl', sUrl + sTitle)
 
         oOutputParameterHandler.addParameter('sMovieTitle', sTitle)
-        oGui.addDir(SITE_IDENTIFIER, 'showAnimes', 'Lettre [COLOR coral]' + sTitle + '[/COLOR]', 'az.png', oOutputParameterHandler)
+        oGui.addDir(
+            SITE_IDENTIFIER,
+            'showAnimes',
+            'Lettre [COLOR coral]' +
+            sTitle +
+            '[/COLOR]',
+            'az.png',
+            oOutputParameterHandler)
 
     progress_.VSclose(progress_)
 
@@ -145,7 +152,7 @@ def showAnimes(sSearch=''):
     if sSearch:
         sUrl = sSearch
 
-        sTypeSearch = oParser.parseSingleResult(sUrl, '\?type=(.+?)&')
+        sTypeSearch = oParser.parseSingleResult(sUrl, '\\?type=(.+?)&')
         if sTypeSearch[0]:
             sTypeSearch = sTypeSearch[1]
         else:
@@ -262,7 +269,14 @@ def showEpisodes():
         oOutputParameterHandler.addParameter('sMovieTitle', sTitle)
         oOutputParameterHandler.addParameter('sDesc', sDesc)
         oOutputParameterHandler.addParameter('sThumb', sThumb)
-        oGui.addEpisode(SITE_IDENTIFIER, 'showLinks', '===] Dernier épisode [===', '', sThumb, sDesc, oOutputParameterHandler)
+        oGui.addEpisode(
+            SITE_IDENTIFIER,
+            'showLinks',
+            '===] Dernier épisode [===',
+            '',
+            sThumb,
+            sDesc,
+            oOutputParameterHandler)
 
         # Premier épisode
         sUrlEpisode = aResult[1][-1][0]
@@ -272,7 +286,14 @@ def showEpisodes():
         oOutputParameterHandler.addParameter('sMovieTitle', sTitle)
         oOutputParameterHandler.addParameter('sDesc', sDesc)
         oOutputParameterHandler.addParameter('sThumb', sThumb)
-        oGui.addEpisode(SITE_IDENTIFIER, 'showLinks', '===] Premier épisode [===', '', sThumb, sDesc, oOutputParameterHandler)
+        oGui.addEpisode(
+            SITE_IDENTIFIER,
+            'showLinks',
+            '===] Premier épisode [===',
+            '',
+            sThumb,
+            sDesc,
+            oOutputParameterHandler)
 
         # Liste des épisodes
         for aEntry in aResult[1]:
@@ -304,7 +325,8 @@ def showLinks():
     chapter = data.group(2)
 
     # On extrait une partie de la page pour eviter les doublons.
-    sData = re.search('<select class="selectpicker host-select">(.+?)</select> </label>', sHtmlContent, re.MULTILINE | re.DOTALL).group(1)
+    sData = re.search('<select class="selectpicker host-select">(.+?)</select> </label>',
+                      sHtmlContent, re.MULTILINE | re.DOTALL).group(1)
 
     oParser = cParser()
     sPattern = '<option data-redirect=.+?value="([^"]+)">LECTEUR.+?</option>'
@@ -376,11 +398,13 @@ def getHost():
     types = oInputParameterHandler.getValue('sType')
 
     # On valide le token du coté du site
-    data = 'action=get_video_chapter_content&grecaptcha=' + test + '&manga=' + post + '&chapter=' + chapter + '&host=' + types.replace(' ', '+')
+    data = 'action=get_video_chapter_content&grecaptcha=' + test + '&manga=' + \
+        post + '&chapter=' + chapter + '&host=' + types.replace(' ', '+')
     oRequestHandler = cRequestHandler("https://voiranime.com/wp-admin/admin-ajax.php")
     oRequestHandler.setRequestType(1)
     oRequestHandler.addHeaderEntry('User-Agent', UA)
-    oRequestHandler.addHeaderEntry('Accept', 'text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,*/*;q=0.8')
+    oRequestHandler.addHeaderEntry(
+        'Accept', 'text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,*/*;q=0.8')
     oRequestHandler.addHeaderEntry('Accept-Language', 'fr,fr-FR;q=0.8,en-US;q=0.5,en;q=0.3')
     oRequestHandler.addHeaderEntry('Accept-Encoding', 'gzip')
     oRequestHandler.addHeaderEntry('Referer', sUrl)

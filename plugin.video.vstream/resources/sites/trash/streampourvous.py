@@ -148,7 +148,12 @@ def showNetwork():
 
     oOutputParameterHandler.addParameter('siteUrl', SERIE_YOUTUBE[0])
     oOutputParameterHandler.addParameter('sTmdbId', 1436)    # Utilisé par TMDB
-    oGui.addNetwork(SITE_IDENTIFIER, SERIE_YOUTUBE[1], 'Séries (YouTube Originals)', 'host.png', oOutputParameterHandler)
+    oGui.addNetwork(
+        SITE_IDENTIFIER,
+        SERIE_YOUTUBE[1],
+        'Séries (YouTube Originals)',
+        'host.png',
+        oOutputParameterHandler)
 
     oGui.setEndOfDirectory()
 
@@ -164,7 +169,7 @@ def showGenres():
     sEnd = '><nav class="releases"><h2>Année de production</h2>'
     sHtmlContent = oParser.abParse(sHtmlContent, sStart, sEnd)
 
-    sPattern = 'href="([^"]+)">([^<]+).+?<i>(\d*)'
+    sPattern = 'href="([^"]+)">([^<]+).+?<i>(\\d*)'
     aResult = oParser.parse(sHtmlContent, sPattern)
 
     if not aResult[0]:
@@ -290,7 +295,7 @@ def showMovies(sSearch=''):
                 sDesc = aEntry[3]
             else:
                 sThumb = aEntry[0]
-                sTitle = re.sub('\([0-9]{4}\)', '', aEntry[1])
+                sTitle = re.sub('\\([0-9]{4}\\)', '', aEntry[1])
                 if aEntry[2]:
                     sQual = aEntry[2]  # parfois sLang
                 sUrl = aEntry[3]
@@ -302,7 +307,7 @@ def showMovies(sSearch=''):
             try:
                 sDesc = unicode(sDesc, 'utf-8')  # converti en unicode
                 sDesc = utils.unescape(sDesc).encode('utf-8')  # retire les balises HTML
-            except:
+            except BaseException:
                 pass
 
             sDisplayTitle = ('%s %s (%s)') % (sTitle, sQual, sYear)
@@ -333,7 +338,7 @@ def showMovies(sSearch=''):
 
 def __checkForNextPage(sHtmlContent):
     oParser = cParser()
-    sPattern = 'class="pagination">.+?de (\d*).+?href="([^"]+)'
+    sPattern = 'class="pagination">.+?de (\\d*).+?href="([^"]+)'
     aResult = oParser.parse(sHtmlContent, sPattern)
     if aResult[0]:
         sNumberMax = aResult[1][0][0]
@@ -367,10 +372,10 @@ def showSxE():
 
             else:
                 sUrl = aEntry[2]
-                SxE = re.sub('(\d+) - (\d+)', 'saison \g<1> Episode \g<2>', aEntry[1])
+                SxE = re.sub('(\\d+) - (\\d+)', 'saison \\g<1> Episode \\g<2>', aEntry[1])
                 sTitle = sMovieTitle + ' ' + SxE
 
-                sDisplayTitle = sMovieTitle + ' ' + re.sub('saison \d+ ', '', SxE)
+                sDisplayTitle = sMovieTitle + ' ' + re.sub('saison \\d+ ', '', SxE)
 
                 oOutputParameterHandler.addParameter('siteUrl', sUrl)
                 oOutputParameterHandler.addParameter('sMovieTitle', sTitle)
@@ -392,7 +397,7 @@ def showLinks():
 
     oRequest = cRequestHandler(sUrl)
     sHtmlContent = oRequest.request()
-    sPattern = "data-type='([^']+)' data-post='([^']+)' data-nume='([^']+).+?title'>([^<]+).+?server'>(.+?)<.+?flags/(\w+)"
+    sPattern = "data-type='([^']+)' data-post='([^']+)' data-nume='([^']+).+?title'>([^<]+).+?server'>(.+?)<.+?flags/(\\w+)"
     oParser = cParser()
     aResult = oParser.parse(sHtmlContent, sPattern)
 

@@ -1,21 +1,21 @@
 # -*- coding: utf-8 -*-
 # vStream https://github.com/Kodi-vStream/venom-xbmc-addons
-return False # 0212020 Site HS depuis plus de 1 moi
-import re
-from resources.lib.gui.hoster import cHosterGui
-from resources.lib.gui.gui import cGui
-from resources.lib.handler.inputParameterHandler import cInputParameterHandler
-from resources.lib.handler.outputParameterHandler import cOutputParameterHandler
-from resources.lib.handler.requestHandler import cRequestHandler
-from resources.lib.parser import cParser
 from resources.lib.comaddon import progress
+from resources.lib.parser import cParser
+from resources.lib.handler.requestHandler import cRequestHandler
+from resources.lib.handler.outputParameterHandler import cOutputParameterHandler
+from resources.lib.handler.inputParameterHandler import cInputParameterHandler
+from resources.lib.gui.gui import cGui
+from resources.lib.gui.hoster import cHosterGui
+import re
+return False  # 0212020 Site HS depuis plus de 1 moi
 
 SITE_IDENTIFIER = 'vkstream'
 SITE_NAME = 'Vkstream'
 SITE_DESC = 'Series en streaming, streaming HD, streaming VF, séries, récent'
 
-#URL_MAIN = 'https://wvv.vkstream.org/' # sous cloudfare
-URL_MAIN = 'https://wvw.voirseries1.co/' # ajout 09/10/2020 nom : VoirSeries ,clone sans CF avec  même code html
+# URL_MAIN = 'https://wvv.vkstream.org/' # sous cloudfare
+URL_MAIN = 'https://wvw.voirseries1.co/'  # ajout 09/10/2020 nom : VoirSeries ,clone sans CF avec  même code html
 
 SERIE_SERIES = (URL_MAIN + 'series/page/1', 'showSeries')
 SERIE_GENRES = (True, 'showGenres')
@@ -120,7 +120,7 @@ def showSeries(sSearch=''):
     oRequestHandler = cRequestHandler(sUrl)
     sHtmlContent = oRequestHandler.request()
 
-    sPattern = '<div class="item_larg">\s*<a href="([^"]+)".+?"([^"]+)">.+?<img src="([^"]+)"'
+    sPattern = '<div class="item_larg">\\s*<a href="([^"]+)".+?"([^"]+)">.+?<img src="([^"]+)"'
     oParser = cParser()
     aResult = oParser.parse(sHtmlContent, sPattern)
 
@@ -156,14 +156,20 @@ def showSeries(sSearch=''):
             oOutputParameterHandler = cOutputParameterHandler()
             oOutputParameterHandler.addParameter('siteUrl', sNextPage)
             number = re.search('([0-9]+)$', sNextPage).group(1)
-            oGui.addNext(SITE_IDENTIFIER, 'showSeries', '[COLOR teal]Page ' + str(number) + ' >>>[/COLOR]', oOutputParameterHandler)
+            oGui.addNext(
+                SITE_IDENTIFIER,
+                'showSeries',
+                '[COLOR teal]Page ' +
+                str(number) +
+                ' >>>[/COLOR]',
+                oOutputParameterHandler)
 
         oGui.setEndOfDirectory()
 
 
 def __checkForNextPage(sHtmlContent):
     oParser = cParser()
-    sPattern = 'href="([^"]+)"\s*rel="next"'
+    sPattern = 'href="([^"]+)"\\s*rel="next"'
     aResult = oParser.parse(sHtmlContent, sPattern)
     if aResult[0]:
         return aResult[1][0]
@@ -234,7 +240,7 @@ def showEpisodes():
         for aEntry in aResult[1]:
 
             sUrl = aEntry[0]
-            sTitle =  sMovieTitle + ' E' + aEntry[1]
+            sTitle = sMovieTitle + ' E' + aEntry[1]
 
             oOutputParameterHandler = cOutputParameterHandler()
             oOutputParameterHandler.addParameter('siteUrl', sUrl)
@@ -272,7 +278,7 @@ def seriesHosters():
                 continue
 
             sUrl = URL_MAIN[:-1] + aEntry[0]
-            sHoster = re.sub('\.\w+', '', aEntry[1]).capitalize()
+            sHoster = re.sub('\\.\\w+', '', aEntry[1]).capitalize()
             sLang = str(aEntry[2]).upper()
             sDisplayTitle = ('%s (%s) [COLOR coral]%s[/COLOR]') % (sMovieTitle, sLang, sHoster)
 

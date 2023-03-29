@@ -1,7 +1,7 @@
 import xbmc
 import re
 
-try: # Python 2
+try:  # Python 2
     import urllib2
 except ImportError:  # Python 3
     import urllib.request as urllib2
@@ -21,17 +21,17 @@ class cHoster(iHoster):
 
     def _getMediaLinkForGuest(self):
         UA = 'Mozilla/5.0 (Windows NT 6.1; WOW64; rv:38.0) Gecko/20100101 Firefox/38.0'
-        headers = {'Host' : 'videomega.tv',
-                   'User-Agent' : UA,
-                   #'Accept' : 'text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8',
-                   #'Accept-Language' : 'fr,fr-FR;q=0.8,en-US;q=0.5,en;q=0.3',
-                   #'Accept-Encoding' : 'gzip, deflate',
-                   'Referer' : self._url
+        headers = {'Host': 'videomega.tv',
+                   'User-Agent': UA,
+                   # 'Accept' : 'text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8',
+                   # 'Accept-Language' : 'fr,fr-FR;q=0.8,en-US;q=0.5,en;q=0.3',
+                   # 'Accept-Encoding' : 'gzip, deflate',
+                   'Referer': self._url
                    }
 
         request = urllib2.Request(self._url, None, headers)
 
-        #print(url)
+        # print(url)
 
         try:
             reponse = urllib2.urlopen(request)
@@ -43,7 +43,7 @@ class cHoster(iHoster):
 
         api_call = False
 
-        #si on passe pr le hash code
+        # si on passe pr le hash code
         if 'validatehash.php?hashkey=' in self._url:
             if 'ref=' in sHtmlContent:
                 a = re.compile('.*?ref="(.+?)".*').findall(sHtmlContent)[0]
@@ -61,44 +61,44 @@ class cHoster(iHoster):
 
         oParser = cParser()
 
-        #Premier test, lien code unescape
-        sPattern =  'unescape.+?"(.+?)"'
+        # Premier test, lien code unescape
+        sPattern = 'unescape.+?"(.+?)"'
         aResult = oParser.parse(sHtmlContent, sPattern)
 
         if aResult[0] is True:
             decoder = cUtil().urlDecode(aResult[1][0])
 
-            sPattern =  'file: "(.+?)"'
+            sPattern = 'file: "(.+?)"'
             aResult = oParser.parse(decoder, sPattern)
 
             if aResult[0] is True:
                 print('code unescape')
                 api_call = aResult[1][0]
 
-        #Dexieme test Dean Edwards Packer
+        # Dexieme test Dean Edwards Packer
         if not api_call:
-            sPattern = "(\s*eval\s*\(\s*function(?:.|\s)+?)<\/script>"
+            sPattern = "(\\s*eval\\s*\\(\\s*function(?:.|\\s)+?)<\\/script>"
             aResult = oParser.parse(sHtmlContent, sPattern)
             if aResult[0] is True:
                 print('code Dean Edwards Packer')
                 sUnpacked = cPacker().unpack(aResult[1][0])
 
-                sPattern =  '\("src", *"([^\)"<>]+?)"\)'
+                sPattern = '\\("src", *"([^\\)"<>]+?)"\\)'
                 aResult = oParser.parse(sUnpacked, sPattern)
 
                 if aResult[0] is True:
                     api_call = aResult[1][0]
 
-        #Troisieme test, lien non code
+        # Troisieme test, lien non code
         if not api_call:
-            sPattern =  '<source src="([^"]+)" type="video[^"]*"\/>'
+            sPattern = '<source src="([^"]+)" type="video[^"]*"\\/>'
             aResult = oParser.parse(sHtmlContent, sPattern)
 
             if aResult[0] is True:
                 print('non code')
                 api_call = aResult[1][0]
 
-        #print('url : ' + api_call)
+        # print('url : ' + api_call)
 
         if api_call:
             api_call = api_call + '|User-Agent=' + UA + '&Referer=' + self._url

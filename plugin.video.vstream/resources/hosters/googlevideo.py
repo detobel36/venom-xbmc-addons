@@ -23,10 +23,9 @@ class cHoster(iHoster):
     def __init__(self):
         iHoster.__init__(self, 'googlevideo', 'GoogleVideo')
 
-
     def get_host_and_id(self, url):
-        sPattern = 'http[s]*:\/\/(.*?(?:\.googlevideo|picasaweb\.google)\.com)' + \
-            '\/(.*?(?:videoplayback\?|\?authkey|#|\/).+)'
+        sPattern = 'http[s]*:\\/\\/(.*?(?:\\.googlevideo|picasaweb\\.google)\\.com)' + \
+            '\\/(.*?(?:videoplayback\\?|\\?authkey|#|\\/).+)'
         r = re.search(sPattern, url)
         if r:
             return r.groups()
@@ -61,7 +60,7 @@ class cHoster(iHoster):
                 # Impossible a faire fonctionner, si quelqu'un y arrive .....
                 # class NoRedirect(urllib2.HTTPRedirectHandler):
                     # def redirect_request(self, req, fp, code, msg, hdrs, newurl):
-                        # return newurl
+                    # return newurl
                 # opener = urllib2.build_opener(NoRedirect)
                 # HttpReponse = opener.open(self._url)
                 # htmlcontent = HttpReponse.read()
@@ -102,11 +101,11 @@ class cHoster(iHoster):
 
                 if vid_id:
                     vid_id = vid_id.group(1)
-                    html = re.search('\["shared_group_' + re.escape(vid_id) + '"\](.+?),"ccOverride":"false"}',
-                        resp, re.DOTALL)
+                    html = re.search('\\["shared_group_' + re.escape(vid_id) + '"\\](.+?),"ccOverride":"false"}',
+                                     resp, re.DOTALL)
                 else:
                     # Methode brute en test
-                    html = re.search('(?:,|\[)"shared_group_[0-9]+"\](.+?),"ccOverride":"false"}', resp, re.DOTALL)
+                    html = re.search('(?:,|\\[)"shared_group_[0-9]+"\\](.+?),"ccOverride":"false"}', resp, re.DOTALL)
 
                 if html:
                     vid_list = []
@@ -114,11 +113,15 @@ class cHoster(iHoster):
                     best = 0
                     quality = 0
 
-                    videos = re.compile(',{"url":"(https:\/\/redirector\.googlevideo\.com\/[^<>"]+?)",' + \
-                        '"height":([0-9]+?),"width":([0-9]+?),"type":"video\/.+?"}').findall(html.group(1))
+                    videos = re.compile(
+                        ',{"url":"(https:\\/\\/redirector\\.googlevideo\\.com\\/[^<>"]+?)",' +
+                        '"height":([0-9]+?),"width":([0-9]+?),"type":"video\\/.+?"}').findall(
+                        html.group(1))
                     if not videos:
-                        videos = re.compile(',{"url":"(https:\/\/lh3\.googleusercontent\.com\/[^<>"]+?)",' + \
-                            '"height":([0-9]+?),"width":([0-9]+?),"type":"video\/.+?"}').findall(html.group(1))
+                        videos = re.compile(
+                            ',{"url":"(https:\\/\\/lh3\\.googleusercontent\\.com\\/[^<>"]+?)",' +
+                            '"height":([0-9]+?),"width":([0-9]+?),"type":"video\\/.+?"}').findall(
+                            html.group(1))
 
                     if videos:
                         if len(videos) > 1:

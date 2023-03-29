@@ -305,7 +305,7 @@ def showMovies(sSearch=''):
 
 def __checkForNextPage(sHtmlContent):
     oParser = cParser()
-    sPattern = '(\d+)</a>\s*</span><span class="pnext"><a href="([^"]+)'
+    sPattern = '(\\d+)</a>\\s*</span><span class="pnext"><a href="([^"]+)'
     aResult = oParser.parse(sHtmlContent, sPattern)
     if aResult[0]:
         sNumberMax = aResult[1][0][0]
@@ -328,7 +328,7 @@ def showEpisodes():
     sHtmlContent = oRequestHandler.request()
 
     if 'saison' not in sMovieTitle.lower():
-        sPattern = 'saison-(\d+)'
+        sPattern = 'saison-(\\d+)'
         aResult = oParser.parse(sUrl, sPattern)
         if aResult[0]:
             sMovieTitle = sMovieTitle + ' Saison ' + aResult[1][0]
@@ -339,7 +339,7 @@ def showEpisodes():
     if aResult[0]:
         sDesc = ('[I][COLOR grey]%s[/COLOR][/I] %s') % ('Synopsis : ', cleanDesc(aResult[1][0]))
 
-    sPattern = 'fa-play-circle-o">.+?(VOSTFR|VF)|id="(?:honey|yoyo)(?:\d+)"\s*href="([^"]+).+?data-rel="([^"]+).+?</i>([^<]+)'
+    sPattern = 'fa-play-circle-o">.+?(VOSTFR|VF)|id="(?:honey|yoyo)(?:\\d+)"\\s*href="([^"]+).+?data-rel="([^"]+).+?</i>([^<]+)'
     aResult = oParser.parse(sHtmlContent, sPattern)
 
     sLang = ''
@@ -371,7 +371,14 @@ def showEpisodes():
                 oOutputParameterHandler.addParameter('sRel_Episode', sRel_Episode)
                 oOutputParameterHandler.addParameter('sFirst_Url', sFirst_Url)
 
-                oGui.addEpisode(SITE_IDENTIFIER, 'showSerieLinks', sDisplayTitle, '', sThumb, sDesc, oOutputParameterHandler)
+                oGui.addEpisode(
+                    SITE_IDENTIFIER,
+                    'showSerieLinks',
+                    sDisplayTitle,
+                    '',
+                    sThumb,
+                    sDesc,
+                    oOutputParameterHandler)
 
     oGui.setEndOfDirectory()
 
@@ -444,7 +451,7 @@ def showMovieLinks():
     oRequestHandler = cRequestHandler(sUrl)
     sHtmlContent = oRequestHandler.request()
     oParser = cParser()
-    sPattern = '<li>\s*<a.*?href="([^"]+).+?<\/i>([^<]+)<'
+    sPattern = '<li>\\s*<a.*?href="([^"]+).+?<\\/i>([^<]+)<'
     aResult = oParser.parse(sHtmlContent, sPattern)
 
     sHosterName = ''
@@ -456,12 +463,12 @@ def showMovieLinks():
                 sHosterName = aEntry[1].strip()
                 continue
             sLang = aEntry[1].strip()
-            sDisplayTitle = '%s [%s] (%s)' %(sMovieTitle, sLang, sHosterName)
-            
+            sDisplayTitle = '%s [%s] (%s)' % (sMovieTitle, sLang, sHosterName)
+
             sHosterUrl = aEntry[0]
             if 'http' not in sHosterUrl:  # liens nazes du site url
                 continue
-            
+
             oHoster = cHosterGui().checkHoster(sHosterUrl)
             if oHoster:
                 oHoster.setDisplayName(sDisplayTitle)
@@ -469,6 +476,7 @@ def showMovieLinks():
                 cHosterGui().showHoster(oGui, oHoster, sHosterUrl, sThumb)
 
     oGui.setEndOfDirectory()
+
 
 def cleanDesc(sDesc):
     oParser = cParser()

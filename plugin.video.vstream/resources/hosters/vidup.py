@@ -28,7 +28,7 @@ class cHoster(iHoster):
         iHoster.__init__(self, 'vidup', 'VidUp')
 
     def __getIdFromUrl(self, sUrl):
-        sPattern = 'https*:\/\/vidup.+?\/(?:embed-)?(?:embed/)?([0-9a-zA-Z]+)'
+        sPattern = 'https*:\\/\\/vidup.+?\\/(?:embed-)?(?:embed/)?([0-9a-zA-Z]+)'
         oParser = cParser()
         aResult = oParser.parse(sUrl, sPattern)
         if aResult[0] is True:

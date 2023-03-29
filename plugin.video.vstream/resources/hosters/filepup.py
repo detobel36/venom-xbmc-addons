@@ -16,7 +16,7 @@ class cHoster(iHoster):
         sHtmlContent = oRequestHandler.request()
 
         oParser = cParser()
-        sPattern = 'type: "video\/mp4", *src: "([^<>"{}]+?)"'
+        sPattern = 'type: "video\\/mp4", *src: "([^<>"{}]+?)"'
         aResult = oParser.parse(sHtmlContent, sPattern)
 
         if aResult[0] is True:

@@ -35,7 +35,12 @@ def load():
     oGui.addDir(SITE_IDENTIFIER, ALL_MAGNETS[1], 'Magnets', 'films.png', oOutputParameterHandler)
 
     oOutputParameterHandler.addParameter('siteUrl', ALL_INFORMATION[0])
-    oGui.addDir(SITE_IDENTIFIER, ALL_INFORMATION[1], 'Information sur les hébergeurs ', 'films.png', oOutputParameterHandler)
+    oGui.addDir(
+        SITE_IDENTIFIER,
+        ALL_INFORMATION[1],
+        'Information sur les hébergeurs ',
+        'films.png',
+        oOutputParameterHandler)
 
     oGui.setEndOfDirectory()
 
@@ -169,9 +174,23 @@ def showMagnets(sSearch=''):
                     break
 
             if 'mp4' in sUrl2 or 'avi' in sUrl2 or 'mkv' in sUrl2:
-                oGui.addMovie(SITE_IDENTIFIER, 'showHosters', sTitle, 'series.png', sThumb, sDesc, oOutputParameterHandler)
+                oGui.addMovie(
+                    SITE_IDENTIFIER,
+                    'showHosters',
+                    sTitle,
+                    'series.png',
+                    sThumb,
+                    sDesc,
+                    oOutputParameterHandler)
             else:
-                oGui.addMovie(SITE_IDENTIFIER, 'showseriesHoster', sTitle, 'movies.png', sThumb, sDesc, oOutputParameterHandler)
+                oGui.addMovie(
+                    SITE_IDENTIFIER,
+                    'showseriesHoster',
+                    sTitle,
+                    'movies.png',
+                    sThumb,
+                    sDesc,
+                    oOutputParameterHandler)
 
         progress_.VSclose(progress_)
 
@@ -203,7 +222,7 @@ def showseriesHoster(sSearch=''):
             oHoster.setFileName(sMovieTitle)
             cHosterGui().showHoster(oGui, oHoster, sHosterUrl, sMovieTitle)
             oGui.setEndOfDirectory()
-    except:
+    except BaseException:
         pass
 
     oRequestHandler = cRequestHandler(sUrl)

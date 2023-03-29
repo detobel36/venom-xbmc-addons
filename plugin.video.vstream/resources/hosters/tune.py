@@ -16,7 +16,7 @@ class cHoster(iHoster):
         iHoster.__init__(self, 'tune', 'Tune')
 
     def __getIdFromUrl(self, sUrl):  # correction ancienne url >> embed depreciated
-        sPattern = '(?:play/|video/|embed\?videoid=|vid=)([0-9]+)'
+        sPattern = '(?:play/|video/|embed\\?videoid=|vid=)([0-9]+)'
         oParser = cParser()
         aResult = oParser.parse(sUrl, sPattern)
         if aResult[0] is True:
@@ -56,7 +56,7 @@ class cHoster(iHoster):
                     url.append(url2)
                     qua.append(repr(content[x]['label']))
 
-                api_call = dialog().VSselectqual(qua,url)
+                api_call = dialog().VSselectqual(qua, url)
 
             if api_call:
                 return True, api_call + '|User-Agent=' + UA

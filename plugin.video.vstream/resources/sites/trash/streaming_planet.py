@@ -1,15 +1,15 @@
 # -*- coding: utf-8 -*-
 # vStream https://github.com/Kodi-vStream/venom-xbmc-addons
-return False  # ne propose que Netu en hoster 31/01/21
-import re
-
-from resources.lib.gui.hoster import cHosterGui
-from resources.lib.gui.gui import cGui
-from resources.lib.handler.inputParameterHandler import cInputParameterHandler
-from resources.lib.handler.outputParameterHandler import cOutputParameterHandler
-from resources.lib.handler.requestHandler import cRequestHandler
-from resources.lib.parser import cParser
 from resources.lib.comaddon import progress
+from resources.lib.parser import cParser
+from resources.lib.handler.requestHandler import cRequestHandler
+from resources.lib.handler.outputParameterHandler import cOutputParameterHandler
+from resources.lib.handler.inputParameterHandler import cInputParameterHandler
+from resources.lib.gui.gui import cGui
+from resources.lib.gui.hoster import cHosterGui
+import re
+return False  # ne propose que Netu en hoster 31/01/21
+
 
 SITE_IDENTIFIER = 'streaming_planet'
 SITE_NAME = 'Streaming-planet'
@@ -115,7 +115,7 @@ def showMovies(sSearch=''):
 
     oRequestHandler = cRequestHandler(sUrl)
     sHtmlContent = oRequestHandler.request()
-    sPattern = 'movie-item">\s*<a href="([^"]+)">\s*<h3>([^<]*)</h3.+?style=.+?>([^<]*).+?;">([^<]*).+?;">([^<]*).+?src="([^"]*)'
+    sPattern = 'movie-item">\\s*<a href="([^"]+)">\\s*<h3>([^<]*)</h3.+?style=.+?>([^<]*).+?;">([^<]*).+?;">([^<]*).+?src="([^"]*)'
     oParser = cParser()
     aResult = oParser.parse(sHtmlContent, sPattern)
 

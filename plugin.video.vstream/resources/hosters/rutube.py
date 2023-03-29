@@ -23,7 +23,7 @@ class cHoster(iHoster):
         self._url = 'http://rutube.ru/play/embed/' + str(self._url)
 
     def __getIdFromUrl(self, url):
-        sPattern = "\/play\/embed\/(\w+)"  # au cas ou test \/play\/embed\/(\w+)(?:\?|\\?)
+        sPattern = "\\/play\\/embed\\/(\\w+)"  # au cas ou test \/play\/embed\/(\w+)(?:\?|\\?)
         oParser = cParser()
         aResult = oParser.parse(url, sPattern)
         if aResult[0] is True:
@@ -33,7 +33,7 @@ class cHoster(iHoster):
 
     def __getRestFromUrl(self, url):
         # sPattern = "\?([\w]=[\w-]+)"
-        sPattern = "\?([^ ]+)"
+        sPattern = "\\?([^ ]+)"
         oParser = cParser()
         aResult = oParser.parse(url, sPattern)
         if aResult[0] is True:
@@ -70,7 +70,7 @@ class cHoster(iHoster):
         oRequest = cRequestHandler(url2)
         sHtmlContent = oRequest.request()
 
-        sPattern = '(http.+?\?i=)([0-9x_]+)'
+        sPattern = '(http.+?\\?i=)([0-9x_]+)'
         aResult = oParser.parse(sHtmlContent, sPattern)
 
         if aResult[0] is True:

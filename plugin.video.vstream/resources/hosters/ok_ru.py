@@ -21,7 +21,7 @@ class cHoster(iHoster):
         iHoster.__init__(self, 'ok_ru', 'Ok.ru')
 
     def getHostAndIdFromUrl(self, sUrl):
-        sPattern = 'https*:\/\/.*?((?:(?:ok)|(?:odnoklassniki))\.ru)\/.+?\/([0-9]+)'
+        sPattern = 'https*:\\/\\/.*?((?:(?:ok)|(?:odnoklassniki))\\.ru)\\/.+?\\/([0-9]+)'
         oParser = cParser()
         aResult = oParser.parse(sUrl, sPattern)
         if aResult[0] is True:
@@ -37,7 +37,7 @@ class cHoster(iHoster):
         HEADERS = {'User-Agent': 'Mozilla/5.0 (Windows NT 6.1; WOW64; rv:52.0) Gecko/20100101 Firefox/52.0',
                    'Accept': 'text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8'}
 
-        St=requests.Session()
+        St = requests.Session()
         sHtmlContent = St.get(web_url).content.decode('utf-8')
         oParser = cParser()
 

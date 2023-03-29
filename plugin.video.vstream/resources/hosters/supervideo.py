@@ -18,16 +18,16 @@ class cHoster(iHoster):
 
         if self._url.startswith('/'):
             self._url = 'https:' + self._url
-        
+
         oRequest = cRequestHandler(self._url)
         sHtmlContent = oRequest.request()
-        sPattern = "(\s*eval\s*\(\s*function(?:.|\s)+?)<\/script>"
+        sPattern = "(\\s*eval\\s*\\(\\s*function(?:.|\\s)+?)<\\/script>"
         oParser = cParser()
         aResult = oParser.parse(sHtmlContent, sPattern)
 
         if aResult[0] is True:
             sHtmlContent = cPacker().unpack(aResult[1][0])
-            sPattern = 'file:"([^<>"]+?\.mp4).+?label:"([^"]+)"'
+            sPattern = 'file:"([^<>"]+?\\.mp4).+?label:"([^"]+)"'
             aResult = oParser.parse(sHtmlContent, sPattern)
 
         if aResult[0] is True:

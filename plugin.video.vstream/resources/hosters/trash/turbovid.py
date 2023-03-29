@@ -1,8 +1,9 @@
-#-*- coding: utf-8 -*-
+# -*- coding: utf-8 -*-
 # https://github.com/Kodi-vStream/venom-xbmc-addons
 from resources.lib.handler.requestHandler import cRequestHandler
 from resources.lib.parser import cParser
 from resources.hosters.hoster import iHoster
+
 
 class cHoster(iHoster):
 
@@ -21,7 +22,7 @@ class cHoster(iHoster):
     def setUrl(self, sUrl):
         if 'embed' not in sUrl:
             self._url = str(self.__getIdFromUrl(sUrl))
-            self._url = 'http://turbovid.net/embed-'+str(self._url)+'.html'
+            self._url = 'http://turbovid.net/embed-' + str(self._url) + '.html'
         else:
             self._url = sUrl
 
@@ -31,10 +32,10 @@ class cHoster(iHoster):
         if not sHtmlContent:
             return False, False
 
-        sPattern = 'var/type/(.+?)/.+?/provider/mp4/([^<]+)/flash/';
+        sPattern = 'var/type/(.+?)/.+?/provider/mp4/([^<]+)/flash/'
 
         oParser = cParser()
-        sHtmlContent=sHtmlContent.replace('|','/')
+        sHtmlContent = sHtmlContent.replace('|', '/')
         aResult = oParser.parse(sHtmlContent, sPattern)
         if aResult[0] is True:
             api_call = ('http://178.33.122.207:%s/%s/v.mp4') % (aResult[1][0][0], aResult[1][0][1])

@@ -61,18 +61,17 @@ class cHoster(iHoster):
             for x in page['data']:
                 url.append(x['file'])
                 qua.append(x['label'])
-    
+
             api_call = dialog().VSselectqual(qua, url)
-    
+
             oRequest = cRequestHandler(api_call)
             oRequest.addHeaderEntry('Host', 'fvs.io')
             oRequest.addHeaderEntry('User-Agent', UA)
             oRequest.request()
             api_call = oRequest.getRealUrl()
-    
+
             if api_call:
                 return True, api_call + '|User-Agent=' + UA
-
 
         oRequestHandler = cRequestHandler(self._url)
         sHtmlContent = oRequestHandler.request()

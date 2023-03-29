@@ -21,7 +21,7 @@ class cHoster(iHoster):
         oRequestHandler = cRequestHandler(self._url)
         sHtmlContent = oRequestHandler.request()
 
-        sPattern2 = '(\s*eval\s*\(\s*function(?:.|\s)+?\)\)\))'
+        sPattern2 = '(\\s*eval\\s*\\(\\s*function(?:.|\\s)+?\\)\\)\\))'
         aResult = re.findall(sPattern2, sHtmlContent)
         list_url = []
         list_qua = []
@@ -41,7 +41,7 @@ class cHoster(iHoster):
                 oRequestHandler.addHeaderEntry('Referer', self._url)
                 sHtmlContent2 = oRequestHandler.request()
                 oParser = cParser()
-                sPattern = 'PROGRAM.*?BANDWIDTH.*?RESOLUTION=(\d+x\d+).*?(https.*?m3u8)'
+                sPattern = 'PROGRAM.*?BANDWIDTH.*?RESOLUTION=(\\d+x\\d+).*?(https.*?m3u8)'
                 aResult = oParser.parse(sHtmlContent2, sPattern)
                 if aResult[0] is True:
                     for aEntry in aResult[1]:

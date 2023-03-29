@@ -18,7 +18,7 @@ class cHoster(iHoster):
         self._url = url.replace('http://vidzi.tv/', '')
         self._url = self._url.replace('https://vidzi.tv/', '')
         self._url = self._url.replace('embed-', '')
-        self._url= re.sub(r'\-.*\.html', r'', self._url)
+        self._url = re.sub(r'\-.*\.html', r'', self._url)
         self._url = self._url.replace('.html', '')
         self._url = 'https://vidzi.tv/' + str(self._url) + '.html'
 
@@ -30,18 +30,18 @@ class cHoster(iHoster):
         oParser = cParser()
 
         # lien direct
-        sPattern = ',{file: *"([^"]+)"}\]'
+        sPattern = ',{file: *"([^"]+)"}\\]'
         aResult = oParser.parse(sHtmlContent, sPattern)
         if aResult[0] is True:
             api_call = aResult[1][0]
 
         # 2 test Dean Edwards Packer
         else:
-            sPattern = "<script type='text/javascript'>(\s*eval\s*\(\s*function(?:.|\s)+?)<\/script>"
+            sPattern = "<script type='text/javascript'>(\\s*eval\\s*\\(\\s*function(?:.|\\s)+?)<\\/script>"
             aResult = oParser.parse(sHtmlContent, sPattern)
             if aResult[0] is True:
                 sUnpacked = cPacker().unpack(aResult[1][0])
-                sPattern = 'file:"([^"]+\.mp4)'
+                sPattern = 'file:"([^"]+\\.mp4)'
                 aResult = oParser.parse(sUnpacked, sPattern)
                 if aResult[0] is True:
                     api_call = aResult[1][0]

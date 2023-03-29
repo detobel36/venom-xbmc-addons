@@ -67,7 +67,7 @@ def showGenres():
     oRequestHandler = cRequestHandler(URL_MAIN)
     sHtmlContent = oRequestHandler.request()
 
-    sPattern = 'option class="level-0" value="\d+">(.+?)</option>'
+    sPattern = 'option class="level-0" value="\\d+">(.+?)</option>'
     aResult = oParser.parse(sHtmlContent, sPattern)
 
     if aResult[0]:
@@ -76,7 +76,7 @@ def showGenres():
             sTitle = aEntry
             if 'Uncategorized' in sTitle:
                 continue
-            
+
             sUrl = URL_MAIN + 'genre/' + oUtil.CleanName(sTitle).replace(' ', '-')
 
             oOutputParameterHandler.addParameter('siteUrl', sUrl)
@@ -112,7 +112,7 @@ def showMovies(sSearch=''):
         oOutputParameterHandler = cOutputParameterHandler()
         for aEntry in aResult[1]:
             sUrl2 = aEntry[0]
-            sThumb = re.sub('/w\d+/', '/w342/', 'https:' + aEntry[1])
+            sThumb = re.sub('/w\\d+/', '/w342/', 'https:' + aEntry[1])
             sTitle = aEntry[2]
             if '/lettre/' in sUrl:
                 sDesc = ''
@@ -135,7 +135,7 @@ def showMovies(sSearch=''):
             oGui.addMovie(SITE_IDENTIFIER, 'showHoster', sDisplayTitle, '', sThumb, sDesc, oOutputParameterHandler)
     else:
         oGui.addText(SITE_IDENTIFIER)
-        
+
     if not sSearch:
         sNextPage, sPaging = __checkForNextPage(sHtmlContent)
         if sNextPage:
@@ -171,29 +171,29 @@ def showHoster():
     sHtmlContent = oRequestHandler.request()
 
     oParser = cParser()
-    
+
     # hoster
     sPattern = 'tplayernv.+?<span>([^<]+)<'
     aResult = oParser.parse(sHtmlContent, sPattern)
     if aResult[0]:
         hosters = aResult[1]
         numHoster = 0
-        # url        
+        # url
         sPattern = 'class="TPlayerTb.+?src=(?:"|&quot;)(.+?)(?:"|&quot;)'
         aResult = oParser.parse(sHtmlContent, sPattern)
         if aResult[0]:
             for aEntry in aResult[1]:
-                
+
                 oHoster = cHosterGui().checkHoster(hosters[numHoster])
                 numHoster += 1
                 if not oHoster:
                     continue
-                
+
                 oRequestHandler = cRequestHandler(aEntry)
                 sHtmlContent = oRequestHandler.request()
                 sPattern = '<iframe.+?src="([^"]+)'
                 aResult = oParser.parse(sHtmlContent, sPattern)
-    
+
                 if aResult[0]:
                     sHosterUrl = aResult[1][0]
                     oHoster = cHosterGui().checkHoster(sHosterUrl)

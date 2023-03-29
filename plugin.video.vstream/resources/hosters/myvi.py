@@ -19,8 +19,8 @@ class cHoster(iHoster):
 
         oRequest = cRequestHandler(self._url)
         sHtmlContent = oRequest.request().replace('\\u0026', '&')
-        cookies = oRequest.GetCookies()# + ";"
-        
+        cookies = oRequest.GetCookies()  # + ";"
+
         sPattern = 'CreatePlayer.+?v=(.+?)&tp'
 
         aResult = oParser.parse(sHtmlContent, sPattern)

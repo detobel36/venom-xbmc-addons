@@ -1,5 +1,13 @@
 # -*- coding: utf-8 -*-
 # vStream https://github.com/Kodi-vStream/venom-xbmc-addons
+from resources.lib.util import cUtil
+from resources.lib.comaddon import progress, siteManager
+from resources.lib.parser import cParser
+from resources.lib.handler.requestHandler import cRequestHandler
+from resources.lib.handler.outputParameterHandler import cOutputParameterHandler
+from resources.lib.handler.inputParameterHandler import cInputParameterHandler
+from resources.lib.gui.gui import cGui
+from resources.lib.gui.hoster import cHosterGui
 DEBUG = False
 
 if DEBUG:
@@ -13,14 +21,6 @@ if DEBUG:
     except ImportError:
         sys.stderr.write("Error: " + "You must add org.python.pydev.debug.pysrc to your PYTHONPATH.")
 
-from resources.lib.gui.hoster import cHosterGui
-from resources.lib.gui.gui import cGui
-from resources.lib.handler.inputParameterHandler import cInputParameterHandler
-from resources.lib.handler.outputParameterHandler import cOutputParameterHandler
-from resources.lib.handler.requestHandler import cRequestHandler
-from resources.lib.parser import cParser
-from resources.lib.comaddon import progress, siteManager
-from resources.lib.util import cUtil
 
 UA = "Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:104.0) Gecko/20100101 Firefox/104.0"
 
@@ -267,7 +267,7 @@ def showMovies(sSearch=''):
 
 def __checkForNextPage(sHtmlContent):
     oParser = cParser()
-    sPattern = 'id="pagination".+?\d+</span>.<a href="([^"]+)">(\d+)(</a> *</div|<.+?(\d+)</a> *</div)'
+    sPattern = 'id="pagination".+?\\d+</span>.<a href="([^"]+)">(\\d+)(</a> *</div|<.+?(\\d+)</a> *</div)'
     aResult = oParser.parse(sHtmlContent, sPattern)
     if aResult[0]:
         nextPage = aResult[1][0]
@@ -335,7 +335,7 @@ def showEpisodes():
     sEnd = '<div class="page__comments pmovie__stretch">'
     sHtmlContent = oParser.abParse(sHtmlContent, sStart, sEnd)
 
-    sPattern = 'href="([^"]+).+?(Episode \d+)'
+    sPattern = 'href="([^"]+).+?(Episode \\d+)'
     aResult = oParser.parse(sHtmlContent, sPattern)
 
     if not aResult[0]:
@@ -380,7 +380,7 @@ def showHosters():
     if isSerie:  # episode d'une série
         sPattern = 'class="ser_pl" data-id="([^"]+)" data-name="([^"]+)'
     else:        # Film
-        sPattern = 'class="nopl" data-id="(\d+)" data-name="([^"]+)'
+        sPattern = 'class="nopl" data-id="(\\d+)" data-name="([^"]+)'
 
     aResult = oParser.parse(sHtmlContent, sPattern)
 
@@ -395,7 +395,7 @@ def showHosters():
                 sHost = dataName = aEntry[1].strip()
                 pdata = 'mod=xfield_ajax&id=' + dataId + '&name=' + dataName
                 pdata = str(pdata)
-                sLang = 'VF' # tag la langue pour l'enchainement
+                sLang = 'VF'  # tag la langue pour l'enchainement
                 if '-' in sHost:
                     sHost, sLang = sHost.split('-')
             else:
@@ -403,14 +403,14 @@ def showHosters():
                 sHost = dataName = aEntry[1].strip()
                 pdata = 'mod=xfield_ajax&id=' + dataId + '&name=' + dataName
                 pdata = str(pdata)
-            
+
             if not cHosterGui().checkHoster(sHost):
                 continue
 
             sDisplayTitle = sMovieTitle
             if sLang:
                 sDisplayTitle += '[%s] ' % sLang.upper()
-            
+
             sDisplayTitle += ' [COLOR coral]%s[/COLOR]' % sHost.capitalize()
 
             oOutputParameterHandler.addParameter('siteUrl', sUrl2)

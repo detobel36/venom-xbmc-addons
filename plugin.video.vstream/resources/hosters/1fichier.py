@@ -87,7 +87,7 @@ class cHoster(iHoster):
             return False
 
         sPattern = '<a href="([^<>"]+?)"  style="float:none;margin:auto;font-weight:bold;padding: 10px;margin: ' + \
-                   '10px;font-size:\+1\.6em;border:2px solid red" class="ok btn-general btn-orange">'
+                   '10px;font-size:\\+1\\.6em;border:2px solid red" class="ok btn-general btn-orange">'
         aResult = oParser.parse(sHtmlContent, sPattern)
 
         if aResult[0] is True:

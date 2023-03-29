@@ -143,7 +143,6 @@ def showCat():
     sHtmlContent = oParser.abParse(sHtmlContent, sFiltre, '</ul>')
     sPattern = 'href="([^"]+)">(.+?)</a>'
 
-
     aResult = oParser.parse(sHtmlContent, sPattern)
 
     if aResult[0]:
@@ -177,7 +176,7 @@ def showMovies(sSearch=''):
     oRequestHandler = cRequestHandler(sUrl)
     sHtmlContent = oRequestHandler.request()
 
-    sPattern = '<figure class="mh-loop-thumb"><a href="([^"]+)"><img src=".+?" style="background:url\(\'(.+?)\'\).+?rel="bookmark">(.+?)</a></h3>'
+    sPattern = '<figure class="mh-loop-thumb"><a href="([^"]+)"><img src=".+?" style="background:url\\(\'(.+?)\'\\).+?rel="bookmark">(.+?)</a></h3>'
 
     aResult = oParser.parse(sHtmlContent, sPattern)
 
@@ -203,7 +202,13 @@ def showMovies(sSearch=''):
             oOutputParameterHandler = cOutputParameterHandler()
             oOutputParameterHandler.addParameter('siteUrl', sNextPage)
             number = re.search('/page/([0-9]+)', sNextPage).group(1)
-            oGui.addNext(SITE_IDENTIFIER, 'showMovies', '[COLOR teal]Page ' + number + ' >>>[/COLOR]', oOutputParameterHandler)
+            oGui.addNext(
+                SITE_IDENTIFIER,
+                'showMovies',
+                '[COLOR teal]Page ' +
+                number +
+                ' >>>[/COLOR]',
+                oOutputParameterHandler)
 
     if not sSearch:
         oGui.setEndOfDirectory()
@@ -234,10 +239,10 @@ def showLinkGenres():
         aResult = oParser.parse(sHtmlContent, sPattern)
         if aResult[0]:
             sThumb = aResult[1][0]
-    except:
+    except BaseException:
         pass
 
-    sPattern = '<span style="font-family: Arial, Helvetica,.+?font-size:.+?pt;">([^<>]+)<\/span>|<li ><a href="([^"]+)" title=".+?">([^<>]+)</a>'
+    sPattern = '<span style="font-family: Arial, Helvetica,.+?font-size:.+?pt;">([^<>]+)<\\/span>|<li ><a href="([^"]+)" title=".+?">([^<>]+)</a>'
     aResult = oParser.parse(sHtmlContent, sPattern)
 
     if aResult[0]:
@@ -248,7 +253,6 @@ def showLinkGenres():
             else:
                 sUrl = aEntry[1]
                 sTitle = aEntry[2]
-
 
                 oOutputParameterHandler = cOutputParameterHandler()
                 oOutputParameterHandler.addParameter('siteUrl', sUrl)
@@ -267,7 +271,6 @@ def showLink():
     sUrl = oInputParameterHandler.getValue('siteUrl')
     sMovieTitle = oInputParameterHandler.getValue('sMovieTitle')
     sThumb = oInputParameterHandler.getValue('sThumb')
-
 
     oRequestHandler = cRequestHandler(sUrl)
     sHtmlContent = oRequestHandler.request()
@@ -372,14 +375,14 @@ def showHosters():
                 aResult = oParser.parse(sUrl, sPattern)
                 if aResult[0]:
                     sUrl = Unquote(''.join(aResult[1])).decode('utf8')
-    
+
             oRequestHandler = cRequestHandler(sUrl)
             sHtmlContent = oRequestHandler.request()
 
     # clictune / mylink / ect ...
-    sPattern = '<b><a href=".+?redirect\/\?url\=(.+?)\&id.+?">'
+    sPattern = '<b><a href=".+?redirect\\/\\?url\\=(.+?)\\&id.+?">'
     aResult = oParser.parse(sHtmlContent, sPattern)
-    if aResult[0] == True:
+    if aResult[0]:
         sUrl = Unquote(aResult[1][0])
 
     # Et maintenant le ou les liens
@@ -388,17 +391,17 @@ def showHosters():
         oRequestHandler = cRequestHandler(sUrl)
         sHtmlContent = oRequestHandler.request()
 
-        sPattern = '(eval\(function\(p,a,c,k,e(?:.|\s)+?\))<\/script>'
+        sPattern = '(eval\\(function\\(p,a,c,k,e(?:.|\\s)+?\\))<\\/script>'
         aResult = oParser.parse(sHtmlContent, sPattern)
         if aResult[0]:
             sHtmlContent = cPacker().unpack(aResult[1][0])
 
-            sPattern = '{sources:\["([^"]+)"'
+            sPattern = '{sources:\\["([^"]+)"'
             aResult = oParser.parse(sHtmlContent, sPattern)
             if not aResult[0]:
-                sPattern = '\[{src:"([^"]+)"'
+                sPattern = '\\[{src:"([^"]+)"'
                 aResult = oParser.parse(sHtmlContent, sPattern)
-            
+
             if aResult[0]:
                 sHosterUrl = aResult[1][0]
                 oHoster = cHosterGui().checkHoster(sHosterUrl)

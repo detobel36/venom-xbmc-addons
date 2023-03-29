@@ -51,7 +51,7 @@ class UpNext:
         # tvShowTitle n'est pas toujours disponible.
         tvShowTitle = guiElement.getItemValue('tvshowtitle')
         if not tvShowTitle:
-            tvShowTitle = re.search('\[\/COLOR\](.+?)\[COLOR', guiElement.getItemValue('title')).group(1)
+            tvShowTitle = re.search('\\[\\/COLOR\\](.+?)\\[COLOR', guiElement.getItemValue('title')).group(1)
 
         sMovieTitle = tvShowTitle
 
@@ -73,13 +73,14 @@ class UpNext:
 
         try:
             # sauvegarde des parametres d'appel
-            oldParams = sys.argv[2] 
-            
-            sHosterIdentifier, sMediaUrl, nextTitle, sDesc, sThumb = self.getMediaUrl(sSiteName, nextSaisonFunc, sParams, sSaison, nextEpisode, sLang, sHosterIdentifier)
+            oldParams = sys.argv[2]
+
+            sHosterIdentifier, sMediaUrl, nextTitle, sDesc, sThumb = self.getMediaUrl(
+                sSiteName, nextSaisonFunc, sParams, sSaison, nextEpisode, sLang, sHosterIdentifier)
 
             # restauration des anciens params
             sys.argv[2] = oldParams
-            
+
             # pas d'épisode suivant
             if not sMediaUrl:
                 return
@@ -162,7 +163,18 @@ class UpNext:
         except Exception as e:
             VSlog('UpNext : %s' % e)
 
-    def getMediaUrl(self, sSiteName, sFunction, sParams, sSaison, iEpisode, sLang, sHosterIdentifier, sTitle='', sDesc='', sThumb=''):
+    def getMediaUrl(
+            self,
+            sSiteName,
+            sFunction,
+            sParams,
+            sSaison,
+            iEpisode,
+            sLang,
+            sHosterIdentifier,
+            sTitle='',
+            sDesc='',
+            sThumb=''):
 
         try:
             sys.argv[2] = '?%s' % sParams
@@ -227,7 +239,8 @@ class UpNext:
                 return hostName, sMediaUrl, sTitle, sDesc, sThumb
 
             # if sFunction != 'play':
-            return self.getMediaUrl(sSiteName, sFunction, sParams, sSaison, iEpisode, sLang, sHosterIdentifier, sTitle, sDesc, sThumb)
+            return self.getMediaUrl(sSiteName, sFunction, sParams, sSaison, iEpisode,
+                                    sLang, sHosterIdentifier, sTitle, sDesc, sThumb)
 
         if sMediaUrl:    # si on n'a pas trouvé le bon host on en retourne un autre, il pourrait fonctionner
             return hostName, sMediaUrl, sTitle, sDesc, sThumb
@@ -294,5 +307,6 @@ class UpNext:
                 return True  # addon activé
             else:                          # UpNext non installé, on l'installe et on l'utilise
                 addonManager().installAddon(upnext_id)
-                # ce n'est pas pris en compte à l'installation de l'addon, donc return False, il faudra attendre le prochain épisode
+                # ce n'est pas pris en compte à l'installation de l'addon, donc return
+                # False, il faudra attendre le prochain épisode
                 return False

@@ -18,7 +18,7 @@ class cHoster(iHoster):
         # sPattern = "(eval\(function.*?)(.+?)</script>"
         # aResult = oParser.parse(sHtmlContent, sPattern)
 
-        aResult = re.search('(eval\(function.*?)\s*</script>', sHtmlContent, re.DOTALL)
+        aResult = re.search('(eval\\(function.*?)\\s*</script>', sHtmlContent, re.DOTALL)
 
         if aResult.group(1):
             sJavascript = aResult.group(1)
@@ -41,7 +41,7 @@ class cHoster(iHoster):
         # image:"http://94.242.57.154/i/03/00249/d8g74g00wtuv.jpg",skin:"",duration:"5314",width:680,height:390,
         # primary:"flash",startparam:"start",plugins:{"http://letwatch.us/player6/lightsout.js
 
-        sPattern = 'sources:\[{file:"(.+?)"'
+        sPattern = 'sources:\\[{file:"(.+?)"'
 
         oParser = cParser()
         aResult = oParser.parse(sUnpacked, sPattern)

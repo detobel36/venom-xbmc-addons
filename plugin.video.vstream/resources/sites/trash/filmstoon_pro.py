@@ -1,18 +1,16 @@
 # -*- coding: utf-8 -*-
 # vStream https://github.com/Kodi-vStream/venom-xbmc-addons
-return False  # 11/02/22 - Plus de liens
-
-import re
-import base64
-
-from resources.lib.comaddon import progress
-from resources.lib.gui.hoster import cHosterGui
-from resources.lib.gui.gui import cGui
-from resources.lib.handler.inputParameterHandler import cInputParameterHandler
-from resources.lib.handler.outputParameterHandler import cOutputParameterHandler
-from resources.lib.handler.requestHandler import cRequestHandler
-from resources.lib.parser import cParser
 from resources.lib.util import cUtil
+from resources.lib.parser import cParser
+from resources.lib.handler.requestHandler import cRequestHandler
+from resources.lib.handler.outputParameterHandler import cOutputParameterHandler
+from resources.lib.handler.inputParameterHandler import cInputParameterHandler
+from resources.lib.gui.gui import cGui
+from resources.lib.gui.hoster import cHosterGui
+from resources.lib.comaddon import progress
+import base64
+import re
+return False  # 11/02/22 - Plus de liens
 
 
 SITE_IDENTIFIER = 'filmstoon_pro'
@@ -64,7 +62,12 @@ def load():
     oGui.addDir(SITE_IDENTIFIER, SERIE_NEWS[1], 'Séries (Derniers ajouts)', 'series.png', oOutputParameterHandler)
 
     oOutputParameterHandler.addParameter('siteUrl', SERIE_NEWS_EPISODE[0])
-    oGui.addDir(SITE_IDENTIFIER, SERIE_NEWS_EPISODE[1], 'Episodes (Derniers ajouts)', 'news.png', oOutputParameterHandler)
+    oGui.addDir(
+        SITE_IDENTIFIER,
+        SERIE_NEWS_EPISODE[1],
+        'Episodes (Derniers ajouts)',
+        'news.png',
+        oOutputParameterHandler)
 
     oGui.setEndOfDirectory()
 
@@ -157,11 +160,19 @@ def showMovies(sSearch=''):
                 break
 
             sUrl2 = aEntry[0]
-            sThumb = re.sub('/w\d+/', '/w342/', aEntry[1])
+            sThumb = re.sub('/w\\d+/', '/w342/', aEntry[1])
             sTitle = aEntry[2]
             if 'episode' in sUrl or '/series/' in sUrl:
-                sTitle = sTitle.replace('- Season', ' ').replace('-Season', ' ').replace('Season', '').replace('- Saison', '')
-                sTitle = re.sub('\d+', '',sTitle)
+                sTitle = sTitle.replace(
+                    '- Season',
+                    ' ').replace(
+                    '-Season',
+                    ' ').replace(
+                    'Season',
+                    '').replace(
+                    '- Saison',
+                    '')
+                sTitle = re.sub('\\d+', '', sTitle)
             sYear = aEntry[3]
             sDesc = aEntry[4].replace('<p>', '')
 
@@ -176,7 +187,6 @@ def showMovies(sSearch=''):
             if sSearch:
                 if not oUtil.CheckOccurence(sSearch, sTitle):
                     continue
-
 
             if sDesc:
                 sDesc = ('[I][COLOR grey]%s[/COLOR][/I] %s') % ('Synopsis :', sDesc)
@@ -203,7 +213,7 @@ def showMovies(sSearch=''):
 
     if not sSearch:
         bvalid, sNextPage, sNumPage = __checkForNextPage(sHtmlContent, sUrl)
-        if (bvalid == True):
+        if (bvalid):
             oOutputParameterHandler = cOutputParameterHandler()
             oOutputParameterHandler.addParameter('siteUrl', sNextPage)
             oGui.addNext(SITE_IDENTIFIER, 'showMovies', 'Page ' + sNumPage, oOutputParameterHandler)
@@ -215,7 +225,7 @@ def __checkForNextPage(shtml, surl):
     # pas de lien next page on crée l'url et on verifie l'index de la derniere page
     sMax = ''
     iMax = 0
-    sPattern = 'page/(\d+)/'
+    sPattern = 'page/(\\d+)/'
     oParser = cParser()
     aResult = oParser.parse(shtml, sPattern)
     if aResult[0]:
@@ -226,7 +236,7 @@ def __checkForNextPage(shtml, surl):
                 iMax = iCurrentMax
                 sMax = sCurrentMax
 
-    sPattern = 'page.(\d+)'
+    sPattern = 'page.(\\d+)'
     oParser = cParser()
     aResult = oParser.parse(surl, sPattern)
     if aResult[0]:
@@ -249,6 +259,7 @@ def __checkForNextPage(shtml, surl):
 
     return False, False, False
 
+
 def showSaison():
     oGui = cGui()
 
@@ -266,7 +277,7 @@ def showSaison():
     sStart = 'class="les-title"'
     sEnd = '<div class="mvi-content"'
     sHtmlContent = oParser.abParse(sHtmlContent, sStart, sEnd)
-    sPattern = '<strong>Season.+?(\d+)'
+    sPattern = '<strong>Season.+?(\\d+)'
 
     aResult = oParser.parse(sHtmlContent, sPattern)
     sSaison = ''
@@ -278,8 +289,8 @@ def showSaison():
             sNumSaison = aEntry[0]
             sSaison = 'Saison ' + aEntry[0]
             sUrlSaison = sUrl + "?sNumSaison=" + sNumSaison
-            sDisplayTitle =  sMovieTitle + ' ' +  sSaison
-            sTitle = sMovieTitle 
+            sDisplayTitle = sMovieTitle + ' ' + sSaison
+            sTitle = sMovieTitle
 
             oOutputParameterHandler.addParameter('siteUrl', sUrlSaison)
             oOutputParameterHandler.addParameter('sThumb', sThumb)
@@ -299,8 +310,8 @@ def showSXE():
     sThumb = oInputParameterHandler.getValue('sThumb')
     sMovieTitle = oInputParameterHandler.getValue('sMovieTitle')
     sDesc = oInputParameterHandler.getValue('sDesc')
-    
-    sUrl, sNumSaison  = sUrl.split('?sNumSaison=')
+
+    sUrl, sNumSaison = sUrl.split('?sNumSaison=')
 
     oRequestHandler = cRequestHandler(sUrl)
     sHtmlContent = oRequestHandler.request()
@@ -310,7 +321,7 @@ def showSXE():
     sStart = '<strong>Season ' + sNumSaison
     sEnd = '<div class="tvseason">'
     sHtmlContent = oParser.abParse(sHtmlContent, sStart, sEnd)
-    sPattern = '<a href="([^"]+).+?Episode.+?(\d+)'
+    sPattern = '<a href="([^"]+).+?Episode.+?(\\d+)'
 
     aResult = oParser.parse(sHtmlContent, sPattern)
 
@@ -370,18 +381,18 @@ def showHosters():
                 redirect = base64.b64decode(aResult[1][0])
                 sPattern = '"page_url":"([^"]+)'
                 aResult = oParser.parse(redirect, sPattern)
-    
+
                 if aResult[0]:
-    
+
                     url2 = aResult[1][0]
                     url3 = url2.replace('\\', '').replace('/s/', '/r/')
-    
+
                     oRequestHandler = cRequestHandler(url3)
                     oRequestHandler.addHeaderEntry('Referer', sUrl)
                     oRequestHandler.addHeaderEntry('connection', 'keep-alive')
                     sHtmlContent = oRequestHandler.request()
                     getReal = oRequestHandler.getRealUrl()
-    
+
                     if 'http' in getReal:
                         sHosterUrl = getReal
                         oHoster = cHosterGui().checkHoster(sHosterUrl)

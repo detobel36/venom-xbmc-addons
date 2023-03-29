@@ -31,8 +31,8 @@ class cHoster(iHoster):
             https://thevideo.me/embed-1a2b3c4e5d6f.html
             http(s)://thevideo.me/embed-1a2b3c4e5d6f-816x459.html
         """
-        sPattern = '\/(?:embed-)?(\w+)(?:-\d+x\d+)?(?:\.html)?$'
-        aResult = cParser().parse( sUrl, sPattern )
+        sPattern = '\\/(?:embed-)?(\\w+)(?:-\\d+x\\d+)?(?:\\.html)?$'
+        aResult = cParser().parse(sUrl, sPattern)
         if aResult[0] is True:
             return aResult[1][0]
         return ''

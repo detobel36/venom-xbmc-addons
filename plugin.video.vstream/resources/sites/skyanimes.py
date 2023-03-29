@@ -19,7 +19,7 @@ STREAM = 'index.php?file=Media&nuked_nude=index&op=do_dl&dl_id='
 
 INDEX = 'index.php?file=Search&op=mod_search&searchtype=matchand&autor=&module=Download&limit=100&main='
 URL_SEARCH_ANIMS = (URL_MAIN + INDEX, 'showEpisode')
-#URL_SEARCH_DRAMAS = (URL_MAIN + INDEX, 'showEpisode')
+# URL_SEARCH_DRAMAS = (URL_MAIN + INDEX, 'showEpisode')
 FUNCTION_SEARCH = 'showEpisode'
 
 ANIM_ANIMS = (True, 'showMenuAnims')
@@ -187,7 +187,7 @@ def showSeries():
 
     if aResult[0]:
         total = len(aResult[1])
-        progress_ = progress().VScreate(SITE_NAME, large=(total>50))
+        progress_ = progress().VScreate(SITE_NAME, large=(total > 50))
         oOutputParameterHandler = cOutputParameterHandler()
         for aEntry in aResult[1]:
             progress_.VSupdate(progress_, total)

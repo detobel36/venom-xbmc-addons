@@ -1,18 +1,17 @@
 # -*- coding: utf-8 -*-
 # vStream https://github.com/Kodi-vStream/venom-xbmc-addons
 
-return False #de nouveau en panne au 08/07/22
-
-import re
-
-from resources.lib.gui.hoster import cHosterGui
-from resources.lib.gui.gui import cGui
-from resources.lib.handler.inputParameterHandler import cInputParameterHandler
-from resources.lib.handler.outputParameterHandler import cOutputParameterHandler
-from resources.lib.handler.requestHandler import cRequestHandler
-from resources.lib.parser import cParser
-from resources.lib.util import cUtil
 from resources.lib.comaddon import progress, siteManager
+from resources.lib.util import cUtil
+from resources.lib.parser import cParser
+from resources.lib.handler.requestHandler import cRequestHandler
+from resources.lib.handler.outputParameterHandler import cOutputParameterHandler
+from resources.lib.handler.inputParameterHandler import cInputParameterHandler
+from resources.lib.gui.gui import cGui
+from resources.lib.gui.hoster import cHosterGui
+import re
+return False  # de nouveau en panne au 08/07/22
+
 
 SITE_IDENTIFIER = 'libertyland_tv'
 SITE_NAME = 'Libertyland'
@@ -182,9 +181,9 @@ def showMovies(sSearch=''):
         oInputParameterHandler = cInputParameterHandler()
         sUrl = oInputParameterHandler.getValue('siteUrl')
         if '/series' in sUrl:
-            sPattern = '<div class="divtelecha.+?href="([^"]+)"><strong>([^<]+)</strong>.+?<img class="img-responsive".+?src="([^"]+).+?serie de (\d{4})<.+?Synopsis :([^<]+)'
+            sPattern = '<div class="divtelecha.+?href="([^"]+)"><strong>([^<]+)</strong>.+?<img class="img-responsive".+?src="([^"]+).+?serie de (\\d{4})<.+?Synopsis :([^<]+)'
         else:  # films
-            sPattern = '<h2 class="heading"> *<a href="[^"]+">([^<]+).+?<img class="img-responsive" *src="([^"]+)" *alt.+?(?:<font color="#.+?">([^<]+)</font>.+?).+?>film de (\d{4})<.+?Synopsis : ([^<]+).+?<div class="divtelecha.+?href="([^"]+)'
+            sPattern = '<h2 class="heading"> *<a href="[^"]+">([^<]+).+?<img class="img-responsive" *src="([^"]+)" *alt.+?(?:<font color="#.+?">([^<]+)</font>.+?).+?>film de (\\d{4})<.+?Synopsis : ([^<]+).+?<div class="divtelecha.+?href="([^"]+)'
 
     oRequestHandler = cRequestHandler(sUrl)
     sHtmlContent = oRequestHandler.request()
@@ -264,7 +263,7 @@ def showMovies(sSearch=''):
                 sTitle = str(sTitle, 'utf-8')
                 sQual = str(sQual, 'utf-8')
                 sDesc = str(sDesc, 'utf-8')
-            except:
+            except BaseException:
                 pass
 
             sDisplayTitle = ('%s [%s] (%s)') % (sTitle, sQual, sYear)
@@ -276,7 +275,14 @@ def showMovies(sSearch=''):
             oOutputParameterHandler.addParameter('sYear', sYear)
 
             if '/series/' in sUrl or '/series/' in sUrl2 or '/series_co/' in sThumb:
-                oGui.addTV(SITE_IDENTIFIER, 'showSaisonsEpisodes', sDisplayTitle, '', sThumb, sDesc, oOutputParameterHandler)
+                oGui.addTV(
+                    SITE_IDENTIFIER,
+                    'showSaisonsEpisodes',
+                    sDisplayTitle,
+                    '',
+                    sThumb,
+                    sDesc,
+                    oOutputParameterHandler)
             else:
                 oGui.addMovie(SITE_IDENTIFIER, 'showLinks', sDisplayTitle, '', sThumb, sDesc, oOutputParameterHandler)
 
@@ -333,7 +339,7 @@ def showSaisonsEpisodes():
     oRequestHandler = cRequestHandler(sUrl)
     sHtmlContent = oRequestHandler.request()
 
-    sPattern = '(?:<h2 class="heading-small">(Saison .+?)<)|(?:<li><a title=".+? \| (.+?)" class="num_episode" href="([^"]+)")'
+    sPattern = '(?:<h2 class="heading-small">(Saison .+?)<)|(?:<li><a title=".+? \\| (.+?)" class="num_episode" href="([^"]+)")'
     aResult = oParser.parse(sHtmlContent, sPattern)
 
     if not aResult[0]:

@@ -75,7 +75,7 @@ def showMovies(sSearch=''):
     oParser = cParser()
 
     if sSearch or '/genre/' in sUrl or '/film' in sUrl:  # news
-        sPattern = '<figure class="m-0">.+?ref="([^"]+).+?(?:src="(.+?)"|\.?) class.+?</i>([^<]+).+?Synopsis:.+?>([^<]+)'
+        sPattern = '<figure class="m-0">.+?ref="([^"]+).+?(?:src="(.+?)"|\\.?) class.+?</i>([^<]+).+?Synopsis:.+?>([^<]+)'
     else:  # populaire et search
         sPattern = '<article class=".+?ref="([^"]+).+?src="([^"]+).+?title="([^"]+)'
 
@@ -111,9 +111,23 @@ def showMovies(sSearch=''):
             oOutputParameterHandler.addParameter('sThumb', sThumb)
 
             if sSearch or '/genre/' in sUrl or '/film' in sUrl:
-                oGui.addAnime(SITE_IDENTIFIER, 'showEpisodes', sDisplayTitle, 'animes.png', sThumb, sDesc, oOutputParameterHandler)
+                oGui.addAnime(
+                    SITE_IDENTIFIER,
+                    'showEpisodes',
+                    sDisplayTitle,
+                    'animes.png',
+                    sThumb,
+                    sDesc,
+                    oOutputParameterHandler)
             else:
-                oGui.addAnime(SITE_IDENTIFIER, 'showLinks', sDisplayTitle, 'animes.png', sThumb, sDesc, oOutputParameterHandler)
+                oGui.addAnime(
+                    SITE_IDENTIFIER,
+                    'showLinks',
+                    sDisplayTitle,
+                    'animes.png',
+                    sThumb,
+                    sDesc,
+                    oOutputParameterHandler)
 
         progress_.VSclose(progress_)
 
@@ -183,7 +197,14 @@ def showAlpha():
 
             oOutputParameterHandler.addParameter('siteUrl', URL_MAIN + Link)
             oOutputParameterHandler.addParameter('AZ', sLetter)
-            oGui.addDir(SITE_IDENTIFIER, 'showAZ', 'Lettre [COLOR coral]' + sLetter + '[/COLOR]', 'animes.png', oOutputParameterHandler)
+            oGui.addDir(
+                SITE_IDENTIFIER,
+                'showAZ',
+                'Lettre [COLOR coral]' +
+                sLetter +
+                '[/COLOR]',
+                'animes.png',
+                oOutputParameterHandler)
 
     oGui.setEndOfDirectory()
 
@@ -278,7 +299,8 @@ def showLinks():
             list_hostname.append(aEntry)
 
     # list_host = []
-    sPattern = 'iframe.+?src="([^"]*).+?id="([^"]*)' # normalement on devrait correler le valeur de l'id avec list_hostname
+    # normalement on devrait correler le valeur de l'id avec list_hostname
+    sPattern = 'iframe.+?src="([^"]*).+?id="([^"]*)'
     aResult = oParser.parse(sHtmlContent, sPattern)
     i = 0
     if aResult[0]:
@@ -370,10 +392,10 @@ def GetHostname(url):
         return oHoster.getDisplayName()
     try:
         if 'www' not in url:
-            sHost = re.search('http.*?\/\/([^.]*)', url).group(1)
+            sHost = re.search('http.*?\\/\\/([^.]*)', url).group(1)
         else:
-            sHost = re.search('htt.+?\/\/(?:www).([^.]*)', url).group(1)
-    except:
+            sHost = re.search('htt.+?\\/\\/(?:www).([^.]*)', url).group(1)
+    except BaseException:
         sHost = url
     return sHost.capitalize()
 

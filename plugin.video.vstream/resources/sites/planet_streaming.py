@@ -97,7 +97,8 @@ def showMovies(sSearch=''):
             sSearch = sSearch.replace(URL_SEARCH[0], '')
 
         if nextPageSearch:
-            query_args = (('do', 'search'), ('subaction', 'search'), ('search_start', nextPageSearch), ('story', sSearch))
+            query_args = (('do', 'search'), ('subaction', 'search'),
+                          ('search_start', nextPageSearch), ('story', sSearch))
         else:
             query_args = (('do', 'search'), ('subaction', 'search'), ('story', sSearch))
 
@@ -139,7 +140,7 @@ def showMovies(sSearch=''):
                 if sThumb.startswith('/'):
                     sThumb = URL_MAIN[:-1] + sThumb
 
-                siteUrl = re.sub('www\.', '', aEntry[1])
+                siteUrl = re.sub('www\\.', '', aEntry[1])
                 sTitle = aEntry[2]
                 sQual = aEntry[3]
                 sQual = sQual.replace(':', '').replace(' ', '').replace(',', '/')
@@ -156,12 +157,12 @@ def showMovies(sSearch=''):
 
                 # Certain film n'ont pas de date.
                 try:
-                    sYear = re.search('(\d{4})', aEntry[3]).group(1)
-                except:
+                    sYear = re.search('(\\d{4})', aEntry[3]).group(1)
+                except BaseException:
                     pass
 
                 sDesc = aEntry[4]
-                siteUrl = re.sub('www\.', '', aEntry[5])
+                siteUrl = re.sub('www\\.', '', aEntry[5])
 
             sDisplayTitle = '%s [%s]' % (sTitle, sQual)
 
@@ -170,12 +171,19 @@ def showMovies(sSearch=''):
             oOutputParameterHandler.addParameter('sThumb', sThumb)
             oOutputParameterHandler.addParameter('sYear', sYear)
 
-            oGui.addMovie(SITE_IDENTIFIER, 'showHosters', sDisplayTitle, 'films.png', sThumb, sDesc, oOutputParameterHandler)
+            oGui.addMovie(
+                SITE_IDENTIFIER,
+                'showHosters',
+                sDisplayTitle,
+                'films.png',
+                sThumb,
+                sDesc,
+                oOutputParameterHandler)
 
         progress_.VSclose(progress_)
 
         if sSearch:
-            sPattern = 'nextlink" id="nextlink" onclick="javascript:list_submit\(([0-9]+)\); return\(false\)" href="#">Suivant'
+            sPattern = 'nextlink" id="nextlink" onclick="javascript:list_submit\\(([0-9]+)\\); return\\(false\\)" href="#">Suivant'
             aResult = oParser.parse(sHtmlContent, sPattern)
             if aResult[0]:
                 oOutputParameterHandler = cOutputParameterHandler()
@@ -205,7 +213,7 @@ def __checkForNextPage(sHtmlContent):
     aResult = oParser.parse(sHtmlContent, sPattern)
 
     if aResult[0]:
-        return re.sub('www\.', '', aResult[1][0])
+        return re.sub('www\\.', '', aResult[1][0])
 
     return False
 

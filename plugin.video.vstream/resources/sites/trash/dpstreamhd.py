@@ -275,7 +275,7 @@ def showLink():
     oRequest = cRequestHandler(sUrl)
     sHtmlContent = oRequest.request()
 
-    sPattern = 'année<.span>\s*([^<]+).+?résume de.+?<br>([^<]+)'
+    sPattern = 'année<.span>\\s*([^<]+).+?résume de.+?<br>([^<]+)'
     aResult_ = oParser.parse(sHtmlContent, sPattern)
     sYear = ''
     sDesc = 'no description'
@@ -294,7 +294,7 @@ def showLink():
         for aEntry in aResult[1]:
             sKey = aEntry[0]
             sHost = aEntry[1].replace('www.', '').replace('embed.mystream.to', 'mystream')
-            sHost = re.sub('\.\w+', '', sHost).capitalize()
+            sHost = re.sub('\\.\\w+', '', sHost).capitalize()
             sUrl2 = URL_MAIN + 'll/captcha?hash=' + sKey
 
             sTitle = ('%s (%s) [COLOR coral]%s[/COLOR]') % (sMovieTitle, sYear, sHost)
@@ -320,7 +320,7 @@ def showHosters():
     oRequestHandler = cRequestHandler(sUrl)
     sHtmlContent = oRequestHandler.request()
 
-    sPattern = '<iframe.*?src=([^\s]+)'
+    sPattern = '<iframe.*?src=([^\\s]+)'
     aResult = re.findall(sPattern, sHtmlContent)
     if aResult:
         sHosterUrl = aResult[0]

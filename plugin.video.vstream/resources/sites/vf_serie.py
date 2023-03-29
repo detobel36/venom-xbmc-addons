@@ -71,7 +71,7 @@ def showGenres():
     oRequestHandler = cRequestHandler(URL_MAIN)
     sHtmlContent = oRequestHandler.request()
 
-    sPattern = 'option class="level-0" value="\d+">(.+?)</option>'
+    sPattern = 'option class="level-0" value="\\d+">(.+?)</option>'
     aResult = oParser.parse(sHtmlContent, sPattern)
 
     if aResult[0]:
@@ -80,7 +80,7 @@ def showGenres():
             sTitle = aEntry
             if 'Non' in sTitle or 'Nom' in sTitle:  # "Non classé" et "Nom de la catégorie"
                 continue
-            
+
             sUrl = URL_MAIN + 'category/' + oUtil.CleanName(sTitle).replace(' ', '-')
 
             oOutputParameterHandler.addParameter('siteUrl', sUrl)
@@ -94,13 +94,20 @@ def showAlpha():
 
     liste = [['0-9', '0-9'], ['A', 'a'], ['B', 'b'], ['C', 'c'], ['D', 'd'], ['E', 'e'], ['F', 'f'], ['G', 'g'],
              ['H', 'h'], ['I', 'i'], ['J', 'j'], ['K', 'k'], ['L', 'l'], ['M', 'm'], ['N', 'n'], ['O', 'o'],
-             ['P', 'p'], ['Q', 'q'], ['R', 'r'], ['S', 's'],['T', 't'], ['U', 'u'], ['V', 'v'], ['W', 'w'],
+             ['P', 'p'], ['Q', 'q'], ['R', 'r'], ['S', 's'], ['T', 't'], ['U', 'u'], ['V', 'v'], ['W', 'w'],
              ['X', 'x'], ['Y', 'y'], ['Z', 'z']]
 
     oOutputParameterHandler = cOutputParameterHandler()
     for sTitle, sUrl in liste:
         oOutputParameterHandler.addParameter('siteUrl', URL_MAIN + 'lettre/' + sUrl + '/')
-        oGui.addDir(SITE_IDENTIFIER, 'showSeries', 'Lettre [COLOR coral]' + sTitle + '[/COLOR]', 'listes.png', oOutputParameterHandler)
+        oGui.addDir(
+            SITE_IDENTIFIER,
+            'showSeries',
+            'Lettre [COLOR coral]' +
+            sTitle +
+            '[/COLOR]',
+            'listes.png',
+            oOutputParameterHandler)
 
     oGui.setEndOfDirectory()
 
@@ -141,16 +148,16 @@ def showSeries(sSearch=''):
                 break
 
             sUrl2 = aEntry[0]
-            sThumb = re.sub('/w\d+/', '/w342/', 'https:' + aEntry[1])
+            sThumb = re.sub('/w\\d+/', '/w342/', 'https:' + aEntry[1])
             if sThumb.startswith('/'):
                 sThumb = 'https' + sThumb
             sTitle = aEntry[2]
-            
+
             # Filtre de recherche
             if sSearch:
                 if not oUtil.CheckOccurence(sSearchText, sTitle):
                     continue
-            
+
             if '/lettre/' in sUrl:
                 sDesc = ''
             else:
@@ -205,7 +212,7 @@ def showSaisons():
         aResult = oParser.parse(sHtmlContent, sPattern)
         if aResult[0]:
             sDesc = aResult[1][0]
-    except:
+    except BaseException:
         pass
 
     sPattern = 'data-tab=.+?pan>([^<]+)|Num">([^<]+).+?src="([^"]+).+?href="([^"]+)">([^<]+)'
@@ -249,7 +256,7 @@ def showSxE():
         aResult = oParser.parse(sHtmlContent, sPattern)
         if aResult[0]:
             sDesc = aResult[1][0]
-    except:
+    except BaseException:
         pass
 
     sPattern = 'data-tab=.+?pan>([^<]+)|Num">([^<]+).+?src="([^"]+).+?href="([^"]+)">([^<]+)'
@@ -266,7 +273,7 @@ def showSxE():
                 if sSaison != sNumSaison:
                     continue
                 sEpisode = aEntry[1]
-                sThumbEp = re.sub('/w\d+/', '/w342/', 'https:' + aEntry[2])
+                sThumbEp = re.sub('/w\\d+/', '/w342/', 'https:' + aEntry[2])
                 sUrl = aEntry[3]
                 sTitleEp = aEntry[4]
 
@@ -277,7 +284,8 @@ def showSxE():
                 oOutputParameterHandler.addParameter('sMovieTitle', sTitle)
                 oOutputParameterHandler.addParameter('sThumb', sThumb)
                 oOutputParameterHandler.addParameter('sDesc', sDesc)
-                oGui.addEpisode(SITE_IDENTIFIER, 'showHoster', sDisplayTitle, '', sThumbEp, sDesc, oOutputParameterHandler)
+                oGui.addEpisode(SITE_IDENTIFIER, 'showHoster', sDisplayTitle,
+                                '', sThumbEp, sDesc, oOutputParameterHandler)
 
     oGui.setEndOfDirectory()
 

@@ -17,7 +17,10 @@ URL_MAIN = siteManager().getUrlMain(SITE_IDENTIFIER)
 ANIM_ENFANTS = ('http://', 'load')
 
 AGE_2A4ANS = (URL_MAIN + 'pages/dessins-animes-2-a-4-ans/jolies-histoires-pour-enfants-de-2-a-4-ans.html', 'showMovies')
-VIDEO_EDU2_4 = (URL_MAIN + 'pages/dessins-animes-2-a-4-ans/videos-educatives-pour-enfant-de-2-a-4-ans.html', 'showEpisode')
+VIDEO_EDU2_4 = (
+    URL_MAIN +
+    'pages/dessins-animes-2-a-4-ans/videos-educatives-pour-enfant-de-2-a-4-ans.html',
+    'showEpisode')
 
 # AGE_4A6ANS = (URL_MAIN + 'pages/dessins-animes-4-a-6-ans/dessins-animes-pour-enfants-de-4-a-6-ans.html', 'showMovies')
 # VIDEO_EDU4_6 = (URL_MAIN + 'pages/dessins-animes-4-a-6-ans/videos-educatives-pour-enfants-de-4-a-6-ans.html', 'showEdu')
@@ -65,7 +68,7 @@ def showMovies():
 
     oRequestHandler = cRequestHandler(sUrl)
     sHtml = oRequestHandler.request()
-    sPattern = 'style="background-image: url\((.+?)\);".+?href="([^"]+)"'
+    sPattern = 'style="background-image: url\\((.+?)\\);".+?href="([^"]+)"'
     aResult = oParser.parse(sHtml, sPattern)
 
     if aResult[0]:
@@ -110,4 +113,3 @@ def showEpisode():
                 oHosterGui.showHoster(oGui, oHoster, sUrl, sThumb)
 
     oGui.setEndOfDirectory()
-

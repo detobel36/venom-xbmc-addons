@@ -150,7 +150,14 @@ def showAnimes(sSearch=''):
             if 'films-vf-vostfr' in sUrl:
                 oGui.addMovie(SITE_IDENTIFIER, 'showHosters', sDisplaytitle, '', sThumb, sDesc, oOutputParameterHandler)
             else:
-                oGui.addSeason(SITE_IDENTIFIER, 'showEpisodes', sDisplaytitle, '', sThumb, sDesc, oOutputParameterHandler)
+                oGui.addSeason(
+                    SITE_IDENTIFIER,
+                    'showEpisodes',
+                    sDisplaytitle,
+                    '',
+                    sThumb,
+                    sDesc,
+                    oOutputParameterHandler)
 
         progress_.VSclose(progress_)
 
@@ -194,7 +201,7 @@ def showEpisodes():
     sHtmlContent = oParser.abParse(sHtmlContent, sStart, sEnd)
     # Pour les liens myvi
     sHtmlContent = sHtmlContent.replace('!//', '!https://').replace(',//', ',https://')
-    
+
     # Besoin des saut de ligne
     sHtmlContent = sHtmlContent.replace('\n', '@')
 

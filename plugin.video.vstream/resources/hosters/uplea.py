@@ -48,7 +48,7 @@ class cHoster(iHoster):
 
         # get step
         urlstep = ''
-        sPattern = '<a href="(\/step\/[^<>"]+)">'
+        sPattern = '<a href="(\\/step\\/[^<>"]+)">'
         aResult = oParser.parse(sHtmlContent, sPattern)
         if aResult[0] is True:
             urlstep = aResult[1][0]
@@ -79,7 +79,7 @@ class cHoster(iHoster):
 
         # waiting time
         waitingtime = 20
-        sPattern = "ulCounter\({'timer':([0-9]+)}\);"
+        sPattern = "ulCounter\\({'timer':([0-9]+)}\\);"
         aResult = oParser.parse(sHtmlContent, sPattern)
         if aResult[0] is True:
             waitingtime = int(aResult[1][0]) + 2
@@ -89,7 +89,7 @@ class cHoster(iHoster):
 
         if aResult[0] is True:
             dialog.VSinfo('Waiting time', self._displayName, waitingtime)
-            xbmc.sleep(waitingtime*1000)
+            xbmc.sleep(waitingtime * 1000)
 
             # print(aResult[1][0])
 

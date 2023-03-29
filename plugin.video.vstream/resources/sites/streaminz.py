@@ -36,7 +36,8 @@ SERIE_ARTE = (URL_MAIN + 'reseau/arte/', 'showMovies')
 # SERIE_ANNEES = (True, 'showSeriesYears')
 
 URL_SEARCH = (URL_MAIN + '?s=', 'showMovies')
-URL_SEARCH_MOVIES = (URL_MAIN + '?post_types=movies&s=', 'showMovies')# l'url ne permet pas de filtrer directement les films des séries mais est utilisée pour filtrer dans showmovies
+# l'url ne permet pas de filtrer directement les films des séries mais est utilisée pour filtrer dans showmovies
+URL_SEARCH_MOVIES = (URL_MAIN + '?post_types=movies&s=', 'showMovies')
 URL_SEARCH_SERIES = (URL_MAIN + '?post_types=tvshows&s=', 'showMovies')
 FUNCTION_SEARCH = 'showMovies'
 
@@ -173,7 +174,12 @@ def showNetwork():
 
     oOutputParameterHandler.addParameter('siteUrl', SERIE_YOUTUBE[0])
     oOutputParameterHandler.addParameter('sTmdbId', 1436)    # Utilisé par TMDB
-    oGui.addNetwork(SITE_IDENTIFIER, SERIE_YOUTUBE[1], 'Séries (YouTube Originals)', 'host.png', oOutputParameterHandler)
+    oGui.addNetwork(
+        SITE_IDENTIFIER,
+        SERIE_YOUTUBE[1],
+        'Séries (YouTube Originals)',
+        'host.png',
+        oOutputParameterHandler)
 
     oOutputParameterHandler.addParameter('siteUrl', SERIE_ARTE[0])
     oOutputParameterHandler.addParameter('sTmdbId', 1436)    # Utilisé par TMDB
@@ -264,14 +270,14 @@ def showMovies(sSearch=''):
         sSearchText = oUtil.CleanName(sSearchText)
 
         sUrl = sSearch.replace(' ', '+')
-        sPattern = 'class="image">.+?<a href="([^"]+).+?<img src="([^"]+)" alt="([^"]+).+?span class="([^"]+).+?<p>(.*?)<\/p'
-        sType = oParser.parseSingleResult(sUrl, '\?post_types=(.+?)&')  # pour filtrage entre film et série
+        sPattern = 'class="image">.+?<a href="([^"]+).+?<img src="([^"]+)" alt="([^"]+).+?span class="([^"]+).+?<p>(.*?)<\\/p'
+        sType = oParser.parseSingleResult(sUrl, '\\?post_types=(.+?)&')  # pour filtrage entre film et série
     else:
         sTypeYear = oInputParameterHandler.getValue('sTypeYear')
         if sTypeYear:
-            sPattern = '<article id="post-\d+".+?class="item ([^"]+).+?img src="([^"]+)" alt="([^"]+).+?(?:|class="quality">([^<]+).+?)(?:|class="dtyearfr">([^<]+).+?)<a href="([^"]+).+?class="texto">(.*?)</div>'
+            sPattern = '<article id="post-\\d+".+?class="item ([^"]+).+?img src="([^"]+)" alt="([^"]+).+?(?:|class="quality">([^<]+).+?)(?:|class="dtyearfr">([^<]+).+?)<a href="([^"]+).+?class="texto">(.*?)</div>'
         else:
-            sPattern = '<article id="post-\d+".+?img src="([^"]+).+?alt="([^"]+).+?(?:|class="quality">([^<]+).+?)(?:|class="dtyearfr">([^<]+).+?)<a href="([^"]+).+?class="texto">(.*?)</div'
+            sPattern = '<article id="post-\\d+".+?img src="([^"]+).+?alt="([^"]+).+?(?:|class="quality">([^<]+).+?)(?:|class="dtyearfr">([^<]+).+?)<a href="([^"]+).+?class="texto">(.*?)</div'
 
     oRequestHandler = cRequestHandler(sUrl)
     sHtmlContent = oRequestHandler.request()
@@ -329,7 +335,7 @@ def showMovies(sSearch=''):
             try:
                 sDesc = unicode(sDesc, 'utf-8')  # converti en unicode
                 sDesc = oUtil.unescape(sDesc).encode('utf-8')  # retire les balises HTML
-            except:
+            except BaseException:
                 pass
 
             sDisplayTitle = ('%s [%s] (%s)') % (sTitle, sQual, sYear)
@@ -359,7 +365,7 @@ def showMovies(sSearch=''):
 
 def __checkForNextPage(sHtmlContent):
     oParser = cParser()
-    sPattern = 'span>Page .+?de (\d+).+?href="([^"]+)"><i id='
+    sPattern = 'span>Page .+?de (\\d+).+?href="([^"]+)"><i id='
     aResult = oParser.parse(sHtmlContent, sPattern)
     if aResult[0]:
         sNumberMax = aResult[1][0][0]
@@ -393,10 +399,10 @@ def showSxE():
 
             else:
                 sUrl = aEntry[2]
-                SxE = re.sub('(\d+) - (\d+)', ' Saison \g<1> Episode \g<2>', aEntry[1])
+                SxE = re.sub('(\\d+) - (\\d+)', ' Saison \\g<1> Episode \\g<2>', aEntry[1])
                 sTitle = sMovieTitle + SxE
 
-                sDisplayTitle = sMovieTitle + ' ' + re.sub('saison \d+ ', '', SxE)
+                sDisplayTitle = sMovieTitle + ' ' + re.sub('saison \\d+ ', '', SxE)
 
                 oOutputParameterHandler.addParameter('siteUrl', sUrl)
                 oOutputParameterHandler.addParameter('sMovieTitle', sTitle)
@@ -419,9 +425,9 @@ def showLink():
     sHtmlContent = oRequest.request()
 
     if '/films/' in sUrl:
-        sPattern = "dooplay_player_option.+?data-post='(\d+)'.+?data-nume='(.+?)'>.+?'title'>(.+?)<"
+        sPattern = "dooplay_player_option.+?data-post='(\\d+)'.+?data-nume='(.+?)'>.+?'title'>(.+?)<"
     else:
-        sPattern = "dooplay_player_option.+?data-post='(\d+)'.+?data-nume='(.+?)'>.+?flags/(.+?).png"
+        sPattern = "dooplay_player_option.+?data-post='(\\d+)'.+?data-nume='(.+?)'>.+?flags/(.+?).png"
 
     oParser = cParser()
     aResult = oParser.parse(sHtmlContent, sPattern)
@@ -501,7 +507,7 @@ def showHosters():
                 oParser = cParser()
                 sHtmlContent2 = oRequest.request()
 
-                sPattern = "if.+?self.+?== top.+?replace\('([^']+)"
+                sPattern = "if.+?self.+?== top.+?replace\\('([^']+)"
                 aResult = oParser.parse(sHtmlContent2, sPattern)
                 for aEntry2 in aResult[1]:
                     sHosterUrl = 'https://waaw.to' + aEntry2

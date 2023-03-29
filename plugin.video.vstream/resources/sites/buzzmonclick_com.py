@@ -217,8 +217,8 @@ def showHosters():
             if aResult[0]:
                 sHosterUrl = aResult[1][0]
                 oHoster = False
-                
-                if 'replay.forum-tv.org' in sHosterUrl: 
+
+                if 'replay.forum-tv.org' in sHosterUrl:
                     oRequestHandler = cRequestHandler(sHosterUrl)
                     sHtmlContent = oRequestHandler.request()
                     sPattern = 'iframe.+?src="([^"]+)'
@@ -246,7 +246,7 @@ def showHosters():
             cHosterGui().showHoster(oGui, oHoster, sHosterUrl, sThumb)
 
     oGui.setEndOfDirectory()
-    
+
 
 def showDoodHosters(sMovieTitle, sUrl):
     oGui = cGui()
@@ -267,5 +267,3 @@ def showDoodHosters(sMovieTitle, sUrl):
             oOutputParameterHandler.addParameter('sMovieTitle', sMovieTitle)
 
             oGui.addLink(SITE_IDENTIFIER, 'showHosters', sTitle, '', sMovieTitle, oOutputParameterHandler)
-
-    

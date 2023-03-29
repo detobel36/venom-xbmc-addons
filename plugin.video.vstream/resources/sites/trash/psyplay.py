@@ -170,11 +170,11 @@ def showMovies(sSearch=''):
 
             sUrl2 = aEntry[0]
             sQual = aEntry[1]
-            sThumb = re.sub('/w\d+/', '/w342/', aEntry[2])
+            sThumb = re.sub('/w\\d+/', '/w342/', aEntry[2])
             sTitle = aEntry[3].replace(' en streaming', '').replace(' en Streaming', '').replace(' Streaming', '')\
                               .replace(' streaming', '').replace(' Straming', '').replace('Version Francais', 'VF')
             if '/series' in sUrl2:
-                sTitle = re.sub('Episode \d+', '', sTitle)
+                sTitle = re.sub('Episode \\d+', '', sTitle)
 
             if sSearch:
                 if not oUtil.CheckOccurence(sSearchText, sTitle):
@@ -210,7 +210,7 @@ def showMovies(sSearch=''):
 
 def __checkForNextPage(sHtmlContent):
     oParser = cParser()
-    sPattern = "<a class=''>.+?href='([^']+).+?/(\d+)'>Last"
+    sPattern = "<a class=''>.+?href='([^']+).+?/(\\d+)'>Last"
     aResult = oParser.parse(sHtmlContent, sPattern)
     if aResult[0]:
         sNextPage = aResult[1][0][0]
@@ -219,7 +219,7 @@ def __checkForNextPage(sHtmlContent):
         sPaging = sNumberNext + '/' + sNumberMax
         return sNextPage, sPaging
 
-    sPattern = "<a class=''>.+?href='([^']+).+?>(\d+)</a></li>"
+    sPattern = "<a class=''>.+?href='([^']+).+?>(\\d+)</a></li>"
     aResult = oParser.parse(sHtmlContent, sPattern)
     if aResult[0]:
         sNextPage = aResult[1][0][0]

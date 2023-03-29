@@ -139,7 +139,7 @@ def showMovies(sSearch=''):
 
 
 def __checkForNextPage(sHtmlContent):
-    sPattern = '<span>[0-9]+</span>\s*<a href="([^"]+).+?">(\d+)</a>\s*</'
+    sPattern = '<span>[0-9]+</span>\\s*<a href="([^"]+).+?">(\\d+)</a>\\s*</'
     oParser = cParser()
     aResult = oParser.parse(sHtmlContent, sPattern)
     if aResult[0]:

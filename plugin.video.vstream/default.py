@@ -1,6 +1,7 @@
 # -*- coding: utf-8 -*-
 # vStream https://github.com/Kodi-vStream/venom-xbmc-addons
-#import xbmc
+# import xbmc
+import traceback
 
 # from resources.lib.statistic import cStatistic
 from resources.lib.home import cHome
@@ -29,7 +30,7 @@ DEBUG = False
 if DEBUG:
 
     import sys  # pydevd module need to be copied in Kodi\system\python\Lib\pysrc
-    sys.path.append('H:\Program Files\Kodi\system\Python\Lib\pysrc')
+    sys.path.append('H:\\Program Files\\Kodi\\system\\Python\\Lib\\pysrc')
 
     try:
         import pysrc.pydevd as pydevd
@@ -42,13 +43,14 @@ if DEBUG:
             sys.stderr.write("Error: " + "You must add org.python.pydev.debug.pysrc to your PYTHONPATH.")
 
 
-class main:
+class Main:
 
     def __init__(self):
         self.parseUrl()
 
     def parseUrl(self):
-        # Exclue les appels par des plugins qu'on ne sait pas gérer, par exemple :  plugin://plugin.video.vstream/extrafanart
+        # Exclue les appels par des plugins qu'on ne sait pas gérer, par exemple :
+        # plugin://plugin.video.vstream/extrafanart
         oPluginHandler = cPluginHandler()
         pluginPath = oPluginHandler.getPluginPath()
         if pluginPath == 'plugin://plugin.video.vstream/extrafanart/':
@@ -129,8 +131,8 @@ class main:
 
             if sSiteName == 'globalSources':
                 oGui = cGui()
-                aPlugins = oPluginHandler.getAvailablePlugins(force = (sFunction == 'globalSources'))
-                
+                aPlugins = oPluginHandler.getAvailablePlugins(force=(sFunction == 'globalSources'))
+
                 sitesManager = siteManager()
 
                 if len(aPlugins) == 0:
@@ -139,11 +141,11 @@ class main:
                     oGui.updateDirectory()
                 else:
                     for aPlugin in aPlugins:
-                        
+
                         sitename = aPlugin[0]
                         if not sitesManager.isActive(aPlugin[1]):
                             sitename = '[COLOR red][OFF] ' + sitename + '[/COLOR]'
-                        
+
                         oOutputParameterHandler = cOutputParameterHandler()
                         oOutputParameterHandler.addParameter('siteUrl', 'http://venom')
                         icon = 'sites/%s.png' % (aPlugin[1])
@@ -167,7 +169,6 @@ class main:
             except Exception as e:
                 progress().VSclose()  # Referme le dialogue en cas d'exception, sinon blocage de Kodi
                 VSlog('could not load site: ' + sSiteName + ' error: ' + str(e))
-                import traceback
                 traceback.print_exc()
                 return
 
@@ -298,10 +299,10 @@ def _pluginSearch(plugin, sSearchText):
         function(sUrl)
 
         VSlog('Load Search: ' + str(plugin['identifier']))
-    except:
+    except BaseException:
         VSlog(plugin['identifier'] + ': search failed')
 
     window(10101).setProperty('search', 'false')
 
 
-main()
+Main()
