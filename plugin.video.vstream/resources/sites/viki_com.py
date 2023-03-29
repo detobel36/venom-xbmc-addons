@@ -12,7 +12,7 @@ from resources.lib.comaddon import progress, isMatrix, dialog, siteManager
 from resources.lib.gui.gui import Gui
 from resources.lib.gui.hoster import cHosterGui
 from resources.lib.handler.inputParameterHandler import InputParameterHandler
-from resources.lib.handler.outputParameterHandler import cOutputParameterHandler
+from resources.lib.handler.outputParameterHandler import OutputParameterHandler
 from resources.lib.handler.requestHandler import cRequestHandler
 from resources.lib.util import cUtil
 
@@ -60,7 +60,7 @@ se = 'true'
 def load():
     oGui = Gui()
 
-    oOutputParameterHandler = cOutputParameterHandler()
+    oOutputParameterHandler = OutputParameterHandler()
     oOutputParameterHandler.addParameter('siteUrl', 'http://venom/')
     oGui.addDir(SITE_IDENTIFIER, 'showSearch', 'Recherche', 'search.png', oOutputParameterHandler)
 
@@ -76,7 +76,7 @@ def load():
 def showMenuMovies():
     oGui = Gui()
 
-    oOutputParameterHandler = cOutputParameterHandler()
+    oOutputParameterHandler = OutputParameterHandler()
     oOutputParameterHandler.addParameter('siteUrl', MOVIE_NEWS[0])
     oGui.addDir(SITE_IDENTIFIER, MOVIE_NEWS[1], 'Films (Nouveautés)', 'news.png', oOutputParameterHandler)
 
@@ -92,7 +92,7 @@ def showMenuMovies():
 def showMenuSeries():
     oGui = Gui()
 
-    oOutputParameterHandler = cOutputParameterHandler()
+    oOutputParameterHandler = OutputParameterHandler()
     oOutputParameterHandler.addParameter('siteUrl', DRAMA_NEWS[0])
     oGui.addDir(SITE_IDENTIFIER, DRAMA_NEWS[1], 'Séries (Nouveautés)', 'dramas.png', oOutputParameterHandler)
 
@@ -149,7 +149,7 @@ def showMovies(sSearch=''):
     if not jsonrsp:
         oGui.addText(SITE_IDENTIFIER)
 
-    oOutputParameterHandler = cOutputParameterHandler()
+    oOutputParameterHandler = OutputParameterHandler()
     if len(jsonrsp['response']) > 0:
         total = len(jsonrsp['response'])
         progress_ = progress().VScreate(SITE_NAME)
@@ -218,7 +218,7 @@ def showMovies(sSearch=''):
             for frontUrl, page, backurl in getpage:
                 iNumberPage = int(page) + 1
                 url = frontUrl + '&page=' + str(iNumberPage) + '&per_page=' + backurl + '&t='
-                oOutputParameterHandler = cOutputParameterHandler()
+                oOutputParameterHandler = OutputParameterHandler()
                 oOutputParameterHandler.addParameter('siteUrl', url)
                 oGui.addNext(SITE_IDENTIFIER, 'showMovies', 'Page ' + str(iNumberPage), oOutputParameterHandler)
 
@@ -241,7 +241,7 @@ def showSaisons():
     oRequestHandler.addHeaderEntry('Accept-Language', '')
     jsonrsp = oRequestHandler.request(jsonDecode=True)
 
-    oOutputParameterHandler = cOutputParameterHandler()
+    oOutputParameterHandler = OutputParameterHandler()
     for episode in range(0, len(jsonrsp['response'])):
         try:
             if jsonrsp['response'][episode]['blocked'] is False:
@@ -275,7 +275,7 @@ def showSaisons():
         for frontUrl, page in getpage:
             newPage = int(page) + 1
             url = frontUrl + 'page=' + str(newPage) + '&per_page=50&app=' + _APP + '&t=' + timestamp
-            oOutputParameterHandler = cOutputParameterHandler()
+            oOutputParameterHandler = OutputParameterHandler()
             oOutputParameterHandler.addParameter('siteUrl', url)
             oGui.addNext(SITE_IDENTIFIER, 'showMovies', 'Page', oOutputParameterHandler)
 
@@ -292,7 +292,7 @@ def showMovieGenre():
     oRequestHandler.addHeaderEntry('Accept-Language', '')
     jsonrsp = oRequestHandler.request(jsonDecode=True)
 
-    oOutputParameterHandler = cOutputParameterHandler()
+    oOutputParameterHandler = OutputParameterHandler()
     for genre in range(0, len(jsonrsp)):
         typeGenre = jsonrsp[genre]['name']['fr']  # or jsonrsp[genre]['name']['en']
         urlGenre = URL_API + sGenre + '.json?sort=newest_video&page=1&per_page=50&app=' + \
@@ -314,7 +314,7 @@ def showSerieGenre():
     oRequestHandler.addHeaderEntry('Accept-Language', '')
     jsonrsp = oRequestHandler.request(jsonDecode=True)
 
-    oOutputParameterHandler = cOutputParameterHandler()
+    oOutputParameterHandler = OutputParameterHandler()
     for genre in range(0, len(jsonrsp)):
         urlGenre = URL_API + sGenre + '.json?sort=newest_video&page=1&per_page=50&app=' + \
             _APP + '&genre=' + jsonrsp[genre]['id'] + '&t='
@@ -342,7 +342,7 @@ def showPays(genre):
     oRequestHandler.addHeaderEntry('Accept-Language', '')
     jsonrsp = oRequestHandler.request(jsonDecode=True)
 
-    oOutputParameterHandler = cOutputParameterHandler()
+    oOutputParameterHandler = OutputParameterHandler()
     for country, subdict in jsonrsp.items():
         urlcountry = URL_API + genre + '.json?sort=newest_video&page=1&per_page=50&app=' + _APP + '&origin_country=' + country + '&t='
         country = jsonrsp[country]['name']['en']

@@ -6,7 +6,7 @@ import re
 from resources.lib.gui.hoster import cHosterGui
 from resources.lib.gui.gui import Gui
 from resources.lib.handler.inputParameterHandler import InputParameterHandler
-from resources.lib.handler.outputParameterHandler import cOutputParameterHandler
+from resources.lib.handler.outputParameterHandler import OutputParameterHandler
 from resources.lib.handler.requestHandler import cRequestHandler
 from resources.lib.parser import cParser
 from resources.lib.comaddon import progress, siteManager
@@ -31,7 +31,7 @@ NETS_CATS = (True, 'showGenres')
 def load():
     oGui = Gui()
 
-    oOutputParameterHandler = cOutputParameterHandler()
+    oOutputParameterHandler = OutputParameterHandler()
     oOutputParameterHandler.addParameter('siteUrl', 'http://venom/')
     oGui.addDir(SITE_IDENTIFIER, 'showSearch', 'Recherche', 'search.png', oOutputParameterHandler)
 
@@ -64,7 +64,7 @@ def showGenre():
     liste = [['Nouveautés', 'videos-s0-1'], ['Top Vues', 'videos-s1-1'], ['Top Vote', 'videos-s2-1'],
              ['Hit Parade', 'videos-s5-1'], ['Fatality', 'videos-s7-1'], ['Vidéos Longues', 'videos-s3-1']]
 
-    oOutputParameterHandler = cOutputParameterHandler()
+    oOutputParameterHandler = OutputParameterHandler()
     for sTitle, sUrl in liste:
         oOutputParameterHandler.addParameter('siteUrl', URL_MAIN + sUrl + '.html')
         oGui.addDir(SITE_IDENTIFIER, 'showMovies', sTitle, 'genres.png', oOutputParameterHandler)
@@ -82,7 +82,7 @@ def showGenres():
     aResult = oParser.parse(sHtmlContent, sPattern)
 
     if aResult[0]:
-        oOutputParameterHandler = cOutputParameterHandler()
+        oOutputParameterHandler = OutputParameterHandler()
         for aEntry in aResult[1]:
 
             sUrl = aEntry[0]
@@ -120,7 +120,7 @@ def showMovies(sSearch=''):
     if aResult[0]:
         total = len(aResult[1])
         progress_ = progress().VScreate(SITE_NAME)
-        oOutputParameterHandler = cOutputParameterHandler()
+        oOutputParameterHandler = OutputParameterHandler()
         for aEntry in aResult[1]:
             progress_.VSupdate(progress_, total)
             if progress_.iscanceled():
@@ -139,7 +139,7 @@ def showMovies(sSearch=''):
 
         sNextPage = __checkForNextPage(sHtmlContent)
         if sNextPage:
-            oOutputParameterHandler = cOutputParameterHandler()
+            oOutputParameterHandler = OutputParameterHandler()
             oOutputParameterHandler.addParameter('siteUrl', sNextPage)
             sPaging = re.search('-([0-9]+).html', sNextPage).group(1)
             oGui.addNext(SITE_IDENTIFIER, 'showMovies', 'Page ' + sPaging, oOutputParameterHandler)

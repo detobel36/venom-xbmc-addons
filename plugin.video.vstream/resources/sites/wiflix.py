@@ -5,7 +5,7 @@ from resources.lib.comaddon import siteManager
 from resources.lib.gui.hoster import cHosterGui
 from resources.lib.gui.gui import Gui
 from resources.lib.handler.inputParameterHandler import InputParameterHandler
-from resources.lib.handler.outputParameterHandler import cOutputParameterHandler
+from resources.lib.handler.outputParameterHandler import OutputParameterHandler
 from resources.lib.handler.requestHandler import cRequestHandler
 from resources.lib.parser import cParser
 from resources.lib.util import cUtil
@@ -39,7 +39,7 @@ FUNCTION_SEARCH = 'showSearch'
 def load():
     oGui = Gui()
 
-    oOutputParameterHandler = cOutputParameterHandler()
+    oOutputParameterHandler = OutputParameterHandler()
     oOutputParameterHandler.addParameter('siteUrl', 'http://film')
     oGui.addDir(SITE_IDENTIFIER, 'showSearch', 'Recherche Films', 'search.png', oOutputParameterHandler)
 
@@ -107,7 +107,7 @@ def showGenres():
         # Trie des genres par ordre alphabétique
         TriAlpha = sorted(TriAlpha, key=lambda genre: genre[0])
 
-        oOutputParameterHandler = cOutputParameterHandler()
+        oOutputParameterHandler = OutputParameterHandler()
         for sTitle, sUrl in TriAlpha:
             oOutputParameterHandler.addParameter('siteUrl', sUrl)
             oGui.addDir(SITE_IDENTIFIER, 'showMovies', sTitle, 'genres.png', oOutputParameterHandler)
@@ -147,7 +147,7 @@ def showMovies(sSearch=''):
     aResult = oParser.parse(sHtmlContent, sPattern)
 
     if aResult[0]:
-        oOutputParameterHandler = cOutputParameterHandler()
+        oOutputParameterHandler = OutputParameterHandler()
 
         for aEntry in aResult[1]:
             sThumb = aEntry[0]
@@ -204,7 +204,7 @@ def showMovies(sSearch=''):
 
         sNextPage, sPaging = __checkForNextPage(sHtmlContent)
         if sNextPage:
-            oOutputParameterHandler = cOutputParameterHandler()
+            oOutputParameterHandler = OutputParameterHandler()
             oOutputParameterHandler.addParameter('siteUrl', sNextPage)
             oGui.addNext(SITE_IDENTIFIER, 'showMovies', 'Page ' + sPaging, oOutputParameterHandler)
     else:
@@ -259,7 +259,7 @@ def showSeries(sSearch=''):
 
     aResult = oParser.parse(sHtmlContent, sPattern)
     if aResult[0]:
-        oOutputParameterHandler = cOutputParameterHandler()
+        oOutputParameterHandler = OutputParameterHandler()
 
         for aEntry in aResult[1]:
             sThumb = aEntry[0]
@@ -284,7 +284,7 @@ def showSeries(sSearch=''):
 
         sNextPage, sPaging = __checkForNextPage(sHtmlContent)
         if sNextPage:
-            oOutputParameterHandler = cOutputParameterHandler()
+            oOutputParameterHandler = OutputParameterHandler()
             oOutputParameterHandler.addParameter('siteUrl', sNextPage)
             oGui.addNext(SITE_IDENTIFIER, 'showSeries', 'Page ' + sPaging, oOutputParameterHandler)
 

@@ -5,7 +5,7 @@ import re
 from resources.lib.gui.hoster import cHosterGui
 from resources.lib.gui.gui import Gui
 from resources.lib.handler.inputParameterHandler import InputParameterHandler
-from resources.lib.handler.outputParameterHandler import cOutputParameterHandler
+from resources.lib.handler.outputParameterHandler import OutputParameterHandler
 from resources.lib.handler.requestHandler import cRequestHandler
 from resources.lib.parser import cParser
 from resources.lib.comaddon import siteManager
@@ -34,7 +34,7 @@ FUNCTION_SEARCH = 'showSeries'
 def load():
     oGui = Gui()
 
-    oOutputParameterHandler = cOutputParameterHandler()
+    oOutputParameterHandler = OutputParameterHandler()
     oOutputParameterHandler.addParameter('siteUrl', 'http://venom/')
     oGui.addDir(SITE_IDENTIFIER, 'showSearch', 'Recherche', 'search.png', oOutputParameterHandler)
 
@@ -90,7 +90,7 @@ def showGenres():
              ['Fantastique', 'fantastique'], ['Guerre', 'guerre'], ['Horreur', 'horreur'], ['Policier', 'policier'],
              ['Romance', 'romance'], ['Thriller', 'thriller'], ['Divers', 'divers']]
 
-    oOutputParameterHandler = cOutputParameterHandler()
+    oOutputParameterHandler = OutputParameterHandler()
     for sTitle, sUrl in liste:
         oOutputParameterHandler.addParameter('siteUrl', URL_MAIN + 'genres/' + sUrl + '/')
         oGui.addDir(SITE_IDENTIFIER, 'showSeries', sTitle, 'genres.png', oOutputParameterHandler)
@@ -106,7 +106,7 @@ def showAlpha():
              ['J', 'j'], ['K', 'k'], ['L', 'l'], ['M', 'm'], ['N', 'n'], ['O', 'o'], ['P', 'p'], ['Q', 'q'], ['R', 'r'],
              ['S', 's'], ['T', 't'], ['U', 'u'], ['V', 'v'], ['W', 'w'], ['X', 'x'], ['Y', 'y'], ['Z', 'z']]
 
-    oOutputParameterHandler = cOutputParameterHandler()
+    oOutputParameterHandler = OutputParameterHandler()
     for sTitle, sUrl in liste:
 
         oOutputParameterHandler.addParameter('siteUrl', URL_MAIN + 'liste/' + sUrl + '/')
@@ -138,7 +138,7 @@ def showSerieYears():
         oGui.addText(SITE_IDENTIFIER)
 
     if aResult[0]:
-        oOutputParameterHandler = cOutputParameterHandler()
+        oOutputParameterHandler = OutputParameterHandler()
         for aEntry in aResult[1][::-1]:
             sUrl = aEntry[0]
             Year = aEntry[1]
@@ -167,7 +167,7 @@ def showSaisonsEpisodesNews():
     aResult = oParser.parse(sHtmlContent, sPattern)
 
     if aResult[0]:
-        oOutputParameterHandler = cOutputParameterHandler()
+        oOutputParameterHandler = OutputParameterHandler()
         for aEntry in aResult[1]:
             sThumb = ''
             sUrl2 = aEntry[0]
@@ -209,7 +209,7 @@ def showSeries(sSearch=''):
     aResult = oParser.parse(sHtmlContent, sPattern)
 
     if aResult[0]:
-        oOutputParameterHandler = cOutputParameterHandler()
+        oOutputParameterHandler = OutputParameterHandler()
         for aEntry in aResult[1]:
             sUrl = aEntry[0]
             sThumb = aEntry[1]
@@ -232,7 +232,7 @@ def showSeries(sSearch=''):
     if not sSearch:
         sNextPage, sPaging = __checkForNextPage(sHtmlContent)
         if sNextPage:
-            oOutputParameterHandler = cOutputParameterHandler()
+            oOutputParameterHandler = OutputParameterHandler()
             oOutputParameterHandler.addParameter('siteUrl', sNextPage)
             oGui.addNext(SITE_IDENTIFIER, 'showSeries', 'Page ' + sPaging, oOutputParameterHandler)
         oGui.setEndOfDirectory()
@@ -271,7 +271,7 @@ def showSaisons():
     aResult = oParser.parse(sHtmlContent, sPattern)
 
     if aResult[0]:
-        oOutputParameterHandler = cOutputParameterHandler()
+        oOutputParameterHandler = OutputParameterHandler()
         for aEntry in aResult[1]:
             sUrl = aEntry[0]
             sThumb = aEntry[1]
@@ -317,7 +317,7 @@ def showEpisodes():
         oGui.addText(SITE_IDENTIFIER)
 
     if aResult[0]:
-        oOutputParameterHandler = cOutputParameterHandler()
+        oOutputParameterHandler = OutputParameterHandler()
         for aEntry in aResult[1]:
             sUrl = aEntry[0]
             sTitle = sMovieTitle + ' ' + aEntry[1]
@@ -359,7 +359,7 @@ def showLinks():
     aResult = oParser.parse(sHtmlContent, sPattern)
 
     if aResult[0]:
-        oOutputParameterHandler = cOutputParameterHandler()
+        oOutputParameterHandler = OutputParameterHandler()
         for aEntry in aResult[1]:
             sUrl2 = aEntry[0]
 

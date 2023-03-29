@@ -2,7 +2,7 @@ from resources.lib.comaddon import progress  # , VSlog
 from resources.lib.util import cUtil
 from resources.lib.parser import cParser
 from resources.lib.handler.requestHandler import cRequestHandler
-from resources.lib.handler.outputParameterHandler import cOutputParameterHandler
+from resources.lib.handler.outputParameterHandler import OutputParameterHandler
 from resources.lib.handler.inputParameterHandler import InputParameterHandler
 from resources.lib.gui.gui import Gui
 from resources.lib.gui.hoster import cHosterGui
@@ -39,19 +39,19 @@ FUNCTION_SEARCH = 'showMovies'
 def load():
     oGui = Gui()
 
-    oOutputParameterHandler = cOutputParameterHandler()
+    oOutputParameterHandler = OutputParameterHandler()
     oOutputParameterHandler.addParameter('siteUrl', 'http://venom/')
     oGui.addDir(SITE_IDENTIFIER, 'showSearch', 'Recherche', 'search.png', oOutputParameterHandler)
 
-    oOutputParameterHandler = cOutputParameterHandler()
+    oOutputParameterHandler = OutputParameterHandler()
     oOutputParameterHandler.addParameter('siteUrl', REPLAYTV_NEWS[0])
     oGui.addDir(SITE_IDENTIFIER, REPLAYTV_NEWS[1], 'Replay (Derniers ajouts)', 'replay.png', oOutputParameterHandler)
 
-    oOutputParameterHandler = cOutputParameterHandler()
+    oOutputParameterHandler = OutputParameterHandler()
     oOutputParameterHandler.addParameter('siteUrl', REPLAYTV_GENRES[0])
     oGui.addDir(SITE_IDENTIFIER, REPLAYTV_GENRES[1], 'Replay (Genres)', 'genres.png', oOutputParameterHandler)
 
-    oOutputParameterHandler = cOutputParameterHandler()
+    oOutputParameterHandler = OutputParameterHandler()
     oOutputParameterHandler.addParameter('siteUrl', MOVIE_MOVIE[0])
     oGui.addDir(SITE_IDENTIFIER, MOVIE_MOVIE[1], 'Films', 'films.png', oOutputParameterHandler)
 
@@ -83,7 +83,7 @@ def showGenres():
 
     for sTitle, sUrl in liste:
 
-        oOutputParameterHandler = cOutputParameterHandler()
+        oOutputParameterHandler = OutputParameterHandler()
         oOutputParameterHandler.addParameter('siteUrl', sUrl)
         oGui.addDir(SITE_IDENTIFIER, 'showMovies', sTitle, 'genres.png', oOutputParameterHandler)
 
@@ -133,7 +133,7 @@ def showMovies(sSearch=''):
             if len(aEntry) > 3:
                 sDesc = aEntry[3]
 
-            oOutputParameterHandler = cOutputParameterHandler()
+            oOutputParameterHandler = OutputParameterHandler()
             oOutputParameterHandler.addParameter('siteUrl', sUrl)
             oOutputParameterHandler.addParameter('sMovieTitle', sTitle)
             oOutputParameterHandler.addParameter('sThumb', sThumb)
@@ -143,7 +143,7 @@ def showMovies(sSearch=''):
 
         sNextPage = __checkForNextPage(sHtmlContent)
         if (sNextPage):
-            oOutputParameterHandler = cOutputParameterHandler()
+            oOutputParameterHandler = OutputParameterHandler()
             oOutputParameterHandler.addParameter('siteUrl', sNextPage)
             oGui.addNext(SITE_IDENTIFIER, 'showMovies', '[COLOR teal]Suivant >>>[/COLOR]', oOutputParameterHandler)
 

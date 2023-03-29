@@ -5,7 +5,7 @@ from resources.lib.comaddon import siteManager
 from resources.lib.gui.gui import Gui
 from resources.lib.gui.hoster import cHosterGui
 from resources.lib.handler.inputParameterHandler import InputParameterHandler
-from resources.lib.handler.outputParameterHandler import cOutputParameterHandler
+from resources.lib.handler.outputParameterHandler import OutputParameterHandler
 from resources.lib.handler.requestHandler import cRequestHandler
 from resources.lib.parser import cParser
 
@@ -42,7 +42,7 @@ def load():
         if not aResult[0]:
             oGui.addText(SITE_IDENTIFIER)
         else:
-            oOutputParameterHandler = cOutputParameterHandler()
+            oOutputParameterHandler = OutputParameterHandler()
             for aEntry in aResult[1]:
                 sUrl = aEntry[0]
                 sTitle = aEntry[1]
@@ -56,7 +56,7 @@ def load():
 
 def showGenres():
     oGui = Gui()
-    oOutputParameterHandler = cOutputParameterHandler()
+    oOutputParameterHandler = OutputParameterHandler()
     oOutputParameterHandler.addParameter('siteUrl', SPORT_GENRES[0])
     oGui.addDir(SITE_IDENTIFIER, 'load', 'Football', 'genres.png', oOutputParameterHandler)
     oGui.setEndOfDirectory()

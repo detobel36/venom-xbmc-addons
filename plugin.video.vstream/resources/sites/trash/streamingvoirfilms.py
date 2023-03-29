@@ -5,7 +5,7 @@ import re
 from resources.lib.comaddon import progress
 from resources.lib.parser import cParser
 from resources.lib.handler.requestHandler import cRequestHandler
-from resources.lib.handler.outputParameterHandler import cOutputParameterHandler
+from resources.lib.handler.outputParameterHandler import OutputParameterHandler
 from resources.lib.handler.inputParameterHandler import InputParameterHandler
 from resources.lib.gui.gui import Gui
 from resources.lib.gui.hoster import cHosterGui
@@ -37,27 +37,27 @@ URL_SEARCH_SERIES = (URL_SEARCH[0], 'showList')
 def load():
     oGui = Gui()
 
-    oOutputParameterHandler = cOutputParameterHandler()
+    oOutputParameterHandler = OutputParameterHandler()
     oOutputParameterHandler.addParameter('siteUrl', URL_SEARCH[0])
     oGui.addDir(SITE_IDENTIFIER, 'showSearch', 'Recherche', 'search.png', oOutputParameterHandler)
 
-    oOutputParameterHandler = cOutputParameterHandler()
+    oOutputParameterHandler = OutputParameterHandler()
     oOutputParameterHandler.addParameter('siteUrl', MOVIE_NEWS[0])
     oGui.addDir(SITE_IDENTIFIER, 'showMovies', 'Films (Derniers ajouts)', 'news.png', oOutputParameterHandler)
 
-    oOutputParameterHandler = cOutputParameterHandler()
+    oOutputParameterHandler = OutputParameterHandler()
     oOutputParameterHandler.addParameter('siteUrl', MOVIE_GENRES[0])
     oGui.addDir(SITE_IDENTIFIER, MOVIE_GENRES[1], 'Films (Genres)', 'genres.png', oOutputParameterHandler)
 
-    oOutputParameterHandler = cOutputParameterHandler()
+    oOutputParameterHandler = OutputParameterHandler()
     oOutputParameterHandler.addParameter('siteUrl', MOVIE_LIST[0])
     oGui.addDir(SITE_IDENTIFIER, MOVIE_LIST[1], 'Films (Liste)', 'listes.png', oOutputParameterHandler)
 
-    oOutputParameterHandler = cOutputParameterHandler()
+    oOutputParameterHandler = OutputParameterHandler()
     oOutputParameterHandler.addParameter('siteUrl', SERIE_NEWS[0])
     oGui.addDir(SITE_IDENTIFIER, 'showMovies', 'Séries (Episode derniers ajouts)', 'news.png', oOutputParameterHandler)
 
-    oOutputParameterHandler = cOutputParameterHandler()
+    oOutputParameterHandler = OutputParameterHandler()
     oOutputParameterHandler.addParameter('siteUrl', SERIE_SEASONS[0])
     oGui.addDir(
         SITE_IDENTIFIER,
@@ -66,11 +66,11 @@ def load():
         'news.png',
         oOutputParameterHandler)
 
-    oOutputParameterHandler = cOutputParameterHandler()
+    oOutputParameterHandler = OutputParameterHandler()
     oOutputParameterHandler.addParameter('siteUrl', SERIE_SERIES[0])
     oGui.addDir(SITE_IDENTIFIER, SERIE_SERIES[1], 'Séries (Toutes les séries)', 'series.png', oOutputParameterHandler)
 
-    oOutputParameterHandler = cOutputParameterHandler()
+    oOutputParameterHandler = OutputParameterHandler()
     oOutputParameterHandler.addParameter('siteUrl', SERIE_LIST[0])
     oGui.addDir(SITE_IDENTIFIER, SERIE_LIST[1], 'Séries (Liste)', 'listes.png', oOutputParameterHandler)
     oGui.setEndOfDirectory()
@@ -115,7 +115,7 @@ def showGenres():
 
     for sTitle, sUrl in liste:
 
-        oOutputParameterHandler = cOutputParameterHandler()
+        oOutputParameterHandler = OutputParameterHandler()
         oOutputParameterHandler.addParameter('siteUrl', sUrl)
         oGui.addDir(SITE_IDENTIFIER, 'showMovies', sTitle, 'genres.png', oOutputParameterHandler)
 
@@ -158,7 +158,7 @@ def showAlpha():
 
     for sTitle, sUrl in liste:
 
-        oOutputParameterHandler = cOutputParameterHandler()
+        oOutputParameterHandler = OutputParameterHandler()
         oOutputParameterHandler.addParameter('siteUrl', sUrl)
         oGui.addDir(
             SITE_IDENTIFIER,
@@ -194,7 +194,7 @@ def showList(sSearch=''):
 
             sThumb = page[x]["img"].replace('90x135', '185x278')  # pas mieux
 
-            oOutputParameterHandler = cOutputParameterHandler()
+            oOutputParameterHandler = OutputParameterHandler()
             oOutputParameterHandler.addParameter('siteUrl', sUrl)
             oOutputParameterHandler.addParameter('sMovieTitle', sTitle)
             oOutputParameterHandler.addParameter('sThumb', sThumb)
@@ -244,7 +244,7 @@ def showMovies():
             if '/films' in sUrl or '/series' in sUrl:
                 sDesc = aEntry[3]
 
-            oOutputParameterHandler = cOutputParameterHandler()
+            oOutputParameterHandler = OutputParameterHandler()
             oOutputParameterHandler.addParameter('siteUrl', sUrl2)
             oOutputParameterHandler.addParameter('sMovieTitle', sTitle)
             oOutputParameterHandler.addParameter('sThumb', sThumb)
@@ -260,7 +260,7 @@ def showMovies():
 
         sNextPage = __checkForNextPage(sHtmlContent)
         if (sNextPage):
-            oOutputParameterHandler = cOutputParameterHandler()
+            oOutputParameterHandler = OutputParameterHandler()
             oOutputParameterHandler.addParameter('siteUrl', sNextPage)
             oGui.addNext(SITE_IDENTIFIER, 'showMovies', '[COLOR teal]Next >>>[/COLOR]', oOutputParameterHandler)
 
@@ -311,7 +311,7 @@ def showSaisonEpisodes():
                 sUrl = aEntry[3]
                 sTitle = 'Saison ' + aEntry[1] + ' Episode' + aEntry[2] + ' ' + sMovieTitle
 
-                oOutputParameterHandler = cOutputParameterHandler()
+                oOutputParameterHandler = OutputParameterHandler()
                 oOutputParameterHandler.addParameter('siteUrl', sUrl)
                 oOutputParameterHandler.addParameter('sMovieTitle', sTitle)
                 oOutputParameterHandler.addParameter('sThumb', sThumb)
@@ -347,7 +347,7 @@ def showLinks():
 
             sDisplayTitle = ('%s (%s %s %s)') % (sMovieTitle, sLang, sQual, sHost)
 
-            oOutputParameterHandler = cOutputParameterHandler()
+            oOutputParameterHandler = OutputParameterHandler()
             oOutputParameterHandler.addParameter('postdata', postdata)
             oOutputParameterHandler.addParameter('sMovieTitle', sMovieTitle)
             oOutputParameterHandler.addParameter('siteUrl', sUrl)

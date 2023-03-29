@@ -7,7 +7,7 @@ from resources.lib.comaddon import progress, siteManager
 from resources.lib.gui.hoster import cHosterGui
 from resources.lib.gui.gui import Gui
 from resources.lib.handler.inputParameterHandler import InputParameterHandler
-from resources.lib.handler.outputParameterHandler import cOutputParameterHandler
+from resources.lib.handler.outputParameterHandler import OutputParameterHandler
 from resources.lib.handler.requestHandler import cRequestHandler
 from resources.lib.parser import cParser
 from resources.lib.util import cUtil
@@ -40,7 +40,7 @@ FUNCTION_SEARCH = 'showMovies'
 def load():
     oGui = Gui()
 
-    oOutputParameterHandler = cOutputParameterHandler()
+    oOutputParameterHandler = OutputParameterHandler()
     oOutputParameterHandler.addParameter('siteUrl', 'http://venom/')
     oGui.addDir(SITE_IDENTIFIER, 'showSearch', 'Recherche', 'search.png', oOutputParameterHandler)
 
@@ -126,7 +126,7 @@ def showGenres():
     liste.append(['Science fiction', 'category/films/courts-metrages/science-fiction-courts-metrages/'])
     liste.append(['Thriller', 'category/films/courts-metrages/thriller-courts-metrages/'])
 
-    oOutputParameterHandler = cOutputParameterHandler()
+    oOutputParameterHandler = OutputParameterHandler()
     for sTitle, sUrl in liste:
 
         oOutputParameterHandler.addParameter('siteUrl', URL_MAIN + sUrl)
@@ -171,7 +171,7 @@ def showSeriesGenres():
     liste.append(['Sport', 'category/webseries/sport-webseries/'])
     liste.append(['Thriller', 'category/webseries/thriller-webseries/'])
 
-    oOutputParameterHandler = cOutputParameterHandler()
+    oOutputParameterHandler = OutputParameterHandler()
     for sTitle, sUrl in liste:
 
         oOutputParameterHandler.addParameter('siteUrl', URL_MAIN + sUrl)
@@ -203,7 +203,7 @@ def showReplayGenres():
     liste.append(['Concerts', 'category/spectaclesweb/concerts/'])
     liste.append(['Humour', 'category/spectaclesweb/humour-spectacles/'])
 
-    oOutputParameterHandler = cOutputParameterHandler()
+    oOutputParameterHandler = OutputParameterHandler()
     for sTitle, sUrl in liste:
 
         oOutputParameterHandler.addParameter('siteUrl', URL_MAIN + sUrl)
@@ -234,7 +234,7 @@ def showMovies(sSearch=''):
     else:
         total = len(aResult[1])
         progress_ = progress().VScreate(SITE_NAME)
-        oOutputParameterHandler = cOutputParameterHandler()
+        oOutputParameterHandler = OutputParameterHandler()
 
         for aEntry in aResult[1]:
             progress_.VSupdate(progress_, total)
@@ -261,7 +261,7 @@ def showMovies(sSearch=''):
     if not sSearch:
         sNextPage, sPaging = __checkForNextPage(sHtmlContent)
         if sNextPage:
-            oOutputParameterHandler = cOutputParameterHandler()
+            oOutputParameterHandler = OutputParameterHandler()
             oOutputParameterHandler.addParameter('siteUrl', sNextPage)
             oGui.addNext(SITE_IDENTIFIER, 'showMovies', 'Page ' + sPaging, oOutputParameterHandler)
 

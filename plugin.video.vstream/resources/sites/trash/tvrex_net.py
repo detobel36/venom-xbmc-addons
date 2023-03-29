@@ -3,7 +3,7 @@
 # Venom.
 from resources.lib.parser import cParser
 from resources.lib.handler.requestHandler import cRequestHandler
-from resources.lib.handler.outputParameterHandler import cOutputParameterHandler
+from resources.lib.handler.outputParameterHandler import OutputParameterHandler
 from resources.lib.handler.inputParameterHandler import InputParameterHandler
 from resources.lib.gui.hoster import cHosterGui
 from resources.lib.gui.gui import Gui
@@ -54,27 +54,27 @@ def load():
 
     oGui = Gui()
 
-    oOutputParameterHandler = cOutputParameterHandler()
+    oOutputParameterHandler = OutputParameterHandler()
     oOutputParameterHandler.addParameter('siteUrl', 'http://venom/')
     oGui.addDir(SITE_IDENTIFIER, 'showSearch', 'Recherche', 'search.png', oOutputParameterHandler)
 
-    oOutputParameterHandler = cOutputParameterHandler()
+    oOutputParameterHandler = OutputParameterHandler()
     oOutputParameterHandler.addParameter('siteUrl', URL_MAIN + 'category/nba-replays/')
     oGui.addDir(SITE_IDENTIFIER, 'showMovies', 'NBA Replay', 'tv.png', oOutputParameterHandler)
 
-    oOutputParameterHandler = cOutputParameterHandler()
+    oOutputParameterHandler = OutputParameterHandler()
     oOutputParameterHandler.addParameter('siteUrl', 'http://')
     oGui.addDir(SITE_IDENTIFIER, 'showFinals', 'NBA Finals Replay', 'tv.png', oOutputParameterHandler)
 
-    oOutputParameterHandler = cOutputParameterHandler()
+    oOutputParameterHandler = OutputParameterHandler()
     oOutputParameterHandler.addParameter('siteUrl', URL_MAIN + 'category/all-star-weekend/')
     oGui.addDir(SITE_IDENTIFIER, 'showMovies', 'NBA All Star Weekend Replay', 'tv.png', oOutputParameterHandler)
 
-    oOutputParameterHandler = cOutputParameterHandler()
+    oOutputParameterHandler = OutputParameterHandler()
     oOutputParameterHandler.addParameter('siteUrl', 'http://venom/')
     oGui.addDir(SITE_IDENTIFIER, 'showGenres', 'NBA Replay (Par États/Équipes)', 'sport.png', oOutputParameterHandler)
 
-    oOutputParameterHandler = cOutputParameterHandler()
+    oOutputParameterHandler = OutputParameterHandler()
     oOutputParameterHandler.addParameter('siteUrl', REDDIT)
     oGui.addDir(SITE_IDENTIFIER, 'showMovies', 'Live NBA Games (bêta)', 'tv.png', oOutputParameterHandler)
 
@@ -94,36 +94,36 @@ def showSearch():
 def showFinals():
     oGui = Gui()
 
-    oOutputParameterHandler = cOutputParameterHandler()
+    oOutputParameterHandler = OutputParameterHandler()
     oOutputParameterHandler.addParameter('siteUrl', URL_MAIN +
                                          'category/2017-nba-playoffs/2017-nba-finals-nba-finals-2/')
     oGui.addDir(SITE_IDENTIFIER, 'showMovies', 'Replay NBA 2017 PlayOffs', 'tv.png', oOutputParameterHandler)
 
-    oOutputParameterHandler = cOutputParameterHandler()
+    oOutputParameterHandler = OutputParameterHandler()
     oOutputParameterHandler.addParameter('siteUrl', URL_MAIN + 'category/2016-nba-finals/')
     oGui.addDir(SITE_IDENTIFIER, 'showMovies', 'Replay NBA 2016 PlayOffs', 'tv.png', oOutputParameterHandler)
 
-    oOutputParameterHandler = cOutputParameterHandler()
+    oOutputParameterHandler = OutputParameterHandler()
     oOutputParameterHandler.addParameter('siteUrl', URL_MAIN + 'category/2015-nba-finals/')
     oGui.addDir(SITE_IDENTIFIER, 'showMovies', 'Replay NBA 2015 PlayOffs', 'tv.png', oOutputParameterHandler)
 
-    oOutputParameterHandler = cOutputParameterHandler()
+    oOutputParameterHandler = OutputParameterHandler()
     oOutputParameterHandler.addParameter('siteUrl', URL_MAIN + 'category/2014-nba-finals/')
     oGui.addDir(SITE_IDENTIFIER, 'showMovies', 'Replay NBA 2014 PlayOffs', 'tv.png', oOutputParameterHandler)
 
-    oOutputParameterHandler = cOutputParameterHandler()
+    oOutputParameterHandler = OutputParameterHandler()
     oOutputParameterHandler.addParameter('siteUrl', URL_MAIN + 'category/2011-nba-finals/')
     oGui.addDir(SITE_IDENTIFIER, 'showMovies', 'Replay NBA 2011 PlayOffs', 'tv.png', oOutputParameterHandler)
 
-    oOutputParameterHandler = cOutputParameterHandler()
+    oOutputParameterHandler = OutputParameterHandler()
     oOutputParameterHandler.addParameter('siteUrl', URL_MAIN + 'category/2010-nba-finals/')
     oGui.addDir(SITE_IDENTIFIER, 'showMovies', 'Replay NBA 2010 PlayOffs', 'tv.png', oOutputParameterHandler)
 
-    oOutputParameterHandler = cOutputParameterHandler()
+    oOutputParameterHandler = OutputParameterHandler()
     oOutputParameterHandler.addParameter('siteUrl', URL_MAIN + 'category/2009-nba-finals/')
     oGui.addDir(SITE_IDENTIFIER, 'showMovies', 'Replay NBA 2009 PlayOffs', 'tv.png', oOutputParameterHandler)
 
-    oOutputParameterHandler = cOutputParameterHandler()
+    oOutputParameterHandler = OutputParameterHandler()
     oOutputParameterHandler.addParameter('siteUrl', URL_MAIN + 'category/2008-nba-finals/')
     oGui.addDir(SITE_IDENTIFIER, 'showMovies', 'Replay NBA 2008 PlayOffs', 'tv.png', oOutputParameterHandler)
 
@@ -166,7 +166,7 @@ def showGenres():
 
     for sTitle, sUrl in liste:
 
-        oOutputParameterHandler = cOutputParameterHandler()
+        oOutputParameterHandler = OutputParameterHandler()
         oOutputParameterHandler.addParameter('siteUrl', sUrl)
         oGui.addDir(SITE_IDENTIFIER, 'showMovies', sTitle, 'genres.png', oOutputParameterHandler)
 
@@ -305,7 +305,7 @@ def showMovies(sSearch=''):
                 sTitle = ''.join(sTitle)
                 sTitle = sTitle.replace(' vs ', '[COLOR gray] vs [/COLOR]').replace('@', '[COLOR gray] vs [/COLOR]')
 
-            oOutputParameterHandler = cOutputParameterHandler()
+            oOutputParameterHandler = OutputParameterHandler()
             oOutputParameterHandler.addParameter('siteUrl', sUrl2)
             oOutputParameterHandler.addParameter('sMovieTitle', sTitle)
             oOutputParameterHandler.addParameter('sThumb', sThumb)
@@ -317,7 +317,7 @@ def showMovies(sSearch=''):
 
         sNextPage = __checkForNextPage(sHtmlContent, sUrl)
         if (sNextPage):
-            oOutputParameterHandler = cOutputParameterHandler()
+            oOutputParameterHandler = OutputParameterHandler()
             oOutputParameterHandler.addParameter('siteUrl', sNextPage)
             oGui.addNext(SITE_IDENTIFIER, 'showMovies', '[COLOR teal]Suivant >>>[/COLOR]', oOutputParameterHandler)
 
@@ -420,7 +420,7 @@ def showHosters():
                 elif '247hd' in aEntry[0]:
                     sTitle = ('[%s] %s') % ('247HD', aEntry[1])
 
-                oOutputParameterHandler = cOutputParameterHandler()
+                oOutputParameterHandler = OutputParameterHandler()
                 oOutputParameterHandler.addParameter('siteUrl', sHosterUrl)
                 oOutputParameterHandler.addParameter('sMovieTitle', sTitle)
                 oOutputParameterHandler.addParameter('sThumb', sThumb)
@@ -483,7 +483,7 @@ def showLiveNbatv():
         else:
             sTitle = ('[%s] %s') % ('YourSportsinHD', 'NBA TV')
 
-        oOutputParameterHandler = cOutputParameterHandler()
+        oOutputParameterHandler = OutputParameterHandler()
         oOutputParameterHandler.addParameter('siteUrl', sUrl)
         oOutputParameterHandler.addParameter('sMovieTitle', sTitle)
         oOutputParameterHandler.addParameter('sThumb', sThumb)

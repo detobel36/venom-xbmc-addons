@@ -7,7 +7,7 @@ import unicodedata
 from resources.lib.comaddon import progress
 from resources.lib.gui.gui import Gui
 from resources.lib.handler.inputParameterHandler import InputParameterHandler
-from resources.lib.handler.outputParameterHandler import cOutputParameterHandler
+from resources.lib.handler.outputParameterHandler import OutputParameterHandler
 from resources.lib.handler.requestHandler import cRequestHandler
 from resources.lib.parser import cParser
 from resources.lib.util import cUtil, Quote
@@ -60,7 +60,7 @@ def unescape(text):
 def load():
     oGui = Gui()
 
-    oOutputParameterHandler = cOutputParameterHandler()
+    oOutputParameterHandler = OutputParameterHandler()
     oOutputParameterHandler.addParameter('siteUrl', MOVIE_WORLD[0])
     oGui.addDir(SITE_IDENTIFIER, MOVIE_WORLD[1], 'Top Films Mondial', 'films.png', oOutputParameterHandler)
 
@@ -79,7 +79,7 @@ def showMovieYears():
     import datetime
     now = datetime.datetime.now()
 
-    oOutputParameterHandler = cOutputParameterHandler()
+    oOutputParameterHandler = OutputParameterHandler()
     for i in reversed(xrange(1903, int(now.year) + 1)):
         oOutputParameterHandler.addParameter(
             'siteUrl',
@@ -117,7 +117,7 @@ def showMovies(sSearch=''):
     if aResult[0]:
         total = len(aResult[1])
         progress_ = progress().VScreate(SITE_NAME)
-        oOutputParameterHandler = cOutputParameterHandler()
+        oOutputParameterHandler = OutputParameterHandler()
         for aEntry in aResult[1]:
             progress_.VSupdate(progress_, total)
             if progress_.iscanceled():
@@ -143,7 +143,7 @@ def showMovies(sSearch=''):
 
         sNextPage = __checkForNextPage(sHtmlContent)
         if sNextPage:
-            oOutputParameterHandler = cOutputParameterHandler()
+            oOutputParameterHandler = OutputParameterHandler()
             oOutputParameterHandler.addParameter('siteUrl', sNextPage)
             oGui.addNext(SITE_IDENTIFIER, 'showMovies', 'Suivant', oOutputParameterHandler)
 

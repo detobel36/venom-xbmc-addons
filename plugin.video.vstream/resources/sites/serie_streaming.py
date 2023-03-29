@@ -6,7 +6,7 @@ from resources.lib.comaddon import siteManager
 from resources.lib.gui.gui import Gui
 from resources.lib.gui.hoster import cHosterGui
 from resources.lib.handler.inputParameterHandler import InputParameterHandler
-from resources.lib.handler.outputParameterHandler import cOutputParameterHandler
+from resources.lib.handler.outputParameterHandler import OutputParameterHandler
 from resources.lib.handler.requestHandler import cRequestHandler
 from resources.lib.parser import cParser
 from resources.lib.util import cUtil
@@ -29,7 +29,7 @@ SERIE_GENRES = (True, 'showGenres')
 def load():
     oGui = Gui()
 
-    oOutputParameterHandler = cOutputParameterHandler()
+    oOutputParameterHandler = OutputParameterHandler()
     oOutputParameterHandler.addParameter('siteUrl', URL_SEARCH[0])
     oGui.addDir(SITE_IDENTIFIER, 'showSearch', 'Recherche', 'search.png', oOutputParameterHandler)
 
@@ -73,7 +73,7 @@ def showGenres():
         # Trie des genres par ordre alphabétique
         triAlpha = sorted(triAlpha, key=lambda genre: genre[0])
 
-        oOutputParameterHandler = cOutputParameterHandler()
+        oOutputParameterHandler = OutputParameterHandler()
         for sTitle, sUrl in triAlpha:
             oOutputParameterHandler.addParameter('siteUrl', sUrl)
             oGui.addDir(SITE_IDENTIFIER, 'showSeries', sTitle, 'genres.png', oOutputParameterHandler)
@@ -109,7 +109,7 @@ def showSeries(sSearch=''):
     aResult = oParser.parse(sHtmlContent, sPattern)
 
     if aResult[0]:
-        oOutputParameterHandler = cOutputParameterHandler()
+        oOutputParameterHandler = OutputParameterHandler()
         for aEntry in aResult[1]:
             sUrl = aEntry[idxUrl]
             sTitle = aEntry[idxTitle].strip()
@@ -128,7 +128,7 @@ def showSeries(sSearch=''):
     if not sSearch:
         sNextPage, sPaging = __checkForNextPage(sHtmlContent)
         if sNextPage:
-            oOutputParameterHandler = cOutputParameterHandler()
+            oOutputParameterHandler = OutputParameterHandler()
             oOutputParameterHandler.addParameter('siteUrl', sNextPage)
             oGui.addNext(SITE_IDENTIFIER, 'showSeries', 'Page ' + sPaging, oOutputParameterHandler)
 
@@ -188,7 +188,7 @@ def showSaisons():
     aResult = oParser.parse(sHtmlContent, sPattern)
 
     if aResult[0]:
-        oOutputParameterHandler = cOutputParameterHandler()
+        oOutputParameterHandler = OutputParameterHandler()
         for aEntry in aResult[1][::-1]:
 
             sUrl = aEntry[0]
@@ -222,7 +222,7 @@ def showEpisodes():
         oGui.addText(SITE_IDENTIFIER)
 
     if aResult[0]:
-        oOutputParameterHandler = cOutputParameterHandler()
+        oOutputParameterHandler = OutputParameterHandler()
         for aEntry in aResult[1]:
             sUrl = aEntry[0]
             sTitle = sMovieTitle + ' ' + aEntry[1]
@@ -253,7 +253,7 @@ def showLink():
     sPattern = 'data-hex="([^"]+).+?data-code="([^"]+).+?mobile">([^<]+).+?language ([^"]+)'
     aResult = oParser.parse(sHtmlContent, sPattern)
     if aResult[0]:
-        oOutputParameterHandler = cOutputParameterHandler()
+        oOutputParameterHandler = OutputParameterHandler()
         for aEntry in aResult[1]:
 
             sDataHex = aEntry[0]
@@ -276,7 +276,7 @@ def showLink():
     sPattern = 'tele"><a href=\'([^\']+).+?mobile">([^<]+).+?language ([^"]+)'
     aResult = oParser.parse(sHtmlContent, sPattern)
     if aResult[0]:
-        oOutputParameterHandler = cOutputParameterHandler()
+        oOutputParameterHandler = OutputParameterHandler()
         for aEntry in aResult[1]:
 
             sDataCode = aEntry[0]

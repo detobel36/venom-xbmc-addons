@@ -11,7 +11,7 @@ from resources.lib.comaddon import listitem, addon, dialog, window, isNexus, pro
 from resources.lib.gui.contextElement import cContextElement
 from resources.lib.gui.guiElement import cGuiElement
 from resources.lib.handler.inputParameterHandler import InputParameterHandler
-from resources.lib.handler.outputParameterHandler import cOutputParameterHandler
+from resources.lib.handler.outputParameterHandler import OutputParameterHandler
 from resources.lib.handler.pluginHandler import cPluginHandler
 from resources.lib.parser import cParser
 from resources.lib.util import QuotePlus
@@ -327,7 +327,7 @@ class Gui:
         oGuiElement.setThumbnail(oGuiElement.getIcon())
         oGuiElement.setMeta(0)
 
-        oOutputParameterHandler = cOutputParameterHandler()
+        oOutputParameterHandler = OutputParameterHandler()
         return self.addFolder(oGuiElement, oOutputParameterHandler)
 
     # afficher les liens non playable
@@ -651,7 +651,7 @@ class Gui:
 
     # Information
     def createContexMenuinfo(self, oGuiElement, oOutputParameterHandler=''):
-        oOutputParameterHandler = cOutputParameterHandler()
+        oOutputParameterHandler = OutputParameterHandler()
         oOutputParameterHandler.addParameter('sTitle', oGuiElement.getCleanTitle())
         oOutputParameterHandler.addParameter('sFileName', oGuiElement.getFileName())
         oOutputParameterHandler.addParameter('sId', oGuiElement.getSiteName())
@@ -670,7 +670,7 @@ class Gui:
 
     # Bande annonce
     def createContexMenuba(self, oGuiElement, oOutputParameterHandler=''):
-        oOutputParameterHandler = cOutputParameterHandler()
+        oOutputParameterHandler = OutputParameterHandler()
         oOutputParameterHandler.addParameter('sTitle', oGuiElement.getTitle())
         oOutputParameterHandler.addParameter('sFileName', oGuiElement.getFileName())
         oOutputParameterHandler.addParameter('sYear', oGuiElement.getYear())
@@ -687,7 +687,7 @@ class Gui:
 
     # Recherche similaire
     def createContexMenuSimil(self, oGuiElement, oOutputParameterHandler=''):
-        oOutputParameterHandler = cOutputParameterHandler()
+        oOutputParameterHandler = OutputParameterHandler()
         oOutputParameterHandler.addParameter('sFileName', oGuiElement.getFileName())
         oOutputParameterHandler.addParameter('sTitle', oGuiElement.getTitle())
         oOutputParameterHandler.addParameter('sCat', oGuiElement.getCat())
@@ -751,7 +751,7 @@ class Gui:
 
     def __createItemUrl(self, oGuiElement, oOutputParameterHandler=''):
         if oOutputParameterHandler == '':
-            oOutputParameterHandler = cOutputParameterHandler()
+            oOutputParameterHandler = OutputParameterHandler()
 
         # On descend l'id TMDB dans les saisons et les épisodes
         oOutputParameterHandler.addParameter('sTmdbId', oGuiElement.getTmdbId())
@@ -879,7 +879,7 @@ class Gui:
         sCat = oInputParameterHandler.getValue('sCat') if oInputParameterHandler.exist(
             'sCat') else xbmc.getInfoLabel('ListItem.Property(sCat)')
 
-        oOutputParameterHandler = cOutputParameterHandler()
+        oOutputParameterHandler = OutputParameterHandler()
         oOutputParameterHandler.addParameter('searchtext', sCleanTitle)
         oOutputParameterHandler.addParameter('sCat', sCat)
 
@@ -919,7 +919,7 @@ class Gui:
             try:
                 siteUrl = urlSource + '/' + endOfUrl.replace(oldNum, newNum, 1)
 
-                oOutputParameterHandler = cOutputParameterHandler()
+                oOutputParameterHandler = OutputParameterHandler()
                 oOutputParameterHandler.addParameter('siteUrl', siteUrl)
                 sParams = oOutputParameterHandler.getParameterAsUri()
                 sTest = '%s?site=%s&function=%s&%s' % (sPluginPath, sId, sFunction, sParams)
@@ -938,7 +938,7 @@ class Gui:
 
         selpage = self.showNumBoard()
 
-        oOutputParameterHandler = cOutputParameterHandler()
+        oOutputParameterHandler = OutputParameterHandler()
         oOutputParameterHandler.addParameter('siteUrl', siteUrl)
         oOutputParameterHandler.addParameter('Selpage', selpage)
 

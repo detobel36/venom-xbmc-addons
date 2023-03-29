@@ -10,7 +10,7 @@ from resources.lib.comaddon import addon, dialog, progress, VSlog
 from resources.lib.gui.gui import Gui
 from resources.lib.gui.guiElement import cGuiElement
 from resources.lib.handler.inputParameterHandler import InputParameterHandler
-from resources.lib.handler.outputParameterHandler import cOutputParameterHandler
+from resources.lib.handler.outputParameterHandler import OutputParameterHandler
 from resources.lib.handler.rechercheHandler import cRechercheHandler
 from resources.lib.handler.requestHandler import cRequestHandler
 from resources.lib.util import Quote
@@ -76,7 +76,7 @@ class cTrakt:
     def search(self):
         oGui = Gui()
 
-        oOutputParameterHandler = cOutputParameterHandler()
+        oOutputParameterHandler = OutputParameterHandler()
         oOutputParameterHandler.addParameter('siteUrl', 'https://')
         oOutputParameterHandler.addParameter('type', 'movie')
         oGui.addDir('themoviedb_org', 'showSearchMovie', self.ADDON.VSlang(30423), 'films.png', oOutputParameterHandler)
@@ -96,7 +96,7 @@ class cTrakt:
         # self.getToken()
         oGui = Gui()
 
-        oOutputParameterHandler = cOutputParameterHandler()
+        oOutputParameterHandler = OutputParameterHandler()
         if self.ADDON.getSetting('bstoken') == '':
             VSlog('bstoken invalid')
             oOutputParameterHandler.addParameter('siteUrl', 'https://')
@@ -154,7 +154,7 @@ class cTrakt:
     def menuList(self):
         oGui = Gui()
 
-        oOutputParameterHandler = cOutputParameterHandler()
+        oOutputParameterHandler = OutputParameterHandler()
         oOutputParameterHandler.addParameter('siteUrl', 'https://')
         oOutputParameterHandler.addParameter('type', 'lists-tendances')
         oGui.addDir(SITE_IDENTIFIER, 'getLists', "Listes tendances", 'trakt.png', oOutputParameterHandler)
@@ -183,7 +183,7 @@ class cTrakt:
 
         for sTitle, sUrl in liste:
 
-            oOutputParameterHandler = cOutputParameterHandler()
+            oOutputParameterHandler = OutputParameterHandler()
             oOutputParameterHandler.addParameter('siteUrl', sUrl)
             oGui.addDir(SITE_IDENTIFIER, 'getTrakt', sTitle, 'genres.png', oOutputParameterHandler)
 
@@ -301,7 +301,7 @@ class cTrakt:
                 liste.append([self.decode((List['list']['name'] + ' (' + str(List['list']['item_count']) + ')')), url])
 
         for sTitle, sUrl in liste:
-            oOutputParameterHandler = cOutputParameterHandler()
+            oOutputParameterHandler = OutputParameterHandler()
             oOutputParameterHandler.addParameter('siteUrl', sUrl)
             oGui.addDir(SITE_IDENTIFIER, 'getTrakt', sTitle, 'genres.png', oOutputParameterHandler)
 
@@ -662,7 +662,7 @@ class cTrakt:
                     return
 
                 if sTitle:
-                    oOutputParameterHandler = cOutputParameterHandler()
+                    oOutputParameterHandler = OutputParameterHandler()
                     oOutputParameterHandler.addParameter('siteUrl', sUrl + str(sTrakt))
                     oOutputParameterHandler.addParameter('file', sFile)
                     oOutputParameterHandler.addParameter('key', sKey)
@@ -675,7 +675,7 @@ class cTrakt:
             try:
                 if (sPage != sMaxPage):
                     sNextPage = sUrl.replace('page=' + str(sPage), 'page=' + str(int(sPage) + 1))
-                    oOutputParameterHandler = cOutputParameterHandler()
+                    oOutputParameterHandler = OutputParameterHandler()
                     oOutputParameterHandler.addParameter('siteUrl', sNextPage)
                     oGui.addNext(SITE_IDENTIFIER, 'getTrakt', 'Page ' +
                                  str(int(sPage) + 1) + '/' + sMaxPage, oOutputParameterHandler)
@@ -683,7 +683,7 @@ class cTrakt:
                 pass
 
             if 'X-Pagination-Page-Count' not in sHeaders and len(sHtmlContent) > int(MAXRESULT):
-                oOutputParameterHandler = cOutputParameterHandler()
+                oOutputParameterHandler = OutputParameterHandler()
                 oOutputParameterHandler.addParameter('siteUrl', sUrl)
                 oOutputParameterHandler.addParameter('limite', int(sCurrentLimit) + int(MAXRESULT))
                 oGui.addNext(SITE_IDENTIFIER, 'getTrakt', 'Page suivante', oOutputParameterHandler)
@@ -718,7 +718,7 @@ class cTrakt:
                     return
 
                 sTitle2 = ('%s - (S%02d)') % (self.decode(sFile), int(sNumber))
-                oOutputParameterHandler = cOutputParameterHandler()
+                oOutputParameterHandler = OutputParameterHandler()
                 oOutputParameterHandler.addParameter('siteUrl', sUrl + str(sNumber))
                 oOutputParameterHandler.addParameter('Key', sKey)
                 oOutputParameterHandler.addParameter('sNum', sNum)
@@ -805,7 +805,7 @@ class cTrakt:
                 else:
                     return
 
-                oOutputParameterHandler = cOutputParameterHandler()
+                oOutputParameterHandler = OutputParameterHandler()
                 oOutputParameterHandler.addParameter('siteUrl', sUrl + str(sNumber))
                 oOutputParameterHandler.addParameter('file', sFile)
                 oOutputParameterHandler.addParameter('searchtext', searchtext)
@@ -1036,7 +1036,7 @@ class cTrakt:
                       'sync/history/remove'])
 
         for sTitle, sUrl in liste:
-            oOutputParameterHandler = cOutputParameterHandler()
+            oOutputParameterHandler = OutputParameterHandler()
             if cTrakt.CONTENT == '2':
                 oOutputParameterHandler.addParameter('sType', 'shows')
             else:

@@ -7,7 +7,7 @@ from resources.lib.comaddon import siteManager
 from resources.lib.gui.gui import Gui
 from resources.lib.gui.hoster import cHosterGui
 from resources.lib.handler.inputParameterHandler import InputParameterHandler
-from resources.lib.handler.outputParameterHandler import cOutputParameterHandler
+from resources.lib.handler.outputParameterHandler import OutputParameterHandler
 from resources.lib.handler.requestHandler import cRequestHandler
 from resources.lib.parser import cParser
 
@@ -38,7 +38,7 @@ channels = {
 def load():
     oGui = Gui()
 
-    oOutputParameterHandler = cOutputParameterHandler()
+    oOutputParameterHandler = OutputParameterHandler()
 
     oOutputParameterHandler.addParameter('siteUrl', SPORT_GENRES[0])
     oGui.addDir(SITE_IDENTIFIER, SPORT_GENRES[1], 'Sports (Genres)', 'genres.png', oOutputParameterHandler)
@@ -55,7 +55,7 @@ def showTV():
     sUrl = URL_MAIN + '/cast/stream-%d.php'
     chaines = [116, 117, 118, 119, 120, 121, 122]
 
-    oOutputParameterHandler = cOutputParameterHandler()
+    oOutputParameterHandler = OutputParameterHandler()
     for iChannel in chaines:
         channel = channels.get(iChannel)
         sDisplayTitle = channel[0]
@@ -83,7 +83,7 @@ def showGenres():
         oGui.addText(SITE_IDENTIFIER)
     else:
         sportGenre = {}
-        oOutputParameterHandler = cOutputParameterHandler()
+        oOutputParameterHandler = OutputParameterHandler()
         for sTitle in aResult[1]:
             if 'Schedule' in sTitle:
                 break
@@ -130,7 +130,7 @@ def showMovies():
     if not aResult[0]:
         oGui.addText(SITE_IDENTIFIER)
     else:
-        oOutputParameterHandler = cOutputParameterHandler()
+        oOutputParameterHandler = OutputParameterHandler()
         for aEntry in aResult[1]:
             sDate = aEntry[1]
             sTitle = aEntry[2]
@@ -173,7 +173,7 @@ def showHoster():
         oGui.addText(SITE_IDENTIFIER)
     else:
         # total = len(aResult[1])
-        oOutputParameterHandler = cOutputParameterHandler()
+        oOutputParameterHandler = OutputParameterHandler()
         for aEntry in aResult[1]:
             sUrl = aEntry[0].replace('/stream/', '/embed/')
             sDisplayTitle = sTitle + ' (' + aEntry[1].strip() + ')'

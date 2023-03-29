@@ -7,7 +7,7 @@ from resources.lib.comaddon import siteManager, isMatrix
 from resources.lib.gui.gui import Gui
 from resources.lib.gui.hoster import cHosterGui
 from resources.lib.handler.inputParameterHandler import InputParameterHandler
-from resources.lib.handler.outputParameterHandler import cOutputParameterHandler
+from resources.lib.handler.outputParameterHandler import OutputParameterHandler
 from resources.lib.handler.requestHandler import cRequestHandler
 from resources.lib.parser import cParser
 
@@ -66,7 +66,7 @@ channels = {
 
 def load():
     oGui = Gui()
-    oOutputParameterHandler = cOutputParameterHandler()
+    oOutputParameterHandler = OutputParameterHandler()
 
     oOutputParameterHandler.addParameter('siteUrl', SPORT_GENRES[0])
     oGui.addDir(SITE_IDENTIFIER, SPORT_GENRES[1], 'Sports (Genres)', 'genres.png', oOutputParameterHandler)
@@ -79,7 +79,7 @@ def load():
 
 def showTV():
     oGui = Gui()
-    oOutputParameterHandler = cOutputParameterHandler()
+    oOutputParameterHandler = OutputParameterHandler()
 
     for sDisplayTitle in channels:
         value = channels.get(sDisplayTitle)
@@ -109,7 +109,7 @@ def showGenres():
         oGui.addText(SITE_IDENTIFIER)
     else:
         sportGenre = {}
-        oOutputParameterHandler = cOutputParameterHandler()
+        oOutputParameterHandler = OutputParameterHandler()
         for sTitle in aResult[1]:
             sDisplayTitle = sTitle
             sDisplayTitle = sDisplayTitle.replace('ALPINE SKI', 'SKI')
@@ -154,7 +154,7 @@ def showMovies():
     if not aResult[0]:
         oGui.addText(SITE_IDENTIFIER)
     else:
-        oOutputParameterHandler = cOutputParameterHandler()
+        oOutputParameterHandler = OutputParameterHandler()
         for aEntry in aResult[1]:
             sDate = aEntry[0]
             sTitle = aEntry[1].strip()
@@ -189,7 +189,7 @@ def showMoviesLinks():
     if not aResult[0]:
         oGui.addText(SITE_IDENTIFIER)
     else:
-        oOutputParameterHandler = cOutputParameterHandler()
+        oOutputParameterHandler = OutputParameterHandler()
         for aEntry in aResult[1]:
             sUrl = aEntry[0]
             sDisplayTitle = sTitle = aEntry[1].strip()
@@ -221,7 +221,7 @@ def showHoster():
     else:
         blackList = ('.tutele.sx', 'leet365', 'casadelfutbol.net', 'yrsport.top', 'cdn.sportcast.life', '.ustreamix.su',
                      'sportzonline.to', 'sportkart1.xyz', 'olasports.xyz', 'cricplay2.xyz')
-        oOutputParameterHandler = cOutputParameterHandler()
+        oOutputParameterHandler = OutputParameterHandler()
         for aEntry in aResult[1]:
             sUrl = aEntry[0]
             hoster = aEntry[1]

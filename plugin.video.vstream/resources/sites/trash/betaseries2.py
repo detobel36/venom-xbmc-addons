@@ -7,7 +7,7 @@ from resources.lib.gui.guiElement import cGuiElement
 from resources.lib.gui.hoster import cHosterGui
 from resources.lib.handler.requestHandler import cRequestHandler
 from resources.lib.handler.inputParameterHandler import InputParameterHandler
-from resources.lib.handler.outputParameterHandler import cOutputParameterHandler
+from resources.lib.handler.outputParameterHandler import OutputParameterHandler
 
 import urllib
 import re
@@ -100,7 +100,7 @@ class cBseries:
 
             if (total > 0):
 
-                oOutputParameterHandler = cOutputParameterHandler()
+                oOutputParameterHandler = OutputParameterHandler()
                 oOutputParameterHandler.addParameter('siteUrl', 'https://')
                 oGui.addText(
                     SITE_IDENTIFIER,
@@ -112,7 +112,7 @@ class cBseries:
                 # for i in result['shows']:
                 # sId, sTitle = i['id'], i['name']
                 if (result['member']['stats']['shows'] > 0):
-                    oOutputParameterHandler = cOutputParameterHandler()
+                    oOutputParameterHandler = OutputParameterHandler()
                     oOutputParameterHandler.addParameter('siteUrl', 'https://api.betaseries.com/members/infos')
                     oOutputParameterHandler.addParameter('param', 'shows')
                     oGui.addDir(SITE_IDENTIFIER,
@@ -122,7 +122,7 @@ class cBseries:
                                 oOutputParameterHandler)
 
                 if (result['member']['stats']['movies'] > 0):
-                    oOutputParameterHandler = cOutputParameterHandler()
+                    oOutputParameterHandler = OutputParameterHandler()
                     oOutputParameterHandler.addParameter('siteUrl', 'https://api.betaseries.com/members/infos')
                     oOutputParameterHandler.addParameter('param', 'movies')
                     oGui.addDir(SITE_IDENTIFIER,
@@ -131,24 +131,24 @@ class cBseries:
                                 'mark.png',
                                 oOutputParameterHandler)
 
-        oOutputParameterHandler = cOutputParameterHandler()
+        oOutputParameterHandler = OutputParameterHandler()
         oOutputParameterHandler.addParameter('siteUrl', 'https://api.betaseries.com/movies/member')
         oGui.addDir(SITE_IDENTIFIER, 'getBseries', 'Films (favories)', 'mark.png', oOutputParameterHandler)
 
-        oOutputParameterHandler = cOutputParameterHandler()
+        oOutputParameterHandler = OutputParameterHandler()
         oOutputParameterHandler.addParameter('siteUrl', 'https://api.betaseries.com/shows/member')
         oGui.addDir(SITE_IDENTIFIER, 'getBseries', 'Series (favories)', 'mark.png', oOutputParameterHandler)
 
-        oOutputParameterHandler = cOutputParameterHandler()
+        oOutputParameterHandler = OutputParameterHandler()
         oOutputParameterHandler.addParameter('siteUrl', 'https://api.betaseries.com/timeline/member')
         oGui.addDir(SITE_IDENTIFIER, 'getBseries', 'Testt (favories)', 'mark.png', oOutputParameterHandler)
 
-        oOutputParameterHandler = cOutputParameterHandler()
+        oOutputParameterHandler = OutputParameterHandler()
         oOutputParameterHandler.addParameter('siteUrl', 'http://')
         oOutputParameterHandler.addParameter('userID', result['member']['id'])
         oGui.addDir(SITE_IDENTIFIER, 'getBtimeline', 'Timeline', 'mark.png', oOutputParameterHandler)
 
-        oOutputParameterHandler = cOutputParameterHandler()
+        oOutputParameterHandler = OutputParameterHandler()
         oOutputParameterHandler.addParameter('siteUrl', 'https://api.betaseries.com/members/destroy')
         oGui.addDir(SITE_IDENTIFIER, 'getBsout', 'Deconnection', 'mark.png', oOutputParameterHandler)
 
@@ -190,7 +190,7 @@ class cBseries:
                     *(time.strptime(i['date'], "%Y-%m-%d %H:%M:%S")[0:6])).strftime('%d-%m-%Y %H:%M')
 
                 sTitle = ('%s - %s') % (date, titre)
-                oOutputParameterHandler = cOutputParameterHandler()
+                oOutputParameterHandler = OutputParameterHandler()
                 oOutputParameterHandler.addParameter('siteUrl', 'http://')
                 oGui.addText(SITE_IDENTIFIER, sTitle, oOutputParameterHandler)
 
@@ -259,7 +259,7 @@ class cBseries:
 
                     sTitle = ('%s - (%s) / %s') % (sTitle.encode("utf-8"), int(sYear), sStatus)
 
-                oOutputParameterHandler = cOutputParameterHandler()
+                oOutputParameterHandler = OutputParameterHandler()
                 oOutputParameterHandler.addParameter('siteUrl', 'http://')
 
                 oGuiElement = cGuiElement()
@@ -324,7 +324,7 @@ class cBseries:
                 if thumbnail == '':
                     thumbnail = 'False'
 
-                oOutputParameterHandler = cOutputParameterHandler()
+                oOutputParameterHandler = OutputParameterHandler()
                 oOutputParameterHandler.addParameter('siteUrl', siteurl)
                 oOutputParameterHandler.addParameter('sMovieTitle', title)
                 oOutputParameterHandler.addParameter('sThumbnail', thumbnail)

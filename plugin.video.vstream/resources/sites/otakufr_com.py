@@ -7,7 +7,7 @@ import xbmc
 from resources.lib.gui.hoster import cHosterGui
 from resources.lib.gui.gui import Gui
 from resources.lib.handler.inputParameterHandler import InputParameterHandler
-from resources.lib.handler.outputParameterHandler import cOutputParameterHandler
+from resources.lib.handler.outputParameterHandler import OutputParameterHandler
 from resources.lib.handler.requestHandler import cRequestHandler
 from resources.lib.parser import cParser
 from resources.lib.comaddon import progress, siteManager
@@ -33,7 +33,7 @@ FUNCTION_SEARCH = 'showMovies'
 def load():
     oGui = Gui()
 
-    oOutputParameterHandler = cOutputParameterHandler()
+    oOutputParameterHandler = OutputParameterHandler()
     oOutputParameterHandler.addParameter('siteUrl', 'siteUrl')
     oGui.addDir(SITE_IDENTIFIER, 'showSearch', 'Recherche', 'search.png', oOutputParameterHandler)
 
@@ -87,7 +87,7 @@ def showMovies(sSearch=''):
     if aResult[0]:
         total = len(aResult[1])
         progress_ = progress().VScreate(SITE_NAME)
-        oOutputParameterHandler = cOutputParameterHandler()
+        oOutputParameterHandler = OutputParameterHandler()
         for aEntry in aResult[1]:
             progress_.VSupdate(progress_, total)
             if progress_.iscanceled():
@@ -134,7 +134,7 @@ def showMovies(sSearch=''):
     if not sSearch:
         sNextPage, sPaging = __checkForNextPage(sHtmlContent)
         if sNextPage:
-            oOutputParameterHandler = cOutputParameterHandler()
+            oOutputParameterHandler = OutputParameterHandler()
             oOutputParameterHandler.addParameter('siteUrl', sNextPage)
             oGui.addNext(SITE_IDENTIFIER, 'showMovies', 'Page ' + sPaging, oOutputParameterHandler)
 
@@ -164,7 +164,7 @@ def ShowGenre():
              'shoujo', 'shoujo-ai', 'shounen', 'shounen-ai', 'sport', 'super-power', 'surnaturel', 'suspense',
              'thriller', 'tranche-de-vie']
 
-    oOutputParameterHandler = cOutputParameterHandler()
+    oOutputParameterHandler = OutputParameterHandler()
     for igenre in liste:
         sTitle = igenre.capitalize().replace('-', ' ')
         if 'Jeu' in igenre:
@@ -189,7 +189,7 @@ def showAlpha():
     aResult = oParser.parse(sHtmlContent, sPattern)
 
     if aResult[0]:
-        oOutputParameterHandler = cOutputParameterHandler()
+        oOutputParameterHandler = OutputParameterHandler()
         for aEntry in aResult[1]:
 
             sLetter = aEntry[1]
@@ -222,7 +222,7 @@ def showAZ():
     aResult = oParser.parse(sHtmlContent, sPattern)
     bValid = False
     if aResult[0]:
-        oOutputParameterHandler = cOutputParameterHandler()
+        oOutputParameterHandler = OutputParameterHandler()
         for aEntry in aResult[1]:
             if aEntry[0]:
                 bValid = False
@@ -264,7 +264,7 @@ def showEpisodes():
     sPattern = '(?:right">|<\\/a>)\\s*<a href="(https.+?\\/episode\\/.+?)".+?list-group-item.+?item-action">([^<]+)(?:Vostfr|Vf)'
     aResult = oParser.parse(sHtmlContent, sPattern)
     if aResult[0]:
-        oOutputParameterHandler = cOutputParameterHandler()
+        oOutputParameterHandler = OutputParameterHandler()
         for aEntry in reversed(aResult[1]):
             sUrl = aEntry[0]
             Ep = aEntry[1].split(' ')[-2]
@@ -304,7 +304,7 @@ def showLinks():
     aResult = oParser.parse(sHtmlContent, sPattern)
     i = 0
     if aResult[0]:
-        oOutputParameterHandler = cOutputParameterHandler()
+        oOutputParameterHandler = OutputParameterHandler()
         for aEntry in aResult[1]:
 
             sUrl2 = aEntry[0]

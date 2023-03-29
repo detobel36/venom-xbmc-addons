@@ -10,7 +10,7 @@ from resources.lib.gui.gui import Gui
 from resources.lib.gui.guiElement import cGuiElement
 from resources.lib.gui.hoster import cHosterGui
 from resources.lib.handler.inputParameterHandler import InputParameterHandler
-from resources.lib.handler.outputParameterHandler import cOutputParameterHandler
+from resources.lib.handler.outputParameterHandler import OutputParameterHandler
 from resources.lib.handler.requestHandler import cRequestHandler
 from resources.lib.parser import cParser
 from resources.lib.util import Unquote
@@ -47,7 +47,7 @@ def load():
     oGui = Gui()
     addons = addon()
 
-    oOutputParameterHandler = cOutputParameterHandler()
+    oOutputParameterHandler = OutputParameterHandler()
     oGui.addDir(SITE_IDENTIFIER, 'showMenuTV', addons.VSlang(30115), 'tv.png', oOutputParameterHandler)
     oGui.addDir(SITE_IDENTIFIER, 'showMenuMusic', addons.VSlang(30137), 'music.png', oOutputParameterHandler)
     oGui.setEndOfDirectory()
@@ -57,7 +57,7 @@ def showMenuTV():
     oGui = Gui()
     addons = addon()
 
-    oOutputParameterHandler = cOutputParameterHandler()
+    oOutputParameterHandler = OutputParameterHandler()
     oOutputParameterHandler.addParameter('siteUrl', URL_WEB)
     oGui.addDir(SITE_IDENTIFIER, 'showWeb', addons.VSlang(30332), 'tv.png', oOutputParameterHandler)
     oGui.setEndOfDirectory()
@@ -67,7 +67,7 @@ def showMenuMusic():
     oGui = Gui()
     addons = addon()
 
-    oOutputParameterHandler = cOutputParameterHandler()
+    oOutputParameterHandler = OutputParameterHandler()
     oOutputParameterHandler.addParameter('siteUrl', URL_RADIO)
     oGui.addDir('radio', 'showWeb', addons.VSlang(30203), 'music.png', oOutputParameterHandler)
 
@@ -136,7 +136,7 @@ def showWeb():  # Code qui s'occupe de liens TV du Web
         playlist = sorted(playlist, key=lambda t: t.title.strip().capitalize())
 
     if not playlist:
-        oOutputParameterHandler = cOutputParameterHandler()
+        oOutputParameterHandler = OutputParameterHandler()
         oOutputParameterHandler.addParameter('siteUrl', 'http://')
         oGui.addText(SITE_IDENTIFIER, '[COLOR red]Problème de lecture avec la playlist[/COLOR]')
 
@@ -162,7 +162,7 @@ def showWeb():  # Code qui s'occupe de liens TV du Web
 
             thumb = '/'.join([sRootArt, sThumb])
 
-            oOutputParameterHandler = cOutputParameterHandler()
+            oOutputParameterHandler = OutputParameterHandler()
             oOutputParameterHandler.addParameter('siteUrl', url2)
             oOutputParameterHandler.addParameter('sMovieTitle', track.title)
             oOutputParameterHandler.addParameter('sThumbnail', thumb)
@@ -244,7 +244,7 @@ def showAZ():
     oInputParameterHandler = InputParameterHandler()
     sUrl = oInputParameterHandler.getValue('siteUrl')
 
-    oOutputParameterHandler = cOutputParameterHandler()
+    oOutputParameterHandler = OutputParameterHandler()
     for i in string.digits:
         oOutputParameterHandler.addParameter('siteUrl', sUrl)
         oOutputParameterHandler.addParameter('AZ', i)
@@ -263,7 +263,7 @@ def showAZRadio():
     oInputParameterHandler = InputParameterHandler()
     sUrl = oInputParameterHandler.getValue('siteUrl')
 
-    oOutputParameterHandler = cOutputParameterHandler()
+    oOutputParameterHandler = OutputParameterHandler()
     for i in string.digits:
         oOutputParameterHandler.addParameter('siteUrl', sUrl)
         oOutputParameterHandler.addParameter('AZ', i)
@@ -301,7 +301,7 @@ def showTV():
             string = sorted(aResult[1], key=lambda t: t[0].strip().capitalize())
 
         total = len(string)
-        oOutputParameterHandler = cOutputParameterHandler()
+        oOutputParameterHandler = OutputParameterHandler()
         for aEntry in string:
             progress_.VSupdate(progress_, total)
             if progress_.iscanceled():

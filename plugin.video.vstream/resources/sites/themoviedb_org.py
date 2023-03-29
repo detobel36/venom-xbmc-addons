@@ -4,7 +4,7 @@
 from resources.lib.gui.gui import Gui
 from resources.lib.gui.guiElement import cGuiElement
 from resources.lib.handler.inputParameterHandler import InputParameterHandler
-from resources.lib.handler.outputParameterHandler import cOutputParameterHandler
+from resources.lib.handler.outputParameterHandler import OutputParameterHandler
 from resources.lib.comaddon import progress, addon, dialog, VSupdate, isMatrix, siteManager
 from resources.lib.parser import cParser
 from resources.lib.util import cUtil
@@ -33,7 +33,7 @@ def load():
     oGui = Gui()
     addons = addon()
 
-    oOutputParameterHandler = cOutputParameterHandler()
+    oOutputParameterHandler = OutputParameterHandler()
     oOutputParameterHandler.addParameter('siteUrl', 'search/movie')
     oGui.addDir(SITE_IDENTIFIER, 'showSearchMovie', addons.VSlang(30423), 'search.png', oOutputParameterHandler)
 
@@ -86,7 +86,7 @@ def showMyTmdb():
 
     tmdb_session = addons.getSetting('tmdb_session')
     if tmdb_session == '':
-        oOutputParameterHandler = cOutputParameterHandler()
+        oOutputParameterHandler = OutputParameterHandler()
         oOutputParameterHandler.addParameter('siteUrl', 'https://')
         oGui.addDir(SITE_IDENTIFIER, 'getToken', addons.VSlang(30305), 'tmdb.png', oOutputParameterHandler)
     else:
@@ -99,7 +99,7 @@ def showMyTmdb():
             addons.setSetting('tmdb_account', str(result['id']))
 
             sUsername = result['username']
-            oOutputParameterHandler = cOutputParameterHandler()
+            oOutputParameterHandler = OutputParameterHandler()
             oOutputParameterHandler.addParameter('siteUrl', 'https://')
             oGui.addText(SITE_IDENTIFIER, (addons.VSlang(30306)) % sUsername)
 
@@ -431,7 +431,7 @@ def showGenreMovie():
     result = grab.getUrl(sUrl)
     total = len(result)
     if total > 0:
-        oOutputParameterHandler = cOutputParameterHandler()
+        oOutputParameterHandler = OutputParameterHandler()
         for i in result['genres']:
             sId, sTitle = i['id'], i['name']
 
@@ -454,7 +454,7 @@ def showGenreTV():
     result = grab.getUrl(sUrl)
     total = len(result)
     if total > 0:
-        oOutputParameterHandler = cOutputParameterHandler()
+        oOutputParameterHandler = OutputParameterHandler()
         for i in result['genres']:
             sId, sTitle = i['id'], i['name']
 
@@ -492,7 +492,7 @@ def showUserLists():
         page += 1
     total = len(results)
     if total > 0:
-        oOutputParameterHandler = cOutputParameterHandler()
+        oOutputParameterHandler = OutputParameterHandler()
         for i in results:
             sId, sTitle = i['id'], i['name']
 
@@ -522,7 +522,7 @@ def showFolderList():
     liste.append(['Films de Noel', '40944'])
     # liste.append(['nom de la liste', 'ID de la liste'])
 
-    oOutputParameterHandler = cOutputParameterHandler()
+    oOutputParameterHandler = OutputParameterHandler()
     for sTitle, sUrl in liste:
         oOutputParameterHandler.addParameter('siteUrl', sUrl)
         oGui.addDir(SITE_IDENTIFIER, 'showLists', sTitle, 'listes.png', oOutputParameterHandler)
@@ -576,7 +576,7 @@ def showMovies(sSearch=''):
                 if not isMatrix():
                     sTitle = sTitle.encode("utf-8")
 
-                oOutputParameterHandler = cOutputParameterHandler()
+                oOutputParameterHandler = OutputParameterHandler()
                 oOutputParameterHandler.addParameter('siteUrl', 'http://tmdb/%s' % sId)
                 oOutputParameterHandler.addParameter('sMovieTitle', sTitle)
                 oOutputParameterHandler.addParameter('sThumb', sThumb)
@@ -611,7 +611,7 @@ def showMovies(sSearch=''):
 
             if int(iPage) > 0:
                 iNextPage = int(iPage) + 1
-                oOutputParameterHandler = cOutputParameterHandler()
+                oOutputParameterHandler = OutputParameterHandler()
                 if sSearch:
                     oOutputParameterHandler.addParameter('sSearch', sSearch)
 
@@ -681,7 +681,7 @@ def showSeries(sSearch=''):
 
                 sSiteUrl = 'tv/' + str(sId)
 
-                oOutputParameterHandler = cOutputParameterHandler()
+                oOutputParameterHandler = OutputParameterHandler()
                 oOutputParameterHandler.addParameter('siteUrl', sSiteUrl)
                 oOutputParameterHandler.addParameter('sMovieTitle', sTitle)
                 oOutputParameterHandler.addParameter('sThumb', sThumb)
@@ -717,7 +717,7 @@ def showSeries(sSearch=''):
 
             if int(iPage) > 0:
                 iNextPage = int(iPage) + 1
-                oOutputParameterHandler = cOutputParameterHandler()
+                oOutputParameterHandler = OutputParameterHandler()
                 oOutputParameterHandler.addParameter('siteUrl', sUrl)
                 oOutputParameterHandler.addParameter('page', iNextPage)
                 if sSearch:
@@ -755,7 +755,7 @@ def showSeriesSaison():
         sFanart = ''
 
     # recherche la serie complete
-    oOutputParameterHandler = cOutputParameterHandler()
+    oOutputParameterHandler = OutputParameterHandler()
     oOutputParameterHandler.addParameter('siteUrl', sMovieTitle)
     # oOutputParameterHandler.addParameter('type', 'serie')
     # oOutputParameterHandler.addParameter('searchtext', sMovieTitle)
@@ -777,7 +777,7 @@ def showSeriesSaison():
     if total > 0:
         total = len(result['seasons'])
         progress_ = progress().VScreate(SITE_NAME)
-        oOutputParameterHandler = cOutputParameterHandler()
+        oOutputParameterHandler = OutputParameterHandler()
 
         for i in result['seasons']:
             progress_.VSupdate(progress_, total)
@@ -850,7 +850,7 @@ def showSeriesEpisode():
     oGui = Gui()
 
     # recherche saison complète
-    oOutputParameterHandler = cOutputParameterHandler()
+    oOutputParameterHandler = OutputParameterHandler()
     oOutputParameterHandler.addParameter('siteUrl', sMovieTitle)
     # oOutputParameterHandler.addParameter('type', 'serie')
     search = '%s S%02d' % (sMovieTitle, int(sSeason))
@@ -875,7 +875,7 @@ def showSeriesEpisode():
     if total > 0 and 'episodes' in result:
         total = len(result['episodes'])
         progress_ = progress().VScreate(SITE_NAME)
-        oOutputParameterHandler = cOutputParameterHandler()
+        oOutputParameterHandler = OutputParameterHandler()
 
         for i in result['episodes']:
             progress_.VSupdate(progress_, total)
@@ -963,7 +963,7 @@ def showActors(sSearch=''):
     if total > 0:
         total = len(result['results'])
         progress_ = progress().VScreate(SITE_NAME)
-        oOutputParameterHandler = cOutputParameterHandler()
+        oOutputParameterHandler = OutputParameterHandler()
 
         # récup le nombre de page pour NextPage
         nbrpage = result['total_pages']
@@ -1007,7 +1007,7 @@ def showActors(sSearch=''):
 
         if int(iPage) < int(nbrpage):
             iNextPage = int(iPage) + 1
-            oOutputParameterHandler = cOutputParameterHandler()
+            oOutputParameterHandler = OutputParameterHandler()
             oOutputParameterHandler.addParameter('siteUrl', sUrl)
             oOutputParameterHandler.addParameter('page', iNextPage)
 
@@ -1040,7 +1040,7 @@ def showFilmActor():
     if total > 0:
         total = len(result['cast'])
         progress_ = progress().VScreate(SITE_NAME)
-        oOutputParameterHandler = cOutputParameterHandler()
+        oOutputParameterHandler = OutputParameterHandler()
 
         for i in result['cast']:
             progress_.VSupdate(progress_, total)
@@ -1111,7 +1111,7 @@ def showLists():
     if total > 0:
         total = len(result['items'])
         progress_ = progress().VScreate(SITE_NAME)
-        oOutputParameterHandler = cOutputParameterHandler()
+        oOutputParameterHandler = OutputParameterHandler()
 
         for i in result['items']:
             progress_.VSupdate(progress_, total)

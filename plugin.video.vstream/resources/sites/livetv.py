@@ -9,7 +9,7 @@ from resources.lib.comaddon import progress, isMatrix, siteManager
 from resources.lib.gui.gui import Gui
 from resources.lib.gui.hoster import cHosterGui
 from resources.lib.handler.inputParameterHandler import InputParameterHandler
-from resources.lib.handler.outputParameterHandler import cOutputParameterHandler
+from resources.lib.handler.outputParameterHandler import OutputParameterHandler
 from resources.lib.handler.requestHandler import cRequestHandler
 from resources.lib.packer import cPacker
 from resources.lib.parser import cParser
@@ -34,7 +34,7 @@ SPORT_SPORTS = (True, 'load')
 
 def load():
     oGui = Gui()
-    oOutputParameterHandler = cOutputParameterHandler()
+    oOutputParameterHandler = OutputParameterHandler()
 
     oOutputParameterHandler.addParameter('siteUrl', SPORT_GENRES[0])
     oGui.addDir(SITE_IDENTIFIER, SPORT_GENRES[1], 'Les sports (Genres)', 'genres.png', oOutputParameterHandler)
@@ -63,7 +63,7 @@ def showLive():
     if aResult[0]:
         total = len(aResult[1])
         progress_ = progress().VScreate(SITE_NAME)
-        oOutputParameterHandler = cOutputParameterHandler()
+        oOutputParameterHandler = OutputParameterHandler()
         for aEntry in aResult[1]:
             progress_.VSupdate(progress_, total)
             if progress_.iscanceled():
@@ -107,7 +107,7 @@ def showMovies():  # affiche les catégories qui ont des lives'
     if not aResult[0]:
         oGui.addText(SITE_IDENTIFIER)
     else:
-        oOutputParameterHandler = cOutputParameterHandler()
+        oOutputParameterHandler = OutputParameterHandler()
         for aEntry in aResult[1]:
             sUrl2 = URL_MAIN + aEntry[0]
             sTitle = aEntry[1]
@@ -163,7 +163,7 @@ def showMovies2():  # affiche les matchs en direct depuis la section showMovie
             'décembre']
         total = len(aResult[1])
         progress_ = progress().VScreate(SITE_NAME, large=True)
-        oOutputParameterHandler = cOutputParameterHandler()
+        oOutputParameterHandler = OutputParameterHandler()
         for aEntry in aResult[1]:
             progress_.VSupdate(progress_, total)
             if progress_.iscanceled():
@@ -239,7 +239,7 @@ def showMovies3():  # affiche les videos disponible du live
     if aResult[0]:
         total = len(aResult[1])
         progress_ = progress().VScreate(SITE_NAME)
-        oOutputParameterHandler = cOutputParameterHandler()
+        oOutputParameterHandler = OutputParameterHandler()
         for aEntry in aResult[1]:
             progress_.VSupdate(progress_, total)
             if progress_.iscanceled():

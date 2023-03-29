@@ -5,7 +5,7 @@ from resources.lib.gui.gui import Gui
 from resources.lib.gui.guiElement import cGuiElement
 from resources.lib.gui.contextElement import cContextElement
 from resources.lib.handler.inputParameterHandler import InputParameterHandler
-from resources.lib.handler.outputParameterHandler import cOutputParameterHandler
+from resources.lib.handler.outputParameterHandler import OutputParameterHandler
 from resources.lib.comaddon import dialog, addon, VSlog
 
 
@@ -15,7 +15,7 @@ class cHosterGui:
 
     # step 1 - bGetRedirectUrl in ein extra optionsObject verpacken
     def showHoster(self, oGui, oHoster, sMediaUrl, sThumbnail, bGetRedirectUrl=False):
-        oOutputParameterHandler = cOutputParameterHandler()
+        oOutputParameterHandler = OutputParameterHandler()
         oInputParameterHandler = InputParameterHandler()
 
         # Gestion NextUp

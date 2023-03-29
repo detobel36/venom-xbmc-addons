@@ -10,7 +10,7 @@ from resources.lib.comaddon import dialog, addon, addonManager, VSlog, isMatrix
 from resources.lib.gui.gui import Gui
 from resources.lib.gui.hoster import cHosterGui
 from resources.lib.handler.inputParameterHandler import InputParameterHandler
-from resources.lib.handler.outputParameterHandler import cOutputParameterHandler
+from resources.lib.handler.outputParameterHandler import OutputParameterHandler
 from resources.lib.util import UnquotePlus
 
 # Utilisation de l'extension UpNext
@@ -60,7 +60,7 @@ class UpNext:
         sNextEpisode = '%02d' % nextEpisode
 
         saisonUrl = oInputParameterHandler.getValue('saisonUrl')
-        oOutputParameterHandler = cOutputParameterHandler()
+        oOutputParameterHandler = OutputParameterHandler()
         oOutputParameterHandler.addParameter('siteUrl', saisonUrl)
         oOutputParameterHandler.addParameter('sMovieTitle', sMovieTitle)
         oOutputParameterHandler.addParameter('tvshowtitle', sMovieTitle)
@@ -98,7 +98,7 @@ class UpNext:
             episodeTitle = nextTitle
 
             saisonUrl = oInputParameterHandler.getValue('saisonUrl')
-            oOutputParameterHandler = cOutputParameterHandler()
+            oOutputParameterHandler = OutputParameterHandler()
             oOutputParameterHandler.addParameter('sHosterIdentifier', sHosterIdentifier)
             oOutputParameterHandler.addParameter('sourceName', sSiteName)
             oOutputParameterHandler.addParameter('sFileName', sFileName)

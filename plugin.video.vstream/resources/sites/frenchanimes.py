@@ -5,7 +5,7 @@ import re
 from resources.lib.gui.hoster import cHosterGui
 from resources.lib.gui.gui import Gui
 from resources.lib.handler.inputParameterHandler import InputParameterHandler
-from resources.lib.handler.outputParameterHandler import cOutputParameterHandler
+from resources.lib.handler.outputParameterHandler import OutputParameterHandler
 from resources.lib.handler.requestHandler import cRequestHandler
 from resources.lib.parser import cParser
 from resources.lib.comaddon import progress, siteManager
@@ -33,7 +33,7 @@ FUNCTION_SEARCH = 'showSearch'
 def load():
     oGui = Gui()
 
-    oOutputParameterHandler = cOutputParameterHandler()
+    oOutputParameterHandler = OutputParameterHandler()
     oOutputParameterHandler.addParameter('siteUrl', 'http://animes')
     oGui.addDir(SITE_IDENTIFIER, 'showSearch', 'Recherche Animés', 'search.png', oOutputParameterHandler)
 
@@ -90,7 +90,7 @@ def showGenres():
         # Trie des genres par ordre alphabétique
         TriAlpha = sorted(TriAlpha, key=lambda genre: genre[0])
 
-        oOutputParameterHandler = cOutputParameterHandler()
+        oOutputParameterHandler = OutputParameterHandler()
         for sTitle, sUrl in TriAlpha:
             oOutputParameterHandler.addParameter('siteUrl', sUrl)
             oGui.addDir(SITE_IDENTIFIER, 'showAnimes', sTitle, 'genres.png', oOutputParameterHandler)
@@ -120,7 +120,7 @@ def showAnimes(sSearch=''):
     if aResult[0]:
         total = len(aResult[1])
         progress_ = progress().VScreate(SITE_NAME)
-        oOutputParameterHandler = cOutputParameterHandler()
+        oOutputParameterHandler = OutputParameterHandler()
 
         for aEntry in aResult[1]:
             progress_.VSupdate(progress_, total)
@@ -163,7 +163,7 @@ def showAnimes(sSearch=''):
 
         sNextPage, sPaging = __checkForNextPage(sHtmlContent)
         if sNextPage:
-            oOutputParameterHandler = cOutputParameterHandler()
+            oOutputParameterHandler = OutputParameterHandler()
             oOutputParameterHandler.addParameter('siteUrl', sNextPage)
             oGui.addNext(SITE_IDENTIFIER, 'showAnimes', 'Page ' + sPaging, oOutputParameterHandler)
 

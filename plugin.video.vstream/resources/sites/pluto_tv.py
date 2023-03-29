@@ -8,7 +8,7 @@ from resources.lib.comaddon import progress, addon, isMatrix, siteManager
 from resources.lib.gui.gui import Gui
 from resources.lib.gui.hoster import cHosterGui
 from resources.lib.handler.inputParameterHandler import InputParameterHandler
-from resources.lib.handler.outputParameterHandler import cOutputParameterHandler
+from resources.lib.handler.outputParameterHandler import OutputParameterHandler
 from resources.lib.handler.requestHandler import cRequestHandler
 from resources.lib.util import Quote
 
@@ -51,7 +51,7 @@ def getData():
 def load():
     oGui = Gui()
 
-    oOutputParameterHandler = cOutputParameterHandler()
+    oOutputParameterHandler = OutputParameterHandler()
     oOutputParameterHandler.addParameter('siteUrl', CHAINE_DIRECT[0])
     oGui.addDir(SITE_IDENTIFIER, CHAINE_DIRECT[1], 'Chaines en direct', 'tv.png', oOutputParameterHandler)
 
@@ -74,7 +74,7 @@ def showTV():
     sHtmlContent = oRequestHandler.request(jsonDecode=True)
 
     if sHtmlContent:
-        oOutputParameterHandler = cOutputParameterHandler()
+        oOutputParameterHandler = OutputParameterHandler()
         for aEntry in sHtmlContent:
             sThumb = aEntry["featuredImage"]["path"]
             sTitle = aEntry["name"]
@@ -106,7 +106,7 @@ def showGenre():
 
     sID = 1
     if sHtmlContent:
-        oOutputParameterHandler = cOutputParameterHandler()
+        oOutputParameterHandler = OutputParameterHandler()
         for aEntry in sHtmlContent["categories"]:
             sTitle = aEntry["name"]
             if not isMatrix():
@@ -137,7 +137,7 @@ def showVOD():
         total = len(items)
         progress_ = progress().VScreate(SITE_NAME)
 
-        oOutputParameterHandler = cOutputParameterHandler()
+        oOutputParameterHandler = OutputParameterHandler()
         for aEntry in items:
             progress_.VSupdate(progress_, total)
             if progress_.iscanceled():
@@ -190,7 +190,7 @@ def showSerieSxE():
     sHtmlContent = oRequestHandler.request(jsonDecode=True)
 
     if sHtmlContent:
-        oOutputParameterHandler = cOutputParameterHandler()
+        oOutputParameterHandler = OutputParameterHandler()
         for aEntry in sHtmlContent["seasons"]:
             for a in aEntry["episodes"]:
                 sTitle = sMovieTitle + " S" + str(a["season"]) + " E" + str(a["number"])

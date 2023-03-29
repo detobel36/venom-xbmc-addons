@@ -4,7 +4,7 @@ from resources.lib.util import cUtil
 from resources.lib.comaddon import progress, siteManager
 from resources.lib.parser import cParser
 from resources.lib.handler.requestHandler import cRequestHandler
-from resources.lib.handler.outputParameterHandler import cOutputParameterHandler
+from resources.lib.handler.outputParameterHandler import OutputParameterHandler
 from resources.lib.handler.inputParameterHandler import InputParameterHandler
 from resources.lib.gui.gui import Gui
 from resources.lib.gui.hoster import cHosterGui
@@ -51,7 +51,7 @@ FUNCTION_SEARCH = 'showMovies'
 def load():
     oGui = Gui()
 
-    oOutputParameterHandler = cOutputParameterHandler()
+    oOutputParameterHandler = OutputParameterHandler()
 
     oOutputParameterHandler.addParameter('siteUrl', URL_SEARCH[0])
     oGui.addDir(SITE_IDENTIFIER, 'showSearch', 'Rechercher Films & Séries', 'search.png', oOutputParameterHandler)
@@ -68,7 +68,7 @@ def load():
 def showMenuMovies():
     oGui = Gui()
 
-    oOutputParameterHandler = cOutputParameterHandler()
+    oOutputParameterHandler = OutputParameterHandler()
 
     oOutputParameterHandler.addParameter('siteUrl', MOVIE_NEWS[0])
     oGui.addDir(SITE_IDENTIFIER, MOVIE_NEWS[1], 'Films (Derniers ajouts)', 'news.png', oOutputParameterHandler)
@@ -85,7 +85,7 @@ def showMenuMovies():
 def showMenuTvShows():
     oGui = Gui()
 
-    oOutputParameterHandler = cOutputParameterHandler()
+    oOutputParameterHandler = OutputParameterHandler()
 
     oOutputParameterHandler.addParameter('siteUrl', SERIE_NEWS[0])
     oGui.addDir(SITE_IDENTIFIER, SERIE_NEWS[1], 'Séries (Derniers ajouts)', 'news.png', oOutputParameterHandler)
@@ -129,7 +129,7 @@ def showGenres():
     if not aResult[0]:
         oGui.addText(SITE_IDENTIFIER)
     else:
-        oOutputParameterHandler = cOutputParameterHandler()
+        oOutputParameterHandler = OutputParameterHandler()
         for aEntry in aResult[1]:
             sUrl2 = aEntry[0]
             sTitle = aEntry[1]
@@ -159,7 +159,7 @@ def showSeriesGenres():
     if not aResult[0]:
         oGui.addText(SITE_IDENTIFIER)
     else:
-        oOutputParameterHandler = cOutputParameterHandler()
+        oOutputParameterHandler = OutputParameterHandler()
         for aEntry in aResult[1]:
             sUrl2 = aEntry[0]
             sTitle = aEntry[1]
@@ -174,7 +174,7 @@ def showMovieYears():
     import datetime
     oGui = Gui()
 
-    oOutputParameterHandler = cOutputParameterHandler()
+    oOutputParameterHandler = OutputParameterHandler()
     for i in reversed(range(1930, int(datetime.datetime.now().year) + 1)):
         sYear = str(i)
         oOutputParameterHandler.addParameter('siteUrl', URL_MAIN + 'annee/' + sYear)
@@ -188,7 +188,7 @@ def showSerieYears():
     import datetime
     oGui = Gui()
 
-    oOutputParameterHandler = cOutputParameterHandler()
+    oOutputParameterHandler = OutputParameterHandler()
     for i in reversed(range(1930, int(datetime.datetime.now().year) + 1)):
         sYear = str(i)
         oOutputParameterHandler.addParameter('siteUrl', URL_MAIN + 'annee/' + sYear)
@@ -222,7 +222,7 @@ def showMovies(sSearch=''):
     else:
         total = len(aResult[1])
         progress_ = progress().VScreate(SITE_NAME)
-        oOutputParameterHandler = cOutputParameterHandler()
+        oOutputParameterHandler = OutputParameterHandler()
 
         for aEntry in aResult[1]:
             progress_.VSupdate(progress_, total)
@@ -258,7 +258,7 @@ def showMovies(sSearch=''):
     if not sSearch:
         sNextPage, sPaging = __checkForNextPage(sHtmlContent)
         if sNextPage is not False:
-            oOutputParameterHandler = cOutputParameterHandler()
+            oOutputParameterHandler = OutputParameterHandler()
             oOutputParameterHandler.addParameter('siteUrl', sNextPage)
             oGui.addNext(SITE_IDENTIFIER, 'showMovies', 'Page ' + sPaging, oOutputParameterHandler)
 
@@ -298,7 +298,7 @@ def showSaisons():
     aResult = oParser.parse(sHtmlContent, sPattern)
 
     if aResult[0]:
-        oOutputParameterHandler = cOutputParameterHandler()
+        oOutputParameterHandler = OutputParameterHandler()
         for aEntry in aResult[1][::-1]:
             sUrl2 = aEntry[2]
             sThumb = aEntry[0]
@@ -341,7 +341,7 @@ def showEpisodes():
     if not aResult[0]:
         oGui.addText(SITE_IDENTIFIER)
     else:
-        oOutputParameterHandler = cOutputParameterHandler()
+        oOutputParameterHandler = OutputParameterHandler()
         for aEntry in aResult[1][::-1]:
             sUrl2 = aEntry[0]
             sEp = aEntry[1]
@@ -387,7 +387,7 @@ def showHosters():
     if aResult[0]:
         sLang = None
         sUrl2 = URL_MAIN + 'engine/ajax/getxfield.php'
-        oOutputParameterHandler = cOutputParameterHandler()
+        oOutputParameterHandler = OutputParameterHandler()
         for aEntry in aResult[1]:
             if isSerie:  # episode d'une série
                 sUrl2 = URL_MAIN + 'engine/ajax/Season.php'

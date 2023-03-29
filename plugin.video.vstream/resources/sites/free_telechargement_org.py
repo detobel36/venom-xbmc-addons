@@ -7,7 +7,7 @@ import xbmcgui
 from resources.lib.gui.hoster import cHosterGui
 from resources.lib.gui.gui import Gui
 from resources.lib.handler.inputParameterHandler import InputParameterHandler
-from resources.lib.handler.outputParameterHandler import cOutputParameterHandler
+from resources.lib.handler.outputParameterHandler import OutputParameterHandler
 from resources.lib.handler.requestHandler import cRequestHandler
 from resources.lib.parser import cParser
 from resources.lib.util import cUtil, Quote
@@ -69,7 +69,7 @@ SPECTACLES = (URL_MAIN + '1/categorie-Spectacles/1.html', 'showMovies')
 def load():
     oGui = Gui()
 
-    oOutputParameterHandler = cOutputParameterHandler()
+    oOutputParameterHandler = OutputParameterHandler()
     oOutputParameterHandler.addParameter('siteUrl', 'http://venom/')
     oGui.addDir(SITE_IDENTIFIER, 'showMenuMovies', 'Films', 'films.png', oOutputParameterHandler)
 
@@ -91,7 +91,7 @@ def load():
 def showMenuMovies():
     oGui = Gui()
 
-    oOutputParameterHandler = cOutputParameterHandler()
+    oOutputParameterHandler = OutputParameterHandler()
     oOutputParameterHandler.addParameter('siteUrl', URL_SEARCH_MOVIES[0])
     oGui.addDir(SITE_IDENTIFIER, 'showSearch', 'Recherche de films', 'search.png', oOutputParameterHandler)
 
@@ -168,7 +168,7 @@ def showMenuMovies():
 def showMenuTvShows():
     oGui = Gui()
 
-    oOutputParameterHandler = cOutputParameterHandler()
+    oOutputParameterHandler = OutputParameterHandler()
     oOutputParameterHandler.addParameter('siteUrl', URL_SEARCH_SERIES[0])
     oGui.addDir(SITE_IDENTIFIER, 'showSearch', 'Recherche de séries', 'search.png', oOutputParameterHandler)
 
@@ -222,7 +222,7 @@ def showMenuTvShows():
 def showMenuMangas():
     oGui = Gui()
 
-    oOutputParameterHandler = cOutputParameterHandler()
+    oOutputParameterHandler = OutputParameterHandler()
     oOutputParameterHandler.addParameter('siteUrl', URL_SEARCH_ANIMS[0])
     oGui.addDir(SITE_IDENTIFIER, 'showSearch', 'Recherche d\'animés', 'search.png', oOutputParameterHandler)
 
@@ -246,7 +246,7 @@ def showMenuMangas():
 def showMenuSpectacles():
     oGui = Gui()
 
-    oOutputParameterHandler = cOutputParameterHandler()
+    oOutputParameterHandler = OutputParameterHandler()
     oOutputParameterHandler.addParameter('siteUrl', URL_SEARCH_MISC[0])
     oGui.addDir(SITE_IDENTIFIER, 'showSearch', 'Recherche de Spectacles', 'search.png', oOutputParameterHandler)
 
@@ -259,7 +259,7 @@ def showMenuSpectacles():
 def showMenuEmissionsTV():
     oGui = Gui()
 
-    oOutputParameterHandler = cOutputParameterHandler()
+    oOutputParameterHandler = OutputParameterHandler()
     oOutputParameterHandler.addParameter('siteUrl', URL_SEARCH_MISC[0])
     oGui.addDir(SITE_IDENTIFIER, 'showSearch', 'Recherche émissions TV', 'search.png', oOutputParameterHandler)
 
@@ -301,7 +301,7 @@ def showGenre(basePath):
              ['Horreur', 'Horreur-Epouvante'], ['Péplum', 'Peplum'], ['Policier', 'Policiers'], ['Romance', 'Romance'],
              ['Science fiction', 'Science-Fiction'], ['Thriller', 'Thriller'], ['Western', 'Westerns']]
 
-    oOutputParameterHandler = cOutputParameterHandler()
+    oOutputParameterHandler = OutputParameterHandler()
     for sTitle, sUrl in liste:
         oOutputParameterHandler.addParameter('siteUrl', URL_MAIN + '1/genre-' + sUrl + '/' + + basePath)
         oGui.addDir(SITE_IDENTIFIER, 'showMovies', sTitle, 'genres.png', oOutputParameterHandler)
@@ -311,7 +311,7 @@ def showGenre(basePath):
 
 def showMovieYears():
     oGui = Gui()
-    oOutputParameterHandler = cOutputParameterHandler()
+    oOutputParameterHandler = OutputParameterHandler()
     for i in reversed(range(1950, 2023)):
         Year = str(i)
         oOutputParameterHandler.addParameter('siteUrl', URL_MAIN + '1/annee/?rech_year=' + Year)
@@ -378,7 +378,7 @@ def showSearchResult(sSearch=''):
 
     if aResult:
         i = 0
-        oOutputParameterHandler = cOutputParameterHandler()
+        oOutputParameterHandler = OutputParameterHandler()
         for aEntry in aResult:
 
             # titre ?
@@ -427,7 +427,7 @@ def showSearchResult(sSearch=''):
 
         if not sSearch:
             for n, u in NextPage:
-                oOutputParameterHandler = cOutputParameterHandler()
+                oOutputParameterHandler = OutputParameterHandler()
                 oOutputParameterHandler.addParameter('siteUrl', u)
                 sNumPage = re.search('/([0-9]+)/', u).group(1)
                 oGui.addNext(SITE_IDENTIFIER, 'showSearchResult', 'Page ' + sNumPage + ' ' + n, oOutputParameterHandler)
@@ -452,7 +452,7 @@ def showMovies():
         total = len(aResult[1])
         progress_ = progress().VScreate(SITE_NAME)
 
-        oOutputParameterHandler = cOutputParameterHandler()
+        oOutputParameterHandler = OutputParameterHandler()
         for aEntry in aResult[1]:
             progress_.VSupdate(progress_, total)
             if progress_.iscanceled():
@@ -494,7 +494,7 @@ def showMovies():
 
         sNextPage = __checkForNextPage(sHtmlContent)
         if sNextPage:
-            oOutputParameterHandler = cOutputParameterHandler()
+            oOutputParameterHandler = OutputParameterHandler()
             oOutputParameterHandler.addParameter('siteUrl', sNextPage)
             sNumPage = re.search('/([0-9]+)/', sNextPage).group(1)
             oGui.addNext(SITE_IDENTIFIER, 'showMovies', 'Page ' + sNumPage, oOutputParameterHandler)
@@ -573,7 +573,7 @@ def showHosters():
     # VSlog(aResult)
 
     if aResult[0]:
-        oOutputParameterHandler = cOutputParameterHandler()
+        oOutputParameterHandler = OutputParameterHandler()
         for aEntry in aResult[1]:
 
             if '-multi' in aEntry:
@@ -654,7 +654,7 @@ def showSeriesHosters():
         total = len(aResult[1])
         oGui.addText(SITE_IDENTIFIER, sMovieTitle + aResult1[1][0])
 
-        oOutputParameterHandler = cOutputParameterHandler()
+        oOutputParameterHandler = OutputParameterHandler()
         for aEntry in aResult[1]:
             if total == 1:
                 sTitle = '[COLOR coral]' + 'Liens Premium' + '[/COLOR]'

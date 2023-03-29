@@ -7,7 +7,7 @@ import string
 from resources.lib.gui.hoster import cHosterGui
 from resources.lib.gui.gui import Gui
 from resources.lib.handler.inputParameterHandler import InputParameterHandler
-from resources.lib.handler.outputParameterHandler import cOutputParameterHandler
+from resources.lib.handler.outputParameterHandler import OutputParameterHandler
 from resources.lib.handler.requestHandler import cRequestHandler
 from resources.lib.parser import cParser
 from resources.lib.comaddon import siteManager
@@ -31,7 +31,7 @@ URL_SEARCH = (URL_MAIN + '?s=', 'showAnims')
 def load():
     oGui = Gui()
 
-    oOutputParameterHandler = cOutputParameterHandler()
+    oOutputParameterHandler = OutputParameterHandler()
     oOutputParameterHandler.addParameter('siteUrl', 'http://venom/')
     oGui.addDir(SITE_IDENTIFIER, 'showSearch', 'Recherche', 'search.png', oOutputParameterHandler)
 
@@ -55,7 +55,7 @@ def showAlpha():
     sHtmlContent = oRequestHandler.request()
 
     # on propose quand meme en premier la liste complete
-    oOutputParameterHandler = cOutputParameterHandler()
+    oOutputParameterHandler = OutputParameterHandler()
     oOutputParameterHandler.addParameter('siteUrl', ANIM_LIST[0])
     oGui.addDir(
         SITE_IDENTIFIER,
@@ -135,7 +135,7 @@ def showAnims(sSearch=''):
     if not aResult[0]:
         oGui.addText(SITE_IDENTIFIER)
     else:
-        oOutputParameterHandler = cOutputParameterHandler()
+        oOutputParameterHandler = OutputParameterHandler()
         for aEntry in aResult[1]:
             iCurrent = iCurrent + 1
             sThumb = ''
@@ -179,7 +179,7 @@ def showAnims(sSearch=''):
     if not bSearchGlobal:
         sNextPage, sPaging = __checkForNextPage(sHtmlContent)
         if sNextPage is not False:
-            oOutputParameterHandler = cOutputParameterHandler()
+            oOutputParameterHandler = OutputParameterHandler()
             oOutputParameterHandler.addParameter('siteUrl', sNextPage)
             oGui.addNext(SITE_IDENTIFIER, 'showAnims', 'Page ' + sPaging, oOutputParameterHandler)
 
@@ -225,7 +225,7 @@ def showSaisons():
     aResult = oParser.parse(sHtmlContent, sPattern)
 
     if aResult[0]:
-        oOutputParameterHandler = cOutputParameterHandler()
+        oOutputParameterHandler = OutputParameterHandler()
         for aEntry in aResult[1]:
             sUrl2 = aEntry[0]
             sTitle = sMovieTitle + ' ' + aEntry[1]
@@ -267,7 +267,7 @@ def showEpisodes():
         oGui.addText(SITE_IDENTIFIER)
 
     if aResult[0]:
-        oOutputParameterHandler = cOutputParameterHandler()
+        oOutputParameterHandler = OutputParameterHandler()
         for aEntry in aResult[1]:
 
             sUrl2 = aEntry[0]
@@ -287,7 +287,7 @@ def showEpisodes():
 
         sNextPage, sPaging = __checkForNextPage(sHtmlContent)
         if sNextPage is not False:
-            oOutputParameterHandler = cOutputParameterHandler()
+            oOutputParameterHandler = OutputParameterHandler()
             oOutputParameterHandler.addParameter('siteUrl', sNextPage)
             oGui.addNext(SITE_IDENTIFIER, 'showEpisodes', 'Page ' + sPaging, oOutputParameterHandler)
 
@@ -311,7 +311,7 @@ def seriesHosters():
     aResult = oParser.parse(sHtmlContent, sPattern)
 
     if aResult[0]:
-        oOutputParameterHandler = cOutputParameterHandler()
+        oOutputParameterHandler = OutputParameterHandler()
         for aEntry in aResult[1]:
             sUrl2 = aEntry
 

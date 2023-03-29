@@ -4,7 +4,7 @@
 from resources.lib.comaddon import progress
 from resources.lib.parser import cParser
 from resources.lib.handler.requestHandler import cRequestHandler
-from resources.lib.handler.outputParameterHandler import cOutputParameterHandler
+from resources.lib.handler.outputParameterHandler import OutputParameterHandler
 from resources.lib.handler.inputParameterHandler import InputParameterHandler
 from resources.lib.gui.gui import Gui
 from resources.lib.gui.hoster import cHosterGui
@@ -42,7 +42,7 @@ UA = "Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:83.0) Gecko/20100101 Firefox/
 def load():
     oGui = Gui()
 
-    oOutputParameterHandler = cOutputParameterHandler()
+    oOutputParameterHandler = OutputParameterHandler()
     oOutputParameterHandler.addParameter('siteUrl', URL_SEARCH[0])
     oGui.addDir(SITE_IDENTIFIER, 'showSearch', 'Recherche Films & Séries', 'search.png', oOutputParameterHandler)
 
@@ -73,7 +73,7 @@ def load():
 def showMenuMovies():
     oGui = Gui()
 
-    oOutputParameterHandler = cOutputParameterHandler()
+    oOutputParameterHandler = OutputParameterHandler()
     oOutputParameterHandler.addParameter('siteUrl', 'siteUrl')
     oGui.addDir(SITE_IDENTIFIER, 'showSearchMovie', 'Recherche Films', 'search.png', oOutputParameterHandler)
 
@@ -86,7 +86,7 @@ def showMenuMovies():
 def showMenuTvShows():
     oGui = Gui()
 
-    oOutputParameterHandler = cOutputParameterHandler()
+    oOutputParameterHandler = OutputParameterHandler()
     oOutputParameterHandler.addParameter('siteUrl', 'siteUrl')
     oGui.addDir(SITE_IDENTIFIER, 'showSearchSerie', 'Recherche Séries', 'search.png', oOutputParameterHandler)
 
@@ -137,7 +137,7 @@ def showGenres():
              'guerre', 'histoire', 'horreur', 'kids', 'musique', 'mystere', 'reality', 'romance', 'science-fiction',
              'science-fiction-fantastique', 'soap', 'telefilm/', 'thriller', 'war-politics', 'western']
 
-    oOutputParameterHandler = cOutputParameterHandler()
+    oOutputParameterHandler = OutputParameterHandler()
     for igenre in liste:
         sTitle = igenre.capitalize()
         sUrl = URL_MAIN + 'genre/' + igenre + '/'
@@ -151,7 +151,7 @@ def showMovieYears():
     import datetime
     oGui = Gui()
 
-    oOutputParameterHandler = cOutputParameterHandler()
+    oOutputParameterHandler = OutputParameterHandler()
     for i in reversed(range(1930, int(datetime.datetime.now().year) + 1)):
         Year = str(i)
         oOutputParameterHandler.addParameter('siteUrl', URL_MAIN + 'annee/' + Year + '/')
@@ -183,7 +183,7 @@ def showMovies(sSearch=''):
     if aResult[0]:
         total = len(aResult[1])
         progress_ = progress().VScreate(SITE_NAME)
-        oOutputParameterHandler = cOutputParameterHandler()
+        oOutputParameterHandler = OutputParameterHandler()
 
         for aEntry in aResult[1]:
             progress_.VSupdate(progress_, total)
@@ -237,7 +237,7 @@ def showMovies(sSearch=''):
     if not sSearch:
         sNextPage, sPagination = __checkForNextPage(sHtmlContent)
         if (sNextPage):
-            oOutputParameterHandler = cOutputParameterHandler()
+            oOutputParameterHandler = OutputParameterHandler()
             oOutputParameterHandler.addParameter('siteUrl', sNextPage)
             oGui.addNext(SITE_IDENTIFIER, 'showMovies', sPagination, oOutputParameterHandler)
 
@@ -284,7 +284,7 @@ def showSaisons():
             oGui.addText(SITE_IDENTIFIER)
 
     if aResult[0]:
-        oOutputParameterHandler = cOutputParameterHandler()
+        oOutputParameterHandler = OutputParameterHandler()
         for aEntry in aResult[1]:
             sUrl2 = aEntry[0]
             sSaison = aEntry[1]
@@ -321,7 +321,7 @@ def ShowEpisodes():
         oGui.addText(SITE_IDENTIFIER)
 
     if aResult[0]:
-        oOutputParameterHandler = cOutputParameterHandler()
+        oOutputParameterHandler = OutputParameterHandler()
         for aEntry in aResult[1]:
 
             sSaisonEpisode = aEntry[0]
@@ -357,7 +357,7 @@ def showHosters():
     aResult = oParser.parse(sHtmlContent, sPattern)
 
     if aResult[0]:
-        oOutputParameterHandler = cOutputParameterHandler()
+        oOutputParameterHandler = OutputParameterHandler()
         for aEntry in aResult[1]:
             datatype = aEntry[0]
             datapost = aEntry[1]

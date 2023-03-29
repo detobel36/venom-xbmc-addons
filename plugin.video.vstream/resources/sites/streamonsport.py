@@ -12,7 +12,7 @@ from resources.lib.comaddon import siteManager
 from resources.lib.gui.gui import Gui
 from resources.lib.gui.hoster import cHosterGui
 from resources.lib.handler.inputParameterHandler import InputParameterHandler
-from resources.lib.handler.outputParameterHandler import cOutputParameterHandler
+from resources.lib.handler.outputParameterHandler import OutputParameterHandler
 from resources.lib.handler.requestHandler import cRequestHandler
 from resources.lib.packer import cPacker
 from resources.lib.parser import cParser
@@ -58,7 +58,7 @@ def GetUrlMain():
 def load():
     oGui = Gui()
 
-    oOutputParameterHandler = cOutputParameterHandler()
+    oOutputParameterHandler = OutputParameterHandler()
 
     oOutputParameterHandler.addParameter('siteUrl', SPORT_LIVE[0])
     oGui.addDir(SITE_IDENTIFIER, SPORT_LIVE[1], 'Sports (En direct)', 'replay.png', oOutputParameterHandler)
@@ -83,7 +83,7 @@ def showGenres():
     genres = [('Basket', '3'), ('Football', '1'), ('Rugby', '2'), ('Tennis', '5'),
               ('Fomule1', '4'), ('Handball', '6'), ('Moto', '7')]
 
-    oOutputParameterHandler = cOutputParameterHandler()
+    oOutputParameterHandler = OutputParameterHandler()
     for title, url in genres:
         sUrl = urlMain + url + genreURL
         oOutputParameterHandler.addParameter('siteUrl', sUrl)
@@ -114,7 +114,7 @@ def showMovies(sSearch=''):
         oGui.addText(SITE_IDENTIFIER)
     else:
         # total = len(aResult[1])
-        oOutputParameterHandler = cOutputParameterHandler()
+        oOutputParameterHandler = OutputParameterHandler()
         for aEntry in aResult[1]:
             sThumb = aEntry[0]
             sUrl2 = aEntry[1]
@@ -175,7 +175,7 @@ def showLive():
 
     i = 0
     if aResult[0]:
-        oOutputParameterHandler = cOutputParameterHandler()
+        oOutputParameterHandler = OutputParameterHandler()
         if aResult[1]:
             for aEntry in aResult[1]:
                 i += 1
@@ -197,7 +197,7 @@ def showLive():
     # if aResult[0] is True:
     #     sUrl2 = GetUrlMain() + 'go/' + aResult[1][0]
     #     sDisplayTitle = sMovieTitle
-    #     oOutputParameterHandler = cOutputParameterHandler()
+    #     oOutputParameterHandler = OutputParameterHandler()
     #     oOutputParameterHandler.addParameter('siteUrl', sUrl2)
     #     oOutputParameterHandler.addParameter('sMovieTitle', sMovieTitle)
     #     oOutputParameterHandler.addParameter('sThumb', sThumb)

@@ -8,7 +8,7 @@ from resources.lib.config import GestionCookie
 from resources.lib.gui.gui import Gui
 from resources.lib.gui.hoster import cHosterGui
 from resources.lib.handler.inputParameterHandler import InputParameterHandler
-from resources.lib.handler.outputParameterHandler import cOutputParameterHandler
+from resources.lib.handler.outputParameterHandler import OutputParameterHandler
 from resources.lib.handler.premiumHandler import cPremiumHandler
 from resources.lib.parser import cParser
 
@@ -31,7 +31,7 @@ def load():
         oGui.addText(SITE_IDENTIFIER, '[COLOR %s]%s[/COLOR]' %
                      ('red', 'Nécessite un Compte 1Fichier Premium ou Gratuit'))
 
-        oOutputParameterHandler = cOutputParameterHandler()
+        oOutputParameterHandler = OutputParameterHandler()
         oOutputParameterHandler.addParameter('siteUrl', 'http://venom/')
         oGui.addDir(SITE_IDENTIFIER, 'opensetting', addons.VSlang(30023), 'none.png', oOutputParameterHandler)
         oGui.setEndOfDirectory()
@@ -76,7 +76,7 @@ def showFile(sFileTree=''):
         total = len(aResult[1])
         progress_ = progress().VScreate(SITE_NAME)
 
-        oOutputParameterHandler = cOutputParameterHandler()
+        oOutputParameterHandler = OutputParameterHandler()
         for aEntry in aResult[1]:
             progress_.VSupdate(progress_, total)
             if progress_.iscanceled():

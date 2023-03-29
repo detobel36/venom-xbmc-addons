@@ -7,7 +7,7 @@ from resources.lib.gui.gui import Gui
 from resources.lib.gui.guiElement import cGuiElement
 from resources.lib.gui.hoster import cHosterGui
 from resources.lib.handler.inputParameterHandler import InputParameterHandler
-from resources.lib.handler.outputParameterHandler import cOutputParameterHandler
+from resources.lib.handler.outputParameterHandler import OutputParameterHandler
 from resources.lib.comaddon import dialog, addon, isMatrix
 from resources.lib.util import UnquotePlus
 
@@ -58,7 +58,7 @@ class Fav:
         for i in row:
             compt[int(i[5])] = compt[int(i[5])] + 1
 
-        oOutputParameterHandler = cOutputParameterHandler()
+        oOutputParameterHandler = OutputParameterHandler()
         oOutputParameterHandler.addParameter('sCat', '1')
         total = compt[1] + compt[7]
         oGui.addDir(
@@ -167,7 +167,7 @@ class Fav:
                 if thumbnail == '':
                     thumbnail = 'False'
 
-                oOutputParameterHandler = cOutputParameterHandler()
+                oOutputParameterHandler = OutputParameterHandler()
                 oOutputParameterHandler.addParameter('siteUrl', siteurl)
                 oOutputParameterHandler.addParameter('sMovieTitle', title)
                 oOutputParameterHandler.addParameter('searchtext', title)
@@ -230,7 +230,7 @@ class Fav:
                     oGui.addFolder(oGuiElement, oOutputParameterHandler)
 
             except BaseException:
-                oOutputParameterHandler = cOutputParameterHandler()
+                oOutputParameterHandler = OutputParameterHandler()
                 oGui.addDir(
                     SITE_IDENTIFIER,
                     'DoNothing',
@@ -240,7 +240,7 @@ class Fav:
 
         # La suppression n'est pas accessible lors de l'utilisation en Widget
         if not xbmc.getCondVisibility('Window.IsActive(home)'):
-            oOutputParameterHandler = cOutputParameterHandler()
+            oOutputParameterHandler = OutputParameterHandler()
             oOutputParameterHandler.addParameter('sCat', sCat)
             oGui.addDir(SITE_IDENTIFIER, 'delBookmark', self.ADDON.VSlang(30211), 'trash.png', oOutputParameterHandler)
 

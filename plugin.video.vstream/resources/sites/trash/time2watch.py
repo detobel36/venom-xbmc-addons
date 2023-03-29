@@ -5,7 +5,7 @@ from resources.lib.multihost import cMultiup
 from resources.lib.util import Noredirection, urlEncode
 from resources.lib.parser import cParser
 from resources.lib.handler.requestHandler import cRequestHandler
-from resources.lib.handler.outputParameterHandler import cOutputParameterHandler
+from resources.lib.handler.outputParameterHandler import OutputParameterHandler
 from resources.lib.handler.inputParameterHandler import InputParameterHandler
 from resources.lib.gui.hoster import cHosterGui
 from resources.lib.gui.gui import Gui
@@ -72,7 +72,7 @@ SPECTACLE_NEWS = (URL_MAIN + 'theatre/', 'showMovies')
 def load():
     oGui = Gui()
 
-    oOutputParameterHandler = cOutputParameterHandler()
+    oOutputParameterHandler = OutputParameterHandler()
     oOutputParameterHandler.addParameter('siteUrl', 'http://venom/')
     oGui.addDir(
         SITE_IDENTIFIER,
@@ -81,27 +81,27 @@ def load():
         'films.png',
         oOutputParameterHandler)
 
-    oOutputParameterHandler = cOutputParameterHandler()
+    oOutputParameterHandler = OutputParameterHandler()
     oOutputParameterHandler.addParameter('siteUrl', 'http://venom/')
     oGui.addDir(SITE_IDENTIFIER, 'showSearch', 'Recherche', 'films.png', oOutputParameterHandler)
 
-    oOutputParameterHandler = cOutputParameterHandler()
+    oOutputParameterHandler = OutputParameterHandler()
     oOutputParameterHandler.addParameter('siteUrl', DERNIER_AJOUT[0])
     oGui.addDir(SITE_IDENTIFIER, DERNIER_AJOUT[1], 'Derniers Ajouts', 'news.png', oOutputParameterHandler)
 
-    oOutputParameterHandler = cOutputParameterHandler()
+    oOutputParameterHandler = OutputParameterHandler()
     oOutputParameterHandler.addParameter('siteUrl', 'http://venom/')
     oGui.addDir(SITE_IDENTIFIER, 'showMenuFilms', 'Films', 'films.png', oOutputParameterHandler)
 
-    oOutputParameterHandler = cOutputParameterHandler()
+    oOutputParameterHandler = OutputParameterHandler()
     oOutputParameterHandler.addParameter('siteUrl', 'http://venom/')
     oGui.addDir(SITE_IDENTIFIER, 'showMenuSeries', 'Séries', 'series.png', oOutputParameterHandler)
 
-    oOutputParameterHandler = cOutputParameterHandler()
+    oOutputParameterHandler = OutputParameterHandler()
     oOutputParameterHandler.addParameter('siteUrl', 'http://venom/')
     oGui.addDir(SITE_IDENTIFIER, 'showMenuMangas', 'Animés', 'animes.png', oOutputParameterHandler)
 
-    oOutputParameterHandler = cOutputParameterHandler()
+    oOutputParameterHandler = OutputParameterHandler()
     oOutputParameterHandler.addParameter('siteUrl', 'http://venom/')
     oGui.addDir(SITE_IDENTIFIER, 'showMenuAutre', 'Autres', 'tv.png', oOutputParameterHandler)
 
@@ -111,35 +111,35 @@ def load():
 def showMenuFilms():
     oGui = Gui()
 
-    oOutputParameterHandler = cOutputParameterHandler()
+    oOutputParameterHandler = OutputParameterHandler()
     oOutputParameterHandler.addParameter('siteUrl', MOVIE_NEWS[0])
     oGui.addDir(SITE_IDENTIFIER, MOVIE_NEWS[1], 'Films (Derniers ajouts)', 'news.png', oOutputParameterHandler)
 
-    oOutputParameterHandler = cOutputParameterHandler()
+    oOutputParameterHandler = OutputParameterHandler()
     oOutputParameterHandler.addParameter('siteUrl', MOVIE_GENRES[0])
     oGui.addDir(SITE_IDENTIFIER, MOVIE_GENRES[1], 'Films (Genres)', 'genres.png', oOutputParameterHandler)
 
-    oOutputParameterHandler = cOutputParameterHandler()
+    oOutputParameterHandler = OutputParameterHandler()
     oOutputParameterHandler.addParameter('siteUrl', MOVIE_ANNEES[0])
     oGui.addDir(SITE_IDENTIFIER, MOVIE_ANNEES[1], 'Films (Par années)', 'annees.png', oOutputParameterHandler)
 
-    oOutputParameterHandler = cOutputParameterHandler()
+    oOutputParameterHandler = OutputParameterHandler()
     oOutputParameterHandler.addParameter('siteUrl', MOVIE_HD1080[0])
     oGui.addDir(SITE_IDENTIFIER, MOVIE_HD1080[1], 'Bluray 1080P', 'hd.png', oOutputParameterHandler)
 
-    oOutputParameterHandler = cOutputParameterHandler()
+    oOutputParameterHandler = OutputParameterHandler()
     oOutputParameterHandler.addParameter('siteUrl', MOVIE_POPULAR[0])
     oGui.addDir(SITE_IDENTIFIER, MOVIE_POPULAR[1], 'Films (Les plus populaires)', 'views.png', oOutputParameterHandler)
 
-    oOutputParameterHandler = cOutputParameterHandler()
+    oOutputParameterHandler = OutputParameterHandler()
     oOutputParameterHandler.addParameter('siteUrl', MOVIE_VOSTFR[0])
     oGui.addDir(SITE_IDENTIFIER, MOVIE_VOSTFR[1], 'Films (VOSTFR)', 'vostfr.png', oOutputParameterHandler)
 
-    oOutputParameterHandler = cOutputParameterHandler()
+    oOutputParameterHandler = OutputParameterHandler()
     oOutputParameterHandler.addParameter('siteUrl', MOVIE_VFR[0])
     oGui.addDir(SITE_IDENTIFIER, MOVIE_VFR[1], 'Films (VFR)', 'vf.png', oOutputParameterHandler)
 
-    oOutputParameterHandler = cOutputParameterHandler()
+    oOutputParameterHandler = OutputParameterHandler()
     oOutputParameterHandler.addParameter('siteUrl', MOVIE_NOTES[0])
     oGui.addDir(SITE_IDENTIFIER, MOVIE_NOTES[1], 'Films (Les mieux notés)', 'notes.png', oOutputParameterHandler)
 
@@ -149,35 +149,35 @@ def showMenuFilms():
 def showMenuSeries():
     oGui = Gui()
 
-    oOutputParameterHandler = cOutputParameterHandler()
+    oOutputParameterHandler = OutputParameterHandler()
     oOutputParameterHandler.addParameter('siteUrl', SERIE_NEWS[0])
     oGui.addDir(SITE_IDENTIFIER, SERIE_NEWS[1], 'Series (Derniers ajouts)', 'news.png', oOutputParameterHandler)
 
-    oOutputParameterHandler = cOutputParameterHandler()
+    oOutputParameterHandler = OutputParameterHandler()
     oOutputParameterHandler.addParameter('siteUrl', SERIE_GENRES[0])
     oGui.addDir(SITE_IDENTIFIER, SERIE_GENRES[1], 'Series (Genres)', 'genres.png', oOutputParameterHandler)
 
-    oOutputParameterHandler = cOutputParameterHandler()
+    oOutputParameterHandler = OutputParameterHandler()
     oOutputParameterHandler.addParameter('siteUrl', SERIE_ANNEES[0])
     oGui.addDir(SITE_IDENTIFIER, SERIE_ANNEES[1], 'Series (Par années)', 'annees.png', oOutputParameterHandler)
 
-    oOutputParameterHandler = cOutputParameterHandler()
+    oOutputParameterHandler = OutputParameterHandler()
     oOutputParameterHandler.addParameter('siteUrl', SERIE_HD1080[0])
     oGui.addDir(SITE_IDENTIFIER, SERIE_HD1080[1], 'Bluray 1080P', 'hd.png', oOutputParameterHandler)
 
-    oOutputParameterHandler = cOutputParameterHandler()
+    oOutputParameterHandler = OutputParameterHandler()
     oOutputParameterHandler.addParameter('siteUrl', SERIE_POPULAR[0])
     oGui.addDir(SITE_IDENTIFIER, SERIE_POPULAR[1], 'Series (Les plus populaires)', 'views.png', oOutputParameterHandler)
 
-    oOutputParameterHandler = cOutputParameterHandler()
+    oOutputParameterHandler = OutputParameterHandler()
     oOutputParameterHandler.addParameter('siteUrl', SERIE_VOSTFR[0])
     oGui.addDir(SITE_IDENTIFIER, SERIE_VOSTFR[1], 'Series (VOSTFR)', 'vostfr.png', oOutputParameterHandler)
 
-    oOutputParameterHandler = cOutputParameterHandler()
+    oOutputParameterHandler = OutputParameterHandler()
     oOutputParameterHandler.addParameter('siteUrl', SERIE_VFR[0])
     oGui.addDir(SITE_IDENTIFIER, SERIE_VFR[1], 'Series (VFR)', 'vf.png', oOutputParameterHandler)
 
-    oOutputParameterHandler = cOutputParameterHandler()
+    oOutputParameterHandler = OutputParameterHandler()
     oOutputParameterHandler.addParameter('siteUrl', SERIE_NOTES[0])
     oGui.addDir(SITE_IDENTIFIER, SERIE_NOTES[1], 'Series (Les mieux notées)', 'notes.png', oOutputParameterHandler)
 
@@ -187,35 +187,35 @@ def showMenuSeries():
 def showMenuMangas():
     oGui = Gui()
 
-    oOutputParameterHandler = cOutputParameterHandler()
+    oOutputParameterHandler = OutputParameterHandler()
     oOutputParameterHandler.addParameter('siteUrl', ANIM_NEWS[0])
     oGui.addDir(SITE_IDENTIFIER, ANIM_NEWS[1], 'Animes (Derniers ajouts)', 'news.png', oOutputParameterHandler)
 
-    oOutputParameterHandler = cOutputParameterHandler()
+    oOutputParameterHandler = OutputParameterHandler()
     oOutputParameterHandler.addParameter('siteUrl', ANIM_GENRES[0])
     oGui.addDir(SITE_IDENTIFIER, ANIM_GENRES[1], 'Animes (Genres)', 'genres.png', oOutputParameterHandler)
 
-    oOutputParameterHandler = cOutputParameterHandler()
+    oOutputParameterHandler = OutputParameterHandler()
     oOutputParameterHandler.addParameter('siteUrl', ANIM_ANNEES[0])
     oGui.addDir(SITE_IDENTIFIER, ANIM_ANNEES[1], 'Animes (Par années)', 'annees.png', oOutputParameterHandler)
 
-    oOutputParameterHandler = cOutputParameterHandler()
+    oOutputParameterHandler = OutputParameterHandler()
     oOutputParameterHandler.addParameter('siteUrl', ANIM_HD1080[0])
     oGui.addDir(SITE_IDENTIFIER, ANIM_HD1080[1], 'Bluray 1080P', 'hd.png', oOutputParameterHandler)
 
-    oOutputParameterHandler = cOutputParameterHandler()
+    oOutputParameterHandler = OutputParameterHandler()
     oOutputParameterHandler.addParameter('siteUrl', ANIM_POPULAR[0])
     oGui.addDir(SITE_IDENTIFIER, ANIM_POPULAR[1], 'Animes (Les plus populaires)', 'views.png', oOutputParameterHandler)
 
-    oOutputParameterHandler = cOutputParameterHandler()
+    oOutputParameterHandler = OutputParameterHandler()
     oOutputParameterHandler.addParameter('siteUrl', ANIM_VOSTFR[0])
     oGui.addDir(SITE_IDENTIFIER, ANIM_VOSTFR[1], 'Animés (VOSTFR)', 'vostfr.png', oOutputParameterHandler)
 
-    oOutputParameterHandler = cOutputParameterHandler()
+    oOutputParameterHandler = OutputParameterHandler()
     oOutputParameterHandler.addParameter('siteUrl', ANIM_VFR[0])
     oGui.addDir(SITE_IDENTIFIER, ANIM_VFR[1], 'Animés (VFR)', 'vf.png', oOutputParameterHandler)
 
-    oOutputParameterHandler = cOutputParameterHandler()
+    oOutputParameterHandler = OutputParameterHandler()
     oOutputParameterHandler.addParameter('siteUrl', ANIM_NOTES[0])
     oGui.addDir(SITE_IDENTIFIER, ANIM_NOTES[1], 'Animés (Les mieux notés)', 'notes.png', oOutputParameterHandler)
 
@@ -262,7 +262,7 @@ def showGenre():
     aResult = oParser.parse(html, sPattern)
 
     for genre in aResult[1]:
-        oOutputParameterHandler = cOutputParameterHandler()
+        oOutputParameterHandler = OutputParameterHandler()
         oOutputParameterHandler.addParameter('siteUrl', URL_MAIN + genre[0])
         oGui.addDir(SITE_IDENTIFIER, 'showMovies', genre[1], 'genres.png', oOutputParameterHandler)
 
@@ -284,7 +284,7 @@ def showYears():
     aResult = oParser.parse(html, sPattern)
 
     for Years in aResult[1]:
-        oOutputParameterHandler = cOutputParameterHandler()
+        oOutputParameterHandler = OutputParameterHandler()
         oOutputParameterHandler.addParameter('siteUrl', URL_MAIN + Years[0])
         oGui.addDir(SITE_IDENTIFIER, 'showMovies', Years[1], 'annees.png', oOutputParameterHandler)
 
@@ -371,7 +371,7 @@ def showMovies(sSearch=''):
 
             sDisplayTitle = ('%s [%s]') % (sTitle, sQual)
 
-            oOutputParameterHandler = cOutputParameterHandler()
+            oOutputParameterHandler = OutputParameterHandler()
             oOutputParameterHandler.addParameter('siteUrl', sUrl2)
             oOutputParameterHandler.addParameter('sMovieTitle', sTitle)
             oOutputParameterHandler.addParameter('sThumb', sThumb)
@@ -402,7 +402,7 @@ def showMovies(sSearch=''):
     if not sSearch:
         sNextPage = __checkForNextPage(sHtmlContent)
         if (sNextPage):
-            oOutputParameterHandler = cOutputParameterHandler()
+            oOutputParameterHandler = OutputParameterHandler()
             oOutputParameterHandler.addParameter('siteUrl', sNextPage)
             number = re.search('/([0-9]+)', sNextPage).group(1)
             oGui.addNext(
@@ -452,7 +452,7 @@ def showMoviesLink():
             sUrl2 = URL_MAIN + url.replace("'+nhash+'", VAR)
             sTitle = ('%s [%s]') % (sMovieTitle, aEntry)
 
-            oOutputParameterHandler = cOutputParameterHandler()
+            oOutputParameterHandler = OutputParameterHandler()
             oOutputParameterHandler.addParameter('siteUrl', sUrl2)
             oOutputParameterHandler.addParameter('sMovieTitle', sTitle)
             oOutputParameterHandler.addParameter('sThumb', sThumb)
@@ -494,7 +494,7 @@ def showSaisonEpisodes():
                 sUrl2 = URL_MAIN + url.replace("'+nhash+'", aEntry[3])
                 sDisplayTitle = ('%s [%s]') % (sMovieTitle, aEntry[2])
 
-                oOutputParameterHandler = cOutputParameterHandler()
+                oOutputParameterHandler = OutputParameterHandler()
                 oOutputParameterHandler.addParameter('siteUrl', sUrl2)
                 oOutputParameterHandler.addParameter('sMovieTitle', sMovieTitle)
                 oOutputParameterHandler.addParameter('sThumb', sThumb)

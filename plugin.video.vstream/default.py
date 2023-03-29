@@ -8,7 +8,7 @@ from resources.lib.home import cHome
 from resources.lib.gui.gui import Gui
 from resources.lib.handler.pluginHandler import cPluginHandler
 from resources.lib.handler.inputParameterHandler import InputParameterHandler
-from resources.lib.handler.outputParameterHandler import cOutputParameterHandler
+from resources.lib.handler.outputParameterHandler import OutputParameterHandler
 from resources.lib.comaddon import progress, VSlog, addon, window, siteManager
 from resources.lib.search import cSearch
 # http://kodi.wiki/view/InfoLabels
@@ -124,7 +124,7 @@ class Main:
                         if not sites_manager.isActive(plugin[1]):
                             site_name = '[COLOR red][OFF] ' + site_name + '[/COLOR]'
 
-                        output_parameter_handler = cOutputParameterHandler()
+                        output_parameter_handler = OutputParameterHandler()
                         output_parameter_handler.addParameter('siteUrl', 'http://venom')
                         icon = 'sites/%s.png' % (plugin[1])
                         gui.addDir(plugin[1], 'load', site_name, icon, output_parameter_handler)

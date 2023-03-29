@@ -1,11 +1,11 @@
-from resources.lib.handler.outputParameterHandler import cOutputParameterHandler
+from resources.lib.handler.outputParameterHandler import OutputParameterHandler
 
 
 class cContextElement:
 
     def __init__(self):
         self.__sTitle = ''
-        self.__oOutputParameterHandler = cOutputParameterHandler()
+        self.__oOutputParameterHandler = OutputParameterHandler()
 
     def setFunction(self, sFunctionName):
         self.__sFunctionName = sFunctionName

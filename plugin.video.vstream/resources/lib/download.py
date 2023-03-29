@@ -19,7 +19,7 @@ from resources.lib.db import Db
 from resources.lib.gui.gui import Gui
 from resources.lib.gui.guiElement import cGuiElement
 from resources.lib.handler.inputParameterHandler import InputParameterHandler
-from resources.lib.handler.outputParameterHandler import cOutputParameterHandler
+from resources.lib.handler.outputParameterHandler import OutputParameterHandler
 from resources.lib.handler.pluginHandler import cPluginHandler
 from resources.lib.player import cPlayer
 from resources.lib.util import cUtil, UnquotePlus
@@ -341,7 +341,7 @@ class cDownload:
         xbmcplugin.addDirectoryItem(sPluginHandle, sItemUrl, item, isFolder=False)
 
         oGui = Gui()
-        oOutputParameterHandler = cOutputParameterHandler()
+        oOutputParameterHandler = OutputParameterHandler()
         oGui.addDir(SITE_IDENTIFIER, 'StopDownloadList', self.ADDON.VSlang(30025), 'none.png', oOutputParameterHandler)
         oGui.addDir(SITE_IDENTIFIER, 'getDownloadList', self.ADDON.VSlang(30039), 'listes.png', oOutputParameterHandler)
         oGui.addDir(
@@ -489,7 +489,7 @@ class cDownload:
         with Db() as db:
             row = db.get_download()
 
-        oOutputParameterHandler = cOutputParameterHandler()
+        oOutputParameterHandler = OutputParameterHandler()
         for data in row:
 
             title = data[1]

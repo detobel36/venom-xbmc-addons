@@ -4,7 +4,7 @@ from resources.lib.comaddon import siteManager
 from resources.lib.gui.gui import Gui
 from resources.lib.gui.hoster import cHosterGui
 from resources.lib.handler.inputParameterHandler import InputParameterHandler
-from resources.lib.handler.outputParameterHandler import cOutputParameterHandler
+from resources.lib.handler.outputParameterHandler import OutputParameterHandler
 from resources.lib.handler.requestHandler import cRequestHandler
 from resources.lib.parser import cParser
 
@@ -34,7 +34,7 @@ COMPIL = (URL_MAIN + 'videos/compilations-longues/', 'showEpisode')
 def load():
     oGui = Gui()
 
-    oOutputParameterHandler = cOutputParameterHandler()
+    oOutputParameterHandler = OutputParameterHandler()
     oOutputParameterHandler.addParameter('siteUrl', AGE_2A4ANS[0])
     oGui.addDir(SITE_IDENTIFIER, AGE_2A4ANS[1], 'Dessins animés 2 à 8 ans', 'enfants.png', oOutputParameterHandler)
 
@@ -72,7 +72,7 @@ def showMovies():
     aResult = oParser.parse(sHtml, sPattern)
 
     if aResult[0]:
-        oOutputParameterHandler = cOutputParameterHandler()
+        oOutputParameterHandler = OutputParameterHandler()
         for aEntry in aResult[1]:
             sThumb = aEntry[0]
             sUrl = aEntry[1]
@@ -98,7 +98,7 @@ def showEpisode():
     aResult = oParser.parse(sHtml, sPattern)
 
     if aResult[0]:
-        oOutputParameterHandler = cOutputParameterHandler()
+        oOutputParameterHandler = OutputParameterHandler()
         for aEntry in aResult[1]:
 
             sTitle = aEntry[0]

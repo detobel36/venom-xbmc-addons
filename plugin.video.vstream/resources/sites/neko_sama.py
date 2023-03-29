@@ -6,7 +6,7 @@ import re
 from resources.lib.gui.hoster import cHosterGui
 from resources.lib.gui.gui import Gui
 from resources.lib.handler.inputParameterHandler import InputParameterHandler
-from resources.lib.handler.outputParameterHandler import cOutputParameterHandler
+from resources.lib.handler.outputParameterHandler import OutputParameterHandler
 from resources.lib.handler.requestHandler import cRequestHandler
 from resources.lib.parser import cParser
 from resources.lib.comaddon import siteManager
@@ -34,7 +34,7 @@ FUNCTION_SEARCH = 'showSearchResult'
 def load():
     oGui = Gui()
 
-    oOutputParameterHandler = cOutputParameterHandler()
+    oOutputParameterHandler = OutputParameterHandler()
     oOutputParameterHandler.addParameter('siteUrl', URL_SEARCH_ANIMS[0])
     oGui.addDir(SITE_IDENTIFIER, 'showSearch', 'Recherche d\'animés (VOSTFR)', 'search.png', oOutputParameterHandler)
 
@@ -75,7 +75,7 @@ def showGenres():
              ['Science Fiction', 'science-fiction'], ['Spectacle', 'spectacle'], ['Thriller', 'thriller'],
              ['Western', 'western'], ['Divers', 'divers']]
 
-    oOutputParameterHandler = cOutputParameterHandler()
+    oOutputParameterHandler = OutputParameterHandler()
     for sTitle, sUrl in liste:
         oOutputParameterHandler.addParameter('siteUrl', URL_MAIN + sUrl + '/')
         oGui.addDir(SITE_IDENTIFIER, 'showMovies', sTitle, 'genres.png', oOutputParameterHandler)
@@ -104,7 +104,7 @@ def showSearchResult(sSearch):
     oRequestHandler = cRequestHandler(searchURL)
     data = oRequestHandler.request(jsonDecode=True)
 
-    oOutputParameterHandler = cOutputParameterHandler()
+    oOutputParameterHandler = OutputParameterHandler()
     for dicts in data:
         if sSearch in dicts['title'].lower() or sSearch in dicts['title_english'].lower(
         ) or sSearch in dicts['others'].lower():
@@ -139,7 +139,7 @@ def showLastEp():
         oGui.addText(SITE_IDENTIFIER)
 
     if aResult[0]:
-        oOutputParameterHandler = cOutputParameterHandler()
+        oOutputParameterHandler = OutputParameterHandler()
         for aEntry in aResult[1]:
             sUrl2 = URL_MAIN[:-1] + aEntry[3]
             sThumb = aEntry[4]
@@ -173,7 +173,7 @@ def showMovies():
         oGui.addText(SITE_IDENTIFIER)
 
     if aResult[0]:
-        oOutputParameterHandler = cOutputParameterHandler()
+        oOutputParameterHandler = OutputParameterHandler()
         for aEntry in aResult[1]:
             sUrl2 = URL_MAIN[:-1] + aEntry[0]
             sThumb = aEntry[1]
@@ -187,7 +187,7 @@ def showMovies():
 
         sNextPage, sPaging = __checkForNextPage(sHtmlContent)
         if sNextPage:
-            oOutputParameterHandler = cOutputParameterHandler()
+            oOutputParameterHandler = OutputParameterHandler()
             oOutputParameterHandler.addParameter('siteUrl', sNextPage)
             oGui.addNext(SITE_IDENTIFIER, 'showMovies', 'Page ' + sPaging, oOutputParameterHandler)
 
@@ -220,7 +220,7 @@ def showSaisonEpisodes():
         oRequestHandler = cRequestHandler(sUrl.replace('vostfr', 'vf'))
         sHtmlContent = oRequestHandler.request()
         if "404 Not Found" not in sHtmlContent:
-            oOutputParameterHandler = cOutputParameterHandler()
+            oOutputParameterHandler = OutputParameterHandler()
             sTitle = "[COLOR red]Cliquez ici pour accéder à la version VF[/COLOR]"
             oOutputParameterHandler.addParameter('siteUrl', sUrl.replace('vostfr', 'vf'))
             oOutputParameterHandler.addParameter('sMovieTitle', sMovieTitle)
@@ -245,7 +245,7 @@ def showSaisonEpisodes():
         oGui.addText(SITE_IDENTIFIER)
 
     if aResult[0]:
-        oOutputParameterHandler = cOutputParameterHandler()
+        oOutputParameterHandler = OutputParameterHandler()
         for aEntry in aResult[1]:
             sTitle = sMovieTitle + ' ' + aEntry[0].replace('Ep. ', 'E')
             sUrl2 = URL_MAIN[:-1] + aEntry[1].replace('\\/', '/')

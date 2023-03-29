@@ -7,7 +7,7 @@ import re
 from resources.lib.gui.hoster import cHosterGui
 from resources.lib.gui.gui import Gui
 from resources.lib.handler.inputParameterHandler import InputParameterHandler
-from resources.lib.handler.outputParameterHandler import cOutputParameterHandler
+from resources.lib.handler.outputParameterHandler import OutputParameterHandler
 from resources.lib.handler.requestHandler import cRequestHandler
 from resources.lib.parser import cParser
 from resources.lib.comaddon import progress, siteManager  # , isMatrix
@@ -37,7 +37,7 @@ OST_ANIME = (True, 'showGenres')
 def load():
     oGui = Gui()
 
-    oOutputParameterHandler = cOutputParameterHandler()
+    oOutputParameterHandler = OutputParameterHandler()
     oOutputParameterHandler.addParameter('siteUrl', URL_SEARCH_ANIMS[0])
     oGui.addDir(SITE_IDENTIFIER, 'showSearch', 'Recherche (Animés)', 'search.png', oOutputParameterHandler)
 
@@ -61,7 +61,7 @@ def showGenres():
 
     liste = [['Animés', '1-anime'], ['Dramas', '6-drama'], ['Jeux Vidéo', '7-jeu-vidéo']]
 
-    oOutputParameterHandler = cOutputParameterHandler()
+    oOutputParameterHandler = OutputParameterHandler()
     for sTitle, sUrl in liste:
         oOutputParameterHandler.addParameter('siteUrl', OST_MAIN + sUrl + '/')
         oGui.addDir(SITE_IDENTIFIER, 'showOst', sTitle, 'music.png', oOutputParameterHandler)
@@ -120,7 +120,7 @@ def showAnimes(sSearch=''):
     if aResult[0]:
         total = len(aResult[1])
         progress_ = progress().VScreate(SITE_NAME)
-        oOutputParameterHandler = cOutputParameterHandler()
+        oOutputParameterHandler = OutputParameterHandler()
         for aEntry in aResult[1]:
             progress_.VSupdate(progress_, total)
             if progress_.iscanceled():
@@ -146,7 +146,7 @@ def showAnimes(sSearch=''):
 
     if not sSearch:
         Page = int(Page) + 1
-        oOutputParameterHandler = cOutputParameterHandler()
+        oOutputParameterHandler = OutputParameterHandler()
         oOutputParameterHandler.addParameter('siteUrl', memorisedUrl + '?&scroll=' + str(Page))
         # On renvoie l'url memoriser et le numero de page pour l'incrementer a chaque fois
         oOutputParameterHandler.addParameter('memorisedUrl', memorisedUrl)
@@ -182,7 +182,7 @@ def showOst():
     if aResult[0]:
         total = len(aResult[1])
         progress_ = progress().VScreate(SITE_NAME)
-        oOutputParameterHandler = cOutputParameterHandler()
+        oOutputParameterHandler = OutputParameterHandler()
         for aEntry in aResult[1]:
             progress_.VSupdate(progress_, total)
             if progress_.iscanceled():
@@ -201,7 +201,7 @@ def showOst():
         progress_.VSclose(progress_)
 
         Page = int(Page) + 1
-        oOutputParameterHandler = cOutputParameterHandler()
+        oOutputParameterHandler = OutputParameterHandler()
         oOutputParameterHandler.addParameter('siteUrl', memorisedUrl + '?page=' + str(Page))
         # On renvoie l'url memoriser et le numero de page pour l'incrementer a chaque fois
         oOutputParameterHandler.addParameter('memorisedUrl', memorisedUrl)
@@ -234,7 +234,7 @@ def showEpisodes():
         oGui.addText(SITE_IDENTIFIER)
 
     if aResult[0]:
-        oOutputParameterHandler = cOutputParameterHandler()
+        oOutputParameterHandler = OutputParameterHandler()
         for aEntry in sorted(aResult[1], key=lambda aResult: aResult[1]):
             sQual = aEntry[2]
 
@@ -287,7 +287,7 @@ def showMusic():
         oGui.addText(SITE_IDENTIFIER)
 
     if aResult[0]:
-        oOutputParameterHandler = cOutputParameterHandler()
+        oOutputParameterHandler = OutputParameterHandler()
         for aEntry in aResult[1]:
             sTitle = aEntry[2] + ' ' + aEntry[1]
             mp3Url = aEntry[0]

@@ -8,7 +8,7 @@ from resources.lib.comaddon import VSlog, isMatrix, siteManager
 from resources.lib.gui.gui import Gui
 from resources.lib.gui.hoster import cHosterGui
 from resources.lib.handler.inputParameterHandler import InputParameterHandler
-from resources.lib.handler.outputParameterHandler import cOutputParameterHandler
+from resources.lib.handler.outputParameterHandler import OutputParameterHandler
 from resources.lib.handler.requestHandler import cRequestHandler
 from resources.lib.parser import cParser
 from resources.lib.util import cUtil, Unquote, QuotePlus
@@ -151,7 +151,7 @@ def GetHost(_url):
 def load():
     oGui = Gui()
 
-    oOutputParameterHandler = cOutputParameterHandler()
+    oOutputParameterHandler = OutputParameterHandler()
     oOutputParameterHandler.addParameter('siteUrl', URL_SEARCH_MOVIES[0])
     oGui.addDir(SITE_IDENTIFIER, 'showSearch', 'Recherche films', 'search.png', oOutputParameterHandler)
 
@@ -223,7 +223,7 @@ def showGenresMovies():
     liste.append(['Romance', 'categorie_romance_page1.html'])
     liste.append(['Thriller', 'categorie_thriller_page1.html'])
 
-    oOutputParameterHandler = cOutputParameterHandler()
+    oOutputParameterHandler = OutputParameterHandler()
     for sTitle, sUrl in liste:
         oOutputParameterHandler.addParameter('siteUrl', URL_MAIN + sUrl)
         oGui.addDir(SITE_IDENTIFIER, 'showMovies', sTitle, 'genres.png', oOutputParameterHandler)
@@ -267,7 +267,7 @@ def showGenres():
         # Trie des genres par ordre alphabétique
         genres = sorted(genres, key=lambda genre: genre[0])
 
-        oOutputParameterHandler = cOutputParameterHandler()
+        oOutputParameterHandler = OutputParameterHandler()
         for sTitle, sUrl in genres:
             oOutputParameterHandler.addParameter('siteUrl', sUrl)
             oGui.addDir(SITE_IDENTIFIER, 'showMovies', sTitle, 'genres.png', oOutputParameterHandler)
@@ -330,7 +330,7 @@ def showAlpha(url=None):
     aResult = oParser.parse(sHtmlContent, sPattern)
 
     if aResult[0]:
-        oOutputParameterHandler = cOutputParameterHandler()
+        oOutputParameterHandler = OutputParameterHandler()
         for aEntry in aResult[1]:
             sUrl = URL_MAIN + aEntry[0]
             sLetter = aEntry[1]
@@ -403,7 +403,7 @@ def showMovies(sSearch=''):
     if aResult[0]:
         isPython3 = isMatrix()
 
-        oOutputParameterHandler = cOutputParameterHandler()
+        oOutputParameterHandler = OutputParameterHandler()
         for aEntry in aResult[1]:
             sThumb = aEntry[0]
             if not sThumb.startswith('http'):
@@ -505,7 +505,7 @@ def showMovies(sSearch=''):
     if not sSearch:  # une seule page par recherche
         sNextPage = __checkForNextPage(sHtmlContent)
         if sNextPage:
-            oOutputParameterHandler = cOutputParameterHandler()
+            oOutputParameterHandler = OutputParameterHandler()
             oOutputParameterHandler.addParameter('siteUrl', sNextPage)
             oGui.addNext(SITE_IDENTIFIER, 'showMovies', 'Suivant', oOutputParameterHandler)
 
@@ -556,7 +556,7 @@ def showSaison():
     if aResult[0]:
         isPython3 = isMatrix()
 
-        oOutputParameterHandler = cOutputParameterHandler()
+        oOutputParameterHandler = OutputParameterHandler()
         for aEntry in aResult[1]:
             sSeason = aEntry.replace('00', '0')
             siteUrl = sUrl + '&season=' + sSeason
@@ -597,7 +597,7 @@ def showEpisode():
         sSeason = ''
         isPython3 = isMatrix()
 
-        oOutputParameterHandler = cOutputParameterHandler()
+        oOutputParameterHandler = OutputParameterHandler()
         for aEntry in aResult[1]:
             if aEntry[0]:
                 sSeason = aEntry[0].replace('00', '0')

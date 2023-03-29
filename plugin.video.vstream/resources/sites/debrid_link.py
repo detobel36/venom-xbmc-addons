@@ -8,7 +8,7 @@ from resources.lib.comaddon import progress, addon, dialog
 from resources.lib.gui.gui import Gui
 from resources.lib.gui.hoster import cHosterGui
 from resources.lib.handler.inputParameterHandler import InputParameterHandler
-from resources.lib.handler.outputParameterHandler import cOutputParameterHandler
+from resources.lib.handler.outputParameterHandler import OutputParameterHandler
 from resources.lib.handler.requestHandler import cRequestHandler
 from resources.lib.parser import cParser
 
@@ -28,7 +28,7 @@ def load():
     ALL_MAGNETS = (URL_HOST + '/api/v2/seedbox/list?page=0&perPage=20', 'showLiens')
     ALL_INFORMATION = (URL_HOST + '/infos/downloader', 'showInfo')
 
-    oOutputParameterHandler = cOutputParameterHandler()
+    oOutputParameterHandler = OutputParameterHandler()
     oOutputParameterHandler.addParameter('siteUrl', ALL_ALL[0])
     oGui.addDir(SITE_IDENTIFIER, ALL_ALL[1], 'Liens', 'films.png', oOutputParameterHandler)
 
@@ -75,7 +75,7 @@ def showLiens(sSearch=''):
     if (r["success"]):
         progress_ = progress().VScreate(SITE_NAME)
 
-        oOutputParameterHandler = cOutputParameterHandler()
+        oOutputParameterHandler = OutputParameterHandler()
         for aEntry in r["value"]:
 
             progress_.VSupdate(progress_, len(aEntry["name"]))
@@ -100,7 +100,7 @@ def showLiens(sSearch=''):
         if not sSearch:
             numPage += 1
             sUrl = re.sub('page=([0-9])', 'page=' + str(numPage), sUrl)
-            oOutputParameterHandler = cOutputParameterHandler()
+            oOutputParameterHandler = OutputParameterHandler()
             oOutputParameterHandler.addParameter('siteUrl', sUrl)
             oOutputParameterHandler.addParameter('numPage', numPage)
             oGui.addNext(SITE_IDENTIFIER, 'showLiens', 'Page ' + str(numPage), oOutputParameterHandler)
@@ -144,7 +144,7 @@ def showInfo():
         total = len(aResult[1])
         progress_ = progress().VScreate(SITE_NAME)
 
-        oOutputParameterHandler = cOutputParameterHandler()
+        oOutputParameterHandler = OutputParameterHandler()
         for aEntry in aResult[1]:
             progress_.VSupdate(progress_, total)
             if progress_.iscanceled():

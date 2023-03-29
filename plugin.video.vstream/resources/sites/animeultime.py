@@ -7,7 +7,7 @@ from resources.lib.comaddon import addon, isMatrix, siteManager
 from resources.lib.gui.hoster import cHosterGui
 from resources.lib.gui.gui import Gui
 from resources.lib.handler.inputParameterHandler import InputParameterHandler
-from resources.lib.handler.outputParameterHandler import cOutputParameterHandler
+from resources.lib.handler.outputParameterHandler import OutputParameterHandler
 from resources.lib.handler.requestHandler import cRequestHandler
 from resources.lib.parser import cParser
 from resources.lib.util import cUtil
@@ -43,7 +43,7 @@ adulteContent = addon().getSetting('contenu_adulte')
 def load():
     oGui = Gui()
 
-    oOutputParameterHandler = cOutputParameterHandler()
+    oOutputParameterHandler = OutputParameterHandler()
     oOutputParameterHandler.addParameter('siteUrl', URL_SEARCH_DRAMAS[0])
     oGui.addDir(SITE_IDENTIFIER, 'showSearch', 'Recherche', 'search.png', oOutputParameterHandler)
 
@@ -62,7 +62,7 @@ def load():
 def showMenuAnimes():
     oGui = Gui()
 
-    oOutputParameterHandler = cOutputParameterHandler()
+    oOutputParameterHandler = OutputParameterHandler()
     oOutputParameterHandler.addParameter('siteUrl', ANIM_ALPHA[0])
     oGui.addDir(SITE_IDENTIFIER, ANIM_ALPHA[1], 'Animés  (Ordre alphabétique)', 'az.png', oOutputParameterHandler)
 
@@ -78,7 +78,7 @@ def showMenuAnimes():
 def showMenuDramas():
     oGui = Gui()
 
-    oOutputParameterHandler = cOutputParameterHandler()
+    oOutputParameterHandler = OutputParameterHandler()
     oOutputParameterHandler.addParameter('siteUrl', DRAMA_ALPHA[0])
     oGui.addDir(SITE_IDENTIFIER, DRAMA_ALPHA[1], 'Dramas (Ordre alphabétique)', 'az.png', oOutputParameterHandler)
 
@@ -94,7 +94,7 @@ def showMenuDramas():
 def showMenuTokusatsu():
     oGui = Gui()
 
-    oOutputParameterHandler = cOutputParameterHandler()
+    oOutputParameterHandler = OutputParameterHandler()
     oOutputParameterHandler.addParameter('siteUrl', TOKUSATSU[0])
     oGui.addDir(SITE_IDENTIFIER, TOKUSATSU[1], 'Tokusatsu', 'films.png', oOutputParameterHandler)
 
@@ -156,7 +156,7 @@ def ShowGenreDramas():
 def ShowGenre(typemovie):
     oGui = Gui()
     list_listgenre = loadTypelist(typemovie, 'genre')
-    oOutputParameterHandler = cOutputParameterHandler()
+    oOutputParameterHandler = OutputParameterHandler()
     for ilist in list_listgenre:
         url = URL_MAIN + 'series-0-1/' + typemovie + '/-' + ilist[1] + '---'
         sTitle = ilist[0].title()
@@ -178,7 +178,7 @@ def ShowYears(typemovie):
     oGui = Gui()
     list_year = loadTypelist(typemovie, 'year')
     # http://www.anime-ultime.net/series-0-1/anime/--626--    2019
-    oOutputParameterHandler = cOutputParameterHandler()
+    oOutputParameterHandler = OutputParameterHandler()
     for liste in reversed(list_year):
         url = URL_MAIN + 'series-0-1/' + typemovie + '/--' + liste[1] + '--'
         sTitle = liste[0]
@@ -211,7 +211,7 @@ def ShowAlpha(typemovie):
     for alpha in listalpha:
         liste.append([str(alpha).upper(), URL_MAIN + 'series-0-1/' + typemovie + '/' + alpha + '---'])
 
-    oOutputParameterHandler = cOutputParameterHandler()
+    oOutputParameterHandler = OutputParameterHandler()
     for sTitle, sUrl in liste:
         oOutputParameterHandler.addParameter('siteUrl', sUrl)
         oGui.addDir(
@@ -264,7 +264,7 @@ def showSeries(sSearch=''):
 
     # Si il y a qu'un seule resultat alors le site fait une redirection.
     if not aResult[0]:
-        oOutputParameterHandler = cOutputParameterHandler()
+        oOutputParameterHandler = OutputParameterHandler()
         if sSearch and "sultats anime" not in sHtmlContent:
             sTitle = ''
             try:
@@ -296,7 +296,7 @@ def showSeries(sSearch=''):
             oGui.addText(SITE_IDENTIFIER)
 
     if aResult[0]:
-        oOutputParameterHandler = cOutputParameterHandler()
+        oOutputParameterHandler = OutputParameterHandler()
         for aEntry in aResult[1]:
             sTitle = aEntry[2]
             if sSearch:
@@ -375,7 +375,7 @@ def showEpisode():
     aResult = oParser.parse(sHtmlContent, sPattern)
 
     if aResult[0]:
-        oOutputParameterHandler = cOutputParameterHandler()
+        oOutputParameterHandler = OutputParameterHandler()
         for aEntry in aResult[1]:
             sTitle = aEntry[0]
             try:

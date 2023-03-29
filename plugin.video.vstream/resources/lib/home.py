@@ -7,7 +7,7 @@ from resources.lib.gui.guiElement import cGuiElement
 from resources.lib.search import cSearch
 from resources.lib.handler.pluginHandler import cPluginHandler
 from resources.lib.handler.inputParameterHandler import InputParameterHandler
-from resources.lib.handler.outputParameterHandler import cOutputParameterHandler
+from resources.lib.handler.outputParameterHandler import OutputParameterHandler
 from resources.lib.comaddon import addon, window
 
 SITE_IDENTIFIER = 'cHome'
@@ -21,7 +21,7 @@ class cHome:
     def load(self):
         oGui = Gui()
 
-        oOutputParameterHandler = cOutputParameterHandler()
+        oOutputParameterHandler = OutputParameterHandler()
         oOutputParameterHandler.addParameter('siteUrl', 'http://venom')
         oGui.addDir(SITE_IDENTIFIER, 'showVOD', self.addons.VSlang(30131), 'films.png', oOutputParameterHandler)
 
@@ -46,7 +46,7 @@ class cHome:
     def showVOD(self):
         oGui = Gui()
 
-        oOutputParameterHandler = cOutputParameterHandler()
+        oOutputParameterHandler = OutputParameterHandler()
         oOutputParameterHandler.addParameter('siteUrl', 'http://venom')
         oGui.addDir(SITE_IDENTIFIER, 'showMenuSearch', self.addons.VSlang(30076), 'search.png', oOutputParameterHandler)
 
@@ -74,7 +74,7 @@ class cHome:
     def showMyVideos(self):
         oGui = Gui()
 
-        oOutputParameterHandler = cOutputParameterHandler()
+        oOutputParameterHandler = OutputParameterHandler()
         oOutputParameterHandler.addParameter('siteUrl', 'http://venom')
         oGui.addDir('cViewing', 'showMenu', self.addons.VSlang(30125), 'replay.png', oOutputParameterHandler)
 
@@ -101,7 +101,7 @@ class cHome:
     def showMenuSearch(self):
         oGui = Gui()
 
-        oOutputParameterHandler = cOutputParameterHandler()
+        oOutputParameterHandler = OutputParameterHandler()
 
         oOutputParameterHandler.addParameter('siteUrl', 'http://venom')
         oGui.addDir('themoviedb_org', 'load', self.addons.VSlang(30088), 'searchtmdb.png', oOutputParameterHandler)
@@ -142,7 +142,7 @@ class cHome:
     def showMovies(self):
         oGui = Gui()
 
-        oOutputParameterHandler = cOutputParameterHandler()
+        oOutputParameterHandler = OutputParameterHandler()
         oOutputParameterHandler.addParameter('sCat', '1')
         oGui.addDir(SITE_IDENTIFIER, 'showSearchText', self.addons.VSlang(30078), 'search.png', oOutputParameterHandler)
 
@@ -250,7 +250,7 @@ class cHome:
     def showSeries(self):
         oGui = Gui()
 
-        oOutputParameterHandler = cOutputParameterHandler()
+        oOutputParameterHandler = OutputParameterHandler()
         oOutputParameterHandler.addParameter('sCat', '2')
         oGui.addDir(SITE_IDENTIFIER, 'showSearchText', self.addons.VSlang(30079), 'search.png', oOutputParameterHandler)
 
@@ -332,7 +332,7 @@ class cHome:
     def showAnimes(self):
         oGui = Gui()
 
-        oOutputParameterHandler = cOutputParameterHandler()
+        oOutputParameterHandler = OutputParameterHandler()
         oOutputParameterHandler.addParameter('sCat', '3')
         oGui.addDir(SITE_IDENTIFIER, 'showSearchText', self.addons.VSlang(30118), 'search.png', oOutputParameterHandler)
 
@@ -412,7 +412,7 @@ class cHome:
         oGui = Gui()
 
         # Affiche les Nouveautés Dramas
-        oOutputParameterHandler = cOutputParameterHandler()
+        oOutputParameterHandler = OutputParameterHandler()
         oOutputParameterHandler.addParameter('sCat', '9')
         oGui.addDir(SITE_IDENTIFIER, 'showSearchText', self.addons.VSlang(30123), 'search.png', oOutputParameterHandler)
 
@@ -484,7 +484,7 @@ class cHome:
         oGui = Gui()
 
         # Affiche les Nouveautés Documentaires
-        oOutputParameterHandler = cOutputParameterHandler()
+        oOutputParameterHandler = OutputParameterHandler()
         oOutputParameterHandler.addParameter('sCat', '5')
         oGui.addDir(SITE_IDENTIFIER, 'showSearchText', self.addons.VSlang(30080), 'search.png', oOutputParameterHandler)
 
@@ -526,7 +526,7 @@ class cHome:
         oGui = Gui()
 
         # Affiche les live Sportifs
-        oOutputParameterHandler = cOutputParameterHandler()
+        oOutputParameterHandler = OutputParameterHandler()
         oOutputParameterHandler.addParameter('siteUrl', 'SPORT_LIVE')
         oGui.addDir(
             SITE_IDENTIFIER,
@@ -573,7 +573,7 @@ class cHome:
 
     def showDirect(self):
         oGui = Gui()
-        oOutputParameterHandler = cOutputParameterHandler()
+        oOutputParameterHandler = OutputParameterHandler()
         oGui.addDir(SITE_IDENTIFIER, 'showSports', self.addons.VSlang(30113), 'sport.png', oOutputParameterHandler)
         oGui.addDir(SITE_IDENTIFIER, 'showMenuTV', self.addons.VSlang(30115), 'tv.png', oOutputParameterHandler)
         oGui.addDir('freebox', 'showMenuMusic', self.addons.VSlang(30203), 'music.png', oOutputParameterHandler)
@@ -582,7 +582,7 @@ class cHome:
     def showMenuTV(self):
         oGui = Gui()
 
-        oOutputParameterHandler = cOutputParameterHandler()
+        oOutputParameterHandler = OutputParameterHandler()
 
         # SI plusieurs sources proposent la TNT
         # oOutputParameterHandler.addParameter('siteUrl', 'CHAINE_TV')
@@ -617,7 +617,7 @@ class cHome:
     def showReplay(self):
         oGui = Gui()
 
-        oOutputParameterHandler = cOutputParameterHandler()
+        oOutputParameterHandler = OutputParameterHandler()
         oOutputParameterHandler.addParameter('sCat', '6')
         oGui.addDir(SITE_IDENTIFIER, 'showSearchText', self.addons.VSlang(30134), 'search.png', oOutputParameterHandler)
 
@@ -667,7 +667,7 @@ class cHome:
         oGui = Gui()
 
         # Affiche les Nouveautés Vidéos
-        oOutputParameterHandler = cOutputParameterHandler()
+        oOutputParameterHandler = OutputParameterHandler()
         oOutputParameterHandler.addParameter('siteUrl', 'NETS_NEWS')
         oGui.addDir(
             SITE_IDENTIFIER,
@@ -705,7 +705,7 @@ class cHome:
     def showUsers(self):
         oGui = Gui()
 
-        oOutputParameterHandler = cOutputParameterHandler()
+        oOutputParameterHandler = OutputParameterHandler()
         oOutputParameterHandler.addParameter('siteUrl', 'http://')
         oGui.addDir('themoviedb_org', 'showMyTmdb', 'TMDB', 'tmdb.png', oOutputParameterHandler)
 
@@ -728,7 +728,7 @@ class cHome:
     def ShowTools(self):
         oGui = Gui()
 
-        oOutputParameterHandler = cOutputParameterHandler()
+        oOutputParameterHandler = OutputParameterHandler()
         oOutputParameterHandler.addParameter('siteUrl', 'http://venom')
         oGui.addDir(SITE_IDENTIFIER, 'opensetting', self.addons.VSlang(30227), 'notes.png', oOutputParameterHandler)
 
@@ -760,7 +760,7 @@ class cHome:
             oGui.addText(SITE_IDENTIFIER, self.addons.VSlang(30416))
         else:
             oGui.addText(SITE_IDENTIFIER)
-        oOutputParameterHandler = cOutputParameterHandler()
+        oOutputParameterHandler = OutputParameterHandler()
         for match in row:
             sTitle = match['title']
             sCat = match['disp']
@@ -809,7 +809,7 @@ class cHome:
 
         oPluginHandler = cPluginHandler()
         aPlugins = oPluginHandler.getAvailablePlugins(sSiteUrl)
-        oOutputParameterHandler = cOutputParameterHandler()
+        oOutputParameterHandler = OutputParameterHandler()
         for aPlugin in aPlugins:
             try:
                 icon = 'sites/%s.png' % (aPlugin[2])

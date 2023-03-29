@@ -10,7 +10,7 @@ from resources.lib.player import cPlayer
 from resources.lib.util import urlEncode, Unquote, Quote, QuotePlus
 from resources.lib.parser import cParser
 from resources.lib.handler.requestHandler import cRequestHandler
-from resources.lib.handler.outputParameterHandler import cOutputParameterHandler
+from resources.lib.handler.outputParameterHandler import OutputParameterHandler
 from resources.lib.handler.inputParameterHandler import InputParameterHandler
 from resources.lib.gui.guiElement import cGuiElement
 from resources.lib.gui.gui import Gui
@@ -112,23 +112,23 @@ def load():
     oGui = Gui()
     addons = addon()
 
-    oOutputParameterHandler = cOutputParameterHandler()
+    oOutputParameterHandler = OutputParameterHandler()
     oOutputParameterHandler.addParameter('siteUrl', 'http://')
     oGui.addDir(SITE_IDENTIFIER, 'showWeb', addons.VSlang(30332), 'tv.png', oOutputParameterHandler)
 
-    oOutputParameterHandler = cOutputParameterHandler()
+    oOutputParameterHandler = OutputParameterHandler()
     oOutputParameterHandler.addParameter('siteUrl', 'http://')
     oGui.addDir(SITE_IDENTIFIER, 'showGenres', 'Catégorie', 'tv.png', oOutputParameterHandler)
 
-    oOutputParameterHandler = cOutputParameterHandler()
+    oOutputParameterHandler = OutputParameterHandler()
     oOutputParameterHandler.addParameter('siteUrl', 'http://')
     oGui.addDir('radio', 'showAZ', addons.VSlang(30203) + ' (A-Z)', 'music.png', oOutputParameterHandler)
 
-    oOutputParameterHandler = cOutputParameterHandler()
+    oOutputParameterHandler = OutputParameterHandler()
     oOutputParameterHandler.addParameter('siteUrl', 'http://')
     oGui.addDir('radio', 'showWeb', addons.VSlang(30203), 'music.png', oOutputParameterHandler)
 
-    oOutputParameterHandler = cOutputParameterHandler()
+    oOutputParameterHandler = OutputParameterHandler()
     oOutputParameterHandler.addParameter('siteUrl', 'http://')
     oGui.addDir('lsdb', 'load', 'Liveset Database', 'music.png', oOutputParameterHandler)
 
@@ -175,7 +175,7 @@ def showGenres():
 
     for sCatID, sTitle in liste:
 
-        oOutputParameterHandler = cOutputParameterHandler()
+        oOutputParameterHandler = OutputParameterHandler()
         oOutputParameterHandler.addParameter('videoCategoryId', sCatID)
         oGui.addDir(SITE_IDENTIFIER, 'showLinks', sTitle, 'genres.png', oOutputParameterHandler)
 
@@ -220,7 +220,7 @@ def showLinks():
             sDesc = aEntry['description'].encode('utf-8')
             sUrl = URL_VIEW % sID
 
-            oOutputParameterHandler = cOutputParameterHandler()
+            oOutputParameterHandler = OutputParameterHandler()
             oOutputParameterHandler.addParameter('siteUrl', sUrl)
             oOutputParameterHandler.addParameter('sID', sID)
 
@@ -231,7 +231,7 @@ def showLinks():
 
         _next = ytb.getNext()
         if _next:
-            oOutputParameterHandler = cOutputParameterHandler()
+            oOutputParameterHandler = OutputParameterHandler()
             oOutputParameterHandler.addParameter('videoCategoryId', sCatID)
             oOutputParameterHandler.addParameter('pageToken', _next)
             oGui.addNext(SITE_IDENTIFIER, 'showLinks', '[COLOR teal]Suivant >>>[/COLOR]', oOutputParameterHandler)
@@ -363,7 +363,7 @@ def showAllPlaylist():  # On recupere les differentes playlist si il y en a
                 sThumb = ''
                 sDesc = ''
 
-            oOutputParameterHandler = cOutputParameterHandler()
+            oOutputParameterHandler = OutputParameterHandler()
             oOutputParameterHandler.addParameter('siteUrl', sUrl2)
             oOutputParameterHandler.addParameter('sMovieTitle', sTitle)
             if 'myfree-tivi' or 'firstonetv' in sUrl:
@@ -428,7 +428,7 @@ def showWorldIptvGratuit():  # On recupere les liens qui sont dans les playlist 
         sTitle = 'Lien: ' + sUrl2
         # cConfig().log(str(sHtmlContent))
 
-        oOutputParameterHandler = cOutputParameterHandler()
+        oOutputParameterHandler = OutputParameterHandler()
         oOutputParameterHandler.addParameter('siteUrl', sUrl2)
         oOutputParameterHandler.addParameter('sMovieTitle', sTitle)
 
@@ -621,7 +621,7 @@ def showWeb():  # Code qui s'occupe de liens TV du Web
         playlist = sorted(playlist, key=lambda t: t.title.strip().capitalize())
 
     if not playlist:
-        oOutputParameterHandler = cOutputParameterHandler()
+        oOutputParameterHandler = OutputParameterHandler()
         oOutputParameterHandler.addParameter('siteUrl', 'http://')
         oGui.addText(SITE_IDENTIFIER, "[COLOR red] Problème de lecture avec la playlist[/COLOR]")
 
@@ -644,7 +644,7 @@ def showWeb():  # Code qui s'occupe de liens TV du Web
 
             thumb = '/'.join([sRootArt, sThumb])
 
-            oOutputParameterHandler = cOutputParameterHandler()
+            oOutputParameterHandler = OutputParameterHandler()
             oOutputParameterHandler.addParameter('siteUrl', url2)
             oOutputParameterHandler.addParameter('sMovieTitle', track.title)
             oOutputParameterHandler.addParameter('sThumbnail', thumb)
@@ -733,13 +733,13 @@ def showAZ():
     sUrl = oInputParameterHandler.getValue('siteUrl')
 
     for i in string.digits:
-        oOutputParameterHandler = cOutputParameterHandler()
+        oOutputParameterHandler = OutputParameterHandler()
         oOutputParameterHandler.addParameter('siteUrl', sUrl)
         oOutputParameterHandler.addParameter('AZ', i)
         oGui.addDir(SITE_IDENTIFIER, 'showTV', i, 'az.png', oOutputParameterHandler)
 
     for i in string.ascii_uppercase:
-        oOutputParameterHandler = cOutputParameterHandler()
+        oOutputParameterHandler = OutputParameterHandler()
         oOutputParameterHandler.addParameter('siteUrl', sUrl)
         oOutputParameterHandler.addParameter('AZ', i)
         oGui.addDir(SITE_IDENTIFIER, 'showTV', i, 'az.png', oOutputParameterHandler)
@@ -756,13 +756,13 @@ def showAZRadio():
     sUrl = oInputParameterHandler.getValue('siteUrl')
 
     for i in string.digits:
-        oOutputParameterHandler = cOutputParameterHandler()
+        oOutputParameterHandler = OutputParameterHandler()
         oOutputParameterHandler.addParameter('siteUrl', sUrl)
         oOutputParameterHandler.addParameter('AZ', i)
         oGui.addDir(SITE_IDENTIFIER, 'showWeb', i, 'az.png', oOutputParameterHandler)
 
     for i in string.ascii_uppercase:
-        oOutputParameterHandler = cOutputParameterHandler()
+        oOutputParameterHandler = OutputParameterHandler()
         oOutputParameterHandler.addParameter('siteUrl', sUrl)
         oOutputParameterHandler.addParameter('AZ', i)
         oGui.addDir(SITE_IDENTIFIER, 'showWeb', i, 'az.png', oOutputParameterHandler)
@@ -800,7 +800,7 @@ def showTV():
             if progress_.iscanceled():
                 break
 
-            oOutputParameterHandler = cOutputParameterHandler()
+            oOutputParameterHandler = OutputParameterHandler()
             oOutputParameterHandler.addParameter('siteUrl', aEntry[1])
             oOutputParameterHandler.addParameter('sMovieTitle', aEntry[0])
             oOutputParameterHandler.addParameter('sThumbnail', 'tv.png')

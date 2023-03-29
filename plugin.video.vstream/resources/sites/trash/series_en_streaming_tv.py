@@ -10,7 +10,7 @@ from resources.lib.util import cUtil
 from resources.lib.parser import cParser
 from resources.lib.config import cConfig
 from resources.lib.handler.requestHandler import cRequestHandler
-from resources.lib.handler.outputParameterHandler import cOutputParameterHandler
+from resources.lib.handler.outputParameterHandler import OutputParameterHandler
 from resources.lib.handler.inputParameterHandler import InputParameterHandler
 from resources.lib.gui.gui import Gui
 from resources.lib.gui.hoster import cHosterGui
@@ -48,15 +48,15 @@ def CleanTitle(title):
 def load():
     oGui = Gui()
 
-    oOutputParameterHandler = cOutputParameterHandler()
+    oOutputParameterHandler = OutputParameterHandler()
     oOutputParameterHandler.addParameter('siteUrl', 'http://venom/')
     oGui.addDir(SITE_IDENTIFIER, 'showSearch', 'Recherche', 'search.png', oOutputParameterHandler)
 
-    oOutputParameterHandler = cOutputParameterHandler()
+    oOutputParameterHandler = OutputParameterHandler()
     oOutputParameterHandler.addParameter('siteUrl', SERIE_NEWS[0])
     oGui.addDir(SITE_IDENTIFIER, SERIE_NEWS[1], 'Séries (Derniers ajouts)', 'news.png', oOutputParameterHandler)
 
-    oOutputParameterHandler = cOutputParameterHandler()
+    oOutputParameterHandler = OutputParameterHandler()
     oOutputParameterHandler.addParameter('siteUrl', SERIE_SERIES[0])
     oGui.addDir(SITE_IDENTIFIER, SERIE_SERIES[1], 'Séries (Liste complète)', 'az.png', oOutputParameterHandler)
 
@@ -80,7 +80,7 @@ def AlphaSearch():
         else:
             sTitle = chr(64 + i)
 
-        oOutputParameterHandler = cOutputParameterHandler()
+        oOutputParameterHandler = OutputParameterHandler()
         oOutputParameterHandler.addParameter('siteUrl', SERIE_SERIES[0])
         oOutputParameterHandler.addParameter('sLetter', sTitle)
         oOutputParameterHandler.addParameter('sMovieTitle', sTitle)
@@ -122,7 +122,7 @@ def AlphaDisplay():
             sTitle = CleanTitle(aEntry[1])
             sUrl2 = URL_MAIN + aEntry[0]
 
-            oOutputParameterHandler = cOutputParameterHandler()
+            oOutputParameterHandler = OutputParameterHandler()
             oOutputParameterHandler.addParameter('siteUrl', sUrl2)
             oOutputParameterHandler.addParameter('sMovieTitle', sTitle)
 
@@ -182,7 +182,7 @@ def showMovies(sSearch=''):
             if not sUrl.startswith('http'):
                 sUrl = URL_MAIN + sUrl[1:]
 
-            oOutputParameterHandler = cOutputParameterHandler()
+            oOutputParameterHandler = OutputParameterHandler()
             oOutputParameterHandler.addParameter('siteUrl', sUrl)
             oOutputParameterHandler.addParameter('sMovieTitle', sTitle)
             oOutputParameterHandler.addParameter('sThumbnail', sThumb)
@@ -230,7 +230,7 @@ def showLasts():
             if not sUrl.startswith('http'):
                 sUrl = URL_MAIN + sUrl[1:]
 
-            oOutputParameterHandler = cOutputParameterHandler()
+            oOutputParameterHandler = OutputParameterHandler()
             oOutputParameterHandler.addParameter('siteUrl', sUrl)
             oOutputParameterHandler.addParameter('sMovieTitle', sMovieTitle)
             oOutputParameterHandler.addParameter('sThumbnail', sThumb)
@@ -278,7 +278,7 @@ def ShowSaisons():
             if img:
                 sThumb = img
 
-            oOutputParameterHandler = cOutputParameterHandler()
+            oOutputParameterHandler = OutputParameterHandler()
             oOutputParameterHandler.addParameter('siteUrl', aEntry[0])
             oOutputParameterHandler.addParameter('sMovieTitle', sTitle)
             oGui.addTV(SITE_IDENTIFIER, 'showEpisode', sDisplayTitle, '', str(sThumb), '', oOutputParameterHandler)
@@ -324,7 +324,7 @@ def showEpisode():
             sCom = aEntry[3]
             sDisplayTitle = cUtil().DecoTitle(sTitle)
 
-            oOutputParameterHandler = cOutputParameterHandler()
+            oOutputParameterHandler = OutputParameterHandler()
             oOutputParameterHandler.addParameter('siteUrl', sUrl)
             oOutputParameterHandler.addParameter('sMovieTitle', sTitle)
             oOutputParameterHandler.addParameter('sThumbnail', sThumb)
@@ -366,7 +366,7 @@ def showHosters():
 
             sDisplayTitle = ('%s [%s] (%s)') % (sTitle, aEntry[2], aEntry[1])
 
-            oOutputParameterHandler = cOutputParameterHandler()
+            oOutputParameterHandler = OutputParameterHandler()
             oOutputParameterHandler.addParameter('siteUrl', sUrl2)
             oOutputParameterHandler.addParameter('sMovieTitle', sTitle)
             oOutputParameterHandler.addParameter('sThumbnail', sThumbnail)

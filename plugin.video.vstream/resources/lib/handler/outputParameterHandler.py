@@ -3,7 +3,7 @@
 from resources.lib.util import urlEncode, Unquote
 
 
-class cOutputParameterHandler:
+class OutputParameterHandler:
     def __init__(self):
         self.__aParams = {}
 

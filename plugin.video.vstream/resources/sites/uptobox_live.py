@@ -6,7 +6,7 @@ import re
 from resources.lib.comaddon import addon, isMatrix, siteManager
 from resources.lib.gui.gui import Gui
 from resources.lib.handler.inputParameterHandler import InputParameterHandler
-from resources.lib.handler.outputParameterHandler import cOutputParameterHandler
+from resources.lib.handler.outputParameterHandler import OutputParameterHandler
 from resources.lib.handler.premiumHandler import cPremiumHandler
 from resources.lib.handler.requestHandler import cRequestHandler
 from resources.lib.parser import cParser
@@ -28,7 +28,7 @@ SERIE_SERIES = ('series', 'load')
 
 def load():
     oGui = Gui()
-    oOutputParameterHandler = cOutputParameterHandler()
+    oOutputParameterHandler = OutputParameterHandler()
 
     oInputParameterHandler = InputParameterHandler()
     sUrl = oInputParameterHandler.getValue('siteUrl')
@@ -113,7 +113,7 @@ def showMovies(sSearch='', searchLocal=False):
     sUrl = sSearch.replace('-', '\\-').replace('.', '%20')
     content = getContent(sUrl)
 
-    oOutputParameterHandler = cOutputParameterHandler()
+    oOutputParameterHandler = OutputParameterHandler()
     movies = set()
     bMatrix = isMatrix()
     for movie in content:
@@ -199,7 +199,7 @@ def showSeries(sSearch='', searchLocal=False, isAnime=False):
     sUrl = sSearch.replace('-', '\\-')
 
     series = set()
-    oOutputParameterHandler = cOutputParameterHandler()
+    oOutputParameterHandler = OutputParameterHandler()
 
     # deux url pour plus de résultats
     urls = [sUrl, sUrl.replace('order=asc', 'order=desc')]
@@ -339,7 +339,7 @@ def showSaisons():
                 if sMovieTitle == sSearchTitle:
                     saisons[saison] = sUrl
 
-    oOutputParameterHandler = cOutputParameterHandler()
+    oOutputParameterHandler = OutputParameterHandler()
     for saison, sUrl in sorted(saisons.items(), key=lambda s: s[0]):
         sDisplayTitle = '%s S%s' % (sSearchTitle, saison)
         siteUrl = '%s|%s' % (sUrl, saison)
@@ -420,7 +420,7 @@ def showEpisodes():
 
         episodes.add(episode)
 
-    oOutputParameterHandler = cOutputParameterHandler()
+    oOutputParameterHandler = OutputParameterHandler()
     for episode in sorted(episodes):
         sDisplayTitle = '%s S%sE%s' % (sSearchTitle, sSearchSaison, episode)
 

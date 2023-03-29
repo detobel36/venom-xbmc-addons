@@ -12,7 +12,7 @@ import xbmc
 from resources.lib.comaddon import addon, dialog, VSPath
 from resources.lib.gui.gui import Gui
 from resources.lib.handler.inputParameterHandler import InputParameterHandler
-from resources.lib.handler.outputParameterHandler import cOutputParameterHandler
+from resources.lib.handler.outputParameterHandler import OutputParameterHandler
 from resources.lib.util import cUtil, QuotePlus
 
 SITE_IDENTIFIER = 'cLibrary'
@@ -107,7 +107,7 @@ class cLibrary:
 
     def getLibrary(self):
         oGui = Gui()
-        oOutputParameterHandler = cOutputParameterHandler()
+        oOutputParameterHandler = OutputParameterHandler()
 
         folder = self.ADDON.getSetting('Library_folder_Movies')
         oOutputParameterHandler.addParameter('siteUrl', folder)
@@ -125,7 +125,7 @@ class cLibrary:
         folder = self.ADDON.getSetting('path_enregistrement')
         if not folder:
             folder = 'special://userdata/addon_data/plugin.video.vstream/Enregistrement"/>'
-        oOutputParameterHandler = cOutputParameterHandler()
+        oOutputParameterHandler = OutputParameterHandler()
         oOutputParameterHandler.addParameter('siteUrl', folder)
         oGui.addDir(SITE_IDENTIFIER, 'openLibrary', self.ADDON.VSlang(30225), 'download.png', oOutputParameterHandler)
 
@@ -156,7 +156,7 @@ class cLibrary:
                 xbmcplugin.addDirectoryItem(handle=addon_handle, url=sHosterUrl, listitem=li)
 
             else:
-                oOutputParameterHandler = cOutputParameterHandler()
+                oOutputParameterHandler = OutputParameterHandler()
                 oOutputParameterHandler.addParameter('siteUrl', sFile + '/' + i)
                 oGui.addDir(SITE_IDENTIFIER, 'openLibrary', sTitle, 'films.png', oOutputParameterHandler)
 

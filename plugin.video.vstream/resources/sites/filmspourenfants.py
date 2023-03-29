@@ -3,7 +3,7 @@
 from resources.lib.gui.hoster import cHosterGui
 from resources.lib.gui.gui import Gui
 from resources.lib.handler.inputParameterHandler import InputParameterHandler
-from resources.lib.handler.outputParameterHandler import cOutputParameterHandler
+from resources.lib.handler.outputParameterHandler import OutputParameterHandler
 from resources.lib.handler.requestHandler import cRequestHandler
 from resources.lib.parser import cParser
 from resources.lib.comaddon import progress, siteManager
@@ -28,7 +28,7 @@ ALL_ALL = (URL_MAIN + 'tous-les-films-pour-enfants.html', 'showMovies')
 def load():
     oGui = Gui()
 
-    oOutputParameterHandler = cOutputParameterHandler()
+    oOutputParameterHandler = OutputParameterHandler()
     oOutputParameterHandler.addParameter('siteUrl', AGE_3ANS[0])
     oGui.addDir(SITE_IDENTIFIER, AGE_3ANS[1], 'A partir de 3 ans', 'enfants.png', oOutputParameterHandler)
 
@@ -68,7 +68,7 @@ def showThemes():
     aResult = oParser.parse(sHtmlContent, sPattern)
 
     if aResult[0]:
-        oOutputParameterHandler = cOutputParameterHandler()
+        oOutputParameterHandler = OutputParameterHandler()
         for aEntry in aResult[1]:
             sUrl = URL_MAIN + aEntry[0]
             sTitle = aEntry[1]
@@ -95,7 +95,7 @@ def showMovies():
         total = len(aResult[1])
         progress_ = progress().VScreate(SITE_NAME)
 
-        oOutputParameterHandler = cOutputParameterHandler()
+        oOutputParameterHandler = OutputParameterHandler()
         for aEntry in aResult[1]:
             progress_.VSupdate(progress_, total)
             if progress_.iscanceled():

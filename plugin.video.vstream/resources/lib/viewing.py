@@ -4,7 +4,7 @@
 from resources.lib.comaddon import dialog, addon, xbmc, isMatrix
 from resources.lib.db import Db
 from resources.lib.handler.inputParameterHandler import InputParameterHandler
-from resources.lib.handler.outputParameterHandler import cOutputParameterHandler
+from resources.lib.handler.outputParameterHandler import OutputParameterHandler
 from resources.lib.gui.gui import Gui
 from resources.lib.util import UnquotePlus
 
@@ -59,10 +59,10 @@ class cViewing:
         oGui = Gui()
         addons = addon()
 
-        oOutputParameterHandler = cOutputParameterHandler()
+        oOutputParameterHandler = OutputParameterHandler()
         oGui.addDir(SITE_IDENTIFIER, 'getViewing', addons.VSlang(30126), 'genres.png', oOutputParameterHandler)
 
-        oOutputParameterHandler = cOutputParameterHandler()
+        oOutputParameterHandler = OutputParameterHandler()
         oOutputParameterHandler.addParameter('sCat', '1')       # films
         oGui.addDir(SITE_IDENTIFIER, 'getViewing', addons.VSlang(30120), 'films.png', oOutputParameterHandler)
 
@@ -122,7 +122,7 @@ class cViewing:
                     if catFilter is not False and cat != catFilter:
                         continue
 
-                    oOutputParameterHandler = cOutputParameterHandler()
+                    oOutputParameterHandler = OutputParameterHandler()
                     oOutputParameterHandler.addParameter('siteUrl', siteurl)
                     oOutputParameterHandler.addParameter('sMovieTitle', title)
                     oOutputParameterHandler.addParameter('sTmdbId', sTmdbId)
@@ -158,7 +158,7 @@ class cViewing:
 
         # Vider toute la catégorie n'est pas accessible lors de l'utilisation en Widget
         if not xbmc.getCondVisibility('Window.IsActive(home)'):
-            oOutputParameterHandler = cOutputParameterHandler()
+            oOutputParameterHandler = OutputParameterHandler()
             oOutputParameterHandler.addParameter('sCat', catFilter)
             oGui.addDir(SITE_IDENTIFIER, 'delViewing', self.ADDON.VSlang(30211), 'trash.png', oOutputParameterHandler)
 

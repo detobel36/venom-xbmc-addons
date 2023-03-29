@@ -3,7 +3,7 @@
 from resources.lib.gui.hoster import cHosterGui  # systeme de recherche pour l'hote
 from resources.lib.gui.gui import Gui  # systeme d'affichage pour xbmc
 from resources.lib.handler.inputParameterHandler import InputParameterHandler  # entree des parametres
-from resources.lib.handler.outputParameterHandler import cOutputParameterHandler  # sortie des parametres
+from resources.lib.handler.outputParameterHandler import OutputParameterHandler  # sortie des parametres
 from resources.lib.handler.requestHandler import cRequestHandler  # requete url
 from resources.lib.parser import cParser  # recherche de code
 from resources.lib.comaddon import progress  # , VSlog
@@ -33,19 +33,19 @@ ANIM_ANIMS = (URL_MAIN + 'anime-list-all/', 'showMovies2')  # anime vrac
 def load():  # fonction chargee automatiquement par l'addon l'index de votre navigation.
     oGui = Gui()  # ouvre l'affichage
 
-    oOutputParameterHandler = cOutputParameterHandler()  # apelle la function pour sortir un parametre
+    oOutputParameterHandler = OutputParameterHandler()  # apelle la function pour sortir un parametre
     # sortie du parametres siteUrl n'oubliez pas la Majuscule
     oOutputParameterHandler.addParameter('siteUrl', 'siteUrl')
     oGui.addDir(SITE_IDENTIFIER, 'showSearch', 'Recherche', 'search.png', oOutputParameterHandler)
     # Ajoute lien dossier (identifant, function a attendre, nom, icon, parametre de sortie)
     # Puisque nous ne voulons pas atteindre une url on peut mettre ce qu'on veut dans le parametre siteUrl
 
-    oOutputParameterHandler = cOutputParameterHandler()
+    oOutputParameterHandler = OutputParameterHandler()
     oOutputParameterHandler.addParameter('siteUrl', ANIM_NEWS[0])
     oGui.addDir(SITE_IDENTIFIER, ANIM_NEWS[1], 'Animes Nouveautés', 'news.png', oOutputParameterHandler)
     # ici la function showMovies a besoin d'une url ici le racourci MOVIE_NEWS
 
-    oOutputParameterHandler = cOutputParameterHandler()
+    oOutputParameterHandler = OutputParameterHandler()
     oOutputParameterHandler.addParameter('siteUrl', ANIM_ANIMS[0])
     oGui.addDir(SITE_IDENTIFIER, ANIM_ANIMS[1], 'Animes liste complete', 'series.png', oOutputParameterHandler)
 
@@ -108,7 +108,7 @@ def showMovies(sSearch=''):
 
             Sthumb = 'http:' + Sthumb
 
-            oOutputParameterHandler = cOutputParameterHandler()
+            oOutputParameterHandler = OutputParameterHandler()
             oOutputParameterHandler.addParameter('siteUrl', sUrl)  # sortie de l'url
             oOutputParameterHandler.addParameter('sMovieTitle', sTitle)  # sortie du titre
             oOutputParameterHandler.addParameter('sThumbnail', Sthumb)  # sortie du poster
@@ -122,7 +122,7 @@ def showMovies(sSearch=''):
 
         sNextPage = __checkForNextPage(sHtmlContent)  # cherche la page suivante
         if (sNextPage):
-            oOutputParameterHandler = cOutputParameterHandler()
+            oOutputParameterHandler = OutputParameterHandler()
             oOutputParameterHandler.addParameter('siteUrl', sNextPage)
             oGui.addDir(
                 SITE_IDENTIFIER,
@@ -158,7 +158,7 @@ def showMovies2(sSearch=''):
             if progress_.iscanceled():
                 break
 
-            oOutputParameterHandler = cOutputParameterHandler()
+            oOutputParameterHandler = OutputParameterHandler()
             oOutputParameterHandler.addParameter('siteUrl', str(aEntry[0]))
             oOutputParameterHandler.addParameter('sMovieTitle', str(aEntry[1]))
             if 'type2=1' in sUrl:
@@ -247,7 +247,7 @@ def seriesListEpisodes():  # cherche les episode de series
             sTitle = aEntry[1]
             sUrl2 = aEntry[0]
 
-            oOutputParameterHandler = cOutputParameterHandler()
+            oOutputParameterHandler = OutputParameterHandler()
             oOutputParameterHandler.addParameter('siteUrl', sUrl2)
             oOutputParameterHandler.addParameter('sMovieTitle', sTitle)
             oGui.addTV(SITE_IDENTIFIER, 'showHosters', sTitle, 'series.png', '', '', oOutputParameterHandler)

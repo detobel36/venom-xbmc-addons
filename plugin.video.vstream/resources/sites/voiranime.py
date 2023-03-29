@@ -6,7 +6,7 @@ import re
 from resources.lib.gui.hoster import cHosterGui
 from resources.lib.gui.gui import Gui
 from resources.lib.handler.inputParameterHandler import InputParameterHandler
-from resources.lib.handler.outputParameterHandler import cOutputParameterHandler
+from resources.lib.handler.outputParameterHandler import OutputParameterHandler
 from resources.lib.handler.requestHandler import cRequestHandler
 from resources.lib.parser import cParser
 from resources.lib.comaddon import progress, siteManager
@@ -38,7 +38,7 @@ URL_SEARCH_VF = (URL_SEARCH[0] + '&language=vf&s=', 'showAnimes')
 def load():
     oGui = Gui()
 
-    oOutputParameterHandler = cOutputParameterHandler()
+    oOutputParameterHandler = OutputParameterHandler()
     oOutputParameterHandler.addParameter('siteUrl', URL_SEARCH_VOSTFR[0])
     oGui.addDir(SITE_IDENTIFIER, 'showSearch', 'Recherche d\'animés (VOSTFR)', 'search.png', oOutputParameterHandler)
 
@@ -82,7 +82,7 @@ def showAlpha():
 
     progress_ = progress().VScreate(SITE_NAME)
 
-    oOutputParameterHandler = cOutputParameterHandler()
+    oOutputParameterHandler = OutputParameterHandler()
     for i in range(-1, 27):
         progress_.VSupdate(progress_, 36)
 
@@ -137,7 +137,7 @@ def showGenres():
     liste.append(['Surnaturel', sUrl + 'supernatural/'])
     liste.append(['Thriller', sUrl + 'thriller/'])
 
-    oOutputParameterHandler = cOutputParameterHandler()
+    oOutputParameterHandler = OutputParameterHandler()
     for sTitle, sUrl in liste:
         oOutputParameterHandler.addParameter('siteUrl', sUrl)
         oGui.addDir(SITE_IDENTIFIER, 'showAnimes', sTitle, 'genres.png', oOutputParameterHandler)
@@ -181,7 +181,7 @@ def showAnimes(sSearch=''):
     if aResult[0]:
         total = len(aResult[1])
         progress_ = progress().VScreate(SITE_NAME)
-        oOutputParameterHandler = cOutputParameterHandler()
+        oOutputParameterHandler = OutputParameterHandler()
         for aEntry in aResult[1]:
             progress_.VSupdate(progress_, total)
             if progress_.iscanceled():
@@ -218,7 +218,7 @@ def showAnimes(sSearch=''):
     if not sSearch:
         sNextPage = __checkForNextPage(sHtmlContent)
         if sNextPage:
-            oOutputParameterHandler = cOutputParameterHandler()
+            oOutputParameterHandler = OutputParameterHandler()
             oOutputParameterHandler.addParameter('siteUrl', sNextPage)
             number = re.findall('([0-9]+)', sNextPage)[-1]
             oGui.addNext(SITE_IDENTIFIER, 'showAnimes', 'Page ' + number, oOutputParameterHandler)
@@ -259,7 +259,7 @@ def showEpisodes():
         oGui.addText(SITE_IDENTIFIER)
 
     if aResult[0]:
-        oOutputParameterHandler = cOutputParameterHandler()
+        oOutputParameterHandler = OutputParameterHandler()
 
         # Dernier épisode
         sUrlEpisode = aResult[1][0][0]
@@ -334,7 +334,7 @@ def showLinks():
     aResult = oParser.parse(sData, sPattern)
 
     if aResult[0]:
-        oOutputParameterHandler = cOutputParameterHandler()
+        oOutputParameterHandler = OutputParameterHandler()
         for aEntry in aResult[1]:
 
             sTitle = sMovieTitle + aEntry
@@ -373,7 +373,7 @@ def RecapchaBypass():
     else:
         # N'affiche pas directement le liens car sinon Kodi crash.
         sDisplayTitle = "Recaptcha passé avec succès, cliquez pour afficher les liens"
-        oOutputParameterHandler = cOutputParameterHandler()
+        oOutputParameterHandler = OutputParameterHandler()
         oOutputParameterHandler.addParameter('siteUrl', sUrl)
         oOutputParameterHandler.addParameter('sMovieTitle', sMovieTitle)
         oOutputParameterHandler.addParameter('sThumb', sThumb)

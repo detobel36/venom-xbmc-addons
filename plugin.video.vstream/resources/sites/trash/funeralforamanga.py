@@ -6,7 +6,7 @@ import re
 from resources.lib.gui.hoster import cHosterGui
 from resources.lib.gui.gui import Gui
 from resources.lib.handler.inputParameterHandler import InputParameterHandler
-from resources.lib.handler.outputParameterHandler import cOutputParameterHandler
+from resources.lib.handler.outputParameterHandler import OutputParameterHandler
 from resources.lib.handler.requestHandler import cRequestHandler
 from resources.lib.parser import cParser
 from resources.lib.comaddon import progress
@@ -56,7 +56,7 @@ UA = 'Mozilla/5.0 (Windows NT 6.1; WOW64; rv:70.0) Gecko/20100101 Firefox/70.0'
 def load():
     oGui = Gui()
 
-    oOutputParameterHandler = cOutputParameterHandler()
+    oOutputParameterHandler = OutputParameterHandler()
     oOutputParameterHandler.addParameter('siteUrl', 'siteUrl')
     oGui.addDir(SITE_IDENTIFIER, 'showSearch', 'Recherche Films & Séries', 'search.png', oOutputParameterHandler)
 
@@ -127,7 +127,7 @@ def load():
     oOutputParameterHandler.addParameter('siteUrl', ANIM_MOVIE_ANNEES[0])
     oGui.addDir(SITE_IDENTIFIER, ANIM_MOVIE_ANNEES[1], 'Animés Films (Années)', 'annees.png', oOutputParameterHandler)
 
-    oOutputParameterHandler = cOutputParameterHandler()
+    oOutputParameterHandler = OutputParameterHandler()
     oOutputParameterHandler.addParameter('siteUrl', ANIM_MOVIE_ALPHA[0])
     oGui.addDir(SITE_IDENTIFIER, ANIM_MOVIE_ALPHA[1], 'Animés Films (Alpha)', 'az.png', oOutputParameterHandler)
 
@@ -160,7 +160,7 @@ def showAllAlpha(sfilter=''):
     url1 = 'videos?sk=a&alpha='
     url2 = '&filter=' + sfilter + '&unlicenced=1&p=1'
 
-    oOutputParameterHandler = cOutputParameterHandler()
+    oOutputParameterHandler = OutputParameterHandler()
     for alpha in listalpha:
         sTitle = str(alpha).upper()
         sUrl = URL_MAIN + url1 + alpha + url2
@@ -188,7 +188,7 @@ def showSerieYears():
 def showAllYears(sfilter=''):
     oGui = Gui()
 
-    oOutputParameterHandler = cOutputParameterHandler()
+    oOutputParameterHandler = OutputParameterHandler()
     for i in reversed(range(1983, 2023)):
         sYear = str(i)
         url1 = 'videos?sk=c&filter=' + sfilter + '&unlicenced=1&aired-min=' + sYear + '&aired-max=' + sYear + '&p=1'
@@ -213,7 +213,7 @@ def showAllGenre(sfilter=''):
 
     url1 = URL_MAIN + 'videos?sk=c&filter=' + sfilter + '&unlicenced=1&genres='
     url2 = '&p=1'
-    oOutputParameterHandler = cOutputParameterHandler()
+    oOutputParameterHandler = OutputParameterHandler()
     for igenre in listegenre:
         sTitle = igenre.capitalize()
         sUrl = url1 + igenre + url2
@@ -276,7 +276,7 @@ def showMovies(sSearch=''):
     if aResult[0]:
         total = len(aResult[1])
         progress_ = progress().VScreate(SITE_NAME)
-        oOutputParameterHandler = cOutputParameterHandler()
+        oOutputParameterHandler = OutputParameterHandler()
         for aEntry in aResult[1]:
             progress_.VSupdate(progress_, total)
             if progress_.iscanceled():
@@ -304,7 +304,7 @@ def showMovies(sSearch=''):
     if not sSearch:
         sNextPage, sPaging = __checkForNextPage(sHtmlContent, sUrl)
         if (sNextPage):
-            oOutputParameterHandler = cOutputParameterHandler()
+            oOutputParameterHandler = OutputParameterHandler()
             oOutputParameterHandler.addParameter('siteUrl', sNextPage)
             oGui.addNext(SITE_IDENTIFIER, 'showMovies', 'Page ' + sPaging, oOutputParameterHandler)
         oGui.setEndOfDirectory()
@@ -364,7 +364,7 @@ def showEpisodesxMovies():
 
     sLang = ''
     if aResult[0]:
-        oOutputParameterHandler = cOutputParameterHandler()
+        oOutputParameterHandler = OutputParameterHandler()
         for aEntry in aResult[1]:
             if aEntry[0]:
                 sLang = aEntry[0]
@@ -400,7 +400,7 @@ def showLinks():
     aResult = oParser.parse(sHtmlContent, sPattern)
 
     if aResult[0]:
-        oOutputParameterHandler = cOutputParameterHandler()
+        oOutputParameterHandler = OutputParameterHandler()
         for aEntry in aResult[1]:
             sId = aEntry[0]
             sHost = aEntry[1].replace(' ', '').replace('-', '')

@@ -6,7 +6,7 @@ from resources.lib.comaddon import progress, siteManager
 from resources.lib.gui.gui import Gui
 from resources.lib.gui.hoster import cHosterGui
 from resources.lib.handler.inputParameterHandler import InputParameterHandler
-from resources.lib.handler.outputParameterHandler import cOutputParameterHandler
+from resources.lib.handler.outputParameterHandler import OutputParameterHandler
 from resources.lib.handler.requestHandler import cRequestHandler
 from resources.lib.parser import cParser
 
@@ -23,7 +23,7 @@ MOVIE_NEWS = (URL_MAIN + 'streaming/', 'showMovies')
 def load():
     oGui = Gui()
 
-    oOutputParameterHandler = cOutputParameterHandler()
+    oOutputParameterHandler = OutputParameterHandler()
     oOutputParameterHandler.addParameter('siteUrl', MOVIE_NEWS[0])
     oGui.addDir(SITE_IDENTIFIER, MOVIE_NEWS[1], 'Films (Derniers ajouts)', 'news.png', oOutputParameterHandler)
 
@@ -49,7 +49,7 @@ def showMovies():
 
     total = len(aResult[1])
     progress_ = progress().VScreate(SITE_NAME)
-    oOutputParameterHandler = cOutputParameterHandler()
+    oOutputParameterHandler = OutputParameterHandler()
     for aEntry in aResult[1]:
         progress_.VSupdate(progress_, total)
         if progress_.iscanceled():
@@ -75,7 +75,7 @@ def showMovies():
 
     sNextPage, sPaging = __checkForNextPage(sHtmlContent)
     if sNextPage:
-        oOutputParameterHandler = cOutputParameterHandler()
+        oOutputParameterHandler = OutputParameterHandler()
         oOutputParameterHandler.addParameter('siteUrl', sNextPage)
         oGui.addNext(SITE_IDENTIFIER, 'showMovies', 'Page ' + sPaging, oOutputParameterHandler)
 

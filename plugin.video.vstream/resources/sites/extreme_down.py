@@ -8,7 +8,7 @@ from resources.lib.comaddon import addon, dialog, progress, siteManager, VSlog
 from resources.lib.gui.gui import Gui
 from resources.lib.gui.hoster import cHosterGui
 from resources.lib.handler.inputParameterHandler import InputParameterHandler
-from resources.lib.handler.outputParameterHandler import cOutputParameterHandler
+from resources.lib.handler.outputParameterHandler import OutputParameterHandler
 from resources.lib.handler.premiumHandler import cPremiumHandler
 from resources.lib.handler.requestHandler import cRequestHandler
 from resources.lib.parser import cParser
@@ -86,7 +86,7 @@ SPECTACLE_NEWS = (URL_MAIN + 'theatre/', 'showMovies')
 def load():
     oGui = Gui()
 
-    oOutputParameterHandler = cOutputParameterHandler()
+    oOutputParameterHandler = OutputParameterHandler()
     oOutputParameterHandler.addParameter('siteUrl', 'http://venom/')
     oGui.addDir(SITE_IDENTIFIER, 'showMenuMovies', 'Films', 'films.png', oOutputParameterHandler)
 
@@ -114,7 +114,7 @@ def load():
 def showMenuMovies():
     oGui = Gui()
 
-    oOutputParameterHandler = cOutputParameterHandler()
+    oOutputParameterHandler = OutputParameterHandler()
     oOutputParameterHandler.addParameter('siteUrl', URL_SEARCH_MOVIES[0])
     oGui.addDir(SITE_IDENTIFIER, 'showSearch', 'Recherche (Films)', 'films.png', oOutputParameterHandler)
 
@@ -187,7 +187,7 @@ def showMenuMovies():
 def showMenuTvShows():
     oGui = Gui()
 
-    oOutputParameterHandler = cOutputParameterHandler()
+    oOutputParameterHandler = OutputParameterHandler()
     oOutputParameterHandler.addParameter('siteUrl', URL_SEARCH_SERIES[0])
     oGui.addDir(SITE_IDENTIFIER, 'showSearch', 'Recherche (Séries)', 'films.png', oOutputParameterHandler)
 
@@ -224,7 +224,7 @@ def showMenuTvShows():
 def showMenuMangas():
     oGui = Gui()
 
-    oOutputParameterHandler = cOutputParameterHandler()
+    oOutputParameterHandler = OutputParameterHandler()
     oOutputParameterHandler.addParameter('siteUrl', URL_SEARCH_ANIMS[0])
     oGui.addDir(SITE_IDENTIFIER, 'showSearch', 'Recherche (Animes)', 'films.png', oOutputParameterHandler)
 
@@ -264,7 +264,7 @@ def showMenuMangas():
 def showMenuAutre():
     oGui = Gui()
 
-    oOutputParameterHandler = cOutputParameterHandler()
+    oOutputParameterHandler = OutputParameterHandler()
     oOutputParameterHandler.addParameter('siteUrl', URL_SEARCH_MISC[0])
     oGui.addDir(SITE_IDENTIFIER, 'showSearch', 'Recherche (Autres)', 'films.png', oOutputParameterHandler)
 
@@ -320,7 +320,7 @@ def showGenres():
              ['Science Fiction', 'science-fiction'], ['Spectacle', 'spectacle'], ['Thriller', 'thriller'],
              ['Western', 'western'], ['Divers', 'divers']]
 
-    oOutputParameterHandler = cOutputParameterHandler()
+    oOutputParameterHandler = OutputParameterHandler()
     for sTitle, sUrl in liste:
         oOutputParameterHandler.addParameter('siteUrl', URL_MAIN + sUrl + '/')
         oGui.addDir(SITE_IDENTIFIER, 'showMovies', sTitle, 'genres.png', oOutputParameterHandler)
@@ -330,7 +330,7 @@ def showGenres():
 
 def showMovieYears():
     oGui = Gui()
-    oOutputParameterHandler = cOutputParameterHandler()
+    oOutputParameterHandler = OutputParameterHandler()
     for i in reversed(range(1913, 2021)):
         Year = str(i)
         oOutputParameterHandler.addParameter('siteUrl', URL_MAIN + 'films/annee-' + Year)
@@ -341,7 +341,7 @@ def showMovieYears():
 
 def showSerieYears():
     oGui = Gui()
-    oOutputParameterHandler = cOutputParameterHandler()
+    oOutputParameterHandler = OutputParameterHandler()
     for i in reversed(range(1936, 2021)):
         Year = str(i)
         oOutputParameterHandler.addParameter('siteUrl', URL_MAIN + 'series/annee-' + Year)
@@ -393,7 +393,7 @@ def showMovies(sSearch=''):
         total = len(aResult[1])
         progress_ = progress().VScreate(SITE_NAME)
 
-        oOutputParameterHandler = cOutputParameterHandler()
+        oOutputParameterHandler = OutputParameterHandler()
         for aEntry in aResult[1]:
             progress_.VSupdate(progress_, total)
             if progress_.iscanceled():
@@ -473,7 +473,7 @@ def showMovies(sSearch=''):
             sPattern = 'name="nextlink" id="nextlink" onclick="javascript:list_submit\\(([0-9]+)\\); return\\(false\\)" href="#">Suivant'
             aResult = oParser.parse(sHtmlContent, sPattern)
             if aResult[0]:
-                oOutputParameterHandler = cOutputParameterHandler()
+                oOutputParameterHandler = OutputParameterHandler()
                 oOutputParameterHandler.addParameter('siteUrl', siteUrl)
                 oOutputParameterHandler.addParameter('misc', sMisc)
                 oOutputParameterHandler.addParameter('nextPageSearch', aResult[1][0])
@@ -483,7 +483,7 @@ def showMovies(sSearch=''):
         else:
             sNextPage = __checkForNextPage(sHtmlContent)
             if sNextPage:
-                oOutputParameterHandler = cOutputParameterHandler()
+                oOutputParameterHandler = OutputParameterHandler()
                 oOutputParameterHandler.addParameter('siteUrl', sNextPage)
                 oOutputParameterHandler.addParameter('misc', sMisc)
                 sNumPage = re.search('/page/([0-9]+)', sNextPage).group(1)
@@ -540,7 +540,7 @@ def showMoviesLinks():
 
     sDisplayTitle = ('%s (%s)') % (sMovieTitle, sQual)
 
-    oOutputParameterHandler = cOutputParameterHandler()
+    oOutputParameterHandler = OutputParameterHandler()
     oOutputParameterHandler.addParameter('siteUrl', sUrl)
     oOutputParameterHandler.addParameter('sMovieTitle', sDisplayTitle)
     oOutputParameterHandler.addParameter('sThumb', sThumb)
@@ -552,7 +552,7 @@ def showMoviesLinks():
     aResult = oParser.parse(sHtmlContent, sPattern)
 
     if aResult[0]:
-        oOutputParameterHandler = cOutputParameterHandler()
+        oOutputParameterHandler = OutputParameterHandler()
         for aEntry in aResult[1]:
             sUrl = aEntry[0]
             sQual = aEntry[1]
@@ -614,7 +614,7 @@ def showSeriesLinks():
 
     sDisplayTitle = ('%s (%s)') % (sTitle, sQual)
 
-    oOutputParameterHandler = cOutputParameterHandler()
+    oOutputParameterHandler = OutputParameterHandler()
     oOutputParameterHandler.addParameter('siteUrl', sUrl)
     oOutputParameterHandler.addParameter('sMovieTitle', sDisplayTitle)
     oOutputParameterHandler.addParameter('sThumb', sThumb)
@@ -627,7 +627,7 @@ def showSeriesLinks():
     aResult1 = oParser.parse(sHtmlContent1, sPattern1)
 
     if aResult1[0] is True:
-        oOutputParameterHandler = cOutputParameterHandler()
+        oOutputParameterHandler = OutputParameterHandler()
         for aEntry in aResult1[1]:
             sUrl = aEntry[0]
             sQual = aEntry[1]
@@ -647,7 +647,7 @@ def showSeriesLinks():
     if aResult2[0] is True:
         oGui.addText(SITE_IDENTIFIER, '[COLOR olive]Autres saisons disponibles :[/COLOR]')
 
-        oOutputParameterHandler = cOutputParameterHandler()
+        oOutputParameterHandler = OutputParameterHandler()
         for aEntry in aResult2[1]:
 
             sUrl = aEntry[0]
@@ -717,7 +717,7 @@ def showLinks():
             aResult[1].insert(0, ('Episode 1', '', ''))
 
         ep = ""
-        oOutputParameterHandler = cOutputParameterHandler()
+        oOutputParameterHandler = OutputParameterHandler()
         for aEntry in aResult[1]:
             if aEntry[0]:
                 ep = aEntry[0]
@@ -783,7 +783,7 @@ def showHosters():
         else:
             # N'affiche pas directement le liens car sinon Kodi crash.
             sDisplayTitle = "Recaptcha passé avec succès, cliquez pour afficher les liens"
-            oOutputParameterHandler = cOutputParameterHandler()
+            oOutputParameterHandler = OutputParameterHandler()
             oOutputParameterHandler.addParameter('siteUrl', sUrl)
             oOutputParameterHandler.addParameter('sMovieTitle', sMovieTitle)
             oOutputParameterHandler.addParameter('sThumb', sThumb)

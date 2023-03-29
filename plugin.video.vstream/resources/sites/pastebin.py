@@ -10,7 +10,7 @@ import xbmcvfs
 
 from resources.lib.comaddon import progress, addon, dialog, VSlog, VSPath, isMatrix, siteManager
 from resources.lib.handler.inputParameterHandler import InputParameterHandler
-from resources.lib.handler.outputParameterHandler import cOutputParameterHandler
+from resources.lib.handler.outputParameterHandler import OutputParameterHandler
 from resources.lib.util import cUtil, Unquote
 from resources.lib.gui.gui import Gui
 
@@ -538,7 +538,7 @@ class PasteContent:
 def load():
     oGui = Gui()
 
-    oOutputParameterHandler = cOutputParameterHandler()
+    oOutputParameterHandler = OutputParameterHandler()
     oOutputParameterHandler.addParameter('siteUrl', URL_SEARCH_MOVIES[0])
     oGui.addDir(SITE_IDENTIFIER, 'showSearch', 'Recherche (Films)', 'search.png', oOutputParameterHandler)
 
@@ -602,7 +602,7 @@ def showMenu():
         contenu = contenu.union(getPasteBin(pbContent, pasteBin))
 
     if not sMedia:
-        oOutputParameterHandler = cOutputParameterHandler()
+        oOutputParameterHandler = OutputParameterHandler()
 
         cnt = contenu.intersection(['containFilms', 'containSeries', 'containAnimes', 'containDivers'])
         if len(cnt) == 1:
@@ -681,7 +681,7 @@ def showDetailMenu(pasteID, contenu):
     oGui = Gui()
 
     sUrl = URL_MAIN + '&numPage=1'  # + pasteBin
-    oOutputParameterHandler = cOutputParameterHandler()
+    oOutputParameterHandler = OutputParameterHandler()
     if 'containFilms' in contenu:
         searchUrl = URL_MAIN + '&pasteID=' + pasteID + '&sMedia=film&sSearch='
         oOutputParameterHandler.addParameter('siteUrl', searchUrl)
@@ -904,7 +904,7 @@ def showMenuFilms():
             (sUrl.split('sRes=')[1]),
             sIcon='hd.png')
 
-    oOutputParameterHandler = cOutputParameterHandler()
+    oOutputParameterHandler = OutputParameterHandler()
 
     # oOutputParameterHandler.addParameter('siteUrl', URL_SEARCH_MOVIES[0])
     oOutputParameterHandler.addParameter('siteUrl', sUrl + '&sSearch=')
@@ -976,7 +976,7 @@ def showMenuTvShows():
     addons = addon()
     sUrl = URL_MAIN + '&sMedia=serie&numPage=1'
 
-    oOutputParameterHandler = cOutputParameterHandler()
+    oOutputParameterHandler = OutputParameterHandler()
 
     oOutputParameterHandler.addParameter('siteUrl', URL_SEARCH_SERIES[0])
     oGui.addDir(SITE_IDENTIFIER, 'showSearch', 'Recherche (Séries)', 'search.png', oOutputParameterHandler)
@@ -1024,7 +1024,7 @@ def showMenuMangas():
     oGui = Gui()
     sUrl = URL_MAIN + '&sMedia=anime&numPage=1'
 
-    oOutputParameterHandler = cOutputParameterHandler()
+    oOutputParameterHandler = OutputParameterHandler()
 
     oOutputParameterHandler.addParameter('siteUrl', URL_SEARCH_ANIMS[0])
     oGui.addDir(SITE_IDENTIFIER, 'showSearch', 'Recherche (Animes)', 'search.png', oOutputParameterHandler)
@@ -1057,7 +1057,7 @@ def showMenuMisc():
     oGui = Gui()
     sUrl = URL_MAIN + '&sMedia=divers&numPage=1'
 
-    oOutputParameterHandler = cOutputParameterHandler()
+    oOutputParameterHandler = OutputParameterHandler()
 
     oOutputParameterHandler.addParameter('siteUrl', URL_SEARCH_MISC[0])
     oGui.addDir(SITE_IDENTIFIER, 'showSearch', 'Recherche (Divers)', 'search.png', oOutputParameterHandler)
@@ -1093,7 +1093,7 @@ def showMenuFolder():
     # Trie des dossiers par label
     pasteListe = sorted(pasteListe.items(), key=lambda paste: paste[0])
 
-    oOutputParameterHandler = cOutputParameterHandler()
+    oOutputParameterHandler = OutputParameterHandler()
     for pasteBin in pasteListe:
         pasteLabel = pasteBin[0]
         pasteID = pasteBin[1]
@@ -1151,7 +1151,7 @@ def showGenreMovieTMDB():
     total = len(result)
     if total > 0:
         bMatrix = isMatrix()
-        oOutputParameterHandler = cOutputParameterHandler()
+        oOutputParameterHandler = OutputParameterHandler()
         for i in result['genres']:
             sId, sTitle = i['id'], i['name']
 
@@ -1175,7 +1175,7 @@ def showGenreMovie():
     result = grab.getUrl('genre/movie/list')
     if len(result) > 0:
         bMatrix = isMatrix()
-        oOutputParameterHandler = cOutputParameterHandler()
+        oOutputParameterHandler = OutputParameterHandler()
         for genre in result['genres']:
             sId, sTitle = str(genre['id']), genre['name']
             if not bMatrix:
@@ -1197,7 +1197,7 @@ def showGenreTV():
     if len(result) > 0:
         bMatrix = isMatrix()
         siteUrl = URL_MAIN + '&numPage=1&sMedia=serie'
-        oOutputParameterHandler = cOutputParameterHandler()
+        oOutputParameterHandler = OutputParameterHandler()
         for genre in result['genres']:
             sId, sTitle = str(genre['id']), genre['name']
             if not bMatrix:
@@ -1262,7 +1262,7 @@ def showTMDB():
                 movies = sorted(movies, key=lambda line: line[pbContent.YEAR], reverse=True)
 
         progress_ = progress().VScreate(SITE_NAME)
-        oOutputParameterHandler = cOutputParameterHandler()
+        oOutputParameterHandler = OutputParameterHandler()
 
         for movie in movies:
             # l'ID TMDB
@@ -1333,7 +1333,7 @@ def showTMDB():
 
         if sType != 'person':
             numPage += 1
-            oOutputParameterHandler = cOutputParameterHandler()
+            oOutputParameterHandler = OutputParameterHandler()
             oOutputParameterHandler.addParameter('siteUrl', siteUrl)
             oOutputParameterHandler.addParameter('numPage', numPage)
             oGui.addNext(SITE_IDENTIFIER, 'showTMDB', 'Page ' + str(numPage), oOutputParameterHandler)
@@ -1394,7 +1394,7 @@ def showActors(sSearch=''):
     if total > 0:
         total = len(result['results'])
         progress_ = progress().VScreate(SITE_NAME)
-        oOutputParameterHandler = cOutputParameterHandler()
+        oOutputParameterHandler = OutputParameterHandler()
 
         # récup le nombre de page pour NextPage
         nbrpage = result['total_pages']
@@ -1426,7 +1426,7 @@ def showActors(sSearch=''):
 
         if int(iPage) < int(nbrpage):
             iNextPage = int(iPage) + 1
-            oOutputParameterHandler = cOutputParameterHandler()
+            oOutputParameterHandler = OutputParameterHandler()
             oOutputParameterHandler.addParameter('siteUrl', sUrl)
             oOutputParameterHandler.addParameter('page', iNextPage)
 
@@ -1487,7 +1487,7 @@ def showGenres():
                 VSlog('Error : ' + str(e))
 
     genreKeys = genres.keys()
-    oOutputParameterHandler = cOutputParameterHandler()
+    oOutputParameterHandler = OutputParameterHandler()
     for sDisplayGenre in sorted(genreKeys):
         genre = genres.get(sDisplayGenre)
         sUrl = siteUrl + '&sGenre=' + str(genre)
@@ -1529,7 +1529,7 @@ def showNetwork():
     maxProgress = len(listNetwork)
     progress_ = progress().VScreate(SITE_NAME)
 
-    oOutputParameterHandler = cOutputParameterHandler()
+    oOutputParameterHandler = OutputParameterHandler()
     for networkName, networkId in sorted(listNetwork.items()):
         progress_.VSupdate(progress_, maxProgress)
         if progress_.iscanceled():
@@ -1587,7 +1587,7 @@ def showRealisateur():
     maxProgress = min(len(listReal), ITEM_PAR_PAGE)
     progress_ = progress().VScreate(SITE_NAME)
 
-    oOutputParameterHandler = cOutputParameterHandler()
+    oOutputParameterHandler = OutputParameterHandler()
     for realName, realId in sorted(listReal.items()):
         # Pagination, on se repositionne
         index += 1
@@ -1608,7 +1608,7 @@ def showRealisateur():
         if nbItem % ITEM_PAR_PAGE == 0 and numPage * ITEM_PAR_PAGE < len(listReal):
             numPage += 1
 
-            oOutputParameterHandler = cOutputParameterHandler()
+            oOutputParameterHandler = OutputParameterHandler()
             oOutputParameterHandler.addParameter('siteUrl', siteUrl)
             oOutputParameterHandler.addParameter('numPage', numPage)
             oOutputParameterHandler.addParameter('numItem', numItem)
@@ -1670,7 +1670,7 @@ def showCast():
     maxProgress = min(len(listActeur), ITEM_PAR_PAGE)
     progress_ = progress().VScreate(SITE_NAME)
 
-    oOutputParameterHandler = cOutputParameterHandler()
+    oOutputParameterHandler = OutputParameterHandler()
     for acteurName, acteurId in sorted(listActeur.items()):
         # Pagination, on se repositionne
         index += 1
@@ -1691,7 +1691,7 @@ def showCast():
         if nbItem % ITEM_PAR_PAGE == 0 and numPage * ITEM_PAR_PAGE < len(listActeur):
             numPage += 1
 
-            oOutputParameterHandler = cOutputParameterHandler()
+            oOutputParameterHandler = OutputParameterHandler()
             oOutputParameterHandler.addParameter('siteUrl', siteUrl)
             oOutputParameterHandler.addParameter('numPage', numPage)
             oOutputParameterHandler.addParameter('numItem', numItem)
@@ -1742,7 +1742,7 @@ def showGroupes():
                 VSlog('Error : ' + str(e))
 
     groupes = groupesPerso.union(sousGroupe)
-    oOutputParameterHandler = cOutputParameterHandler()
+    oOutputParameterHandler = OutputParameterHandler()
     for sGroupe in sorted(groupes):
         sUrl = siteUrl + '&sGroupe=' + sGroupe
         oOutputParameterHandler.addParameter('siteUrl', sUrl)
@@ -1784,7 +1784,7 @@ def showGroupeDetails():
             except Exception as e:
                 pass
 
-    oOutputParameterHandler = cOutputParameterHandler()
+    oOutputParameterHandler = OutputParameterHandler()
     for sGroupe in sorted(groupes):
         sUrl = siteUrl + '&sGroupe=' + sGroupe.replace('+', '|')
         oOutputParameterHandler.addParameter('siteUrl', sUrl)
@@ -1846,7 +1846,7 @@ def showSaga():
     index = 0
     progress_ = progress().VScreate(SITE_NAME)
     names = sagas.keys()
-    oOutputParameterHandler = cOutputParameterHandler()
+    oOutputParameterHandler = OutputParameterHandler()
     for sSagaName in sorted(names):
 
         # Pagination, on se repositionne
@@ -1880,7 +1880,7 @@ def showSaga():
         if nbItem % ITEM_PAR_PAGE == 0 and numPage * ITEM_PAR_PAGE < len(names):
             numPage += 1
 
-            oOutputParameterHandler = cOutputParameterHandler()
+            oOutputParameterHandler = OutputParameterHandler()
             oOutputParameterHandler.addParameter('siteUrl', siteUrl)
             oOutputParameterHandler.addParameter('numPage', numPage)
             oOutputParameterHandler.addParameter('numItem', numItem)
@@ -1916,7 +1916,7 @@ def showYears():
                 year = UNCLASSIFIED
             years.add(year)
 
-    oOutputParameterHandler = cOutputParameterHandler()
+    oOutputParameterHandler = OutputParameterHandler()
     for sYear in sorted(years, reverse=True):
         sUrl = siteUrl + '&sYear=' + sYear
         oOutputParameterHandler.addParameter('siteUrl', sUrl)
@@ -1955,7 +1955,7 @@ def showResolution():
     oGui = Gui()
     oInputParameterHandler = InputParameterHandler()
     siteUrl = oInputParameterHandler.getValue('siteUrl')
-    oOutputParameterHandler = cOutputParameterHandler()
+    oOutputParameterHandler = OutputParameterHandler()
     resolutions = [('DOLBY VISION', 'DOLBY VISION'), ('4K', '4K [2160p]'),
                    ('1080P', 'fullHD [1080p]'), ('720P', 'HD [720p]'), ('SD', 'SD'), ('3D', '3D')]
     for sRes, sDisplayRes in resolutions:
@@ -1970,7 +1970,7 @@ def alphaList():
     oGui = Gui()
     oInputParameterHandler = InputParameterHandler()
     siteUrl = oInputParameterHandler.getValue('siteUrl')
-    oOutputParameterHandler = cOutputParameterHandler()
+    oOutputParameterHandler = OutputParameterHandler()
     for i in range(48, 84):
         sLetter = chr(i + 7 if i > 57 else i)
         oOutputParameterHandler.addParameter('siteUrl', siteUrl + '&sAlpha=' + sLetter)
@@ -2134,7 +2134,7 @@ def showMovies(sSearch=''):
 
     if not bSilent:
         progress_ = progress().VScreate(SITE_NAME)
-    oOutputParameterHandler = cOutputParameterHandler()
+    oOutputParameterHandler = OutputParameterHandler()
 
     if sRes:
         oGui.addText(SITE_IDENTIFIER, sLabel='[COLOR red]## Résolution %s ##[/COLOR]' % sRes, sIcon='hd.png')
@@ -2336,7 +2336,7 @@ def showMovies(sSearch=''):
         if nbItem % ITEM_PAR_PAGE == 0 and numPage * ITEM_PAR_PAGE < len(movies):
             if not sSearchTitle:
                 numPage += 1
-                oOutputParameterHandler = cOutputParameterHandler()
+                oOutputParameterHandler = OutputParameterHandler()
                 oOutputParameterHandler.addParameter('siteUrl', siteUrl)
                 oOutputParameterHandler.addParameter('numPage', numPage)
                 oOutputParameterHandler.addParameter('numItem', numItem)
@@ -2425,7 +2425,7 @@ def showSerieSaisons():
 #         return
 
     # Proposer les différentes saisons
-    oOutputParameterHandler = cOutputParameterHandler()
+    oOutputParameterHandler = OutputParameterHandler()
     saisons = sorted(saisons.items(), key=lambda saison: saison[0])
     for sSaison, res in saisons:
 
@@ -2499,7 +2499,7 @@ def showEpisodesLinks(siteUrl=''):
     if sSaison.isdigit():
         sDisplaySaison = 'S{:02d}'.format(int(sSaison))
 
-    oOutputParameterHandler = cOutputParameterHandler()
+    oOutputParameterHandler = OutputParameterHandler()
     for episode in sorted(listeEpisodes):
         sUrl = siteUrl + '&sEpisode=' + str(episode)
 
@@ -2973,7 +2973,7 @@ def adminPasteID():
     prefixID = SETTING_PASTE_ID + str(pasteID)
 
     pbContentNew = PasteContent()
-    oOutputParameterHandler = cOutputParameterHandler()
+    oOutputParameterHandler = OutputParameterHandler()
     for numID in range(0, PASTE_PAR_GROUPE):
         if numID == 0:
             pasteBin = addons.getSetting(prefixID)
@@ -3035,7 +3035,7 @@ def deletePasteID():
 # Menu d'administration des contenus
 def adminContenu():
     oGui = Gui()
-    oOutputParameterHandler = cOutputParameterHandler()
+    oOutputParameterHandler = OutputParameterHandler()
     sDecoColor = addon().getSetting('deco_color')
 
     # Menu pour afficher le nombre de média

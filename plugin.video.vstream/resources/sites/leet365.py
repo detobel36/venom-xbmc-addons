@@ -8,7 +8,7 @@ from resources.lib.comaddon import siteManager
 from resources.lib.gui.gui import Gui
 from resources.lib.gui.hoster import cHosterGui
 from resources.lib.handler.inputParameterHandler import InputParameterHandler
-from resources.lib.handler.outputParameterHandler import cOutputParameterHandler
+from resources.lib.handler.outputParameterHandler import OutputParameterHandler
 from resources.lib.handler.requestHandler import cRequestHandler
 from resources.lib.packer import cPacker
 from resources.lib.parser import cParser
@@ -81,7 +81,7 @@ channels = {
 def load():
     oGui = Gui()
 
-    oOutputParameterHandler = cOutputParameterHandler()
+    oOutputParameterHandler = OutputParameterHandler()
 
     oOutputParameterHandler.addParameter('siteUrl', SPORT_LIVE[0])
     oGui.addDir(SITE_IDENTIFIER, SPORT_LIVE[1], 'Sports (En direct)', 'replay.png', oOutputParameterHandler)
@@ -122,7 +122,7 @@ def showGenres():
     for sGenre in aResult[1]:
         genres.add(sGenre)
 
-    oOutputParameterHandler = cOutputParameterHandler()
+    oOutputParameterHandler = OutputParameterHandler()
     for sGenre in sorted(genres):
         sTitle = sGenre
         sDisplayTitle = sTitle
@@ -154,7 +154,7 @@ def showTV():
     else:  # Chaines ciné
         chaines = [29, 30, 38, 5, 17, 39]
 
-    oOutputParameterHandler = cOutputParameterHandler()
+    oOutputParameterHandler = OutputParameterHandler()
     for iChannel in chaines:
         channel = channels.get(iChannel)
         sDisplayTitle = channel[0]
@@ -188,7 +188,7 @@ def showMovies():
     if not aResult[0]:
         oGui.addText(SITE_IDENTIFIER)
     else:
-        oOutputParameterHandler = cOutputParameterHandler()
+        oOutputParameterHandler = OutputParameterHandler()
         for aEntry in aResult[1]:
             sDate = aEntry[0].replace('-20', '/').replace('-', '/').replace('(', '').replace(')', '')
             sDesc1 = aEntry[1]
@@ -227,7 +227,7 @@ def showLive():
     else:
         links.append(eval(sUrl))
 
-    oOutputParameterHandler = cOutputParameterHandler()
+    oOutputParameterHandler = OutputParameterHandler()
     for link in links:
         aEntry = re.findall('(\\d+)(.+)', link)
         iChannel = aEntry[0][0]
@@ -260,7 +260,7 @@ def showLink():
     sHoster = 'https://leet365.cc/fr/%d/%s'
 # alternative    sHoster = 'https://1rowsports.com/player/%d/%s'
 
-    oOutputParameterHandler = cOutputParameterHandler()
+    oOutputParameterHandler = OutputParameterHandler()
 
     # jusqu'à 6 hosters, mais on vStream ne sait décoder que le 1 et le 5.
     hosters = [1, 5]

@@ -6,7 +6,7 @@ import requests
 from resources.lib.gui.hoster import cHosterGui
 from resources.lib.gui.gui import Gui
 from resources.lib.handler.inputParameterHandler import InputParameterHandler
-from resources.lib.handler.outputParameterHandler import cOutputParameterHandler
+from resources.lib.handler.outputParameterHandler import OutputParameterHandler
 from resources.lib.handler.requestHandler import cRequestHandler
 from resources.lib.parser import cParser
 from resources.lib.comaddon import progress, addon
@@ -27,7 +27,7 @@ def load():
     ALL_MAGNETS = (URL_HOST + 'magnets/', 'showMagnets')
     ALL_INFORMATION = ('https://alldebrid.fr', 'showInfo')
 
-    oOutputParameterHandler = cOutputParameterHandler()
+    oOutputParameterHandler = OutputParameterHandler()
     oOutputParameterHandler.addParameter('siteUrl', ALL_ALL[0])
     oGui.addDir(SITE_IDENTIFIER, ALL_ALL[1], 'Liens', 'films.png', oOutputParameterHandler)
 
@@ -91,7 +91,7 @@ def showLiens(sSearch=''):
             sThumb = ''
             sDesc = ''
 
-            oOutputParameterHandler = cOutputParameterHandler()
+            oOutputParameterHandler = OutputParameterHandler()
             oOutputParameterHandler.addParameter('siteUrl', sUrl2)
             oOutputParameterHandler.addParameter('sMovieTitle', sTitle)
             oOutputParameterHandler.addParameter('sDesc', sDesc)
@@ -103,7 +103,7 @@ def showLiens(sSearch=''):
             if not sSearch:
                 if nbItem % ITEM_PAR_PAGE == 0:  # cherche la page suivante
                     numPage += 1
-                    oOutputParameterHandler = cOutputParameterHandler()
+                    oOutputParameterHandler = OutputParameterHandler()
                     oOutputParameterHandler.addParameter('siteUrl', sUrl)
                     oOutputParameterHandler.addParameter('numItem', numItem)
                     oOutputParameterHandler.addParameter('numPage', numPage)
@@ -158,7 +158,7 @@ def showMagnets(sSearch=''):
             sTitle = aEntry[0]
             sUrl2 = sUrl + aEntry[1]
 
-            oOutputParameterHandler = cOutputParameterHandler()
+            oOutputParameterHandler = OutputParameterHandler()
             oOutputParameterHandler.addParameter('siteUrl', sUrl2)
             oOutputParameterHandler.addParameter('sMovieTitle', sTitle)
             oOutputParameterHandler.addParameter('sThumb', sThumb)
@@ -166,7 +166,7 @@ def showMagnets(sSearch=''):
             if not sSearch:
                 if nbItem % ITEM_PAR_PAGE == 0:  # cherche la page suivante
                     numPage += 1
-                    oOutputParameterHandler = cOutputParameterHandler()
+                    oOutputParameterHandler = OutputParameterHandler()
                     oOutputParameterHandler.addParameter('siteUrl', sUrl)
                     oOutputParameterHandler.addParameter('numItem', numItem)
                     oOutputParameterHandler.addParameter('numPage', numPage)
@@ -258,7 +258,7 @@ def showseriesHoster(sSearch=''):
             sThumb = ''
             sDesc = ''
 
-            oOutputParameterHandler = cOutputParameterHandler()
+            oOutputParameterHandler = OutputParameterHandler()
             oOutputParameterHandler.addParameter('siteUrl', sUrl2)
             oOutputParameterHandler.addParameter('sMovieTitle', sTitle)
             oOutputParameterHandler.addParameter('sDesc', sDesc)
@@ -269,7 +269,7 @@ def showseriesHoster(sSearch=''):
             if not sSearch:
                 if nbItem % ITEM_PAR_PAGE == 0:  # cherche la page suivante
                     numPage += 1
-                    oOutputParameterHandler = cOutputParameterHandler()
+                    oOutputParameterHandler = OutputParameterHandler()
                     oOutputParameterHandler.addParameter('siteUrl', sUrl)
                     oOutputParameterHandler.addParameter('numItem', numItem)
                     oOutputParameterHandler.addParameter('numPage', numPage)
@@ -328,7 +328,7 @@ def showInfo():
 
             sDisplayTitle = ('%s (%s)') % (sHebergeur, sDisponible)
 
-            oOutputParameterHandler = cOutputParameterHandler()
+            oOutputParameterHandler = OutputParameterHandler()
             oOutputParameterHandler.addParameter('sMovieTitle', sDisplayTitle)
 
             oGui.addText(SITE_IDENTIFIER, sDisplayTitle)

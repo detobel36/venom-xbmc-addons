@@ -10,7 +10,7 @@ from resources.lib.comaddon import addon
 from resources.lib.gui.gui import Gui
 from resources.lib.gui.guiElement import cGuiElement
 from resources.lib.handler.inputParameterHandler import InputParameterHandler
-from resources.lib.handler.outputParameterHandler import cOutputParameterHandler
+from resources.lib.handler.outputParameterHandler import OutputParameterHandler
 from resources.lib.handler.requestHandler import cRequestHandler
 from resources.lib.parser import cParser
 from resources.lib.player import cPlayer
@@ -41,7 +41,7 @@ def load():
     oGui = Gui()
     addons = addon()
 
-    oOutputParameterHandler = cOutputParameterHandler()
+    oOutputParameterHandler = OutputParameterHandler()
     oOutputParameterHandler.addParameter('siteUrl', 'http://')
     oGui.addDir(SITE_IDENTIFIER, 'showWeb', addons.VSlang(30203), 'music.png', oOutputParameterHandler)
 
@@ -68,7 +68,7 @@ def showGenres():
              ['Hits', 'Hits'], ['Jazz', 'Jazz'], ['Lounge', 'Lounge'], ['Metal', 'Metal'],
              ['News', 'News'], ['Pop', 'Pop'], ['Rock', 'Rock'], ['Slow', 'Slow'], ['Trance', 'Trance']]
 
-    oOutputParameterHandler = cOutputParameterHandler()
+    oOutputParameterHandler = OutputParameterHandler()
     for sTitle, sIdent in liste:
         oOutputParameterHandler.addParameter('siteUrl', '')
         oOutputParameterHandler.addParameter('ident', sIdent)
@@ -121,11 +121,11 @@ def showWeb():  # Code qui s'occupe de liens TV du Web
         playlist = sorted(playlist, key=lambda t: t.title.strip().capitalize())
 
     if not playlist:
-        oOutputParameterHandler = cOutputParameterHandler()
+        oOutputParameterHandler = OutputParameterHandler()
         oOutputParameterHandler.addParameter('siteUrl', 'http://')
         oGui.addText(SITE_IDENTIFIER, '[COLOR red]Aucun résultat[/COLOR] ')
     else:
-        oOutputParameterHandler = cOutputParameterHandler()
+        oOutputParameterHandler = OutputParameterHandler()
         for track in playlist:
             sThumb = track.image
             if not sThumb:
@@ -158,13 +158,13 @@ def showAZ():
     oInputParameterHandler = InputParameterHandler()
     sUrl = oInputParameterHandler.getValue('siteUrl')
 
-    oOutputParameterHandler = cOutputParameterHandler()
+    oOutputParameterHandler = OutputParameterHandler()
     for i in string.digits:
         oOutputParameterHandler.addParameter('siteUrl', sUrl)
         oOutputParameterHandler.addParameter('AZ', i)
         oGui.addDir(SITE_IDENTIFIER, 'showWeb', i, 'az.png', oOutputParameterHandler)
 
-    oOutputParameterHandler = cOutputParameterHandler()
+    oOutputParameterHandler = OutputParameterHandler()
     for i in string.ascii_uppercase:
         oOutputParameterHandler.addParameter('siteUrl', sUrl)
         oOutputParameterHandler.addParameter('AZ', i)

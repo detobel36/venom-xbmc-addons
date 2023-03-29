@@ -9,7 +9,7 @@ import xbmc
 from resources.lib import util
 from resources.lib.parser import cParser
 from resources.lib.handler.requestHandler import cRequestHandler
-from resources.lib.handler.outputParameterHandler import cOutputParameterHandler
+from resources.lib.handler.outputParameterHandler import OutputParameterHandler
 from resources.lib.handler.inputParameterHandler import InputParameterHandler
 from resources.lib.gui.gui import Gui
 return False
@@ -28,7 +28,7 @@ NETS_NEWS = (URL_MAIN, 'showMovies')
 def load():
     oGui = Gui()
 
-    oOutputParameterHandler = cOutputParameterHandler()
+    oOutputParameterHandler = OutputParameterHandler()
     oOutputParameterHandler.addParameter('siteUrl', NETS_NEWS[0])
     oGui.addDir(SITE_IDENTIFIER, NETS_NEWS[1], 'Vidéos (Derniers ajouts)', 'news.png', oOutputParameterHandler)
 
@@ -71,7 +71,7 @@ def showMovies(sSearch=''):
             # recup id last tweet pour NextPage
             sNext = str(aEntry[0]).replace('/malaisetele/status/', '')
 
-            oOutputParameterHandler = cOutputParameterHandler()
+            oOutputParameterHandler = OutputParameterHandler()
             oOutputParameterHandler.addParameter('siteUrl', sUrl)
             oOutputParameterHandler.addParameter('sMovieTitle', sTitle)
             oOutputParameterHandler.addParameter('sThumbnail', sThumbnail)
@@ -82,7 +82,7 @@ def showMovies(sSearch=''):
 
         sNextPage = __checkForNextPage(sNext)
         if (sNextPage):
-            oOutputParameterHandler = cOutputParameterHandler()
+            oOutputParameterHandler = OutputParameterHandler()
             oOutputParameterHandler.addParameter('siteUrl', sNextPage)
             oGui.addNext(SITE_IDENTIFIER, 'showMovies', '[COLOR teal]Next >>>[/COLOR]', oOutputParameterHandler)
 

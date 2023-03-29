@@ -6,7 +6,7 @@ from resources.lib.comaddon import progress, isMatrix, siteManager
 from resources.lib.gui.hoster import cHosterGui
 from resources.lib.gui.gui import Gui
 from resources.lib.handler.inputParameterHandler import InputParameterHandler
-from resources.lib.handler.outputParameterHandler import cOutputParameterHandler
+from resources.lib.handler.outputParameterHandler import OutputParameterHandler
 from resources.lib.handler.requestHandler import cRequestHandler
 from resources.lib.parser import cParser
 from resources.lib.util import cUtil
@@ -36,7 +36,7 @@ FUNCTION_SEARCH = 'showSeries'
 def load():
     oGui = Gui()
 
-    oOutputParameterHandler = cOutputParameterHandler()
+    oOutputParameterHandler = OutputParameterHandler()
     oOutputParameterHandler.addParameter('siteUrl', 'http://venom/')
     oGui.addDir(SITE_IDENTIFIER, 'showSearch', 'Recherche', 'search.png', oOutputParameterHandler)
 
@@ -52,7 +52,7 @@ def load():
 def showAnimMenu():
     oGui = Gui()
 
-    oOutputParameterHandler = cOutputParameterHandler()
+    oOutputParameterHandler = OutputParameterHandler()
     oOutputParameterHandler.addParameter('siteUrl', 'http://venom/')
     oGui.addDir(SITE_IDENTIFIER, 'showSearchAnim', 'Recherche', 'search.png', oOutputParameterHandler)
 
@@ -68,7 +68,7 @@ def showAnimMenu():
 def showDramaMenu():
     oGui = Gui()
 
-    oOutputParameterHandler = cOutputParameterHandler()
+    oOutputParameterHandler = OutputParameterHandler()
     oOutputParameterHandler.addParameter('siteUrl', 'http://venom/')
     oGui.addDir(SITE_IDENTIFIER, 'showSearchDrama', 'Recherche', 'search.png', oOutputParameterHandler)
 
@@ -159,7 +159,7 @@ def showGenres():
     liste.append(['Shônen-Ai', URL_MAIN + 'video?recherche=&genre3=26&type2=' + sType2])
     liste.append(['Yaoi/BL', URL_MAIN + 'video?recherche=&genre3=27&type2=' + sType2])
 
-    oOutputParameterHandler = cOutputParameterHandler()
+    oOutputParameterHandler = OutputParameterHandler()
     for sTitle, sUrl in liste:
         oOutputParameterHandler.addParameter('siteUrl', sUrl)
         oGui.addDir(SITE_IDENTIFIER, 'showSeries', sTitle, 'genres.png', oOutputParameterHandler)
@@ -173,7 +173,7 @@ def showAZ():
     sUrl = oInputParameterHandler.getValue('siteUrl')
 
     # pas d'url pour les non alpha, on utilise l'ancienne méthode épurée.
-    oOutputParameterHandler = cOutputParameterHandler()
+    oOutputParameterHandler = OutputParameterHandler()
     oOutputParameterHandler.addParameter('siteUrl', sUrl)
     oGui.addDir(
         SITE_IDENTIFIER,
@@ -220,7 +220,7 @@ def showNoAlpha():
         oGui.addText(SITE_IDENTIFIER)
 
     if aResult[0]:
-        oOutputParameterHandler = cOutputParameterHandler()
+        oOutputParameterHandler = OutputParameterHandler()
 
         for aEntry in aResult[1]:
 
@@ -265,7 +265,7 @@ def showSeries(sSearch=''):
     else:
         total = len(aResult)
         progress_ = progress().VScreate(SITE_NAME, large=total > 50)
-        oOutputParameterHandler = cOutputParameterHandler()
+        oOutputParameterHandler = OutputParameterHandler()
 
         for aEntry in aResult:
             progress_.VSupdate(progress_, total)
@@ -296,7 +296,7 @@ def showSeries(sSearch=''):
 
         sNextPage = __checkForNextPage(sHtmlContent)
         if sNextPage is not False:
-            oOutputParameterHandler = cOutputParameterHandler()
+            oOutputParameterHandler = OutputParameterHandler()
             oOutputParameterHandler.addParameter('siteUrl', sNextPage)
             sNumPage = re.search('page=([0-9]+)', sNextPage).group(1)
             oGui.addNext(SITE_IDENTIFIER, 'showSeries', 'Page ' + sNumPage, oOutputParameterHandler)
@@ -347,7 +347,7 @@ def showSaison():
         sPattern = '<li class="saison">.+?(\\d+)<\\/li>'
         aResult = oParser.parse(sHtmlContent, sPattern)
         if aResult[0]:
-            oOutputParameterHandler = cOutputParameterHandler()
+            oOutputParameterHandler = OutputParameterHandler()
             for aEntry in aResult[1]:
 
                 sNumSaison = aEntry[0]
@@ -400,7 +400,7 @@ def showEpisode():
         sPattern = '<a href="(https://www\\.adkami\\.com[^"]+)"[^<>]+>([^<]+)</a></li>'
         aResult = oParser.parse(sHtmlContent, sPattern)
         if aResult[0]:
-            oOutputParameterHandler = cOutputParameterHandler()
+            oOutputParameterHandler = OutputParameterHandler()
             for aEntry in aResult[1]:
                 sUrl = aEntry[0]
                 sEpisode = aEntry[1]
