@@ -4,7 +4,7 @@
 
 import re
 
-from resources.lib.gui.hoster import cHosterGui
+from resources.lib.gui.hoster import HosterGui
 from resources.lib.gui.gui import Gui
 from resources.lib.handler.inputParameterHandler import InputParameterHandler
 from resources.lib.handler.outputParameterHandler import OutputParameterHandler
@@ -305,7 +305,7 @@ def showLinks():
 
             # trie des hosters
             sHoster = aEntry[2].capitalize()
-            oHoster = cHosterGui().checkHoster(sHoster)
+            oHoster = HosterGui().checkHoster(sHoster)
             if not oHoster:
                 continue
 
@@ -348,10 +348,10 @@ def showHosters():
     if aResult:
         for aEntry in aResult:
             sHosterUrl = aEntry
-            oHoster = cHosterGui().checkHoster(sHosterUrl)
+            oHoster = HosterGui().checkHoster(sHosterUrl)
             if (oHoster):
                 oHoster.setDisplayName(sMovieTitle)
                 oHoster.setFileName(sMovieTitle)
-                cHosterGui().showHoster(oGui, oHoster, sHosterUrl, sThumb)
+                HosterGui().showHoster(oGui, oHoster, sHosterUrl, sThumb)
 
     oGui.setEndOfDirectory()

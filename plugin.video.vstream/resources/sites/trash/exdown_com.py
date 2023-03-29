@@ -2,7 +2,7 @@
 # From Patoche2025
 
 from resources.lib.config import cConfig
-from resources.lib.gui.hoster import cHosterGui
+from resources.lib.gui.hoster import HosterGui
 from resources.lib.handler.rechercheHandler import cRechercheHandler
 from resources.lib.handler.hosterHandler import cHosterHandler
 from resources.lib.gui.gui import Gui
@@ -673,12 +673,12 @@ def Display_protected_link():
 
             episode += 1
 
-            oHoster = cHosterGui().checkHoster(sHosterUrl)
+            oHoster = HosterGui().checkHoster(sHosterUrl)
             if (oHoster):
                 sDisplayTitle = cUtil().DecoTitle(sTitle)
                 oHoster.setDisplayName(sDisplayTitle)
                 oHoster.setFileName(sTitle)
-                cHosterGui().showHoster(oGui, oHoster, sHosterUrl, sThumbnail)
+                HosterGui().showHoster(oGui, oHoster, sHosterUrl, sThumbnail)
 
     oGui.setEndOfDirectory()
 

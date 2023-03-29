@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 # Vstream https://github.com/Kodi-vStream/venom-xbmc-addons
-from resources.lib.gui.hoster import cHosterGui
+from resources.lib.gui.hoster import HosterGui
 from resources.lib.gui.gui import Gui
 from resources.lib.handler.inputParameterHandler import InputParameterHandler
 from resources.lib.handler.outputParameterHandler import OutputParameterHandler
@@ -429,12 +429,12 @@ def showHosters():
             else:
                 sHosterUrl = sUrl
 
-                oHoster = cHosterGui().checkHoster(sHosterUrl)
+                oHoster = HosterGui().checkHoster(sHosterUrl)
                 if (oHoster):
                     sDisplayTitle = sMovieTitle + ' [' + aEntry[1][1] + '/' + sLang + ']'
                     oHoster.setDisplayName(sDisplayTitle)
                     oHoster.setFileName(sMovieTitle)
-                    cHosterGui().showHoster(oGui, oHoster, sHosterUrl, sThumbnail)
+                    HosterGui().showHoster(oGui, oHoster, sHosterUrl, sThumbnail)
 
     oGui.setEndOfDirectory()
 
@@ -455,11 +455,11 @@ def ShowPapyLink():
         aResult = oParser.parse(sHtmlContent, sPattern)
         if aResult[0]:
             sHosterUrl = aResult[1][0]
-            oHoster = cHosterGui().checkHoster(sHosterUrl)
+            oHoster = HosterGui().checkHoster(sHosterUrl)
             if (oHoster):
                 oHoster.setDisplayName(sMovieTitle)
                 oHoster.setFileName(sMovieTitle)
-                cHosterGui().showHoster(oGui, oHoster, sHosterUrl, sThumbnail)
+                HosterGui().showHoster(oGui, oHoster, sHosterUrl, sThumbnail)
             else:
                 oGui.addText(SITE_IDENTIFIER, '[COLOR red]Lien vidéo Non géré[/COLOR]')
         else:
@@ -475,12 +475,12 @@ def ShowPapyLink():
                 sHosterUrl = aEntry[0]
                 sLabel = aEntry[1]
 
-                oHoster = cHosterGui().checkHoster(sHosterUrl)
+                oHoster = HosterGui().checkHoster(sHosterUrl)
                 if (oHoster):
                     sDisplayTitle = sMovieTitle + ' [' + sLabel + ']'
                     oHoster.setDisplayName(sDisplayTitle)
                     oHoster.setFileName(sMovieTitle)
-                    cHosterGui().showHoster(oGui, oHoster, sHosterUrl, sThumbnail)
+                    HosterGui().showHoster(oGui, oHoster, sHosterUrl, sThumbnail)
     else:
 
         oRequestHandler = cRequestHandler(sUrl)
@@ -506,12 +506,12 @@ def ShowPapyLink():
                 if not sHosterUrl.startswith('http'):
                     sHosterUrl = 'http' + sHosterUrl
 
-                oHoster = cHosterGui().checkHoster(sHosterUrl)
+                oHoster = HosterGui().checkHoster(sHosterUrl)
                 if (oHoster):
                     sDisplayTitle = sMovieTitle + ' [' + qual + ']'
                     oHoster.setDisplayName(sDisplayTitle)
                     oHoster.setFileName(sMovieTitle)
-                    cHosterGui().showHoster(oGui, oHoster, sHosterUrl, sThumbnail)
+                    HosterGui().showHoster(oGui, oHoster, sHosterUrl, sThumbnail)
         else:
             oGui.addText(SITE_IDENTIFIER, '[COLOR red]Lien vidéo HS[/COLOR]')
 

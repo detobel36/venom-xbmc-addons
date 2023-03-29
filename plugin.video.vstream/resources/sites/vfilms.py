@@ -3,7 +3,7 @@
 import re
 
 from resources.lib.comaddon import siteManager
-from resources.lib.gui.hoster import cHosterGui
+from resources.lib.gui.hoster import HosterGui
 from resources.lib.gui.gui import Gui
 from resources.lib.handler.inputParameterHandler import InputParameterHandler
 from resources.lib.handler.outputParameterHandler import OutputParameterHandler
@@ -301,10 +301,10 @@ def showHosters():
                 sDisplayTitle = ('%s (%s)') % (sMovieTitle, sHost)
             else:
                 sDisplayTitle = sMovieTitle
-            oHoster = cHosterGui().checkHoster(sHosterUrl)
+            oHoster = HosterGui().checkHoster(sHosterUrl)
             if oHoster:
                 oHoster.setDisplayName(sDisplayTitle)
                 oHoster.setFileName(sDisplayTitle)
-                cHosterGui().showHoster(oGui, oHoster, sHosterUrl, sThumb)
+                HosterGui().showHoster(oGui, oHoster, sHosterUrl, sThumb)
 
     oGui.setEndOfDirectory()

@@ -59,7 +59,7 @@ class cLibrary:
         sMediaUrl = QuotePlus(sMediaUrl)
         # sFileName = QuotePlus(sFileName)
 
-        sLink = 'plugin://plugin.video.vstream/?function=play&site=cHosterGui&sFileName='
+        sLink = 'plugin://plugin.video.vstream/?function=play&site=HosterGui&sFileName='
         sLink += sFileName + '&sMediaUrl=' + sMediaUrl + '&sHosterIdentifier=' + sHosterIdentifier
 
         sTitle = sFileName

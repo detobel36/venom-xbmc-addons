@@ -3,7 +3,7 @@
 import re
 
 from resources.lib.comaddon import progress, siteManager
-from resources.lib.gui.hoster import cHosterGui
+from resources.lib.gui.hoster import HosterGui
 from resources.lib.gui.gui import Gui
 from resources.lib.handler.inputParameterHandler import InputParameterHandler
 from resources.lib.handler.outputParameterHandler import OutputParameterHandler
@@ -341,20 +341,20 @@ def showHosters():
                 for aEntry in aResult:
                     sHosterUrl = aEntry
 
-                    oHoster = cHosterGui().checkHoster(sHosterUrl)
+                    oHoster = HosterGui().checkHoster(sHosterUrl)
                     if oHoster:
                         oHoster.setDisplayName(sMovieTitle)
                         oHoster.setFileName(sMovieTitle)
-                        cHosterGui().showHoster(oGui, oHoster, sHosterUrl, sThumb)
+                        HosterGui().showHoster(oGui, oHoster, sHosterUrl, sThumb)
 
         else:
             sHosterUrl = sUrl2
 
-            oHoster = cHosterGui().checkHoster(sUrl2)
+            oHoster = HosterGui().checkHoster(sUrl2)
             if oHoster:
                 oHoster.setDisplayName(sMovieTitle)
                 oHoster.setFileName(sMovieTitle)
-                cHosterGui().showHoster(oGui, oHoster, sHosterUrl, sThumb)
+                HosterGui().showHoster(oGui, oHoster, sHosterUrl, sThumb)
 
     else:
         oRequestHandler = cRequestHandler(sUrl)
@@ -372,10 +372,10 @@ def showHosters():
                 sTitle = sMovieTitle
                 sHosterUrl = aEntry
 
-                oHoster = cHosterGui().checkHoster(sHosterUrl)
+                oHoster = HosterGui().checkHoster(sHosterUrl)
                 if oHoster:
                     oHoster.setDisplayName(sTitle)
                     oHoster.setFileName(sMovieTitle)
-                    cHosterGui().showHoster(oGui, oHoster, sHosterUrl, sThumb)
+                    HosterGui().showHoster(oGui, oHoster, sHosterUrl, sThumb)
 
     oGui.setEndOfDirectory()

@@ -9,8 +9,8 @@ from resources.lib.handler.outputParameterHandler import OutputParameterHandler
 from resources.lib.comaddon import dialog, addon, VSlog
 
 
-class cHosterGui:
-    SITE_NAME = 'cHosterGui'
+class HosterGui:
+    SITE_NAME = 'HosterGui'
     ADDON = addon()
 
     # step 1 - bGetRedirectUrl in ein extra optionsObject verpacken
@@ -68,7 +68,7 @@ class cHosterGui:
         oOutputParameterHandler.addParameter('sTitle', title)
         oOutputParameterHandler.addParameter('sLang', sLang)
         oOutputParameterHandler.addParameter('sRes', sRes)
-        oOutputParameterHandler.addParameter('sId', 'cHosterGui')
+        oOutputParameterHandler.addParameter('sId', 'HosterGui')
         oOutputParameterHandler.addParameter('siteUrl', siteUrl)
         oOutputParameterHandler.addParameter('sTmdbId', sTmdbId)
 
@@ -103,7 +103,7 @@ class cHosterGui:
 
         # Liste de lecture
         oContext = cContextElement()
-        oContext.setFile('cHosterGui')
+        oContext.setFile('HosterGui')
         oContext.setSiteName(self.SITE_NAME)
         oContext.setFunction('addToPlaylist')
         oContext.setTitle(self.ADDON.VSlang(30201))

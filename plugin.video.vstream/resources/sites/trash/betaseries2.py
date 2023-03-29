@@ -4,7 +4,7 @@ from resources.lib.config import cConfig
 from resources.lib.db import Db
 from resources.lib.gui.gui import Gui
 from resources.lib.gui.guiElement import cGuiElement
-from resources.lib.gui.hoster import cHosterGui
+from resources.lib.gui.hoster import HosterGui
 from resources.lib.handler.requestHandler import cRequestHandler
 from resources.lib.handler.inputParameterHandler import InputParameterHandler
 from resources.lib.handler.outputParameterHandler import OutputParameterHandler
@@ -330,7 +330,7 @@ class cBseries:
                 oOutputParameterHandler.addParameter('sThumbnail', thumbnail)
 
                 if (function == 'play'):
-                    oHoster = cHosterGui().checkHoster(siteurl)
+                    oHoster = HosterGui().checkHoster(siteurl)
                     oOutputParameterHandler.addParameter('sHosterIdentifier', oHoster.getPluginIdentifier())
                     oOutputParameterHandler.addParameter('sFileName', oHoster.getFileName())
                     oOutputParameterHandler.addParameter('sMediaUrl', siteurl)

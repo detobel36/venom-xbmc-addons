@@ -3,7 +3,7 @@
 # return False  # 06/02/2021
 import re
 
-from resources.lib.gui.hoster import cHosterGui
+from resources.lib.gui.hoster import HosterGui
 from resources.lib.gui.gui import Gui
 from resources.lib.handler.inputParameterHandler import InputParameterHandler
 from resources.lib.handler.outputParameterHandler import OutputParameterHandler
@@ -192,11 +192,11 @@ def showHosters():
     if aResult[0]:
         for aEntry in aResult[1]:
             sHosterUrl = aEntry
-            oHoster = cHosterGui().checkHoster(sHosterUrl)
+            oHoster = HosterGui().checkHoster(sHosterUrl)
             if (oHoster):
                 oHoster.setDisplayName(sMovieTitle)
                 oHoster.setFileName(sMovieTitle)
-                cHosterGui().showHoster(oGui, oHoster, sHosterUrl, sThumb)
+                HosterGui().showHoster(oGui, oHoster, sHosterUrl, sThumb)
 
 #
 #
@@ -222,11 +222,11 @@ def showHosters():
 #        if aResult[0]:
 #            sHosterUrl = 'https:' + aResult[1][0]
 #            #VSlog(sHosterUrl)
-#            oHoster = cHosterGui().checkHoster(sHosterUrl)
+#            oHoster = HosterGui().checkHoster(sHosterUrl)
 #            if (oHoster):
 #                oHoster.setDisplayName(sMovieTitle)
 #                oHoster.setFileName(sMovieTitle)
-#                cHosterGui().showHoster(oGui, oHoster, sHosterUrl, sThumb)
+#                HosterGui().showHoster(oGui, oHoster, sHosterUrl, sThumb)
 #        else:
 #            sHtmlContent = oParser.abParse(sHtmlContent, "<script>", "</script><script>")
 #
@@ -240,9 +240,9 @@ def showHosters():
 #                if code:
 #                    sHosterUrl = code.group(1)
 #                   #VSlog(sHosterUrl)
-#                   oHoster = cHosterGui().checkHoster(sHosterUrl)
+#                   oHoster = HosterGui().checkHoster(sHosterUrl)
 #                   if (oHoster):
 #                       oHoster.setDisplayName(sMovieTitle)
 #                       oHoster.setFileName(sMovieTitle)
-#                       cHosterGui().showHoster(oGui, oHoster, sHosterUrl, sThumb)
+#                       HosterGui().showHoster(oGui, oHoster, sHosterUrl, sThumb)
     oGui.setEndOfDirectory()

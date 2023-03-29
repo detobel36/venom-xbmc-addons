@@ -12,7 +12,7 @@ from resources.lib.handler.outputParameterHandler import OutputParameterHandler
 from resources.lib.handler.inputParameterHandler import InputParameterHandler
 from resources.lib.gui.guiElement import cGuiElement
 from resources.lib.gui.gui import Gui
-from resources.lib.gui.hoster import cHosterGui
+from resources.lib.gui.hoster import HosterGui
 return False
 
 SITE_IDENTIFIER = 'filmstreamingv2'
@@ -292,11 +292,11 @@ def showHosters():
 
             sHosterUrl = str(aEntry)
             sHosterUrl = sHosterUrl.replace('//ok.ru', 'https://ok.ru')
-            oHoster = cHosterGui().checkHoster(sHosterUrl)
+            oHoster = HosterGui().checkHoster(sHosterUrl)
             if (oHoster):
                 oHoster.setDisplayName(sMovieTitle)
                 oHoster.setFileName(sMovieTitle)
-                cHosterGui().showHoster(oGui, oHoster, sHosterUrl, '')
+                HosterGui().showHoster(oGui, oHoster, sHosterUrl, '')
 
     # recherche des liens de telechargement
     sUrl = sUrl + '#example'
@@ -365,12 +365,12 @@ def Display_protected_link():
 
             sTitle = sMovieTitle
 
-            oHoster = cHosterGui().checkHoster(sHosterUrl)
+            oHoster = HosterGui().checkHoster(sHosterUrl)
             if (oHoster):
                 sDisplayTitle = cUtil().DecoTitle(sTitle)
                 oHoster.setDisplayName(sDisplayTitle)
                 oHoster.setFileName(sTitle)
-                cHosterGui().showHoster(oGui, oHoster, sHosterUrl, sThumb)
+                HosterGui().showHoster(oGui, oHoster, sHosterUrl, sThumb)
 
         else:
             oDialog = cConfig().createDialogOK('Erreur décryptage du lien')

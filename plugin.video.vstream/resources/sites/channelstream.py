@@ -152,7 +152,7 @@ def showHoster():
             oOutputParameterHandler.addParameter('siteUrl', sHosterUrl)  # variable manquante
             oOutputParameterHandler.addParameter('sFileName', sMovieTitle)
             oGuiElement.setFunction('play')
-            oGuiElement.setSiteName('cHosterGui')
+            oGuiElement.setSiteName('HosterGui')
             oGui.addHost(oGuiElement, oOutputParameterHandler)  # addHost absent ???? del 20/08/2021
             Gui.CONTENT = 'movies'
             oGui.setEndOfDirectory()

@@ -3,7 +3,7 @@
 
 import re
 
-from resources.lib.gui.hoster import cHosterGui
+from resources.lib.gui.hoster import HosterGui
 from resources.lib.gui.gui import Gui
 from resources.lib.handler.inputParameterHandler import InputParameterHandler
 from resources.lib.handler.outputParameterHandler import OutputParameterHandler
@@ -330,7 +330,7 @@ def showEpisodes():
 
 def showLinks():
     oGui = Gui()
-    oHosterGui = cHosterGui()
+    oHosterGui = HosterGui()
     oInputParameterHandler = InputParameterHandler()
     sUrl = oInputParameterHandler.getValue('siteUrl')
     sTitle = oInputParameterHandler.getValue('sMovieTitle')
@@ -410,7 +410,7 @@ def showLinks():
 
 def showHosters():
     oGui = Gui()
-    oHosterGui = cHosterGui()
+    oHosterGui = HosterGui()
     oInputParameterHandler = InputParameterHandler()
     sUrl = oInputParameterHandler.getValue('siteUrl')
     sMovieTitle = oInputParameterHandler.getValue('sMovieTitle')

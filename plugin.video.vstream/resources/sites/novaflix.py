@@ -7,7 +7,7 @@ from resources.lib.handler.requestHandler import cRequestHandler
 from resources.lib.handler.outputParameterHandler import OutputParameterHandler
 from resources.lib.handler.inputParameterHandler import InputParameterHandler
 from resources.lib.gui.gui import Gui
-from resources.lib.gui.hoster import cHosterGui
+from resources.lib.gui.hoster import HosterGui
 DEBUG = False
 
 if DEBUG:
@@ -404,7 +404,7 @@ def showHosters():
                 pdata = 'mod=xfield_ajax&id=' + dataId + '&name=' + dataName
                 pdata = str(pdata)
 
-            if not cHosterGui().checkHoster(sHost):
+            if not HosterGui().checkHoster(sHost):
                 continue
 
             sDisplayTitle = sMovieTitle
@@ -461,9 +461,9 @@ def hostersLink():
             if 'userload' in sHosterUrl:
                 sHosterUrl = sHosterUrl + "|Referer=" + URL_MAIN
 
-            oHoster = cHosterGui().checkHoster(sHosterUrl)
+            oHoster = HosterGui().checkHoster(sHosterUrl)
             if oHoster:
                 oHoster.setDisplayName(sMovieTitle)
                 oHoster.setFileName(sMovieTitle)
-                cHosterGui().showHoster(oGui, oHoster, sHosterUrl, sThumb)
+                HosterGui().showHoster(oGui, oHoster, sHosterUrl, sThumb)
     oGui.setEndOfDirectory()

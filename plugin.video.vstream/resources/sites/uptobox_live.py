@@ -436,9 +436,9 @@ def showEpisodes():
 
 def showHosters():
 
-    from resources.lib.gui.hoster import cHosterGui
+    from resources.lib.gui.hoster import HosterGui
     oGui = Gui()
-    oHosterGui = cHosterGui()
+    oHosterGui = HosterGui()
     hoster = oHosterGui.getHoster('lien_direct')
     oUtil = cUtil()
 

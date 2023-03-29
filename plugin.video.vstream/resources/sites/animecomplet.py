@@ -4,7 +4,7 @@
 import re
 import string
 
-from resources.lib.gui.hoster import cHosterGui
+from resources.lib.gui.hoster import HosterGui
 from resources.lib.gui.gui import Gui
 from resources.lib.handler.inputParameterHandler import InputParameterHandler
 from resources.lib.handler.outputParameterHandler import OutputParameterHandler
@@ -319,7 +319,7 @@ def seriesHosters():
                 sUrl2 = 'https:' + sUrl2
 
             # sHost = ''
-            oHoster = cHosterGui().checkHoster(sUrl2)
+            oHoster = HosterGui().checkHoster(sUrl2)
             if not oHoster:
                 continue
             sHost = '[COLOR coral]' + oHoster.getDisplayName() + '[/COLOR]'
@@ -366,11 +366,11 @@ def hostersLink():
     if 'userload' in sHosterUrl:
         sHosterUrl = sHosterUrl + "|Referer=" + URL_MAIN
 
-    oHoster = cHosterGui().checkHoster(sHosterUrl)
+    oHoster = HosterGui().checkHoster(sHosterUrl)
     if oHoster:
         oHoster.setDisplayName(sMovieTitle)
         oHoster.setFileName(sMovieTitle)
-        cHosterGui().showHoster(oGui, oHoster, sHosterUrl, sThumb)
+        HosterGui().showHoster(oGui, oHoster, sHosterUrl, sThumb)
 
     oGui.setEndOfDirectory()
 

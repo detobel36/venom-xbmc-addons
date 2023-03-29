@@ -2,7 +2,7 @@
 # vStream https://github.com/Kodi-vStream/venom-xbmc-addons
 import re
 
-from resources.lib.gui.hoster import cHosterGui
+from resources.lib.gui.hoster import HosterGui
 from resources.lib.gui.gui import Gui
 from resources.lib.handler.inputParameterHandler import InputParameterHandler
 from resources.lib.handler.outputParameterHandler import OutputParameterHandler
@@ -363,7 +363,7 @@ def showLinks():
         for aEntry in aResult[1]:
             sUrl2 = aEntry[0]
 
-            if cHosterGui().checkHoster(sUrl2) is False:
+            if HosterGui().checkHoster(sUrl2) is False:
                 continue
 
             sHostName = aEntry[1]
@@ -405,10 +405,10 @@ def showHosters():
                 sHosterUrl = 'https:' + sHosterUrl
             sLang = aEntry[1].upper()
 
-            oHoster = cHosterGui().checkHoster(sHosterUrl)
+            oHoster = HosterGui().checkHoster(sHosterUrl)
             if oHoster:
                 oHoster.setDisplayName(sMovieTitle + ' (' + sLang + ')')
                 oHoster.setFileName(sMovieTitle)
-                cHosterGui().showHoster(oGui, oHoster, sHosterUrl, sThumb)
+                HosterGui().showHoster(oGui, oHoster, sHosterUrl, sThumb)
 
     oGui.setEndOfDirectory()

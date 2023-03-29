@@ -5,7 +5,7 @@
 import re
 import random
 
-from resources.lib.gui.hoster import cHosterGui
+from resources.lib.gui.hoster import HosterGui
 from resources.lib.gui.gui import Gui
 from resources.lib.handler.inputParameterHandler import InputParameterHandler
 from resources.lib.handler.outputParameterHandler import OutputParameterHandler
@@ -259,18 +259,18 @@ def showHosters():
                 result = re.findall('<td><a href="([^"]+)" title=\'([^<]+)\'>', sHtmlContent)
                 for url, title in result:
                     sHosterUrl = url
-                    oHoster = cHosterGui().checkHoster(sHosterUrl)
+                    oHoster = HosterGui().checkHoster(sHosterUrl)
                     if oHoster:
                         oHoster.setDisplayName(title)
                         oHoster.setFileName(title)
-                        cHosterGui().showHoster(oGui, oHoster, sHosterUrl, sThumb)
+                        HosterGui().showHoster(oGui, oHoster, sHosterUrl, sThumb)
             else:
 
                 sHosterUrl = aEntry
-                oHoster = cHosterGui().checkHoster(sHosterUrl)
+                oHoster = HosterGui().checkHoster(sHosterUrl)
                 if oHoster:
                     oHoster.setDisplayName(sMovieTitle)
                     oHoster.setFileName(sMovieTitle)
-                    cHosterGui().showHoster(oGui, oHoster, sHosterUrl, sThumb)
+                    HosterGui().showHoster(oGui, oHoster, sHosterUrl, sThumb)
 
     oGui.setEndOfDirectory()

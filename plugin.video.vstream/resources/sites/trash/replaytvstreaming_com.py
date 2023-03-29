@@ -5,7 +5,7 @@ from resources.lib.handler.requestHandler import cRequestHandler
 from resources.lib.handler.outputParameterHandler import OutputParameterHandler
 from resources.lib.handler.inputParameterHandler import InputParameterHandler
 from resources.lib.gui.gui import Gui
-from resources.lib.gui.hoster import cHosterGui
+from resources.lib.gui.hoster import HosterGui
 return False  # Désactivé le 08/04/2020
 
 # -*- coding: utf-8 -*-
@@ -201,11 +201,11 @@ def showHosters():
                 oGui.addText(SITE_IDENTIFIER, '[COLOR olive]' + sTitle + '[/COLOR]')
                 sTest = sTitle
 
-            oHoster = cHosterGui().checkHoster(sHosterUrl)
+            oHoster = HosterGui().checkHoster(sHosterUrl)
             if (oHoster):
                 oHoster.setDisplayName(sMovieTitle)
                 oHoster.setFileName(sMovieTitle)
-                cHosterGui().showHoster(oGui, oHoster, sHosterUrl, sThumb)
+                HosterGui().showHoster(oGui, oHoster, sHosterUrl, sThumb)
     else:
         sPattern = '<div class="playe.+?" data-show_player="video"><iframe.+?src="([^"]+)"'
         aResult = oParser.parse(sHtmlContent, sPattern)
@@ -214,10 +214,10 @@ def showHosters():
             sHosterUrl = aResult[1][0]
             sHosterUrl = cUtil().unescape(sHosterUrl)
 
-            oHoster = cHosterGui().checkHoster(sHosterUrl)
+            oHoster = HosterGui().checkHoster(sHosterUrl)
             if (oHoster):
                 oHoster.setDisplayName(sMovieTitle)
                 oHoster.setFileName(sMovieTitle)
-                cHosterGui().showHoster(oGui, oHoster, sHosterUrl, sThumb)
+                HosterGui().showHoster(oGui, oHoster, sHosterUrl, sThumb)
 
     oGui.setEndOfDirectory()

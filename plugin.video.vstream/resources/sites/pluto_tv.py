@@ -6,7 +6,7 @@ import uuid
 
 from resources.lib.comaddon import progress, addon, isMatrix, siteManager
 from resources.lib.gui.gui import Gui
-from resources.lib.gui.hoster import cHosterGui
+from resources.lib.gui.hoster import HosterGui
 from resources.lib.handler.inputParameterHandler import InputParameterHandler
 from resources.lib.handler.outputParameterHandler import OutputParameterHandler
 from resources.lib.handler.requestHandler import cRequestHandler
@@ -226,11 +226,11 @@ def showHosters():
     sHosterUrl = "https://service-stitcher.clusters.pluto.tv/stitch/hls/channel/"
     sHosterUrl += sHtmlContent["startingChannel"]["id"] + "/master.m3u8?" + sHtmlContent["stitcherParams"]
 
-    oHoster = cHosterGui().checkHoster(sHosterUrl)
+    oHoster = HosterGui().checkHoster(sHosterUrl)
     if oHoster:
         oHoster.setDisplayName(sMovieTitle)
         oHoster.setFileName(sMovieTitle)
-        cHosterGui().showHoster(oGui, oHoster, sHosterUrl, sThumb)
+        HosterGui().showHoster(oGui, oHoster, sHosterUrl, sThumb)
 
     oGui.setEndOfDirectory()
 
@@ -249,10 +249,10 @@ def seriesHosters():
     sHosterUrl += "&deviceId=" + deviceID + "&deviceMake=Firefox&deviceModel=web&deviceType=web&deviceVersion=87.0"
     sHosterUrl += "&includeExtendedEvents=false&marketingRegion=FR&sid=" + sid + "&serverSideAds=true"
 
-    oHoster = cHosterGui().checkHoster(sUrl)
+    oHoster = HosterGui().checkHoster(sUrl)
     if oHoster:
         oHoster.setDisplayName(sMovieTitle)
         oHoster.setFileName(sMovieTitle)
-        cHosterGui().showHoster(oGui, oHoster, sHosterUrl, sThumb)
+        HosterGui().showHoster(oGui, oHoster, sHosterUrl, sThumb)
 
     oGui.setEndOfDirectory()

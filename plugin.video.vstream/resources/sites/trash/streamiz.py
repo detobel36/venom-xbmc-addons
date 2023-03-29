@@ -7,7 +7,7 @@ from resources.lib.handler.requestHandler import cRequestHandler
 from resources.lib.handler.outputParameterHandler import OutputParameterHandler
 from resources.lib.handler.inputParameterHandler import InputParameterHandler
 from resources.lib.gui.gui import Gui
-from resources.lib.gui.hoster import cHosterGui
+from resources.lib.gui.hoster import HosterGui
 import re
 return False  # url instable et de plus en plus souvent  redirection vers streamcomplet3 (clone qui le remplace)
 
@@ -196,7 +196,7 @@ def showLinks():
         for aEntry in aResult[1]:
             sUrl = aEntry
 
-            oHoster = cHosterGui().checkHoster(sUrl)
+            oHoster = HosterGui().checkHoster(sUrl)
             if (oHoster):
                 hostName = oHoster.getDisplayName()
             else:
@@ -221,11 +221,11 @@ def showHosters():
     sThumb = oInputParameterHandler.getValue('sThumb')
 
     sHosterUrl = sUrl
-    oHoster = cHosterGui().checkHoster(sHosterUrl)
+    oHoster = HosterGui().checkHoster(sHosterUrl)
     if (oHoster):
         oHoster.setDisplayName(sMovieTitle)
         oHoster.setFileName(sMovieTitle)
-        cHosterGui().showHoster(oGui, oHoster, sHosterUrl, sThumb)
+        HosterGui().showHoster(oGui, oHoster, sHosterUrl, sThumb)
 
     oGui.setEndOfDirectory()
 

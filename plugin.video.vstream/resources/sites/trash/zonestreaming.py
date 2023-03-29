@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 # Vstream https://github.com/Kodi-vStream/venom-xbmc-addons
 #
-from resources.lib.gui.hoster import cHosterGui
+from resources.lib.gui.hoster import HosterGui
 from resources.lib.gui.gui import Gui
 from resources.lib.handler.inputParameterHandler import InputParameterHandler
 from resources.lib.handler.outputParameterHandler import OutputParameterHandler
@@ -422,11 +422,11 @@ def showHosters():
                         for aEntry in aResult[1]:
                             sHosterUrl = aEntry
 
-                            oHoster = cHosterGui().checkHoster(sHosterUrl)
+                            oHoster = HosterGui().checkHoster(sHosterUrl)
                             if (oHoster):
                                 oHoster.setDisplayName(sMovieTitle)
                                 oHoster.setFileName(sMovieTitle)
-                                cHosterGui().showHoster(oGui, oHoster, sHosterUrl, sThumb)
+                                HosterGui().showHoster(oGui, oHoster, sHosterUrl, sThumb)
 
                 # pour récuperer les liens jheberg
                 elif 'jheberg' in sHosterUrl:
@@ -435,18 +435,18 @@ def showHosters():
                         for aEntry in aResult:
                             sHosterUrl = aEntry
 
-                            oHoster = cHosterGui().checkHoster(sHosterUrl)
+                            oHoster = HosterGui().checkHoster(sHosterUrl)
                             if (oHoster):
                                 oHoster.setDisplayName(sMovieTitle)
                                 oHoster.setFileName(sMovieTitle)
-                                cHosterGui().showHoster(oGui, oHoster, sHosterUrl, sThumb)
+                                HosterGui().showHoster(oGui, oHoster, sHosterUrl, sThumb)
 
                 else:
-                    oHoster = cHosterGui().checkHoster(sHosterUrl)
+                    oHoster = HosterGui().checkHoster(sHosterUrl)
                     if (oHoster):
                         oHoster.setDisplayName(sMovieTitle)
                         oHoster.setFileName(sMovieTitle)
-                        cHosterGui().showHoster(oGui, oHoster, sHosterUrl, sThumb)
+                        HosterGui().showHoster(oGui, oHoster, sHosterUrl, sThumb)
 
         progress_.VSclose(progress_)
 
@@ -490,11 +490,11 @@ def serieHosters():
                     for aEntry in aResult[1]:
                         sHosterUrl = aEntry
 
-                        oHoster = cHosterGui().checkHoster(sHosterUrl)
+                        oHoster = HosterGui().checkHoster(sHosterUrl)
                         if (oHoster):
                             oHoster.setDisplayName(sMovieTitle)
                             oHoster.setFileName(sMovieTitle)
-                            cHosterGui().showHoster(oGui, oHoster, sHosterUrl, sThumb)
+                            HosterGui().showHoster(oGui, oHoster, sHosterUrl, sThumb)
 
             # pour récuperer les liens jheberg
             elif 'jheberg' in sHosterUrl:
@@ -503,18 +503,18 @@ def serieHosters():
                     for aEntry in aResult:
                         sHosterUrl = aEntry
 
-                        oHoster = cHosterGui().checkHoster(sHosterUrl)
+                        oHoster = HosterGui().checkHoster(sHosterUrl)
                         if (oHoster):
                             oHoster.setDisplayName(sMovieTitle)
                             oHoster.setFileName(sMovieTitle)
-                            cHosterGui().showHoster(oGui, oHoster, sHosterUrl, sThumb)
+                            HosterGui().showHoster(oGui, oHoster, sHosterUrl, sThumb)
 
             else:
-                oHoster = cHosterGui().checkHoster(sHosterUrl)
+                oHoster = HosterGui().checkHoster(sHosterUrl)
                 if (oHoster):
                     oHoster.setDisplayName(sMovieTitle)
                     oHoster.setFileName(sMovieTitle)
-                    cHosterGui().showHoster(oGui, oHoster, sHosterUrl, sThumb)
+                    HosterGui().showHoster(oGui, oHoster, sHosterUrl, sThumb)
 
         progress_.VSclose(progress_)
 

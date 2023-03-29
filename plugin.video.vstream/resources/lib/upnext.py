@@ -8,7 +8,7 @@ import re
 from base64 import b64encode
 from resources.lib.comaddon import dialog, addon, addonManager, VSlog, isMatrix
 from resources.lib.gui.gui import Gui
-from resources.lib.gui.hoster import cHosterGui
+from resources.lib.gui.hoster import HosterGui
 from resources.lib.handler.inputParameterHandler import InputParameterHandler
 from resources.lib.handler.outputParameterHandler import OutputParameterHandler
 from resources.lib.util import UnquotePlus
@@ -116,7 +116,7 @@ class UpNext:
             oOutputParameterHandler.addParameter('sTmdbId', sTmdbId)
 
             sParams = oOutputParameterHandler.getParameterAsUri()
-            url = 'plugin://plugin.video.vstream/?site=cHosterGui&function=play&%s' % sParams
+            url = 'plugin://plugin.video.vstream/?site=HosterGui&function=play&%s' % sParams
 
             # sThumbnail = guiElement.getThumbnail()
             sThumbnail = sThumb
@@ -216,7 +216,7 @@ class UpNext:
             if not sTitle:
                 sTitle = UnquotePlus(aParams['sTitle']) if 'sTitle' in aParams else None
             if 'sHost' in aParams and aParams['sHost']:
-                oHoster = cHosterGui().checkHoster(aParams['sHost'])
+                oHoster = HosterGui().checkHoster(aParams['sHost'])
                 if not oHoster:
                     continue
                 hostName = oHoster.getPluginIdentifier()

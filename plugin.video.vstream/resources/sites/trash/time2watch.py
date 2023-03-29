@@ -7,7 +7,7 @@ from resources.lib.parser import cParser
 from resources.lib.handler.requestHandler import cRequestHandler
 from resources.lib.handler.outputParameterHandler import OutputParameterHandler
 from resources.lib.handler.inputParameterHandler import InputParameterHandler
-from resources.lib.gui.hoster import cHosterGui
+from resources.lib.gui.hoster import HosterGui
 from resources.lib.gui.gui import Gui
 from resources.lib.config import GestionCookie
 from resources.lib.comaddon import progress, dialog, xbmc, xbmcgui, VSlog, addon
@@ -606,18 +606,18 @@ def decryptTime():
                     for aEntry in aResult:
                         sHosterUrl = aEntry
 
-                        oHoster = cHosterGui().checkHoster(sHosterUrl)
+                        oHoster = HosterGui().checkHoster(sHosterUrl)
                         if (oHoster):
                             oHoster.setDisplayName(sMovieTitle)
                             oHoster.setFileName(sMovieTitle)
-                            cHosterGui().showHoster(oGui, oHoster, sHosterUrl, sThumb)
+                            HosterGui().showHoster(oGui, oHoster, sHosterUrl, sThumb)
 
             else:
-                oHoster = cHosterGui().checkHoster(aEntry)
+                oHoster = HosterGui().checkHoster(aEntry)
                 if (oHoster):
                     oHoster.setDisplayName(sMovieTitle)
                     oHoster.setFileName(sMovieTitle)
-                    cHosterGui().showHoster(oGui, oHoster, aEntry, sThumb)
+                    HosterGui().showHoster(oGui, oHoster, aEntry, sThumb)
 
     oGui.setEndOfDirectory()
 

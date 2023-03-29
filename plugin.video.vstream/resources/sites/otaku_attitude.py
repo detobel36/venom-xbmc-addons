@@ -4,7 +4,7 @@
 
 import re
 
-from resources.lib.gui.hoster import cHosterGui
+from resources.lib.gui.hoster import HosterGui
 from resources.lib.gui.gui import Gui
 from resources.lib.handler.inputParameterHandler import InputParameterHandler
 from resources.lib.handler.outputParameterHandler import OutputParameterHandler
@@ -310,11 +310,11 @@ def showMp3():
 #     if 'mp3' in mp3Url:
 #         sHosterUrl = mp3Url
 
-    oHoster = cHosterGui().checkHoster('.m3u8')
+    oHoster = HosterGui().checkHoster('.m3u8')
     if oHoster:
         oHoster.setDisplayName(sMovieTitle)
         oHoster.setFileName(sMovieTitle)
-        cHosterGui().showHoster(oGui, oHoster, mp3Url + "|verifypeer=false", sThumb)
+        HosterGui().showHoster(oGui, oHoster, mp3Url + "|verifypeer=false", sThumb)
 
     oGui.setEndOfDirectory()
 
@@ -334,10 +334,10 @@ def showHosters():
     elif 'fiche-drama' in sUrl:
         sHosterUrl = URL_MAIN + 'launch-download-2-' + serieID + '-ddl-' + idEpisode + '.html'
 
-    oHoster = cHosterGui().checkHoster('.m3u8')
+    oHoster = HosterGui().checkHoster('.m3u8')
     if oHoster:
         oHoster.setDisplayName(sMovieTitle)
         oHoster.setFileName(sMovieTitle)
-        cHosterGui().showHoster(oGui, oHoster, sHosterUrl + "|verifypeer=false", sThumb)
+        HosterGui().showHoster(oGui, oHoster, sHosterUrl + "|verifypeer=false", sThumb)
 
     oGui.setEndOfDirectory()

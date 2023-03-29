@@ -4,7 +4,7 @@ from resources.lib.comaddon import progress, addon, VSlog, dialog
 from resources.lib.epg import cePg
 from resources.lib.enregistrement import cEnregistremement
 from resources.lib.jsunfuck import unFuckFirst
-from resources.lib.gui.hoster import cHosterGui
+from resources.lib.gui.hoster import HosterGui
 from resources.lib.config import GestionCookie
 from resources.lib.player import cPlayer
 from resources.lib.util import urlEncode, Unquote, Quote, QuotePlus
@@ -269,11 +269,11 @@ def showHosters():
     sMovieTitle = oInputParameterHandler.getValue('sMovieTitle')
     sThumb = oInputParameterHandler.getValue('sThumb')
 
-    oHoster = cHosterGui().checkHoster(sUrl)
+    oHoster = HosterGui().checkHoster(sUrl)
     if (oHoster):
         oHoster.setDisplayName(sMovieTitle)
         oHoster.setFileName(sMovieTitle)
-        cHosterGui().showHoster(oGui, oHoster, sUrl, sThumb)
+        HosterGui().showHoster(oGui, oHoster, sUrl, sThumb)
 
     oGui.setEndOfDirectory()
 

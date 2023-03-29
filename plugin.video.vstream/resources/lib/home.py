@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 # vStream https://github.com/Kodi-vStream/venom-xbmc-addons
 # Venom.
-from resources.lib.gui.hoster import cHosterGui
+from resources.lib.gui.hoster import HosterGui
 from resources.lib.gui.gui import Gui
 from resources.lib.gui.guiElement import cGuiElement
 from resources.lib.search import cSearch
@@ -825,10 +825,10 @@ class cHome:
         sUrl = oGui.showKeyBoard(heading=self.addons.VSlang(30045))
         if (sUrl):
 
-            oHoster = cHosterGui().checkHoster(sUrl)
+            oHoster = HosterGui().checkHoster(sUrl)
             if (oHoster):
                 oHoster.setDisplayName(self.addons.VSlang(30046))
                 oHoster.setFileName(self.addons.VSlang(30046))
-                cHosterGui().showHoster(oGui, oHoster, sUrl, '')
+                HosterGui().showHoster(oGui, oHoster, sUrl, '')
 
         oGui.setEndOfDirectory()

@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 # Venom.
-from resources.lib.gui.hoster import cHosterGui  # system de recherche pour l'hote
+from resources.lib.gui.hoster import HosterGui  # system de recherche pour l'hote
 from resources.lib.handler.hosterHandler import cHosterHandler  # system de recherche pour l'hote
 from resources.lib.gui.gui import Gui  # system d'affichage pour xbmc
 from resources.lib.gui.guiElement import cGuiElement  # system d'affichage pour xbmc
@@ -498,10 +498,10 @@ def showHosters():
 
         sHosterUrl = str(aResult)
 
-        oHoster = cHosterGui().checkHoster(sHosterUrl)
+        oHoster = HosterGui().checkHoster(sHosterUrl)
         if (oHoster):
             oHoster.setDisplayName(sMovieTitle)
             oHoster.setFileName(sMovieTitle)
-            cHosterGui().showHoster(oGui, oHoster, sHosterUrl, sThumbnail)
+            HosterGui().showHoster(oGui, oHoster, sHosterUrl, sThumbnail)
 
     oGui.setEndOfDirectory()

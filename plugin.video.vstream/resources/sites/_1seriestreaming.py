@@ -3,7 +3,7 @@
 
 import re
 
-from resources.lib.gui.hoster import cHosterGui
+from resources.lib.gui.hoster import HosterGui
 from resources.lib.gui.gui import Gui
 from resources.lib.handler.inputParameterHandler import InputParameterHandler
 from resources.lib.handler.outputParameterHandler import OutputParameterHandler
@@ -297,7 +297,7 @@ def showLinks():
 
             sHost = aEntry[1].replace('www.', '')
             sHost = re.sub('\\..+', '', sHost).capitalize()
-            if not cHosterGui().checkHoster(sHost):
+            if not HosterGui().checkHoster(sHost):
                 continue
 
             sLang = aEntry[2].replace('default', '').upper()
@@ -330,22 +330,22 @@ def showHosters():
     sHosterUrl = oRequest.getRealUrl()
 
     if 'captcha' not in sHosterUrl:
-        oHoster = cHosterGui().checkHoster(sHosterUrl)
+        oHoster = HosterGui().checkHoster(sHosterUrl)
         if oHoster:
             oHoster.setDisplayName(sMovieTitle)
             oHoster.setFileName(sMovieTitle)
-            cHosterGui().showHoster(oGui, oHoster, sHosterUrl, sThumb)
+            HosterGui().showHoster(oGui, oHoster, sHosterUrl, sThumb)
     else:
         oParser = cParser()
         sPattern = 'src=([^ ]+)'
         aResult = oParser.parse(sHtmlContent, sPattern)
         if aResult[0]:
             sHosterUrl = aResult[1][0]
-            oHoster = cHosterGui().checkHoster(sHosterUrl)
+            oHoster = HosterGui().checkHoster(sHosterUrl)
             if oHoster:
                 oHoster.setDisplayName(sMovieTitle)
                 oHoster.setFileName(sMovieTitle)
-                cHosterGui().showHoster(oGui, oHoster, sHosterUrl, sThumb)
+                HosterGui().showHoster(oGui, oHoster, sHosterUrl, sThumb)
 
     oGui.setEndOfDirectory()
 

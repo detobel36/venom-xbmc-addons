@@ -263,8 +263,8 @@ class cDownload:
         self.__sTitle = sTitle
 
         # resolve url
-        from resources.lib.gui.hoster import cHosterGui
-        oHoster = cHosterGui().checkHoster(sDBUrl)
+        from resources.lib.gui.hoster import HosterGui
+        oHoster = HosterGui().checkHoster(sDBUrl)
         oHoster.setUrl(sDBUrl)
         aLink = oHoster.getMediaLink()
 
@@ -579,8 +579,8 @@ class cDownload:
         sUrl = meta['url']
 
         # resolve url ?
-        from resources.lib.gui.hoster import cHosterGui
-        oHoster = cHosterGui().checkHoster(sUrl)
+        from resources.lib.gui.hoster import HosterGui
+        oHoster = HosterGui().checkHoster(sUrl)
         oHoster.setUrl(sUrl)
         aLink = oHoster.getMediaLink()
         if not aLink or not aLink[0]:

@@ -12,7 +12,7 @@ from resources.lib.handler.requestHandler import cRequestHandler
 from resources.lib.handler.outputParameterHandler import OutputParameterHandler
 from resources.lib.handler.inputParameterHandler import InputParameterHandler
 from resources.lib.gui.gui import Gui
-from resources.lib.gui.hoster import cHosterGui
+from resources.lib.gui.hoster import HosterGui
 return False
 
 
@@ -719,7 +719,7 @@ def showHosters():
                 sTitle = sTitle.replace('Telecharger ', '')
 
             # test si le host est supporte par vstream.
-            oHoster = cHosterGui().checkHoster(sHost.lower())
+            oHoster = HosterGui().checkHoster(sHost.lower())
             if sHost == 'Revivelink':
                 oHoster = True
 
@@ -760,11 +760,11 @@ def Display_protected_link():
             if match:
                 sHosterUrl = code[k] + match.group(1)
                 sHosterUrl = sHosterUrl.replace('123455615', '/')
-                oHoster = cHosterGui().checkHoster(sHosterUrl)
+                oHoster = HosterGui().checkHoster(sHosterUrl)
                 if (oHoster):
                     oHoster.setDisplayName(sMovieTitle)
                     oHoster.setFileName(sMovieTitle)
-                    cHosterGui().showHoster(oGui, oHoster, sHosterUrl, sThumb)
+                    HosterGui().showHoster(oGui, oHoster, sHosterUrl, sThumb)
                 oGui.setEndOfDirectory()
                 return
 
@@ -813,11 +813,11 @@ def Display_protected_link():
                 oOutputParameterHandler.addParameter('sThumb', sThumb)
                 oGui.addMovie(SITE_IDENTIFIER, 'showStreamingHosters', sTitle, '', sThumb, '', oOutputParameterHandler)
             else:
-                oHoster = cHosterGui().checkHoster(sHosterUrl)
+                oHoster = HosterGui().checkHoster(sHosterUrl)
                 if (oHoster):
                     oHoster.setDisplayName(sTitle)
                     oHoster.setFileName(sTitle)
-                    cHosterGui().showHoster(oGui, oHoster, sHosterUrl, sThumb)
+                    HosterGui().showHoster(oGui, oHoster, sHosterUrl, sThumb)
 
     oGui.setEndOfDirectory()
 

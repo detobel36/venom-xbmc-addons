@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 # vStream https://github.com/Kodi-vStream/venom-xbmc-addons
 # Makoto
-from resources.lib.gui.hoster import cHosterGui
+from resources.lib.gui.hoster import HosterGui
 from resources.lib.gui.gui import Gui
 from resources.lib.handler.inputParameterHandler import InputParameterHandler
 from resources.lib.handler.outputParameterHandler import OutputParameterHandler
@@ -284,11 +284,11 @@ def showHosters():
     sThumb = oInputParameterHandler.getValue('sThumb')
     if sThumb:
         sThumb = sThumb.replace(' ', '%20')
-    oHoster = cHosterGui().checkHoster('.m3u8')
+    oHoster = HosterGui().checkHoster('.m3u8')
 
     if oHoster:
         oHoster.setDisplayName(sMovieTitle)
         oHoster.setFileName(sMovieTitle)
-        cHosterGui().showHoster(oGui, oHoster, sUrl, sThumb)
+        HosterGui().showHoster(oGui, oHoster, sUrl, sThumb)
 
     oGui.setEndOfDirectory()

@@ -7,7 +7,7 @@ import xbmc
 
 from resources.lib.comaddon import progress, isMatrix, siteManager
 from resources.lib.gui.gui import Gui
-from resources.lib.gui.hoster import cHosterGui
+from resources.lib.gui.hoster import HosterGui
 from resources.lib.handler.inputParameterHandler import InputParameterHandler
 from resources.lib.handler.outputParameterHandler import OutputParameterHandler
 from resources.lib.handler.requestHandler import cRequestHandler
@@ -336,11 +336,11 @@ def showHosters():  # affiche les videos disponible du live
                             sHosterUrl = aResult[1]
                             sDisplayTitle = sMovieTitle2 + ' [' + q + '] '
 
-                            oHoster = cHosterGui().checkHoster(sHosterUrl)
+                            oHoster = HosterGui().checkHoster(sHosterUrl)
                             if oHoster:
                                 oHoster.setDisplayName(sDisplayTitle)
                                 oHoster.setFileName(sMovieTitle2)
-                                cHosterGui().showHoster(oGui, oHoster, sHosterUrl, sThumb)
+                                HosterGui().showHoster(oGui, oHoster, sHosterUrl, sThumb)
                         oGui.setEndOfDirectory()
                         return
 
@@ -400,11 +400,11 @@ def showHosters():  # affiche les videos disponible du live
                             sHosterUrl = Result[1]
                             sDisplayTitle = sMovieTitle2 + ' [' + q + '] '
 
-                            oHoster = cHosterGui().checkHoster(sHosterUrl)
+                            oHoster = HosterGui().checkHoster(sHosterUrl)
                             if oHoster:
                                 oHoster.setDisplayName(sDisplayTitle)
                                 oHoster.setFileName(sMovieTitle2)
-                                cHosterGui().showHoster(oGui, oHoster, sHosterUrl, sThumb)
+                                HosterGui().showHoster(oGui, oHoster, sHosterUrl, sThumb)
 
                         oGui.setEndOfDirectory()
                         return
@@ -1264,11 +1264,11 @@ def showHosters():  # affiche les videos disponible du live
             if sHosterUrl.startswith('//'):
                 sHosterUrl = 'http:' + sHosterUrl
 
-            oHoster = cHosterGui().checkHoster(".m3u8")
+            oHoster = HosterGui().checkHoster(".m3u8")
             if oHoster:
                 oHoster.setDisplayName(sMovieTitle2)  # nom affiche
                 oHoster.setFileName(sMovieTitle2)  # idem
-                cHosterGui().showHoster(oGui, oHoster, sHosterUrl, sThumb)
+                HosterGui().showHoster(oGui, oHoster, sHosterUrl, sThumb)
 
         oGui.setEndOfDirectory()
 

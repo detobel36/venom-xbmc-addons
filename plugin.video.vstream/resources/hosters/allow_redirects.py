@@ -2,7 +2,7 @@
 # vStream https://github.com/Kodi-vStream/venom-xbmc-addons
 from resources.hosters.hoster import iHoster
 from resources.lib.handler.requestHandler import cRequestHandler
-from resources.lib.gui.hoster import cHosterGui
+from resources.lib.gui.hoster import HosterGui
 
 
 class cHoster(iHoster):
@@ -16,7 +16,7 @@ class cHoster(iHoster):
         sHosterUrl = oRequestHandler.getRealUrl()
 
         if sHosterUrl and sHosterUrl != self._url:
-            oHoster = cHosterGui().checkHoster(sHosterUrl)
+            oHoster = HosterGui().checkHoster(sHosterUrl)
             if oHoster:
                 oHoster.setUrl(sHosterUrl)
                 api_call = oHoster.getMediaLink()

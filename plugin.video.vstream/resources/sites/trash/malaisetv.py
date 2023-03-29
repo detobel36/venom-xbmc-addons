@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 # Venom.kodigoal
-# from resources.lib.gui.hoster import cHosterGui
+# from resources.lib.gui.hoster import HosterGui
 # ne fonctionne plus : une reprise depuis twitter vraiment utile ?
 import xbmcgui
 from resources.lib.player import cPlayer

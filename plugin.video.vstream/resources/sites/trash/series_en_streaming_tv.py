@@ -13,7 +13,7 @@ from resources.lib.handler.requestHandler import cRequestHandler
 from resources.lib.handler.outputParameterHandler import OutputParameterHandler
 from resources.lib.handler.inputParameterHandler import InputParameterHandler
 from resources.lib.gui.gui import Gui
-from resources.lib.gui.hoster import cHosterGui
+from resources.lib.gui.hoster import HosterGui
 return False
 # https://github.com/Kodi-vStream/venom-xbmc-addons
 
@@ -401,7 +401,7 @@ def GetLink():
         sPattern2 = "src=\\\\\'(.+?)\\\\"
         aResult = oParser.parse(sHosterUrl, sPattern2)
         if aResult[0]:
-            oHoster = cHosterGui().checkHoster(aResult[1][0])
+            oHoster = HosterGui().checkHoster(aResult[1][0])
             sHosterUrl = aResult[1][0]
         else:
             oHoster = False
@@ -410,6 +410,6 @@ def GetLink():
             sDisplayTitle = cUtil().DecoTitle(sTitle)
             oHoster.setDisplayName(sDisplayTitle)
             oHoster.setFileName(sTitle)
-            cHosterGui().showHoster(oGui, oHoster, sHosterUrl, sThumbnail)
+            HosterGui().showHoster(oGui, oHoster, sHosterUrl, sThumbnail)
 
     oGui.setEndOfDirectory()

@@ -7,7 +7,7 @@ from resources.lib.handler.requestHandler import cRequestHandler
 from resources.lib.parser import cParser
 from resources.hosters.hoster import iHoster
 from resources.lib.packer import cPacker
-from resources.lib.gui.hoster import cHosterGui
+from resources.lib.gui.hoster import HosterGui
 
 UA = 'Mozilla/5.0 (Windows NT 6.1; WOW64; rv:61.0) Gecko/20100101 Firefox/61.0'
 
@@ -67,7 +67,7 @@ class cHoster(iHoster):
 
                         sHosterUrl = sHosterUrl.replace('\\', '')
 
-                        oHoster = cHosterGui().checkHoster(sHosterUrl)
+                        oHoster = HosterGui().checkHoster(sHosterUrl)
                         oHoster.setUrl(sHosterUrl)
                         api_call = oHoster.getMediaLink()
 

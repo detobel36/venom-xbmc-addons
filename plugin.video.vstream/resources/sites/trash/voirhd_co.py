@@ -7,7 +7,7 @@ from resources.lib.handler.requestHandler import cRequestHandler
 from resources.lib.handler.outputParameterHandler import OutputParameterHandler
 from resources.lib.handler.inputParameterHandler import InputParameterHandler
 from resources.lib.gui.gui import Gui
-from resources.lib.gui.hoster import cHosterGui
+from resources.lib.gui.hoster import HosterGui
 import re
 return False  # 0212020 Site HS depuis plus de 1 moi
 
@@ -742,11 +742,11 @@ def showHosters():
     sMovieTitle = oInputParameterHandler.getValue('sMovieTitle')
     sThumb = oInputParameterHandler.getValue('sThumb')
 
-    oHoster = cHosterGui().checkHoster(sUrl)
+    oHoster = HosterGui().checkHoster(sUrl)
     if (oHoster):
         oHoster.setDisplayName(sMovieTitle)
         oHoster.setFileName(sMovieTitle)
-        cHosterGui().showHoster(oGui, oHoster, sUrl, sThumb)
+        HosterGui().showHoster(oGui, oHoster, sUrl, sThumb)
     # else:
         # oGui.addText(SITE_IDENTIFIER, 'Host inconnu ' + sUrl)
     oGui.setEndOfDirectory()

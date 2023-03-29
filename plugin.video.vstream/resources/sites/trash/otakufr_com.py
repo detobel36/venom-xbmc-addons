@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 # https://github.com/Kodi-vStream/venom-xbmc-addons
-from resources.lib.gui.hoster import cHosterGui  # systeme de recherche pour l'hote
+from resources.lib.gui.hoster import HosterGui  # systeme de recherche pour l'hote
 from resources.lib.gui.gui import Gui  # systeme d'affichage pour xbmc
 from resources.lib.handler.inputParameterHandler import InputParameterHandler  # entree des parametres
 from resources.lib.handler.outputParameterHandler import OutputParameterHandler  # sortie des parametres
@@ -211,11 +211,11 @@ def showHosters():  # recherche et affiche les hotes
         for aEntry in aResult[1]:
 
             sHosterUrl = str(aEntry[0])
-            oHoster = cHosterGui().checkHoster(sHosterUrl)
+            oHoster = HosterGui().checkHoster(sHosterUrl)
             if (oHoster):
                 oHoster.setDisplayName(aEntry[1])
                 oHoster.setFileName(aEntry[1])
-                cHosterGui().showHoster(oGui, oHoster, sHosterUrl, sThumbnail)
+                HosterGui().showHoster(oGui, oHoster, sHosterUrl, sThumbnail)
 
     oGui.setEndOfDirectory()  # fin
 

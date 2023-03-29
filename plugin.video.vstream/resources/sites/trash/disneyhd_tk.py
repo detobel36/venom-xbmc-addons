@@ -8,7 +8,7 @@ from resources.lib.handler.requestHandler import cRequestHandler
 from resources.lib.handler.outputParameterHandler import OutputParameterHandler
 from resources.lib.handler.inputParameterHandler import InputParameterHandler
 from resources.lib.gui.gui import Gui
-from resources.lib.gui.hoster import cHosterGui
+from resources.lib.gui.hoster import HosterGui
 return False  # au 18/03/2020
 
 
@@ -312,11 +312,11 @@ def showHosters():
                 except BaseException:
                     pass
 
-            oHoster = cHosterGui().checkHoster(sHosterUrl)
+            oHoster = HosterGui().checkHoster(sHosterUrl)
             if (oHoster):
                 oHoster.setDisplayName(sFinalTitle)
                 oHoster.setFileName(sFinalTitle)
-                cHosterGui().showHoster(oGui, oHoster, sHosterUrl, sThumb)
+                HosterGui().showHoster(oGui, oHoster, sHosterUrl, sThumb)
     else:
         # playlist-serie lien direct http pour le moment
         aResult = oParser.parse(sHtmlContent, sPattern)
@@ -325,11 +325,11 @@ def showHosters():
                 sHosterUrl = aEntry[0]
                 sTitle = aEntry[1]
 
-                oHoster = cHosterGui().checkHoster(sHosterUrl)
+                oHoster = HosterGui().checkHoster(sHosterUrl)
                 if (oHoster):
                     oHoster.setDisplayName(sTitle)
                     oHoster.setFileName(sTitle)
-                    cHosterGui().showHoster(oGui, oHoster, sHosterUrl, sThumb)
+                    HosterGui().showHoster(oGui, oHoster, sHosterUrl, sThumb)
 
         else:
             # Dernier essai avec les torrent
@@ -351,11 +351,11 @@ def showHosters():
                     sHosterUrl = (folder + name + '/' + i['path'][0])
                     count = count + 1
 
-                    oHoster = cHosterGui().checkHoster(sHosterUrl)
+                    oHoster = HosterGui().checkHoster(sHosterUrl)
                     if (oHoster):
                         oHoster.setDisplayName(sMovieTitle + " " + name + "E" + str(count))
                         oHoster.setFileName(sMovieTitle + " " + name + "E" + str(count))
-                        cHosterGui().showHoster(oGui, oHoster, sHosterUrl, sThumb)
+                        HosterGui().showHoster(oGui, oHoster, sHosterUrl, sThumb)
 
             else:
                 oGui.addText(SITE_IDENTIFIER)

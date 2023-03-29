@@ -2517,8 +2517,8 @@ def showEpisodesLinks(siteUrl=''):
 
 
 def showHosters():
-    from resources.lib.gui.hoster import cHosterGui
-    oHosterGui = cHosterGui()
+    from resources.lib.gui.hoster import HosterGui
+    oHosterGui = HosterGui()
     oGui = Gui()
     oInputParameterHandler = InputParameterHandler()
     sTitle = oInputParameterHandler.getValue('sMovieTitle').replace(' | ', ' & ')

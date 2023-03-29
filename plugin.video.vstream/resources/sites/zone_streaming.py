@@ -4,7 +4,7 @@
 import re
 
 from resources.lib.comaddon import progress, siteManager
-from resources.lib.gui.hoster import cHosterGui
+from resources.lib.gui.hoster import HosterGui
 from resources.lib.gui.gui import Gui
 from resources.lib.handler.inputParameterHandler import InputParameterHandler
 from resources.lib.handler.outputParameterHandler import OutputParameterHandler
@@ -320,20 +320,20 @@ def showHosters():
                         sTitle = aEntry[1].replace('EP.', 'E').replace('Ep. ', 'E').replace('Ep ', 'E')
                         sTitle = sTitle.replace('|', '-')
 
-                        oHoster = cHosterGui().checkHoster(sHosterUrl)
+                        oHoster = HosterGui().checkHoster(sHosterUrl)
                         if oHoster:
                             oHoster.setDisplayName(sTitle)
                             oHoster.setFileName(sTitle)
-                            cHosterGui().showHoster(oGui, oHoster, sHosterUrl, sThumb)
+                            HosterGui().showHoster(oGui, oHoster, sHosterUrl, sThumb)
 
             else:
                 link = re.sub('.+?embed/', '', aEntry)
                 link = link.replace('?rel=0', '')
                 sHosterUrl = watchUrl + link
-                oHoster = cHosterGui().checkHoster(sHosterUrl)
+                oHoster = HosterGui().checkHoster(sHosterUrl)
                 if oHoster:
                     oHoster.setDisplayName(sMovieTitle)
                     oHoster.setFileName(sMovieTitle)
-                    cHosterGui().showHoster(oGui, oHoster, sHosterUrl, sThumb)
+                    HosterGui().showHoster(oGui, oHoster, sHosterUrl, sThumb)
 
     oGui.setEndOfDirectory()

@@ -8,7 +8,7 @@ from resources.lib.enregistrement import cEnregistremement
 from resources.lib.epg import cePg
 from resources.lib.gui.gui import Gui
 from resources.lib.gui.guiElement import cGuiElement
-from resources.lib.gui.hoster import cHosterGui
+from resources.lib.gui.hoster import HosterGui
 from resources.lib.handler.inputParameterHandler import InputParameterHandler
 from resources.lib.handler.outputParameterHandler import OutputParameterHandler
 from resources.lib.handler.requestHandler import cRequestHandler
@@ -375,12 +375,12 @@ def play__():  # Lancer les liens
         oPlayer.startPlayer()
 
     else:
-        oHoster = cHosterGui().checkHoster(sUrl)
+        oHoster = HosterGui().checkHoster(sUrl)
 
         if oHoster:
             oHoster.setDisplayName(sTitle)
             oHoster.setFileName(sTitle)
-            cHosterGui().showHoster(oGui, oHoster, sUrl, sThumbnail)
+            HosterGui().showHoster(oGui, oHoster, sUrl, sThumbnail)
 
         oGui.setEndOfDirectory()
 

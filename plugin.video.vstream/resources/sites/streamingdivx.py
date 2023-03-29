@@ -3,7 +3,7 @@
 
 import re
 
-from resources.lib.gui.hoster import cHosterGui
+from resources.lib.gui.hoster import HosterGui
 from resources.lib.gui.gui import Gui
 from resources.lib.handler.inputParameterHandler import InputParameterHandler
 from resources.lib.handler.outputParameterHandler import OutputParameterHandler
@@ -281,7 +281,7 @@ def showLinks():
             sHost = aEntry[2].replace('server player-', '').replace('télécharger sur ', '').capitalize()
 
             # Filtre des host
-            oHoster = cHosterGui().checkHoster(sHost)
+            oHoster = HosterGui().checkHoster(sHost)
             if not oHoster:
                 continue
 
@@ -324,10 +324,10 @@ def showHosters():
         sPattern2 = 'href="(.+?)"'
         sHosterUrl = oParser.parse(sHtmlContent, sPattern2)[1][0]
 
-    oHoster = cHosterGui().checkHoster(sHosterUrl)
+    oHoster = HosterGui().checkHoster(sHosterUrl)
     if oHoster:
         oHoster.setDisplayName(sMovieTitle)
         oHoster.setFileName(sMovieTitle)
-        cHosterGui().showHoster(oGui, oHoster, sHosterUrl, sThumb)
+        HosterGui().showHoster(oGui, oHoster, sHosterUrl, sThumb)
 
     oGui.setEndOfDirectory()

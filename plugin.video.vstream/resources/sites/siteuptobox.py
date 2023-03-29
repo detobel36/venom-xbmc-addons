@@ -16,7 +16,7 @@ except ImportError:  # Python 3
 from resources.lib.comaddon import VSlog, dialog, addon, isMatrix, siteManager
 from resources.lib.config import GestionCookie
 from resources.lib.gui.gui import Gui
-from resources.lib.gui.hoster import cHosterGui
+from resources.lib.gui.hoster import HosterGui
 from resources.lib.handler.inputParameterHandler import InputParameterHandler
 from resources.lib.handler.outputParameterHandler import OutputParameterHandler
 from resources.lib.handler.premiumHandler import cPremiumHandler
@@ -154,7 +154,7 @@ def showFile(sSearch=''):
 
     # les fichiers
     nbFile = 0
-    oHosterGui = cHosterGui()
+    oHosterGui = HosterGui()
     oHoster = oHosterGui.getHoster('uptobox')
 
     for file in content['files']:
@@ -708,11 +708,11 @@ def showHosters():
     oInputParameterHandler = InputParameterHandler()
     sHosterUrl = oInputParameterHandler.getValue('siteUrl')
     sTitle = oInputParameterHandler.getValue('sMovieTitle')
-    oHoster = cHosterGui().checkHoster(sHosterUrl)
+    oHoster = HosterGui().checkHoster(sHosterUrl)
     if oHoster:
         oHoster.setDisplayName(sTitle)
         oHoster.setFileName(sTitle)
-        cHosterGui().showHoster(oGui, oHoster, sHosterUrl, '')
+        HosterGui().showHoster(oGui, oHoster, sHosterUrl, '')
     oGui.setEndOfDirectory()
 
 

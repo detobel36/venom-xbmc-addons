@@ -6,7 +6,7 @@ from resources.lib.handler.requestHandler import cRequestHandler
 from resources.lib.handler.outputParameterHandler import OutputParameterHandler
 from resources.lib.handler.inputParameterHandler import InputParameterHandler
 from resources.lib.gui.gui import Gui
-from resources.lib.gui.hoster import cHosterGui
+from resources.lib.gui.hoster import HosterGui
 import re
 return False  # 06/02/2021
 
@@ -394,7 +394,7 @@ def showLink():
             if 'alliance4creativity' in sUrl2:
                 continue
 
-            oHoster = cHosterGui().checkHoster(sUrl2)
+            oHoster = HosterGui().checkHoster(sUrl2)
             if (oHoster):
                 sHost = oHoster.getDisplayName()
             else:
@@ -429,11 +429,11 @@ def showHosters():
 
     if vUrl:
         sHosterUrl = vUrl
-        oHoster = cHosterGui().checkHoster(sHosterUrl)
+        oHoster = HosterGui().checkHoster(sHosterUrl)
         if (oHoster):
             oHoster.setDisplayName(sMovieTitle)
             oHoster.setFileName(sMovieTitle)
-            cHosterGui().showHoster(oGui, oHoster, sHosterUrl, sThumb)
+            HosterGui().showHoster(oGui, oHoster, sHosterUrl, sThumb)
 
     oGui.setEndOfDirectory()
 

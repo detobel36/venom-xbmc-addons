@@ -88,7 +88,7 @@ class Main:
     def parse_url_for_site(self):
         VSlog('load site ' + self.site_name + ' and call function ' + self.function_name)
         list_action = {
-            'cHosterGui': 'resources.lib.gui.hoster',
+            'HosterGui': 'resources.lib.gui.hoster',
             'Gui': 'resources.lib.gui.gui',
             'Fav': 'resources.lib.bookmark',
             'cViewing': 'resources.lib.viewing',

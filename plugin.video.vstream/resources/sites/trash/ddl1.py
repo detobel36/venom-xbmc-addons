@@ -7,7 +7,7 @@ from resources.lib.handler.requestHandler import cRequestHandler
 from resources.lib.handler.outputParameterHandler import OutputParameterHandler
 from resources.lib.handler.inputParameterHandler import InputParameterHandler
 from resources.lib.gui.gui import Gui
-from resources.lib.gui.hoster import cHosterGui
+from resources.lib.gui.hoster import HosterGui
 import base64
 import requests
 import re
@@ -534,11 +534,11 @@ def showHosters():
             sTitle = sMovieTitle
 
             if "protect" not in sUrl2:
-                oHoster = cHosterGui().checkHoster(sUrl2)
+                oHoster = HosterGui().checkHoster(sUrl2)
                 if (oHoster):
                     oHoster.setDisplayName(sTitle)
                     oHoster.setFileName(sTitle)
-                    cHosterGui().showHoster(oGui, oHoster, sUrl2, sThumb)
+                    HosterGui().showHoster(oGui, oHoster, sUrl2, sThumb)
 
             else:
 
@@ -584,11 +584,11 @@ def showSeriesHosters():
                 sTitle = sMovieTitle + ' ' + sEpisode
 
                 if 'protect' not in sUrl2:
-                    oHoster = cHosterGui().checkHoster(sUrl2)
+                    oHoster = HosterGui().checkHoster(sUrl2)
                     if (oHoster):
                         oHoster.setDisplayName(sTitle)
                         oHoster.setFileName(sTitle)
-                        cHosterGui().showHoster(oGui, oHoster, sUrl2, sThumb)
+                        HosterGui().showHoster(oGui, oHoster, sUrl2, sThumb)
 
                 else:
                     oOutputParameterHandler.addParameter('siteUrl', sUrl2)
@@ -638,11 +638,11 @@ def Display_protected_link():
     except BaseException:
         pass
 
-    oHoster = cHosterGui().checkHoster(sHosterUrl)
+    oHoster = HosterGui().checkHoster(sHosterUrl)
     if (oHoster):
         oHoster.setDisplayName(sTitle)
         oHoster.setFileName(sTitle)
-        cHosterGui().showHoster(oGui, oHoster, sHosterUrl, sThumb)
+        HosterGui().showHoster(oGui, oHoster, sHosterUrl, sThumb)
 
     oGui.setEndOfDirectory()
 
