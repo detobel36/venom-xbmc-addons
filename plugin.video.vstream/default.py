@@ -90,7 +90,7 @@ class Main:
         list_action = {
             'cHosterGui': 'resources.lib.gui.hoster',
             'Gui': 'resources.lib.gui.gui',
-            'cFav': 'resources.lib.bookmark',
+            'Fav': 'resources.lib.bookmark',
             'cViewing': 'resources.lib.viewing',
             'cLibrary': 'resources.lib.library',
             'cDownload': 'resources.lib.download',

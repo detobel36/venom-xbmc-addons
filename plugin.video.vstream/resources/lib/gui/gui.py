@@ -565,8 +565,8 @@ class Gui:
         self.createSimpleMenu(
             oGuiElement,
             oOutputParameterHandler,
-            'cFav',
-            'cFav',
+            'Fav',
+            'Fav',
             'setBookmark',
             self.ADDON.VSlang(30210))
 
@@ -714,8 +714,8 @@ class Gui:
         self.createSimpleMenu(
             oGuiElement,
             oOutputParameterHandler,
-            'cFav',
-            'cFav',
+            'Fav',
+            'Fav',
             'delBookmarksMenu',
             self.ADDON.VSlang(30209))
 

@@ -6,7 +6,7 @@ from resources.lib.gui.hoster import cHosterGui
 from resources.lib.handler.rechercheHandler import cRechercheHandler
 from resources.lib.handler.hosterHandler import cHosterHandler
 from resources.lib.gui.gui import Gui
-from resources.lib.favourite import cFav
+from resources.lib.favourite import Fav
 from resources.lib.gui.guiElement import cGuiElement
 from resources.lib.handler.inputParameterHandler import cInputParameterHandler
 from resources.lib.handler.outputParameterHandler import cOutputParameterHandler

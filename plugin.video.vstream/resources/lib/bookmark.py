@@ -11,11 +11,11 @@ from resources.lib.handler.outputParameterHandler import cOutputParameterHandler
 from resources.lib.comaddon import dialog, addon, isMatrix
 from resources.lib.util import UnquotePlus
 
-SITE_IDENTIFIER = 'cFav'
+SITE_IDENTIFIER = 'Fav'
 SITE_NAME = 'Fav'
 
 
-class cFav:
+class Fav:
 
     DIALOG = dialog()
     ADDON = addon()
@@ -221,8 +221,8 @@ class cFav:
                 oGuiElement.setFanart(fanart)
                 oGuiElement.addItemProperties('isBookmark', True)
 
-                oGui.createSimpleMenu(oGuiElement, oOutputParameterHandler, 'cFav',
-                                      'cFav', 'delBookmark', self.ADDON.VSlang(30412))
+                oGui.createSimpleMenu(oGuiElement, oOutputParameterHandler, 'Fav',
+                                      'Fav', 'delBookmark', self.ADDON.VSlang(30412))
 
                 if (function == 'play'):
                     oGui.addHost(oGuiElement, oOutputParameterHandler)  # addHost n'existe plus
