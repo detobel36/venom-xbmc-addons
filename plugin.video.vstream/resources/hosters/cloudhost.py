@@ -2,7 +2,7 @@
 # vStream https://github.com/Kodi-vStream/venom-xbmc-addons
 # ==>otakufr
 
-from resources.lib.handler.requestHandler import cRequestHandler
+from resources.lib.handler.requestHandler import RequestHandler
 from resources.hosters.hoster import iHoster
 from resources.lib.parser import cParser
 
@@ -13,7 +13,7 @@ class cHoster(iHoster):
         iHoster.__init__(self, 'cloudhost', 'Cloudhost')
 
     def _getMediaLinkForGuest(self, api_call=None):
-        oRequest = cRequestHandler(self._url)
+        oRequest = RequestHandler(self._url)
         sHtmlContent = oRequest.request()
 
         sPattern = '<source src="([^"]+)"'

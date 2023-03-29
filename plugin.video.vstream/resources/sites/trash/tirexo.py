@@ -8,7 +8,7 @@ from resources.lib.gui.gui import Gui
 from resources.lib.gui.hoster import HosterGui
 from resources.lib.handler.inputParameterHandler import InputParameterHandler
 from resources.lib.handler.outputParameterHandler import OutputParameterHandler
-from resources.lib.handler.requestHandler import cRequestHandler
+from resources.lib.handler.requestHandler import RequestHandler
 from resources.lib.parser import cParser
 from resources.lib.util import cUtil
 
@@ -342,7 +342,7 @@ def showMovies(sSearch=''):
     else:
         sPattern = '<div class="mov .+?href="([^"]+).+?title="([^"]+).+?data-content="([^"]*).+?src="([^"]+).+?annee-de-sortie.+?>(\\d+)<.+?saison">([^<]*)<'
 
-    oRequestHandler = cRequestHandler(sUrl.replace(' ', '%20'))
+    oRequestHandler = RequestHandler(sUrl.replace(' ', '%20'))
     oRequestHandler.addHeaderEntry('User-Agent', UA)
     oRequestHandler.addHeaderEntry('Accept-Encoding', 'gzip, deflate')
     sHtmlContent = oRequestHandler.request()
@@ -465,7 +465,7 @@ def showCollec():
 
     sPattern = 'class="mov-t nowrap" href="([^"]+).+?data-content="([^"]*).+?<img src="([^"]+).+?title="([^"]+)'
 
-    oRequestHandler = cRequestHandler(sUrl.replace(' ', '%20'))
+    oRequestHandler = RequestHandler(sUrl.replace(' ', '%20'))
     oRequestHandler.addHeaderEntry('User-Agent', UA)
     oRequestHandler.addHeaderEntry('Accept-Encoding', 'gzip, deflate')
     sHtmlContent = oRequestHandler.request()
@@ -523,7 +523,7 @@ def showMoviesLinks():
     sThumb = oInputParameterHandler.getValue('sThumb')
     sDesc = oInputParameterHandler.getValue('sDesc')
 
-    oRequestHandler = cRequestHandler(sUrl.replace(' ', '%20'))
+    oRequestHandler = RequestHandler(sUrl.replace(' ', '%20'))
     oRequestHandler.addHeaderEntry('User-Agent', UA)
     oRequestHandler.addHeaderEntry('Accept-Encoding', 'gzip, deflate')
     sHtmlContent = oRequestHandler.request()
@@ -610,7 +610,7 @@ def showSeriesLinks():
     sThumb = oInputParameterHandler.getValue('sThumb')
     sDesc = oInputParameterHandler.getValue('sDesc')
 
-    oRequestHandler = cRequestHandler(sUrl.replace(' ', '%20'))
+    oRequestHandler = RequestHandler(sUrl.replace(' ', '%20'))
     oRequestHandler.addHeaderEntry('User-Agent', UA)
     oRequestHandler.addHeaderEntry('Accept-Encoding', 'gzip, deflate')
     sHtmlContent = oRequestHandler.request()
@@ -723,7 +723,7 @@ def showHosters():
     if sUrl.find("https") != sUrl.rfind("https"):
         sUrl = sUrl[sUrl.rfind("https"):]
 
-    oRequestHandler = cRequestHandler(sUrl.replace(' ', '%20'))
+    oRequestHandler = RequestHandler(sUrl.replace(' ', '%20'))
     oRequestHandler.addHeaderEntry('User-Agent', UA)
     oRequestHandler.addHeaderEntry('Accept-Encoding', 'gzip, deflate')
     sHtmlContent = oRequestHandler.request()
@@ -767,7 +767,7 @@ def showHostersLink():
     sMovieTitle = oInputParameterHandler.getValue('sMovieTitle')
     sThumb = oInputParameterHandler.getValue('sThumb')
 
-    oRequestHandler = cRequestHandler(sUrl.replace(' ', '%20'))
+    oRequestHandler = RequestHandler(sUrl.replace(' ', '%20'))
     oRequestHandler.addHeaderEntry('User-Agent', UA)
     oRequestHandler.addHeaderEntry('Accept-Encoding', 'gzip, deflate')
     sHtmlContent = oRequestHandler.request()
@@ -798,7 +798,7 @@ def showSeriesHosters():
     sThumb = oInputParameterHandler.getValue('sThumb')
     sDesc = oInputParameterHandler.getValue('sDesc')
 
-    oRequestHandler = cRequestHandler(sUrl.replace(' ', '%20'))
+    oRequestHandler = RequestHandler(sUrl.replace(' ', '%20'))
     oRequestHandler.addHeaderEntry('User-Agent', UA)
     oRequestHandler.addHeaderEntry('Accept-Encoding', 'gzip, deflate')
     sHtmlContent = oRequestHandler.request()
@@ -844,7 +844,7 @@ def Display_protected_link():
     if not sUrl.startswith('http'):
         sUrl = 'http://' + sUrl
 
-    oRequestHandler = cRequestHandler(sUrl.replace('link', 'streaming').replace(' ', '%20'))
+    oRequestHandler = RequestHandler(sUrl.replace('link', 'streaming').replace(' ', '%20'))
     oRequestHandler.addHeaderEntry('User-Agent', UA)
     sHtmlContent = oRequestHandler.request()
 
@@ -902,7 +902,7 @@ def DecryptDlProtecte(url):
     sPattern = 'type="hidden" name="_token" value="(.+?)">'
     aResult = re.search(sPattern, sHtmlContent).group(1)
 
-    oRequestHandler = cRequestHandler(url)
+    oRequestHandler = RequestHandler(url)
     oRequestHandler.setRequestType(1)
     oRequestHandler.addHeaderEntry('Host', url.split('/')[2])
     oRequestHandler.addHeaderEntry('Referer', url)

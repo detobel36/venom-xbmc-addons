@@ -3,7 +3,7 @@
 # stream elite
 import re
 
-from resources.lib.handler.requestHandler import cRequestHandler
+from resources.lib.handler.requestHandler import RequestHandler
 from resources.lib.parser import cParser
 from resources.hosters.hoster import iHoster
 from resources.lib.packer import cPacker
@@ -29,7 +29,7 @@ class cHoster(iHoster):
 
     def _getMediaLinkForGuest(self):
         oParser = cParser()
-        oRequest = cRequestHandler(self._url)
+        oRequest = RequestHandler(self._url)
         oRequest.addHeaderEntry('User-Agent', UA)
         oRequest.addHeaderEntry('Referer', self._url.replace('iframe.php?u=', ''))
         sHtmlContent = oRequest.request()
@@ -41,7 +41,7 @@ class cHoster(iHoster):
         if aResult[0] is True:
             postdata = aResult[1][0][0] + '=' + aResult[1][0][1] + '&' + aResult[1][0][2] + '=' + aResult[1][0][3]
 
-            oRequest = cRequestHandler(self._url)
+            oRequest = RequestHandler(self._url)
             oRequest.setRequestType(1)
             oRequest.addHeaderEntry('User-Agent', UA)
             oRequest.addHeaderEntry('Referer', self._url)

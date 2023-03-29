@@ -9,7 +9,7 @@ import string
 
 from resources.hosters.hoster import iHoster
 from resources.lib.comaddon import dialog, VSlog
-from resources.lib.handler.requestHandler import cRequestHandler
+from resources.lib.handler.requestHandler import RequestHandler
 from resources.lib.parser import cParser
 
 UA = 'Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:100.0) Gecko/20100101 Firefox/100.0'
@@ -36,7 +36,7 @@ class cHoster(iHoster):
         videoId = self.__getId(self._url)
         url = host + 'd/' + videoId + '.html'
 
-        oRequest = cRequestHandler(url)
+        oRequest = RequestHandler(url)
         oRequest.addHeaderEntry('User-Agent', UA)
         oRequest.addHeaderEntry('Referer', host)
         sHtmlContent = oRequest.request()
@@ -59,13 +59,13 @@ class cHoster(iHoster):
                     dl_url = host + 'dl?op=download_orig&id=' + code + '&mode=' + mode + '&hash=' + hash
                     VSlog(dl_url)
 
-                    oRequest = cRequestHandler(dl_url)
+                    oRequest = RequestHandler(dl_url)
                     sHtmlContent = oRequest.request()
                     domain = base64.b64encode((host[:-1] + ':443').encode('utf-8')).decode('utf-8').replace('=', '')
         else:
             eurl = get_embedurl(host, videoId)
 
-            oRequest = cRequestHandler(eurl)
+            oRequest = RequestHandler(eurl)
             oRequest.addHeaderEntry('User-Agent', UA)
             oRequest.addHeaderEntry('Referer', host)
             oRequest.addHeaderEntry('watchsb', 'streamsb')

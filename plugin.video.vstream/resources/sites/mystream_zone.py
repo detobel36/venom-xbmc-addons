@@ -7,7 +7,7 @@ from resources.lib.gui.hoster import HosterGui
 from resources.lib.gui.gui import Gui
 from resources.lib.handler.inputParameterHandler import InputParameterHandler
 from resources.lib.handler.outputParameterHandler import OutputParameterHandler
-from resources.lib.handler.requestHandler import cRequestHandler
+from resources.lib.handler.requestHandler import RequestHandler
 from resources.lib.parser import cParser
 from resources.lib.util import cUtil
 import re
@@ -255,7 +255,7 @@ def showMovies(sSearch=''):
 
     if 'wp-json' in sUrl and not sSearch:
         try:
-            oRequestHandler = cRequestHandler(sUrl)
+            oRequestHandler = RequestHandler(sUrl)
             oRequestHandler.setTimeout(TimeOut)
             jsonrsp = oRequestHandler.request(jsonDecode=True)
         except Exception as e:
@@ -320,7 +320,7 @@ def showMovies(sSearch=''):
     elif '/tvshows/' in sUrl or '/movies/' in sUrl:  # thumb; title; url; year; desc #regex ok
         sPattern = 'noscript>.+?src="([^"]+).+?alt="([^"]+).+?href="([^"]+).+?class="metadata".+?<span>(\\d+).+?class="texto">([^<]*)'
 
-    oRequestHandler = cRequestHandler(sUrl)
+    oRequestHandler = RequestHandler(sUrl)
     oRequestHandler.setTimeout(TimeOut)
     sHtmlContent = oRequestHandler.request()
     oParser = cParser()
@@ -484,7 +484,7 @@ def showSaisons():
     sYear = oInputParameterHandler.getValue('sYear')
     # probleme temps de la requete aleatoire normale, lent, ou tps de connexion > max autorisé
     oParser = cParser()
-    oRequestHandler = cRequestHandler(sUrl)
+    oRequestHandler = RequestHandler(sUrl)
     sHtmlContent = oRequestHandler.request()
     # temps qui peu depasser 10 secondes parfois
 
@@ -579,7 +579,7 @@ def showEpisodes():
     sMovieTitle = oInputParameterHandler.getValue('sMovieTitle')
 
     oParser = cParser()
-    oRequestHandler = cRequestHandler(sUrl)
+    oRequestHandler = RequestHandler(sUrl)
     sHtmlContent = oRequestHandler.request()
 
     if not sDesc:
@@ -625,7 +625,7 @@ def showHosters():
     sDesc = oInputParameterHandler.getValue('sDesc')
     sYear = oInputParameterHandler.getValue('sYear')
     oParser = cParser()
-    oRequestHandler = cRequestHandler(sUrl)
+    oRequestHandler = RequestHandler(sUrl)
     sHtmlContent = oRequestHandler.request()
 
     # if False: no desc MOVIE_TENDANCE
@@ -674,7 +674,7 @@ def hostersLink():
     sThumb = oInputParameterHandler.getValue('sThumb')
     sYear = oInputParameterHandler.getValue('sYear')
 
-    oRequest = cRequestHandler(sUrl)
+    oRequest = RequestHandler(sUrl)
     oRequest.setRequestType(1)
     oRequest.addHeaderEntry('User-Agent', 'Mozilla/5.0 (Windows NT 6.1; WOW64; rv:70.0) Gecko/20100101 Firefox/70.0')
     oRequest.addHeaderEntry('Referer', referer)

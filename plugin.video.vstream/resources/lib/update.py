@@ -3,7 +3,7 @@
 
 
 from resources.lib.comaddon import addon, siteManager
-from resources.lib.handler.requestHandler import cRequestHandler
+from resources.lib.handler.requestHandler import RequestHandler
 import datetime
 import time
 
@@ -24,7 +24,7 @@ class cUpdate:
         time_sleep = datetime.timedelta(hours=72)
         if time_now - time_service > time_sleep:
             sUrl = 'https://raw.githubusercontent.com/Kodi-vStream/venom-xbmc-addons/Beta/plugin.video.vstream/resources/sites.json'
-            oRequestHandler = cRequestHandler(sUrl)
+            oRequestHandler = RequestHandler(sUrl)
             properties = oRequestHandler.request(jsonDecode=True)
             if properties == "":
                 return

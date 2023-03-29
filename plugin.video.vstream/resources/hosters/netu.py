@@ -4,7 +4,7 @@
 import re
 
 from resources.hosters.hoster import iHoster
-from resources.lib.handler.requestHandler import cRequestHandler
+from resources.lib.handler.requestHandler import RequestHandler
 from resources.lib.parser import cParser
 
 UA = 'Mozilla/5.0 (Windows NT 6.1; WOW64; rv:72.0) Gecko/20100101 Firefox/72.0'
@@ -41,7 +41,7 @@ class cHoster(iHoster):
 
         hqqUrl = 'http://hqq.tv/player/embed_player.php?vid=' + ids + '&autoplay=no'
 
-        oRequestHandler = cRequestHandler(hqqUrl)
+        oRequestHandler = RequestHandler(hqqUrl)
         oRequestHandler.addHeaderEntry('User-Agent', UA)
         html = oRequestHandler.request()
 
@@ -49,7 +49,7 @@ class cHoster(iHoster):
 
         url = "time=1&ver=0&secure=0&adb=0%2F&v={}&token=&gt=&embed_from=0&wasmcheck=1".format(vid)
 
-        oRequestHandler = cRequestHandler('https://hqq.tv/player/get_md5.php?' + url)
+        oRequestHandler = RequestHandler('https://hqq.tv/player/get_md5.php?' + url)
         oRequestHandler.addHeaderEntry('User-Agent', UA)
         oRequestHandler.addHeaderEntry('Accept', '*/*')
         oRequestHandler.addHeaderEntry('Accept-Language', 'fr,fr-FR;q=0.8,en-US;q=0.5,en;q=0.3')

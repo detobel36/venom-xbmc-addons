@@ -6,7 +6,7 @@ from resources.lib.gui.gui import Gui  # system d'affichage pour xbmc
 from resources.lib.gui.guiElement import GuiElement  # system d'affichage pour xbmc
 from resources.lib.handler.inputParameterHandler import InputParameterHandler  # entrer des parametres
 from resources.lib.handler.outputParameterHandler import OutputParameterHandler  # sortis des parametres
-from resources.lib.handler.requestHandler import cRequestHandler  # requete url
+from resources.lib.handler.requestHandler import RequestHandler  # requete url
 from resources.lib.config import cConfig  # config
 from resources.lib.parser import cParser  # recherche de code
 from resources.lib.util import cUtil
@@ -61,7 +61,7 @@ def _DecryptProtectStream(url):
     videoId = re.findall('protect-stream\\.com\\/PS_DL_([A-Za-z0-9\\-_]+)', url)
     # print(videoId[0])
 
-    oRequestHandler = cRequestHandler("http://www.protect-stream.com/w.php?u=" + videoId[0])
+    oRequestHandler = RequestHandler("http://www.protect-stream.com/w.php?u=" + videoId[0])
     sHtmlContent = oRequestHandler.request()
 
     cheap = re.findall('var k=\"([^<>\"]*?)\";', sHtmlContent)
@@ -163,7 +163,7 @@ def showAlpha(sLettre=''):
                 oOutputParameterHandler)
     else:
 
-        oRequestHandler = cRequestHandler(sUrl)
+        oRequestHandler = RequestHandler(sUrl)
         sHtmlContent = oRequestHandler.request()
 
         sPattern = 'font-size:10px;font-weight:bold;" href="([^<]+)" class="b">(' + str(sLettre) + '.*?)<\\/a>'
@@ -239,7 +239,7 @@ def showMovies(sSearch=''):
 
         sUrl = oInputParameterHandler.getValue('siteUrl')
 
-        oRequestHandler = cRequestHandler(sUrl)
+        oRequestHandler = RequestHandler(sUrl)
         sHtmlContent = oRequestHandler.request()
 
         sPattern = 'Tip\\(\'<center><b>(.+?)<.b>.+?Synopsis : <.b> <i>(.+?)<.i>(?:.|\n)+?<a href="(.+?)"><img src="(.+?)" alt'
@@ -332,7 +332,7 @@ def showEpisode():
 
     # print sUrl
 
-    oRequestHandler = cRequestHandler(sUrl)
+    oRequestHandler = RequestHandler(sUrl)
     sHtmlContent = oRequestHandler.request()
 
     # fh = open('c:\\test.txt', "w")
@@ -429,7 +429,7 @@ def showListHosters():
 
     print sUrl
 
-    oRequestHandler = cRequestHandler(sUrl)
+    oRequestHandler = RequestHandler(sUrl)
     sHtmlContent = oRequestHandler.request()
 
     # fh = open('c:\\test.txt', "w")

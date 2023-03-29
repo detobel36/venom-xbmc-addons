@@ -3,7 +3,7 @@
 # disable 03/08/2020
 from resources.lib.util import cUtil, Unquote
 from resources.lib.parser import cParser
-from resources.lib.handler.requestHandler import cRequestHandler
+from resources.lib.handler.requestHandler import RequestHandler
 from resources.lib.handler.outputParameterHandler import OutputParameterHandler
 from resources.lib.handler.inputParameterHandler import InputParameterHandler
 from resources.lib.gui.hoster import HosterGui
@@ -83,7 +83,7 @@ def showSearchMovies(sSearch=''):
     UA = "Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:62.0) Gecko/20100101 Firefox/62.0"
     pdata = 'nonce=3293a1b68c&action=tr_livearch&trsearch=' + sSearch  # la valeur nonce change
 
-    oRequest = cRequestHandler(sUrl2)
+    oRequest = RequestHandler(sUrl2)
     oRequest.setRequestType(1)
     oRequest.addHeaderEntry('User-Agent', UA)
     oRequest.addParameters('Referer', URL_MAIN)
@@ -126,7 +126,7 @@ def showSearchMovies(sSearch=''):
 def showGenres():
     oGui = Gui()
     oParser = cParser()
-    oRequestHandler = cRequestHandler(MOVIE_NEWS[0])
+    oRequestHandler = RequestHandler(MOVIE_NEWS[0])
     sHtmlContent = oRequestHandler.request()
 
     sHtmlContent = oParser.abParse(sHtmlContent, 'class=Title>Film Streaming Par Genres</div>', '</div></aside>')
@@ -176,7 +176,7 @@ def showList():
     oInputParameterHandler = InputParameterHandler()
     sUrl = oInputParameterHandler.getValue('siteUrl')
 
-    oRequestHandler = cRequestHandler(sUrl)
+    oRequestHandler = RequestHandler(sUrl)
     sHtmlContent = oRequestHandler.request()
 
     sPattern = 'class=Num>.+?href=(.+?) class=MvTbImg.+?src=([^ ]+).+?<strong>([^<]+)</strong> </a></td><td>([^<]*)<.+?class=Qlty>([^<]+)<'
@@ -243,7 +243,7 @@ def showMovies(sSearch=''):
         oInputParameterHandler = InputParameterHandler()
         sUrl = oInputParameterHandler.getValue('siteUrl')
 
-    oRequestHandler = cRequestHandler(sUrl)
+    oRequestHandler = RequestHandler(sUrl)
     sHtmlContent = oRequestHandler.request()
     sHtmlContent = oParser.abParse(sHtmlContent, 'MovieList Rows', '</body></html>')
     sPattern = 'class=Image>.+?src=([^ ]+) .+?class=Qlty>([^<]+).+?href=([^>]+)><div class=Title>([^<]+).+?Description><p>(.+?)</p>'
@@ -317,7 +317,7 @@ def showHosters():
     sMovieTitle = oInputParameterHandler.getValue('sMovieTitle')
     sThumb = oInputParameterHandler.getValue('sThumb')
 
-    oRequestHandler = cRequestHandler(sUrl)
+    oRequestHandler = RequestHandler(sUrl)
     sHtmlContent = oRequestHandler.request()
 
     sPattern = 'class=AAIco-language>([^<]+)</p><p class=AAIco-dns>.+?<p class=AAIco-equalizer>([^<]+)<'  # qual, lang
@@ -344,7 +344,7 @@ def showHosters():
                 sUrl = re.search('src="([^"]+)"', sHtmlContent.decode())
             sHosterUrl = sUrl.group(1)
 
-            oRequestHandler = cRequestHandler(sHosterUrl)
+            oRequestHandler = RequestHandler(sHosterUrl)
             sHtmlContent = oRequestHandler.request()
             sUrl = re.search('<iframe id="iframe" src="([^"]+)"', sHtmlContent)
             if sUrl:

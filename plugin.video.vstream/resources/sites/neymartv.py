@@ -8,7 +8,7 @@ from resources.lib.gui.gui import Gui
 from resources.lib.gui.hoster import HosterGui
 from resources.lib.handler.inputParameterHandler import InputParameterHandler
 from resources.lib.handler.outputParameterHandler import OutputParameterHandler
-from resources.lib.handler.requestHandler import cRequestHandler
+from resources.lib.handler.requestHandler import RequestHandler
 from resources.lib.parser import cParser
 
 
@@ -98,7 +98,7 @@ def showGenres():
 
     oInputParameterHandler = InputParameterHandler()
     sUrl = oInputParameterHandler.getValue('siteUrl')
-    oRequestHandler = cRequestHandler(URL_MAIN + sUrl)
+    oRequestHandler = RequestHandler(URL_MAIN + sUrl)
     sHtmlContent = oRequestHandler.request()
 
     oParser = cParser()
@@ -142,7 +142,7 @@ def showMovies():
     sTitle = oInputParameterHandler.getValue('sMovieTitle')
     sUrl = URL_MAIN + oInputParameterHandler.getValue('siteUrl')
 
-    oRequestHandler = cRequestHandler(sUrl)
+    oRequestHandler = RequestHandler(sUrl)
     sHtmlContent = oRequestHandler.request()
 
     sPattern = '<h3> %s <' % sTitle
@@ -177,7 +177,7 @@ def showMoviesLinks():
     sTitle = oInputParameterHandler.getValue('sMovieTitle')
     sUrl = oInputParameterHandler.getValue('siteUrl')
 
-    oRequestHandler = cRequestHandler(sUrl)
+    oRequestHandler = RequestHandler(sUrl)
     sHtmlContent = oRequestHandler.request()
 
     sPattern = '%s' % sTitle
@@ -211,7 +211,7 @@ def showHoster():
     sThumb = oInputParameterHandler.getValue('sThumb')
     sUrl = URL_MAIN + oInputParameterHandler.getValue('siteUrl')
 
-    oRequestHandler = cRequestHandler(sUrl)
+    oRequestHandler = RequestHandler(sUrl)
     sHtmlContent = oRequestHandler.request()
     sPattern = '<li movieurl=["\']([^"]+)["\']><a>([^<]+)'
     aResult = oParser.parse(sHtmlContent, sPattern)
@@ -282,7 +282,7 @@ def getHosterIframe(url, referer):
     if not url.startswith('http'):
         url = URL_MAIN + url
 
-    oRequestHandler = cRequestHandler(url)
+    oRequestHandler = RequestHandler(url)
     if referer:
         oRequestHandler.addHeaderEntry('Referer', referer)
 #    oRequestHandler.disableSSL()
@@ -340,10 +340,10 @@ def getHosterIframe(url, referer):
     sPattern = '[^/]source.+?["\'](https.+?)["\']'
     aResult = re.findall(sPattern, sHtmlContent)
     if aResult:
-        oRequestHandler = cRequestHandler(aResult[0])
+        oRequestHandler = RequestHandler(aResult[0])
         oRequestHandler.request()
         sHosterUrl = oRequestHandler.getRealUrl()
-        oRequestHandler = cRequestHandler(sHosterUrl)
+        oRequestHandler = RequestHandler(sHosterUrl)
         h = oRequestHandler.request()
         return True, sHosterUrl + '|referer=' + url
     return False, False

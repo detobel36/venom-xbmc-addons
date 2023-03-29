@@ -4,7 +4,7 @@
 import json
 
 from resources.lib.handler.premiumHandler import cPremiumHandler
-from resources.lib.handler.requestHandler import cRequestHandler
+from resources.lib.handler.requestHandler import RequestHandler
 from resources.hosters.hoster import iHoster
 from resources.lib.comaddon import VSlog
 
@@ -21,7 +21,7 @@ class cHoster(iHoster):
         else:
             return False, False
 
-        oRequest = cRequestHandler(sUrl_Bypass)
+        oRequest = RequestHandler(sUrl_Bypass)
         sHtmlContent = json.loads(oRequest.request())
 
         if 'error' in sHtmlContent:

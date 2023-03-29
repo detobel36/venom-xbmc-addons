@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 # vStream https://github.com/Kodi-vStream/venom-xbmc-addons
 
-from resources.lib.handler.requestHandler import cRequestHandler
+from resources.lib.handler.requestHandler import RequestHandler
 from resources.lib.parser import cParser
 from resources.hosters.hoster import iHoster
 from resources.lib.comaddon import dialog, isKrypton
@@ -20,7 +20,7 @@ class cHoster(iHoster):
 
     def _getMediaLinkForGuest(self):
         oParser = cParser()
-        oRequest = cRequestHandler(self._url)
+        oRequest = RequestHandler(self._url)
         oRequest.addHeaderEntry('Referer', "https://vidlox.me/8m8p7kane4r1.html")
         sHtmlContent = oRequest.request()
 

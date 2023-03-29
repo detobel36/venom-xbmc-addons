@@ -10,7 +10,7 @@ from resources.lib.gui.hoster import HosterGui
 from resources.lib.handler.inputParameterHandler import InputParameterHandler
 from resources.lib.handler.outputParameterHandler import OutputParameterHandler
 from resources.lib.handler.premiumHandler import cPremiumHandler
-from resources.lib.handler.requestHandler import cRequestHandler
+from resources.lib.handler.requestHandler import RequestHandler
 from resources.lib.parser import cParser
 from resources.lib.util import cUtil
 
@@ -367,7 +367,7 @@ def showMovies(sSearch=''):
 
         if nextPageSearch:
             sSearch += '&search_start=' + nextPageSearch
-        oRequestHandler = cRequestHandler(siteUrl)
+        oRequestHandler = RequestHandler(siteUrl)
         sHtmlContent = oRequestHandler.request()
 
         sHtmlContent = oParser.abParse(sHtmlContent, 'de la recherche', 'À propos')
@@ -377,7 +377,7 @@ def showMovies(sSearch=''):
         oUtil = cUtil()
         sSearch = oUtil.CleanName(sSearch)
     else:
-        oRequestHandler = cRequestHandler(siteUrl)
+        oRequestHandler = RequestHandler(siteUrl)
         sHtmlContent = oRequestHandler.request()
 
     sPattern = 'class="top-last thumbnails" href="([^"]+)".+?"img-post" src="([^"]+).+?alt="([^"]+)'
@@ -515,7 +515,7 @@ def showMoviesLinks():
     sThumb = oInputParameterHandler.getValue('sThumb')
     sUrl = oInputParameterHandler.getValue('siteUrl')
 
-    oRequestHandler = cRequestHandler(sUrl)
+    oRequestHandler = RequestHandler(sUrl)
     sHtmlContent = oRequestHandler.request()
 
     # récupération du Synopsis
@@ -576,7 +576,7 @@ def showSeriesLinks():
     sThumb = oInputParameterHandler.getValue('sThumb')
     sUrl = oInputParameterHandler.getValue('siteUrl')
 
-    oRequestHandler = cRequestHandler(sUrl)
+    oRequestHandler = RequestHandler(sUrl)
     sHtmlContent = oRequestHandler.request()
 
     # récupération du Synopsis
@@ -678,7 +678,7 @@ def showLinks():
     sMovieTitle = oInputParameterHandler.getValue('sMovieTitle')
     sDesc = oInputParameterHandler.getValue('sDesc')
 
-    oRequestHandler = cRequestHandler(sUrl)
+    oRequestHandler = RequestHandler(sUrl)
     sHtmlContent = oRequestHandler.request()
 
     # Detection de la taille des fichier pour separer les fichier premium des parties en .rar
@@ -760,7 +760,7 @@ def showHosters():
         sUrl_Bypass = "https://api.alldebrid.com/v4/link/redirector?agent=service&version=1.0-&apikey="
         sUrl_Bypass += Token_Alldebrid + "&link=" + sUrl
 
-        oRequestHandler = cRequestHandler(sUrl_Bypass)
+        oRequestHandler = RequestHandler(sUrl_Bypass)
         sHtmlContent = json.loads(oRequestHandler.request())
 
         HostURL = sHtmlContent["data"]["links"]
@@ -802,7 +802,7 @@ def getHost():
     test = oInputParameterHandler.getValue('Token')
 
     data = 'g-recaptcha-response=' + test + '&submit_captcha=1'
-    oRequestHandler = cRequestHandler(sUrl)
+    oRequestHandler = RequestHandler(sUrl)
     oRequestHandler.setRequestType(1)
     oRequestHandler.addHeaderEntry('User-Agent', UA)
     oRequestHandler.addHeaderEntry(

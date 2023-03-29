@@ -4,7 +4,7 @@ from resources.lib.gui.hoster import HosterGui  # systeme de recherche pour l'ho
 from resources.lib.gui.gui import Gui  # systeme d'affichage pour xbmc
 from resources.lib.handler.inputParameterHandler import InputParameterHandler  # entree des parametres
 from resources.lib.handler.outputParameterHandler import OutputParameterHandler  # sortie des parametres
-from resources.lib.handler.requestHandler import cRequestHandler  # requete url
+from resources.lib.handler.requestHandler import RequestHandler  # requete url
 from resources.lib.parser import cParser  # recherche de code
 from resources.lib.comaddon import progress  # , VSlog
 # from resources.lib.util import cUtil #outils pouvant etre utiles
@@ -71,7 +71,7 @@ def showMovies(sSearch=''):
         oInputParameterHandler = InputParameterHandler()
         sUrl = oInputParameterHandler.getValue('siteUrl')  # recupere l'url sortie en parametre
 
-    oRequestHandler = cRequestHandler(sUrl)  # envoye une requete a l'url
+    oRequestHandler = RequestHandler(sUrl)  # envoye une requete a l'url
     sHtmlContent = oRequestHandler.request()  # requete aussi
 
     sHtmlContent = sHtmlContent.replace('<span class="likeThis">', '').replace('</span>', '')
@@ -144,7 +144,7 @@ def showMovies2(sSearch=''):
         oInputParameterHandler = InputParameterHandler()
         sUrl = oInputParameterHandler.getValue('siteUrl')
 
-    oRequestHandler = cRequestHandler(sUrl)
+    oRequestHandler = RequestHandler(sUrl)
     sHtmlContent = oRequestHandler.request()
     sPattern = '<li><a href="([^<]+)" title="([^<]+)" rel="([^<]+)" class="anm_det_pop">([^<]+)</a></li>'
     oParser = cParser()
@@ -190,7 +190,7 @@ def showHosters():  # recherche et affiche les hotes
     sMovieTitle = oInputParameterHandler.getValue('sMovieTitle')  # apelle le titre
     sThumbnail = oInputParameterHandler.getValue('sThumbnail')  # apelle le poster
 
-    oRequestHandler = cRequestHandler(sUrl)  # requete sur l'url
+    oRequestHandler = RequestHandler(sUrl)  # requete sur l'url
     sHtmlContent = oRequestHandler.request()  # requete sur l'url
     sHtmlContent = sHtmlContent.replace(
         '<iframe src="//www.facebook.com/',
@@ -227,7 +227,7 @@ def seriesListEpisodes():  # cherche les episode de series
     sMovieTitle = oInputParameterHandler.getValue('sMovieTitle')
     sThumbnail = oInputParameterHandler.getValue('sThumbnail')
 
-    oRequestHandler = cRequestHandler(sUrl)
+    oRequestHandler = RequestHandler(sUrl)
     sHtmlContent = oRequestHandler.request()
 
     # sPattern = '<option value="([0-9]+)">([^<]+)<\/option>'

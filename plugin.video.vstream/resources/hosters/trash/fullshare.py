@@ -1,7 +1,7 @@
 import time
 import random
 
-from resources.lib.handler.requestHandler import cRequestHandler
+from resources.lib.handler.requestHandler import RequestHandler
 from resources.lib.parser import cParser
 from resources.lib.gui.gui import Gui
 from resources.hosters.hoster import iHoster
@@ -13,7 +13,7 @@ class cHoster(iHoster):
         iHoster.__init__(self, 'fullshare', 'FullShare.net')
 
     def _getMediaLinkForGuest(self):
-        oRequest = cRequestHandler(self._url)
+        oRequest = RequestHandler(self._url)
         sHtmlContent = oRequest.request()
 
         aHeader = oRequest.getResponseHeader()
@@ -51,8 +51,8 @@ class cHoster(iHoster):
                 sCookieValue = sCookieValue + '__utmc=' + str(rndY) + "; "
                 sCookieValue = sCookieValue + '__utmb=' + str(rndY) + '.7.10.' + str(ts5) + "; ADBLOCK=1"
 
-                oRequest = cRequestHandler(self._url)
-                oRequest.setRequestType(cRequestHandler.REQUEST_TYPE_POST)
+                oRequest = RequestHandler(self._url)
+                oRequest.setRequestType(RequestHandler.REQUEST_TYPE_POST)
                 oRequest.addHeaderEntry('Cookie', sCookieValue)
                 oRequest.addParameters('code', sCode)
                 sHtmlContent = oRequest.request()

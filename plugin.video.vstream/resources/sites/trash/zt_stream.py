@@ -5,7 +5,7 @@ from resources.lib.gui.hoster import HosterGui
 from resources.lib.gui.gui import Gui
 from resources.lib.handler.inputParameterHandler import InputParameterHandler
 from resources.lib.handler.outputParameterHandler import OutputParameterHandler
-from resources.lib.handler.requestHandler import cRequestHandler
+from resources.lib.handler.requestHandler import RequestHandler
 from resources.lib.parser import cParser
 from resources.lib.comaddon import progress
 from resources.lib.util import Quote, cUtil
@@ -341,7 +341,7 @@ def showMovies(sSearch=''):
         oInputParameterHandler = InputParameterHandler()
         sUrl = oInputParameterHandler.getValue('siteUrl')
 
-    oRequestHandler = cRequestHandler(sUrl.replace('https', 'http'))
+    oRequestHandler = RequestHandler(sUrl.replace('https', 'http'))
     oRequestHandler.addHeaderEntry('User-Agent', UA)
     oRequestHandler.addHeaderEntry('Accept-Encoding', 'gzip, deflate')
     sHtmlContent = oRequestHandler.request()
@@ -474,7 +474,7 @@ def showMoviesLinks():
     sThumb = oInputParameterHandler.getValue('sThumb')
     sUrl = oInputParameterHandler.getValue('siteUrl')
 
-    oRequestHandler = cRequestHandler(sUrl.replace('https', 'http'))
+    oRequestHandler = RequestHandler(sUrl.replace('https', 'http'))
     oRequestHandler.addHeaderEntry('User-Agent', UA)
     oRequestHandler.addHeaderEntry('Accept-Encoding', 'gzip, deflate')
     sHtmlContent = oRequestHandler.request()
@@ -535,7 +535,7 @@ def showSeriesLinks():
     sThumb = oInputParameterHandler.getValue('sThumb')
     sUrl = oInputParameterHandler.getValue('siteUrl')
 
-    oRequestHandler = cRequestHandler(sUrl.replace('https', 'http'))
+    oRequestHandler = RequestHandler(sUrl.replace('https', 'http'))
     oRequestHandler.addHeaderEntry('User-Agent', UA)
     oRequestHandler.addHeaderEntry('Accept-Encoding', 'gzip, deflate')
     sHtmlContent = oRequestHandler.request()
@@ -643,7 +643,7 @@ def showHosters():
     sUrl = oInputParameterHandler.getValue('siteUrl')
     sThumb = oInputParameterHandler.getValue('sThumb')
 
-    oRequestHandler = cRequestHandler(sUrl.replace('https', 'http'))
+    oRequestHandler = RequestHandler(sUrl.replace('https', 'http'))
     oRequestHandler.addHeaderEntry('User-Agent', UA)
     oRequestHandler.addHeaderEntry('Accept-Encoding', 'gzip, deflate')
     sHtmlContent = oRequestHandler.request()
@@ -672,7 +672,7 @@ def showSerieEpisodes():
     sUrl = oInputParameterHandler.getValue('siteUrl')
     sThumb = oInputParameterHandler.getValue('sThumb')
 
-    oRequestHandler = cRequestHandler(sUrl.replace('https', 'http'))
+    oRequestHandler = RequestHandler(sUrl.replace('https', 'http'))
     oRequestHandler.addHeaderEntry('User-Agent', UA)
     oRequestHandler.addHeaderEntry('Accept-Encoding', 'gzip, deflate')
     sHtmlContent = oRequestHandler.request()
@@ -765,7 +765,7 @@ def DecryptDlProtecte(url):
     if not (url):
         return ''
 
-    oRequestHandler = cRequestHandler(url)
+    oRequestHandler = RequestHandler(url)
     sHtmlContent = oRequestHandler.request()
 
     oParser = cParser()
@@ -794,7 +794,7 @@ def DecryptDlProtecte(url):
             if restUrl.startswith('/'):
                 restUrl = 'https://' + url.split('/')[2] + restUrl
 
-    oRequestHandler = cRequestHandler(restUrl)
+    oRequestHandler = RequestHandler(restUrl)
     if method == "post":
         oRequestHandler.setRequestType(1)
     oRequestHandler.addParameters("_token", token)

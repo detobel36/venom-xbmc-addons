@@ -10,7 +10,7 @@ from resources.lib.favourite import Fav
 from resources.lib.gui.guiElement import GuiElement
 from resources.lib.handler.inputParameterHandler import InputParameterHandler
 from resources.lib.handler.outputParameterHandler import OutputParameterHandler
-from resources.lib.handler.requestHandler import cRequestHandler
+from resources.lib.handler.requestHandler import RequestHandler
 from resources.lib.parser import cParser
 from resources.lib.util import cUtil
 
@@ -222,7 +222,7 @@ def showMovies(sSearch=''):
         oInputParameterHandler = InputParameterHandler()
         sUrl = oInputParameterHandler.getValue('siteUrl')
 
-    oRequestHandler = cRequestHandler(sUrl)
+    oRequestHandler = RequestHandler(sUrl)
     sHtmlContent = oRequestHandler.request()
 
     sPattern = '<div style="height:[0-9]{3}px;"><a title="" href="([^"]+)[^>]+?><img class="[^"]+?" data-newsid="[^"]+?" src="([^<"]+)".+?<a title="" href[^>]+?>([^<]+?)<'
@@ -294,7 +294,7 @@ def showLinks():
 
     # print sUrl
 
-    oRequestHandler = cRequestHandler(sUrl)
+    oRequestHandler = RequestHandler(sUrl)
     sHtmlContent = oRequestHandler.request()
 
     # Bon ici, grosse bataille, c'est un film ou une serie ?
@@ -496,7 +496,7 @@ def showHosters():  # recherche et affiche les hotes
 
     xbmc.log(sUrl)
 
-    oRequestHandler = cRequestHandler(sUrl)
+    oRequestHandler = RequestHandler(sUrl)
     sHtmlContent = oRequestHandler.request()
 
     # Fonction pour recuperer uniquement les liens
@@ -567,7 +567,7 @@ def showSeriesHosters():  # recherche et affiche les hotes
     sUrl = oInputParameterHandler.getValue('siteUrl')
     sThumbnail = oInputParameterHandler.getValue('sThumbnail')
 
-    oRequestHandler = cRequestHandler(sUrl)
+    oRequestHandler = RequestHandler(sUrl)
     sHtmlContent = oRequestHandler.request()
 
     # Fonction pour recuperer uniquement les liens
@@ -739,7 +739,7 @@ def ShowBA():
     oInputParameterHandler = InputParameterHandler()
     sUrl = oInputParameterHandler.getValue('sUrl')
 
-    oRequestHandler = cRequestHandler(sUrl)
+    oRequestHandler = RequestHandler(sUrl)
     sHtmlContent = oRequestHandler.request()
 
     oParser = cParser()
@@ -747,7 +747,7 @@ def ShowBA():
     aResult = oParser.parse(sHtmlContent, sPattern)
 
     if (aResult[0]):
-        oRequestHandler = cRequestHandler(aResult[1][0])
+        oRequestHandler = RequestHandler(aResult[1][0])
         sHtmlContent = oRequestHandler.request()
 
         sPattern = 'player_gen_cmedia=(.*?)&cfilm'
@@ -755,7 +755,7 @@ def ShowBA():
 
         if (aResult[0]):
             url2 = 'http://www.allocine.fr/ws/AcVisiondataV4.ashx?media=%s' % (aResult[1][0])
-            oRequestHandler = cRequestHandler(url2)
+            oRequestHandler = RequestHandler(url2)
             sHtmlContent = oRequestHandler.request()
 
             sPattern = 'md_path="([^"]+)"'

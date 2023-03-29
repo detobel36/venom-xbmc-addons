@@ -5,7 +5,7 @@ from resources.lib.gui.hoster import HosterGui
 from resources.lib.gui.gui import Gui
 from resources.lib.handler.inputParameterHandler import InputParameterHandler
 from resources.lib.handler.outputParameterHandler import OutputParameterHandler
-from resources.lib.handler.requestHandler import cRequestHandler
+from resources.lib.handler.requestHandler import RequestHandler
 from resources.lib.parser import cParser
 from resources.lib.comaddon import progress
 from resources.lib.multihost import cJheberg
@@ -222,7 +222,7 @@ def showMovies(sSearch=''):
         oInputParameterHandler = InputParameterHandler()
         sUrl = oInputParameterHandler.getValue('siteUrl')
 
-    oRequestHandler = cRequestHandler(sUrl)
+    oRequestHandler = RequestHandler(sUrl)
     sHtmlContent = oRequestHandler.request()
 
     sHtmlContent = sHtmlContent.replace(
@@ -310,7 +310,7 @@ def showSeries():
     sMovieTitle = oInputParameterHandler.getValue('sMovieTitle')
     sThumb = oInputParameterHandler.getValue('sThumb')
 
-    oRequestHandler = cRequestHandler(sUrl)
+    oRequestHandler = RequestHandler(sUrl)
     sHtmlContent = oRequestHandler.request()
 
     # Nettoyage du code, a simplifier, mais je trouve pas ce qui ne va pas
@@ -385,7 +385,7 @@ def showHosters():
     sMovieTitle = oInputParameterHandler.getValue('sMovieTitle')
     sThumb = oInputParameterHandler.getValue('sThumb')
 
-    oRequestHandler = cRequestHandler(sUrl)
+    oRequestHandler = RequestHandler(sUrl)
     sHtmlContent = oRequestHandler.request()
 
     sPattern = '<span style="color: #ff990.+?>([^<]+)<|large button.+?href="([^"]+)"'
@@ -414,7 +414,7 @@ def showHosters():
 
                 # pour récuperer le lien jwplayer(GoogleDrive)
                 if 'filmhdstream' in sHosterUrl:
-                    oRequestHandler = cRequestHandler(sHosterUrl)
+                    oRequestHandler = RequestHandler(sHosterUrl)
                     sHtmlContent = oRequestHandler.request()
                     sPattern = '<iframe.+?src="([^"]+)"'
                     aResult = oParser.parse(sHtmlContent, sPattern)
@@ -482,7 +482,7 @@ def serieHosters():
 
             # pour récuperer le lien jwplayer(GoogleDrive)
             if 'filmhdstream' in sHosterUrl:
-                oRequestHandler = cRequestHandler(sHosterUrl)
+                oRequestHandler = RequestHandler(sHosterUrl)
                 sHtmlContent = oRequestHandler.request()
                 sPattern = '<iframe.+?src="([^"]+)"'
                 aResult = oParser.parse(sHtmlContent, sPattern)

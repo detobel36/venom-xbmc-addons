@@ -5,7 +5,7 @@
 import base64
 import re
 
-from resources.lib.handler.requestHandler import cRequestHandler
+from resources.lib.handler.requestHandler import RequestHandler
 from resources.lib.parser import cParser
 from resources.hosters.hoster import iHoster
 from resources.lib.aadecode import AADecoder
@@ -38,7 +38,7 @@ class cHoster(iHoster):
         # Max 3 fois
         for i in range(0, 3):
 
-            oRequest = cRequestHandler(sUrl)
+            oRequest = RequestHandler(sUrl)
             oRequest.addHeaderEntry('User-Agent', UA)
             oRequest.addHeaderEntry('Referer', referer)
             sHtmlContent = oRequest.request()

@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 # vStream https://github.com/Kodi-vStream/venom-xbmc-addons
 
-from resources.lib.handler.requestHandler import cRequestHandler
+from resources.lib.handler.requestHandler import RequestHandler
 from resources.lib.comaddon import addon, dialog, VSlog
 
 
@@ -55,7 +55,7 @@ class cJDownloaderHandler:
         sLinkForJd = self.__createJDUrl(sFileUrl, sHost, sPort, bAutomaticDownload, bLinkGrabber)
         VSlog("JD Link " + str(sLinkForJd))
 
-        oRequestHandler = cRequestHandler(sLinkForJd)
+        oRequestHandler = RequestHandler(sLinkForJd)
         oRequestHandler.request()
         return True
 
@@ -80,7 +80,7 @@ class cJDownloaderHandler:
         sLinkForJd = 'http://' + str(sHost) + ':' + str(sPort)
 
         try:
-            oRequestHandler = cRequestHandler(sLinkForJd)
+            oRequestHandler = RequestHandler(sLinkForJd)
             oRequestHandler.request()
             return True
         except Exception as e:

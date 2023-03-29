@@ -11,7 +11,7 @@ from resources.lib.gui.guiElement import GuiElement
 from resources.lib.gui.hoster import HosterGui
 from resources.lib.handler.inputParameterHandler import InputParameterHandler
 from resources.lib.handler.outputParameterHandler import OutputParameterHandler
-from resources.lib.handler.requestHandler import cRequestHandler
+from resources.lib.handler.requestHandler import RequestHandler
 from resources.lib.parser import cParser
 from resources.lib.util import Unquote
 
@@ -86,7 +86,7 @@ def parseM3U(sUrl=None):  # Traite les m3u local
         oInputParameterHandler = InputParameterHandler()
         sUrl = oInputParameterHandler.getValue('siteUrl')
 
-    oRequestHandler = cRequestHandler(sUrl)
+    oRequestHandler = RequestHandler(sUrl)
     oRequestHandler.addHeaderEntry('User-Agent', UA)
     inf = oRequestHandler.request().split('\n')
 
@@ -282,7 +282,7 @@ def showTV():
     oInputParameterHandler = InputParameterHandler()
     sUrl = oInputParameterHandler.getValue('siteUrl')
 
-    oRequestHandler = cRequestHandler(sUrl)
+    oRequestHandler = RequestHandler(sUrl)
     sHtmlContent = oRequestHandler.request()
 
     oParser = cParser()
@@ -431,7 +431,7 @@ def getRealUrl(chain):
     if r:
         param = r.group(1)
 
-    oRequestHandler = cRequestHandler(url)
+    oRequestHandler = RequestHandler(url)
     if param:
         oRequestHandler.setRequestType(1)
         oRequestHandler.addHeaderEntry('Accept-Encoding', 'identity')
@@ -454,7 +454,7 @@ def getRealUrl(chain):
 
 
 def decodeNrj(d):
-    oRequestHandler = cRequestHandler(d)
+    oRequestHandler = RequestHandler(d)
     sHtmlContent = oRequestHandler.request()
 
     title = re.search('data-program_title="([^"]+)"', sHtmlContent).group(1)
@@ -463,7 +463,7 @@ def decodeNrj(d):
     url = 'https://www.nrj-play.fr/compte/live?channel=' + d.split('/')[3] + '&channel=' + d.split('/')[3] + '&title='
     url += title + '&channel=' + d.split('/')[3] + '&ref=' + ids + '&formId=formDirect'
 
-    oRequestHandler = cRequestHandler(url)
+    oRequestHandler = RequestHandler(url)
     sHtmlContent = oRequestHandler.request()
     dataUrl = re.search('"contentUrl" content="([^"]+)"', sHtmlContent).group(1)
 
@@ -471,19 +471,19 @@ def decodeNrj(d):
 
 
 def getBrightcoveKey(sUrl):
-    oRequestHandler = cRequestHandler(sUrl)
+    oRequestHandler = RequestHandler(sUrl)
     sHtmlContent = oRequestHandler.request()
 
     if "rmcdecouverte" in sUrl:
         url = re.search('<script type="application/javascript" src="([^"]+)"></script>', sHtmlContent).group(1)
 
-        oRequestHandler = cRequestHandler("https://" + sUrl.split('/')[2] + url)
+        oRequestHandler = RequestHandler("https://" + sUrl.split('/')[2] + url)
         sHtmlContent = oRequestHandler.request()
         result = re.search('N="([^"]+)",y="([^"]+)"\\)', sHtmlContent)
         player = result.group(1)
         video = result.group(2)
 
-        oRequestHandler = cRequestHandler("https://static.bfmtv.com/ressources/next-player/cleo-player/playerBridge.js")
+        oRequestHandler = RequestHandler("https://static.bfmtv.com/ressources/next-player/cleo-player/playerBridge.js")
         sHtmlContent = oRequestHandler.request().lower()
 
         ID = sUrl.split('/')[2].split('.')[0]
@@ -499,12 +499,12 @@ def getBrightcoveKey(sUrl):
         video = result.group(3)
 
     url = 'http://players.brightcove.net/%s/%s_default/index.min.js' % (account, player)
-    oRequestHandler = cRequestHandler(url)
+    oRequestHandler = RequestHandler(url)
     sHtmlContent = oRequestHandler.request()
     policyKey = re.search('policyKey:"(.+?)"', sHtmlContent).group(1)
 
     url = "https://edge.api.brightcove.com/playback/v1/accounts/%s/videos/%s" % (account, video)
-    oRequestHandler = cRequestHandler(url)
+    oRequestHandler = RequestHandler(url)
     oRequestHandler.addHeaderEntry('Accept', "application/json;pk=" + policyKey)
     sHtmlContent = oRequestHandler.request()
     url = re.search('"sources":.+?src":"([^"]+)"', sHtmlContent).group(1)

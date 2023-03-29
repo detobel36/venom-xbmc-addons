@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 # vStream https://github.com/Kodi-vStream/venom-xbmc-addons
-from resources.lib.handler.requestHandler import cRequestHandler
+from resources.lib.handler.requestHandler import RequestHandler
 from resources.lib.parser import cParser
 from resources.hosters.hoster import iHoster
 from resources.lib.comaddon import dialog
@@ -32,7 +32,7 @@ class cHoster(iHoster):
         url = []
         qua = []
 
-        oRequest = cRequestHandler(sUrl)
+        oRequest = RequestHandler(sUrl)
         oRequest.addHeaderEntry('User-Agent', UA)
         oRequest.addHeaderEntry('Referer', 'https://streamax.club/public/dist/index.html?id=' + urlId)
         sHtmlContent = oRequest.request()

@@ -498,8 +498,8 @@ class PasteContent:
                 pass
 
         if not hasMovies:
-            from resources.lib.handler.requestHandler import cRequestHandler
-            oRequestHandler = cRequestHandler(URL_MAIN + pasteBin)
+            from resources.lib.handler.requestHandler import RequestHandler
+            oRequestHandler = RequestHandler(URL_MAIN + pasteBin)
             oRequestHandler.setTimeout(4)
             sContent = oRequestHandler.request()
             if sContent.startswith('<'):

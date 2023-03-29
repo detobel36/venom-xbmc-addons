@@ -11,7 +11,7 @@ from resources.lib.gui.gui import Gui
 from resources.lib.gui.guiElement import GuiElement
 from resources.lib.handler.inputParameterHandler import InputParameterHandler
 from resources.lib.handler.outputParameterHandler import OutputParameterHandler
-from resources.lib.handler.requestHandler import cRequestHandler
+from resources.lib.handler.requestHandler import RequestHandler
 from resources.lib.parser import cParser
 from resources.lib.player import cPlayer
 
@@ -227,7 +227,7 @@ def GetRealUrl(chain):  # Récupère les liens des regex
     r = re.search('\\[[POSTFORM]+\\](.+?)(?:(?:\\[[A-Z]+\\])|$)', chain)
     if r:
         param = r.group(1)
-        oRequestHandler = cRequestHandler(url)
+        oRequestHandler = RequestHandler(url)
         oRequestHandler.setRequestType(1)
         oRequestHandler.addHeaderEntry('Accept-Encoding', 'identity')
         oRequestHandler.addParametersLine(param)
@@ -235,7 +235,7 @@ def GetRealUrl(chain):  # Récupère les liens des regex
 
     else:
         if url:
-            oRequestHandler = cRequestHandler(url)
+            oRequestHandler = RequestHandler(url)
             sHtmlContent = oRequestHandler.request()
 
     if regex:

@@ -2,7 +2,7 @@ import re
 
 from resources.lib.handler.premiumHandler import cPremiumHandler
 from resources.lib.util import cUtil
-from resources.lib.handler.requestHandler import cRequestHandler
+from resources.lib.handler.requestHandler import RequestHandler
 from resources.lib.parser import cParser
 from resources.hosters.hoster import iHoster
 
@@ -23,7 +23,7 @@ class cHoster(iHoster):
 
     def __modifyUrl(self, url):
         if (url.startswith('http://www.megavideo.com/v/')):
-            oRequestHandler = cRequestHandler(url)
+            oRequestHandler = RequestHandler(url)
             oRequestHandler.request()
             sRealUrl = oRequestHandler.getRealUrl()
             self._url = sRealUrl
@@ -54,7 +54,7 @@ class cHoster(iHoster):
 
         self._url = 'http://www.megavideo.com/xml/videolink.php?v=' + str(sId)
 
-        oRequest = cRequestHandler(self.getUrl())
+        oRequest = RequestHandler(self.getUrl())
         oRequest.addHeaderEntry('Referer', 'http://www.megavideo.com/')
         sContent = oRequest.request()
 
@@ -79,8 +79,8 @@ class cHoster(iHoster):
         return aResult
 
     def _getMediaLinkByPremiumUser(self, sUsername, sPassword):
-        oRequestHandler = cRequestHandler('http://www.megavideo.com/?s=account')
-        oRequestHandler.setRequestType(cRequestHandler.REQUEST_TYPE_POST)
+        oRequestHandler = RequestHandler('http://www.megavideo.com/?s=account')
+        oRequestHandler.setRequestType(RequestHandler.REQUEST_TYPE_POST)
         oRequestHandler.addParameters('login', '1')
         oRequestHandler.addParameters('username', sUsername)
         oRequestHandler.addParameters('password', sPassword)
@@ -97,7 +97,7 @@ class cHoster(iHoster):
         if aResult[0] is True:
             sUserId = aResult[1][0]
             sUrl = 'http://www.megavideo.com/xml/player_login.php?u=' + str(sUserId) + '&v=' + str(self._url)
-            oRequestHandler = cRequestHandler(sUrl)
+            oRequestHandler = RequestHandler(sUrl)
             sXmlContent = oRequestHandler.request()
 
             sPattern = 'downloadurl="([^"]+)"'

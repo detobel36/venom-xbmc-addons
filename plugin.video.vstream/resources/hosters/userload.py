@@ -7,7 +7,7 @@ import requests
 
 from resources.hosters.hoster import iHoster
 from resources.lib.aadecode import AADecoder
-from resources.lib.handler.requestHandler import cRequestHandler
+from resources.lib.handler.requestHandler import RequestHandler
 from resources.lib.packer import cPacker
 from resources.lib.parser import cParser
 
@@ -50,7 +50,7 @@ class cHoster(iHoster):
         referer = self._url.split('|Referer=')[1]
         url = self._url.split('|Referer=')[:-1][0]
 
-        oRequestHandler = cRequestHandler(url)
+        oRequestHandler = RequestHandler(url)
         oRequestHandler.addHeaderEntry('Referer', referer)
         sHtmlContent1 = oRequestHandler.request()
 
@@ -78,7 +78,7 @@ class cHoster(iHoster):
         if morocco and mycountry:
             url2 = 'https://userload.co/api/request/'
             pdata = 'morocco=' + morocco + '&mycountry=' + mycountry
-            oRequest = cRequestHandler(url2)
+            oRequest = RequestHandler(url2)
             oRequest.setRequestType(1)
             oRequestHandler.addHeaderEntry('User-Agent', UA)
             oRequest.addHeaderEntry('Content-Type', 'application/x-www-form-urlencoded')

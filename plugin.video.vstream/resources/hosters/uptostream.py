@@ -10,7 +10,7 @@ from resources.hosters.hoster import iHoster
 from resources.lib.comaddon import dialog, VSlog, CountdownDialog, VSPath
 from resources.lib.config import GestionCookie
 from resources.lib.handler.premiumHandler import cPremiumHandler
-from resources.lib.handler.requestHandler import cRequestHandler
+from resources.lib.handler.requestHandler import RequestHandler
 from resources.lib.librecaptcha.gui import cInputWindowYesNo
 from resources.lib.parser import cParser
 
@@ -61,7 +61,7 @@ class cHoster(iHoster):
             status = ''
             url1 = "https://uptobox.com/api/streaming?token=%s&file_code=%s" % (token, filecode)
             try:
-                oRequestHandler = cRequestHandler(url1)
+                oRequestHandler = RequestHandler(url1)
                 dict_liens = oRequestHandler.request(jsonDecode=True)
                 status = dict_liens["statusCode"]
                 if status == 0:

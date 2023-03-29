@@ -4,7 +4,7 @@ import re
 
 from resources.hosters.hoster import iHoster
 from resources.lib.comaddon import VSlog
-from resources.lib.handler.requestHandler import cRequestHandler
+from resources.lib.handler.requestHandler import RequestHandler
 from resources.lib.jsparser import JsParser
 from resources.lib.packer import cPacker
 from resources.lib.parser import cParser
@@ -22,7 +22,7 @@ class cHoster(iHoster):
         return host
 
     def _getMediaLinkForGuest(self):
-        oRequest = cRequestHandler(self._url.replace('sn', 'embed'))
+        oRequest = RequestHandler(self._url.replace('sn', 'embed'))
         oRequest.addHeaderEntry('User-Agent', UA)
         oRequest.addHeaderEntry('Host', 'www.speedvid.net')
         sHtmlContent = oRequest.request()
@@ -78,7 +78,7 @@ class cHoster(iHoster):
 
         VSlog('Real url>> ' + realurl)
 
-        oRequest = cRequestHandler(realurl)
+        oRequest = RequestHandler(realurl)
         oRequest.addHeaderEntry('User-Agent', UA)
         oRequest.addHeaderEntry('Referer', self._url)
 

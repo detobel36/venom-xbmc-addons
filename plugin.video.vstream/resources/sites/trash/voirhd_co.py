@@ -3,7 +3,7 @@
 # S09 update 02/11/2020
 from resources.lib.comaddon import progress
 from resources.lib.parser import cParser
-from resources.lib.handler.requestHandler import cRequestHandler
+from resources.lib.handler.requestHandler import RequestHandler
 from resources.lib.handler.outputParameterHandler import OutputParameterHandler
 from resources.lib.handler.inputParameterHandler import InputParameterHandler
 from resources.lib.gui.gui import Gui
@@ -205,8 +205,8 @@ def RequestHandlerSearch(searchs):
 
     sCookies = 'PHPSESSID=1'
     req2 = 'https://voirhd.co/lien.php'
-    oRequestHandler = cRequestHandler(req2)
-    oRequestHandler.setRequestType(cRequestHandler.REQUEST_TYPE_POST)
+    oRequestHandler = RequestHandler(req2)
+    oRequestHandler.setRequestType(RequestHandler.REQUEST_TYPE_POST)
     oRequestHandler.addParameters('Search', ssearch)
     oRequestHandler.addHeaderEntry('Content-Type', 'application/x-www-form-urlencoded')
     oRequestHandler.addHeaderEntry('Cookie', sCookies)
@@ -234,8 +234,8 @@ def RequestHandlerGenre(searchs):
 
     sCookies = 'PHPSESSID=1'
     req2 = 'https://voirhd.co/lien.php'
-    oRequestHandler = cRequestHandler(req2)
-    oRequestHandler.setRequestType(cRequestHandler.REQUEST_TYPE_POST)
+    oRequestHandler = RequestHandler(req2)
+    oRequestHandler.setRequestType(RequestHandler.REQUEST_TYPE_POST)
     oRequestHandler.addParameters('Search', ssearch)
     oRequestHandler.addHeaderEntry('Content-Type', 'application/x-www-form-urlencoded')
     oRequestHandler.addHeaderEntry('Cookie', sCookies)
@@ -301,10 +301,10 @@ def showMovies(sSearch=''):
             sbool, sHtmlContent = RequestHandlerGenre(sUrl)
             sUrl = surl.replace('0', '1.html')  # genre-0.html / genre-1.html l : '-1' need for next page
         else:
-            oRequestHandler = cRequestHandler(sUrl)
+            oRequestHandler = RequestHandler(sUrl)
             sHtmlContent = oRequestHandler.request()
     else:
-        oRequestHandler = cRequestHandler(sUrl)
+        oRequestHandler = RequestHandler(sUrl)
         sHtmlContent = oRequestHandler.request()
 
     oParser = cParser()
@@ -554,7 +554,7 @@ def showSaisons():
     sUrl = oInputParameterHandler.getValue('siteUrl')
     sThumb = oInputParameterHandler.getValue('sThumb')
 
-    oRequestHandler = cRequestHandler(sUrl)
+    oRequestHandler = RequestHandler(sUrl)
     sHtmlContent = oRequestHandler.request()
 
     sDesc = ''
@@ -603,7 +603,7 @@ def ShowEpisodes():
     sYear = oInputParameterHandler.getValue('sYear')
     sMovieTitle = oInputParameterHandler.getValue('sMovieTitle')  # contient num saison
 
-    oRequestHandler = cRequestHandler(sUrl)
+    oRequestHandler = RequestHandler(sUrl)
     sHtmlContent = oRequestHandler.request()
     # url numeroEpisode
     sPattern = 'streaming" href=".([^"]*).*?right"><.span>([^<]*)'
@@ -645,7 +645,7 @@ def showLink():
     sQual = oInputParameterHandler.getValue('sQual')
     sYear = oInputParameterHandler.getValue('sYear')
 
-    oRequestHandler = cRequestHandler(sUrl)
+    oRequestHandler = RequestHandler(sUrl)
     sHtmlContent = oRequestHandler.request()
 
     if (sThumb):

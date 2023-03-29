@@ -8,7 +8,7 @@ from resources.lib.gui.hoster import HosterGui
 from resources.lib.gui.gui import Gui
 from resources.lib.handler.inputParameterHandler import InputParameterHandler
 from resources.lib.handler.outputParameterHandler import OutputParameterHandler
-from resources.lib.handler.requestHandler import cRequestHandler
+from resources.lib.handler.requestHandler import RequestHandler
 from resources.lib.parser import cParser
 from resources.lib.util import cUtil, Quote
 from resources.lib.config import GestionCookie
@@ -345,7 +345,7 @@ def showSearchResult(sSearch=''):
     NextPage = []
 
     while loop:
-        oRequestHandler = cRequestHandler(sUrl)
+        oRequestHandler = RequestHandler(sUrl)
         sHtmlContent = oRequestHandler.request()
         sHtmlContent = sHtmlContent.replace('<span style="background-color: yellow;"><font color="red">', '')
         sPattern = '<b><p style="font-size: 18px;"><A href="([^"]+)">(.+?)<\\/A.+?<td align="center">\\s*<img src="([^"]+)".+?<b>Description : (.+?)<br /><br />'
@@ -442,7 +442,7 @@ def showMovies():
     oInputParameterHandler = InputParameterHandler()
     sUrl = oInputParameterHandler.getValue('siteUrl')
 
-    oRequestHandler = cRequestHandler(sUrl)
+    oRequestHandler = RequestHandler(sUrl)
     sHtmlContent = oRequestHandler.request()
 
     sPattern = '<table style="float:left;padding-left:8px"> *<td> *<div align="left"> *<a href="([^"]+)" onmouseover="Tip\\(\'<b>([^"]+?)</b>.+?Description :</b> <i>([^<]+?)<.+?<img src="([^"]+?)"'
@@ -522,7 +522,7 @@ def showHosters():
     sThumb = oInputParameterHandler.getValue('sThumb')
     sDesc = oInputParameterHandler.getValue('sDesc')
 
-    oRequestHandler = cRequestHandler(sUrl)
+    oRequestHandler = RequestHandler(sUrl)
     sHtmlContent = oRequestHandler.request()
     # parfois présent, plus sure que de réduire la regex
     sHtmlContent = re.sub('</font>', '', sHtmlContent)
@@ -621,7 +621,7 @@ def showSeriesHosters():
     sThumb = oInputParameterHandler.getValue('sThumb')
     sDesc = oInputParameterHandler.getValue('sDesc')
 
-    oRequestHandler = cRequestHandler(sUrl)
+    oRequestHandler = RequestHandler(sUrl)
     sHtmlContent = oRequestHandler.request()
     # parfois présent, plus sure que de réduire la regex
     sHtmlContent = re.sub('</font>', '', sHtmlContent)
@@ -730,7 +730,7 @@ def DecryptddlProtect(url):
     # try to get previous cookie
     cookies = GestionCookie().Readcookie('liens_free-telechargement_org')
 
-    oRequestHandler = cRequestHandler(url)
+    oRequestHandler = RequestHandler(url)
     if cookies:
         oRequestHandler.addHeaderEntry('Cookie', cookies)
     sHtmlContent = oRequestHandler.request()
@@ -741,7 +741,7 @@ def DecryptddlProtect(url):
     if 'Veuillez recopier le captcha ci-dessus' in sHtmlContent:
         if cookies:
             GestionCookie().DeleteCookie('liens_free-telechargement_org')
-            oRequestHandler = cRequestHandler(url)
+            oRequestHandler = RequestHandler(url)
             sHtmlContent = oRequestHandler.request()
 
         s = re.findall('src=".\\/([^<>"]+?)" alt="CAPTCHA Image"', sHtmlContent)
@@ -753,7 +753,7 @@ def DecryptddlProtect(url):
         captcha, cookies2 = get_response(image, cookies)
         cookies = cookies + '; ' + cookies2
 
-        oRequestHandler = cRequestHandler(url)
+        oRequestHandler = RequestHandler(url)
         oRequestHandler.setRequestType(1)
         oRequestHandler.addHeaderEntry('User-Agent', UA)
         oRequestHandler.addHeaderEntry('Accept-Language', 'fr-FR,fr;q=0.8,en-US;q=0.6,en;q=0.4')
@@ -795,7 +795,7 @@ def get_response(img, cookie):
     # host = re.sub(r'https*:\/\/', '', hostComplet)
     url = img
 
-    oRequestHandler = cRequestHandler(url)
+    oRequestHandler = RequestHandler(url)
     oRequestHandler.addHeaderEntry('User-Agent', UA)
     # oRequestHandler.addHeaderEntry('Referer', url)
     oRequestHandler.addHeaderEntry('Cookie', cookie)

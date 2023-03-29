@@ -8,7 +8,7 @@ from resources.lib.gui.hoster import HosterGui
 from resources.lib.gui.gui import Gui
 from resources.lib.handler.inputParameterHandler import InputParameterHandler
 from resources.lib.handler.outputParameterHandler import OutputParameterHandler
-from resources.lib.handler.requestHandler import cRequestHandler
+from resources.lib.handler.requestHandler import RequestHandler
 from resources.lib.parser import cParser
 from resources.lib.comaddon import progress, siteManager  # , isMatrix
 from resources.lib.util import cUtil
@@ -98,7 +98,7 @@ def showAnimes(sSearch=''):
             memorisedUrl = oInputParameterHandler.getValue('memorisedUrl')
             Page = oInputParameterHandler.getValue('Page')
 
-    oRequestHandler = cRequestHandler(sUrl)
+    oRequestHandler = RequestHandler(sUrl)
     oRequestHandler.disableSSL()
     sHtmlContent = oRequestHandler.request()
 
@@ -168,7 +168,7 @@ def showOst():
         memorisedUrl = oInputParameterHandler.getValue('memorisedUrl')
         Page = oInputParameterHandler.getValue('Page')
 
-    oRequestHandler = cRequestHandler(sUrl)
+    oRequestHandler = RequestHandler(sUrl)
     oRequestHandler.disableSSL()
     sHtmlContent = oRequestHandler.request()
 
@@ -220,7 +220,7 @@ def showEpisodes():
     sThumb = oInputParameterHandler.getValue('sThumb')
     sDesc = oInputParameterHandler.getValue('sDesc')
 
-    oRequestHandler = cRequestHandler(sUrl)
+    oRequestHandler = RequestHandler(sUrl)
     oRequestHandler.disableSSL()
     sHtmlContent = oRequestHandler.request()
 
@@ -277,7 +277,7 @@ def showMusic():
     sThumb = oInputParameterHandler.getValue('sThumb')
 
     oParser = cParser()
-    oRequestHandler = cRequestHandler(sUrl)
+    oRequestHandler = RequestHandler(sUrl)
     oRequestHandler.disableSSL()
     sHtmlContent = oRequestHandler.request()
     sPattern = '<div data-track-file="([^"]+)".+?data-track-name="([^"]+)".+?"><span.+?>([^<]+)</span>'

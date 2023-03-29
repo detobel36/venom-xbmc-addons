@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 # Vstream https://github.com/Kodi-vStream/venom-xbmc-addons
-from resources.lib.handler.requestHandler import cRequestHandler
+from resources.lib.handler.requestHandler import RequestHandler
 from resources.hosters.hoster import iHoster
 from resources.lib.parser import cParser
 from resources.lib.comaddon import xbmcgui, dialog
@@ -17,7 +17,7 @@ class cHoster(iHoster):
         sUrl = self._url
 
         oParser = cParser()
-        oRequest = cRequestHandler(sUrl)
+        oRequest = RequestHandler(sUrl)
         sHtmlContent = oRequest.request()
 
         if 'rapidvideo' in sUrl:  # qual site film illimite
@@ -40,7 +40,7 @@ class cHoster(iHoster):
                     dialog2 = xbmcgui.Dialog()
                     ret = dialog2.select('Select Quality', qua)
                     if (ret > -1):
-                        oRequest = cRequestHandler(url[ret])
+                        oRequest = RequestHandler(url[ret])
                         sHtmlContent = oRequest.request()
                         sPattern = '<source src="([^"]+)" type="video/.+?"'
                         aResult = oParser.parse(sHtmlContent, sPattern)
@@ -48,7 +48,7 @@ class cHoster(iHoster):
                             api_call = aResult[1][0]
 
             else:
-                oRequest = cRequestHandler(sUrl)
+                oRequest = RequestHandler(sUrl)
                 sHtmlContent = oRequest.request()
                 sPattern = '<source src="([^"]+)" type="video/.+?" label="([^"]+)"'
                 aResult = oParser.parse(sHtmlContent, sPattern)

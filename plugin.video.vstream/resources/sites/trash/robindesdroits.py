@@ -7,7 +7,7 @@ from resources.lib.gui.hoster import HosterGui
 from resources.lib.gui.gui import Gui
 from resources.lib.handler.inputParameterHandler import InputParameterHandler
 from resources.lib.handler.outputParameterHandler import OutputParameterHandler
-from resources.lib.handler.requestHandler import cRequestHandler
+from resources.lib.handler.requestHandler import RequestHandler
 from resources.lib.parser import cParser
 from resources.lib.util import cUtil
 from resources.lib.multihost import cJheberg
@@ -137,7 +137,7 @@ def showCat():
     # siteUrl = oInputParameterHandler.getValue('siteUrl')
     sFiltre = oInputParameterHandler.getValue('cat')
 
-    oRequestHandler = cRequestHandler(URL_MAIN)
+    oRequestHandler = RequestHandler(URL_MAIN)
     sHtmlContent = oRequestHandler.request()
 
     sHtmlContent = oParser.abParse(sHtmlContent, sFiltre, '</ul>')
@@ -173,7 +173,7 @@ def showMovies(sSearch=''):
         oInputParameterHandler = InputParameterHandler()
         sUrl = oInputParameterHandler.getValue('siteUrl')
 
-    oRequestHandler = cRequestHandler(sUrl)
+    oRequestHandler = RequestHandler(sUrl)
     sHtmlContent = oRequestHandler.request()
 
     sPattern = '<figure class="mh-loop-thumb"><a href="([^"]+)"><img src=".+?" style="background:url\\(\'(.+?)\'\\).+?rel="bookmark">(.+?)</a></h3>'
@@ -230,7 +230,7 @@ def showLinkGenres():
     oInputParameterHandler = InputParameterHandler()
     sUrl = oInputParameterHandler.getValue('siteUrl')
 
-    oRequestHandler = cRequestHandler(sUrl)
+    oRequestHandler = RequestHandler(sUrl)
     sHtmlContent = oRequestHandler.request()
 
     sThumb = ''
@@ -272,7 +272,7 @@ def showLink():
     sMovieTitle = oInputParameterHandler.getValue('sMovieTitle')
     sThumb = oInputParameterHandler.getValue('sThumb')
 
-    oRequestHandler = cRequestHandler(sUrl)
+    oRequestHandler = RequestHandler(sUrl)
     sHtmlContent = oRequestHandler.request()
 
     sPattern = 'a href="([^"]+)">(?:<span.+?|)<b>([^<]+)</b><'
@@ -296,7 +296,7 @@ def showLink():
 
 
 def AdflyDecoder(url):
-    oRequestHandler = cRequestHandler(url)
+    oRequestHandler = RequestHandler(url)
     sHtmlContent = oRequestHandler.request()
 
     oParser = cParser()
@@ -354,7 +354,7 @@ def showHosters():
     sMovieTitle = oInputParameterHandler.getValue('sMovieTitle')
     sThumb = oInputParameterHandler.getValue('sThumb')
 
-    oRequestHandler = cRequestHandler(sUrl)
+    oRequestHandler = RequestHandler(sUrl)
     sHtmlContent = oRequestHandler.request()
 
     # D'abord on saute les redirections.
@@ -363,7 +363,7 @@ def showHosters():
         aResult = oParser.parse(sHtmlContent, sPattern)
         if aResult:
             sUrl = aResult[1][0]
-            oRequestHandler = cRequestHandler(sUrl)
+            oRequestHandler = RequestHandler(sUrl)
             sHtmlContent = oRequestHandler.request()
 
     # Ensuite les sites a la con
@@ -376,7 +376,7 @@ def showHosters():
                 if aResult[0]:
                     sUrl = Unquote(''.join(aResult[1])).decode('utf8')
 
-            oRequestHandler = cRequestHandler(sUrl)
+            oRequestHandler = RequestHandler(sUrl)
             sHtmlContent = oRequestHandler.request()
 
     # clictune / mylink / ect ...
@@ -388,7 +388,7 @@ def showHosters():
     # Et maintenant le ou les liens
 
     if 'gounlimited' in sUrl:
-        oRequestHandler = cRequestHandler(sUrl)
+        oRequestHandler = RequestHandler(sUrl)
         sHtmlContent = oRequestHandler.request()
 
         sPattern = '(eval\\(function\\(p,a,c,k,e(?:.|\\s)+?\\))<\\/script>'

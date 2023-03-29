@@ -2,7 +2,7 @@
 # https://github.com/Kodi-vStream/venom-xbmc-addons
 # https://aparat.cam/embed-xxxxx.html
 
-from resources.lib.handler.requestHandler import cRequestHandler
+from resources.lib.handler.requestHandler import RequestHandler
 from resources.lib.parser import cParser
 from resources.hosters.hoster import iHoster
 from resources.lib.comaddon import dialog
@@ -21,7 +21,7 @@ class cHoster(iHoster):
         list_url = []
 
         if VideoType == 1:
-            oRequestHandler = cRequestHandler(self._url)
+            oRequestHandler = RequestHandler(self._url)
             sHtmlContent = oRequestHandler.request()
 
             oParser = cParser()
@@ -30,7 +30,7 @@ class cHoster(iHoster):
 
             if aResult[0] is True:
                 url2 = aResult[1][0]
-                oRequestHandler = cRequestHandler(url2)
+                oRequestHandler = RequestHandler(url2)
                 sHtmlContent2 = oRequestHandler.request()
 
                 # prend tous les formats (peu créer problèmes CODECS avc1)
@@ -49,7 +49,7 @@ class cHoster(iHoster):
                     return True, api_call
 
         if VideoType == 2:
-            oRequestHandler = cRequestHandler(self._url)
+            oRequestHandler = RequestHandler(self._url)
             sHtmlContent = oRequestHandler.request()
 
             oParser = cParser()
@@ -62,7 +62,7 @@ class cHoster(iHoster):
                 url = 'https://aparat.cam/dl?op=download_orig&id=' + resultId + \
                       '&mode=0&hash=' + resultHash  # + '&embed=1&adb=0'
                 data = 'op=download_orig&id=' + resultId + '&mode=n&hash=' + resultHash
-                oRequestHandler = cRequestHandler(url)
+                oRequestHandler = RequestHandler(url)
                 oRequestHandler.setRequestType(1)
                 oRequestHandler.addHeaderEntry('Referer', url)
                 oRequestHandler.addParametersLine(data)

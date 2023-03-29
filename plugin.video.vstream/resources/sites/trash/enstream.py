@@ -3,7 +3,7 @@
 from resources.lib.comaddon import progress
 from resources.lib.util import Unquote
 from resources.lib.parser import cParser
-from resources.lib.handler.requestHandler import cRequestHandler
+from resources.lib.handler.requestHandler import RequestHandler
 from resources.lib.handler.outputParameterHandler import OutputParameterHandler
 from resources.lib.handler.inputParameterHandler import InputParameterHandler
 from resources.lib.gui.gui import Gui
@@ -120,13 +120,13 @@ def showMovies(sSearch=''):
 
     if sSearch:
         sUrl = URL_MAIN + 'search.php'
-        oRequestHandler = cRequestHandler(sUrl)
-        oRequestHandler.setRequestType(cRequestHandler.REQUEST_TYPE_POST)
+        oRequestHandler = RequestHandler(sUrl)
+        oRequestHandler.setRequestType(RequestHandler.REQUEST_TYPE_POST)
         oRequestHandler.addParameters('q', Unquote(sSearch))
     else:
         oInputParameterHandler = InputParameterHandler()
         sUrl = oInputParameterHandler.getValue('siteUrl')
-        oRequestHandler = cRequestHandler(sUrl)
+        oRequestHandler = RequestHandler(sUrl)
 
     oRequestHandler.addHeaderEntry('Referer', URL_MAIN)
     sHtmlContent = oRequestHandler.request()
@@ -226,7 +226,7 @@ def showHoster():
     sDesc = oInputParameterHandler.getValue('sDesc')
 
     oParser = cParser()
-    oRequestHandler = cRequestHandler(sUrl)
+    oRequestHandler = RequestHandler(sUrl)
     sHtmlContent = oRequestHandler.request()
     sPattern = 'data-url="([^"]+)".+?data-code="([^"]+)".+?mobile">([^<]+)'
     aResult = oParser.parse(sHtmlContent, sPattern)
@@ -292,7 +292,7 @@ def showHostersLinks():
     sMovieTitle = oInputParameterHandler.getValue('sMovieTitle')
     sThumb = oInputParameterHandler.getValue('sThumb')
     referer = oInputParameterHandler.getValue('referer')
-    oRequestHandler = cRequestHandler(sUrl)
+    oRequestHandler = RequestHandler(sUrl)
     oRequestHandler.addHeaderEntry('Referer', referer)
 
     oRequestHandler.request()

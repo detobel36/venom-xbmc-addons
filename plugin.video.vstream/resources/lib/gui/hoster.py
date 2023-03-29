@@ -421,7 +421,7 @@ class HosterGui:
         oGui.setEndOfDirectory()
 
     def __getRedirectUrl(self, sUrl):
-        from resources.lib.handler.requestHandler import cRequestHandler
-        oRequest = cRequestHandler(sUrl)
+        from resources.lib.handler.requestHandler import RequestHandler
+        oRequest = RequestHandler(sUrl)
         oRequest.request()
         return oRequest.getRealUrl()

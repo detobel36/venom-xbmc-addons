@@ -6,7 +6,7 @@ from resources.lib.gui.hoster import HosterGui
 from resources.lib.gui.gui import Gui
 from resources.lib.handler.inputParameterHandler import InputParameterHandler
 from resources.lib.handler.outputParameterHandler import OutputParameterHandler
-from resources.lib.handler.requestHandler import cRequestHandler
+from resources.lib.handler.requestHandler import RequestHandler
 from resources.lib.parser import cParser
 from resources.lib.comaddon import progress, siteManager
 from resources.lib.util import cUtil
@@ -115,7 +115,7 @@ def showMovies(sSearch=''):
         oInputParameterHandler = InputParameterHandler()
         sUrl = oInputParameterHandler.getValue('siteUrl')
 
-    oRequestHandler = cRequestHandler(sUrl)
+    oRequestHandler = RequestHandler(sUrl)
     sHtmlContent = oRequestHandler.request()
 
     oParser = cParser()
@@ -190,7 +190,7 @@ def showSaison():
     sThumb = oInputParameterHandler.getValue('sThumb')
     sMovieTitle = oInputParameterHandler.getValue('sMovieTitle')
 
-    oRequestHandler = cRequestHandler(sUrl)
+    oRequestHandler = RequestHandler(sUrl)
     sHtmlContent = oRequestHandler.request()
 
     sDesc = ''
@@ -232,7 +232,7 @@ def showSXE():
 
     sUrl, sNumSaison = sUrl.split('?sNumSaison=')
 
-    oRequestHandler = cRequestHandler(sUrl)
+    oRequestHandler = RequestHandler(sUrl)
     sHtmlContent = oRequestHandler.request()
     oParser = cParser()
     sStart = 'id="saison-' + sNumSaison
@@ -267,7 +267,7 @@ def showLinks():
     sTitle = oInputParameterHandler.getValue('sMovieTitle')
     sThumb = oInputParameterHandler.getValue('sThumb')
 
-    oRequestHandler = cRequestHandler(sUrl)
+    oRequestHandler = RequestHandler(sUrl)
     sHtmlContent = oRequestHandler.request()
 
     sDesc = ''
@@ -336,7 +336,7 @@ def showHosters():
 
     if 'sstatic' in sUrl:
         sUrl1 = sUrl + '/ajax'
-        oRequestHandler = cRequestHandler(sUrl1)
+        oRequestHandler = RequestHandler(sUrl1)
         oRequestHandler.addHeaderEntry('Referer', sUrl)
         oRequestHandler.addHeaderEntry('Accept', 'application/json, text/javascript, */*; q=0.01')
         oRequestHandler.addHeaderEntry('X-Requested-With', 'XMLHttpRequest')
@@ -354,7 +354,7 @@ def showHosters():
                 oHoster.setFileName(sMovieTitle)
                 oHosterGui.showHoster(oGui, oHoster, sHosterUrl, sThumb)
     else:
-        oRequestHandler = cRequestHandler(sUrl)
+        oRequestHandler = RequestHandler(sUrl)
         oRequestHandler.addHeaderEntry('Referer', siteReferer)
         sHtmlContent = oRequestHandler.request()
 
@@ -409,7 +409,7 @@ def showHostersDL():
 def Hoster_shortn(url):
     shost = ''
     url = url.replace('%22', '')
-    oRequestHandler = cRequestHandler(url)
+    oRequestHandler = RequestHandler(url)
     oRequestHandler.addHeaderEntry('User-Agent', UA)
     sHtmlContent = oRequestHandler.request()
     cookies = oRequestHandler.GetCookies()
@@ -418,7 +418,7 @@ def Hoster_shortn(url):
     if aResult:
         token = aResult[0]
         data = '_token=' + token
-        oRequestHandler = cRequestHandler(url)
+        oRequestHandler = RequestHandler(url)
         oRequestHandler.setRequestType(1)
         oRequestHandler.addHeaderEntry('Referer', url)
         oRequestHandler.addHeaderEntry(

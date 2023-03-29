@@ -1,7 +1,7 @@
 # -*- coding: utf8 -*-
 # Vstream https://github.com/Kodi-vStream/venom-xbmc-addons
 # https://thevideo.cc/embed-xxx.html
-from resources.lib.handler.requestHandler import cRequestHandler
+from resources.lib.handler.requestHandler import RequestHandler
 from resources.lib.parser import cParser
 from resources.hosters.hoster import iHoster
 from resources.lib.packer import cPacker
@@ -26,7 +26,7 @@ class cHoster(iHoster):
 
     def _getMediaLinkForGuest(self):
 
-        oRequest = cRequestHandler(self._url)
+        oRequest = RequestHandler(self._url)
         sHtmlContent = oRequest.request()
         oParser = cParser()
 
@@ -36,7 +36,7 @@ class cHoster(iHoster):
         if sId == '':
             return False, False
 
-        oRequest = cRequestHandler('https://thevideo.cc/vsign/player/' + sId)
+        oRequest = RequestHandler('https://thevideo.cc/vsign/player/' + sId)
         sHtmlContent2 = oRequest.request()
         sPattern = "(\\s*eval\\s*\\(\\s*function(?:.|\\s)+?\\)\\))"
         aResult = oParser.parse(sHtmlContent2, sPattern)

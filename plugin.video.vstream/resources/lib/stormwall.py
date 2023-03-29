@@ -4,7 +4,7 @@ import xbmcaddon
 import time
 
 from resources.lib.comaddon import VSlog, dialog, VSPath, xbmc
-from resources.lib.handler.requestHandler import cRequestHandler
+from resources.lib.handler.requestHandler import RequestHandler
 from resources.lib.config import GestionCookie
 
 UA = 'Mozilla/5.0 (Windows NT 6.1; Win64; x64; rv:56.0) Gecko/20100101 Firefox/56.0'
@@ -120,7 +120,7 @@ class Stormwall(object):
         return htmlcontent
 
     def htmlrequest(self, url, cookies, data):
-        oRequestHandler = cRequestHandler(url)
+        oRequestHandler = RequestHandler(url)
         oRequestHandler.disableSSL()
         oRequestHandler.addHeaderEntry('User-Agent', UA)
         oRequestHandler.addHeaderEntry('Accept-Encoding', 'gzip, deflate')

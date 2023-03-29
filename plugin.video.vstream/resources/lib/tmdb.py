@@ -1308,12 +1308,12 @@ class cTMDb:
         return data
 
     def _call(self, action, append_to_response=''):
-        from resources.lib.handler.requestHandler import cRequestHandler
+        from resources.lib.handler.requestHandler import RequestHandler
         url = '%s%s?language=%s&api_key=%s' % (self.URL, action, self.lang, self.api_key)
         if append_to_response:
             url += '&%s' % append_to_response
 
-        oRequestHandler = cRequestHandler(url)
+        oRequestHandler = RequestHandler(url)
         data = oRequestHandler.request(jsonDecode=True)
 
         return data

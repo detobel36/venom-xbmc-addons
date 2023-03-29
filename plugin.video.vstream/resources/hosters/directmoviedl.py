@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 # vStream https://github.com/Kodi-vStream/venom-xbmc-addons
 
-from resources.lib.handler.requestHandler import cRequestHandler
+from resources.lib.handler.requestHandler import RequestHandler
 from resources.lib.parser import cParser
 from resources.hosters.hoster import iHoster
 
@@ -15,14 +15,14 @@ class cHoster(iHoster):
         api_call = False
 
         if 'movie.directmoviedl' in self._url:
-            oRequest = cRequestHandler(self._url)
+            oRequest = RequestHandler(self._url)
             sHtmlContent = oRequest.request()
             oParser = cParser()
             sPattern = '="([^"]+)" type="video/mp4'
             aResult = oParser.parse(sHtmlContent, sPattern)
             api_call = aResult[1][0]
         else:
-            oRequest = cRequestHandler(self._url)
+            oRequest = RequestHandler(self._url)
             sHtmlContent = oRequest.request()
             oParser = cParser()
             sPattern = 'src="(http.+?)"'
@@ -31,7 +31,7 @@ class cHoster(iHoster):
             if aResult[0] is True:
                 for aEntry in aResult[1]:
                     sHoster = aEntry
-                    oRequest = cRequestHandler(sHoster)
+                    oRequest = RequestHandler(sHoster)
                     sHtmlContent1 = oRequest.request()
                     sPattern1 = '="([^"]+)" type="video/mp4'
                     aResult1 = oParser.parse(sHtmlContent1, sPattern1)

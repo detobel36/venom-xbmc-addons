@@ -7,7 +7,7 @@
 import re
 
 from resources.hosters.hoster import iHoster
-from resources.lib.handler.requestHandler import cRequestHandler
+from resources.lib.handler.requestHandler import RequestHandler
 from resources.lib.parser import cParser
 
 UA = 'Mozilla/5.0 (Windows NT 6.1; WOW64; rv:72.0) Gecko/20100101 Firefox/72.0'
@@ -30,7 +30,7 @@ class cHoster(iHoster):
         self._url = self._url.replace('.html', '')
 
     def _getMediaLinkForGuest(self):
-        oRequest = cRequestHandler(self._url)
+        oRequest = RequestHandler(self._url)
         sHtmlContent = oRequest.request()
 
         oParser = cParser()

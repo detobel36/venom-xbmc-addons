@@ -10,7 +10,7 @@ from resources.lib.gui.gui import Gui
 from resources.lib.gui.hoster import HosterGui
 from resources.lib.handler.inputParameterHandler import InputParameterHandler
 from resources.lib.handler.outputParameterHandler import OutputParameterHandler
-from resources.lib.handler.requestHandler import cRequestHandler
+from resources.lib.handler.requestHandler import RequestHandler
 from resources.lib.parser import cParser
 from resources.lib.util import Quote
 
@@ -64,7 +64,7 @@ def showGenres():
     oGui = Gui()
     oParser = cParser()
 
-    oRequestHandler = cRequestHandler(URL_MAIN)
+    oRequestHandler = RequestHandler(URL_MAIN)
     sHtmlContent = oRequestHandler.request()
     sStart = 'main-menu'
     sEnd = '/ul'
@@ -90,7 +90,7 @@ def showTvShows():
     oGui = Gui()
     oParser = cParser()
 
-    oRequestHandler = cRequestHandler(URL_MAIN)
+    oRequestHandler = RequestHandler(URL_MAIN)
     sHtmlContent = oRequestHandler.request()
     sStart = 'ÉMISSIONS TV'
     sEnd = '</div></div> </aside>'
@@ -128,7 +128,7 @@ def showMovies(sSearch=''):
     if sSearch:
         sUrl = sSearch.replace(' ', '+')
 
-    oRequestHandler = cRequestHandler(sUrl)
+    oRequestHandler = RequestHandler(sUrl)
     sHtmlContent = oRequestHandler.request()
 
     # &hellip'
@@ -192,7 +192,7 @@ def showLinks():
     sMovieTitle = oInputParameterHandler.getValue('sMovieTitle')
     sThumb = oInputParameterHandler.getValue('sThumb')
 
-    oRequestHandler = cRequestHandler(sUrl)
+    oRequestHandler = RequestHandler(sUrl)
     sHtmlContent = oRequestHandler.request()
 
     sPattern = '<a class="myButton" href="([^<]+)" target="_blank"'
@@ -245,7 +245,7 @@ def showHosters():
                               + "&g-recaptcha-response=" + test + "&_Token%5Bfields%5D=" + Quote(aResult[1][3])\
                               + "&_Token%5Bunlocked%5D=" + Quote(aResult[1][4])
 
-            oRequestHandler = cRequestHandler(sUrl)
+            oRequestHandler = RequestHandler(sUrl)
             oRequestHandler.setRequestType(1)
             oRequestHandler.addHeaderEntry('Referer', sUrl)
             oRequestHandler.addHeaderEntry('User-Agent', UA)
@@ -266,7 +266,7 @@ def showHosters():
 
             # Obligatoire pour validé les cookies.
             xbmc.sleep(15000)
-            oRequestHandler = cRequestHandler('https://mon-tele.com/obtenirliens/links/go')
+            oRequestHandler = RequestHandler('https://mon-tele.com/obtenirliens/links/go')
             oRequestHandler.setRequestType(1)
             oRequestHandler.addHeaderEntry('Referer', sUrl)
             oRequestHandler.addHeaderEntry('User-Agent', UA)

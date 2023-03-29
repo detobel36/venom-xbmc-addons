@@ -2,7 +2,7 @@
 # vStream https://github.com/Kodi-vStream/venom-xbmc-addons
 import json
 
-from resources.lib.handler.requestHandler import cRequestHandler
+from resources.lib.handler.requestHandler import RequestHandler
 from resources.hosters.hoster import iHoster
 from resources.lib.comaddon import addon, dialog
 
@@ -17,7 +17,7 @@ class cHoster(iHoster):
     def _getMediaLinkForGuest(self):
         token_debrid_link = "Bearer " + addon().getSetting('hoster_debridlink_token')
 
-        oRequestHandler = cRequestHandler(URL_HOST + '/api/downloader/add')
+        oRequestHandler = RequestHandler(URL_HOST + '/api/downloader/add')
         oRequestHandler.setRequestType(1)
         oRequestHandler.addHeaderEntry('Accept', 'application/json')
         oRequestHandler.addHeaderEntry('Authorization', token_debrid_link)
@@ -29,7 +29,7 @@ class cHoster(iHoster):
             if text["ERR"] == 'badToken':
                 new_token = renewToken()
 
-                oRequestHandler = cRequestHandler(URL_HOST + '/api/downloader/add')
+                oRequestHandler = RequestHandler(URL_HOST + '/api/downloader/add')
                 oRequestHandler.setRequestType(1)
                 oRequestHandler.addHeaderEntry('Accept', 'application/json')
                 oRequestHandler.addHeaderEntry('Authorization', new_token)
@@ -48,7 +48,7 @@ class cHoster(iHoster):
 def renewToken():
     refreshTok = addon().getSetting('hoster_debridlink_tokenrefresh')
     if refreshTok == "":
-        oRequestHandler = cRequestHandler(URL_HOST + "/api/oauth/device/code")
+        oRequestHandler = RequestHandler(URL_HOST + "/api/oauth/device/code")
         oRequestHandler.setRequestType(1)
         oRequestHandler.addHeaderEntry('Content-Type', 'application/x-www-form-urlencoded')
         oRequestHandler.addParameters('client_id', addon().getSetting('hoster_debridlink_ID'))
@@ -57,7 +57,7 @@ def renewToken():
         dialog().VSok('Allez sur la page : https://debrid-link.fr/device\n' +
                       'et rentrer le code ' + r["user_code"] + ' pour autorisez la connection')
 
-        oRequestHandler = cRequestHandler(URL_HOST + "/api/oauth/token")
+        oRequestHandler = RequestHandler(URL_HOST + "/api/oauth/token")
         oRequestHandler.setRequestType(1)
         oRequestHandler.addHeaderEntry('Content-Type', 'application/x-www-form-urlencoded')
         oRequestHandler.addParameters('client_id', addon().getSetting('hoster_debridlink_ID'))
@@ -70,7 +70,7 @@ def renewToken():
         return r["access_token"]
 
     else:
-        oRequestHandler = cRequestHandler(URL_HOST + "/api/oauth/token")
+        oRequestHandler = RequestHandler(URL_HOST + "/api/oauth/token")
         oRequestHandler.setRequestType(1)
         oRequestHandler.addHeaderEntry('Content-Type', 'application/x-www-form-urlencoded')
         oRequestHandler.addParameters('client_id', addon().getSetting('hoster_debridlink_ID'))

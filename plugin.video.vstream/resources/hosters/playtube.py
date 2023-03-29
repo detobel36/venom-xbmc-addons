@@ -3,7 +3,7 @@
 # https://playtube.ws/embed-xxxxx.html
 import re
 
-from resources.lib.handler.requestHandler import cRequestHandler
+from resources.lib.handler.requestHandler import RequestHandler
 from resources.lib.parser import cParser
 from resources.hosters.hoster import iHoster
 from resources.lib.comaddon import dialog
@@ -18,7 +18,7 @@ class cHoster(iHoster):
         iHoster.__init__(self, 'playtube', 'Playtube')
 
     def _getMediaLinkForGuest(self):
-        oRequestHandler = cRequestHandler(self._url)
+        oRequestHandler = RequestHandler(self._url)
         sHtmlContent = oRequestHandler.request()
 
         sPattern2 = '(\\s*eval\\s*\\(\\s*function(?:.|\\s)+?\\)\\)\\))'
@@ -36,7 +36,7 @@ class cHoster(iHoster):
             aResult = re.findall(sPattern, strs)
             if aResult:
                 urlhost = aResult[0]
-                oRequestHandler = cRequestHandler(urlhost)
+                oRequestHandler = RequestHandler(urlhost)
                 oRequestHandler.addHeaderEntry('User-Agent', UA)
                 oRequestHandler.addHeaderEntry('Referer', self._url)
                 sHtmlContent2 = oRequestHandler.request()

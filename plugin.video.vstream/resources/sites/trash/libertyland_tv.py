@@ -4,7 +4,7 @@
 from resources.lib.comaddon import progress, siteManager
 from resources.lib.util import cUtil
 from resources.lib.parser import cParser
-from resources.lib.handler.requestHandler import cRequestHandler
+from resources.lib.handler.requestHandler import RequestHandler
 from resources.lib.handler.outputParameterHandler import OutputParameterHandler
 from resources.lib.handler.inputParameterHandler import InputParameterHandler
 from resources.lib.gui.gui import Gui
@@ -185,7 +185,7 @@ def showMovies(sSearch=''):
         else:  # films
             sPattern = '<h2 class="heading"> *<a href="[^"]+">([^<]+).+?<img class="img-responsive" *src="([^"]+)" *alt.+?(?:<font color="#.+?">([^<]+)</font>.+?).+?>film de (\\d{4})<.+?Synopsis : ([^<]+).+?<div class="divtelecha.+?href="([^"]+)'
 
-    oRequestHandler = cRequestHandler(sUrl)
+    oRequestHandler = RequestHandler(sUrl)
     sHtmlContent = oRequestHandler.request()
     aResult = oParser.parse(sHtmlContent, sPattern)
 
@@ -336,7 +336,7 @@ def showSaisonsEpisodes():
     sDesc = oInputParameterHandler.getValue('sDesc')
     sYear = oInputParameterHandler.getValue('sYear')
 
-    oRequestHandler = cRequestHandler(sUrl)
+    oRequestHandler = RequestHandler(sUrl)
     sHtmlContent = oRequestHandler.request()
 
     sPattern = '(?:<h2 class="heading-small">(Saison .+?)<)|(?:<li><a title=".+? \\| (.+?)" class="num_episode" href="([^"]+)")'
@@ -379,7 +379,7 @@ def showLinks():
     # reformatage url
     sUrl = ReformatUrl(sUrl)
 
-    oRequestHandler = cRequestHandler(sUrl)
+    oRequestHandler = RequestHandler(sUrl)
     sHtmlContent = oRequestHandler.request()
 
     sType = ''
@@ -443,7 +443,7 @@ def showHosters():
 
     pUrl = pUrl + '?' + pdata
 
-    oRequest = cRequestHandler(pUrl)
+    oRequest = RequestHandler(pUrl)
     oRequest.addHeaderEntry('Referer', sUrl)
     sHtmlContent = oRequest.request()
     sHtmlContent = sHtmlContent.replace('\\', '')

@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 # vStream https://github.com/Kodi-vStream/venom-xbmc-addons
 
-from resources.lib.handler.requestHandler import cRequestHandler
+from resources.lib.handler.requestHandler import RequestHandler
 from resources.lib.parser import cParser
 from resources.hosters.hoster import iHoster
 from resources.lib.comaddon import VSlog
@@ -22,7 +22,7 @@ class cHoster(iHoster):
         url2 = ''
         VSlog(self._url)
 
-        oRequest = cRequestHandler(self._url)
+        oRequest = RequestHandler(self._url)
         oRequest.addHeaderEntry('User-Agent', UA)
         sHtmlContent = oRequest.request()
 
@@ -54,7 +54,7 @@ class cHoster(iHoster):
             VSlog('err url2')
             return False
 
-        oRequest = cRequestHandler(url2)
+        oRequest = RequestHandler(url2)
         oRequest.addHeaderEntry('User-Agent', UA)
         sHtmlContent = oRequest.request()
 
@@ -69,7 +69,7 @@ class cHoster(iHoster):
         # Need track
         TrackUrl = 'https://api-v2.soundcloud.com/tracks?ids=' + n + '&client_id=' + sId
         VSlog('TrackUrl : ' + TrackUrl)
-        oRequest = cRequestHandler(TrackUrl)
+        oRequest = RequestHandler(TrackUrl)
         oRequest.addHeaderEntry('User-Agent', UA)
         sHtmlContent = oRequest.request()
         sPattern = 'soundcloud:tracks:([^"]+\\/)stream'
@@ -83,7 +83,7 @@ class cHoster(iHoster):
         jsonurl = 'https://api-v2.soundcloud.com/media/soundcloud:tracks:' + sTrack + 'stream/hls?client_id=' + sId
         VSlog('jsonurl : ' + jsonurl)
 
-        oRequest = cRequestHandler(jsonurl)
+        oRequest = RequestHandler(jsonurl)
         oRequest.addHeaderEntry('User-Agent', UA)
         sHtmlContent = oRequest.request()
 

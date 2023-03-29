@@ -7,7 +7,7 @@ from resources.lib.gui.hoster import HosterGui
 from resources.lib.gui.gui import Gui
 from resources.lib.handler.inputParameterHandler import InputParameterHandler
 from resources.lib.handler.outputParameterHandler import OutputParameterHandler
-from resources.lib.handler.requestHandler import cRequestHandler
+from resources.lib.handler.requestHandler import RequestHandler
 from resources.lib.parser import cParser
 from resources.lib.comaddon import siteManager
 
@@ -89,7 +89,7 @@ def showSearchResult(sSearch):
     oInputParameterHandler = InputParameterHandler()
     sUrl = oInputParameterHandler.getValue('siteUrl')
 
-    oRequestHandler = cRequestHandler(sUrl)
+    oRequestHandler = RequestHandler(sUrl)
     sHtmlContent = oRequestHandler.request()
 
     searchURL = URL_MAIN[:-1] + re.search('var urlsearch = "([^"]+)";', sHtmlContent).group(1)
@@ -101,7 +101,7 @@ def showSearchResult(sSearch):
             sSearch = sSearch.replace(URL_SEARCH[0], '')
     sSearch = sSearch.lower()
 
-    oRequestHandler = cRequestHandler(searchURL)
+    oRequestHandler = RequestHandler(searchURL)
     data = oRequestHandler.request(jsonDecode=True)
 
     oOutputParameterHandler = OutputParameterHandler()
@@ -130,7 +130,7 @@ def showLastEp():
     oInputParameterHandler = InputParameterHandler()
     sUrl = oInputParameterHandler.getValue('siteUrl')
 
-    oRequestHandler = cRequestHandler(sUrl)
+    oRequestHandler = RequestHandler(sUrl)
     sHtmlContent = oRequestHandler.request()
     sPattern = '"episode":"([^"]+)".+?","title":"([^"]+)".+?"lang":"([^"]+)".+?"anime_url":"([^"]+)".+?"url_bg":"([^"]+)"'
     aResult = oParser.parse(sHtmlContent, sPattern)
@@ -163,7 +163,7 @@ def showMovies():
     oInputParameterHandler = InputParameterHandler()
     sUrl = oInputParameterHandler.getValue('siteUrl')
 
-    oRequestHandler = cRequestHandler(sUrl)
+    oRequestHandler = RequestHandler(sUrl)
     sHtmlContent = oRequestHandler.request()
 
     sPattern = '<a href="([^"]+)">.+?src="([^"]+)" alt="([^"]+)"'
@@ -217,7 +217,7 @@ def showSaisonEpisodes():
     sMovieTitle = oInputParameterHandler.getValue('sMovieTitle')
 
     if sUrl.endswith("vostfr"):
-        oRequestHandler = cRequestHandler(sUrl.replace('vostfr', 'vf'))
+        oRequestHandler = RequestHandler(sUrl.replace('vostfr', 'vf'))
         sHtmlContent = oRequestHandler.request()
         if "404 Not Found" not in sHtmlContent:
             oOutputParameterHandler = OutputParameterHandler()
@@ -226,7 +226,7 @@ def showSaisonEpisodes():
             oOutputParameterHandler.addParameter('sMovieTitle', sMovieTitle)
             oGui.addDir(SITE_IDENTIFIER, 'showSaisonEpisodes', sTitle, '', oOutputParameterHandler)
 
-    oRequestHandler = cRequestHandler(sUrl)
+    oRequestHandler = RequestHandler(sUrl)
     sHtmlContent = oRequestHandler.request()
 
     sDesc = ''
@@ -266,7 +266,7 @@ def showSeriesHosters():
     sMovieTitle = oInputParameterHandler.getValue('sMovieTitle')
     sThumb = oInputParameterHandler.getValue('sThumb')
 
-    oRequestHandler = cRequestHandler(sUrl)
+    oRequestHandler = RequestHandler(sUrl)
     sHtmlContent = oRequestHandler.request()
 
     sPattern = "video\\[\\d+\\] = \'([^']+)\'"

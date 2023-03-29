@@ -1,7 +1,7 @@
 # -*- coding: utf8 -*-
 import re
 
-from resources.lib.handler.requestHandler import cRequestHandler
+from resources.lib.handler.requestHandler import RequestHandler
 from resources.lib.parser import cParser
 from resources.hosters.hoster import iHoster
 
@@ -30,7 +30,7 @@ class cHoster(iHoster):
             self._url = url
 
     def _getMediaLinkForGuest(self):
-        oRequest = cRequestHandler(self._url)
+        oRequest = RequestHandler(self._url)
         sHtmlContent = oRequest.request()
 
         oParser = cParser()
@@ -39,7 +39,7 @@ class cHoster(iHoster):
         aResult = oParser.parse(sHtmlContent, sPattern)
         if aResult[0] is True:
             UA = 'Mozilla/5.0 (Windows NT 6.1; WOW64; rv:50.0) Gecko/20100101 Firefox/50.0'
-            oRequestHandler = cRequestHandler(aResult[1][0])
+            oRequestHandler = RequestHandler(aResult[1][0])
             oRequestHandler.addHeaderEntry('User-Agent', UA)
             oRequestHandler.addHeaderEntry('Referer', aResult[1][0])
             sHtmlContent = oRequestHandler.request()

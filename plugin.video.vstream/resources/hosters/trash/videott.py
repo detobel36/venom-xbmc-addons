@@ -12,7 +12,7 @@ try:
 except BaseException:
     import simplejson as json
 
-from resources.lib.handler.requestHandler import cRequestHandler
+from resources.lib.handler.requestHandler import RequestHandler
 # from t0mm0.common.net import Net
 from resources.lib.parser import cParser
 from resources.hosters.hoster import iHoster

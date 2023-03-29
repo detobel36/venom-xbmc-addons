@@ -7,7 +7,7 @@ try:  # Python 2
 except ImportError:  # Python 3
     import urllib.request as urllib2
 
-from resources.lib.handler.requestHandler import cRequestHandler
+from resources.lib.handler.requestHandler import RequestHandler
 from resources.lib.parser import cParser
 from resources.hosters.hoster import iHoster
 from resources.lib.comaddon import VSlog
@@ -36,7 +36,7 @@ class cHoster(iHoster):
     def _getMediaLinkForGuest(self):
         api_call = False
 
-        oRequest = cRequestHandler(self._url)
+        oRequest = RequestHandler(self._url)
         sHtmlContent = oRequest.request()
         sPattern = 'var linkfile\\s*=\\s*"([^"]+)"'
 

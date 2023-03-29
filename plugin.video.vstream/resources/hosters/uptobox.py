@@ -6,7 +6,7 @@ from resources.hosters.hoster import iHoster
 from resources.hosters.uptostream import cHoster as uptostreamHoster
 from resources.lib.comaddon import dialog, VSlog, addon
 from resources.lib.handler.premiumHandler import cPremiumHandler
-from resources.lib.handler.requestHandler import cRequestHandler
+from resources.lib.handler.requestHandler import RequestHandler
 
 
 class cHoster(iHoster):
@@ -71,7 +71,7 @@ class cHoster(iHoster):
         fileCode = self._url.split('/')[-1].split('?')[0]
         url1 = "https://uptobox.com/api/link?token=%s&file_code=%s" % (token, fileCode)
         try:
-            oRequestHandler = cRequestHandler(url1)
+            oRequestHandler = RequestHandler(url1)
             dict_liens = oRequestHandler.request(jsonDecode=True)
             statusCode = dict_liens["statusCode"]
             if statusCode == 0:  # success

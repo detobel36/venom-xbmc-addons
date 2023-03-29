@@ -2,7 +2,7 @@
 # https://github.com/Kodi-vStream/venom-xbmc-addons
 from resources.lib.comaddon import progress  # , VSlog
 from resources.lib.parser import cParser
-from resources.lib.handler.requestHandler import cRequestHandler
+from resources.lib.handler.requestHandler import RequestHandler
 from resources.lib.handler.outputParameterHandler import OutputParameterHandler
 from resources.lib.handler.inputParameterHandler import InputParameterHandler
 from resources.lib.gui.gui import Gui
@@ -73,7 +73,7 @@ def showGenres():
     oGui = Gui()
     oParser = cParser()
 
-    oRequestHandler = cRequestHandler(MOVIE_NEWS[0])
+    oRequestHandler = RequestHandler(MOVIE_NEWS[0])
     sHtmlContent = oRequestHandler.request()
 
     sPattern = '<li class="cat-item cat-item.+?"><a href="([^"]+)".+?>([^<]+)<\\/a> *<i>([^<]+)<\\/i>'
@@ -95,7 +95,7 @@ def showMovieYears():
     oGui = Gui()
     oParser = cParser()
 
-    oRequestHandler = cRequestHandler(MOVIE_NEWS[0])
+    oRequestHandler = RequestHandler(MOVIE_NEWS[0])
     sHtmlContent = oRequestHandler.request()
 
     sPattern = '<li><a href="([^<]+)">([^<]+)</a></li>'
@@ -122,7 +122,7 @@ def showMovies(sSearch=''):
         oInputParameterHandler = InputParameterHandler()
         sUrl = oInputParameterHandler.getValue('siteUrl')
 
-    oRequestHandler = cRequestHandler(sUrl)
+    oRequestHandler = RequestHandler(sUrl)
     sHtmlContent = oRequestHandler.request()
 
     sPattern = 'class="(?:image|poster)".+?img src="([^"]+)" alt="([^"]+)".+?(?:|class="quality">([^<]+)<.+?)<a href="([^"]+)">'
@@ -192,7 +192,7 @@ def showHosters():
     sMovieTitle = oInputParameterHandler.getValue('sMovieTitle')
     sThumb = oInputParameterHandler.getValue('sThumb')
 
-    oRequestHandler = cRequestHandler(sUrl)
+    oRequestHandler = RequestHandler(sUrl)
     sHtmlContent = oRequestHandler.request()
     sHtmlContent = sHtmlContent.replace('https://www.youtube.com/embed/', '')
 
@@ -224,7 +224,7 @@ def geturl(aEntry):
 
     sUrl = URL_MAIN + 'wp-admin/admin-ajax.php'
 
-    oRequest = cRequestHandler(sUrl)
+    oRequest = RequestHandler(sUrl)
     oRequest.setRequestType(1)
     oRequest.addHeaderEntry(
         'User-Agent',

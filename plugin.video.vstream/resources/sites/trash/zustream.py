@@ -3,7 +3,7 @@
 
 from resources.lib.util import cUtil
 from resources.lib.parser import cParser
-from resources.lib.handler.requestHandler import cRequestHandler
+from resources.lib.handler.requestHandler import RequestHandler
 from resources.lib.handler.outputParameterHandler import OutputParameterHandler
 from resources.lib.handler.inputParameterHandler import InputParameterHandler
 from resources.lib.gui.hoster import HosterGui
@@ -221,7 +221,7 @@ def showMovies(sSearch=''):
         sUrl = oInputParameterHandler.getValue('siteUrl')
         sPattern = 'article id="post-\\d+".+?img src="([^"]+)" alt="([^"]+).+?(?:|class="quality">([^<]+).+?)(?:|class="dtyearfr">([^<]+).+?)href="([^"]+).+?class="texto">(.*?)</div>'
 
-    oRequestHandler = cRequestHandler(sUrl)
+    oRequestHandler = RequestHandler(sUrl)
     sHtmlContent = oRequestHandler.request()
     oParser = cParser()
     aResult = oParser.parse(sHtmlContent, sPattern)
@@ -313,7 +313,7 @@ def showSaison():
     sMovieTitle = oInputParameterHandler.getValue('sMovieTitle')
     sDesc = oInputParameterHandler.getValue('sDesc')
 
-    oRequestHandler = cRequestHandler(sUrl)
+    oRequestHandler = RequestHandler(sUrl)
     sHtmlContent = oRequestHandler.request()
     sPattern = "<span class='title'>Saisons (.+?) *<i>"
     oParser = cParser()
@@ -343,7 +343,7 @@ def showSxE():
     sDesc = oInputParameterHandler.getValue('sDesc')
     sUrl, sNumSaison = sUrl.split('?sNumSaison=')
 
-    oRequestHandler = cRequestHandler(sUrl)
+    oRequestHandler = RequestHandler(sUrl)
     sHtmlContent = oRequestHandler.request()
     sPattern = "class='numerando'>(\\d+) - (\\d+)</div><div class='episodiotitle'><a href='([^']+)'"
     oParser = cParser()
@@ -377,7 +377,7 @@ def showLink():
     sThumb = oInputParameterHandler.getValue('sThumb')
     sDesc = oInputParameterHandler.getValue('sDesc')
 
-    oRequest = cRequestHandler(sUrl)
+    oRequest = RequestHandler(sUrl)
     sHtmlContent = oRequest.request()
     sPattern = "dooplay_player_option.+?data-post='(\\d+)'.+?data-nume='(.+?)'>.+?'title'>(.+?)<"
     oParser = cParser()
@@ -421,7 +421,7 @@ def showHosters():
     referer = oInputParameterHandler.getValue('referer')
     pdata = oInputParameterHandler.getValue('pdata')
 
-    oRequest = cRequestHandler(sUrl)
+    oRequest = RequestHandler(sUrl)
     oRequest.setRequestType(1)
     oRequest.addHeaderEntry('User-Agent', UA)
     oRequest.addHeaderEntry('Referer', referer)
@@ -451,13 +451,13 @@ def showHosters():
                 return
 
             if 're.zu-lien.com' in sHosterUrl:
-                oRequestHandler = cRequestHandler(sHosterUrl)
+                oRequestHandler = RequestHandler(sHosterUrl)
                 oRequestHandler.addHeaderEntry('User-Agent', UA)
                 oRequestHandler.addHeaderEntry('Referer', 'https://re.zu-lien.com')
                 oRequestHandler.request()
                 sUrl1 = oRequestHandler.getRealUrl()
                 if not sUrl1 or sUrl1 == sHosterUrl:
-                    oRequestHandler = cRequestHandler(sHosterUrl)
+                    oRequestHandler = RequestHandler(sHosterUrl)
                     oRequestHandler.disableRedirect()
                     oRequestHandler.addHeaderEntry('User-Agent', UA)
                     oRequestHandler.addHeaderEntry('Referer', 'https://re.zu-lien.com')

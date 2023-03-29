@@ -11,7 +11,7 @@ from resources.lib.gui.gui import Gui
 from resources.lib.gui.guiElement import GuiElement
 from resources.lib.handler.inputParameterHandler import InputParameterHandler
 from resources.lib.handler.outputParameterHandler import OutputParameterHandler
-from resources.lib.handler.requestHandler import cRequestHandler
+from resources.lib.handler.requestHandler import RequestHandler
 from resources.lib.parser import cParser
 from resources.lib.util import Quote
 
@@ -45,7 +45,7 @@ def showMovies():
     oInputParameterHandler = InputParameterHandler()
     sUrl = URL_MAIN + oInputParameterHandler.getValue('siteUrl')
 
-    oRequestHandler = cRequestHandler(sUrl)
+    oRequestHandler = RequestHandler(sUrl)
     sHtmlContent = oRequestHandler.request()
     if isMatrix():
         sHtmlContent = sHtmlContent.replace('Ã®', 'î').replace('Ã©', 'é')
@@ -110,7 +110,7 @@ def showHoster():
     sCat = 6
     sMeta = 0
 
-    oRequestHandler = cRequestHandler(sUrl)
+    oRequestHandler = RequestHandler(sUrl)
     sHtmlContent = oRequestHandler.request()
 
     # Double Iframe a passer.
@@ -158,7 +158,7 @@ def showHoster():
             oGui.setEndOfDirectory()
             return
 
-        oRequestHandler = cRequestHandler(iframeURL1)
+        oRequestHandler = RequestHandler(iframeURL1)
         oRequestHandler.addHeaderEntry('User-Agent', UA)
         # oRequestHandler.addHeaderEntry('Referer', siterefer) # a verifier
         sHtmlContent = oRequestHandler.request()
@@ -179,7 +179,7 @@ def showHoster():
                 sHosterUrl = getHosterWigistream(iframeURL1, sUrl)
 
             if not sHosterUrl:
-                oRequestHandler = cRequestHandler(iframeURL1)
+                oRequestHandler = RequestHandler(iframeURL1)
                 oRequestHandler.addHeaderEntry('User-Agent', UA)
                 sHtmlContent = oRequestHandler.request()
 
@@ -206,7 +206,7 @@ def getHosterWigistream(url, referer):
     url = url.strip()
     if not url.startswith('http'):
         url = 'http:' + url
-    oRequestHandler = cRequestHandler(url)
+    oRequestHandler = RequestHandler(url)
     oRequestHandler.addHeaderEntry('User-Agent', UA)
     oRequestHandler.addHeaderEntry('Referer', referer)
     sHtmlContent = oRequestHandler.request()
@@ -236,7 +236,7 @@ def getHosterWigistream(url, referer):
 def getHosterPrimetubsub(url, referer):
     oParser = cParser()
 
-    oRequestHandler = cRequestHandler(url)
+    oRequestHandler = RequestHandler(url)
     oRequestHandler.addHeaderEntry('User-Agent', UA)
     oRequestHandler.addHeaderEntry('Referer', referer)
     sHtmlContent = oRequestHandler.request()
@@ -249,7 +249,7 @@ def getHosterPrimetubsub(url, referer):
     referer = url
     url = aResult[1][0]
 
-    oRequestHandler = cRequestHandler(url)
+    oRequestHandler = RequestHandler(url)
     oRequestHandler.addHeaderEntry('User-Agent', UA)
     oRequestHandler.addHeaderEntry('Referer', referer)
     sHtmlContent = oRequestHandler.request()

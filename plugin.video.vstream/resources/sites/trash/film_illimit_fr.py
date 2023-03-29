@@ -3,7 +3,7 @@
 from resources.lib.comaddon import progress
 from resources.lib.util import cUtil, QuotePlus, Noredirection
 from resources.lib.parser import cParser
-from resources.lib.handler.requestHandler import cRequestHandler
+from resources.lib.handler.requestHandler import RequestHandler
 from resources.lib.handler.outputParameterHandler import OutputParameterHandler
 from resources.lib.handler.inputParameterHandler import InputParameterHandler
 from resources.lib.gui.gui import Gui
@@ -113,7 +113,7 @@ def showGenres():
 def showYears():
     oGui = Gui()
     oParser = cParser()
-    oRequestHandler = cRequestHandler(URL_MAIN)
+    oRequestHandler = RequestHandler(URL_MAIN)
     sHtmlContent = oRequestHandler.request()
 
     sStart = '<div class="filter-content-slider">'
@@ -142,7 +142,7 @@ def showMovies(sSearch=''):
         oInputParameterHandler = InputParameterHandler()
         sUrl = oInputParameterHandler.getValue('siteUrl')
 
-    oRequestHandler = cRequestHandler(sUrl)
+    oRequestHandler = RequestHandler(sUrl)
     sHtmlContent = oRequestHandler.request()
 
     sHtmlContent = sHtmlContent.replace('en illimité', 'en illimite')
@@ -233,7 +233,7 @@ def showHosters():
     sMovieTitle = oInputParameterHandler.getValue('sMovieTitle')
     sThumb = oInputParameterHandler.getValue('sThumb')
 
-    oRequestHandler = cRequestHandler(sUrl)
+    oRequestHandler = RequestHandler(sUrl)
     sHtmlContent = oRequestHandler.request()
 
     # Vire les bandes annonces
@@ -280,7 +280,7 @@ def showSaisons():
     sThumb = oInputParameterHandler.getValue('sThumb')
     sDesc = oInputParameterHandler.getValue('sDesc')
 
-    oRequestHandler = cRequestHandler(sUrl)
+    oRequestHandler = RequestHandler(sUrl)
     sHtmlContent = oRequestHandler.request()
 
     sHtmlContent = sHtmlContent.replace('<iframe width="420" height="315" src="https://www.youtube.com/', '')
@@ -322,7 +322,7 @@ def ShowSpecialHosters():
     pdata = 'data=' + QuotePlus(data)
 
     if 'fr-land.me' in sUrl:
-        oRequest = cRequestHandler('http://fr-land.me/Htplugins/Loader.php')
+        oRequest = RequestHandler('http://fr-land.me/Htplugins/Loader.php')
         oRequest.setRequestType(1)
         oRequest.addHeaderEntry('User-Agent', UA)
         # oRequest.addHeaderEntry('Host', 'official-film-illimite.to')

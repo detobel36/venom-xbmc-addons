@@ -1,6 +1,6 @@
 from resources.lib.jsunpacker import cJsUnpacker
 from resources.lib.parser import cParser
-from resources.lib.handler.requestHandler import cRequestHandler
+from resources.lib.handler.requestHandler import RequestHandler
 from resources.hosters.hoster import iHoster
 
 
@@ -10,7 +10,7 @@ class cHoster(iHoster):
         iHoster.__init__(self, 'vidbux', 'VidBux.com')
 
     def _getMediaLinkForGuest(self):
-        oRequest = cRequestHandler(self._url)
+        oRequest = RequestHandler(self._url)
         sHtmlContent = oRequest.request()
 
         sPattern = '<input name="([^"]+)".*?value=([^>]+)>'
@@ -18,8 +18,8 @@ class cHoster(iHoster):
         aResult = oParser.parse(sHtmlContent, sPattern)
 
         if aResult[0] is True:
-            oRequest = cRequestHandler(self._url)
-            oRequest.setRequestType(cRequestHandler.REQUEST_TYPE_POST)
+            oRequest = RequestHandler(self._url)
+            oRequest.setRequestType(RequestHandler.REQUEST_TYPE_POST)
 
             for aEntry in aResult[1]:
                 oRequest.addParameters(str(aEntry[0]), str(aEntry[1]).replace('"', ''))

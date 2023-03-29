@@ -8,7 +8,7 @@ from resources.lib.gui.gui import Gui
 from resources.lib.handler.inputParameterHandler import InputParameterHandler
 from resources.lib.handler.outputParameterHandler import OutputParameterHandler
 from resources.lib.handler.premiumHandler import cPremiumHandler
-from resources.lib.handler.requestHandler import cRequestHandler
+from resources.lib.handler.requestHandler import RequestHandler
 from resources.lib.parser import cParser
 from resources.lib.util import cUtil, Unquote
 
@@ -70,7 +70,7 @@ def showSearch(path='//'):
 def getAuthorizedID():
     oParser = cParser()
     oInputParameterHandler = InputParameterHandler()
-    oRequest = cRequestHandler(URL_MAIN)
+    oRequest = RequestHandler(URL_MAIN)
     sHtmlContent = oRequest.request()
     sPattern = "Authorization': '(.+?)'"
     aResult = oParser.parse(sHtmlContent, sPattern)
@@ -84,7 +84,7 @@ def getContent(sUrl):
     sUrl = sUrl.replace(' ', '%20')
     videoId = getAuthorizedID()
 
-    oRequest = cRequestHandler(URL_MAIN + sUrl)
+    oRequest = RequestHandler(URL_MAIN + sUrl)
     oRequest.addHeaderEntry('Referer', URL_MAIN)
     oRequest.addHeaderEntry('Authorization', videoId)
     sHtmlContent = oRequest.request()

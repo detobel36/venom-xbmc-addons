@@ -8,7 +8,7 @@ from resources.lib.gui.hoster import HosterGui
 from resources.lib.gui.gui import Gui
 from resources.lib.handler.inputParameterHandler import InputParameterHandler
 from resources.lib.handler.outputParameterHandler import OutputParameterHandler
-from resources.lib.handler.requestHandler import cRequestHandler
+from resources.lib.handler.requestHandler import RequestHandler
 from resources.lib.parser import cParser
 from resources.lib.comaddon import progress, siteManager
 
@@ -70,7 +70,7 @@ def showMovies(sSearch=''):
     if sSearch:
         sUrl = sSearch.replace(' ', '+')
 
-    oRequestHandler = cRequestHandler(sUrl)
+    oRequestHandler = RequestHandler(sUrl)
     sHtmlContent = oRequestHandler.request()
     oParser = cParser()
 
@@ -181,7 +181,7 @@ def showAlpha():
     oInputParameterHandler = InputParameterHandler()
     sUrl = oInputParameterHandler.getValue('siteUrl')
 
-    oRequestHandler = cRequestHandler(sUrl)
+    oRequestHandler = RequestHandler(sUrl)
     sHtmlContent = oRequestHandler.request()
 
     oParser = cParser()
@@ -214,7 +214,7 @@ def showAZ():
     oInputParameterHandler = InputParameterHandler()
     sUrl = oInputParameterHandler.getValue('siteUrl')
     dAZ = oInputParameterHandler.getValue('AZ')
-    oRequestHandler = cRequestHandler(sUrl)
+    oRequestHandler = RequestHandler(sUrl)
     sHtmlContent = oRequestHandler.request()
 
     oParser = cParser()
@@ -245,7 +245,7 @@ def showEpisodes():
     oParser = cParser()
     oInputParameterHandler = InputParameterHandler()
     sUrl = oInputParameterHandler.getValue('siteUrl')
-    oRequestHandler = cRequestHandler(sUrl)
+    oRequestHandler = RequestHandler(sUrl)
     sHtmlContent = oRequestHandler.request()
 
     sDesc = ''
@@ -288,7 +288,7 @@ def showLinks():
     sThumb = oInputParameterHandler.getValue('sThumb')
     sDesc = oInputParameterHandler.getValue('sDesc')
 
-    oRequestHandler = cRequestHandler(sUrl)
+    oRequestHandler = RequestHandler(sUrl)
     sHtmlContent = oRequestHandler.request()
 
     list_hostname = []
@@ -361,7 +361,7 @@ def showHosters():
 
 def unCap(sHosterUrl, sUrl):
 
-    oRequest = cRequestHandler(sHosterUrl)
+    oRequest = RequestHandler(sHosterUrl)
     oRequest.addHeaderEntry('User-Agent', 'Mozilla/5.0 (Windows NT 6.1; WOW64; rv:66.0) Gecko/20100101 Firefox/66.0')
     oRequest.addHeaderEntry('Referer', sUrl)
     oRequest.addHeaderEntry('Accept', '*/*')
@@ -373,7 +373,7 @@ def unCap(sHosterUrl, sUrl):
 
     xbmc.sleep(1000)
 
-    oRequest = cRequestHandler(sHosterUrl)
+    oRequest = RequestHandler(sHosterUrl)
     oRequest.addHeaderEntry('User-Agent', 'Mozilla/5.0 (Windows NT 6.1; WOW64; rv:66.0) Gecko/20100101 Firefox/66.0')
     oRequest.addHeaderEntry('Host', 'parisanime.com')
     oRequest.addHeaderEntry('Referer', sHosterUrl)

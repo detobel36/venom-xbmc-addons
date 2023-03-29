@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 # vStream https://github.com/Kodi-vStream/venom-xbmc-addons
 # 2 methode play
-from resources.lib.handler.requestHandler import cRequestHandler
+from resources.lib.handler.requestHandler import RequestHandler
 from resources.lib.parser import cParser
 from resources.hosters.hoster import iHoster
 
@@ -22,7 +22,7 @@ class cHoster(iHoster):
     def _getMediaLinkForGuest(self):
         api_call = False
 
-        oRequest = cRequestHandler(self._url)
+        oRequest = RequestHandler(self._url)
         sHtmlContent = oRequest.request()
 
         oParser = cParser()
@@ -53,7 +53,7 @@ class cHoster(iHoster):
 
             # pdata = 'file_name=' + FN + '.mp4&srv=' + SRV
 
-            # oRequest = cRequestHandler('https://jetload.net/api/download')
+            # oRequest = RequestHandler('https://jetload.net/api/download')
             # oRequest.setRequestType(1)
             # #oRequest.addHeaderEntry('User-Agent', UA)
             # oRequest.addHeaderEntry('Referer', self._url)

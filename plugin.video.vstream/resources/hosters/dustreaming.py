@@ -2,7 +2,7 @@
 # vStream https://github.com/Kodi-vStream/venom-xbmc-addons
 import json
 
-from resources.lib.handler.requestHandler import cRequestHandler
+from resources.lib.handler.requestHandler import RequestHandler
 from resources.hosters.hoster import iHoster
 from resources.lib.comaddon import dialog
 
@@ -16,8 +16,8 @@ class cHoster(iHoster):
         api_call = ''
 
         url = self._url.replace('/v/', '/api/source/')
-        oRequest = cRequestHandler(url)
-        oRequest.setRequestType(cRequestHandler.REQUEST_TYPE_POST)
+        oRequest = RequestHandler(url)
+        oRequest.setRequestType(RequestHandler.REQUEST_TYPE_POST)
         oRequest.addHeaderEntry('Referer', self._url)
         oRequest.addParameters('r', '')
         oRequest.addParameters('d', 'dustreaming.fr')

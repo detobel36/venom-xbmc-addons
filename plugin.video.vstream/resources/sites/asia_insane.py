@@ -7,7 +7,7 @@ from resources.lib.gui.hoster import HosterGui
 from resources.lib.gui.gui import Gui
 from resources.lib.handler.inputParameterHandler import InputParameterHandler
 from resources.lib.handler.outputParameterHandler import OutputParameterHandler
-from resources.lib.handler.requestHandler import cRequestHandler
+from resources.lib.handler.requestHandler import RequestHandler
 from resources.lib.multihost import cMultiup
 from resources.lib.util import cUtil
 from resources.lib.parser import cParser
@@ -109,7 +109,7 @@ def showAlpha():
 
     sUrl = URL_MAIN + 'films-asiatiques-vostfr-affichage-alphanumerique/'
 
-    oRequestHandler = cRequestHandler(sUrl)
+    oRequestHandler = RequestHandler(sUrl)
     sHtmlContent = oRequestHandler.request()
     sPattern = 'front">.+?src="(http[^"]+).+?field-title"><a href="([^"]+)">([^<]+)d{2}.+?.+?field-desc"><p>([^<]+)'
     aResult = oParser.parse(sHtmlContent, sPattern)
@@ -165,7 +165,7 @@ def showMovies(sSearch=''):
 
         sPattern = '<a class=\'asp_res_image_url\' href=\'([^>]+)\'.+?url\\("([^"]+)"\\).+?\'>([^.]+)d{2}.+?<span.+?class="asp_res_text">([^<]+)'
 
-        oRequestHandler = cRequestHandler(URL_SEARCH[0])
+        oRequestHandler = RequestHandler(URL_SEARCH[0])
         oRequestHandler.setRequestType(1)
         oRequestHandler.addHeaderEntry('User-Agent', UA)
         oRequestHandler.addHeaderEntry(
@@ -185,12 +185,12 @@ def showMovies(sSearch=''):
         sHtmlContent = oRequestHandler.request()
 
     elif '/amy_genre/' in sUrl or '/date/' in sUrl:
-        oRequestHandler = cRequestHandler(sUrl)
+        oRequestHandler = RequestHandler(sUrl)
         sHtmlContent = oRequestHandler.request()
         sPattern = 'item-poster">.+?src="(http[^"]+).+?href="([^"]+)">([^<]+)d{2}.+?desc"><p>([^<]+)'
 
     else:
-        oRequestHandler = cRequestHandler(sUrl)
+        oRequestHandler = RequestHandler(sUrl)
         sHtmlContent = oRequestHandler.request()
         sPattern = 'front">.+?src="(http[^"]+).+?field-title"><a href="([^"]+)">([^<]+)d{2}.+?field-desc"><p>([^<]+).+?(?:|/version/([^/]+).+?)(?:|/date/([^/]+).+?)Genre:'
 
@@ -292,7 +292,7 @@ def showSerieEpisodes():
     sThumb = oInputParameterHandler.getValue('sThumb')
     sMovieTitle = oInputParameterHandler.getValue('sMovieTitle')
 
-    oRequestHandler = cRequestHandler(sUrl)
+    oRequestHandler = RequestHandler(sUrl)
     sHtmlContent = oRequestHandler.request()
     sStart = '<div class="entry-content e-content" itemprop="description articleBody">'
     sEnd = '<div class="entry-comment">'
@@ -357,7 +357,7 @@ def showHosters():
                 HosterGui().showHoster(oGui, oHoster, sHosterUrl, sThumb)
 
     else:
-        oRequestHandler = cRequestHandler(sUrl)
+        oRequestHandler = RequestHandler(sUrl)
         sHtmlContent = oRequestHandler.request()
 
         sStart = '<pre>'

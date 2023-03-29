@@ -4,7 +4,7 @@ import json
 import re
 from resources.lib.comaddon import progress
 from resources.lib.parser import cParser
-from resources.lib.handler.requestHandler import cRequestHandler
+from resources.lib.handler.requestHandler import RequestHandler
 from resources.lib.handler.outputParameterHandler import OutputParameterHandler
 from resources.lib.handler.inputParameterHandler import InputParameterHandler
 from resources.lib.gui.gui import Gui
@@ -182,7 +182,7 @@ def showList(sSearch=''):
         oInputParameterHandler = InputParameterHandler()
         sUrl = oInputParameterHandler.getValue('siteUrl')
 
-    oRequestHandler = cRequestHandler(sUrl)
+    oRequestHandler = RequestHandler(sUrl)
     sHtmlContent = oRequestHandler.request()
 
     page = json.loads(sHtmlContent)
@@ -215,7 +215,7 @@ def showMovies():
     oInputParameterHandler = InputParameterHandler()
     sUrl = oInputParameterHandler.getValue('siteUrl')
 
-    oRequestHandler = cRequestHandler(sUrl)
+    oRequestHandler = RequestHandler(sUrl)
     sHtmlContent = oRequestHandler.request()
 
     if '/films' in sUrl or '/series' in sUrl:
@@ -285,7 +285,7 @@ def showSaisonEpisodes():
     sThumb = oInputParameterHandler.getValue('sThumb')
     sMovieTitle = oInputParameterHandler.getValue('sMovieTitle')
 
-    oRequestHandler = cRequestHandler(sUrl)
+    oRequestHandler = RequestHandler(sUrl)
     sHtmlContent = oRequestHandler.request()
 
     oParser = cParser()
@@ -330,7 +330,7 @@ def showLinks():
     sThumb = oInputParameterHandler.getValue('sThumb')
 
     oParser = cParser()
-    oRequest = cRequestHandler(sUrl)
+    oRequest = RequestHandler(sUrl)
     sHtmlContent = oRequest.request()
 
     sPattern2 = "data-type='([^']+)' data-post='([^']+)' data-nume='([^']+)'>.+?<span class='title'>([^<]+)<\\/span><span class='server'>([^<]+)<\\/span>.+?<img src='([^']+)'>"
@@ -366,7 +366,7 @@ def showHosters():
     sThumb = oInputParameterHandler.getValue('sThumb')
     postdata = oInputParameterHandler.getValue('postdata')
 
-    oRequest = cRequestHandler(URL_MAIN + '/wp-admin/admin-ajax.php')
+    oRequest = RequestHandler(URL_MAIN + '/wp-admin/admin-ajax.php')
     oRequest.setRequestType(1)
     oRequest.addHeaderEntry('User-Agent', UA)
     # oRequest.addHeaderEntry('Accept', '*/*')

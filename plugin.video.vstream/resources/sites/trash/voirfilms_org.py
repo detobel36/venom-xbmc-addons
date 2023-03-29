@@ -5,7 +5,7 @@ from resources.lib.gui.hoster import HosterGui
 from resources.lib.gui.gui import Gui
 from resources.lib.handler.inputParameterHandler import InputParameterHandler
 from resources.lib.handler.outputParameterHandler import OutputParameterHandler
-from resources.lib.handler.requestHandler import cRequestHandler
+from resources.lib.handler.requestHandler import RequestHandler
 from resources.lib.parser import cParser
 from resources.lib.comaddon import progress, siteManager
 from resources.lib.util import QuoteSafe, Quote
@@ -301,7 +301,7 @@ def showMovies(sSearch=''):
         else:
             sTypeSearch = False
 
-        oRequest = cRequestHandler(sUrl)
+        oRequest = RequestHandler(sUrl)
         oRequest.addHeaderEntry('User-Agent', UA)
         oRequest.addHeaderEntry('Referer', URL_MAIN)
         oRequest.addHeaderEntry('Accept', 'text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8')
@@ -315,7 +315,7 @@ def showMovies(sSearch=''):
     else:
         oInputParameterHandler = InputParameterHandler()
         sUrl = oInputParameterHandler.getValue('siteUrl')
-        oRequestHandler = cRequestHandler(sUrl)
+        oRequestHandler = RequestHandler(sUrl)
         sHtmlContent = oRequestHandler.request()
         sHtmlContent = re.sub('alt="title="', 'alt="', sHtmlContent)  # anime
         sPattern = '<div class="unfilm".+?href="([^"]+).+?<img src="([^"]+)" alt="([^"]+).+?("suivre2">([^<]+)<|<span class="qualite ([^"]+)|<div class="cdiv")'
@@ -427,7 +427,7 @@ def showLinks():
     # patch for unicode url
     sUrl = QuoteSafe(sUrl)
 
-    oRequestHandler = cRequestHandler(sUrl)
+    oRequestHandler = RequestHandler(sUrl)
     sHtmlContent = oRequestHandler.request()
 
     sPattern = 'data-src="([^"]+)" target="filmPlayer".+?span class="([^"]+)"></span>.+?class="([^"]+)"></span>'
@@ -491,7 +491,7 @@ def showS_E():
     sMovieTitle = oInputParameterHandler.getValue('sMovieTitle')
     sThumb = oInputParameterHandler.getValue('sThumb')
 
-    oRequestHandler = cRequestHandler(sUrl)
+    oRequestHandler = RequestHandler(sUrl)
     sHtmlContent = oRequestHandler.request()
 
     # sHtmlContent = sHtmlContent.replace("\r\t", "")
@@ -556,14 +556,14 @@ def showHosters():
     # Attention ne marche pas dans tout les cas, certain site retourne aussi un 302 et la lib n'en gere qu'un
     if False:
         # On recupere la redirection
-        oRequestHandler = cRequestHandler(sUrl)
+        oRequestHandler = RequestHandler(sUrl)
         oRequestHandler.addHeaderEntry('User-Agent', UA)
         oRequestHandler.addHeaderEntry('Referer', host)
         sHtmlContent = oRequestHandler.request()
         redirection_target = oRequestHandler.getRealUrl()
 
     else:
-        oRequestHandler = cRequestHandler(sUrl)
+        oRequestHandler = RequestHandler(sUrl)
         oRequestHandler.disableRedirect()
         oRequestHandler.addHeaderEntry('User-Agent', UA)
         oRequestHandler.addHeaderEntry('Referer', host)
@@ -609,7 +609,7 @@ def showHostersDL():
     siteReferer = oInputParameterHandler.getValue('siteReferer')
 
     if 'cineactu.co' in sUrl:  # tjrs vrai mais au cas ou autre pattern fait sur host DL
-        oRequestHandler = cRequestHandler(sUrl)
+        oRequestHandler = RequestHandler(sUrl)
         oRequestHandler.addHeaderEntry('User-Agent', UA)
         oRequestHandler.addHeaderEntry('Referer', siteReferer)
         oRequestHandler.request()
@@ -631,7 +631,7 @@ def Hoster_shortn(url, refer):
     shost = ''
     # url="https://shortn.co/f/6183943"
     url = url.replace('%22', '')
-    oRequestHandler = cRequestHandler(url)
+    oRequestHandler = RequestHandler(url)
     oRequestHandler.addHeaderEntry('User-Agent', UA)
     oRequestHandler.addHeaderEntry('Referer', refer)
     sHtmlContent = oRequestHandler.request()
@@ -641,7 +641,7 @@ def Hoster_shortn(url, refer):
     if aResult:
         token = aResult[0]
         data = '_token=' + token
-        oRequestHandler = cRequestHandler(url)
+        oRequestHandler = RequestHandler(url)
         oRequestHandler.setRequestType(1)
         oRequestHandler.addHeaderEntry('Referer', url)
         oRequestHandler.addHeaderEntry(

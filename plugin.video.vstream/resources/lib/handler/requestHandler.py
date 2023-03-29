@@ -9,7 +9,7 @@ import requests.packages.urllib3.util.connection as urllib3_cn
 import socket
 
 
-class cRequestHandler:
+class RequestHandler:
     REQUEST_TYPE_GET = 0
     REQUEST_TYPE_POST = 1
 
@@ -161,7 +161,7 @@ class cRequestHandler:
         else:
             sParameters = self.__aParamaters
 
-        if (self.__cType == cRequestHandler.REQUEST_TYPE_GET):
+        if (self.__cType == RequestHandler.REQUEST_TYPE_GET):
             if (len(sParameters) > 0):
                 if (self.__sUrl.find('?') == -1):
                     self.__sUrl = self.__sUrl + '?' + str(sParameters)
@@ -175,7 +175,7 @@ class cRequestHandler:
         if self.BUG_SSL:
             self.verify = False
 
-        if self.__cType == cRequestHandler.REQUEST_TYPE_GET:
+        if self.__cType == RequestHandler.REQUEST_TYPE_GET:
             method = "GET"
         else:
             method = "POST"

@@ -9,7 +9,7 @@ from resources.lib.gui.hoster import HosterGui
 from resources.lib.gui.gui import Gui
 from resources.lib.handler.inputParameterHandler import InputParameterHandler
 from resources.lib.handler.outputParameterHandler import OutputParameterHandler
-from resources.lib.handler.requestHandler import cRequestHandler
+from resources.lib.handler.requestHandler import RequestHandler
 from resources.lib.parser import cParser
 from resources.lib.comaddon import progress, siteManager, VSlog
 from resources.lib.config import GestionCookie
@@ -133,7 +133,7 @@ def showMovies(sSearch=''):
     if sSearch:
         sUrl = sSearch.replace(' ', '+')
 
-    oRequestHandler = cRequestHandler(sUrl)
+    oRequestHandler = RequestHandler(sUrl)
     sHtmlContent = oRequestHandler.request()
     sPattern = 'class="attachment-medium.+?" data-src="([^"]+)".+?<a href="([^"<]+)"[^<>]+>([^<>]+)'
     aResult = oParser.parse(sHtmlContent, sPattern)
@@ -195,7 +195,7 @@ def showHosters():
     sMovieTitle = oInputParameterHandler.getValue('sMovieTitle')
     sThumb = oInputParameterHandler.getValue('sThumb')
 
-    oRequestHandler = cRequestHandler(sUrl)
+    oRequestHandler = RequestHandler(sUrl)
     sHtmlContent = oRequestHandler.request()
 
     sPattern = '<a href="([^"]+)" title=".+?".+?</a>'
@@ -205,7 +205,7 @@ def showHosters():
         for aEntry in aResult[1]:
 
             if "clictune" in aEntry:
-                oRequestHandler = cRequestHandler(aEntry)
+                oRequestHandler = RequestHandler(aEntry)
                 sHtmlContent = oRequestHandler.request()
 
                 sPattern = 'txt = \'<b><a href="([^"]+)"'
@@ -220,7 +220,7 @@ def showHosters():
                 s = "azertyupqsdfghjkmwxcvbn23456789AZERTYUPQSDFGHJKMWXCVBN_-#@"
                 RandomKey = ''.join(random.choice(s) for i in range(32))
 
-                oRequestHandler = cRequestHandler(url2)
+                oRequestHandler = RequestHandler(url2)
                 oRequestHandler.setRequestType(1)
                 oRequestHandler.addHeaderEntry('Host', 'revivelink.com')
                 oRequestHandler.addHeaderEntry('User-Agent', UA)
@@ -244,7 +244,7 @@ def showHosters():
                     return
 
                 cookies = GestionCookie().Readcookie('revivelink.com')
-                oRequestHandler = cRequestHandler('http://revivelink.com/slinks.php?R=' + idUrl + '&' + RandomKey)
+                oRequestHandler = RequestHandler('http://revivelink.com/slinks.php?R=' + idUrl + '&' + RandomKey)
                 oRequestHandler.addHeaderEntry('Host', 'revivelink.com')
                 oRequestHandler.addHeaderEntry('Referer', aEntry)
                 oRequestHandler.addHeaderEntry('Accept', 'application/json, text/javascript, */*; q=0.01')

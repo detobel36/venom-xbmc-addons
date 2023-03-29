@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 # Vstream https://github.com/Kodi-vStream/venom-xbmc-addons
 # Arias800
-from resources.lib.handler.requestHandler import cRequestHandler
+from resources.lib.handler.requestHandler import RequestHandler
 from resources.lib.parser import cParser
 from resources.hosters.hoster import iHoster
 from resources.lib.comaddon import dialog  # , VSlog
@@ -17,7 +17,7 @@ class cHoster(iHoster):
     def _getMediaLinkForGuest(self):
         api_call = False
 
-        oRequest = cRequestHandler(self._url)
+        oRequest = RequestHandler(self._url)
         sHtmlContent = oRequest.request()
 
         oParser = cParser()
@@ -25,7 +25,7 @@ class cHoster(iHoster):
         aResult = oParser.parse(sHtmlContent, sPattern)
 
         if (aResult[0]):
-            oRequest = cRequestHandler(aResult[1][0])
+            oRequest = RequestHandler(aResult[1][0])
             sHtmlContent1 = oRequest.request()
 
             sPattern1 = '"([^"]+)":"([^"]+)"'

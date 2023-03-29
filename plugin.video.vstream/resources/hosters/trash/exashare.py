@@ -8,7 +8,7 @@ try:  # Python 2
 except ImportError:  # Python 3
     import urllib.request as urllib2
 
-from resources.lib.handler.requestHandler import cRequestHandler
+from resources.lib.handler.requestHandler import RequestHandler
 from resources.lib.parser import cParser
 from resources.hosters.hoster import iHoster
 from resources.lib.comaddon import xbmc
@@ -22,7 +22,7 @@ class cHoster(iHoster):
     def _getMediaLinkForGuest(self):
         api_call = False
 
-        oRequest = cRequestHandler(self._url)
+        oRequest = RequestHandler(self._url)
         sHtmlContent = oRequest.request()
         oParser = cParser()
 
@@ -73,7 +73,7 @@ class cHoster(iHoster):
         aResult = oParser.parse(sHtmlContent, sPattern)
         if aResult[0] is True:
             url = aResult[1][0]
-            oRequest = cRequestHandler(url)
+            oRequest = RequestHandler(url)
             oRequest.addHeaderEntry('Referer', url)
             # oRequest.addHeaderEntry('Host','dowed.info')
             sHtmlContent = oRequest.request()
@@ -88,7 +88,7 @@ class cHoster(iHoster):
             aResult = oParser.parse(sHtmlContent, sPattern)
             if aResult[0] is True:
                 vurl = aResult[1][0]
-                oRequest = cRequestHandler(vurl)
+                oRequest = RequestHandler(vurl)
                 sHtmlContent = oRequest.request()
                 sPattern = 'file: *"([^"]+)"'
                 aResult = oParser.parse(sHtmlContent, sPattern)

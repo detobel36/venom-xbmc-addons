@@ -2,7 +2,7 @@
 import re
 import xbmcgui
 
-from resources.lib.handler.requestHandler import cRequestHandler
+from resources.lib.handler.requestHandler import RequestHandler
 from resources.lib.parser import cParser
 from resources.hosters.hoster import iHoster
 from resources.lib.packer import cPacker
@@ -14,7 +14,7 @@ class cHoster(iHoster):
         iHoster.__init__(self, 'easyvid', 'EasyVid')
 
     def _getMediaLinkForGuest(self):
-        oRequest = cRequestHandler(self._url)
+        oRequest = RequestHandler(self._url)
         sHtmlContent = oRequest.request()
         if 'File was deleted' in sHtmlContent:
             return False, False

@@ -13,7 +13,7 @@ from resources.lib.gui.gui import Gui
 from resources.lib.gui.hoster import HosterGui
 from resources.lib.handler.inputParameterHandler import InputParameterHandler
 from resources.lib.handler.outputParameterHandler import OutputParameterHandler
-from resources.lib.handler.requestHandler import cRequestHandler
+from resources.lib.handler.requestHandler import RequestHandler
 from resources.lib.util import cUtil
 
 # _DEVICE_ID = '86085977d'  # used for android api
@@ -141,7 +141,7 @@ def showMovies(sSearch=''):
     if 'search.json' not in url:
         url = url + timestamp
 
-    oRequestHandler = cRequestHandler(url)
+    oRequestHandler = RequestHandler(url)
     oRequestHandler.addHeaderEntry('User-Agent', UA)
     oRequestHandler.addHeaderEntry('Accept-Language', '')
     jsonrsp = oRequestHandler.request(jsonDecode=True)
@@ -236,7 +236,7 @@ def showSaisons():
     url = sUrl + '&direction=asc'
     timestamp = str(int(time.time()))
 
-    oRequestHandler = cRequestHandler(url)
+    oRequestHandler = RequestHandler(url)
     oRequestHandler.addHeaderEntry('User-Agent', UA)
     oRequestHandler.addHeaderEntry('Accept-Language', '')
     jsonrsp = oRequestHandler.request(jsonDecode=True)
@@ -287,7 +287,7 @@ def showMovieGenre():
 
     sGenre = 'movies'
     url = URL_API + 'videos/genres.json?app=' + _APP + ''
-    oRequestHandler = cRequestHandler(url)
+    oRequestHandler = RequestHandler(url)
     oRequestHandler.addHeaderEntry('User-Agent', UA)
     oRequestHandler.addHeaderEntry('Accept-Language', '')
     jsonrsp = oRequestHandler.request(jsonDecode=True)
@@ -309,7 +309,7 @@ def showSerieGenre():
 
     sGenre = 'series'
     url = URL_API + 'videos/genres.json?app=' + _APP + ''
-    oRequestHandler = cRequestHandler(url)
+    oRequestHandler = RequestHandler(url)
     oRequestHandler.addHeaderEntry('User-Agent', UA)
     oRequestHandler.addHeaderEntry('Accept-Language', '')
     jsonrsp = oRequestHandler.request(jsonDecode=True)
@@ -337,7 +337,7 @@ def showSeriePays():
 def showPays(genre):
     oGui = Gui()
     url = URL_API + 'videos/countries.json?app=' + _APP + ''
-    oRequestHandler = cRequestHandler(url)
+    oRequestHandler = RequestHandler(url)
     oRequestHandler.addHeaderEntry('User-Agent', UA)
     oRequestHandler.addHeaderEntry('Accept-Language', '')
     jsonrsp = oRequestHandler.request(jsonDecode=True)
@@ -370,7 +370,7 @@ def GET_URLS_STREAM(url):
     validq = []
 
     urlreq, timestamp, sig = SIGN('playback_streams/' + url + '.json', 5)
-    oRequestHandler = cRequestHandler(urlreq)
+    oRequestHandler = RequestHandler(urlreq)
     oRequestHandler.addHeaderEntry('User-Agent', UA)
     oRequestHandler.addHeaderEntry('X-Viki-manufacturer', 'vivo')
     oRequestHandler.addHeaderEntry('X-Viki-device-model', 'vivo 1606')

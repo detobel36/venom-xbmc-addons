@@ -3,7 +3,7 @@
 # https://streamz.cc/xxx
 import re
 
-from resources.lib.handler.requestHandler import cRequestHandler
+from resources.lib.handler.requestHandler import RequestHandler
 from resources.lib.parser import cParser
 from resources.hosters.hoster import iHoster
 from resources.lib.packer import cPacker
@@ -13,7 +13,7 @@ UA = 'Mozilla/5.0 (Windows NT 6.1; Win64; x64; rv:68.0) Gecko/20100101 Firefox/6
 
 
 def getheader(url, c):
-    oRequestHandler = cRequestHandler(url)
+    oRequestHandler = RequestHandler(url)
     oRequestHandler.disableRedirect()
     oRequestHandler.addHeaderEntry('User-Agent', UA)
     oRequestHandler.addHeaderEntry('Cookie', c)
@@ -30,7 +30,7 @@ class cHoster(iHoster):
 
         oParser = cParser()
 
-        oRequest = cRequestHandler(self._url)
+        oRequest = RequestHandler(self._url)
         oRequest.addHeaderEntry('User-Agent', UA)
         sHtmlContent = oRequest.request()
 
@@ -42,7 +42,7 @@ class cHoster(iHoster):
         # By-pass fake video
         # Get url
         urlJS = host + '/js/count.js'
-        oRequest = cRequestHandler(urlJS)
+        oRequest = RequestHandler(urlJS)
         oRequest.addHeaderEntry('User-Agent', UA)
         JScode = oRequest.request()
 
@@ -58,7 +58,7 @@ class cHoster(iHoster):
         Fakeurl = aResult[1][0][0] + '?' + data[0] + '=' + data[1].replace("'", "")
 
         # Request URL
-        oRequest = cRequestHandler(Fakeurl)
+        oRequest = RequestHandler(Fakeurl)
         oRequest.addHeaderEntry('User-Agent', UA)
         try:
             tmp = oRequest.request()

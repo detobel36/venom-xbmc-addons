@@ -2,7 +2,7 @@
 # vStream https://github.com/Kodi-vStream/venom-xbmc-addons
 # https://video.sibnet.ru/shell.php?videoid=xxxxxx
 
-from resources.lib.handler.requestHandler import cRequestHandler
+from resources.lib.handler.requestHandler import RequestHandler
 from resources.hosters.hoster import iHoster
 from resources.lib.parser import cParser
 
@@ -20,7 +20,7 @@ class cHoster(iHoster):
     def _getMediaLinkForGuest(self):
         api_call = False
         urlmain = 'https://video.sibnet.ru'
-        oRequestHandler = cRequestHandler(self._url)
+        oRequestHandler = RequestHandler(self._url)
         oRequestHandler.addHeaderEntry('User-Agent', UA)
         oRequestHandler.addHeaderEntry('Referer', urlmain + '/')
         sHtmlContent = oRequestHandler.request()

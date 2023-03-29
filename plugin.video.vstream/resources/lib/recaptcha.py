@@ -28,7 +28,7 @@ import xbmcgui
 import xbmc
 
 from resources.lib.comaddon import dialog, VSlog
-from resources.lib.handler.requestHandler import cRequestHandler
+from resources.lib.handler.requestHandler import RequestHandler
 from resources.lib.util import urlEncode, Noredirection
 
 UA = 'Mozilla/5.0 (Windows NT 6.1; WOW64; rv:53.0) Gecko/20100101 Firefox/53.0'
@@ -301,7 +301,7 @@ class cInputWindow(xbmcgui.WindowDialog):
 
 def ResolveCaptcha(key, urlOuo):
     urlBase = 'https://www.google.com/recaptcha/api/fallback?k=' + key
-    oRequestHandler = cRequestHandler(urlBase)
+    oRequestHandler = RequestHandler(urlBase)
     oRequestHandler.addHeaderEntry('User-Agent', UA)
     oRequestHandler.addHeaderEntry('Accept', 'text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8')
     oRequestHandler.addHeaderEntry('Accept-Language', 'fr,fr-FR;q=0.8,en-US;q=0.5,en;q=0.3')
@@ -322,7 +322,7 @@ def ResolveCaptcha(key, urlOuo):
 
     filePath = 'special://home/userdata/addon_data/plugin.video.vstream/Captcha.raw'
 
-    oRequestHandler = cRequestHandler(url)
+    oRequestHandler = RequestHandler(url)
     htmlcontent = oRequestHandler.request()
 
     downloaded_image = xbmcvfs.File(filePath, 'wb')
@@ -347,7 +347,7 @@ def ResolveCaptcha(key, urlOuo):
 
     params = 'c=' + c + responseFinal
 
-    oRequestHandler = cRequestHandler(urlBase)
+    oRequestHandler = RequestHandler(urlBase)
     oRequestHandler.setRequestType(1)
     oRequestHandler.addHeaderEntry('User-Agent', UA)
     oRequestHandler.addHeaderEntry('Accept', 'text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8')

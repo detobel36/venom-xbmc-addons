@@ -8,7 +8,7 @@ from resources.lib.gui.guiElement import GuiElement
 import xbmc
 from resources.lib import util
 from resources.lib.parser import cParser
-from resources.lib.handler.requestHandler import cRequestHandler
+from resources.lib.handler.requestHandler import RequestHandler
 from resources.lib.handler.outputParameterHandler import OutputParameterHandler
 from resources.lib.handler.inputParameterHandler import InputParameterHandler
 from resources.lib.gui.gui import Gui
@@ -44,7 +44,7 @@ def showMovies(sSearch=''):
         oInputParameterHandler = InputParameterHandler()
         sUrl = oInputParameterHandler.getValue('siteUrl')
 
-    oRequestHandler = cRequestHandler(sUrl)
+    oRequestHandler = RequestHandler(sUrl)
     sHtmlContent = oRequestHandler.request()
 
     sPattern = '<a href="([^"]+)" class="tweet.+?" title=".+?\\-([^"]+)".+?background-image:url((.+?))">'
@@ -108,8 +108,8 @@ def showLinks():
     # recup lien mp4 video twitter via twdown.net
     sUrl2 = 'http://twdown.net/download.php'
 
-    oRequestHandler = cRequestHandler(sUrl2)
-    oRequestHandler.setRequestType(cRequestHandler.REQUEST_TYPE_POST)
+    oRequestHandler = RequestHandler(sUrl2)
+    oRequestHandler.setRequestType(RequestHandler.REQUEST_TYPE_POST)
     oRequestHandler.addParameters('URL', sUrl)
     oRequestHandler.addParameters('submit', 'Download')
     oRequestHandler.addParameters('submit', '')

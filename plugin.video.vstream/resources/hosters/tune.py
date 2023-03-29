@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 import json
 
-from resources.lib.handler.requestHandler import cRequestHandler
+from resources.lib.handler.requestHandler import RequestHandler
 from resources.lib.parser import cParser
 from resources.hosters.hoster import iHoster
 from resources.lib.comaddon import dialog
@@ -32,7 +32,7 @@ class cHoster(iHoster):
 
         sUrl = 'https://api.tune.pk/v3/videos/' + sId
 
-        oRequest = cRequestHandler(sUrl)
+        oRequest = RequestHandler(sUrl)
         oRequest.addHeaderEntry('User-Agent', UA)
         oRequest.addHeaderEntry('X-KEY', '777750fea4d3bd585bf47dc1873619fc')
         oRequest.addHeaderEntry('X-REQ-APP', 'web')  # pour les mp4

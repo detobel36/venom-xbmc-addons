@@ -2,7 +2,7 @@
 # https://github.com/Kodi-vStream/venom-xbmc-addons
 import re
 
-from resources.lib.handler.requestHandler import cRequestHandler
+from resources.lib.handler.requestHandler import RequestHandler
 from resources.hosters.hoster import iHoster
 
 
@@ -46,7 +46,7 @@ class cHoster(iHoster):
 
     def _getMediaLinkForGuest(self):
         api_call = False
-        oRequest = cRequestHandler(self._url)
+        oRequest = RequestHandler(self._url)
         sHtmlContent = oRequest.request()
 
         r1 = re.search("{type:\"video/mp4\",src:\\w+\\('([^']+)',(\\d+)", sHtmlContent)

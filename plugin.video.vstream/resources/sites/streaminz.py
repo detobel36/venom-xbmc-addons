@@ -8,7 +8,7 @@ from resources.lib.gui.gui import Gui
 from resources.lib.gui.hoster import HosterGui
 from resources.lib.handler.inputParameterHandler import InputParameterHandler
 from resources.lib.handler.outputParameterHandler import OutputParameterHandler
-from resources.lib.handler.requestHandler import cRequestHandler
+from resources.lib.handler.requestHandler import RequestHandler
 from resources.lib.parser import cParser
 from resources.lib.util import cUtil
 
@@ -121,7 +121,7 @@ def showGenres():
     oGui = Gui()
     oParser = cParser()
 
-    oRequestHandler = cRequestHandler(URL_MAIN)
+    oRequestHandler = RequestHandler(URL_MAIN)
     sHtmlContent = oRequestHandler.request()
     sStart = '</i>Genres</a>'
     sEnd = '</i>Demandes</a>'
@@ -191,7 +191,7 @@ def showNetwork():
 def showYears():
     oGui = Gui()
     oParser = cParser()
-    oRequestHandler = cRequestHandler(URL_MAIN)
+    oRequestHandler = RequestHandler(URL_MAIN)
     sHtmlContent = oRequestHandler.request()
     sStart = '<span>Années</span>'
     sEnd = '<span>Connexion</span>'
@@ -219,7 +219,7 @@ def showYears():
 def showSeriesYears():
     oGui = Gui()
     oParser = cParser()
-    oRequestHandler = cRequestHandler(URL_MAIN)
+    oRequestHandler = RequestHandler(URL_MAIN)
     sHtmlContent = oRequestHandler.request()
     sStart = '<span>Années</span>'
     sEnd = '<span>Connexion</span>'
@@ -279,7 +279,7 @@ def showMovies(sSearch=''):
         else:
             sPattern = '<article id="post-\\d+".+?img src="([^"]+).+?alt="([^"]+).+?(?:|class="quality">([^<]+).+?)(?:|class="dtyearfr">([^<]+).+?)<a href="([^"]+).+?class="texto">(.*?)</div'
 
-    oRequestHandler = cRequestHandler(sUrl)
+    oRequestHandler = RequestHandler(sUrl)
     sHtmlContent = oRequestHandler.request()
     aResult = oParser.parse(sHtmlContent, sPattern)
 
@@ -385,7 +385,7 @@ def showSxE():
     sMovieTitle = oInputParameterHandler.getValue('sMovieTitle')
     sDesc = oInputParameterHandler.getValue('sDesc')
 
-    oRequestHandler = cRequestHandler(sUrl)
+    oRequestHandler = RequestHandler(sUrl)
     sHtmlContent = oRequestHandler.request()
     sPattern = ">([^<]+)</span><span class='title|numerando'>(.+?)</div><div class='episodiotitle'><a href='([^']+)"
     oParser = cParser()
@@ -421,7 +421,7 @@ def showLink():
     sThumb = oInputParameterHandler.getValue('sThumb')
     sDesc = oInputParameterHandler.getValue('sDesc')
 
-    oRequest = cRequestHandler(sUrl)
+    oRequest = RequestHandler(sUrl)
     sHtmlContent = oRequest.request()
 
     if '/films/' in sUrl:
@@ -474,7 +474,7 @@ def showHosters():
     pdata = oInputParameterHandler.getValue('pdata')
     UA = 'Mozilla/5.0 (Windows NT 6.1; WOW64; rv:70.0) Gecko/20100101 Firefox/70.0'
 
-    oRequest = cRequestHandler(sUrl)
+    oRequest = RequestHandler(sUrl)
     oRequest.setRequestType(1)
     oRequest.addHeaderEntry('User-Agent', UA)
     oRequest.addHeaderEntry('Referer', referer)
@@ -503,7 +503,7 @@ def showHosters():
 
             if 'club' in sHosterUrl:
                 sHosterUrl = sHosterUrl
-                oRequest = cRequestHandler(sHosterUrl)
+                oRequest = RequestHandler(sHosterUrl)
                 oParser = cParser()
                 sHtmlContent2 = oRequest.request()
 
@@ -518,7 +518,7 @@ def showHosters():
                 sHosterUrl = sHosterUrl
                 postdata = 'r=&d=streaminz.ml'
                 urlapi = 'https://streaminz.ml/api/source/' + sid
-                oRequest = cRequestHandler(urlapi)
+                oRequest = RequestHandler(urlapi)
                 oRequest.setRequestType(1)
                 oRequest.addHeaderEntry('Referer', sHosterUrl)
                 oRequest.addParametersLine(postdata)

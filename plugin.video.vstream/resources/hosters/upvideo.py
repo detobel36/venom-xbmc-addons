@@ -4,7 +4,7 @@
 import re
 import base64
 
-from resources.lib.handler.requestHandler import cRequestHandler
+from resources.lib.handler.requestHandler import RequestHandler
 from resources.lib.parser import cParser
 from resources.hosters.hoster import iHoster
 from resources.lib.hunter import hunter
@@ -23,14 +23,14 @@ class cHoster(iHoster):
         oParser = cParser()
         sPattern = 'return decodeURIComponent\\(escape\\(r\\)\\)}\\("([^,]+)",([^,]+),"([^,]+)",([^,]+),([^,]+),([^,\\))]+)\\)'
 
-        oRequest = cRequestHandler(self._url)
+        oRequest = RequestHandler(self._url)
         oRequest.addHeaderEntry('Cookie', 'popads2=opened')
         sHtmlContent = oRequest.request()
 
         aResult = oParser.parse(sHtmlContent, sPattern)
 
         # Get decode page
-        # oRequest = cRequestHandler("https://upvideo.to/assets/js/tabber.js")
+        # oRequest = RequestHandler("https://upvideo.to/assets/js/tabber.js")
         # oRequest.addHeaderEntry('Referer', self._url)
         # sHtmlContent2 = oRequest.request()
         # aResult2 = oParser.parse(sHtmlContent2, sPattern)

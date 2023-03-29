@@ -5,7 +5,7 @@ from resources.lib.gui.gui import Gui
 from resources.lib.gui.hoster import HosterGui
 from resources.lib.handler.inputParameterHandler import InputParameterHandler
 from resources.lib.handler.outputParameterHandler import OutputParameterHandler
-from resources.lib.handler.requestHandler import cRequestHandler
+from resources.lib.handler.requestHandler import RequestHandler
 from resources.lib.parser import cParser
 
 SITE_IDENTIFIER = 'youtitou_com'
@@ -66,7 +66,7 @@ def showMovies():
     oInputParameterHandler = InputParameterHandler()
     sUrl = oInputParameterHandler.getValue('siteUrl')
 
-    oRequestHandler = cRequestHandler(sUrl)
+    oRequestHandler = RequestHandler(sUrl)
     sHtml = oRequestHandler.request()
     sPattern = 'style="background-image: url\\((.+?)\\);".+?href="([^"]+)"'
     aResult = oParser.parse(sHtml, sPattern)
@@ -92,7 +92,7 @@ def showEpisode():
     oInputParameterHandler = InputParameterHandler()
     sUrl = oInputParameterHandler.getValue('siteUrl')
 
-    oRequestHandler = cRequestHandler(sUrl)
+    oRequestHandler = RequestHandler(sUrl)
     sHtml = oRequestHandler.request()
     sPattern = '<h5 class=.+?>([^<]+)<.+?data-settings=".+?url":"(.+?)(&|")'
     aResult = oParser.parse(sHtml, sPattern)

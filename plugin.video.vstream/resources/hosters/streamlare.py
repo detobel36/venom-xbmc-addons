@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 # vStream https://github.com/Kodi-vStream/venom-xbmc-addons
-from resources.lib.handler.requestHandler import cRequestHandler
+from resources.lib.handler.requestHandler import RequestHandler
 from resources.hosters.hoster import iHoster
 from resources.lib.parser import cParser
 from resources.lib.comaddon import dialog
@@ -16,7 +16,7 @@ class cHoster(iHoster):
     def _getMediaLinkForGuest(self):
         api_call = False
 
-        oRequestHandler = cRequestHandler("https://sltube.org/api/video/stream/get")
+        oRequestHandler = RequestHandler("https://sltube.org/api/video/stream/get")
         oRequestHandler.setRequestType(1)
         oRequestHandler.addHeaderEntry('Referer', self._url)
         oRequestHandler.addHeaderEntry('User-Agent', UA)

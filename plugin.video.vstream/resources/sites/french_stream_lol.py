@@ -6,7 +6,7 @@ from resources.lib.gui.hoster import HosterGui
 from resources.lib.gui.gui import Gui
 from resources.lib.handler.inputParameterHandler import InputParameterHandler
 from resources.lib.handler.outputParameterHandler import OutputParameterHandler
-from resources.lib.handler.requestHandler import cRequestHandler
+from resources.lib.handler.requestHandler import RequestHandler
 from resources.lib.parser import cParser
 from resources.lib.comaddon import progress, siteManager
 from resources.lib.util import cUtil
@@ -227,12 +227,12 @@ def showMovies(sSearch=''):
             bSearchSerie = True
 
         sUrl = URL_MAIN + 'index.php?story=' + sSearch + '&do=search&subaction=search'
-        oRequestHandler = cRequestHandler(sUrl)
+        oRequestHandler = RequestHandler(sUrl)
         sHtmlContent = oRequestHandler.request()
 
         # la méthode suivante fonctionne mais pas à 100%
         # pdata = 'do=search&subaction=search&search_start=1&full_search=0&result_from=1&story=' + sSearch
-        # oRequest = cRequestHandler(URL_SEARCH[0])
+        # oRequest = RequestHandler(URL_SEARCH[0])
         # oRequest.setRequestType(1)
         # oRequest.addHeaderEntry('Referer', URL_MAIN)
         # oRequest.addHeaderEntry('Accept', 'text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8')
@@ -242,7 +242,7 @@ def showMovies(sSearch=''):
         # sHtmlContent = oRequest.request()
 
     else:
-        oRequestHandler = cRequestHandler(sUrl)
+        oRequestHandler = RequestHandler(sUrl)
         sHtmlContent = oRequestHandler.request()
 
     sPattern = 'with-mask" href="([^"]+).+?src="([^"]*).+?title">([^<]*)'
@@ -324,7 +324,7 @@ def showEpisodes():
     sUrl = oInputParameterHandler.getValue('siteUrl')
     sMovieTitle = oInputParameterHandler.getValue('sMovieTitle')
     sThumb = oInputParameterHandler.getValue('sThumb')
-    oRequestHandler = cRequestHandler(sUrl)
+    oRequestHandler = RequestHandler(sUrl)
     sHtmlContent = oRequestHandler.request()
 
     if 'saison' not in sMovieTitle.lower():
@@ -404,7 +404,7 @@ def showSerieLinks():
                 sRel_Episode = 'episode%d' % numEpisode
 
     oParser = cParser()
-    oRequestHandler = cRequestHandler(sUrl)
+    oRequestHandler = RequestHandler(sUrl)
     sHtmlContent = oRequestHandler.request()
 
     sPattern = '<div id="' + sRel_Episode + '" class="fullsfeature".*?<li><a (id="singh.*?<div style="height)'
@@ -448,7 +448,7 @@ def showMovieLinks():
     sMovieTitle = oInputParameterHandler.getValue('sMovieTitle')
     sThumb = oInputParameterHandler.getValue('sThumb')
 
-    oRequestHandler = cRequestHandler(sUrl)
+    oRequestHandler = RequestHandler(sUrl)
     sHtmlContent = oRequestHandler.request()
     oParser = cParser()
     sPattern = '<li>\\s*<a.*?href="([^"]+).+?<\\/i>([^<]+)<'

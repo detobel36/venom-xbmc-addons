@@ -3,7 +3,7 @@
 from resources.lib.comaddon import progress
 from resources.lib.util import Unquote
 from resources.lib.parser import cParser
-from resources.lib.handler.requestHandler import cRequestHandler
+from resources.lib.handler.requestHandler import RequestHandler
 from resources.lib.handler.outputParameterHandler import OutputParameterHandler
 from resources.lib.handler.inputParameterHandler import InputParameterHandler
 from resources.lib.gui.gui import Gui
@@ -112,7 +112,7 @@ def showMovies(sSearch=''):
         oInputParameterHandler = InputParameterHandler()
         sUrl = oInputParameterHandler.getValue('siteUrl')
 
-    oRequestHandler = cRequestHandler(sUrl)
+    oRequestHandler = RequestHandler(sUrl)
     sHtmlContent = oRequestHandler.request()
 
     oParser = cParser()
@@ -184,7 +184,7 @@ def showHosters():
     sMovieTitle = oInputParameterHandler.getValue('sMovieTitle')
     sThumb = oInputParameterHandler.getValue('sThumb')
 
-    oRequestHandler = cRequestHandler(sUrl)
+    oRequestHandler = RequestHandler(sUrl)
     sHtmlContent = oRequestHandler.request()
     sPattern = '<iframe[^<>]+?(?:data-)*data-src="([^"]+)"'
     oParser = cParser()
@@ -195,16 +195,16 @@ def showHosters():
 
             if 'belike' in aEntry:
                 if aEntry.startswith('/'):
-                    oRequestHandler = cRequestHandler('https:' + aEntry)
+                    oRequestHandler = RequestHandler('https:' + aEntry)
                 else:
-                    oRequestHandler = cRequestHandler(aEntry)
+                    oRequestHandler = RequestHandler(aEntry)
 
                 oRequestHandler.request()
                 sHosterUrl = oRequestHandler.getRealUrl()
 
             # pour récuperer le lien Downpit
             elif 'downpit' in aEntry:
-                oRequestHandler = cRequestHandler(aEntry)
+                oRequestHandler = RequestHandler(aEntry)
                 sHtmlContent = oRequestHandler.request()
                 sPattern = '<iframe.+?src="([^"]+)"'
                 aResult = oParser.parse(sHtmlContent, sPattern)

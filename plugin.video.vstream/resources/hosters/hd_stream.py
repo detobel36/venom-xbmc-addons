@@ -2,7 +2,7 @@
 # vStream https://github.com/Kodi-vStream/venom-xbmc-addons
 # Venom
 # Hoster pour les liens https://hd-stream.xyz/embed/
-from resources.lib.handler.requestHandler import cRequestHandler
+from resources.lib.handler.requestHandler import RequestHandler
 from resources.lib.parser import cParser
 from resources.lib.packer import cPacker
 from resources.lib.comaddon import dialog
@@ -16,7 +16,7 @@ class cHoster(iHoster):
     def _getMediaLinkForGuest(self):
         api_call = False
 
-        oRequestHandler = cRequestHandler(self._url)
+        oRequestHandler = RequestHandler(self._url)
         sHtmlContent = oRequestHandler.request()
 
         oParser = cParser()

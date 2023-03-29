@@ -9,7 +9,7 @@ from resources.lib.gui.gui import Gui
 from resources.lib.gui.hoster import HosterGui
 from resources.lib.handler.inputParameterHandler import InputParameterHandler
 from resources.lib.handler.outputParameterHandler import OutputParameterHandler
-from resources.lib.handler.requestHandler import cRequestHandler
+from resources.lib.handler.requestHandler import RequestHandler
 from resources.lib.packer import cPacker
 from resources.lib.parser import cParser
 from resources.lib.util import Quote
@@ -103,7 +103,7 @@ def showGenres():
     oInputParameterHandler = InputParameterHandler()
     sUrl = URL_MAIN + oInputParameterHandler.getValue('siteUrl')
 
-    oRequestHandler = cRequestHandler(sUrl)
+    oRequestHandler = RequestHandler(sUrl)
     sHtmlContent = oRequestHandler.request()
 
     # Besoin des saut de ligne
@@ -175,7 +175,7 @@ def showMovies():
 
     if 'genre=' in sUrl:
         sUrl, sGenre = sUrl.split('genre=')
-    oRequestHandler = cRequestHandler(sUrl)
+    oRequestHandler = RequestHandler(sUrl)
     sHtmlContent = oRequestHandler.request()
 
     # Besoin des saut de ligne
@@ -310,7 +310,7 @@ def showHoster():
 
 def Hoster_Leet365(url, referer):
     oParser = cParser()
-    oRequestHandler = cRequestHandler(url)
+    oRequestHandler = RequestHandler(url)
     oRequestHandler.addHeaderEntry('User-Agent', UA)
     oRequestHandler.addHeaderEntry('Referer', referer)
     sHtmlContent = oRequestHandler.request()
@@ -339,7 +339,7 @@ def Hoster_Wigistream(url, referer):
 
     if not url.startswith('http'):
         url = 'https:' + url
-    oRequestHandler = cRequestHandler(url)
+    oRequestHandler = RequestHandler(url)
     oRequestHandler.addHeaderEntry('User-Agent', UA)
     oRequestHandler.addHeaderEntry('Referer', referer)
     sHtmlContent = oRequestHandler.request()
@@ -366,7 +366,7 @@ def Hoster_Wigistream(url, referer):
 
 
 def Hoster_Pkcast(url, referer):
-    oRequestHandler = cRequestHandler(url)
+    oRequestHandler = RequestHandler(url)
     oRequestHandler.addHeaderEntry('User-Agent', UA)
     oRequestHandler.addHeaderEntry('Referer', '{uri.scheme}://{uri.netloc}/'.format(uri=urlparse(referer)))
     sHtmlContent = oRequestHandler.request()
@@ -382,7 +382,7 @@ def Hoster_Pkcast(url, referer):
 
 
 def Hoster_Laylow(url, referer):
-    oRequestHandler = cRequestHandler(url)
+    oRequestHandler = RequestHandler(url)
     oRequestHandler.addHeaderEntry('User-Agent', UA)
     oRequestHandler.addHeaderEntry('Referer', referer)
     sHtmlContent = oRequestHandler.request()

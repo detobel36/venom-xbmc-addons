@@ -7,7 +7,7 @@
 
 import re
 
-from resources.lib.handler.requestHandler import cRequestHandler
+from resources.lib.handler.requestHandler import RequestHandler
 from resources.lib.parser import cParser
 from resources.hosters.hoster import iHoster
 from resources.lib.packer import cPacker
@@ -30,7 +30,7 @@ class cHoster(iHoster):
             self._url = self._url + '.html'
 
     def extractSmil(self, smil):
-        oRequest = cRequestHandler(smil)
+        oRequest = RequestHandler(smil)
         oRequest.addParameters('referer', self._url)
         sHtmlContent = oRequest.request()
         Base = re.search('<meta base="(.+?)"', sHtmlContent)
@@ -41,7 +41,7 @@ class cHoster(iHoster):
         api_call = ''
 
         oParser = cParser()
-        oRequest = cRequestHandler(self._url)
+        oRequest = RequestHandler(self._url)
         oRequest.addHeaderEntry('Referer', self._url)
         oRequest.addParameters('User-Agent', UA)
         sHtmlContent = oRequest.request()

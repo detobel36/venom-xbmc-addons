@@ -4,7 +4,7 @@ from resources.lib.gui.hoster import HosterGui
 from resources.lib.gui.gui import Gui
 from resources.lib.handler.inputParameterHandler import InputParameterHandler
 from resources.lib.handler.outputParameterHandler import OutputParameterHandler
-from resources.lib.handler.requestHandler import cRequestHandler
+from resources.lib.handler.requestHandler import RequestHandler
 from resources.lib.config import cConfig
 from resources.lib.parser import cParser
 # from resources.lib.util import cUtil
@@ -189,7 +189,7 @@ def showMovies(sSearch=''):
         oInputParameterHandler = InputParameterHandler()
         sUrl = oInputParameterHandler.getValue('siteUrl')
 
-    oRequestHandler = cRequestHandler(sUrl)
+    oRequestHandler = RequestHandler(sUrl)
     sHtmlContent = oRequestHandler.request()
     oParser = cParser()
 
@@ -251,7 +251,7 @@ def showSeries(sSearch=''):
         oInputParameterHandler = InputParameterHandler()
         sUrl = oInputParameterHandler.getValue('siteUrl')
 
-    oRequestHandler = cRequestHandler(sUrl)
+    oRequestHandler = RequestHandler(sUrl)
     sHtmlContent = oRequestHandler.request()
 
     oParser = cParser()
@@ -297,7 +297,7 @@ def showSaisons():
     sMovieTitle = oInputParameterHandler.getValue('sMovieTitle')
     sThumbnail = oInputParameterHandler.getValue('sThumbnail')
 
-    oRequestHandler = cRequestHandler(sUrl)
+    oRequestHandler = RequestHandler(sUrl)
     sHtmlContent = oRequestHandler.request()
     oParser = cParser()
 
@@ -346,7 +346,7 @@ def showEpisodes():
     sFilter = oInputParameterHandler.getValue('sFilter')
     sSyn = oInputParameterHandler.getValue('sSyn')
 
-    oRequestHandler = cRequestHandler(sUrl)
+    oRequestHandler = RequestHandler(sUrl)
     sHtmlContent = oRequestHandler.request()
     oParser = cParser()
 
@@ -386,7 +386,7 @@ def showHosters():
     sMovieTitle = oInputParameterHandler.getValue('sMovieTitle')
     sThumbnail = oInputParameterHandler.getValue('sThumbnail')
 
-    oRequestHandler = cRequestHandler(sUrl)
+    oRequestHandler = RequestHandler(sUrl)
     sHtmlContent = oRequestHandler.request()
     sHtmlContent = sHtmlContent.replace('http://www.google.com/s2/favicons?domain=', '').replace('\\', '')
     oParser = cParser()
@@ -448,7 +448,7 @@ def ShowPapyLink():
     oParser = cParser()
 
     if 'papystreaming' in sUrl:
-        oRequestHandler = cRequestHandler(sUrl)
+        oRequestHandler = RequestHandler(sUrl)
         sHtmlContent = oRequestHandler.request()
 
         sPattern = 'var player.+?"([^"]+mp4)"'
@@ -466,7 +466,7 @@ def ShowPapyLink():
             oGui.addText(SITE_IDENTIFIER, '[COLOR red]Lien vidéo Non géré[/COLOR]')
 
     elif 'belike.pw' in sUrl:
-        oRequestHandler = cRequestHandler(sUrl)
+        oRequestHandler = RequestHandler(sUrl)
         sHtmlContent = oRequestHandler.request()
         sPattern = 'file: *"([^"]+)",label:"(\\d+p)"'
         aResult = oParser.parse(sHtmlContent, sPattern)
@@ -483,7 +483,7 @@ def ShowPapyLink():
                     HosterGui().showHoster(oGui, oHoster, sHosterUrl, sThumbnail)
     else:
 
-        oRequestHandler = cRequestHandler(sUrl)
+        oRequestHandler = RequestHandler(sUrl)
         sHtmlContent = oRequestHandler.request()
 
         sHtmlContent = sHtmlContent.replace('\\', '')

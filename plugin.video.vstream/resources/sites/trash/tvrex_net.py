@@ -2,7 +2,7 @@
 # vStream https://github.com/Kodi-vStream/venom-xbmc-addons
 # Venom.
 from resources.lib.parser import cParser
-from resources.lib.handler.requestHandler import cRequestHandler
+from resources.lib.handler.requestHandler import RequestHandler
 from resources.lib.handler.outputParameterHandler import OutputParameterHandler
 from resources.lib.handler.inputParameterHandler import InputParameterHandler
 from resources.lib.gui.hoster import HosterGui
@@ -36,7 +36,7 @@ Logo_Nba = 'aHR0cDovL3d3dy5vZmZpY2lhbHBzZHMuY29tL2ltYWdlcy90aHVtYnMvSS1sb3ZlLXRo
 
 def TimeET():
     sUrl = 'http://www.worldtimeserver.com/current_time_in_CA-ON.aspx'
-    oRequestHandler = cRequestHandler(sUrl)
+    oRequestHandler = RequestHandler(sUrl)
 
     sHtmlContent = oRequestHandler.request()
     sPattern = '<span id="theTime" class="fontTS">\\s*(.+?)\\s*</span>'
@@ -181,7 +181,7 @@ def showMovies(sSearch=''):
     if sSearch:
         sUrl = sSearch
 
-    oRequestHandler = cRequestHandler(sUrl)
+    oRequestHandler = RequestHandler(sUrl)
     sHtmlContent = oRequestHandler.request()
 
     if 'reddit' in sUrl:
@@ -352,7 +352,7 @@ def showHosters():
     sThumb = oInputParameterHandler.getValue('sThumb')
     sDateReplay = oInputParameterHandler.getValue('sDateReplay')
 
-    oRequestHandler = cRequestHandler(sUrl)
+    oRequestHandler = RequestHandler(sUrl)
     sHtmlContent = oRequestHandler.request()
     sHtmlContent = sHtmlContent.replace(' rel="nofollow"', '')
 
@@ -389,7 +389,7 @@ def showHosters():
 
                 sUrl = str(aEntry)
 
-                oRequestHandler = cRequestHandler(sUrl)
+                oRequestHandler = RequestHandler(sUrl)
                 sHtmlContent = oRequestHandler.request()
                 sHtmlContent = sHtmlContent.replace(' rel="nofollow"', '')
 
@@ -550,7 +550,7 @@ def showHosters4():
     sMovieTitle = oInputParameterHandler.getValue('sMovieTitle')
     sThumbnail = oInputParameterHandler.getValue('sThumbnail')
 
-    oRequestHandler = cRequestHandler(sUrl)
+    oRequestHandler = RequestHandler(sUrl)
     sHtmlContent = oRequestHandler.request()
 
     sPattern = 'onClick=.+?src=\'([^"]+)\''
@@ -568,12 +568,12 @@ def showHosters4():
 
             if 'fembed' in sHosterUrl:
                 videoID = re.findall('v/([^"]+)', sHosterUrl)
-                oRequestHandler = cRequestHandler(sUrl)
+                oRequestHandler = RequestHandler(sUrl)
                 oRequestHandler.request()
                 cookies = oRequestHandler.GetCookies()
 
                 apiUrl = 'https://www.fembed.com/api/source/' + videoID[0]
-                oRequestHandler = cRequestHandler(apiUrl)
+                oRequestHandler = RequestHandler(apiUrl)
                 oRequestHandler.setRequestType(1)
                 oRequestHandler.addHeaderEntry(
                     'User-Agent', 'Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:66.0) Gecko/20100101 Firefox/66.0')

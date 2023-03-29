@@ -10,7 +10,7 @@ from resources.lib.gui.hoster import HosterGui
 from resources.lib.gui.gui import Gui
 from resources.lib.handler.inputParameterHandler import InputParameterHandler
 from resources.lib.handler.outputParameterHandler import OutputParameterHandler
-from resources.lib.handler.requestHandler import cRequestHandler
+from resources.lib.handler.requestHandler import RequestHandler
 from resources.lib.parser import cParser
 from resources.lib.comaddon import dialog, siteManager
 from resources.lib.util import Quote
@@ -84,7 +84,7 @@ def showMovies(sSearch=''):
         oInputParameterHandler = InputParameterHandler()
         sUrl = oInputParameterHandler.getValue('siteUrl')
 
-    oRequestHandler = cRequestHandler(sUrl)
+    oRequestHandler = RequestHandler(sUrl)
     sHtmlContent = oRequestHandler.request()
 
     sPattern = '<div id="post-[0-9]+".+?<a class="clip-link.+?title="([^"]+)" href="([^"]+).+?img src="([^"]+)'
@@ -149,7 +149,7 @@ def showLinks():
     sThumb = oInputParameterHandler.getValue('sThumb')
     sDesc = oInputParameterHandler.getValue('sDesc')
 
-    oRequestHandler = cRequestHandler(sUrl)
+    oRequestHandler = RequestHandler(sUrl)
     sHtmlContent = oRequestHandler.request()
 
     oParser = cParser()
@@ -200,7 +200,7 @@ def showHosters():
             data += "&_Token%5Bfields%5D=" + Quote(aResult[1][3]) + "&_Token%5Bunlocked%5D=" + Quote(aResult[1][4])
             # Obligatoire pour validé les cookies.
             xbmc.sleep(6000)
-            oRequestHandler = cRequestHandler('https://forum-tv.org/adslinkme/links/go')
+            oRequestHandler = RequestHandler('https://forum-tv.org/adslinkme/links/go')
             oRequestHandler.setRequestType(1)
             oRequestHandler.addHeaderEntry('Referer', sUrl)
             oRequestHandler.addHeaderEntry('Accept', 'application/json, text/javascript, */*; q=0.01')
@@ -219,7 +219,7 @@ def showHosters():
                 oHoster = False
 
                 if 'replay.forum-tv.org' in sHosterUrl:
-                    oRequestHandler = cRequestHandler(sHosterUrl)
+                    oRequestHandler = RequestHandler(sHosterUrl)
                     sHtmlContent = oRequestHandler.request()
                     sPattern = 'iframe.+?src="([^"]+)'
                     oParser = cParser()
@@ -250,7 +250,7 @@ def showHosters():
 
 def showDoodHosters(sMovieTitle, sUrl):
     oGui = Gui()
-    oRequestHandler = cRequestHandler(sUrl)
+    oRequestHandler = RequestHandler(sUrl)
     sHtmlContent = oRequestHandler.request()
     sPattern = '<a href="([^"]+)".+?value=\'([^\']+)'
     oParser = cParser()

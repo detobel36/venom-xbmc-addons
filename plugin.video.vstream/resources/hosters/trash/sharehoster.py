@@ -1,4 +1,4 @@
-from resources.lib.handler.requestHandler import cRequestHandler
+from resources.lib.handler.requestHandler import RequestHandler
 from resources.lib.parser import cParser
 from resources.lib.gui.gui import Gui
 from resources.hosters.hoster import iHoster
@@ -17,7 +17,7 @@ class cHoster(iHoster):
 
         sUrl = 'http://www.sharehoster.com/flowplayer/config.php?movie=' + sId
 
-        oRequest = cRequestHandler(sUrl)
+        oRequest = RequestHandler(sUrl)
         sHtmlContent = oRequest.request()
 
         sPattern = "playlist': \\[.*?},.*?'url': '(.*?)'"

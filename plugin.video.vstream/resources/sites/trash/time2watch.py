@@ -4,7 +4,7 @@
 from resources.lib.multihost import cMultiup
 from resources.lib.util import Noredirection, urlEncode
 from resources.lib.parser import cParser
-from resources.lib.handler.requestHandler import cRequestHandler
+from resources.lib.handler.requestHandler import RequestHandler
 from resources.lib.handler.outputParameterHandler import OutputParameterHandler
 from resources.lib.handler.inputParameterHandler import InputParameterHandler
 from resources.lib.gui.hoster import HosterGui
@@ -252,7 +252,7 @@ def showGenre():
     oInputParameterHandler = InputParameterHandler()
     sUrl = oInputParameterHandler.getValue('siteUrl')
 
-    oRequestHandler = cRequestHandler(sUrl)
+    oRequestHandler = RequestHandler(sUrl)
     sHtmlContent = oRequestHandler.request()
 
     html = re.search('<section id="section_genre">(.+?)</section>', sHtmlContent, re.DOTALL).group(1)
@@ -274,7 +274,7 @@ def showYears():
     oInputParameterHandler = InputParameterHandler()
     sUrl = oInputParameterHandler.getValue('siteUrl')
 
-    oRequestHandler = cRequestHandler(sUrl)
+    oRequestHandler = RequestHandler(sUrl)
     sHtmlContent = oRequestHandler.request()
 
     html = re.search('<section id="section_genre">(.+?)</section>', sHtmlContent, re.DOTALL).group(1)
@@ -303,7 +303,7 @@ def showMovies(sSearch=''):
 
     Cookie = GestionCookie().Readcookie('time2watch')
 
-    oRequestHandler = cRequestHandler(sUrl)
+    oRequestHandler = RequestHandler(sUrl)
     if Cookie:
         oRequestHandler.addHeaderEntry('Cookie', Cookie)
     sHtmlContent = oRequestHandler.request()
@@ -342,7 +342,7 @@ def showMovies(sSearch=''):
 
         GestionCookie().SaveCookie('time2watch', Cookie)
 
-        oRequestHandler = cRequestHandler(sUrl)
+        oRequestHandler = RequestHandler(sUrl)
         oRequestHandler.addHeaderEntry('Cookie', Cookie)
         sHtmlContent = oRequestHandler.request()
 
@@ -437,7 +437,7 @@ def showMoviesLink():
     sDesc = oInputParameterHandler.getValue('sDesc')
     Cookie = oInputParameterHandler.getValue('sCookie')
 
-    oRequestHandler = cRequestHandler(sUrl)
+    oRequestHandler = RequestHandler(sUrl)
     if Cookie:
         oRequestHandler.addHeaderEntry('Cookie', Cookie)
     sHtmlContent = oRequestHandler.request()
@@ -472,7 +472,7 @@ def showSaisonEpisodes():
     sDesc = oInputParameterHandler.getValue('sDesc')
     Cookie = oInputParameterHandler.getValue('sCookie')
 
-    oRequestHandler = cRequestHandler(sUrl)
+    oRequestHandler = RequestHandler(sUrl)
     if Cookie:
         oRequestHandler.addHeaderEntry('Cookie', Cookie)
     sHtmlContent = oRequestHandler.request()
@@ -532,7 +532,7 @@ def decryptTime():
     sMovieTitle = oInputParameterHandler.getValue('sMovieTitle')
     Cookie = oInputParameterHandler.getValue('sCookie')
 
-    oRequestHandler = cRequestHandler(sUrl)
+    oRequestHandler = RequestHandler(sUrl)
     if Cookie:
         oRequestHandler.addHeaderEntry('Cookie', Cookie)
     sHtmlContent = oRequestHandler.request()
@@ -549,7 +549,7 @@ def decryptTime():
         Filename = []
         i = 0
 
-        oRequestHandler = cRequestHandler(challenge)
+        oRequestHandler = RequestHandler(challenge)
         if Cookie:
             oRequestHandler.addHeaderEntry('Cookie', Cookie)
         sHtmlContent = oRequestHandler.request()
@@ -559,7 +559,7 @@ def decryptTime():
         downloaded_image.close()
 
         for imgURL in aResult[1]:
-            oRequestHandler = cRequestHandler(imgURL[1])
+            oRequestHandler = RequestHandler(imgURL[1])
             if Cookie:
                 oRequestHandler.addHeaderEntry('Cookie', Cookie)
             imgdata = oRequestHandler.request()
@@ -577,7 +577,7 @@ def decryptTime():
 
         data = "g-recaptcha-response=" + aResult[1][int(retArg)][0] + "&challenge=" + challengeTok
 
-        oRequestHandler = cRequestHandler(sUrl)
+        oRequestHandler = RequestHandler(sUrl)
         oRequestHandler.setRequestType(1)
         oRequestHandler.addHeaderEntry('User-Agent', UA)
         oRequestHandler.addHeaderEntry('Content-Type', "application/x-www-form-urlencoded")

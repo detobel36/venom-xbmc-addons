@@ -5,7 +5,7 @@ from resources.lib.gui.hoster import HosterGui
 from resources.lib.gui.gui import Gui
 from resources.lib.handler.inputParameterHandler import InputParameterHandler
 from resources.lib.handler.outputParameterHandler import OutputParameterHandler
-from resources.lib.handler.requestHandler import cRequestHandler
+from resources.lib.handler.requestHandler import RequestHandler
 from resources.lib.parser import cParser
 from resources.lib.comaddon import progress, siteManager
 
@@ -99,7 +99,7 @@ def showGenresA():
 
     sUrl = URL_MAIN + 'streaming-animes-en-cours'
 
-    oRequestHandler = cRequestHandler(sUrl)
+    oRequestHandler = RequestHandler(sUrl)
     sHtmlContent = oRequestHandler.request()
     sStart = 'id="id_genre"'
     sEnd = '<select id="triGenre"'
@@ -130,7 +130,7 @@ def showGenresD():
 
     sUrl = URL_MAIN + 'download-dramas-en-cours?p=-1'
 
-    oRequestHandler = cRequestHandler(sUrl)
+    oRequestHandler = RequestHandler(sUrl)
     sHtmlContent = oRequestHandler.request()
     sStart = 'id="id_genre"'
     sEnd = '<select id="triGenre"'
@@ -174,7 +174,7 @@ def showSeries():
     sUrl = oInputParameterHandler.getValue('siteUrl').replace('+', '%2B').replace('é', 'e').replace('ô', 'o')\
                                                      .replace('É', 'E').replace('ï', 'i').replace('è', 'e')
 
-    oRequestHandler = cRequestHandler(sUrl)
+    oRequestHandler = RequestHandler(sUrl)
     sHtmlContent = oRequestHandler.request()
 
     oParser = cParser()
@@ -226,7 +226,7 @@ def showEpisode(sSearch=''):
     if sSearch:
         sUrl = sSearch
 
-    oRequestHandler = cRequestHandler(sUrl)
+    oRequestHandler = RequestHandler(sUrl)
     sHtmlContent = oRequestHandler.request()
 
     oParser = cParser()

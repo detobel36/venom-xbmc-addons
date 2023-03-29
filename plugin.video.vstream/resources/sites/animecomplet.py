@@ -8,7 +8,7 @@ from resources.lib.gui.hoster import HosterGui
 from resources.lib.gui.gui import Gui
 from resources.lib.handler.inputParameterHandler import InputParameterHandler
 from resources.lib.handler.outputParameterHandler import OutputParameterHandler
-from resources.lib.handler.requestHandler import cRequestHandler
+from resources.lib.handler.requestHandler import RequestHandler
 from resources.lib.parser import cParser
 from resources.lib.comaddon import siteManager
 from resources.lib.util import cUtil
@@ -51,7 +51,7 @@ def showAlpha():
     liste = []
 
     req = ANIM_LIST[0]
-    oRequestHandler = cRequestHandler(req)
+    oRequestHandler = RequestHandler(req)
     sHtmlContent = oRequestHandler.request()
 
     # on propose quand meme en premier la liste complete
@@ -123,7 +123,7 @@ def showAnims(sSearch=''):
     # pour la liste alpha on peu aussi faire sUrl = alpha (plus rapide)
     # sPattern = '<a href="([^"]+)">..' + alpha + '([^<]+).+?style="width'
 
-    oRequestHandler = cRequestHandler(sUrl)
+    oRequestHandler = RequestHandler(sUrl)
     sHtmlContent = oRequestHandler.request()
     sPattern = '<article id=".+?img src="([^\"]+)".+?<a href="([^\"]+)"><.+?>(.+?)<'
     oParser = cParser()
@@ -208,7 +208,7 @@ def showSaisons():
     sThumb = oInputParameterHandler.getValue('sThumb')
     sMovieTitle = oInputParameterHandler.getValue('sMovieTitle')
 
-    oRequestHandler = cRequestHandler(sUrl)
+    oRequestHandler = RequestHandler(sUrl)
     sHtmlContent = oRequestHandler.request()
 
     sPattern = 'colo_cont">.+?>([^<]*)</p>'
@@ -245,7 +245,7 @@ def showEpisodes():
     oInputParameterHandler = InputParameterHandler()
     sUrl = oInputParameterHandler.getValue('siteUrl')
 
-    oRequestHandler = cRequestHandler(sUrl)
+    oRequestHandler = RequestHandler(sUrl)
     sHtmlContent = oRequestHandler.request()
 
     oParser = cParser()
@@ -303,7 +303,7 @@ def seriesHosters():
     sThumb = oInputParameterHandler.getValue('sThumb')
     sDesc = oInputParameterHandler.getValue('sDesc')
 
-    oRequestHandler = cRequestHandler(sUrl)
+    oRequestHandler = RequestHandler(sUrl)
     sHtmlContent = oRequestHandler.request()
 
     sPattern = 'iframe.+?src="([^"]+)'

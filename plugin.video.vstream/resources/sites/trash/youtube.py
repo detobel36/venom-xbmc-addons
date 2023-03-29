@@ -9,7 +9,7 @@ from resources.lib.config import GestionCookie
 from resources.lib.player import cPlayer
 from resources.lib.util import urlEncode, Unquote, Quote, QuotePlus
 from resources.lib.parser import cParser
-from resources.lib.handler.requestHandler import cRequestHandler
+from resources.lib.handler.requestHandler import RequestHandler
 from resources.lib.handler.outputParameterHandler import OutputParameterHandler
 from resources.lib.handler.inputParameterHandler import InputParameterHandler
 from resources.lib.gui.guiElement import GuiElement
@@ -462,7 +462,7 @@ def getHtml(sUrl, data=None):  # S'occupe des requetes
 
         apiNumber = random.uniform(0.0000000000000000, 0.9999999999999999)
         url = 'https://www.firstonetv.net/api/?cacheFucker=' + str(apiNumber)
-        oRequestHandler = cRequestHandler(url)
+        oRequestHandler = RequestHandler(url)
         oRequestHandler.setRequestType(1)
         oRequestHandler.addHeaderEntry('User-Agent', UA)
         oRequestHandler.addHeaderEntry('Cookie', cookies)
@@ -483,7 +483,7 @@ def getHtml(sUrl, data=None):  # S'occupe des requetes
 
         apiNumber = random.uniform(0.0000000000000000, 0.9999999999999999)
         url = 'https://www.firstonetv.net/api/?cacheFucker=' + str(apiNumber)
-        oRequestHandler = cRequestHandler(url)
+        oRequestHandler = RequestHandler(url)
         oRequestHandler.setRequestType(1)
         oRequestHandler.addHeaderEntry('User-Agent', UA)
         oRequestHandler.addHeaderEntry('Cookie', cookies)
@@ -498,7 +498,7 @@ def getHtml(sUrl, data=None):  # S'occupe des requetes
 
         apiNumber = random.uniform(0.0000000000000000, 0.9999999999999999)
         url = 'https://www.firstonetv.net/api/?cacheFucker=' + str(apiNumber)
-        oRequestHandler = cRequestHandler(url)
+        oRequestHandler = RequestHandler(url)
         oRequestHandler.setRequestType(1)
         oRequestHandler.addHeaderEntry('User-Agent', UA)
         oRequestHandler.addHeaderEntry('Cookie', cookies)
@@ -511,7 +511,7 @@ def getHtml(sUrl, data=None):  # S'occupe des requetes
         data = oRequestHandler.request()
         return data
     elif 'firstonetv' in sUrl:
-        oRequestHandler = cRequestHandler(sUrl)
+        oRequestHandler = RequestHandler(sUrl)
         oRequestHandler.addHeaderEntry('User-Agent', UA)
         oRequestHandler.addHeaderEntry('Host', 'www.firstonetv.net')
         oRequestHandler.addHeaderEntry('Cookie', cookies)
@@ -519,14 +519,14 @@ def getHtml(sUrl, data=None):  # S'occupe des requetes
         return data
 
     if data is None and 'watch' in sUrl:
-        oRequestHandler = cRequestHandler(sUrl)
+        oRequestHandler = RequestHandler(sUrl)
         data = oRequestHandler.request()
         cookies = oRequestHandler.GetCookies()
         GestionCookie().SaveCookie('myfree_tivi', cookies)
         return data
 
     else:
-        oRequestHandler = cRequestHandler(sUrl)
+        oRequestHandler = RequestHandler(sUrl)
         oRequestHandler.addHeaderEntry('User-Agent', UA)
 
     if data is not None and 'watch' in sUrl:
@@ -775,7 +775,7 @@ def showTV():
     oInputParameterHandler = InputParameterHandler()
     sUrl = oInputParameterHandler.getValue('siteUrl')
 
-    oRequestHandler = cRequestHandler(sUrl)
+    oRequestHandler = RequestHandler(sUrl)
     sHtmlContent = oRequestHandler.request()
 
     oParser = cParser()

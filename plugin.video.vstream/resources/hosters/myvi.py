@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 # vStream https://github.com/Kodi-vStream/venom-xbmc-addons
 # https://www.myvi.tv/embed/xxxxxxxxx
-from resources.lib.handler.requestHandler import cRequestHandler
+from resources.lib.handler.requestHandler import RequestHandler
 from resources.lib.parser import cParser
 from resources.hosters.hoster import iHoster
 from resources.lib.util import Unquote
@@ -17,7 +17,7 @@ class cHoster(iHoster):
         api_call = ''
         oParser = cParser()
 
-        oRequest = cRequestHandler(self._url)
+        oRequest = RequestHandler(self._url)
         sHtmlContent = oRequest.request().replace('\\u0026', '&')
         cookies = oRequest.GetCookies()  # + ";"
 

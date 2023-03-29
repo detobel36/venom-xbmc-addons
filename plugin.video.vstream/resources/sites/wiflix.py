@@ -6,7 +6,7 @@ from resources.lib.gui.hoster import HosterGui
 from resources.lib.gui.gui import Gui
 from resources.lib.handler.inputParameterHandler import InputParameterHandler
 from resources.lib.handler.outputParameterHandler import OutputParameterHandler
-from resources.lib.handler.requestHandler import cRequestHandler
+from resources.lib.handler.requestHandler import RequestHandler
 from resources.lib.parser import cParser
 from resources.lib.util import cUtil
 
@@ -86,7 +86,7 @@ def showGenres():
     oParser = cParser()
 
     sUrl = URL_MAIN
-    oRequestHandler = cRequestHandler(sUrl)
+    oRequestHandler = RequestHandler(sUrl)
     sHtmlContent = oRequestHandler.request()
     sStart = '</span><b>Films par genre</b></div>'
     sEnd = '<div class="side-b">'
@@ -125,7 +125,7 @@ def showMovies(sSearch=''):
         pdata = 'do=search&subaction=search&story=' + \
             sSearchText.replace(' ', '+') + '&titleonly=3&all_word_seach=1&catlist[]=1'
 
-        oRequest = cRequestHandler(URL_SEARCH[0])
+        oRequest = RequestHandler(URL_SEARCH[0])
         # oRequest.setRequestType(1)
         oRequest.addHeaderEntry('User-Agent', UA)
         oRequest.addHeaderEntry('Referer', URL_MAIN)
@@ -139,7 +139,7 @@ def showMovies(sSearch=''):
     else:
         oInputParameterHandler = InputParameterHandler()
         sUrl = oInputParameterHandler.getValue('siteUrl')
-        oRequestHandler = cRequestHandler(sUrl)
+        oRequestHandler = RequestHandler(sUrl)
         sHtmlContent = oRequestHandler.request()
 
     sPattern = 'mov clearfix.+?src="([^"]*)" *alt="([^"]*).+?link="([^"]+).+?(?:|bloc1">([^<]+).+?)(?:|bloc2">([^<]*).+?)'
@@ -239,7 +239,7 @@ def showSeries(sSearch=''):
 
         pdata = 'do=search&subaction=search&story=' + sUrl + '&titleonly=3&all_word_seach=1&catlist[]=31&catlist[]=35'
 
-        oRequest = cRequestHandler(URL_SEARCH[0])
+        oRequest = RequestHandler(URL_SEARCH[0])
         # oRequest.setRequestType(1)
         oRequest.addHeaderEntry('User-Agent', UA)
         oRequest.addHeaderEntry('Referer', URL_MAIN)
@@ -252,7 +252,7 @@ def showSeries(sSearch=''):
     else:
         oInputParameterHandler = InputParameterHandler()
         sUrl = oInputParameterHandler.getValue('siteUrl')
-        oRequestHandler = cRequestHandler(sUrl)
+        oRequestHandler = RequestHandler(sUrl)
         sHtmlContent = oRequestHandler.request()
 
     sPattern = 'mov clearfix.+?src="([^"]+)" *alt="([^"]+).+?data-link="([^"]+).+?block-sai">([^<]+).+?ml-desc">(.+?)</div>'
@@ -299,7 +299,7 @@ def showEpisodes():
     sMovieTitle = oInputParameterHandler.getValue('sMovieTitle')
     sThumb = oInputParameterHandler.getValue('sThumb')
 
-    oRequestHandler = cRequestHandler(sUrl)
+    oRequestHandler = RequestHandler(sUrl)
     sHtmlContent = oRequestHandler.request()
     sPattern = '<div class="(ep.+?)"|<a href="([^"]+)"[^><]+target="x_player"'
     oParser = cParser()
@@ -328,7 +328,7 @@ def showEpisodes():
                 sTitle = sMovieTitle + ' ' + ep + sLang
                 sHosterUrl = aEntry[1].replace('/vd.php?u=', '')
                 if 'players.wiflix.' in sHosterUrl:
-                    oRequestHandler = cRequestHandler(sHosterUrl)
+                    oRequestHandler = RequestHandler(sHosterUrl)
                     oRequestHandler.request()
                     sHosterUrl = oRequestHandler.getRealUrl()
 
@@ -349,7 +349,7 @@ def showHosters():
     sThumb = oInputParameterHandler.getValue('sThumb')
 
     oParser = cParser()
-    oRequestHandler = cRequestHandler(sUrl)
+    oRequestHandler = RequestHandler(sUrl)
     sHtmlContent = oRequestHandler.request()
     sPattern = '<a href="\\/vd.php\\?u=([^"]+)"[^<>]+target="x_player_wfx"><span>([^<]+)'
     aResult = oParser.parse(sHtmlContent, sPattern)
@@ -359,7 +359,7 @@ def showHosters():
 
             sHosterUrl = aEntry[0]  # .replace('/wiflix.cc/', '')
             if 'wiflix.' in sHosterUrl:
-                oRequestHandler = cRequestHandler(sHosterUrl)
+                oRequestHandler = RequestHandler(sHosterUrl)
                 oRequestHandler.request()
                 sHosterUrl = oRequestHandler.getRealUrl()
             else:

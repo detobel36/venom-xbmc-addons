@@ -4,7 +4,7 @@ from resources.lib.gui.hoster import HosterGui
 from resources.lib.gui.gui import Gui
 from resources.lib.handler.inputParameterHandler import InputParameterHandler
 from resources.lib.handler.outputParameterHandler import OutputParameterHandler
-from resources.lib.handler.requestHandler import cRequestHandler
+from resources.lib.handler.requestHandler import RequestHandler
 from resources.lib.parser import cParser
 from resources.lib.comaddon import progress, siteManager
 
@@ -56,7 +56,7 @@ def load():
 def showThemes():
     oGui = Gui()
     oParser = cParser()
-    oRequestHandler = cRequestHandler('siteUrl')
+    oRequestHandler = RequestHandler('siteUrl')
     sHtmlContent = oRequestHandler.request()
 
     sHtmlContent = oParser.abParse(
@@ -86,7 +86,7 @@ def showMovies():
     oInputParameterHandler = InputParameterHandler()
     sUrl = oInputParameterHandler.getValue('siteUrl')
 
-    oRequestHandler = cRequestHandler(sUrl)
+    oRequestHandler = RequestHandler(sUrl)
     sHtmlContent = oRequestHandler.request()
     sPattern = 'class=portfolio-image>.+?src="*([^ ]+\\.jpg).+?synopsis>([^<]+)<.+?href="(https[^"]+)".+?<h4>([^<]+)<'
     aResult = oParser.parse(sHtmlContent, sPattern)

@@ -8,7 +8,7 @@ from resources.lib.gui.hoster import HosterGui
 from resources.lib.gui.gui import Gui
 from resources.lib.handler.inputParameterHandler import InputParameterHandler
 from resources.lib.handler.outputParameterHandler import OutputParameterHandler
-from resources.lib.handler.requestHandler import cRequestHandler
+from resources.lib.handler.requestHandler import RequestHandler
 from resources.lib.parser import cParser
 from resources.lib.util import cUtil
 
@@ -223,7 +223,7 @@ def showMovies(sSearch=''):
         oInputParameterHandler = InputParameterHandler()
         sUrl = oInputParameterHandler.getValue('siteUrl')
 
-    oRequestHandler = cRequestHandler(sUrl)
+    oRequestHandler = RequestHandler(sUrl)
     sHtmlContent = oRequestHandler.request()
     oParser = cParser()
     sPattern = 'post-thumbnail".+?href="([^"]+).+?src="(http[^"]+).+?bookmark">([^<]+).+?<p>([^<]+)'
@@ -291,7 +291,7 @@ def showHosters():
     sMovieTitle = oInputParameterHandler.getValue('sMovieTitle')
     sThumb = oInputParameterHandler.getValue('sThumb')
 
-    oRequestHandler = cRequestHandler(sUrl)
+    oRequestHandler = RequestHandler(sUrl)
     sHtmlContent = oRequestHandler.request()
 
     sPattern = '<iframe.+?src="([^"]+)'
@@ -307,7 +307,7 @@ def showHosters():
                 idList = re.sub('https:.+?list=', '', aEntry)
 
                 sUrl = 'https://invidious.fdn.fr/playlist?list=' + idList
-                oRequestHandler = cRequestHandler(sUrl)
+                oRequestHandler = RequestHandler(sUrl)
                 sHtmlContent = oRequestHandler.request()
 
                 sPattern1 = ' class="thumbnail" src="(.+?)".+?<p dir="auto">(.+?)</p>.+? <a.+?href="(.+?)"'

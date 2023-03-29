@@ -1,4 +1,4 @@
-from resources.lib.handler.requestHandler import cRequestHandler
+from resources.lib.handler.requestHandler import RequestHandler
 from resources.lib.handler.premiumHandler import cPremiumHandler
 from resources.lib.parser import cParser
 from resources.lib.gui.gui import Gui
@@ -25,15 +25,15 @@ class cHoster(iHoster):
         return self._getMediaLinkForGuest()
 
     def _getMediaLinkByPremiumUser(self, sUsername, sPassword):
-        oRequestHandler = cRequestHandler('http://www.duckload.com/api/public/login&user=' + sUsername + '&pw=' +
+        oRequestHandler = RequestHandler('http://www.duckload.com/api/public/login&user=' + sUsername + '&pw=' +
                                           sPassword + '&fmt=json&source=WEB')
         sHtmlContent = oRequestHandler.request()
 
         aHeader = oRequestHandler.getResponseHeader()
         sReponseCookie = aHeader.getheader("Set-Cookie")
 
-        oRequestHandler = cRequestHandler(self._url)
-        oRequestHandler.setRequestType(cRequestHandler.REQUEST_TYPE_POST)
+        oRequestHandler = RequestHandler(self._url)
+        oRequestHandler.setRequestType(RequestHandler.REQUEST_TYPE_POST)
         oRequestHandler.addParameters('stream', '')
         oRequestHandler.addHeaderEntry('Cookie', sReponseCookie)
         sHtmlContent = oRequestHandler.request()
@@ -50,7 +50,7 @@ class cHoster(iHoster):
     def _getMediaLinkForGuest(self):
         sSecondsForWait = 10
 
-        oRequest = cRequestHandler(self._url)
+        oRequest = RequestHandler(self._url)
         sHtmlContent = oRequest.request()
 
         aHeader = oRequest.getResponseHeader()
@@ -96,8 +96,8 @@ class cHoster(iHoster):
         sCookieValue = sCookieValue + '__utmz=' + str(rndY) + '.' + str(ts4) + \
             '.1.1.utmcsr=(direct)|utmccn=(direct)|utmcmd=(none); '
 
-        oRequest = cRequestHandler(self._url)
-        oRequest.setRequestType(cRequestHandler.REQUEST_TYPE_POST)
+        oRequest = RequestHandler(self._url)
+        oRequest.setRequestType(RequestHandler.REQUEST_TYPE_POST)
         oRequest.addHeaderEntry('Cookie', sCookieValue)
         oRequest.addParameters(sPostName, sPostValue)
         oRequest.addParameters(sPostButtonName, '')

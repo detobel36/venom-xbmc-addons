@@ -7,7 +7,7 @@ from resources.lib.gui.hoster import HosterGui
 from resources.lib.gui.gui import Gui
 from resources.lib.handler.inputParameterHandler import InputParameterHandler
 from resources.lib.handler.outputParameterHandler import OutputParameterHandler
-from resources.lib.handler.requestHandler import cRequestHandler
+from resources.lib.handler.requestHandler import RequestHandler
 from resources.lib.parser import cParser
 from resources.lib.comaddon import progress, addon
 
@@ -58,7 +58,7 @@ def showLiens(sSearch=''):
     numItem = int(numItem)
     numPage = int(numPage)
 
-    oRequestHandler = cRequestHandler(sUrl)
+    oRequestHandler = RequestHandler(sUrl)
     sHtmlContent = oRequestHandler.request()
     sHtmlContent = sHtmlContent.replace('</h1><hr><pre><a href="../">../</a>', '')
     sPattern = '<a href="(.+?)">([^<>]+)</a>'
@@ -128,7 +128,7 @@ def showMagnets(sSearch=''):
     numItem = int(numItem)
     numPage = int(numPage)
 
-    oRequestHandler = cRequestHandler(sUrl)
+    oRequestHandler = RequestHandler(sUrl)
     sHtmlContent = oRequestHandler.request()
     sHtmlContent = sHtmlContent.replace('</h1><hr><pre><a href="../">../</a>', '')
     # Pattern servant à retrouver les éléments dans la page
@@ -225,7 +225,7 @@ def showseriesHoster(sSearch=''):
     except BaseException:
         pass
 
-    oRequestHandler = cRequestHandler(sUrl)
+    oRequestHandler = RequestHandler(sUrl)
     sHtmlContent = oRequestHandler.request()
     sHtmlContent = sHtmlContent.replace('</h1><hr><pre><a href="../">../</a>', '')
 
@@ -303,7 +303,7 @@ def showInfo():
     oInputParameterHandler = InputParameterHandler()
     sUrl = oInputParameterHandler.getValue('siteUrl')
 
-    oRequestHandler = cRequestHandler(sUrl)
+    oRequestHandler = RequestHandler(sUrl)
     sHtmlContent = oRequestHandler.request()
     sPattern = '<li class="([^"]+)">.+?<i alt=".+?" title="([^"]+)".+?</li>'
 

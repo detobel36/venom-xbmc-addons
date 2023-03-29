@@ -2,7 +2,7 @@
 # Vstream https://github.com/Kodi-vStream/venom-xbmc-addons
 #
 # Ne marche pas, ne marchera que sous kodi V17
-from resources.lib.handler.requestHandler import cRequestHandler
+from resources.lib.handler.requestHandler import RequestHandler
 from resources.lib.parser import cParser
 from resources.lib.gui.gui import Gui
 from resources.hosters.hoster import iHoster
@@ -22,7 +22,7 @@ class cHoster(iHoster):
         # VSlog(self._url)
         api_call = False
 
-        oRequest = cRequestHandler(self._url)
+        oRequest = RequestHandler(self._url)
         # oRequest.addHeaderEntry('User-Agent','Mozilla/5.0 (Windows NT 6.1; WOW64; rv:49.0) ' + \
         #   'Gecko/20100101 Firefox/49.0')
         # oRequest.addHeaderEntry('Upgrade-Insecure-Requests','1')

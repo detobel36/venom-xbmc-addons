@@ -8,7 +8,7 @@ from resources.lib.gui.hoster import HosterGui
 from resources.lib.gui.gui import Gui
 from resources.lib.handler.inputParameterHandler import InputParameterHandler
 from resources.lib.handler.outputParameterHandler import OutputParameterHandler
-from resources.lib.handler.requestHandler import cRequestHandler
+from resources.lib.handler.requestHandler import RequestHandler
 from resources.lib.parser import cParser
 from resources.lib.util import cUtil
 from resources.lib.comaddon import dialog, siteManager
@@ -86,7 +86,7 @@ def showMovies(sSearch=''):
         oInputParameterHandler = InputParameterHandler()
         sUrl = oInputParameterHandler.getValue('siteUrl')
 
-    oRequestHandler = cRequestHandler(sUrl)
+    oRequestHandler = RequestHandler(sUrl)
     sHtmlContent = oRequestHandler.request()
     sPattern = 'class="post-thumbnail">.+?href="([^"]+)" *title="([^"]+).+?src="([^"]+)'
     aResult = oParser.parse(sHtmlContent, sPattern)
@@ -142,7 +142,7 @@ def showEpisodes():
     sMovieTitle = oInputParameterHandler.getValue('sMovieTitle')
     sThumb = oInputParameterHandler.getValue('sThumb')
 
-    oRequestHandler = cRequestHandler(sUrl)
+    oRequestHandler = RequestHandler(sUrl)
     sHtmlContent = oRequestHandler.request()
     oParser = cParser()
 
@@ -191,7 +191,7 @@ def showLinks():
     sDesc = oInputParameterHandler.getValue('sDesc')
 
     oParser = cParser()
-    oRequest = cRequestHandler(sUrl)
+    oRequest = RequestHandler(sUrl)
     sHtmlContent = oRequest.request()
     sPattern = '<span class="lg">([^<]+)<|<span class="myLecteur">.+?<b>([^<]+)</b>.+?href="([^"]+)'
     aResult = oParser.parse(sHtmlContent, sPattern)
@@ -248,7 +248,7 @@ def protectStreamByPass(url):
 
     # lien commencant par VID_
     Codedurl = url
-    oRequestHandler = cRequestHandler(Codedurl)
+    oRequestHandler = RequestHandler(Codedurl)
     sHtmlContent = oRequestHandler.request()
 
     oParser = cParser()
@@ -263,7 +263,7 @@ def protectStreamByPass(url):
 
         UA = 'Mozilla/5.0 (Windows NT 6.1; WOW64; rv:55.0) Gecko/20100101 Firefox/55.0'
 
-        oRequest = cRequestHandler(URL_MAIN + 'embed_secur.php')
+        oRequest = RequestHandler(URL_MAIN + 'embed_secur.php')
         oRequest.setRequestType(1)
         oRequest.addHeaderEntry('User-Agent', UA)
         # oRequest.addHeaderEntry('Host', 'www.protect-stream.com')

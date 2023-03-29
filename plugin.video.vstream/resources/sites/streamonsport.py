@@ -13,7 +13,7 @@ from resources.lib.gui.gui import Gui
 from resources.lib.gui.hoster import HosterGui
 from resources.lib.handler.inputParameterHandler import InputParameterHandler
 from resources.lib.handler.outputParameterHandler import OutputParameterHandler
-from resources.lib.handler.requestHandler import cRequestHandler
+from resources.lib.handler.requestHandler import RequestHandler
 from resources.lib.packer import cPacker
 from resources.lib.parser import cParser
 from resources.lib.util import Quote
@@ -46,7 +46,7 @@ def GetUrlMain():
     if URL_MAIN != '':
         return URL_MAIN
 
-    oRequestHandler = cRequestHandler(siteManager().getUrlMain(SITE_IDENTIFIER))
+    oRequestHandler = RequestHandler(siteManager().getUrlMain(SITE_IDENTIFIER))
     sHtmlContent = oRequestHandler.request()
 
     sPattern = '<a href="(.+?)"'
@@ -101,7 +101,7 @@ def showMovies(sSearch=''):
     if 'http' not in sUrl:
         sUrl = urlMain + sUrl
 
-    oRequestHandler = cRequestHandler(sUrl)
+    oRequestHandler = RequestHandler(sUrl)
     sHtmlContent = oRequestHandler.request()
 
     # THUMB ref title desc1 desc2
@@ -165,7 +165,7 @@ def showLive():
     sDesc = oInputParameterHandler.getValue('sDesc')
     sMovieTitle = oInputParameterHandler.getValue('sMovieTitle')
 
-    oRequestHandler = cRequestHandler(sUrl)
+    oRequestHandler = RequestHandler(sUrl)
     sHtmlContent = oRequestHandler.request()
     oParser = cParser()
 
@@ -222,7 +222,7 @@ def showLink():
         sUrl = urlMain + sUrl
 
     if 'allfoot' in sUrl or 'streamonsport' in sUrl:
-        oRequestHandler = cRequestHandler(sUrl)
+        oRequestHandler = RequestHandler(sUrl)
         oRequestHandler.addHeaderEntry('User-Agent', UA)
         # oRequestHandler.addHeaderEntry('Referer', siterefer) # a verifier
         sHtmlContent = oRequestHandler.request()
@@ -292,7 +292,7 @@ def showLink():
 
 
 def Hoster_Pkcast(url, referer):
-    oRequestHandler = cRequestHandler(url)
+    oRequestHandler = RequestHandler(url)
     oRequestHandler.addHeaderEntry('User-Agent', UA)
     oRequestHandler.addHeaderEntry('Referer', '{uri.scheme}://{uri.netloc}/'.format(uri=urlparse(referer)))
     sHtmlContent = oRequestHandler.request()
@@ -308,7 +308,7 @@ def Hoster_Pkcast(url, referer):
 
 
 def Hoster_Telerium(url, referer):
-    oRequestHandler = cRequestHandler(url)
+    oRequestHandler = RequestHandler(url)
     oRequestHandler.addHeaderEntry('User-Agent', UA)
     oRequestHandler.addHeaderEntry('Referer', referer)
     sHtmlContent = oRequestHandler.request()
@@ -343,7 +343,7 @@ def Hoster_Telerium(url, referer):
 
 def Hoster_Leet365(url, referer):
     oParser = cParser()
-    oRequestHandler = cRequestHandler(url)
+    oRequestHandler = RequestHandler(url)
     oRequestHandler.addHeaderEntry('User-Agent', UA)
     oRequestHandler.addHeaderEntry('Referer', referer)
     sHtmlContent = oRequestHandler.request()
@@ -367,7 +367,7 @@ def Hoster_Leet365(url, referer):
 
 
 def Hoster_Andrhino(url, referer):
-    oRequestHandler = cRequestHandler(url)
+    oRequestHandler = RequestHandler(url)
     oRequestHandler.addHeaderEntry('User-Agent', UA)
     oRequestHandler.addHeaderEntry('Referer', referer)
     sHtmlContent = oRequestHandler.request()
@@ -390,7 +390,7 @@ def Hoster_Andrhino(url, referer):
 
 
 def Hoster_Wigistream(url, referer):
-    oRequestHandler = cRequestHandler(url)
+    oRequestHandler = RequestHandler(url)
     oRequestHandler.addHeaderEntry('User-Agent', UA)
     oRequestHandler.addHeaderEntry('Referer', referer)
     sHtmlContent = oRequestHandler.request()
@@ -417,7 +417,7 @@ def Hoster_Wigistream(url, referer):
 
 
 def Hoster_Laylow(url, referer):
-    oRequestHandler = cRequestHandler(url)
+    oRequestHandler = RequestHandler(url)
     oRequestHandler.addHeaderEntry('User-Agent', UA)
     oRequestHandler.addHeaderEntry('Referer', referer)
     sHtmlContent = oRequestHandler.request()
@@ -434,7 +434,7 @@ def Hoster_Laylow(url, referer):
 def getRealTokenJson(link, referer):
 
     realResp = ''
-    oRequestHandler = cRequestHandler(link)
+    oRequestHandler = RequestHandler(link)
     oRequestHandler.addHeaderEntry('User-Agent', UA)
     oRequestHandler.addHeaderEntry('Accept-Language', 'pl,en-US;q=0.7,en;q=0.3')
     oRequestHandler.addHeaderEntry('X-Requested-With', 'XMLHttpRequest')
@@ -448,7 +448,7 @@ def getRealTokenJson(link, referer):
         pass
 
     if not realResp:
-        oRequestHandler = cRequestHandler(link)
+        oRequestHandler = RequestHandler(link)
         oRequestHandler.addHeaderEntry('User-Agent', UA)
         oRequestHandler.addHeaderEntry('Accept', 'application/json')
         oRequestHandler.addHeaderEntry('Accept-Language', 'pl,en-US;q=0.7,en;q=0.3')
@@ -474,7 +474,7 @@ def getHosterIframe(url, referer):
     if not url.startswith('http'):
         url = GetUrlMain() + url
 
-    oRequestHandler = cRequestHandler(url)
+    oRequestHandler = RequestHandler(url)
     oRequestHandler.addHeaderEntry('Referer', referer)
     sHtmlContent = str(oRequestHandler.request())
     if not sHtmlContent:

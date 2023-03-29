@@ -4,7 +4,7 @@ import re
 from resources.lib.comaddon import progress
 from resources.lib.util import cUtil
 from resources.lib.parser import cParser
-from resources.lib.handler.requestHandler import cRequestHandler
+from resources.lib.handler.requestHandler import RequestHandler
 from resources.lib.handler.outputParameterHandler import OutputParameterHandler
 from resources.lib.handler.inputParameterHandler import InputParameterHandler
 from resources.lib.gui.gui import Gui
@@ -63,7 +63,7 @@ def showSearch():
 def showAlpha():
     oGui = Gui()
     oParser = cParser()
-    oRequestHandler = cRequestHandler(SERIE_LIST[0])
+    oRequestHandler = RequestHandler(SERIE_LIST[0])
     sHtmlContent = oRequestHandler.request()
 
     sPattern = '<font color="red".+?>(.+?)<\\/font>'
@@ -100,7 +100,7 @@ def showList():
     oGui = Gui()
     oParser = cParser()
     oInputParameterHandler = InputParameterHandler()
-    oRequestHandler = cRequestHandler(SERIE_LIST[0])
+    oRequestHandler = RequestHandler(SERIE_LIST[0])
     dAZ = oInputParameterHandler.getValue('dAZ')
     sHtmlContent = oRequestHandler.request()
 
@@ -169,7 +169,7 @@ def showSeries(sSearch=''):
         sUrl = oInputParameterHandler.getValue('siteUrl')
         sMovieTitle = oInputParameterHandler.getValue('sMovieTitle')
 
-    oRequestHandler = cRequestHandler(sUrl)
+    oRequestHandler = RequestHandler(sUrl)
     sHtmlContent = oRequestHandler.request()
 
     sPattern = '<div class="post".+?<h2><a class="title" href="(.+?)" rel="bookmark">(.+?)</a>.+?src="(.+?)"'
@@ -228,7 +228,7 @@ def serieHosters():
     sUrl = oInputParameterHandler.getValue('siteUrl')
     sMovieTitle = oInputParameterHandler.getValue('sMovieTitle')
 
-    oRequestHandler = cRequestHandler(sUrl)
+    oRequestHandler = RequestHandler(sUrl)
     sHtmlContent = oRequestHandler.request()
 
     oParser = cParser()

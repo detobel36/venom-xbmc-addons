@@ -7,7 +7,7 @@ from resources.lib.gui.gui import Gui
 from resources.lib.gui.hoster import HosterGui
 from resources.lib.handler.inputParameterHandler import InputParameterHandler
 from resources.lib.handler.outputParameterHandler import OutputParameterHandler
-from resources.lib.handler.requestHandler import cRequestHandler
+from resources.lib.handler.requestHandler import RequestHandler
 from resources.lib.parser import cParser
 from resources.lib.util import cUtil
 
@@ -55,7 +55,7 @@ def showGenres():
     oGui = Gui()
     oParser = cParser()
 
-    oRequestHandler = cRequestHandler(URL_MAIN)
+    oRequestHandler = RequestHandler(URL_MAIN)
     sHtmlContent = oRequestHandler.request()
     sStart = 'allowGenrebydefault">'
     sEnd = 'Dernières Episodes récents'
@@ -88,7 +88,7 @@ def showSeries(sSearch=''):
         sSearchText = sSearch.replace(URL_SEARCH_SERIES[0], '')
         sSearchText = oUtil.CleanName(sSearchText)
         sUrl = sSearch.replace(' ', '+')
-        reqType = cRequestHandler.REQUEST_TYPE_POST
+        reqType = RequestHandler.REQUEST_TYPE_POST
         sPattern = 'href="([^"]+).+?image: url\\((.+?)"title">([^<]+)'
         idxUrl = 0
         idxThumb = 1
@@ -96,13 +96,13 @@ def showSeries(sSearch=''):
     else:
         oInputParameterHandler = InputParameterHandler()
         sUrl = oInputParameterHandler.getValue('siteUrl')
-        reqType = cRequestHandler.REQUEST_TYPE_GET
+        reqType = RequestHandler.REQUEST_TYPE_GET
         sPattern = 'item">.+?href="([^"]+)" title="([^"]+).+?-src="([^"]+)'
         idxUrl = 0
         idxTitle = 1
         idxThumb = 2
 
-    oRequestHandler = cRequestHandler(sUrl)
+    oRequestHandler = RequestHandler(sUrl)
     oRequestHandler.setRequestType(reqType)
     sHtmlContent = oRequestHandler.request()
     oParser = cParser()
@@ -166,7 +166,7 @@ def showSaisons():
     sUrl = oInputParameterHandler.getValue('siteUrl')
     sThumb = oInputParameterHandler.getValue('sThumb')
 
-    oRequestHandler = cRequestHandler(sUrl)
+    oRequestHandler = RequestHandler(sUrl)
     sHtmlContent = oRequestHandler.request()
 
     # récupération du Synopsis
@@ -212,7 +212,7 @@ def showEpisodes():
     sThumb = oInputParameterHandler.getValue('sThumb')
     sDesc = oInputParameterHandler.getValue('sDesc')
 
-    oRequestHandler = cRequestHandler(sUrl)
+    oRequestHandler = RequestHandler(sUrl)
     sHtmlContent = oRequestHandler.request()
 
     sPattern = 'title"><a href="([^"]+)" title=.+?(episode [0-9]+)"'
@@ -246,7 +246,7 @@ def showLink():
     sDesc = oInputParameterHandler.getValue('sDesc')
 
     oParser = cParser()
-    oRequestHandler = cRequestHandler(sUrl)
+    oRequestHandler = RequestHandler(sUrl)
     sHtmlContent = oRequestHandler.request()
 
     # streaming
@@ -304,7 +304,7 @@ def showHosters():
     sMovieTitle = oInputParameterHandler.getValue('sMovieTitle')
     sThumb = oInputParameterHandler.getValue('sThumb')
     referer = oInputParameterHandler.getValue('referer')
-    oRequestHandler = cRequestHandler(sUrl)
+    oRequestHandler = RequestHandler(sUrl)
     oRequestHandler.addHeaderEntry('Referer', referer)
 
     oRequestHandler.request()

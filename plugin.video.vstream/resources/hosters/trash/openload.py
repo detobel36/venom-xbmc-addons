@@ -8,7 +8,7 @@ try:  # Python 2
 except ImportError:  # Python 3
     import urllib.request as urllib2
 
-from resources.lib.handler.requestHandler import cRequestHandler
+from resources.lib.handler.requestHandler import RequestHandler
 from resources.lib.parser import cParser
 from resources.hosters.hoster import iHoster
 from resources.lib.aadecode import AADecoder
@@ -44,7 +44,7 @@ class cHoster(iHoster):
 
         # recuperation de la page
         # xbmc.log('url teste : ' + self._url)
-        oRequest = cRequestHandler(self._url)
+        oRequest = RequestHandler(self._url)
         oRequest.addHeaderEntry('referer', self._url)
         oRequest.addHeaderEntry('User-Agent', UA)
         sHtmlContent1 = oRequest.request()

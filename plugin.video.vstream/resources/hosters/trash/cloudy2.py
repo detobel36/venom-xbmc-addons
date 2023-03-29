@@ -2,7 +2,7 @@
 # https://github.com/Kodi-vStream/venom-xbmc-addons
 import urllib
 
-from resources.lib.handler.requestHandler import cRequestHandler
+from resources.lib.handler.requestHandler import RequestHandler
 from resources.lib.parser import cParser
 from resources.hosters.hoster import iHoster
 
@@ -22,7 +22,7 @@ class cHoster(iHoster):
         return ''
 
     def __getKey(self):
-        oRequestHandler = cRequestHandler(self._url)
+        oRequestHandler = RequestHandler(self._url)
         sHtmlContent = oRequestHandler.request()
         sPattern = 'flashvars.filekey="(.+?)";'
         oParser = cParser()
@@ -45,7 +45,7 @@ class cHoster(iHoster):
         api_call = ('http://www.cloudy.ec/api/player.api.php?user=undefined&codes=1&file=%s' +
                     '&pass=undefined&key=%s') % (self.__getIdFromUrl(), self.__getKey())
 
-        oRequest = cRequestHandler(api_call)
+        oRequest = RequestHandler(api_call)
         sHtmlContent = oRequest.request()
 
         sPattern = 'url=(.+?)&title'

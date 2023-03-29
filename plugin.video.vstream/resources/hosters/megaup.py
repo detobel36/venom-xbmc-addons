@@ -4,7 +4,7 @@ import re
 import time
 
 from resources.hosters.hoster import iHoster
-from resources.lib.handler.requestHandler import cRequestHandler
+from resources.lib.handler.requestHandler import RequestHandler
 
 UA = 'Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:89.0) Gecko/20100101 Firefox/89.0'
 
@@ -15,7 +15,7 @@ class cHoster(iHoster):
         iHoster.__init__(self, 'megaup', 'Megaup')
 
     def _getMediaLinkForGuest(self):
-        oRequestHandler = cRequestHandler(self._url)
+        oRequestHandler = RequestHandler(self._url)
         oRequestHandler.addHeaderEntry('User-Agent', UA)
         sHtmlContent = oRequestHandler.request()
         cookies = oRequestHandler.GetCookies() + ";"
@@ -38,14 +38,14 @@ class cHoster(iHoster):
 
         time.sleep(6)
 
-        oRequestHandler = cRequestHandler("https://download.megaup.net/?idurl=" + cidken + "&idfilename=" + file +
+        oRequestHandler = RequestHandler("https://download.megaup.net/?idurl=" + cidken + "&idfilename=" + file +
                                           "&idfilesize=" + size)
         oRequestHandler.addHeaderEntry('User-Agent', UA)
         sHtmlContent = oRequestHandler.request()
 
         la = re.search('window\\.location\\.replace\\("(.+?)"', sHtmlContent).group(1)
 
-        oRequestHandler = cRequestHandler(la)
+        oRequestHandler = RequestHandler(la)
         oRequestHandler.disableRedirect()
         oRequestHandler.addHeaderEntry('User-Agent', UA)
         oRequestHandler.addHeaderEntry("Referer", "https://download.megaup.net/")

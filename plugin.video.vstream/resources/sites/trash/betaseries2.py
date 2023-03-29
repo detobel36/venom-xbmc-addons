@@ -5,7 +5,7 @@ from resources.lib.db import Db
 from resources.lib.gui.gui import Gui
 from resources.lib.gui.guiElement import GuiElement
 from resources.lib.gui.hoster import HosterGui
-from resources.lib.handler.requestHandler import cRequestHandler
+from resources.lib.handler.requestHandler import RequestHandler
 from resources.lib.handler.inputParameterHandler import InputParameterHandler
 from resources.lib.handler.outputParameterHandler import OutputParameterHandler
 
@@ -38,8 +38,8 @@ class cBseries:
     def getToken(self):
 
         sUrl = 'https://api.betaseries.com/members/auth'
-        oRequestHandler = cRequestHandler(sUrl)
-        oRequestHandler.setRequestType(cRequestHandler.REQUEST_TYPE_POST)
+        oRequestHandler = RequestHandler(sUrl)
+        oRequestHandler.setRequestType(RequestHandler.REQUEST_TYPE_POST)
         oRequestHandler.addHeaderEntry('X-BetaSeries-Key', API_KEY)
         oRequestHandler.addHeaderEntry('X-BetaSeries-Version', API_VERS)
 
@@ -84,7 +84,7 @@ class cBseries:
         if cConfig().getSetting("bstoken") == '':
             self.getToken()
         else:
-            oRequestHandler = cRequestHandler('https://api.betaseries.com/members/infos')
+            oRequestHandler = RequestHandler('https://api.betaseries.com/members/infos')
             oRequestHandler.addHeaderEntry('X-BetaSeries-Key', API_KEY)
             oRequestHandler.addHeaderEntry('X-BetaSeries-Version', API_VERS)
             oRequestHandler.addHeaderEntry('Authorization', cConfig().getSetting("bstoken"))
@@ -165,7 +165,7 @@ class cBseries:
         userID = oInputParameterHandler.getValue('userID')
 
         # timeline
-        oRequestHandler = cRequestHandler('https://api.betaseries.com/timeline/member')
+        oRequestHandler = RequestHandler('https://api.betaseries.com/timeline/member')
         oRequestHandler.addHeaderEntry('X-BetaSeries-Key', API_KEY)
         oRequestHandler.addHeaderEntry('X-BetaSeries-Version', API_VERS)
         oRequestHandler.addHeaderEntry('Authorization', cConfig().getSetting("bstoken"))
@@ -203,14 +203,14 @@ class cBseries:
 
         oGui = Gui()
 
-        oRequestHandler = cRequestHandler(sUrl)
+        oRequestHandler = RequestHandler(sUrl)
         oRequestHandler.addHeaderEntry('X-BetaSeries-Key', API_KEY)
         oRequestHandler.addHeaderEntry('X-BetaSeries-Version', API_VERS)
         oRequestHandler.addHeaderEntry('Authorization', cConfig().getSetting("bstoken"))
         # api buguer normalement ça affiche que les films et series
         oRequestHandler.addParameters('token', cConfig().getSetting("bstoken"))
 
-        oRequestHandler.setRequestType(cRequestHandler.REQUEST_TYPE_POST)
+        oRequestHandler.setRequestType(RequestHandler.REQUEST_TYPE_POST)
         sHtmlContent = oRequestHandler.request()
         result = json.loads(sHtmlContent)
         total = len(sHtmlContent)
@@ -229,7 +229,7 @@ class cBseries:
 
         oGui = Gui()
 
-        oRequestHandler = cRequestHandler(sUrl)
+        oRequestHandler = RequestHandler(sUrl)
         oRequestHandler.addHeaderEntry('X-BetaSeries-Key', API_KEY)
         oRequestHandler.addHeaderEntry('X-BetaSeries-Version', API_VERS)
         oRequestHandler.addHeaderEntry('Authorization', cConfig().getSetting("bstoken"))
@@ -295,7 +295,7 @@ class cBseries:
         if (oInputParameterHandler.exist('page')):
             iPage = oInputParameterHandler.getValue('page')
 
-        oRequestHandler = cRequestHandler(sUrl)
+        oRequestHandler = RequestHandler(sUrl)
         oRequestHandler.addHeaderEntry('X-BetaSeries-Key', API_KEY)
         oRequestHandler.addHeaderEntry('X-BetaSeries-Version', API_VERS)
         oRequestHandler.addHeaderEntry('Authorization', cConfig().getSetting("bstoken"))

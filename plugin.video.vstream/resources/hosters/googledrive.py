@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 # vStream https://github.com/Kodi-vStream/venom-xbmc-addons
-# from resources.lib.handler.requestHandler import cRequestHandler
+# from resources.lib.handler.requestHandler import RequestHandler
 
 try:  # Python 2
     import urllib2

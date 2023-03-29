@@ -8,7 +8,7 @@
 import json
 
 from resources.hosters.hoster import iHoster
-from resources.lib.handler.requestHandler import cRequestHandler
+from resources.lib.handler.requestHandler import RequestHandler
 
 UA = 'Mozilla/5.0 (Windows NT 6.1; WOW64; rv:70.0) Gecko/20100101 Firefox/70.0'
 
@@ -31,7 +31,7 @@ class cHoster(iHoster):
 
         url1 = "https://" + host + "/api/make/hash/" + videoId
 
-        oRequest = cRequestHandler(url1)
+        oRequest = RequestHandler(url1)
         oRequest.addHeaderEntry('User-Agent', UA)
         oRequest.addHeaderEntry('Referer', "https://" + host)
         sHtmlContent = oRequest.request()
@@ -41,7 +41,7 @@ class cHoster(iHoster):
 
         url2 = "https://" + host + "/api/player/setup"
 
-        oRequest = cRequestHandler(url2)
+        oRequest = RequestHandler(url2)
         oRequest.setRequestType(1)
         oRequest.addHeaderEntry('User-Agent', UA)
         oRequest.addHeaderEntry('Referer', "https://" + host)

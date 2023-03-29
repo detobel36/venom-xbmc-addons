@@ -7,7 +7,7 @@ from resources.lib.gui.hoster import HosterGui
 from resources.lib.gui.gui import Gui
 from resources.lib.handler.inputParameterHandler import InputParameterHandler
 from resources.lib.handler.outputParameterHandler import OutputParameterHandler
-from resources.lib.handler.requestHandler import cRequestHandler
+from resources.lib.handler.requestHandler import RequestHandler
 from resources.lib.parser import cParser
 from resources.lib.comaddon import siteManager
 from resources.lib.util import cUtil
@@ -111,7 +111,7 @@ def showGenres():
     oGui = Gui()
     oParser = cParser()
 
-    oRequestHandler = cRequestHandler(URL_MAIN)
+    oRequestHandler = RequestHandler(URL_MAIN)
     sHtmlContent = oRequestHandler.request()
     sStart = '<h4 class="head nop">Genre'
     sEnd = '<div class="menu_first">'
@@ -150,7 +150,7 @@ def showMovies(sSearch=''):
         sSearchText = sSearchText.replace(URL_SEARCH_SERIES[0], '')
         sSearchText = oUtil.CleanName(sSearchText)
         sUrl = sSearch.replace(' ', '-').replace('%20', '-') + '.html'
-    oRequestHandler = cRequestHandler(sUrl)
+    oRequestHandler = RequestHandler(sUrl)
     sHtmlContent = oRequestHandler.request()
 
     if 'list-films.html' in sUrl or '/films/page' in sUrl:
@@ -247,7 +247,7 @@ def showSaisons():
     sYear = oInputParameterHandler.getValue('sYear')
     sDesc = oInputParameterHandler.getValue('sDesc')
 
-    oRequestHandler = cRequestHandler(sUrl)
+    oRequestHandler = RequestHandler(sUrl)
     sHtmlContent = oRequestHandler.request()
 
     sPattern = 'itemprop="description">([^<]+)'
@@ -296,7 +296,7 @@ def showEpisodes():
     aResult = oParser.parse(sUrl, sPattern)
     if aResult[0]:
         iSaison = ' Saison ' + aResult[1][0].replace(' ', '')
-    oRequestHandler = cRequestHandler(sUrl)
+    oRequestHandler = RequestHandler(sUrl)
     sHtmlContent = oRequestHandler.request()
     sStart = '<div class="contentomovies">'
     sEnd = '<div class="keywords"'
@@ -338,7 +338,7 @@ def showLinks():
     sDesc = oInputParameterHandler.getValue('sDesc')
 
     oParser = cParser()
-    oRequestHandler = cRequestHandler(sUrl)
+    oRequestHandler = RequestHandler(sUrl)
     sHtmlContent = oRequestHandler.request()
     sPattern = 'itemprop="description">([^<]+)'
     aResult = oParser.parse(sHtmlContent, sPattern)
@@ -417,12 +417,12 @@ def showHosters():
     sThumb = oInputParameterHandler.getValue('sThumb')
     referer = oInputParameterHandler.getValue('referer')
 
-    oRequest = cRequestHandler(sUrl)
+    oRequest = RequestHandler(sUrl)
     oRequest.addHeaderEntry('Referer', referer)
     oRequest.request()
     urlReal = oRequest.getRealUrl()
     if URL_MAIN in urlReal:
-        oRequest = cRequestHandler(sUrl)
+        oRequest = RequestHandler(sUrl)
         oRequest.addHeaderEntry('Referer', referer)
         oRequest.request()
         sHtmlContent = oRequest.request()

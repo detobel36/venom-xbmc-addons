@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 # https://rapidstream.co/embed-zxxx-635x445.html tfarjo twd
 
-from resources.lib.handler.requestHandler import cRequestHandler
+from resources.lib.handler.requestHandler import RequestHandler
 from resources.lib.parser import cParser
 from resources.hosters.hoster import iHoster
 
@@ -15,7 +15,7 @@ class cHoster(iHoster):
         api_call = ''
         oParser = cParser()
 
-        oRequest = cRequestHandler(self._url)
+        oRequest = RequestHandler(self._url)
         sHtmlContent = oRequest.request()
         sPattern = '"(http[^"]+(?:.m3u8|.mp4))"'
 

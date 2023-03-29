@@ -2,7 +2,7 @@
 # vStream https://github.com/Kodi-vStream/venom-xbmc-addons
 import json
 
-from resources.lib.handler.requestHandler import cRequestHandler
+from resources.lib.handler.requestHandler import RequestHandler
 from resources.hosters.hoster import iHoster
 from resources.lib.comaddon import dialog
 
@@ -20,7 +20,7 @@ class cHoster(iHoster):
 
         postdata = 'r=&d=clickopen.win'
 
-        oRequest = cRequestHandler(url)
+        oRequest = RequestHandler(url)
         oRequest.setRequestType(1)
         oRequest.addHeaderEntry('User-Agent', UA)
         # oRequest.addHeaderEntry('Accept', '*/*')

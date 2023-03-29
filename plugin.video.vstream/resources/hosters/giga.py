@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 # vStream https://github.com/Kodi-vStream/venom-xbmc-addons
 # 2 hoster giga & 2gigalink
-# from resources.lib.handler.requestHandler import cRequestHandler
+# from resources.lib.handler.requestHandler import RequestHandler
 
 try:  # Python 2
     import urllib2

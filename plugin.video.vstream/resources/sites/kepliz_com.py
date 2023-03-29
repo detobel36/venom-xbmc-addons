@@ -5,7 +5,7 @@ from resources.lib.gui.hoster import HosterGui
 from resources.lib.gui.gui import Gui
 from resources.lib.handler.inputParameterHandler import InputParameterHandler
 from resources.lib.handler.outputParameterHandler import OutputParameterHandler
-from resources.lib.handler.requestHandler import cRequestHandler
+from resources.lib.handler.requestHandler import RequestHandler
 from resources.lib.parser import cParser
 from resources.lib.util import cUtil
 from resources.lib.comaddon import siteManager
@@ -106,7 +106,7 @@ def showMovies(sSearch=''):
     oParser = cParser()
 
     # L'url change tres souvent donc faut la retrouver
-    oRequestHandler = cRequestHandler(URL_HOST)
+    oRequestHandler = RequestHandler(URL_HOST)
     data = oRequestHandler.request()
     aResult = oParser.parse(data, '<a.+?href="(/*[0-9a-zA-Z]+)"')  # Compatible avec plusieurs clones
     if not aResult[0]:
@@ -124,8 +124,8 @@ def showMovies(sSearch=''):
         sSearchText = oUtil.CleanName(sSearchText)
 
         sSearch = sSearch[:20]  # limite de caractere sinon bug de la recherche
-        oRequestHandler = cRequestHandler(sMainUrl + 'home/poblom/')
-        oRequestHandler.setRequestType(cRequestHandler.REQUEST_TYPE_POST)
+        oRequestHandler = RequestHandler(sMainUrl + 'home/poblom/')
+        oRequestHandler.setRequestType(RequestHandler.REQUEST_TYPE_POST)
         oRequestHandler.addParameters('searchword', sSearch.replace(' ', '+'))
         sABPattern = '<div class="column24"'
     else:
@@ -136,7 +136,7 @@ def showMovies(sSearch=''):
         else:
             sABPattern = '<div class="column20"'
         sUrl = sUrl.replace(URL_MAIN, sMainUrl)
-        oRequestHandler = cRequestHandler(sUrl)
+        oRequestHandler = RequestHandler(sUrl)
 
     sHtmlContent = oRequestHandler.request()
     sHtmlContent = oParser.abParse(sHtmlContent, sABPattern, '<div class="column2"')
@@ -195,7 +195,7 @@ def showHosters():
     # sMainUrl = oInputParameterHandler.getValue('sMainUrl')
     # sYear = oInputParameterHandler.getValue('sYear')
 
-    oRequestHandler = cRequestHandler(sUrl)
+    oRequestHandler = RequestHandler(sUrl)
     sHtmlContent = oRequestHandler.request()
 
     sHtmlContent = sHtmlContent.replace('<br/>', '')  # traitement de sDesc
@@ -218,7 +218,7 @@ def showHosters():
         if sLink.startswith('/'):
             sLink = URL_HOST[:-1] + sLink
 
-        oRequestHandler = cRequestHandler(sLink)
+        oRequestHandler = RequestHandler(sLink)
         data = oRequestHandler.request()
 
         sPattern = 'file: "(.+?)"'

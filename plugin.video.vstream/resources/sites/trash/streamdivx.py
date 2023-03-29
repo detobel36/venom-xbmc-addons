@@ -2,7 +2,7 @@
 # vStream https://github.com/Kodi-vStream/venom-xbmc-addons
 from resources.lib.comaddon import progress
 from resources.lib.parser import cParser
-from resources.lib.handler.requestHandler import cRequestHandler
+from resources.lib.handler.requestHandler import RequestHandler
 from resources.lib.handler.outputParameterHandler import OutputParameterHandler
 from resources.lib.handler.inputParameterHandler import InputParameterHandler
 from resources.lib.gui.gui import Gui
@@ -108,13 +108,13 @@ def showMovies(sSearch=''):
     oParser = cParser()
     if sSearch:
         sUrl = sSearch
-        oRequest = cRequestHandler(sUrl)
+        oRequest = RequestHandler(sUrl)
         sHtmlContent = oRequest.request()
     else:
         oInputParameterHandler = InputParameterHandler()
         sUrl = oInputParameterHandler.getValue('siteUrl')
 
-        oRequestHandler = cRequestHandler(sUrl)
+        oRequestHandler = RequestHandler(sUrl)
         sHtmlContent = oRequestHandler.request()
 
         if '<h2 class="side-title nop">film du moment</h2>' in sHtmlContent:
@@ -189,7 +189,7 @@ def showHosters():
     sThumb = oInputParameterHandler.getValue('sThumb')
     # sPost = oInputParameterHandler.getValue('sPost')
 
-    oRequestHandler = cRequestHandler(sUrl)
+    oRequestHandler = RequestHandler(sUrl)
     sHtmlContent = oRequestHandler.request()
 
     sPattern = '<iframe src="([^"]+)"'

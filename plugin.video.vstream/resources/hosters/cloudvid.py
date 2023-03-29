@@ -3,7 +3,7 @@
 # http://cloudvid.co/embed-xxxx.html
 # https://clipwatching.com/embed-xxx.html
 
-from resources.lib.handler.requestHandler import cRequestHandler
+from resources.lib.handler.requestHandler import RequestHandler
 from resources.hosters.hoster import iHoster
 from resources.lib.parser import cParser
 from resources.lib.packer import cPacker
@@ -24,7 +24,7 @@ class cHoster(iHoster):
             self._url = self._url + '.html'
 
     def _getMediaLinkForGuest(self, api_call=None):
-        oRequest = cRequestHandler(self._url)
+        oRequest = RequestHandler(self._url)
         sHtmlContent = oRequest.request()
 
         if 'File was deleted' in sHtmlContent:

@@ -4,7 +4,7 @@
 from resources.lib.util import Noredirection
 from resources.lib.comaddon import progress, siteManager
 from resources.lib.parser import cParser
-from resources.lib.handler.requestHandler import cRequestHandler
+from resources.lib.handler.requestHandler import RequestHandler
 from resources.lib.handler.outputParameterHandler import OutputParameterHandler
 from resources.lib.handler.inputParameterHandler import InputParameterHandler
 from resources.lib.gui.gui import Gui
@@ -183,7 +183,7 @@ def showMovieGenres():
     oInputParameterHandler = InputParameterHandler()
     siteUrl = oInputParameterHandler.getValue('siteUrl')
 
-    oRequestHandler = cRequestHandler(siteUrl)
+    oRequestHandler = RequestHandler(siteUrl)
     sHtmlContent = oRequestHandler.request()
 
     oParser = cParser()
@@ -220,7 +220,7 @@ def showMovies(sSearch=''):
     else:
         sPattern = 'class="TPost C".+?href="([^"]+).+?src="([^"]*).+?Title">([^<]+).+?(?:|Year">([^<]*).+?)(?:|Qlty">([^<]*).+?)Description"><p>([^<]+)'
 
-    oRequestHandler = cRequestHandler(sUrl)
+    oRequestHandler = RequestHandler(sUrl)
     sHtmlContent = oRequestHandler.request()
     oParser = cParser()
     # réécriture pour prendre les séries dans le menu des genres
@@ -302,7 +302,7 @@ def ShowSaisonEpisodes():
     sUrl = oInputParameterHandler.getValue('siteUrl')
     sDesc = oInputParameterHandler.getValue('sDesc')
 
-    oRequestHandler = cRequestHandler(sUrl)
+    oRequestHandler = RequestHandler(sUrl)
     sHtmlContent = oRequestHandler.request()
 
     sPattern = 'class="Title AA-Season.+?>Season <span>([^<]+)</span>|class="MvTbImg">.+?img src.+?["|;]([^\"]+?)["|;].+?href="([^"]+)">([^<]+)<'
@@ -342,7 +342,7 @@ def showHosters():
     sMovieTitle = oInputParameterHandler.getValue('sMovieTitle')
     sThumb = oInputParameterHandler.getValue('sThumb')
 
-    oRequestHandler = cRequestHandler(sUrl)
+    oRequestHandler = RequestHandler(sUrl)
     sHtmlContent = oRequestHandler.request()
 
     # Recuperer variable pour url de base
@@ -363,7 +363,7 @@ def showHosters():
                 else:
                     continue  # inutile de faire des requetes identiques pour les films
 
-            oRequestHandler = cRequestHandler(site)
+            oRequestHandler = RequestHandler(site)
             sHtmlContent = oRequestHandler.request()
 
             slug = re.search('"Video".+?src=".+?v=(.+?)"', sHtmlContent).group(1)

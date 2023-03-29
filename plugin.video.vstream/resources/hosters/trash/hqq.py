@@ -16,7 +16,7 @@ try:  # Python 2
 except ImportError:  # Python 3
     import urllib.request as urllib2
 
-from resources.lib.handler.requestHandler import cRequestHandler
+from resources.lib.handler.requestHandler import RequestHandler
 from resources.lib.parser import cParser
 from resources.hosters.hoster import iHoster
 
@@ -210,7 +210,7 @@ class cHoster(iHoster):
         # HTTP_HEADER['Referer'] = url
         # data = self.getPage(playerUrl, {'header' : HTTP_HEADER})
 
-        oRequestHandler = cRequestHandler(self._url)
+        oRequestHandler = RequestHandler(self._url)
         data = oRequestHandler.request()
         data = base64.b64decode(re.search('base64\\,([^"]+?)"', data).group(1))
 
@@ -226,8 +226,8 @@ class cHoster(iHoster):
         for idx in range(len(data)):
             post_data[data[idx][0]] = data[idx][1]
 
-        oRequest = cRequestHandler(playerUrl)
-        oRequest.setRequestType(cRequestHandler.REQUEST_TYPE_POST)
+        oRequest = RequestHandler(playerUrl)
+        oRequest.setRequestType(RequestHandler.REQUEST_TYPE_POST)
         oRequest.addHeaderEntry('Referer', playerUrl)
         for aEntry in data:
             oRequest.addParameters(aEntry[0], aEntry[1])
@@ -277,7 +277,7 @@ class cHoster(iHoster):
 
     def _getMediaLinkForGuest(self):
         # host = self.parseNETUTV(self._url)
-        oRequest = cRequestHandler('http://netu.tv/watch_video.php?v=S7DGB15KBN6N')
+        oRequest = RequestHandler('http://netu.tv/watch_video.php?v=S7DGB15KBN6N')
         sHtmlContent = oRequest.request()
         aHeader = oRequest.getResponseHeader()
         sPhpSessionId = self.__getPhpSessionId(aHeader)

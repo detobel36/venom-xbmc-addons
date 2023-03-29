@@ -6,7 +6,7 @@ from resources.lib.gui.hoster import HosterGui
 from resources.lib.gui.gui import Gui
 from resources.lib.handler.inputParameterHandler import InputParameterHandler
 from resources.lib.handler.outputParameterHandler import OutputParameterHandler
-from resources.lib.handler.requestHandler import cRequestHandler
+from resources.lib.handler.requestHandler import RequestHandler
 from resources.lib.parser import cParser
 from resources.lib.comaddon import siteManager
 from resources.lib.util import cUtil
@@ -94,7 +94,7 @@ def showYears():
     oGui = Gui()
     oParser = cParser()
 
-    oRequestHandler = cRequestHandler(URL_MAIN + 'accueil/')
+    oRequestHandler = RequestHandler(URL_MAIN + 'accueil/')
     sHtmlContent = oRequestHandler.request()
 
     sPattern = 'class="btn sm" href="([^"]+)">([^<]+)'
@@ -120,7 +120,7 @@ def showGenres():
     oInputParameterHandler = InputParameterHandler()
     sUrl = oInputParameterHandler.getValue('siteUrl')
 
-    oRequestHandler = cRequestHandler(sUrl)
+    oRequestHandler = RequestHandler(sUrl)
     sHtmlContent = oRequestHandler.request()
 
     sPattern = 'class="cat-item.+?href="([^"]+)">([^<]+)'
@@ -146,7 +146,7 @@ def showSeriesGenres():
     oInputParameterHandler = InputParameterHandler()
     sUrl = oInputParameterHandler.getValue('siteUrl')
 
-    oRequestHandler = cRequestHandler(sUrl)
+    oRequestHandler = RequestHandler(sUrl)
     sHtmlContent = oRequestHandler.request()
 
     sPattern = 'class="cat-item.+?href="([^"]+)">([^<]+)'
@@ -179,7 +179,7 @@ def showMovies(sSearch=''):
         sUrl = sSearch.replace(' ', '+').replace('%20 ', '+')
 
     sPattern = 'class="entry-title">([^<]+).+?data-src="([^"]+).+?year">([^<]*).+?href="([^"]+)'
-    oRequestHandler = cRequestHandler(sUrl)
+    oRequestHandler = RequestHandler(sUrl)
     # on ne prend pas les populaires qui sinon sont présent à chaque fois
     sStart = '<!doctype html>'
     sEnd = '<h3 class="widget-title">Populaires'
@@ -257,7 +257,7 @@ def showSaisons():
     sYear = oInputParameterHandler.getValue('sYear')
     sDesc = oInputParameterHandler.getValue('sDesc')
 
-    oRequestHandler = cRequestHandler(sUrl)
+    oRequestHandler = RequestHandler(sUrl)
     sHtmlContent = oRequestHandler.request()
 
     # récupération du Synopsis
@@ -297,7 +297,7 @@ def showEpisodes():
     sDesc = oInputParameterHandler.getValue('sDesc')
     sYear = oInputParameterHandler.getValue('sYear')
 
-    oRequestHandler = cRequestHandler(sUrl)
+    oRequestHandler = RequestHandler(sUrl)
     sHtmlContent = oRequestHandler.request()
     sPattern = '<span class=num-epi>\\dx(\\d+).+?href=(\\S+)'
     aResult = oParser.parse(sHtmlContent, sPattern)
@@ -331,7 +331,7 @@ def showHosters():
     sYear = oInputParameterHandler.getValue('sYear')
 
     oParser = cParser()
-    oRequestHandler = cRequestHandler(sUrl)
+    oRequestHandler = RequestHandler(sUrl)
     oRequestHandler.addHeaderEntry('User-Agent', UA)
     oRequestHandler.addHeaderEntry('Accept', '*/*')
     oRequestHandler.addHeaderEntry('Accept-Language', 'fr,fr-FR;q=0.8,en-US;q=0.5,en;q=0.3')
@@ -391,7 +391,7 @@ def hostersLink():
     sMovieTitle = oInputParameterHandler.getValue('sMovieTitle')
     sThumb = oInputParameterHandler.getValue('sThumb')
 
-    oRequest = cRequestHandler(sUrl)
+    oRequest = RequestHandler(sUrl)
     oRequest.setRequestType(1)
     oRequest.addHeaderEntry('User-Agent', UA)
     oRequest.addHeaderEntry('Referer', referer)

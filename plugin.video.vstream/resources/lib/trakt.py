@@ -12,7 +12,7 @@ from resources.lib.gui.guiElement import GuiElement
 from resources.lib.handler.inputParameterHandler import InputParameterHandler
 from resources.lib.handler.outputParameterHandler import OutputParameterHandler
 from resources.lib.handler.rechercheHandler import cRechercheHandler
-from resources.lib.handler.requestHandler import cRequestHandler
+from resources.lib.handler.requestHandler import RequestHandler
 from resources.lib.util import Quote
 
 SITE_IDENTIFIER = 'cTrakt'
@@ -38,7 +38,7 @@ class cTrakt:
         self.__sType = ''
 
     def getToken(self):
-        oRequestHandler = cRequestHandler(URL_API + 'oauth/device/code')
+        oRequestHandler = RequestHandler(URL_API + 'oauth/device/code')
         oRequestHandler.setRequestType(1)
         oRequestHandler.addHeaderEntry('Content-Type', 'application/json')
         oRequestHandler.addJSONEntry('client_id', API_KEY)
@@ -55,7 +55,7 @@ class cTrakt:
 
             if (oDialog == 1):
                 try:
-                    oRequestHandler = cRequestHandler(URL_API + 'oauth/device/token')
+                    oRequestHandler = RequestHandler(URL_API + 'oauth/device/token')
                     oRequestHandler.setRequestType(1)
                     oRequestHandler.addHeaderEntry('Content-Type', 'application/json')
                     oRequestHandler.addJSONEntry('client_id', API_KEY)
@@ -105,7 +105,7 @@ class cTrakt:
         else:
             # nom de l'user
             try:
-                oRequestHandler = cRequestHandler(URL_API + 'users/me')
+                oRequestHandler = RequestHandler(URL_API + 'users/me')
                 oRequestHandler.addHeaderEntry('Content-Type', 'application/json')
                 oRequestHandler.addHeaderEntry('trakt-api-key', API_KEY)
                 oRequestHandler.addHeaderEntry('trakt-api-version', API_VERS)
@@ -196,7 +196,7 @@ class cTrakt:
         sType = oInputParameterHandler.getValue('type')
 
         # stats user
-        oRequestHandler = cRequestHandler(URL_API + 'users/me/stats')
+        oRequestHandler = RequestHandler(URL_API + 'users/me/stats')
         oRequestHandler.addHeaderEntry('Content-Type', 'application/json')
         oRequestHandler.addHeaderEntry('trakt-api-key', API_KEY)
         oRequestHandler.addHeaderEntry('trakt-api-version', API_VERS)
@@ -265,7 +265,7 @@ class cTrakt:
                 liste.append([self.ADDON.VSlang(30317), URL_API + 'shows/played/monthly'])
 
         elif sType == 'custom-lists':
-            oRequestHandler = cRequestHandler(URL_API + 'users/me/lists')
+            oRequestHandler = RequestHandler(URL_API + 'users/me/lists')
             oRequestHandler.addHeaderEntry('Content-Type', 'application/json')
             oRequestHandler.addHeaderEntry('trakt-api-key', API_KEY)
             oRequestHandler.addHeaderEntry('trakt-api-version', API_VERS)
@@ -284,7 +284,7 @@ class cTrakt:
             elif sType == 'lists-pop':
                 URL = URL_API + 'lists/popular'
 
-            oRequestHandler = cRequestHandler(URL)
+            oRequestHandler = RequestHandler(URL)
             oRequestHandler.addHeaderEntry('Content-Type', 'application/json')
             oRequestHandler.addHeaderEntry('trakt-api-key', API_KEY)
             oRequestHandler.addHeaderEntry('trakt-api-version', API_VERS)
@@ -311,7 +311,7 @@ class cTrakt:
         oInputParameterHandler = InputParameterHandler()
         sUrl = oInputParameterHandler.getValue('siteUrl')
 
-        oRequestHandler = cRequestHandler(sUrl)
+        oRequestHandler = RequestHandler(sUrl)
         oRequestHandler.addHeaderEntry('Content-Type', 'application/json')
         oRequestHandler.addHeaderEntry('trakt-api-key', API_KEY)
         oRequestHandler.addHeaderEntry('trakt-api-version', API_VERS)
@@ -359,7 +359,7 @@ class cTrakt:
 
         sUrl = sUrl + "?page=1&limit=" + MAXRESULT
 
-        oRequestHandler = cRequestHandler(sUrl)
+        oRequestHandler = RequestHandler(sUrl)
         oRequestHandler.addHeaderEntry('Content-Type', 'application/json')
         oRequestHandler.addHeaderEntry('trakt-api-key', API_KEY)
         oRequestHandler.addHeaderEntry('trakt-api-version', API_VERS)
@@ -699,7 +699,7 @@ class cTrakt:
         sKey = oInputParameterHandler.getValue('key')
         searchtext = oInputParameterHandler.getValue('searchtext')
 
-        oRequestHandler = cRequestHandler(sUrl)
+        oRequestHandler = RequestHandler(sUrl)
         oRequestHandler.addHeaderEntry('Content-Type', 'application/json')
         oRequestHandler.addHeaderEntry('trakt-api-key', API_KEY)
         oRequestHandler.addHeaderEntry('trakt-api-version', API_VERS)
@@ -733,7 +733,7 @@ class cTrakt:
     def getLocalizedTitle(self, item, what):
         try:
             if 'episode' not in what:
-                oRequestHandler = cRequestHandler(URL_API + '%s/%s/translations/fr' % (what, item['ids']['slug']))
+                oRequestHandler = RequestHandler(URL_API + '%s/%s/translations/fr' % (what, item['ids']['slug']))
                 oRequestHandler.addHeaderEntry('Content-Type', 'application/json')
                 oRequestHandler.addHeaderEntry('trakt-api-key', API_KEY)
                 oRequestHandler.addHeaderEntry('trakt-api-version', API_VERS)
@@ -743,7 +743,7 @@ class cTrakt:
                 show_title = self.getLocalizedTitle(item['show'], 'shows')
                 t_values = (item['show']['ids']['slug'], item['episode']['season'], item['episode']['number'])
 
-                oRequestHandler = cRequestHandler(
+                oRequestHandler = RequestHandler(
                     URL_API +
                     'shows/%s/seasons/%s/episodes/%s/translations/fr' %
                     t_values)
@@ -779,7 +779,7 @@ class cTrakt:
 
         cTrakt.CONTENT = '2'
 
-        oRequestHandler = cRequestHandler(sUrl)
+        oRequestHandler = RequestHandler(sUrl)
         oRequestHandler.addHeaderEntry('Content-Type', 'application/json')
         oRequestHandler.addHeaderEntry('trakt-api-key', API_KEY)
         oRequestHandler.addHeaderEntry('trakt-api-version', API_VERS)
@@ -964,7 +964,7 @@ class cTrakt:
         else:
             sPost = {sType: [{'ids': {'imdb': sImdb}}]}
 
-        oRequestHandler = cRequestHandler(sAction)
+        oRequestHandler = RequestHandler(sAction)
         oRequestHandler.setRequestType(1)
         oRequestHandler.addHeaderEntry('Content-Type', 'application/json')
         oRequestHandler.addHeaderEntry('trakt-api-key', API_KEY)
@@ -1084,7 +1084,7 @@ class cTrakt:
             VSlog('Problème sTmdb')
             return
 
-        oRequestHandler = cRequestHandler('https://api.themoviedb.org/3/movie/' + str(sTmdb))
+        oRequestHandler = RequestHandler('https://api.themoviedb.org/3/movie/' + str(sTmdb))
         oRequestHandler.addParameters('api_key', '92ab39516970ab9d86396866456ec9b6')
         oRequestHandler.addParameters('language', 'fr')
 

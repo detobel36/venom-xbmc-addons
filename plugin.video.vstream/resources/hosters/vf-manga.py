@@ -3,7 +3,7 @@
 # import base64
 import codecs
 
-from resources.lib.handler.requestHandler import cRequestHandler
+from resources.lib.handler.requestHandler import RequestHandler
 from resources.lib.packer import cPacker
 from resources.lib.parser import cParser
 from resources.hosters.hoster import iHoster
@@ -17,7 +17,7 @@ class cHoster(iHoster):
     def _getMediaLinkForGuest(self):
         api_call = False
 
-        oRequest = cRequestHandler(self._url)
+        oRequest = RequestHandler(self._url)
         sHtmlContent = oRequest.request()
 
         oParser = cParser()
@@ -44,7 +44,7 @@ class cHoster(iHoster):
                 if not api_call.startswith('http'):
                     api_call = 'https://vf-manga.cc/player/' + api_call
 
-                oRequest = cRequestHandler(api_call)
+                oRequest = RequestHandler(api_call)
                 oRequest.addHeaderEntry('Referer', self._url)
                 sHtmlContent = oRequest.request()
                 api_call = oRequest.getRealUrl()

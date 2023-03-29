@@ -9,7 +9,7 @@ from resources.lib.gui.gui import Gui
 from resources.lib.gui.hoster import HosterGui
 from resources.lib.handler.inputParameterHandler import InputParameterHandler
 from resources.lib.handler.outputParameterHandler import OutputParameterHandler
-from resources.lib.handler.requestHandler import cRequestHandler
+from resources.lib.handler.requestHandler import RequestHandler
 from resources.lib.parser import cParser
 
 SITE_IDENTIFIER = 'debrid_link'
@@ -57,7 +57,7 @@ def showLiens(sSearch=''):
     numPage = int(numPage)
 
     Token_debrid_link = "Bearer " + addon().getSetting('hoster_debridlink_token')
-    oRequestHandler = cRequestHandler(sUrl)
+    oRequestHandler = RequestHandler(sUrl)
     oRequestHandler.addHeaderEntry('Accept', 'application/json')
     oRequestHandler.addHeaderEntry('Authorization', Token_debrid_link)
     r = json.loads(oRequestHandler.request())
@@ -67,7 +67,7 @@ def showLiens(sSearch=''):
         if (r["error"] == 'badToken'):
             New_token = RenewToken()
 
-            oRequestHandler = cRequestHandler(sUrl)
+            oRequestHandler = RequestHandler(sUrl)
             oRequestHandler.addHeaderEntry('Accept', 'application/json')
             oRequestHandler.addHeaderEntry('Authorization', New_token)
             r = json.loads(oRequestHandler.request())
@@ -130,7 +130,7 @@ def showInfo():
     oInputParameterHandler = InputParameterHandler()
     sUrl = oInputParameterHandler.getValue('siteUrl')
 
-    oRequestHandler = cRequestHandler(sUrl)
+    oRequestHandler = RequestHandler(sUrl)
     sHtmlContent = oRequestHandler.request()
     sPattern = '<i class="sprite sprite-.+?"></i>.+?<li tooltip="([^"]+)" class="([^"]+)">'
 
@@ -168,7 +168,7 @@ def showInfo():
 def RenewToken():
     refreshTok = addon().getSetting('hoster_debridlink_tokenrefresh')
     if refreshTok == "":
-        oRequestHandler = cRequestHandler(URL_HOST + "/api/oauth/device/code")
+        oRequestHandler = RequestHandler(URL_HOST + "/api/oauth/device/code")
         oRequestHandler.setRequestType(1)
         oRequestHandler.addHeaderEntry('Content-Type', 'application/x-www-form-urlencoded')
         oRequestHandler.addParameters('client_id', addon().getSetting('hoster_debridlink_ID'))
@@ -179,7 +179,7 @@ def RenewToken():
             r["user_code"] +
             ' pour autorisez la connection')
 
-        oRequestHandler = cRequestHandler(URL_HOST + "/api/oauth/token")
+        oRequestHandler = RequestHandler(URL_HOST + "/api/oauth/token")
         oRequestHandler.setRequestType(1)
         oRequestHandler.addHeaderEntry('Content-Type', 'application/x-www-form-urlencoded')
         oRequestHandler.addParameters('client_id', addon().getSetting('hoster_debridlink_ID'))
@@ -192,7 +192,7 @@ def RenewToken():
         return r["access_token"]
 
     else:
-        oRequestHandler = cRequestHandler(URL_HOST + "/api/oauth/token")
+        oRequestHandler = RequestHandler(URL_HOST + "/api/oauth/token")
         oRequestHandler.setRequestType(1)
         oRequestHandler.addHeaderEntry('Content-Type', 'application/x-www-form-urlencoded')
         oRequestHandler.addParameters('client_id', addon().getSetting('hoster_debridlink_ID'))

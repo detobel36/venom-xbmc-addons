@@ -9,7 +9,7 @@ from resources.lib.gui.gui import Gui
 from resources.lib.gui.hoster import HosterGui
 from resources.lib.handler.inputParameterHandler import InputParameterHandler
 from resources.lib.handler.outputParameterHandler import OutputParameterHandler
-from resources.lib.handler.requestHandler import cRequestHandler
+from resources.lib.handler.requestHandler import RequestHandler
 from resources.lib.parser import cParser
 from resources.lib.util import cUtil, Unquote, QuotePlus
 
@@ -238,7 +238,7 @@ def showGenres():
     oInputParameterHandler = InputParameterHandler()
     sUrl = oInputParameterHandler.getValue('siteUrl')
 
-    oRequestHandler = cRequestHandler(sUrl)
+    oRequestHandler = RequestHandler(sUrl)
     oRequestHandler.addHeaderEntry('User-Agent', UA)
     sHtmlContent = oRequestHandler.request()
 
@@ -285,7 +285,7 @@ def showAlpha2():
     if 'vostfr' in sUrl:
         sType = 'VOSTFR'
 
-    oRequestHandler = cRequestHandler(sUrl2)
+    oRequestHandler = RequestHandler(sUrl2)
     oRequestHandler.addHeaderEntry('User-Agent', UA)
     oRequestHandler.addHeaderEntry('Referer', URL_MAIN)
     sHtmlContent = oRequestHandler.request()
@@ -313,7 +313,7 @@ def showAlpha(url=None):
     else:
         sUrl = url
 
-    oRequestHandler = cRequestHandler(sUrl)
+    oRequestHandler = RequestHandler(sUrl)
     oRequestHandler.addHeaderEntry('User-Agent', UA)
     oRequestHandler.addHeaderEntry('Referer', URL_MAIN)
     sHtmlContent = oRequestHandler.request()
@@ -366,7 +366,7 @@ def showMovies(sSearch=''):
 
         sUrl = URL_SEARCH[0] + sSearch + '.html'
 
-        oRequestHandler = cRequestHandler(sUrl)
+        oRequestHandler = RequestHandler(sUrl)
         oRequestHandler.addHeaderEntry('User-Agent', UA)
         oRequestHandler.addHeaderEntry('Referer', URL_MAIN)
         sHtmlContent = oRequestHandler.request()
@@ -376,7 +376,7 @@ def showMovies(sSearch=''):
         oInputParameterHandler = InputParameterHandler()
         sUrl = oInputParameterHandler.getValue('siteUrl')
 
-        oRequestHandler = cRequestHandler(sUrl)
+        oRequestHandler = RequestHandler(sUrl)
         oRequestHandler.addHeaderEntry('User-Agent', UA)
         oRequestHandler.addHeaderEntry('Referer', RandomReferer())
         sHtmlContent = oRequestHandler.request()
@@ -536,7 +536,7 @@ def showSaison():
     sMovieTitle = oInputParameterHandler.getValue('sMovieTitle')
     sThumb = oInputParameterHandler.getValue('sThumb')
 
-    oRequestHandler = cRequestHandler(sUrl)
+    oRequestHandler = RequestHandler(sUrl)
     oRequestHandler.addHeaderEntry('User-Agent', UA)
     oRequestHandler.addHeaderEntry('Referer', RandomReferer())
     sHtmlContent = oRequestHandler.request()
@@ -577,7 +577,7 @@ def showEpisode():
     sUrl, sSearchSeason = oInputParameterHandler.getValue('siteUrl').split('&season=')
     sThumb = oInputParameterHandler.getValue('sThumb')
 
-    oRequestHandler = cRequestHandler(sUrl)
+    oRequestHandler = RequestHandler(sUrl)
     oRequestHandler.addHeaderEntry('User-Agent', UA)
     oRequestHandler.addHeaderEntry('Referer', RandomReferer())
     sHtmlContent = oRequestHandler.request()
@@ -690,7 +690,7 @@ def showHosters():
     sMovieTitle = oInputParameterHandler.getValue('sMovieTitle')
     sThumb = oInputParameterHandler.getValue('sThumb')
 
-    oRequestHandler = cRequestHandler(sUrl)
+    oRequestHandler = RequestHandler(sUrl)
     oRequestHandler.addHeaderEntry('User-Agent', UA)
     oRequestHandler.addHeaderEntry('Referer', RandomReferer())
     sHtmlContent = oRequestHandler.request()
@@ -771,7 +771,7 @@ def showHosters():
                 if 'openload2.php' in sHosterUrl:
                     # on telecharge la page
 
-                    oRequestHandler = cRequestHandler(sHosterUrl)
+                    oRequestHandler = RequestHandler(sHosterUrl)
                     oRequestHandler.addHeaderEntry('User-Agent', UA)
                     sHtmlContent = oRequestHandler.request()
                     # Et on remplace le code
@@ -783,7 +783,7 @@ def showHosters():
                 aResult = oParser.parse(sHosterUrl, sPattern)
                 if aResult[0]:
                     # on telecharge la page
-                    oRequestHandler = cRequestHandler(sHosterUrl)
+                    oRequestHandler = RequestHandler(sHosterUrl)
                     oRequestHandler.addHeaderEntry('Referer', sUrl)
                     oRequestHandler.addHeaderEntry('User-Agent', UA)
                     sHtmlContent = oRequestHandler.request()
@@ -809,7 +809,7 @@ def showHosters():
                 # test pr liens raccourcis
                 if 'http://goo.gl' in sHosterUrl:
                     try:
-                        oRequestHandler = cRequestHandler(sHosterUrl)
+                        oRequestHandler = RequestHandler(sHosterUrl)
                         oRequestHandler.addHeaderEntry('User-Agent', "Mozilla 5.10")
                         oRequestHandler.addHeaderEntry('Host', "goo.gl")
                         oRequestHandler.addHeaderEntry('Connection', 'keep-alive')
@@ -821,7 +821,7 @@ def showHosters():
 
                 # Potection visio.php
                 if '/visio.php?' in sHosterUrl:
-                    oRequestHandler = cRequestHandler(sHosterUrl)
+                    oRequestHandler = RequestHandler(sHosterUrl)
                     oRequestHandler.addHeaderEntry('Referer', sUrl)
                     oRequestHandler.addHeaderEntry('User-Agent', UA)
                     sHtmlContent = oRequestHandler.request()
@@ -837,7 +837,7 @@ def showHosters():
                 sPattern = "(https*:\\/\\/www.ianime[^\\/\\]+\\/[^']+)"
                 aResult = oParser.parse(sHosterUrl, sPattern)
                 if aResult[0]:
-                    oRequestHandler = cRequestHandler(sHosterUrl)
+                    oRequestHandler = RequestHandler(sHosterUrl)
                     oRequestHandler.addHeaderEntry('Referer', sUrl)
                     oRequestHandler.addHeaderEntry('User-Agent', UA)
 
@@ -854,8 +854,8 @@ def showHosters():
                         # Add new one
                         sHosterUrl = GetHost(sHosterUrl2) + sHosterUrl
 
-                        oRequestHandler = cRequestHandler(sHosterUrl)
-                        oRequestHandler.setRequestType(cRequestHandler.REQUEST_TYPE_POST)
+                        oRequestHandler = RequestHandler(sHosterUrl)
+                        oRequestHandler.setRequestType(RequestHandler.REQUEST_TYPE_POST)
                         # Add params
                         oRequestHandler.addParameters('submit.x', xx)
                         oRequestHandler.addParameters('submit.y', yy)
@@ -924,7 +924,7 @@ def getTinyUrl(url):
 
     # On va chercher le vrai lien
     else:
-        oRequestHandler = cRequestHandler(url)
+        oRequestHandler = RequestHandler(url)
         oRequestHandler.disableRedirect()
         oRequestHandler.addHeaderEntry('User-Agent', UA)
         oRequestHandler.addHeaderEntry('Referer', URL_MAIN)

@@ -8,7 +8,7 @@ import random
 from resources.lib.config import GestionCookie
 from resources.lib.comaddon import progress, dialog, xbmc, xbmcgui, VSlog
 from resources.lib.parser import cParser
-from resources.lib.handler.requestHandler import cRequestHandler
+from resources.lib.handler.requestHandler import RequestHandler
 from resources.lib.handler.outputParameterHandler import OutputParameterHandler
 from resources.lib.handler.inputParameterHandler import InputParameterHandler
 from resources.lib.gui.gui import Gui
@@ -428,7 +428,7 @@ def showMovies(sSearch=''):
         sUrl = oInputParameterHandler.getValue('siteUrl')
 
     # print sUrl
-    oRequestHandler = cRequestHandler(sUrl)
+    oRequestHandler = RequestHandler(sUrl)
     sHtmlContent = oRequestHandler.request()
     # print sHtmlContent
     sDesc = ''
@@ -553,7 +553,7 @@ def showMoviesReleases():
     sUrl = oInputParameterHandler.getValue('siteUrl')
     sUrl = sUrl.replace('.html', '')
 
-    oRequestHandler = cRequestHandler(sUrl)
+    oRequestHandler = RequestHandler(sUrl)
     sHtmlContent = oRequestHandler.request()
 
     sPattern = '<option value="([^"]+)"  id="([^"]+)"'
@@ -596,7 +596,7 @@ def showSaisons():
     sUrl = oInputParameterHandler.getValue('siteUrl')
     sDesc = oInputParameterHandler.getValue('sDesc')
 
-    oRequestHandler = cRequestHandler(sUrl)
+    oRequestHandler = RequestHandler(sUrl)
     sHtmlContent = oRequestHandler.request()
 
     # fh = open('c:\\test.txt', "w")
@@ -641,7 +641,7 @@ def showSeriesReleases():
     sUrl = oInputParameterHandler.getValue('siteUrl')
     sUrl = sUrl.replace('.html', '')
 
-    oRequestHandler = cRequestHandler(sUrl)
+    oRequestHandler = RequestHandler(sUrl)
     sHtmlContent = oRequestHandler.request()
 
     oGui = Gui()
@@ -695,7 +695,7 @@ def showHosters():
     # print sUrl
     sUrl = sUrl.replace(' & ', '+%26+').replace(' ', '+')
     # VSlog(sUrl)
-    oRequestHandler = cRequestHandler(sUrl)
+    oRequestHandler = RequestHandler(sUrl)
     sHtmlContent = oRequestHandler.request()
     oParser = cParser()
 
@@ -840,7 +840,7 @@ def DecryptDlProtecte(url):
     s = "azertyupqsdfghjkmwxcvbn23456789AZERTYUPQSDFGHJKMWXCVBN_-#@"
     RandomKey = ''.join(random.choice(s) for i in range(32))
 
-    oRequestHandler = cRequestHandler(url2)
+    oRequestHandler = RequestHandler(url2)
     oRequestHandler.setRequestType(1)
     oRequestHandler.addHeaderEntry('Host', 'www.dl-protect.ru')
     oRequestHandler.addHeaderEntry('Referer', url)
@@ -885,7 +885,7 @@ def DecryptDlProtecte(url):
 
     # 2 eme requete pour avoir le lien
     cookies = GestionCookie().Readcookie('dl_protect.ru')
-    oRequestHandler = cRequestHandler(url)
+    oRequestHandler = RequestHandler(url)
     oRequestHandler.setRequestType(1)
     oRequestHandler.addHeaderEntry('Host', 'www.dl-protect.ru')
     oRequestHandler.addHeaderEntry('Referer', url)

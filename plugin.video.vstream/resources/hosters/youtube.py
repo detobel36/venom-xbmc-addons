@@ -9,7 +9,7 @@
 import time
 
 from resources.hosters.hoster import iHoster
-from resources.lib.handler.requestHandler import cRequestHandler
+from resources.lib.handler.requestHandler import RequestHandler
 from resources.lib.comaddon import VSlog
 
 import xbmcaddon

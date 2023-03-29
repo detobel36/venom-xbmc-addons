@@ -6,7 +6,7 @@ from resources.lib.gui.hoster import HosterGui
 from resources.lib.gui.gui import Gui
 from resources.lib.handler.inputParameterHandler import InputParameterHandler
 from resources.lib.handler.outputParameterHandler import OutputParameterHandler
-from resources.lib.handler.requestHandler import cRequestHandler
+from resources.lib.handler.requestHandler import RequestHandler
 from resources.lib.parser import cParser
 from resources.lib.comaddon import progress, siteManager
 
@@ -71,7 +71,7 @@ def showMovies(sSearch=''):
     if sSearch:
         sUrl = sSearch.replace(' ', '+')
 
-    oRequestHandler = cRequestHandler(sUrl)
+    oRequestHandler = RequestHandler(sUrl)
     sHtmlContent = oRequestHandler.request()
 
     if sSearch:
@@ -165,10 +165,10 @@ def seriesHosters():
 
     url = URL_MAIN + 'templates/Animix/js/anime.js'
 
-    oRequestHandler = cRequestHandler(url)
+    oRequestHandler = RequestHandler(url)
     playerContent = oRequestHandler.request()
 
-    oRequestHandler = cRequestHandler(sUrl)
+    oRequestHandler = RequestHandler(sUrl)
     sHtmlContent = oRequestHandler.request()
 
     # On récupère l'id associé à l'épisode
@@ -257,7 +257,7 @@ def DecryptOuo():
     if '/fbc/' not in urlOuo:
         urlOuo = urlOuo.replace('io/', 'io/fbc/').replace('press/', 'press/fbc/')
 
-    oRequestHandler = cRequestHandler(urlOuo)
+    oRequestHandler = RequestHandler(urlOuo)
     sHtmlContent = oRequestHandler.request()
     Cookie = oRequestHandler.GetCookies()
 
@@ -272,7 +272,7 @@ def DecryptOuo():
     url = urlOuo.replace('/fbc/', '/go/')
     params = '_token=' + OuoToken.group(1) + '&g-recaptcha-response=' + gToken + '&v-token=' + OuoToken.group(2)
 
-    oRequestHandler = cRequestHandler(url)
+    oRequestHandler = RequestHandler(url)
     oRequestHandler.setRequestType(1)
     oRequestHandler.addHeaderEntry('User-Agent', UA)
     oRequestHandler.addHeaderEntry('Accept', 'text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8')
@@ -292,7 +292,7 @@ def DecryptOuo():
     url = final.group(1)
     params = '_token=' + final.group(2) + '&x-token=' + ''
 
-    oRequestHandler = cRequestHandler(url)
+    oRequestHandler = RequestHandler(url)
     oRequestHandler.setRequestType(1)
     oRequestHandler.addHeaderEntry('User-Agent', UA)
     oRequestHandler.addHeaderEntry('Accept', 'text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8')

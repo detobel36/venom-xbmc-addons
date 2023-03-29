@@ -20,7 +20,7 @@ from resources.lib.gui.hoster import HosterGui
 from resources.lib.handler.inputParameterHandler import InputParameterHandler
 from resources.lib.handler.outputParameterHandler import OutputParameterHandler
 from resources.lib.handler.premiumHandler import cPremiumHandler
-from resources.lib.handler.requestHandler import cRequestHandler, MPencode
+from resources.lib.handler.requestHandler import RequestHandler, MPencode
 from resources.lib.parser import cParser
 from resources.lib.util import Quote
 
@@ -114,7 +114,7 @@ def showFile(sSearch=''):
     oPremiumHandler = cPremiumHandler('uptobox')
     sToken = oPremiumHandler.getToken()
 
-    oRequestHandler = cRequestHandler(API_URL.replace('none', sToken) + sUrl)
+    oRequestHandler = RequestHandler(API_URL.replace('none', sToken) + sUrl)
     sHtmlContent = oRequestHandler.request()
     content = json.loads(sHtmlContent)
     if ('success' in content and content['success'] == False) or content['statusCode'] != 0:
@@ -221,7 +221,7 @@ def showMedias(sSearch='', sType=None):
     # Page courante
     numPage = offset // limit
 
-    oRequestHandler = cRequestHandler(API_URL.replace('none', sToken) + sSiteUrl)
+    oRequestHandler = RequestHandler(API_URL.replace('none', sToken) + sSiteUrl)
     sHtmlContent = oRequestHandler.request()
     content = json.loads(sHtmlContent)
 
@@ -668,7 +668,7 @@ def searchSeries(searchName):
     sUrl = API_URL.replace('none', sToken) + '&offset=0&limit=20&path='
 
     # recherches des dossiers "series" à la racine
-    oRequestHandler = cRequestHandler(sUrl + '//')
+    oRequestHandler = RequestHandler(sUrl + '//')
     sHtmlContent = oRequestHandler.request()
     content = json.loads(sHtmlContent)
     content = content['data']
@@ -687,7 +687,7 @@ def searchSeries(searchName):
 
 
 def searchSerie(oGui, sUrl, path, searchName):
-    oRequestHandler = cRequestHandler(sUrl + path)
+    oRequestHandler = RequestHandler(sUrl + path)
     sHtmlContent = oRequestHandler.request()
     content = json.loads(sHtmlContent)
     content = content['data']

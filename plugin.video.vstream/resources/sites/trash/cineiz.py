@@ -5,7 +5,7 @@ from resources.lib.gui.hoster import HosterGui
 from resources.lib.gui.gui import Gui
 from resources.lib.handler.inputParameterHandler import InputParameterHandler
 from resources.lib.handler.outputParameterHandler import OutputParameterHandler
-from resources.lib.handler.requestHandler import cRequestHandler
+from resources.lib.handler.requestHandler import RequestHandler
 from resources.lib.parser import cParser
 from resources.lib.comaddon import progress, VSlog
 import re
@@ -310,9 +310,9 @@ def showMovieSearch(sSearch=''):
     else:
         sUrl = URL_MAIN + 'recherche'
 
-    oRequestHandler = cRequestHandler(sUrl)
+    oRequestHandler = RequestHandler(sUrl)
     # oRequestHandler.addHeaderEntry('Referer', 'https://www.cineiz.io/recherche')
-    oRequestHandler.setRequestType(cRequestHandler.REQUEST_TYPE_POST)
+    oRequestHandler.setRequestType(RequestHandler.REQUEST_TYPE_POST)
     oRequestHandler.addParameters('action', 'recherche')
     oRequestHandler.addParameters('story', sSearch)
 
@@ -366,7 +366,7 @@ def showMovies(sSearch=''):
         oInputParameterHandler = InputParameterHandler()
         sUrl = oInputParameterHandler.getValue('siteUrl')
 
-    oRequestHandler = cRequestHandler(sUrl)
+    oRequestHandler = RequestHandler(sUrl)
     sHtmlContent = oRequestHandler.request()
 
     sPattern = '<div class="unfilm".+?href="(.+?)".+?<img src="(.+?)".+?<span class="xquality">(.+?)</span>.+?<span class="xlangue">(.+?)</span>.+?<span class="linkfilm">(.+?)</span>'
@@ -445,7 +445,7 @@ def showSaisons():
     sThumb = oInputParameterHandler.getValue('sThumb')
     sMovieTitle = oInputParameterHandler.getValue('sMovieTitle')
 
-    oRequestHandler = cRequestHandler(sUrl)
+    oRequestHandler = RequestHandler(sUrl)
     sHtmlContent = oRequestHandler.request()
 
     sPattern = '<div class="unepetitesaisons"><a href="(.+?)" title=.+?<div class="etlelien">(.+?)</div>'
@@ -485,7 +485,7 @@ def showEpisodes():
     sThumb = oInputParameterHandler.getValue('sThumb')
     sMovieTitle = oInputParameterHandler.getValue('sMovieTitle')
 
-    oRequestHandler = cRequestHandler(sUrl)
+    oRequestHandler = RequestHandler(sUrl)
     sHtmlContent = oRequestHandler.request()
 
     sPattern = '<a class="n_episode2".+?href="([^"]+)"><span class="head">(.+?)</span><span class="body">(.+?)</span>'
@@ -530,9 +530,9 @@ def showLinks():
     sMovieTitle = oInputParameterHandler.getValue('sMovieTitle')
 
     oParser = cParser()
-    oRequestHandler = cRequestHandler(sUrl)
+    oRequestHandler = RequestHandler(sUrl)
     # faut post
-    oRequestHandler.setRequestType(cRequestHandler.REQUEST_TYPE_POST)
+    oRequestHandler.setRequestType(RequestHandler.REQUEST_TYPE_POST)
     oRequestHandler.addParameters('levideo', '123456')
     sHtmlContent = oRequestHandler.request().replace('<span class="telecharger_sur_uptobox"></span>', '')
 
@@ -579,7 +579,7 @@ def showHosters():
     sThumb = oInputParameterHandler.getValue('sThumb')
     sPost = oInputParameterHandler.getValue('sPost')
 
-    oRequestHandler = cRequestHandler(sUrl)
+    oRequestHandler = RequestHandler(sUrl)
     oRequestHandler.setRequestType(1)
     oRequestHandler.addParameters('levideo', sPost)
     sHtmlContent = oRequestHandler.request()
@@ -593,7 +593,7 @@ def showHosters():
         for aEntry in aResult[1]:
 
             url = URL_MAIN + aEntry
-            oRequestHandler = cRequestHandler(url)
+            oRequestHandler = RequestHandler(url)
             sHtmlContent = oRequestHandler.request()
             sHosterUrl = oRequestHandler.getRealUrl()
 
@@ -601,7 +601,7 @@ def showHosters():
                 continue
 
             if 'vimple.org' in sHosterUrl:
-                oRequestHandler = cRequestHandler(sHosterUrl)
+                oRequestHandler = RequestHandler(sHosterUrl)
                 oRequestHandler.addHeaderEntry('Referer', sUrl)
                 sHtmlContent2 = oRequestHandler.request()
                 try:

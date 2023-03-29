@@ -16,7 +16,7 @@ import re
 
 from resources.hosters.hoster import iHoster
 from resources.lib.comaddon import dialog, VSlog
-from resources.lib.handler.requestHandler import cRequestHandler
+from resources.lib.handler.requestHandler import RequestHandler
 from resources.lib.packer import cPacker
 from resources.lib.parser import cParser
 
@@ -71,7 +71,7 @@ def unlockUrl(url2=None):
 
     VSlog('Test unlock url :' + url1)
 
-    oRequest = cRequestHandler(url1)
+    oRequest = RequestHandler(url1)
     oRequest.addParameters('User-Agent', UA)
     # oRequest.addParameters('Accept', '*/*')
     # oRequest.addParameters('Accept-Encoding', 'gzip, deflate, br')

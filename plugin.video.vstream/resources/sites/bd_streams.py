@@ -6,7 +6,7 @@ from resources.lib.gui.gui import Gui
 from resources.lib.gui.hoster import HosterGui
 from resources.lib.handler.inputParameterHandler import InputParameterHandler
 from resources.lib.handler.outputParameterHandler import OutputParameterHandler
-from resources.lib.handler.requestHandler import cRequestHandler
+from resources.lib.handler.requestHandler import RequestHandler
 from resources.lib.parser import cParser
 
 
@@ -27,7 +27,7 @@ def load():
     sUrl = URL_MAIN
 
     oParser = cParser()
-    oRequestHandler = cRequestHandler(sUrl)
+    oRequestHandler = RequestHandler(sUrl)
     sHtmlContent = oRequestHandler.request()
     sPattern = "<li class='archivedate'><a href='(.+?)'>"
     aResult = oParser.parse(sHtmlContent, sPattern)
@@ -35,7 +35,7 @@ def load():
     if aResult[0]:
         sUrl = aResult[1][0]
         sPattern = "<h3 class='post-title entry-title'><a href='(.+?)'>(.+?)</a>"
-        oRequestHandler = cRequestHandler(sUrl)
+        oRequestHandler = RequestHandler(sUrl)
         sHtmlContent = oRequestHandler.request()
         aResult = oParser.parse(sHtmlContent, sPattern)
 
@@ -71,7 +71,7 @@ def showLink():
     sMovieTitle = oInputParameterHandler.getValue('sMovieTitle')
 
     sPattern = 'player = new Clappr\\.Player.+?source: "([^"]+)'
-    oRequestHandler = cRequestHandler(sUrl)
+    oRequestHandler = RequestHandler(sUrl)
     sHtmlContent = oRequestHandler.request()
     aResult = oParser.parse(sHtmlContent, sPattern)
 

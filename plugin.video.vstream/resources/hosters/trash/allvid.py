@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 # Vstream https://github.com/Kodi-vStream/venom-xbmc-addons
-from resources.lib.handler.requestHandler import cRequestHandler
+from resources.lib.handler.requestHandler import RequestHandler
 from resources.lib.parser import cParser
 from resources.hosters.hoster import iHoster
 from resources.lib.packer import cPacker
@@ -16,7 +16,7 @@ class cHoster(iHoster):
         # print self._url
         api_call = False
 
-        oRequest = cRequestHandler(self._url)
+        oRequest = RequestHandler(self._url)
         sHtmlContent = oRequest.request()
 
         oParser = cParser()
@@ -25,7 +25,7 @@ class cHoster(iHoster):
         sPattern = '<iframe.+?src="([^"]+)"'
         aResult = oParser.parse(sHtmlContent, sPattern)
         if aResult[0] is True:
-            oRequest = cRequestHandler(aResult[1][0])
+            oRequest = RequestHandler(aResult[1][0])
             sHtmlContent = oRequest.request()
 
         # test pour voir si code

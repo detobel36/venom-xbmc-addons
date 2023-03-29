@@ -8,7 +8,7 @@ from resources.lib.gui.gui import Gui
 from resources.lib.gui.hoster import HosterGui
 from resources.lib.handler.inputParameterHandler import InputParameterHandler
 from resources.lib.handler.outputParameterHandler import OutputParameterHandler
-from resources.lib.handler.requestHandler import cRequestHandler
+from resources.lib.handler.requestHandler import RequestHandler
 from resources.lib.parser import cParser
 # Fonction de vStream qui remplace urllib.quote, pour simplifier le passage en python 3
 from resources.lib.util import Quote, cUtil
@@ -287,7 +287,7 @@ def showMovies(sSearch=''):
     if sSearch:
         sUrl = sSearch
 
-    oRequestHandler = cRequestHandler(sUrl)
+    oRequestHandler = RequestHandler(sUrl)
     sHtmlContent = oRequestHandler.request()
 
     sPattern = '<img class="mainimg.+?src="([^"]+).+?href="([^"]+)">([^<]+)<.+?<b>([^<]+)<.+?">([^<]+)<'
@@ -420,7 +420,7 @@ def showMoviesLinks():
     sThumb = oInputParameterHandler.getValue('sThumb')
     sUrl = oInputParameterHandler.getValue('siteUrl')
 
-    oRequestHandler = cRequestHandler(sUrl)
+    oRequestHandler = RequestHandler(sUrl)
     sHtmlContent = oRequestHandler.request()
 
     if "onaregarde" in sUrl:
@@ -428,7 +428,7 @@ def showMoviesLinks():
         sPattern = '<a type="submit".+?href="([^"]+)"'
         sUrl = oParser.parse(sHtmlContent, sPattern)[1][0]
 
-        oRequestHandler = cRequestHandler(sUrl)
+        oRequestHandler = RequestHandler(sUrl)
         sHtmlContent = oRequestHandler.request()
 
     # Affichage du texte
@@ -488,7 +488,7 @@ def showSeriesLinks():
     sThumb = oInputParameterHandler.getValue('sThumb')
     sUrl = oInputParameterHandler.getValue('siteUrl')
 
-    oRequestHandler = cRequestHandler(sUrl)
+    oRequestHandler = RequestHandler(sUrl)
     sHtmlContent = oRequestHandler.request()
 
     if "onaregarde" in sUrl:
@@ -496,7 +496,7 @@ def showSeriesLinks():
         sPattern = '<a type="submit".+?href="([^"]+)"'
         sUrl = oParser.parse(sHtmlContent, sPattern)[1][0]
 
-        oRequestHandler = cRequestHandler(sUrl)
+        oRequestHandler = RequestHandler(sUrl)
         sHtmlContent = oRequestHandler.request()
 
     # Affichage du texte
@@ -611,14 +611,14 @@ def showHosters():
     sDesc = oInputParameterHandler.getValue('sDesc')
     sYear = oInputParameterHandler.getValue('sYear')
 
-    oRequestHandler = cRequestHandler(sUrl)
+    oRequestHandler = RequestHandler(sUrl)
     sHtmlContent = oRequestHandler.request()
 
     if "zt-protect" in sUrl:
         # Dl Protect present aussi a cette étape.
         sHtmlContent = DecryptDlProtecte(sUrl)
     else:
-        oRequestHandler = cRequestHandler(sUrl)
+        oRequestHandler = RequestHandler(sUrl)
         sHtmlContent = oRequestHandler.request()
 
     # Si ça ressemble aux liens premiums on vire les liens non premium
@@ -675,7 +675,7 @@ def showSeriesHosters():
         # Dl Protect present aussi a cette étape.
         sHtmlContent = DecryptDlProtecte(sUrl)
     else:
-        oRequestHandler = cRequestHandler(sUrl)
+        oRequestHandler = RequestHandler(sUrl)
         sHtmlContent = oRequestHandler.request()
 
     # Pour les series on fait l'inverse des films on vire les liens premiums
@@ -818,7 +818,7 @@ def DecryptDlProtecte(url):
     if not url:
         return ''
 
-    oRequestHandler = cRequestHandler(url)
+    oRequestHandler = RequestHandler(url)
     oRequestHandler.setRequestType(1)
     sHtmlContent = oRequestHandler.request()
 

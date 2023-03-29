@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 # vStream https://github.com/Kodi-vStream/venom-xbmc-addons
 from resources.hosters.hoster import iHoster
-from resources.lib.handler.requestHandler import cRequestHandler
+from resources.lib.handler.requestHandler import RequestHandler
 from resources.lib.parser import cParser
 from resources.lib.comaddon import dialog
 from resources.lib.util import QuotePlus
@@ -52,7 +52,7 @@ class cHoster(iHoster):
         api = 'http://rutube.ru/api/play/options/' + sID + '/?format=json&no_404=true&referer=' + QuotePlus(self._url)
         api = api + '&' + sRestUrl
 
-        oRequest = cRequestHandler(api)
+        oRequest = RequestHandler(api)
         sHtmlContent = oRequest.request()
 
         sPattern = '"m3u8": *"([^"]+)"'
@@ -67,7 +67,7 @@ class cHoster(iHoster):
         else:
             return False, False
 
-        oRequest = cRequestHandler(url2)
+        oRequest = RequestHandler(url2)
         sHtmlContent = oRequest.request()
 
         sPattern = '(http.+?\\?i=)([0-9x_]+)'

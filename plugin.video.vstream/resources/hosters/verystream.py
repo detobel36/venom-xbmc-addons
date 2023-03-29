@@ -2,7 +2,7 @@
 import re
 
 from resources.hosters.hoster import iHoster
-from resources.lib.handler.requestHandler import cRequestHandler
+from resources.lib.handler.requestHandler import RequestHandler
 
 
 class cHoster(iHoster):
@@ -11,7 +11,7 @@ class cHoster(iHoster):
         iHoster.__init__(self, 'verystream', 'VeryStream')
 
     def _getMediaLinkForGuest(self):
-        oRequest = cRequestHandler(self._url)
+        oRequest = RequestHandler(self._url)
         sHtmlContent = oRequest.request()
 
         api_call = ''

@@ -2,7 +2,7 @@
 # vStream https://github.com/Kodi-vStream/venom-xbmc-addons
 import re
 
-from resources.lib.handler.requestHandler import cRequestHandler
+from resources.lib.handler.requestHandler import RequestHandler
 from resources.hosters.hoster import iHoster
 from resources.lib.comaddon import dialog
 from resources.lib.util import urlEncode, Quote
@@ -43,7 +43,7 @@ class cHoster(iHoster):
 
         # Special pour toonanime.
         if 'toonanime' in api_call:
-            oRequest = cRequestHandler(api_call)
+            oRequest = RequestHandler(api_call)
             oRequest.addHeaderEntry('Referer', 'https://lb.toonanime.xyz/')
             sHtmlContent = oRequest.request()
 

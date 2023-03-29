@@ -7,7 +7,7 @@ from resources.lib.gui.hoster import HosterGui
 from resources.lib.gui.gui import Gui
 from resources.lib.handler.inputParameterHandler import InputParameterHandler
 from resources.lib.handler.outputParameterHandler import OutputParameterHandler
-from resources.lib.handler.requestHandler import cRequestHandler
+from resources.lib.handler.requestHandler import RequestHandler
 from resources.lib.parser import cParser
 from resources.lib.comaddon import progress, siteManager
 from resources.lib.util import urlEncode
@@ -123,7 +123,7 @@ def showMovies(sSearch=''):
                       ('story', sSearch), ('titleonly', '0'), ('full_search', '1'))
         data = urlEncode(query_args)
 
-        oRequestHandler = cRequestHandler(URL_SEARCH[0])
+        oRequestHandler = RequestHandler(URL_SEARCH[0])
         oRequestHandler.setRequestType(1)
         oRequestHandler.addParametersLine(data)
         oRequestHandler.addHeaderEntry('User-Agent', UA)
@@ -132,7 +132,7 @@ def showMovies(sSearch=''):
         oRequestHandler.addHeaderEntry('Content-Length', str(len(data)))
         sHtmlContent = oRequestHandler.request()
     else:
-        oRequestHandler = cRequestHandler(sUrl)
+        oRequestHandler = RequestHandler(sUrl)
         sHtmlContent = oRequestHandler.request()
 
     if "/films/" in sUrl:
@@ -215,7 +215,7 @@ def ShowSxE():
 
     sID = sUrl.split('/')[3].split('-')[0]
 
-    oRequestHandler = cRequestHandler(URL_MAIN + 'engine/ajax/full-story.php?newsId=' + sID)
+    oRequestHandler = RequestHandler(URL_MAIN + 'engine/ajax/full-story.php?newsId=' + sID)
     sHtmlContent = oRequestHandler.request(jsonDecode=True)['html']
 
     sPattern = 'href="(.+?)".+?title="(.+?)">'
@@ -264,7 +264,7 @@ def seriesHosters():
     sMovieTitle = oInputParameterHandler.getValue('sMovieTitle')
     sID = oInputParameterHandler.getValue('id')
 
-    oRequestHandler = cRequestHandler(sUrl)
+    oRequestHandler = RequestHandler(sUrl)
     sHtmlContent = oRequestHandler.request()
 
     sPattern = 'data-class="(.+?) ".+?data-server-id="(.+?)"'
@@ -272,7 +272,7 @@ def seriesHosters():
     oParser = cParser()
     aResult = oParser.parse(sHtmlContent, sPattern)
 
-    oRequestHandler = cRequestHandler(URL_MAIN + 'engine/ajax/full-story.php?newsId=' + sID)
+    oRequestHandler = RequestHandler(URL_MAIN + 'engine/ajax/full-story.php?newsId=' + sID)
     sHtmlContent = oRequestHandler.request(jsonDecode=True)['html']
 
     if aResult[0]:
@@ -295,7 +295,7 @@ def seriesHosters():
                 elif hostClass == "cdnt":
                     sHosterUrl = "https://lb.toonanime.xyz/playlist/" + aEntry1 + "/" + str(round(time.time() * 1000))
                 else:
-                    oRequestHandler = cRequestHandler(URL_MAIN + "/templates/toonanime/js/anime.js")
+                    oRequestHandler = RequestHandler(URL_MAIN + "/templates/toonanime/js/anime.js")
                     sHtmlContent1 = oRequestHandler.request()
 
                     sPattern = 'player_type=="toonanimeplayer_' + hostClass + '".+?src=\\\\"([^\\\\]+)\\\\"'

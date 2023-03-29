@@ -16,7 +16,7 @@ try:  # Python 2
 except ImportError:  # Python 3
     import urllib.request as urllib2
 
-from resources.lib.handler.requestHandler import cRequestHandler
+from resources.lib.handler.requestHandler import RequestHandler
 from resources.lib.comaddon import addon, dialog, VSlog, window, VSPath, siteManager
 # from resources.lib.util import urlEncode
 

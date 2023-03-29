@@ -4,7 +4,7 @@ import re
 from resources.lib.util import Unquote
 from resources.lib.comaddon import progress
 from resources.lib.parser import cParser
-from resources.lib.handler.requestHandler import cRequestHandler
+from resources.lib.handler.requestHandler import RequestHandler
 from resources.lib.handler.outputParameterHandler import OutputParameterHandler
 from resources.lib.handler.inputParameterHandler import InputParameterHandler
 from resources.lib.gui.gui import Gui
@@ -122,7 +122,7 @@ def sHowResultSearch(sSearch=''):
 
     sSearch = Unquote(sSearch)
 
-    oRequestHandler = cRequestHandler(URL_MAIN + 'movies_list.php')
+    oRequestHandler = RequestHandler(URL_MAIN + 'movies_list.php')
     sHtmlContent = oRequestHandler.request()
 
     oParser = cParser()
@@ -173,7 +173,7 @@ def showMovies():
     else:
         sFiltre = "none"
 
-    oRequestHandler = cRequestHandler(sUrl)
+    oRequestHandler = RequestHandler(sUrl)
     sHtmlContent = oRequestHandler.request()
 
     if 'ajouts' in sFiltre:
@@ -233,7 +233,7 @@ def ShowList():
     sMovieTitle = oInputParameterHandler.getValue('sMovieTitle')
     sThumb = oInputParameterHandler.getValue('sThumb')
 
-    oRequestHandler = cRequestHandler(sUrl)
+    oRequestHandler = RequestHandler(sUrl)
     sHtmlContent = oRequestHandler.request()
 
     oParser = cParser()
@@ -270,7 +270,7 @@ def showHosters():
     sMovieTitle = oInputParameterHandler.getValue('sMovieTitle')
     sThumb = oInputParameterHandler.getValue('sThumb')
 
-    oRequestHandler = cRequestHandler(sUrl)
+    oRequestHandler = RequestHandler(sUrl)
     sHtmlContent = oRequestHandler.request()
 
     oParser = cParser()
@@ -340,7 +340,7 @@ def showHosters():
                 folder = re.findall('ws=(https[^&]+)', match)[0] + '/'
                 torrent = re.findall('xs=(https[^&]+)', match)[0]
 
-                oRequestHandler2 = cRequestHandler(torrent)
+                oRequestHandler2 = RequestHandler(torrent)
                 torrent = decode(oRequestHandler2.request())
 
                 files = torrent['info']['files']

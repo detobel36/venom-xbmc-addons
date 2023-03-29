@@ -7,7 +7,7 @@ from resources.lib.gui.gui import Gui
 from resources.lib.gui.hoster import HosterGui
 from resources.lib.handler.inputParameterHandler import InputParameterHandler
 from resources.lib.handler.outputParameterHandler import OutputParameterHandler
-from resources.lib.handler.requestHandler import cRequestHandler
+from resources.lib.handler.requestHandler import RequestHandler
 from resources.lib.parser import cParser
 from resources.lib.util import cUtil
 
@@ -97,7 +97,7 @@ def showGenres():
     oParser = cParser()
 
     sUrl = URL_MAIN
-    oRequestHandler = cRequestHandler(sUrl)
+    oRequestHandler = RequestHandler(sUrl)
     sHtmlContent = oRequestHandler.request()
     sStart = '<a>genres</a>'
     sEnd = '</ul><div class="clearfix"></div>'
@@ -167,7 +167,7 @@ def showNetwork():
 def showYears():
     oGui = Gui()
     oParser = cParser()
-    oRequestHandler = cRequestHandler(URL_MAIN)
+    oRequestHandler = RequestHandler(URL_MAIN)
     sHtmlContent = oRequestHandler.request()
     sStart = '<a>Anneés</a>'
     sEnd = '<a>genres</a>'
@@ -196,7 +196,7 @@ def showYears():
 def showSeriesYears():
     oGui = Gui()
     oParser = cParser()
-    oRequestHandler = cRequestHandler(URL_MAIN)
+    oRequestHandler = RequestHandler(URL_MAIN)
     sHtmlContent = oRequestHandler.request()
     sStart = '<a>Anneés</a>'
     sEnd = '<a>genres</a>'
@@ -252,7 +252,7 @@ def showMovies(sSearch=''):
 
     sPattern = 'data-movie-id="\\d+".+?href="([^"]+).+?oldtitle="([^"]+).+?data-original="([^ "]+).+?desc"><p>([^<]+)'
 
-    oRequestHandler = cRequestHandler(sUrl)
+    oRequestHandler = RequestHandler(sUrl)
     sHtmlContent = oRequestHandler.request()
     oParser = cParser()
     aResult = oParser.parse(sHtmlContent, sPattern)
@@ -334,7 +334,7 @@ def showSaisons():
     sMovieTitle = oInputParameterHandler.getValue('sMovieTitle')
     sDesc = oInputParameterHandler.getValue('sDesc')
     oParser = cParser()
-    oRequestHandler = cRequestHandler(siteUrl)
+    oRequestHandler = RequestHandler(siteUrl)
     sHtmlContent = oRequestHandler.request()
     sStart = '<div class="tvseason">'
     sEnd = '<!-- Micro data -->'
@@ -366,7 +366,7 @@ def showEpisodes():
     sMovieTitle = oInputParameterHandler.getValue('sMovieTitle')
     sDesc = oInputParameterHandler.getValue('sDesc')
     oParser = cParser()
-    oRequestHandler = cRequestHandler(sUrl)
+    oRequestHandler = RequestHandler(sUrl)
     sHtmlContent = oRequestHandler.request()
     sStart = '<div class="tvseason">'
     sEnd = '<!-- Micro data -->'
@@ -407,7 +407,7 @@ def showHosters():
     sMovieTitle = oInputParameterHandler.getValue('sMovieTitle')
     sThumb = oInputParameterHandler.getValue('sThumb')
 
-    oRequest = cRequestHandler(sUrl)
+    oRequest = RequestHandler(sUrl)
     sHtmlContent = oRequest.request()
     sPattern = '<div class="movieplay">([^<]+)|lnk lnk-dl"><h6>([^<]*)'
     oParser = cParser()

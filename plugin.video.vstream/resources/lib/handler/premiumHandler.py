@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 # vStream https://github.com/Kodi-vStream/venom-xbmc-addons
-from resources.lib.handler.requestHandler import cRequestHandler
+from resources.lib.handler.requestHandler import RequestHandler
 
 from resources.lib.comaddon import addon, dialog, VSlog
 from resources.lib.config import GestionCookie
@@ -99,7 +99,7 @@ class cPremiumHandler:
         else:
             return False
 
-        oRequestHandler = cRequestHandler(url)
+        oRequestHandler = RequestHandler(url)
         oRequestHandler.setRequestType(1)
 
         if 'uptobox' in self.__sHosterIdentifier:
@@ -158,7 +158,7 @@ class cPremiumHandler:
         return True
 
     def GetHtmlwithcookies(self, url, data, cookies):
-        oRequestHandler = cRequestHandler(url)
+        oRequestHandler = RequestHandler(url)
         oRequestHandler.addHeaderEntry('User-Agent', UA)
         if not (data is None):
             oRequestHandler.addParametersLine(data)

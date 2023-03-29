@@ -5,7 +5,7 @@
 #          http://vshare.eu/embed-cxmr4o8l2waa703x405.html erreur code streambb
 import re
 
-from resources.lib.handler.requestHandler import cRequestHandler
+from resources.lib.handler.requestHandler import RequestHandler
 from resources.hosters.hoster import iHoster
 from resources.lib.parser import cParser
 from resources.lib.packer import cPacker
@@ -24,7 +24,7 @@ class cHoster(iHoster):
         self._url = self._url.replace('https', 'http')
 
     def _getMediaLinkForGuest(self):
-        oRequest = cRequestHandler(self._url)
+        oRequest = RequestHandler(self._url)
         sHtmlContent = oRequest.request()
 
         if '<div id="deleted">' in sHtmlContent:

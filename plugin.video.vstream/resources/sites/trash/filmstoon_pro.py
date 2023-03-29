@@ -2,7 +2,7 @@
 # vStream https://github.com/Kodi-vStream/venom-xbmc-addons
 from resources.lib.util import cUtil
 from resources.lib.parser import cParser
-from resources.lib.handler.requestHandler import cRequestHandler
+from resources.lib.handler.requestHandler import RequestHandler
 from resources.lib.handler.outputParameterHandler import OutputParameterHandler
 from resources.lib.handler.inputParameterHandler import InputParameterHandler
 from resources.lib.gui.gui import Gui
@@ -138,7 +138,7 @@ def showMovies(sSearch=''):
         oInputParameterHandler = InputParameterHandler()
         sUrl = oInputParameterHandler.getValue('siteUrl')
 
-    oRequestHandler = cRequestHandler(sUrl)
+    oRequestHandler = RequestHandler(sUrl)
     sHtmlContent = oRequestHandler.request()
 
     # url image alt year desc
@@ -269,7 +269,7 @@ def showSaison():
     sMovieTitle = oInputParameterHandler.getValue('sMovieTitle')
     sDesc = oInputParameterHandler.getValue('sDesc')
 
-    oRequestHandler = cRequestHandler(sUrl)
+    oRequestHandler = RequestHandler(sUrl)
     sHtmlContent = oRequestHandler.request()
     oParser = cParser()
 
@@ -313,7 +313,7 @@ def showSXE():
 
     sUrl, sNumSaison = sUrl.split('?sNumSaison=')
 
-    oRequestHandler = cRequestHandler(sUrl)
+    oRequestHandler = RequestHandler(sUrl)
     sHtmlContent = oRequestHandler.request()
     oParser = cParser()
 
@@ -355,7 +355,7 @@ def showHosters():
     # 1 seul host constaté 10112020 : uqload
 
     # sHosterUrl = ''
-    oRequestHandler = cRequestHandler(sUrl)
+    oRequestHandler = RequestHandler(sUrl)
     sHtmlContent = oRequestHandler.request()
 
     oParser = cParser()
@@ -370,7 +370,7 @@ def showHosters():
             # url3 https://embedo.to/r/cTJtdlNDY2J5aGM9
 
             url1 = aResult[1][0]
-            oRequestHandler = cRequestHandler(url1)
+            oRequestHandler = RequestHandler(url1)
             oRequestHandler.addHeaderEntry('Referer', sUrl)
             sHtmlContent = oRequestHandler.request()
 
@@ -387,7 +387,7 @@ def showHosters():
                     url2 = aResult[1][0]
                     url3 = url2.replace('\\', '').replace('/s/', '/r/')
 
-                    oRequestHandler = cRequestHandler(url3)
+                    oRequestHandler = RequestHandler(url3)
                     oRequestHandler.addHeaderEntry('Referer', sUrl)
                     oRequestHandler.addHeaderEntry('connection', 'keep-alive')
                     sHtmlContent = oRequestHandler.request()

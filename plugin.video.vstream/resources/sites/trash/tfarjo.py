@@ -3,7 +3,7 @@
 import re
 from resources.lib.comaddon import progress, addon
 from resources.lib.parser import cParser
-from resources.lib.handler.requestHandler import cRequestHandler
+from resources.lib.handler.requestHandler import RequestHandler
 from resources.lib.handler.outputParameterHandler import OutputParameterHandler
 from resources.lib.handler.inputParameterHandler import InputParameterHandler
 from resources.lib.gui.gui import Gui
@@ -131,14 +131,14 @@ def showMovies(sSearch=''):
     oParser = cParser()
 
     if sSearch:
-        oRequest = cRequestHandler(URL_MAIN)
+        oRequest = RequestHandler(URL_MAIN)
         sHtmlContent = oRequest.request()
         cook = oRequest.GetCookies()
 
         sCode = getcode(sHtmlContent)
 
         sText = sSearch
-        oRequest = cRequestHandler(URL_MAIN + 'search')
+        oRequest = RequestHandler(URL_MAIN + 'search')
         oRequest.setRequestType(1)
         oRequest.addHeaderEntry('User-Agent', UA)
         oRequest.addHeaderEntry('Referer', URL_MAIN)
@@ -155,7 +155,7 @@ def showMovies(sSearch=''):
         oInputParameterHandler = InputParameterHandler()
         sUrl = oInputParameterHandler.getValue('siteUrl')
 
-        oRequestHandler = cRequestHandler(sUrl)
+        oRequestHandler = RequestHandler(sUrl)
         sHtmlContent = oRequestHandler.request()
 
         # parfois pas de qualité,langue,liens >> BA
@@ -226,7 +226,7 @@ def showSeries():
     oInputParameterHandler = InputParameterHandler()
     sUrl = oInputParameterHandler.getValue('siteUrl')
 
-    oRequestHandler = cRequestHandler(sUrl)
+    oRequestHandler = RequestHandler(sUrl)
     sHtmlContent = oRequestHandler.request()
 
     oParser = cParser()
@@ -275,7 +275,7 @@ def showSaisons():
     sMovieTitle = oInputParameterHandler.getValue('sMovieTitle')
     sThumb = oInputParameterHandler.getValue('sThumb')
 
-    oRequestHandler = cRequestHandler(sUrl)
+    oRequestHandler = RequestHandler(sUrl)
     sHtmlContent = oRequestHandler.request()
 
     # sHtmlContent = oParser.abParse(sHtmlContent, 'begin seasons', 'end seasons')
@@ -313,7 +313,7 @@ def showLink():
     sThumb = oInputParameterHandler.getValue('sThumb')
 
     oParser = cParser()
-    oRequest = cRequestHandler(sUrl)
+    oRequest = RequestHandler(sUrl)
     sHtmlContent = oRequest.request()
     cook = oRequest.GetCookies()
     sCode = getcode(sHtmlContent)
@@ -358,10 +358,10 @@ def showHosters():
     # VSlog(sCook)
 
     if '/serie' in sUrl:
-        oRequest = cRequestHandler(URL_MAIN + 'getlinke')
+        oRequest = RequestHandler(URL_MAIN + 'getlinke')
         oRequest.addParametersLine('csrf_test_name=' + sCode + '&episode=' + sCode2)
     else:
-        oRequest = cRequestHandler(URL_MAIN + 'getlink')
+        oRequest = RequestHandler(URL_MAIN + 'getlink')
         oRequest.addParametersLine('csrf_test_name=' + sCode + '&movie=' + sCode2)
 
     oRequest.setRequestType(1)

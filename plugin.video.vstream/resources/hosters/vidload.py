@@ -1,4 +1,4 @@
-from resources.lib.handler.requestHandler import cRequestHandler
+from resources.lib.handler.requestHandler import RequestHandler
 from resources.lib.parser import cParser
 from resources.hosters.hoster import iHoster
 
@@ -9,7 +9,7 @@ class cHoster(iHoster):
         iHoster.__init__(self, 'vidload', 'VidLoad')
 
     def _getMediaLinkForGuest(self):
-        oRequest = cRequestHandler(self._url)
+        oRequest = RequestHandler(self._url)
         sHtmlContent = oRequest.request()
 
         sPattern = 'var token="([^"]+)".+?var crsf="([^"]+)"'
@@ -18,11 +18,11 @@ class cHoster(iHoster):
         if aResult[0] is True:
             aEntry = aResult[1][0]
 
-            oRequest = cRequestHandler('https://www.vidload.net/vid/')
+            oRequest = RequestHandler('https://www.vidload.net/vid/')
             oRequest.addParameters('gone', aEntry[0])
             oRequest.addParameters('oujda', aEntry[1])
             oRequest.addParameters('referer', self._url)
-            oRequest.setRequestType(cRequestHandler.REQUEST_TYPE_POST)
+            oRequest.setRequestType(RequestHandler.REQUEST_TYPE_POST)
 
             resolvedUrl = oRequest.request()
             if resolvedUrl:

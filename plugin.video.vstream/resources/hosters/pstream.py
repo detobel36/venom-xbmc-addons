@@ -6,7 +6,7 @@ import json
 
 from resources.hosters.hoster import iHoster
 from resources.lib.comaddon import isMatrix
-from resources.lib.handler.requestHandler import cRequestHandler
+from resources.lib.handler.requestHandler import RequestHandler
 from resources.lib.parser import cParser
 from resources.lib.util import urlEncode
 
@@ -32,7 +32,7 @@ class cHoster(iHoster):
     def _getMediaLinkForGuest(self):
         api_call = ''
 
-        oRequest = cRequestHandler(self._url)
+        oRequest = RequestHandler(self._url)
         oRequest.addHeaderEntry('User-Agent', UA)
         oRequest.addHeaderEntry('Accept', 'text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8')
         oRequest.addHeaderEntry('Accept-Language', 'fr,fr-FR;q=0.8,en-US;q=0.5,en;q=0.3')
@@ -42,7 +42,7 @@ class cHoster(iHoster):
         sPattern = '<script src="(.+?)"'
         aResult = oParser.parse(sHtmlContent, sPattern)[1][1]
 
-        oRequest = cRequestHandler(aResult)
+        oRequest = RequestHandler(aResult)
         oRequest.addHeaderEntry('User-Agent', UA)
         oRequest.addHeaderEntry('Accept', 'text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8')
         oRequest.addHeaderEntry('Accept-Language', 'fr,fr-FR;q=0.8,en-US;q=0.5,en;q=0.3')

@@ -1,7 +1,7 @@
 import re
 import time
 
-from resources.lib.handler.requestHandler import cRequestHandler
+from resources.lib.handler.requestHandler import RequestHandler
 from resources.lib.parser import cParser
 from resources.hosters.hoster import iHoster
 from resources.lib.packer import cPacker
@@ -19,7 +19,7 @@ class cHoster(iHoster):
         self._url = 'http://vidto.me/' + str(self._url)
 
     def _getMediaLinkForGuest(self):
-        oRequest = cRequestHandler(self._url)
+        oRequest = RequestHandler(self._url)
         sHtmlContent = oRequest.request()
 
         sPattern = '<input type="hidden" name="([^"]+)" value="([^"]+)"'
@@ -27,8 +27,8 @@ class cHoster(iHoster):
         aResult = oParser.parse(sHtmlContent, sPattern)
         if aResult[0] is True:
             time.sleep(7)
-            oRequest = cRequestHandler(self._url)
-            oRequest.setRequestType(cRequestHandler.REQUEST_TYPE_POST)
+            oRequest = RequestHandler(self._url)
+            oRequest.setRequestType(RequestHandler.REQUEST_TYPE_POST)
             for aEntry in aResult[1]:
                 oRequest.addParameters(aEntry[0], aEntry[1])
 

@@ -6,7 +6,7 @@ from resources.lib.comaddon import progress, dialog, VSlog
 from resources.lib.recaptcha import ResolveCaptcha
 from resources.lib.config import GestionCookie
 from resources.lib.parser import cParser
-from resources.lib.handler.requestHandler import cRequestHandler
+from resources.lib.handler.requestHandler import RequestHandler
 from resources.lib.handler.outputParameterHandler import OutputParameterHandler
 from resources.lib.handler.inputParameterHandler import InputParameterHandler
 from resources.lib.gui.gui import Gui
@@ -124,7 +124,7 @@ def showMovies(sSearch=''):
         oInputParameterHandler = InputParameterHandler()
         sUrl = oInputParameterHandler.getValue('siteUrl')
 
-    oRequestHandler = cRequestHandler(sUrl)
+    oRequestHandler = RequestHandler(sUrl)
     sHtmlContent = oRequestHandler.request()
 
     sPattern = 'class="poster.+?img src="([^"]+)".+?class="quality">([^<]+)</div>.+?class="title"><a href="([^"]+)".+?title="([^"]+)".+?class="label">Ann.+?<a href.+?>([^<]+)</a>.+?class="shortStory">([^<]+)</div>'
@@ -201,7 +201,7 @@ def showHosters():
     sYear = oInputParameterHandler.getValue('sYear')
     sDesc = oInputParameterHandler.getValue('sDesc')
 
-    oRequestHandler = cRequestHandler(sUrl)
+    oRequestHandler = RequestHandler(sUrl)
     sHtmlContent = oRequestHandler.request()
     # Vire les bandes annonces
     sHtmlContent = sHtmlContent.replace('src="https://www.youtube.com/', '')
@@ -334,7 +334,7 @@ def DecryptddlProtect(url):
     # try to get previous cookie
     cookies = GestionCookie().Readcookie('cinemegatoil_org')
 
-    oRequestHandler = cRequestHandler(url)
+    oRequestHandler = RequestHandler(url)
     if cookies:
         oRequestHandler.addHeaderEntry('Cookie', cookies)
     sHtmlContent = oRequestHandler.request()
@@ -345,7 +345,7 @@ def DecryptddlProtect(url):
     if 'Vérification Captcha:' in sHtmlContent:
         if cookies:
             GestionCookie().DeleteCookie('cinemegatoil_org')
-            oRequestHandler = cRequestHandler(url)
+            oRequestHandler = RequestHandler(url)
             sHtmlContent = oRequestHandler.request()
 
         s = re.findall('<img src="([^<>"]+?)" /><br />', sHtmlContent)
@@ -357,7 +357,7 @@ def DecryptddlProtect(url):
         captcha, cookies2 = get_response(image, cookies)
         cookies = cookies2.replace(';', '')
 
-        oRequestHandler = cRequestHandler(url)
+        oRequestHandler = RequestHandler(url)
         oRequestHandler.setRequestType(1)
         oRequestHandler.addHeaderEntry('Host', host1)
         oRequestHandler.addHeaderEntry('User-Agent', UA)
@@ -401,7 +401,7 @@ def get_response(img, cookie):
     host = re.sub(r'https*:\/\/', '', hostComplet)
     url = img
 
-    oRequestHandler = cRequestHandler(url)
+    oRequestHandler = RequestHandler(url)
     oRequestHandler.addHeaderEntry('User-Agent', UA)
     # oRequestHandler.addHeaderEntry('Referer', url)
     oRequestHandler.addHeaderEntry('Cookie', cookie)
@@ -510,7 +510,7 @@ def get_response(img, cookie):
 
 
 def DecryptKeeplinks(sUrl):
-    oRequestHandler = cRequestHandler(sUrl)
+    oRequestHandler = RequestHandler(sUrl)
     sHtmlContent = oRequestHandler.request()
     Cookie = oRequestHandler.GetCookies()
 
@@ -523,7 +523,7 @@ def DecryptKeeplinks(sUrl):
 
     data = "myhiddenpwd=&hiddenaction=" + hiddenAction + \
         "+&captchatype=Re&hiddencaptcha=1&hiddenpwd=&g-recaptcha-response=" + gToken
-    oRequestHandler = cRequestHandler(sUrl)
+    oRequestHandler = RequestHandler(sUrl)
     oRequestHandler.setRequestType(1)
     oRequestHandler.addHeaderEntry('User-Agent', UA)
     oRequestHandler.addHeaderEntry('Accept', 'text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8')
@@ -545,7 +545,7 @@ def DecryptOuo(sUrl):
     if '/fbc/' not in urlOuo:
         urlOuo = urlOuo.replace('io/', 'io/fbc/').replace('press/', 'press/fbc/')
 
-    oRequestHandler = cRequestHandler(urlOuo)
+    oRequestHandler = RequestHandler(urlOuo)
     sHtmlContent = oRequestHandler.request()
     Cookie = oRequestHandler.GetCookies()
 
@@ -560,7 +560,7 @@ def DecryptOuo(sUrl):
     url = urlOuo.replace('/fbc/', '/go/')
     params = '_token=' + OuoToken.group(1) + '&g-recaptcha-response=' + gToken + "&v-token=" + OuoToken.group(2)
 
-    oRequestHandler = cRequestHandler(url)
+    oRequestHandler = RequestHandler(url)
     oRequestHandler.setRequestType(1)
     oRequestHandler.addHeaderEntry('User-Agent', UA)
     oRequestHandler.addHeaderEntry('Accept', 'text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8')
@@ -580,7 +580,7 @@ def DecryptOuo(sUrl):
     url = final.group(1)
     params = '_token=' + final.group(2) + '&x-token=' + ""
 
-    oRequestHandler = cRequestHandler(url)
+    oRequestHandler = RequestHandler(url)
     oRequestHandler.setRequestType(1)
     oRequestHandler.addHeaderEntry('User-Agent', UA)
     oRequestHandler.addHeaderEntry('Accept', 'text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8')

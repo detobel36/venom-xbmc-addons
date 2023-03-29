@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 # vStream https://github.com/Kodi-vStream/venom-xbmc-addons
 # https://letsupload.co/plugins/mediaplayer/site/_embed.php?u=1r0c1&w=770&h=320
-from resources.lib.handler.requestHandler import cRequestHandler
+from resources.lib.handler.requestHandler import RequestHandler
 from resources.hosters.hoster import iHoster
 from resources.lib.parser import cParser
 
@@ -16,7 +16,7 @@ class cHoster(iHoster):
 
     def _getMediaLinkForGuest(self):
         api_call = ''
-        oRequest = cRequestHandler(self._url)
+        oRequest = RequestHandler(self._url)
         sHtmlContent = oRequest.request()
 
         oParser = cParser()

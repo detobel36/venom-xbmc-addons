@@ -3,7 +3,7 @@
 import time
 import md5
 
-from resources.lib.handler.requestHandler import cRequestHandler
+from resources.lib.handler.requestHandler import RequestHandler
 from resources.lib.parser import cParser
 from resources.hosters.hoster import iHoster
 
@@ -43,7 +43,7 @@ class cHoster(iHoster):
                 base36 = alphabet[i] + base36
             return base36 or alphabet[0]
 
-        # oRequest = cRequestHandler('http://www.wat.tv/servertime2')
+        # oRequest = RequestHandler('http://www.wat.tv/servertime2')
         # stime = oRequest.request()
         # stime = base36encode(int(stime))
 
@@ -65,7 +65,7 @@ class cHoster(iHoster):
         sLocation = '/web/' + sID
 
         # sUrl1 = 'http://www.wat.tv/interface/contentv3/' + sID
-        # oRequest = cRequestHandler(sUrl1)
+        # oRequest = RequestHandler(sUrl1)
         # Json1 = oRequest.request()
 
         sToken = self.makeToken(sLocation)
@@ -74,7 +74,7 @@ class cHoster(iHoster):
             '&context=swf2&getURL=1&version=WIN%2010,3,181,14'
         # print sUrl2
 
-        oRequest = cRequestHandler(sUrl2)
+        oRequest = RequestHandler(sUrl2)
         oRequest.addHeaderEntry('User-Agent', UA)
         url3 = oRequest.request()
 

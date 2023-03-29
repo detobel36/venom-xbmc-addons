@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 # https://github.com/Kodi-vStream/venom-xbmc-addons
 
-from resources.lib.handler.requestHandler import cRequestHandler
+from resources.lib.handler.requestHandler import RequestHandler
 from resources.lib.parser import cParser
 from resources.hosters.hoster import iHoster
 from resources.lib.comaddon import dialog
@@ -25,7 +25,7 @@ class cHoster(iHoster):
         sId = self.__getIdFromUrl(self._url)
         web_url = 'https://player.vimeo.com/video/' + sId
 
-        oRequest = cRequestHandler(web_url)
+        oRequest = RequestHandler(web_url)
         sHtmlContent = oRequest.request()
         sPattern = ',"url":"(.+?)",.+?"quality":"(.+?)",'
         oParser = cParser()

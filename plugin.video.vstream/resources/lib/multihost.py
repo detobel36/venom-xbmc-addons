@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 # vStream https://github.com/Kodi-vStream/venom-xbmc-addons
 
-from resources.lib.handler.requestHandler import cRequestHandler
+from resources.lib.handler.requestHandler import RequestHandler
 import re
 
 UA = 'Mozilla/5.0 (Windows NT 6.1; WOW64; rv:56.0) Gecko/20100101 Firefox/56.0'
@@ -73,13 +73,13 @@ class cJheberg:
 def GetHtml(url, postdata=None):
 
     if 'download.jheberg.net/redirect' in url:
-        oRequest = cRequestHandler(url)
+        oRequest = RequestHandler(url)
         sHtmlContent = oRequest.request()
         url = oRequest.getRealUrl()
         return url
     else:
         sHtmlContent = ''
-        oRequest = cRequestHandler(url)
+        oRequest = RequestHandler(url)
         oRequest.setRequestType(1)
         oRequest.addHeaderEntry('User-Agent', UA)
 

@@ -1,6 +1,6 @@
 from resources.lib.jsunpacker import cJsUnpacker
 from resources.lib.parser import cParser
-from resources.lib.handler.requestHandler import cRequestHandler
+from resources.lib.handler.requestHandler import RequestHandler
 from resources.hosters.hoster import iHoster
 
 
@@ -10,7 +10,7 @@ class cHoster(iHoster):
         iHoster.__init__(self, 'dankfile', 'DankFile.com')
 
     def _getMediaLinkForGuest(self):
-        oRequest = cRequestHandler(self._url)
+        oRequest = RequestHandler(self._url)
         sHtmlContent = oRequest.request()
 
         return self.__getUrlFromJavascriptCode(sHtmlContent)
