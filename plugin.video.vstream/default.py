@@ -33,7 +33,7 @@ if DEBUG:
     sys.path.append('H:\\Program Files\\Kodi\\system\\Python\\Lib\\pysrc')
 
     try:
-        import pysrc.pydevd as pydevd
+        from pysrc import pydevd
         pydevd.settrace('localhost', stdoutToServer=True, stderrToServer=True)
     except ImportError:
         try:
@@ -110,7 +110,7 @@ class Main:
                 return
             elif self.site_name == 'globalSources':
                 gui = Gui()
-                list_plugins = self.plugin_handler.getAvailablePlugins(force=(self.function_name == 'globalSources'))
+                list_plugins = self.plugin_handler.getAvailablePlugins(force=self.function_name == 'globalSources')
 
                 sites_manager = siteManager()
 
@@ -140,9 +140,9 @@ class Main:
                     plugins = __import__('resources.sites.%s' % self.site_name, fromlist=[self.site_name])
                     function = getattr(plugins, self.function_name)
                     function()
-                except Exception as e:
+                except Exception as error:
                     progress().VSclose()  # Referme le dialogue en cas d'exception, sinon blocage de Kodi
-                    VSlog('could not load site: ' + self.site_name + ' error: ' + str(e))
+                    VSlog('could not load site: ' + self.site_name + ' error: ' + str(error))
                     traceback.print_exc()
                 return
 
