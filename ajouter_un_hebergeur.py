@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 # vStream https://github.com/Kodi-vStream/venom-xbmc-addons
 # Votre pseudo
-from resources.lib.handler.requestHandler import cRequestHandler  # requete url
+from resources.lib.handler.requestHandler import RequestHandler  # requete url
 from resources.lib.parser import cParser  # recherche de code
 from resources.hosters.hoster import iHoster
 # from resources.lib.util import cUtil #Autres fonctions utiles
@@ -46,7 +46,7 @@ class cHoster(iHoster):
     def __getMediaLinkForGuest(self):
         api_call = False
 
-        oRequest = cRequestHandler(self._url)
+        oRequest = RequestHandler(self._url)
         # oRequest.addHeaderEntry('Referer', 'http://www.google.fr/')  # Rajoute un header
         sHtmlContent = oRequest.request()
 
