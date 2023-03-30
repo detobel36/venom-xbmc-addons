@@ -36,7 +36,7 @@ class addon(xbmcaddon.Addon):
 
 L'utilisation de subclass peut provoquer des fuites de mémoire, signalé par ce message :
 
-the python script "\plugin.video.vstream\default.py" has left several classes in memory that we couldn't clean up. The classes include: class XBMCAddon::xbmcaddon::Addon
+the python script "\\plugin.video.vstream\\default.py" has left several classes in memory that we couldn't clean up. The classes include: class XBMCAddon::xbmcaddon::Addon
 
 # https://stackoverflow.com/questions/26588266/xbmc-addon-memory-leak
 """
@@ -49,19 +49,30 @@ class addon:
         self.addonId = addonId
 
     def openSettings(self):
-        return xbmcaddon.Addon(self.addonId).openSettings() if self.addonId else ADDONVS.openSettings()
+        return xbmcaddon.Addon(self.addonId).openSettings(
+        ) if self.addonId else ADDONVS.openSettings()
 
     def getSetting(self, key):
-        return xbmcaddon.Addon(self.addonId).getSetting(key) if self.addonId else ADDONVS.getSetting(key)
+        return xbmcaddon.Addon(self.addonId).getSetting(
+            key) if self.addonId else ADDONVS.getSetting(key)
 
     def setSetting(self, key, value):
-        return xbmcaddon.Addon(self.addonId).setSetting(key, value) if self.addonId else ADDONVS.setSetting(key, value)
+        return xbmcaddon.Addon(
+            self.addonId).setSetting(
+            key,
+            value) if self.addonId else ADDONVS.setSetting(
+            key,
+            value)
 
     def getAddonInfo(self, info):
-        return xbmcaddon.Addon(self.addonId).getAddonInfo(info) if self.addonId else ADDONVS.getAddonInfo(info)
+        return xbmcaddon.Addon(self.addonId).getAddonInfo(
+            info) if self.addonId else ADDONVS.getAddonInfo(info)
 
     def VSlang(self, lang):
-        return VSPath(xbmcaddon.Addon(self.addonId).getLocalizedString(lang)) if self.addonId else VSPath(ADDONVS.getLocalizedString(lang))
+        return VSPath(
+            xbmcaddon.Addon(
+                self.addonId).getLocalizedString(lang)) if self.addonId else VSPath(
+            ADDONVS.getLocalizedString(lang))
 
 
 """
@@ -114,28 +125,34 @@ class dialog:
         if (addon().getSetting('Block_Noti_sound') == 'true'):
             sound = True
 
-        return self.DIALOG.notification(str(title), str(desc), xbmcgui.NOTIFICATION_INFO, iseconds, sound)
+        return self.DIALOG.notification(
+            str(title),
+            str(desc),
+            xbmcgui.NOTIFICATION_INFO,
+            iseconds,
+            sound)
 
     def VSerror(self, e):
-        return self.DIALOG.notification('vStream', 'Erreur: ' + str(e), xbmcgui.NOTIFICATION_ERROR, 2000), VSlog('Erreur: ' + str(e))
+        return self.DIALOG.notification(
+            'vStream', 'Erreur: ' + str(e), xbmcgui.NOTIFICATION_ERROR, 2000), VSlog('Erreur: ' + str(e))
 
     def VStextView(self, desc, title='vStream'):
         return self.DIALOG.textviewer(title, desc)
 
 
 """
-from resources.lib.comaddon import progress
+from resources.lib.comaddon import Progress
 
 Utilisation :
-progress_ = progress()
+progress_ = Progress()
 progress_.VScreate(SITE_NAME)
 progress_.VSupdate(progress_, total)
 if progress_.iscanceled():
     break
 progress_.VSclose(progress_)
 
-dialog = progress() non recommandé
-progress = progress() non recommandé
+dialog = Progress() non recommandé
+Progress = Progress() non recommandé
 https://codedocs.xyz/xbmc/xbmc/group__python___dialog_progress.html
 """
 
@@ -155,10 +172,20 @@ class empty:
         return 100  # simuler la fin de la progression
 
 # Basé sur UrlResolver
+
+
 class CountdownDialog(object):
     __INTERVALS = 5
 
-    def __init__(self, heading, line1='', line2='', line3='', active=True, countdown=60, interval=5):
+    def __init__(
+            self,
+            heading,
+            line1='',
+            line2='',
+            line3='',
+            active=True,
+            countdown=60,
+            interval=5):
         self.heading = heading
         self.countdown = countdown
         self.interval = interval
@@ -204,15 +231,16 @@ class CountdownDialog(object):
             interval = self.interval
             while time_left > 0:
                 for _ in range(CountdownDialog.__INTERVALS):
-                    xbmc.sleep(int(interval * 1000 / CountdownDialog.__INTERVALS))
+                    xbmc.sleep(
+                        int(interval * 1000 / CountdownDialog.__INTERVALS))
                     if self.is_canceled():
                         return
                     time_left = expires - int(time.time() - start)
                     if time_left < 0:
                         time_left = 0
-                    progress = int(time_left * 100 / expires)
+                    Progress = int(time_left * 100 / expires)
                     line3 = 'Expires in: %s seconds' % time_left if not self.line3 else ''
-                    self.update(progress, line3=line3)
+                    self.update(Progress, line3=line3)
 
                 result = func(*args, **kwargs)
                 if result:
@@ -238,13 +266,14 @@ class CountdownDialog(object):
                 self.pd.update(percent, line1 + '\n' + line2 + '\n' + line3)
 
 
-class progress:
+class Progress:
     def __init__(self):
         self.PROGRESS = None
         self.COUNT = 0
 
     def VScreate(self, title='', desc='', large=False):
-        # l'option "large" permet de forcer un sablier large, seul le sablier large peut être annulé.
+        # l'option "large" permet de forcer un sablier large, seul le sablier
+        # large peut être annulé.
 
         # Ne pas afficher le sablier si nous ne sommes pas dans un menu vStream
         currentWindow = xbmcgui.getCurrentWindowId()
@@ -257,10 +286,10 @@ class progress:
         if dlgId != 9999 and dlgId != 10138:  # 9999 = None
             return empty()
 
-        if self.PROGRESS == None:
+        if self.PROGRESS is None:
             if not title:
                 title = addon().VSlang(30140)
-            
+
             if large:
                 self.PROGRESS = xbmcgui.DialogProgress()
             elif ADDONVS.getSetting('spinner_small') == 'true':
@@ -279,15 +308,15 @@ class progress:
             return
 
         if not text:
-            text= addon().VSlang(30140)
+            text = addon().VSlang(30140)
 
         self.COUNT += 1
         iPercent = int(float(self.COUNT * 100) / total)
         text += ' : ' + str(self.COUNT) + '/' + str(total) + '\n'
         if isinstance(self.PROGRESS, xbmcgui.DialogProgress):
-            self.PROGRESS.update(iPercent, text )
+            self.PROGRESS.update(iPercent, text)
         else:
-            self.PROGRESS.update(iPercent, message = text )
+            self.PROGRESS.update(iPercent, message=text)
 
     def iscanceled(self):
         if isinstance(self.PROGRESS, xbmcgui.DialogProgress):
@@ -334,17 +363,18 @@ class listitem(xbmcgui.ListItem):
         pass
 
     # Permet l'ajout d'un menu après la création d'un item
-    def addMenu(self, sFile, sFunction, sTitle, oOutputParameterHandler=False):
-        sPluginPath = 'plugin://plugin.video.vstream/'  # cPluginHandler().getPluginPath()
+    def addMenu(self, sFile, function, title,
+                output_parameter_handler=False):
+        sPluginPath = 'plugin://plugin.video.vstream/'  # PluginHandler().getPluginPath()
         nbContextMenu = self.getProperty('nbcontextmenu')
         nbContextMenu = int(nbContextMenu) if nbContextMenu else 0
 
-        sUrl = '%s?site=%s&function=%s' % (sPluginPath, sFile, sFunction)
-        if oOutputParameterHandler:
-            sUrl += '&%s' % oOutputParameterHandler.getParameterAsUri()
+        sUrl = '%s?site=%s&function=%s' % (sPluginPath, sFile, function)
+        if output_parameter_handler:
+            sUrl += '&%s' % output_parameter_handler.getParameterAsUri()
 
         property = 'contextmenulabel(%d)' % nbContextMenu
-        self.setProperty(property, sTitle)
+        self.setProperty(property, title)
 
         property = 'contextmenuaction(%d)' % nbContextMenu
         self.setProperty(property, 'RunPlugin(%s)' % sUrl)
@@ -369,7 +399,7 @@ def VSlog(e, level=xbmc.LOGDEBUG):
                 level = xbmc.LOGNOTICE
         xbmc.log('\t[PLUGIN] vStream: ' + str(e), level)
 
-    except:
+    except BaseException:
         pass
 
 
@@ -394,7 +424,7 @@ def isKrypton():
             return True
         else:
             return False
-    except:
+    except BaseException:
         return False
 
 
@@ -405,7 +435,7 @@ def isMatrix():
             return True
         else:
             return False
-    except:
+    except BaseException:
         return False
 
 
@@ -416,7 +446,7 @@ def isNexus():
             return True
         else:
             return False
-    except:
+    except BaseException:
         return False
 
 
@@ -448,8 +478,8 @@ def VSProfil():
     return name
 
 
-# Gestion des sources : activer/désactiver, libellé, url, ... 
-class siteManager:
+# Gestion des sources : activer/désactiver, libellé, url, ...
+class SiteManager:
 
     SITES = 'sites'
     ACTIVE = 'active'
@@ -457,18 +487,23 @@ class siteManager:
     URL_MAIN = 'url'
 
     def __init__(self):
-        
+
         # Propriétés par défaut
-        self.defaultPath = VSPath('special://home/addons/plugin.video.vstream/resources/sites.json')
+        self.defaultPath = VSPath(
+            'special://home/addons/plugin.video.vstream/resources/sites.json')
         self.defaultData = None
 
-        # Propriétés selon le profil        
+        # Propriétés selon le profil
         name = VSProfil()
         if name == 'Master user':   # Le cas par defaut
-            path = VSPath('special://home/userdata/addon_data/plugin.video.vstream/sites.json')
+            path = VSPath(
+                'special://home/userdata/addon_data/plugin.video.vstream/sites.json')
         else:
-            path = VSPath('special://home/userdata/profiles/' + name + '/addon_data/plugin.video.vstream/sites.json')
-        
+            path = VSPath(
+                'special://home/userdata/profiles/' +
+                name +
+                '/addon_data/plugin.video.vstream/sites.json')
+
         # Résolution du chemin
         try:
             self.propertiesPath = VSPath(path).decode('utf-8')
@@ -479,26 +514,27 @@ class siteManager:
         try:
             self.data = json.load(open(self.propertiesPath))
         except IOError:
-            # le fichier n'existe pas, on le crée à partir des settings par défaut
+            # le fichier n'existe pas, on le crée à partir des settings par
+            # défaut
             xbmcvfs.copy(self.defaultPath, path)
             self.data = json.load(open(self.propertiesPath))
-            
 
     # sites désactivé par la team
+
     def isEnable(self, sourceName):
         return self.getDefaultProperty(sourceName, self.ACTIVE) == 'True'
 
-    
     # sites désactivé par l'utilisateur
+
     def isActive(self, sourceName):
         return self.getProperty(sourceName, self.ACTIVE) == 'True'
-    
+
     def setActive(self, sourceName, state):
         self.setProperty(sourceName, self.ACTIVE, state)
 
     def getUrlMain(self, sourceName):
         return str(self.getDefaultProperty(sourceName, self.URL_MAIN))
-    
+
     def disableAll(self):
         for sourceName in self.data[self.SITES]:
             self.setActive(sourceName, False)
@@ -509,13 +545,11 @@ class siteManager:
             self.setActive(sourceName, True)
         return
 
-
     def getDefaultProperty(self, sourceName, propName):
         defaultProps = self._getDefaultProp(sourceName)
         if propName not in defaultProps:
             return False
         return defaultProps.get(propName)
-
 
     def getProperty(self, sourceName, propName):
         sourceData = self._getDataSource(sourceName)
@@ -534,7 +568,6 @@ class siteManager:
             self.save()
             return value
 
-
     def setProperty(self, sourceName, propName, value):
         sourceData = self._getDataSource(sourceName)
         if sourceData:
@@ -549,7 +582,7 @@ class siteManager:
 
         # userSettings
         sourceData = self.data[self.SITES].get(sourceName)
-        
+
         # pas de user Settings, on recherche dans les default Settings
         if not sourceData:
             sourceData = self._getDefaultProp(sourceName)
@@ -558,8 +591,8 @@ class siteManager:
             if sourceData:
                 self.data[self.SITES][sourceName] = sourceData
 
-        return sourceData 
-        
+        return sourceData
+
     # Récupérer les propriétés par défaut d'une source
     def _getDefaultProp(self, sourceName):
 
@@ -568,14 +601,15 @@ class siteManager:
             self.defaultData = json.load(open(self.defaultPath))
 
         # Retrouver la prop par défaut
-        sourceData = self.defaultData[self.SITES].get(sourceName) if self.defaultData and self.SITES in self.defaultData else None
-        
+        sourceData = self.defaultData[self.SITES].get(
+            sourceName) if self.defaultData and self.SITES in self.defaultData else None
+
         # pas de valeurs par défaut, on en crée à la volée
         if not sourceData:
             return {}
 
         return sourceData
-    
+
     # Sauvegarder les propriétés modifiées
     def save(self):
         with open(self.propertiesPath, 'w') as f:
@@ -586,7 +620,6 @@ class siteManager:
         with open(self.defaultPath, 'w') as f:
             f.write(json.dumps(self.defaultData, indent=4))
 
-    
 
 class addonManager:
     # Demande l'installation d'un addon
@@ -595,7 +628,8 @@ class addonManager:
 
     # Vérifie la présence d'un addon
     def isAddonExists(self, addon_id):
-        return not xbmc.getCondVisibility('System.HasAddon(%s)' % addon_id) == 0
+        return not xbmc.getCondVisibility(
+            'System.HasAddon(%s)' % addon_id) == 0
 
     # Active/desactive un addon
     def enableAddon(self, addon_id, enable='True'):
@@ -618,5 +652,8 @@ class addonManager:
             VSlog("response = " + str(response))
             return response['result'] == 'OK'
         except KeyError:
-            VSlog('enable_addon received an unexpected response - ' + addon_id, xbmc.LOGERROR)
+            VSlog(
+                'enable_addon received an unexpected response - ' +
+                addon_id,
+                xbmc.LOGERROR)
             return False

@@ -1,8 +1,8 @@
 # -*- coding: utf-8 -*-
 # vStream https://github.com/Kodi-vStream/venom-xbmc-addons
-from resources.lib.handler.requestHandler import cRequestHandler
+from resources.lib.handler.requestHandler import RequestHandler
 from resources.hosters.hoster import iHoster
-from resources.lib.parser import cParser
+from resources.lib.parser import Parser
 
 
 class cHoster(iHoster):
@@ -13,11 +13,11 @@ class cHoster(iHoster):
     def isDownloadable(self):
         return False
 
-    def _getMediaLinkForGuest(self, autoPlay = False):
-        oRequest = cRequestHandler(self._url)
+    def _getMediaLinkForGuest(self, autoPlay=False):
+        oRequest = RequestHandler(self._url)
         sHtmlContent = oRequest.request()
 
-        oParser = cParser()
+        oParser = Parser()
         # sPattern = '(eval\(function\(p,a,c,k,e(?:.|\s)+?\))<\/script>'
         # aResult = oParser.parse(sHtmlContent,sPattern)
         # if aResult[0] is True:
@@ -26,7 +26,8 @@ class cHoster(iHoster):
         sPattern = 'controls preload="none" src="([^"]+)"'
         aResult = oParser.parse(sHtmlContent, sPattern)
         if aResult[0] is True:
-            api_call = aResult[1][0]  # pas de choix qualité trouvé pour le moment
+            # pas de choix qualité trouvé pour le moment
+            api_call = aResult[1][0]
 
         if api_call:
             return True, api_call

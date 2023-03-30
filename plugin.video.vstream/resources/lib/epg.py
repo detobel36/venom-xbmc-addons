@@ -12,23 +12,23 @@ import unicodedata
 SITE_IDENTIFIER = 'ePg'
 SITE_NAME = 'epg'
 
+
 class cePg:
 
-    def view_epg(self, sTitle, sTime,text=None):
-        if text == None:
-            text = self.getEpg(sTitle, sTime)
-         
+    def view_epg(self, title, sTime, text=None):
+        if text is None:
+            text = self.getEpg(title, sTime)
+
         if text:
-            self.TextBoxes(sTitle, text)
+            self.TextBoxes(title, text)
         else:
             dialog().VSinfo('Impossible de trouver le guide tv')
 
+    def getEpg(self, title, sTime, noTextBox=False):
+        # Si noTextBox == True, ca veux dire que l'appel viens d'une source.
+        # Dans ce cas la, on normalise les noms pour faciliter la detection.
 
-    def getEpg(self, sTitle, sTime, noTextBox=False):
-        #Si noTextBox == True, ca veux dire que l'appel viens d'une source.
-        #Dans ce cas la, on normalise les noms pour faciliter la detection.
-        
-        #sUrl = "https://xmltv.ch/xmltv/xmltv-complet.xml"
+        # sUrl = "https://xmltv.ch/xmltv/xmltv-complet.xml"
         sUrl = "https://xmltv.ch/xmltv/xmltv-tnt.xml"
 
         # dialog().VSinfo("Chargement du guide TV")
@@ -50,35 +50,38 @@ class cePg:
         text = ""
         channelList = {}
         for child in tree.findall('channel'):
-            channelList.update({child.get('id'):child.find('display-name').text})
+            channelList.update(
+                {child.get('id'): child.find('display-name').text})
 
         for elem in tree.findall('programme'):
             if elem.get('start'):
-                formatTime = self.parse_date_tz(elem.get('start').split(' ')[0], elem.get('stop').split(' ')[0])
+                formatTime = self.parse_date_tz(
+                    elem.get('start').split(' ')[0],
+                    elem.get('stop').split(' ')[0])
                 channelId = elem.get("channel")
                 if not isinstance(channelId, str):
                     channelId = channelId.decode('utf-8')
                 channel = channelList[channelId]
                 if noTextBox:
                     channel = self._clean_name(channel)
-                text += "[COLOR red]" + channel + "[/COLOR]\r\n"                  
+                text += "[COLOR red]" + channel + "[/COLOR]\r\n"
                 text += "[B]" + formatTime + "[/B]\r\n"
-                text += "[COLOR khaki][UPPERCASE]" + elem.find('title').text + "[/UPPERCASE][/COLOR]\r\n"
-                if elem.find('category') is not None:    
-                    text += "(" +  elem.find('category').text + ") \r\n"
+                text += "[COLOR khaki][UPPERCASE]" + \
+                    elem.find('title').text + "[/UPPERCASE][/COLOR]\r\n"
+                if elem.find('category') is not None:
+                    text += "(" + elem.find('category').text + ") \r\n"
                 if elem.find('desc') is not None:
-                    text +=  elem.find('desc').text
+                    text += elem.find('desc').text
             text += "\r\n"
-            
-            
+
         if not isMatrix():
             text = text.encode('utf8')
         return text
 
-
     def parse_date_tz(self, dateStart, dateEnd):
-        #Convert 20211019163600  to 2021-10-19 16:36
-        formatTime = dateStart[8:10] + ":" + dateStart[10:12] + "-" +  dateEnd[8:10] + ":" + dateEnd[10:12] + " " + dateStart[6:8] + "-" + dateStart[4:6] + "-" + dateStart[:4]  
+        # Convert 20211019163600  to 2021-10-19 16:36
+        formatTime = dateStart[8:10] + ":" + dateStart[10:12] + "-" + dateEnd[8:10] + ":" + \
+            dateEnd[10:12] + " " + dateStart[6:8] + "-" + dateStart[4:6] + "-" + dateStart[:4]
         return formatTime
 
     def TextBoxes(self, heading, anounce):
@@ -96,8 +99,8 @@ class cePg:
         win.getControl(5).setText(anounce)
         return
 
-    #Code de catchup tv and more.
-    #https://github.com/Catch-up-TV-and-More/plugin.video.catchuptvandmore/blob/dev/resources/lib/xmltv.py
+    # Code de catchup tv and more.
+    # https://github.com/Catch-up-TV-and-More/plugin.video.catchuptvandmore/blob/dev/resources/lib/xmltv.py
     def read_programmes(self, r, date):
         xmltv_l = []
         take_line = True
@@ -105,13 +108,19 @@ class cePg:
             # Match the beginning of a program
             if b'<programme ' in line:
                 try:
-                    start = int(re.search(b'start="(.+?) ', line).group(1))  # UTC start time
+                    start = int(
+                        re.search(
+                            b'start="(.+?) ',
+                            line).group(1))  # UTC start time
                 except Exception:
                     take_line = False
                     continue
 
                 try:
-                    stop = int(re.search(b'stop="(.+?) ', line).group(1))  # UTC stop time
+                    stop = int(
+                        re.search(
+                            b'stop="(.+?) ',
+                            line).group(1))  # UTC stop time
                 except Exception:
                     stop = 50000000000000
 
@@ -136,23 +145,28 @@ class cePg:
             return ''
 
         try:
-            searchName = self._clean_name(channelName).replace('+',"\\+")
-            sDesc = re.search("\[COLOR red\]" + searchName + "\[\/COLOR\](.+?)\[COLOR red", EPG, re.MULTILINE|re.DOTALL).group(1)
+            searchName = self._clean_name(channelName).replace('+', "\\+")
+            desc = re.search(
+                "\\[COLOR red\\]" +
+                searchName +
+                "\\[\\/COLOR\\](.+?)\\[COLOR red",
+                EPG,
+                re.MULTILINE | re.DOTALL).group(1)
         except Exception as e:
-            sDesc = ''
-        return sDesc
-
+            desc = ''
+        return desc
 
     def _clean_name(self, name):
         # vire accent
         try:
             if isinstance(name, str):
                 name = unicode(name, 'utf-8')
-            name = unicodedata.normalize('NFD', name).encode('ascii', 'ignore').decode('unicode_escape')
+            name = unicodedata.normalize('NFD', name).encode(
+                'ascii', 'ignore').decode('unicode_escape')
             if not isMatrix():
                 name = name.encode('utf-8')  # on repasse en utf-8
         except Exception as e:
             pass
 
-        name = name.replace(' +',"+").lower().strip()
+        name = name.replace(' +', "+").lower().strip()
         return name

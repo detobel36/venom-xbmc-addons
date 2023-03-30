@@ -3,12 +3,12 @@
 
 import re
 
-from resources.lib.gui.gui import cGui
-from resources.lib.handler.inputParameterHandler import cInputParameterHandler
-from resources.lib.handler.outputParameterHandler import cOutputParameterHandler
-from resources.lib.parser import cParser
+from resources.lib.gui.gui import Gui
+from resources.lib.handler.inputParameterHandler import InputParameterHandler
+from resources.lib.handler.outputParameterHandler import OutputParameterHandler
+from resources.lib.parser import Parser
 from resources.sites.freebox import getHtml, showWeb, play__
-from resources.lib.comaddon import progress
+from resources.lib.comaddon import Progress
 
 SITE_IDENTIFIER = 'daily_iptv_list'
 SITE_NAME = 'Daily Iptv List'
@@ -23,107 +23,156 @@ URL_WORLDWIDE = URL_MAIN + 'iptv-world-wide/'
 
 
 def load():
-    oGui = cGui()
+    gui = Gui()
 
-    oOutputParameterHandler = cOutputParameterHandler()
-    oOutputParameterHandler.addParameter('siteUrl', URL_MAIN)
-    oGui.addDir(SITE_IDENTIFIER, 'showDailyList', 'Dernière liste', 'tv.png', oOutputParameterHandler)
+    output_parameter_handler = OutputParameterHandler()
+    output_parameter_handler.addParameter('siteUrl', URL_MAIN)
+    gui.addDir(
+        SITE_IDENTIFIER,
+        'showDailyList',
+        'Dernière liste',
+        'tv.png',
+        output_parameter_handler)
 
-    oOutputParameterHandler.addParameter('siteUrl', URL_MAIN)
-    oGui.addDir(SITE_IDENTIFIER, 'showPays', 'Choix du pays', 'tv.png', oOutputParameterHandler)
+    output_parameter_handler.addParameter('siteUrl', URL_MAIN)
+    gui.addDir(
+        SITE_IDENTIFIER,
+        'showPays',
+        'Choix du pays',
+        'tv.png',
+        output_parameter_handler)
 
-    oOutputParameterHandler.addParameter('siteUrl', URL_EUROPE)
-    oGui.addDir(SITE_IDENTIFIER, 'showDailyList', 'Liste iptv Europe', 'tv.png', oOutputParameterHandler)
+    output_parameter_handler.addParameter('siteUrl', URL_EUROPE)
+    gui.addDir(
+        SITE_IDENTIFIER,
+        'showDailyList',
+        'Liste iptv Europe',
+        'tv.png',
+        output_parameter_handler)
 
-    oOutputParameterHandler.addParameter('siteUrl', URL_AMERICA)
-    oGui.addDir(SITE_IDENTIFIER, 'showDailyList', 'Liste iptv America', 'tv.png', oOutputParameterHandler)
+    output_parameter_handler.addParameter('siteUrl', URL_AMERICA)
+    gui.addDir(
+        SITE_IDENTIFIER,
+        'showDailyList',
+        'Liste iptv America',
+        'tv.png',
+        output_parameter_handler)
 
-    oOutputParameterHandler.addParameter('siteUrl', URL_ASIA)
-    oGui.addDir(SITE_IDENTIFIER, 'showDailyList', 'Liste iptv Asia', 'tv.png', oOutputParameterHandler)
+    output_parameter_handler.addParameter('siteUrl', URL_ASIA)
+    gui.addDir(
+        SITE_IDENTIFIER,
+        'showDailyList',
+        'Liste iptv Asia',
+        'tv.png',
+        output_parameter_handler)
 
-    oOutputParameterHandler.addParameter('siteUrl', URL_SPORT)
-    oGui.addDir(SITE_IDENTIFIER, 'showDailyList', 'Liste iptv Sport', 'tv.png', oOutputParameterHandler)
+    output_parameter_handler.addParameter('siteUrl', URL_SPORT)
+    gui.addDir(
+        SITE_IDENTIFIER,
+        'showDailyList',
+        'Liste iptv Sport',
+        'tv.png',
+        output_parameter_handler)
 
-    oOutputParameterHandler.addParameter('siteUrl', URL_WORLDWIDE)
-    oGui.addDir(SITE_IDENTIFIER, 'showDailyList', 'Liste iptv Worldwide', 'tv.png', oOutputParameterHandler)
+    output_parameter_handler.addParameter('siteUrl', URL_WORLDWIDE)
+    gui.addDir(
+        SITE_IDENTIFIER,
+        'showDailyList',
+        'Liste iptv Worldwide',
+        'tv.png',
+        output_parameter_handler)
 
-    oGui.setEndOfDirectory()
+    gui.setEndOfDirectory()
 
 
 def showPays():
-    oGui = cGui()
-    oInputParameterHandler = cInputParameterHandler()
-    sUrl = oInputParameterHandler.getValue('siteUrl')
+    gui = Gui()
+    input_parameter_handler = InputParameterHandler()
+    sUrl = input_parameter_handler.getValue('siteUrl')
 
-    oParser = cParser()
+    oParser = Parser()
     sHtmlContent = getHtml(sUrl)
     sPattern = '<li class="cat-item cat-item-.+?"><a href="([^"]+)".+?>([^<]+)</a>'
     aResult = oParser.parse(sHtmlContent, sPattern)
 
     if aResult[0]:
         total = len(aResult[1])
-        progress_ = progress().VScreate(SITE_NAME)
+        progress_ = Progress().VScreate(SITE_NAME)
 
-        oOutputParameterHandler = cOutputParameterHandler()
+        output_parameter_handler = OutputParameterHandler()
         for aEntry in aResult[1]:
             progress_.VSupdate(progress_, total)
             if progress_.iscanceled():
                 break
 
             sUrl2 = aEntry[0]
-            sTitle = aEntry[1]
+            title = aEntry[1]
 
-            oOutputParameterHandler.addParameter('siteUrl', sUrl2)
-            oOutputParameterHandler.addParameter('sMovieTitle', sTitle)
-            oGui.addDir(SITE_IDENTIFIER, 'showDailyList', sTitle, 'tv.png', oOutputParameterHandler)
+            output_parameter_handler.addParameter('siteUrl', sUrl2)
+            output_parameter_handler.addParameter('sMovieTitle', title)
+            gui.addDir(
+                SITE_IDENTIFIER,
+                'showDailyList',
+                title,
+                'tv.png',
+                output_parameter_handler)
 
         progress_.VSclose(progress_)
 
-    oGui.setEndOfDirectory()
+    gui.setEndOfDirectory()
 
 
 def showDailyList():
-    oGui = cGui()
-    oInputParameterHandler = cInputParameterHandler()
-    sUrl = oInputParameterHandler.getValue('siteUrl')
+    gui = Gui()
+    input_parameter_handler = InputParameterHandler()
+    sUrl = input_parameter_handler.getValue('siteUrl')
 
-    oParser = cParser()
+    oParser = Parser()
     sHtmlContent = getHtml(sUrl)
     sPattern = '</a><h2 class="post-title"><a href="([^"]+)">([^<]+)</a></h2><div class="excerpt"><p>.+?</p>'
     aResult = oParser.parse(sHtmlContent, sPattern)
 
     if aResult[0]:
         total = len(aResult[1])
-        progress_ = progress().VScreate(SITE_NAME)
+        progress_ = Progress().VScreate(SITE_NAME)
 
-        oOutputParameterHandler = cOutputParameterHandler()
+        output_parameter_handler = OutputParameterHandler()
         for aEntry in aResult[1]:
             progress_.VSupdate(progress_, total)
             if progress_.iscanceled():
                 break
 
             sUrl2 = aEntry[0]
-            sTitle = aEntry[1]
+            title = aEntry[1]
 
-            oOutputParameterHandler.addParameter('siteUrl', sUrl2)
-            oOutputParameterHandler.addParameter('sMovieTitle', sTitle)
+            output_parameter_handler.addParameter('siteUrl', sUrl2)
+            output_parameter_handler.addParameter('sMovieTitle', title)
 
-            oGui.addDir(SITE_IDENTIFIER, 'showAllPlaylist', sTitle, 'tv.png', oOutputParameterHandler)
+            gui.addDir(
+                SITE_IDENTIFIER,
+                'showAllPlaylist',
+                title,
+                'tv.png',
+                output_parameter_handler)
 
         progress_.VSclose(progress_)
 
         sNextPage = __checkForNextPage(sHtmlContent)
         if (sNextPage):
-            oOutputParameterHandler = cOutputParameterHandler()
-            oOutputParameterHandler.addParameter('siteUrl', sNextPage)
+            output_parameter_handler = OutputParameterHandler()
+            output_parameter_handler.addParameter('siteUrl', sNextPage)
             sNumPage = re.search('/page/([0-9]+)', sNextPage).group(1)
-            oGui.addNext(SITE_IDENTIFIER, 'showDailyList', 'Page ' + sNumPage, oOutputParameterHandler)
+            gui.addNext(
+                SITE_IDENTIFIER,
+                'showDailyList',
+                'Page ' + sNumPage,
+                output_parameter_handler)
 
-    oGui.setEndOfDirectory()
+    gui.setEndOfDirectory()
 
 
 def __checkForNextPage(sHtmlContent):
-    oParser = cParser()
+    oParser = Parser()
     sPattern = '<a class="next page-numbers" href="([^"]+)">'
     aResult = oParser.parse(sHtmlContent, sPattern)
 
@@ -134,33 +183,38 @@ def __checkForNextPage(sHtmlContent):
 
 
 def showAllPlaylist():
-    oGui = cGui()
-    oInputParameterHandler = cInputParameterHandler()
-    sUrl = oInputParameterHandler.getValue('siteUrl')
+    gui = Gui()
+    input_parameter_handler = InputParameterHandler()
+    sUrl = input_parameter_handler.getValue('siteUrl')
 
-    oParser = cParser()
+    oParser = Parser()
     sHtmlContent = getHtml(sUrl)
     sPattern = '<p></br><br /><strong>2. Click on link to download .+? iptv channels list</strong></p>|<a href="([^"]+)">Download ([^<]+)</a>'
     aResult = oParser.parse(sHtmlContent, sPattern)
 
     if aResult[0]:
         total = len(aResult[1])
-        progress_ = progress().VScreate(SITE_NAME)
+        progress_ = Progress().VScreate(SITE_NAME)
 
-        oOutputParameterHandler = cOutputParameterHandler()
+        output_parameter_handler = OutputParameterHandler()
         for aEntry in aResult[1]:
             progress_.VSupdate(progress_, total)
             if progress_.iscanceled():
                 break
 
             sUrl2 = aEntry[0]
-            sTitle = aEntry[1]
+            title = aEntry[1]
 
-            oOutputParameterHandler.addParameter('siteUrl', sUrl2)
-            oOutputParameterHandler.addParameter('sMovieTitle', sTitle)
+            output_parameter_handler.addParameter('siteUrl', sUrl2)
+            output_parameter_handler.addParameter('sMovieTitle', title)
 
-            oGui.addDir(SITE_IDENTIFIER, 'showWeb', sTitle, '', oOutputParameterHandler)
+            gui.addDir(
+                SITE_IDENTIFIER,
+                'showWeb',
+                title,
+                '',
+                output_parameter_handler)
 
         progress_.VSclose(progress_)
 
-    oGui.setEndOfDirectory()
+    gui.setEndOfDirectory()

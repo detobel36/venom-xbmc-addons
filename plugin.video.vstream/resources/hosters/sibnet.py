@@ -2,9 +2,9 @@
 # vStream https://github.com/Kodi-vStream/venom-xbmc-addons
 # https://video.sibnet.ru/shell.php?videoid=xxxxxx
 
-from resources.lib.handler.requestHandler import cRequestHandler
+from resources.lib.handler.requestHandler import RequestHandler
 from resources.hosters.hoster import iHoster
-from resources.lib.parser import cParser
+from resources.lib.parser import Parser
 
 UA = 'Mozilla/5.0 (Windows NT 6.1; WOW64; rv:72.0) Gecko/20100101 Firefox/72.0'
 
@@ -17,15 +17,15 @@ class cHoster(iHoster):
     def isDownloadable(self):
         return False
 
-    def _getMediaLinkForGuest(self, autoPlay = False):
+    def _getMediaLinkForGuest(self, autoPlay=False):
         api_call = False
         urlmain = 'https://video.sibnet.ru'
-        oRequestHandler = cRequestHandler(self._url)
+        oRequestHandler = RequestHandler(self._url)
         oRequestHandler.addHeaderEntry('User-Agent', UA)
         oRequestHandler.addHeaderEntry('Referer', urlmain + '/')
         sHtmlContent = oRequestHandler.request()
 
-        oParser = cParser()
+        oParser = Parser()
         sPattern = 'src:.+?"([^"]+)'
         aResult = oParser.parse(sHtmlContent, sPattern)
 

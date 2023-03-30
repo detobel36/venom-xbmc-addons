@@ -4,7 +4,7 @@ import re
 import time
 
 from resources.hosters.hoster import iHoster
-from resources.lib.handler.requestHandler import cRequestHandler
+from resources.lib.handler.requestHandler import RequestHandler
 
 UA = 'Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:89.0) Gecko/20100101 Firefox/89.0'
 
@@ -14,13 +14,13 @@ class cHoster(iHoster):
     def __init__(self):
         iHoster.__init__(self, 'megaup', 'Megaup')
 
-    def _getMediaLinkForGuest(self, autoPlay = False):
-        oRequestHandler = cRequestHandler(self._url)
+    def _getMediaLinkForGuest(self, autoPlay=False):
+        oRequestHandler = RequestHandler(self._url)
         oRequestHandler.addHeaderEntry('User-Agent', UA)
         sHtmlContent = oRequestHandler.request()
         cookies = oRequestHandler.GetCookies() + ";"
 
-        data = re.search('Mhoa_URL\((.+?)\);', sHtmlContent).group(1)
+        data = re.search('Mhoa_URL\\((.+?)\\);', sHtmlContent).group(1)
         data = re.findall("'(.+?)'", data)
 
         part1 = data[0]
@@ -29,26 +29,34 @@ class cHoster(iHoster):
         size = data[3]
 
         cidken = ''
-        d1p1 = part1[0:len(part1)//4]
+        d1p1 = part1[0:len(part1) // 4]
         cidken += d1p1[::-1]
-        d1p2 = part1[len(part1)//4*2:len(part1)//4*3]
+        d1p2 = part1[len(part1) // 4 * 2:len(part1) // 4 * 3]
         cidken += d1p2[::-1]
-        d2p1 = part2[3:(len(part2)+3)//2]
+        d2p1 = part2[3:(len(part2) + 3) // 2]
         cidken += d2p1[::-1]
 
         time.sleep(6)
 
-        oRequestHandler = cRequestHandler("https://download.megaup.net/?idurl=" + cidken + "&idfilename=" + file +
-                                          "&idfilesize=" + size)
+        oRequestHandler = RequestHandler(
+            "https://download.megaup.net/?idurl=" +
+            cidken +
+            "&idfilename=" +
+            file +
+            "&idfilesize=" +
+            size)
         oRequestHandler.addHeaderEntry('User-Agent', UA)
         sHtmlContent = oRequestHandler.request()
 
-        la = re.search('window\.location\.replace\("(.+?)"', sHtmlContent).group(1)
+        la = re.search(
+            'window\\.location\\.replace\\("(.+?)"',
+            sHtmlContent).group(1)
 
-        oRequestHandler = cRequestHandler(la)
+        oRequestHandler = RequestHandler(la)
         oRequestHandler.disableRedirect()
         oRequestHandler.addHeaderEntry('User-Agent', UA)
-        oRequestHandler.addHeaderEntry("Referer", "https://download.megaup.net/")
+        oRequestHandler.addHeaderEntry(
+            "Referer", "https://download.megaup.net/")
         oRequestHandler.addHeaderEntry("Cookie", cookies)
         oRequestHandler.request()
         api_call = oRequestHandler.getResponseHeader()['Location']

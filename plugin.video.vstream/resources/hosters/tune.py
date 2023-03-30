@@ -1,8 +1,8 @@
 # -*- coding: utf-8 -*-
 import json
 
-from resources.lib.handler.requestHandler import cRequestHandler
-from resources.lib.parser import cParser
+from resources.lib.handler.requestHandler import RequestHandler
+from resources.lib.parser import Parser
 from resources.hosters.hoster import iHoster
 from resources.lib.comaddon import dialog
 from resources.lib.util import cUtil
@@ -16,15 +16,15 @@ class cHoster(iHoster):
         iHoster.__init__(self, 'tune', 'Tune')
 
     def __getIdFromUrl(self, sUrl):  # correction ancienne url >> embed depreciated
-        sPattern = '(?:play/|video/|embed\?videoid=|vid=)([0-9]+)'
-        oParser = cParser()
+        sPattern = '(?:play/|video/|embed\\?videoid=|vid=)([0-9]+)'
+        oParser = Parser()
         aResult = oParser.parse(sUrl, sPattern)
         if aResult[0] is True:
             return aResult[1][0]
 
         return ''
 
-    def _getMediaLinkForGuest(self, autoPlay = False):
+    def _getMediaLinkForGuest(self, autoPlay=False):
         api_call = ''
         url = []
         qua = []
@@ -32,7 +32,7 @@ class cHoster(iHoster):
 
         sUrl = 'https://api.tune.pk/v3/videos/' + sId
 
-        oRequest = cRequestHandler(sUrl)
+        oRequest = RequestHandler(sUrl)
         oRequest.addHeaderEntry('User-Agent', UA)
         oRequest.addHeaderEntry('X-KEY', '777750fea4d3bd585bf47dc1873619fc')
         oRequest.addHeaderEntry('X-REQ-APP', 'web')  # pour les mp4
@@ -51,12 +51,15 @@ class cHoster(iHoster):
                 for x in content:
                     if 'Auto' in str(content[x]['label']):
                         continue
-                    url2 = str(content[x]['file']).replace('index', str(content[x]['label']))
+                    url2 = str(
+                        content[x]['file']).replace(
+                        'index', str(
+                            content[x]['label']))
 
                     url.append(url2)
                     qua.append(repr(content[x]['label']))
 
-                api_call = dialog().VSselectqual(qua,url)
+                api_call = dialog().VSselectqual(qua, url)
 
             if api_call:
                 return True, api_call + '|User-Agent=' + UA

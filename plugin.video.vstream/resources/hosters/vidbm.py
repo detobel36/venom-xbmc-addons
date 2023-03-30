@@ -7,8 +7,8 @@
 import re
 
 from resources.hosters.hoster import iHoster
-from resources.lib.handler.requestHandler import cRequestHandler
-from resources.lib.parser import cParser
+from resources.lib.handler.requestHandler import RequestHandler
+from resources.lib.parser import Parser
 
 UA = 'Mozilla/5.0 (Windows NT 6.1; WOW64; rv:72.0) Gecko/20100101 Firefox/72.0'
 
@@ -29,12 +29,12 @@ class cHoster(iHoster):
         self._url = self._url.replace('.html?auto=1', '')
         self._url = self._url.replace('.html', '')
 
-    def _getMediaLinkForGuest(self, autoPlay = False):
-        oRequest = cRequestHandler(self._url)
+    def _getMediaLinkForGuest(self, autoPlay=False):
+        oRequest = RequestHandler(self._url)
         sHtmlContent = oRequest.request()
 
-        oParser = cParser()
-        sPattern = 'sources: *\[{file:"([^"]+)"'
+        oParser = Parser()
+        sPattern = 'sources: *\\[{file:"([^"]+)"'
         aResult = oParser.parse(sHtmlContent, sPattern)
         api_call = aResult[1][0] + '|User-Agent=' + UA
 

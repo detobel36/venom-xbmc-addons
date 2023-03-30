@@ -27,12 +27,13 @@ from .gui import cInputWindow, cInputWindowYesNo
 
 try:
     from Queue import Queue
-except:
+except BaseException:
     from queue import Queue
 
 import json
 import time
-import xbmcvfs, re
+import xbmcvfs
+import re
 
 Objectif = ""
 DimTab = []
@@ -45,9 +46,13 @@ class CliSolver(object):
         self.__image_procs = []
 
     def show_image(self, image):
-        oSolver = cInputWindow(captcha=image, msg= Objectif, dimtab = DimTab , roundnum=1)
+        oSolver = cInputWindow(
+            captcha=image,
+            msg=Objectif,
+            dimtab=DimTab,
+            roundnum=1)
         retArg = oSolver.get()
-        if retArg == False:
+        if not retArg:
             return False
         else:
             return retArg
@@ -70,7 +75,7 @@ class CliDynamicSolver(CliSolver):
         solver = self.solver
         indices = self.show_image(image)
 
-        if indices == False:
+        if not indices:
             return False
 
         self.select_initial(indices)
@@ -78,7 +83,10 @@ class CliDynamicSolver(CliSolver):
         solver.finish()
 
     def show_imageNewTile(self, image):
-        oSolver = cInputWindowYesNo(captcha=image, msg="Est-ce que cette image est en lien avec le thème ?", roundnum=1)
+        oSolver = cInputWindowYesNo(
+            captcha=image,
+            msg="Est-ce que cette image est en lien avec le thème ?",
+            roundnum=1)
         retArg = oSolver.get()
         return retArg
 
@@ -95,7 +103,7 @@ class CliDynamicSolver(CliSolver):
         self.image_queue.put((index, image))
 
     def select_initial(self, indices):
-        if indices == False:
+        if not indices:
             solver = self.solver
             solver.finish()
 
@@ -126,7 +134,7 @@ class CliMultiCaptchaSolver(CliSolver):
     def handle_image(self, image, **kwargs):
         solver = self.solver
         indices = self.show_image(image)
-        if indices == False:
+        if not indices:
             return False
         solver.select_indices(indices)
 
@@ -162,21 +170,27 @@ class Cli(Frontend):
             return
         global Objectif, DimTab
 
-        ID = json.dumps(meta).split(',')[0].replace('[','')
-        
+        ID = json.dumps(meta).split(',')[0].replace('[', '')
+
         f = xbmcvfs.File(STRINGS_PATH + "/data.txt")
         content = f.read()
         f.close()
 
-        Objectif = re.findall('case '+ID+'.+?<strong>([^<]+)</strong>', content)
+        Objectif = re.findall(
+            'case ' +
+            ID +
+            '.+?<strong>([^<]+)</strong>',
+            content)
 
         # Recupere le theme de maniere plus precis.
-        if (int(json.dumps(meta).split(',')[3]) * int(json.dumps(meta).split(',')[4]) > 9):
+        if (int(json.dumps(meta).split(',')[3]) *
+                int(json.dumps(meta).split(',')[4]) > 9):
             Objectif = Objectif[1].encode('utf-8').decode('unicode-escape')
         else:
             Objectif = Objectif[0].encode('utf-8').decode('unicode-escape')
 
-        DimTab = [int(json.dumps(meta).split(',')[3]), int(json.dumps(meta).split(u',')[4])]
+        DimTab = [int(json.dumps(meta).split(',')[3]),
+                  int(json.dumps(meta).split(u',')[4])]
 
     def handle_challenge(self, ctype, **kwargs):
         if not self._first:

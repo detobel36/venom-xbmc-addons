@@ -1,8 +1,8 @@
 # -*- coding: utf-8 -*-
 # vStream https://github.com/Kodi-vStream/venom-xbmc-addons
 from resources.hosters.hoster import iHoster
-from resources.lib.handler.requestHandler import cRequestHandler
-from resources.lib.parser import cParser
+from resources.lib.handler.requestHandler import RequestHandler
+from resources.lib.parser import Parser
 from resources.lib.comaddon import dialog
 from resources.lib.util import QuotePlus
 
@@ -23,8 +23,9 @@ class cHoster(iHoster):
         self._url = 'http://rutube.ru/play/embed/' + str(self._url)
 
     def __getIdFromUrl(self, url):
-        sPattern = "\/play\/embed\/(\w+)"  # au cas ou test \/play\/embed\/(\w+)(?:\?|\\?)
-        oParser = cParser()
+        # au cas ou test \/play\/embed\/(\w+)(?:\?|\\?)
+        sPattern = "\\/play\\/embed\\/(\\w+)"
+        oParser = Parser()
         aResult = oParser.parse(url, sPattern)
         if aResult[0] is True:
             return aResult[1][0]
@@ -33,26 +34,27 @@ class cHoster(iHoster):
 
     def __getRestFromUrl(self, url):
         # sPattern = "\?([\w]=[\w-]+)"
-        sPattern = "\?([^ ]+)"
-        oParser = cParser()
+        sPattern = "\\?([^ ]+)"
+        oParser = Parser()
         aResult = oParser.parse(url, sPattern)
         if aResult[0] is True:
             return aResult[1][0]
 
         return ''
 
-    def _getMediaLinkForGuest(self, autoPlay = False):
+    def _getMediaLinkForGuest(self, autoPlay=False):
         stream_url = False
 
-        oParser = cParser()
+        oParser = Parser()
 
         sID = self.__getIdFromUrl(self._url)
         sRestUrl = self.__getRestFromUrl(self._url)
 
-        api = 'http://rutube.ru/api/play/options/' + sID + '/?format=json&no_404=true&referer=' + QuotePlus(self._url)
+        api = 'http://rutube.ru/api/play/options/' + sID + \
+            '/?format=json&no_404=true&referer=' + QuotePlus(self._url)
         api = api + '&' + sRestUrl
 
-        oRequest = cRequestHandler(api)
+        oRequest = RequestHandler(api)
         sHtmlContent = oRequest.request()
 
         sPattern = '"m3u8": *"([^"]+)"'
@@ -67,10 +69,10 @@ class cHoster(iHoster):
         else:
             return False, False
 
-        oRequest = cRequestHandler(url2)
+        oRequest = RequestHandler(url2)
         sHtmlContent = oRequest.request()
 
-        sPattern = '(http.+?\?i=)([0-9x_]+)'
+        sPattern = '(http.+?\\?i=)([0-9x_]+)'
         aResult = oParser.parse(sHtmlContent, sPattern)
 
         if aResult[0] is True:

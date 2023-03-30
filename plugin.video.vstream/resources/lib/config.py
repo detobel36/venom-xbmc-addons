@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 # vStream https://github.com/Kodi-vStream/venom-xbmc-addons
 from resources.lib.comaddon import addon, dialog, listitem
-from resources.lib.tmdb import cTMDb
+from resources.lib.tmdb import TMDb
 from datetime import date, datetime
 
 import unicodedata
@@ -59,7 +59,7 @@ class GestionCookie:
             f = xbmcvfs.File(Name)
             data = f.read()
             f.close()
-        except:
+        except BaseException:
             return ''
 
         return data
@@ -90,22 +90,22 @@ class cConfig:
 
     # def __init__(self):
 
-        # import xbmcaddon
-        # self.__oSettings = xbmcaddon.Addon(self.getPluginId())
-        # self.__aLanguage = self.__oSettings.getLocalizedString
-        # self.__setSetting = self.__oSettings.setSetting
-        # self.__getSetting = self.__oSettings.getSetting
-        # self.__oVersion = self.__oSettings.getAddonInfo('version')
-        # self.__oId = self.__oSettings.getAddonInfo('id')
-        # self.__oPath = self.__oSettings.getAddonInfo('path')
-        # self.__oName = self.__oSettings.getAddonInfo('name')
-        # self.__oCache = xbmc.translatePath(self.__oSettings.getAddonInfo('profile'))
-        # self.__sRootArt = os.path.join(self.__oPath, 'resources' , 'art', '')
-        # self.__sIcon = os.path.join(self.__oPath,'resources', 'art','icon.png')
-        # self.__sFanart = os.path.join(self.__oPath,'resources','art','fanart.jpg')
-        # self.__sFileFav = os.path.join(self.__oCache,'favourite.db').decode('utf-8')
-        # self.__sFileDB = os.path.join(self.__oCache,'vstream.db').decode('utf-8')
-        # self.__sFileCache = os.path.join(self.__oCache,'video_cache.db').decode('utf-8')
+    # import xbmcaddon
+    # self.__oSettings = xbmcaddon.Addon(self.getPluginId())
+    # self.__aLanguage = self.__oSettings.getLocalizedString
+    # self.__setSetting = self.__oSettings.setSetting
+    # self.__getSetting = self.__oSettings.getSetting
+    # self.__oVersion = self.__oSettings.getAddonInfo('version')
+    # self.__oId = self.__oSettings.getAddonInfo('id')
+    # self.__oPath = self.__oSettings.getAddonInfo('path')
+    # self.__oName = self.__oSettings.getAddonInfo('name')
+    # self.__oCache = xbmc.translatePath(self.__oSettings.getAddonInfo('profile'))
+    # self.__sRootArt = os.path.join(self.__oPath, 'resources' , 'art', '')
+    # self.__sIcon = os.path.join(self.__oPath,'resources', 'art','icon.png')
+    # self.__sFanart = os.path.join(self.__oPath,'resources','art','fanart.jpg')
+    # self.__sFileFav = os.path.join(self.__oCache,'favourite.db').decode('utf-8')
+    # self.__sFileDB = os.path.join(self.__oCache,'vstream.db').decode('utf-8')
+    # self.__sFileCache = os.path.join(self.__oCache,'video_cache.db').decode('utf-8')
 
     def isDharma(self):
         return self.__bIsDharma
@@ -129,14 +129,25 @@ class cConfig:
         return False
 
 
-def WindowsBoxes(sTitle, siteUrl, metaType, year, sSite, sFav, sCat):
+def WindowsBoxes(title, siteUrl, metaType, year, sSite, sFav, sCat):
 
     ADDON = addon()
     DIALOG = dialog()
 
     # Sinon on gere par vStream via la lib TMDB
-    sType = str(metaType).replace('1', 'movie').replace('2', 'tvshow').replace('3', 'collection').replace('4', 'anime')\
-                         .replace('5', 'season').replace('6', 'episode')
+    sType = str(metaType).replace(
+        '1',
+        'movie').replace(
+        '2',
+        'tvshow').replace(
+            '3',
+            'collection').replace(
+                '4',
+                'anime') .replace(
+                    '5',
+                    'season').replace(
+                        '6',
+        'episode')
 
     try:
         tmdb_id = xbmc.getInfoLabel('ListItem.Property(TmdbId)')
@@ -146,9 +157,16 @@ def WindowsBoxes(sTitle, siteUrl, metaType, year, sSite, sFav, sCat):
             sType = 'season'
         if sType == 'season' and not season:
             sType = 'tvshow'
-        meta = cTMDb().get_meta(sType, sTitle, tmdb_id=tmdb_id, year=year, season=season, episode=episode)
-    except:
-        DIALOG.VSok("Veuillez vider le cache des métadonnées Paramètre - outils - 'vider le cache de vStream'")
+        meta = TMDb().get_meta(
+            sType,
+            title,
+            tmdb_id=tmdb_id,
+            year=year,
+            season=season,
+            episode=episode)
+    except BaseException:
+        DIALOG.VSok(
+            "Veuillez vider le cache des métadonnées Paramètre - outils - 'vider le cache de vStream'")
         pass
 
     # si rien ne marche
@@ -168,7 +186,8 @@ def WindowsBoxes(sTitle, siteUrl, metaType, year, sSite, sFav, sCat):
 
     # convertion de la date au format JJ/MM/AAAA
     if 'premiered' in meta and meta['premiered']:
-        releaseDate = datetime(*(time.strptime(meta['premiered'], '%Y-%m-%d')[0:6]))
+        releaseDate = datetime(
+            *(time.strptime(meta['premiered'], '%Y-%m-%d')[0:6]))
         meta['releaseDate'] = releaseDate.strftime('%d/%m/%Y')
     else:
         meta['releaseDate'] = '-'
@@ -178,7 +197,7 @@ def WindowsBoxes(sTitle, siteUrl, metaType, year, sSite, sFav, sCat):
         duration = meta['duration'] // 60  # En minutes
         durationH = duration // 60  # Nombre d'heures
         meta['durationH'] = '{:02d}'.format(int(durationH))
-        meta['durationM'] = '{:02d}'.format(int(duration - 60*durationH))
+        meta['durationM'] = '{:02d}'.format(int(duration - 60 * durationH))
     else:
         meta['durationH'] = 0
         meta['durationM'] = 0
@@ -205,7 +224,8 @@ def WindowsBoxes(sTitle, siteUrl, metaType, year, sSite, sFav, sCat):
             # par default le resumer#
             color = ADDON.getSetting('deco_color')
             self.setProperty('color', color)
-            self.poster = 'https://image.tmdb.org/t/p/%s' % self.ADDON.getSetting('poster_tmdb')
+            self.poster = 'https://image.tmdb.org/t/p/%s' % self.ADDON.getSetting(
+                'poster_tmdb')
             self.none_poster = 'https://eu.ui-avatars.com/api/?background=000&size=512&name=%s&color=FFF&font-size=0.33'
 
             # self.getControl(50).setVisible(False)
@@ -231,7 +251,7 @@ def WindowsBoxes(sTitle, siteUrl, metaType, year, sSite, sFav, sCat):
                     sid = i['id']
                     listitem_ = listitem(label=slabel, label2=slabel2)
                     listitem_.setProperty('id', str(sid))
-                    listitem_.setArt({'icon':sicon})
+                    listitem_.setArt({'icon': sicon})
                     listitems.append(listitem_)
                 self.getControl(50).addItems(listitems)
 
@@ -253,7 +273,8 @@ def WindowsBoxes(sTitle, siteUrl, metaType, year, sSite, sFav, sCat):
                 self.getControl(5200).addItems(listitems2)
 
             listitems3 = []
-            if 'guest_stars' in meta and meta['guest_stars']:  # dans certains épisodes
+            # dans certains épisodes
+            if 'guest_stars' in meta and meta['guest_stars']:
                 # Decodage python 3
                 data = eval(meta['guest_stars'])
                 for guest in data:
@@ -283,7 +304,7 @@ def WindowsBoxes(sTitle, siteUrl, metaType, year, sSite, sFav, sCat):
 
             # title
             # self.getControl(1).setLabel(meta['title'])
-            meta['title'] = sTitle
+            meta['title'] = title
 
             # self.getControl(49).setVisible(True)
             # self.getControl(2).setImage(meta['cover_url'])
@@ -296,7 +317,7 @@ def WindowsBoxes(sTitle, siteUrl, metaType, year, sSite, sFav, sCat):
                         self.setProperty(prop, meta[prop].encode('utf-8'))
                     else:
                         self.setProperty(prop, str(meta[prop]))
-                except:
+                except BaseException:
                     if isinstance(meta[prop], str):
                         self.setProperty(prop, meta[prop].encode('utf-8'))
                     else:
@@ -307,28 +328,35 @@ def WindowsBoxes(sTitle, siteUrl, metaType, year, sSite, sFav, sCat):
             listitems = []
 
             if not meta:
-                meta = [{u'id': 0, u'title': u'Aucune information', u'poster_path': u'', u'vote_average': 0}]
+                meta = [{u'id': 0, u'title': u'Aucune information',
+                         u'poster_path': u'', u'vote_average': 0}]
 
             try:
                 for i in meta:
                     try:
-                        sTitle = unicodedata.normalize('NFKD', i['title']).encode('ascii', 'ignore')
-                    except:
-                        sTitle = 'Aucune information'
+                        title = unicodedata.normalize(
+                            'NFKD', i['title']).encode(
+                            'ascii', 'ignore')
+                    except BaseException:
+                        title = 'Aucune information'
 
                     if i['poster_path']:
-                        sThumbnail = self.poster+str(i['poster_path'])
+                        thumbnail = self.poster + str(i['poster_path'])
                     else:
-                        sThumbnail = self.none_poster % sTitle
+                        thumbnail = self.none_poster % title
 
-
-                    listitem_ = listitem(label=sTitle)
+                    listitem_ = listitem(label=title)
                     try:
-                        listitem_.setInfo('video', {'rating': i['vote_average'].encode('utf-8')})
-                    except:
-                        listitem_.setInfo('video', {'rating': str(i['vote_average'])})
+                        listitem_.setInfo(
+                            'video', {
+                                'rating': i['vote_average'].encode('utf-8')})
+                    except BaseException:
+                        listitem_.setInfo(
+                            'video', {
+                                'rating': str(
+                                    i['vote_average'])})
 
-                    listitem_.setArt({'icon': sThumbnail})
+                    listitem_.setArt({'icon': thumbnail})
                     # listitem_.setProperty('TmdbId', str(i['id']))
                     listitems.append(listitem_)
                 self.getControl(control).addItems(listitems)
@@ -343,11 +371,11 @@ def WindowsBoxes(sTitle, siteUrl, metaType, year, sSite, sFav, sCat):
 
         def onClick(self, controlId):
             if controlId == 11:
-                sTitle = self.meta['title']
+                title = self.meta['title']
                 year = self.meta['year']
-                from resources.lib.ba import cShowBA
-                cBA = cShowBA()
-                cBA.SetSearch(sTitle)
+                from resources.lib.ba import ShowBA
+                cBA = ShowBA()
+                cBA.SetSearch(title)
                 cBA.SetYear(year)
                 cBA.SetMetaType(metaType)
                 cBA.SetTrailerUrl(self.getProperty('trailer'))
@@ -362,38 +390,45 @@ def WindowsBoxes(sTitle, siteUrl, metaType, year, sSite, sFav, sCat):
                 # print(self.getControl(50).ListItem.Property('id'))
                 item = self.getControl(controlId).getSelectedItem()
                 sid = item.getProperty('id')
-                grab = cTMDb()
+                grab = TMDb()
                 sUrl = 'person/' + str(sid)
 
                 try:
-                    meta = grab.getUrl(sUrl, term="append_to_response=movie_credits,tv_credits")
+                    meta = grab.getUrl(
+                        sUrl, term="append_to_response=movie_credits,tv_credits")
                     meta_credits = meta['movie_credits']['cast']
                     self.credit(meta_credits, 5215)
 
                     try:
-                        sTitle = unicodedata.normalize('NFKD', meta['name']).encode('ascii', 'ignore')
-                    except:
-                        sTitle = 'Aucune information'
+                        title = unicodedata.normalize(
+                            'NFKD', meta['name']).encode(
+                            'ascii', 'ignore')
+                    except BaseException:
+                        title = 'Aucune information'
 
                     if not meta['deathday']:
                         today = date.today()
                         try:
-                            birthday = datetime(*(time.strptime(meta['birthday'], '%Y-%m-%d')[0:6]))
-                            age = today.year - birthday.year - ((today.month, today.day) < (birthday.month, birthday.day))
+                            birthday = datetime(
+                                *(time.strptime(meta['birthday'], '%Y-%m-%d')[0:6]))
+                            age = today.year - birthday.year - \
+                                ((today.month, today.day) < (birthday.month, birthday.day))
                             age = '%s Ans' % age
-                        except:
+                        except BaseException:
                             age = ''
                     else:
                         age = meta['deathday']
 
-                    self.setProperty('Person_name', sTitle)
+                    self.setProperty('Person_name', title)
                     self.setProperty('Person_birthday', meta['birthday'])
-                    self.setProperty('Person_place_of_birth', meta['place_of_birth'])
+                    self.setProperty(
+                        'Person_place_of_birth',
+                        meta['place_of_birth'])
                     self.setProperty('Person_deathday', str(age))
                     self.setProperty('Person_biography', meta['biography'])
                     self.setFocusId(9000)
 
-                except:
+                except BaseException:
                     return
                 # self.getControl(50).setVisible(True)
                 self.setProperty('vstream_menu', 'Person')
@@ -403,7 +438,7 @@ def WindowsBoxes(sTitle, siteUrl, metaType, year, sSite, sFav, sCat):
                 # print(self.getControl(9000).ListItem.tmdb_id)
                 sid = self.getProperty('tmdb_id')
 
-                grab = cTMDb()
+                grab = TMDb()
                 sUrl_simil = 'movie/%s/similar' % str(sid)
                 sUrl_recom = 'movie/%s/recommendations' % str(sid)
 
@@ -411,14 +446,14 @@ def WindowsBoxes(sTitle, siteUrl, metaType, year, sSite, sFav, sCat):
                     meta = grab.getUrl(sUrl_simil)
                     meta = meta['results']
                     self.credit(meta, 5205)
-                except:
+                except BaseException:
                     pass
 
                 try:
                     meta = grab.getUrl(sUrl_recom)
                     meta = meta['results']
                     self.credit(meta, 5210)
-                except:
+                except BaseException:
                     return
 
             # click sur marque-page
@@ -432,10 +467,10 @@ def WindowsBoxes(sTitle, siteUrl, metaType, year, sSite, sFav, sCat):
                 metaBM['icon'] = self.meta['poster_path']
                 metaBM['fanart'] = self.meta['backdrop_path']
                 try:
-                    from resources.lib.db import cDb
-                    with cDb() as db:
+                    from resources.lib.db import Db
+                    with Db() as db:
                         db.insert_bookmark(metaBM)
-                except:
+                except BaseException:
                     pass
 
             # click pour recherche
@@ -444,15 +479,17 @@ def WindowsBoxes(sTitle, siteUrl, metaType, year, sSite, sFav, sCat):
                 import sys
                 from resources.lib.util import cUtil
                 item = self.getControl(controlId).getSelectedItem()
-                sTitle = cUtil().CleanName(item.getLabel())
+                title = cUtil().CleanName(item.getLabel())
 
                 self.close()
 
-                # Si lancé depuis la page Home de Kodi, il faut d'abord en sortir pour lancer la recherche
+                # Si lancé depuis la page Home de Kodi, il faut d'abord en
+                # sortir pour lancer la recherche
                 if xbmc.getCondVisibility('Window.IsVisible(home)'):
                     xbmc.executebuiltin('ActivateWindow(%d)' % 10028)
 
-                sTest = '%s?site=globalSearch&searchtext=%s&sCat=1' % (sys.argv[0], sTitle)
+                sTest = '%s?site=globalSearch&searchtext=%s&sCat=1' % (
+                    sys.argv[0], title)
                 xbmc.executebuiltin('Container.Update(%s)' % sTest)
                 return
             # elif controlId == 2:

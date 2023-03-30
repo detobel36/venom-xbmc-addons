@@ -1,8 +1,8 @@
 # coding: utf-8
 # vStream https://github.com/Kodi-vStream/venom-xbmc-addons
 # https://mixloads.com/embed-xxx.html sur topreplay
-from resources.lib.handler.requestHandler import cRequestHandler
-from resources.lib.parser import cParser
+from resources.lib.handler.requestHandler import RequestHandler
+from resources.lib.parser import Parser
 from resources.hosters.hoster import iHoster
 import xbmcgui
 
@@ -12,11 +12,11 @@ class cHoster(iHoster):
     def __init__(self):
         iHoster.__init__(self, 'mixloads', 'Mixloads')
 
-    def _getMediaLinkForGuest(self, autoPlay = False):
+    def _getMediaLinkForGuest(self, autoPlay=False):
         api_call = ''
-        oParser = cParser()
+        oParser = Parser()
 
-        oRequest = cRequestHandler(self._url)
+        oRequest = RequestHandler(self._url)
         sHtmlContent = oRequest.request()
 
         sPattern = '{file:"([^"]+)",label:"([^"]+)"}'

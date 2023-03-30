@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 # vStream https://github.com/Kodi-vStream/venom-xbmc-addons
-from resources.lib.comaddon import addon, VSlog, siteManager
-from resources.lib.db import cDb
+from resources.lib.comaddon import addon, VSlog, SiteManager
+from resources.lib.db import Db
 
 import sys
 import xbmcvfs
@@ -19,13 +19,13 @@ class cRechercheHandler:
     def getPluginHandle(self):
         try:
             return int(sys.argv[1])
-        except:
+        except BaseException:
             return 0
 
     def getPluginPath(self):
         try:
             return sys.argv[0]
-        except:
+        except BaseException:
             return ''
 
     def setText(self, sText):
@@ -65,7 +65,7 @@ class cRechercheHandler:
             sFilePath = "/".join([sFolder, sItemName])
             sFilePath = sFilePath.replace('\\', '/')
 
-            if (xbmcvfs.exists(sFilePath) == True):
+            if (xbmcvfs.exists(sFilePath)):
                 if (sFilePath.lower().endswith('py')):
                     sItemName = sItemName.replace('.py', '')
                     aNameList.append(sItemName)
@@ -119,7 +119,7 @@ class cRechercheHandler:
         try:
             if (addons.getSetting("history-view") == 'true'):
                 meta = {'title': sText, 'disp': sCat}
-                with cDb() as db:
+                with Db() as db:
                     db.insert_history(meta)
         except Exception as e:
             VSlog(str(e))
@@ -129,7 +129,7 @@ class cRechercheHandler:
         sFolder = sFolder.replace('\\', '/')
         VSlog("Sites Folder: " + sFolder)
 
-        sitesManager = siteManager()
+        sitesManager = SiteManager()
 
         aPlugins = []
         aFileNames = self.__getFileNamesFromFolder(sFolder)
@@ -142,6 +142,10 @@ class cRechercheHandler:
 
         return aPlugins
 
-    def __createAvailablePluginsItem(self, sPluginName, sPluginIdentifier, sPluginDesc):
+    def __createAvailablePluginsItem(
+            self,
+            sPluginName,
+            sPluginIdentifier,
+            sPluginDesc):
         aPluginEntry = [sPluginName, sPluginIdentifier, sPluginDesc]
         return aPluginEntry

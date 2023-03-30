@@ -2,9 +2,9 @@
 # vStream https://github.com/Kodi-vStream/venom-xbmc-addons
 # https://xdrive.cc/embed/xxxxxx/blabla.mp4 >fstreamvk
 
-from resources.lib.handler.requestHandler import cRequestHandler
+from resources.lib.handler.requestHandler import RequestHandler
 from resources.hosters.hoster import iHoster
-from resources.lib.parser import cParser
+from resources.lib.parser import Parser
 
 
 class cHoster(iHoster):
@@ -15,11 +15,11 @@ class cHoster(iHoster):
     def isDownloadable(self):
         return False
 
-    def _getMediaLinkForGuest(self, autoPlay = False):
-        oRequest = cRequestHandler(self._url)
+    def _getMediaLinkForGuest(self, autoPlay=False):
+        oRequest = RequestHandler(self._url)
         sHtmlContent = oRequest.request()
 
-        oParser = cParser()
+        oParser = Parser()
         sPattern = '<source src="([^"]+)"'
         aResult = oParser.parse(sHtmlContent, sPattern)
         if aResult[0] is True:

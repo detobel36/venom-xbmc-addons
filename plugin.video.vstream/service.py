@@ -7,7 +7,7 @@ import xbmcvfs
 import xbmc
 
 from datetime import datetime
-from resources.lib.comaddon import addon, VSlog, VSPath, isMatrix, siteManager
+from resources.lib.comaddon import addon, VSlog, VSPath, isMatrix, SiteManager
 from resources.lib.update import cUpdate
 
 
@@ -19,10 +19,10 @@ if isMatrix():
 
 
 def service():
-    
+
     # mise à jour des setting si nécessaire
     cUpdate().getUpdateSetting()
-    
+
     # gestion des enregistrements en cours
     ADDON = addon()
     recordIsActivate = ADDON.getSetting('enregistrement_activer')
@@ -38,10 +38,9 @@ def service():
     if not xbmcvfs.exists(path):
         xbmcvfs.mkdir(path)
 
-
     # enregistrement TV
     recordList = xbmcvfs.listdir(path)
-    interval = 55 # Vérifier toutes les minutes si un enregistrement est programmé
+    interval = 55  # Vérifier toutes les minutes si un enregistrement est programmé
     ADDON.setSetting('path_enregistrement_programmation', path)
     recordInProgress = False
     monitor = xbmc.Monitor()
@@ -69,8 +68,9 @@ if __name__ == '__main__':
     service()
 
     if isMatrix():
-        sitesManager = siteManager()
-        if sitesManager.isActive('toonanime') or sitesManager.isActive('kaydo_ws'):
+        sitesManager = SiteManager()
+        if sitesManager.isActive(
+                'toonanime') or sitesManager.isActive('kaydo_ws'):
             class ThreadedHTTPServer(ThreadingMixIn, HTTPServer):
                 """Handle requests in a separate thread."""
 
@@ -78,7 +78,8 @@ if __name__ == '__main__':
                 from resources.lib.proxy.ProxyHTTPRequestHandler import ProxyHTTPRequestHandler
 
                 server_address = ('127.0.0.1', 2424)
-                httpd = ThreadingHTTPServer(server_address, ProxyHTTPRequestHandler)
+                httpd = ThreadingHTTPServer(
+                    server_address, ProxyHTTPRequestHandler)
 
                 server_thread = threading.Thread(target=httpd.serve_forever)
                 server_thread.start()

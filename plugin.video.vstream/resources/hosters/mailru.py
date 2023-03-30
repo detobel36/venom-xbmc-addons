@@ -10,7 +10,7 @@ except ImportError:  # Python 3
     from urllib.error import URLError as UrlError
 
 from resources.hosters.hoster import iHoster
-from resources.lib.parser import cParser
+from resources.lib.parser import Parser
 from resources.lib.comaddon import dialog
 
 
@@ -19,7 +19,7 @@ class cHoster(iHoster):
     def __init__(self):
         iHoster.__init__(self, 'mailru', 'MailRu')
 
-    def _getMediaLinkForGuest(self, autoPlay = False):
+    def _getMediaLinkForGuest(self, autoPlay=False):
         api_call = False
 
         UA = 'Mozilla/5.0 (Windows NT 6.1; WOW64; rv:50.0) Gecko/20100101 Firefox/50.0'
@@ -32,7 +32,7 @@ class cHoster(iHoster):
         resp1.close()
 
         sPattern = '{"metadataUrl":"([^"]+)",'
-        oParser = cParser()
+        oParser = Parser()
         aResult = oParser.parse(sHtmlContent, sPattern)
 
         vurl = 'http://my.mail.ru/' + aResult[1][0]
@@ -52,15 +52,15 @@ class cHoster(iHoster):
         # get cookie
         cookies = ''
         if 'Set-Cookie' in head:
-            oParser = cParser()
-            sPattern = '(?:^|,) *([^;,]+?)=([^;,\/]+?);'
+            oParser = Parser()
+            sPattern = '(?:^|,) *([^;,]+?)=([^;,\\/]+?);'
             aResult = oParser.parse(str(head['Set-Cookie']), sPattern)
             # print(aResult)
             if aResult[0] is True:
                 for cook in aResult[1]:
                     cookies = cookies + cook[0] + '=' + cook[1] + ';'
 
-        sPattern = '{"url":"([^"]+)",.+?"key":"(\d+p)"}'
+        sPattern = '{"url":"([^"]+)",.+?"key":"(\\d+p)"}'
         aResult = oParser.parse(data, sPattern)
         if aResult[0] is True:
             # initialisation des tableaux

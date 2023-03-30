@@ -87,8 +87,8 @@ class JSUnfuck(object):
 
         if replace_plus:
             self.js = self.js.replace('+', '')
-        self.js = re.sub('\[[A-Za-z]*\]', '', self.js)
-        self.js = re.sub('\[(\d+)\]', '\\1', self.js)
+        self.js = re.sub('\\[[A-Za-z]*\\]', '', self.js)
+        self.js = re.sub('\\[(\\d+)\\]', '\\1', self.js)
 
         # foutu ici pr le moment
         self.js = self.js.replace('(+)', '0')
@@ -99,7 +99,9 @@ class JSUnfuck(object):
     def repl_words(self, words):
         while True:
             start_js = self.js
-            for key, value in sorted(words.items(), key=lambda x: len(x[0]), reverse=True):
+            for key, value in sorted(
+                words.items(), key=lambda x: len(
+                    x[0]), reverse=True):
                 self.js = self.js.replace(key, value)
 
             if self.js == start_js:
@@ -111,7 +113,7 @@ class JSUnfuck(object):
                 try:
                     repl = word[index]
                     self.js = self.js.replace('%s[%d]' % (word, index), repl)
-                except:
+                except BaseException:
                     pass
 
     def repl_numbers(self):
@@ -120,7 +122,9 @@ class JSUnfuck(object):
 
         while True:
             start_js = self.js
-            for key, value in sorted(self.numbers.items(), key=lambda x: len(x[0]), reverse=True):
+            for key, value in sorted(
+                self.numbers.items(), key=lambda x: len(
+                    x[0]), reverse=True):
                 self.js = self.js.replace(key, value)
 
             if self.js == start_js:
@@ -137,7 +141,9 @@ class JSUnfuck(object):
                     self.__handle_unescape(key)
 
     def __handle_tostring(self):
-        for match in re.finditer('(\d+)\[t\+o\+S\+t\+r\+i\+n\+g\](\d+)', self.js):
+        for match in re.finditer(
+            '(\\d+)\\[t\\+o\\+S\\+t\\+r\\+i\\+n\\+g\\](\\d+)',
+                self.js):
             repl = to_base(match.group(1), match.group(2))
             self.js = self.js.replace(match.group(0), repl)
 
@@ -233,4 +239,5 @@ def to_base(n, base, digits="0123456789abcdefghijklmnopqrstuvwxyz"):
     if n < base:
         return digits[n]
     else:
-        return to_base(n // base, base, digits).lstrip(digits[0]) + digits[n % base]
+        return to_base(n // base, base,
+                       digits).lstrip(digits[0]) + digits[n % base]

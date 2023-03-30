@@ -4,8 +4,8 @@
 
 import re
 
-from resources.lib.handler.requestHandler import cRequestHandler
-from resources.lib.parser import cParser
+from resources.lib.handler.requestHandler import RequestHandler
+from resources.lib.parser import Parser
 from resources.hosters.hoster import iHoster
 from resources.lib.packer import cPacker
 from resources.lib.GKDecrypter import GKDecrypter
@@ -16,15 +16,15 @@ class cHoster(iHoster):
     def __init__(self):
         iHoster.__init__(self, 'vidbull', 'VidBull')
 
-    def _getMediaLinkForGuest(self, autoPlay = False):
+    def _getMediaLinkForGuest(self, autoPlay=False):
         url_stream = ''
 
-        oRequest = cRequestHandler(self._url)
+        oRequest = RequestHandler(self._url)
         sHtmlContent = oRequest.request()
 
-        oParser = cParser()
+        oParser = Parser()
 
-        sPattern = "<script type='text\/javascript'>(eval\(function\(p,a,c,k,e,d.+?)<\/script>"
+        sPattern = "<script type='text\\/javascript'>(eval\\(function\\(p,a,c,k,e,d.+?)<\\/script>"
         aResult = oParser.parse(sHtmlContent, sPattern)
 
         if aResult[0] is True:
@@ -38,13 +38,17 @@ class cHoster(iHoster):
 
                 # deuxieme methode, lien code aes
                 else:
-                    EncodedLink = re.search('file:"([^"]+)"', sHtmlContent, re.DOTALL)
+                    EncodedLink = re.search(
+                        'file:"([^"]+)"', sHtmlContent, re.DOTALL)
 
                     if EncodedLink:
 
                         Key = "a949376e37b369" + "f17bc7d3c7a04c5721"
                         x = GKDecrypter(128, 128)
-                        sUrl = x.decrypt(EncodedLink.group(1), Key.decode("hex"), "ECB").split('\0')[0]
+                        sUrl = x.decrypt(
+                            EncodedLink.group(1),
+                            Key.decode("hex"),
+                            "ECB").split('\0')[0]
 
                         # Si utilise pyaes
                         # import resources.lib.pyaes as pyaes

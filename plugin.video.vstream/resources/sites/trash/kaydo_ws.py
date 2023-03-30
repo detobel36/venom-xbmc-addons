@@ -1,20 +1,19 @@
 # -*- coding: utf-8 -*-
 # vStream https://github.com/Kodi-vStream/venom-xbmc-addons
-#Il faut faire le code pour le nouvel hoster.
+# Il faut faire le code pour le nouvel hoster.
+from resources.lib.util import Noredirection
+from resources.lib.comaddon import Progress, SiteManager
+from resources.lib.parser import Parser
+from resources.lib.handler.requestHandler import RequestHandler
+from resources.lib.handler.outputParameterHandler import OutputParameterHandler
+from resources.lib.handler.inputParameterHandler import InputParameterHandler
+from resources.lib.gui.gui import Gui
+from resources.lib.gui.hoster import HosterGui
+import time
+import base64
+import re
 return False
 
-import re
-import base64
-import time
-
-from resources.lib.gui.hoster import cHosterGui
-from resources.lib.gui.gui import cGui
-from resources.lib.handler.inputParameterHandler import cInputParameterHandler
-from resources.lib.handler.outputParameterHandler import cOutputParameterHandler
-from resources.lib.handler.requestHandler import cRequestHandler
-from resources.lib.parser import cParser
-from resources.lib.comaddon import progress, siteManager
-from resources.lib.util import Noredirection
 
 # copie du site http://www.kaydo.ws/
 # copie du site https://www.hds.to/
@@ -23,7 +22,7 @@ SITE_IDENTIFIER = 'kaydo_ws'
 SITE_NAME = 'Kaydo (hdss.to)'
 SITE_DESC = 'Site de streaming en HD'
 
-URL_MAIN = siteManager().getUrlMain(SITE_IDENTIFIER)
+URL_MAIN = SiteManager().getUrlMain(SITE_IDENTIFIER)
 
 MOVIE_MOVIE = (True, 'showMenuMovies')
 MOVIE_NEWS = (URL_MAIN + 'films/', 'showMovies')
@@ -51,78 +50,153 @@ def Decode(chain):
         chain = ''.join(chain.split('$'))
 
         return base64.b64decode(chain)
-    except:
+    except BaseException:
         return chain
 
 
 def load():
-    oGui = cGui()
+    gui = Gui()
 
-    oOutputParameterHandler = cOutputParameterHandler()
-    oOutputParameterHandler.addParameter('siteUrl', 'http://venom/')
-    oGui.addDir(SITE_IDENTIFIER, 'showSearch', 'Recherche', 'search.png', oOutputParameterHandler)
+    output_parameter_handler = OutputParameterHandler()
+    output_parameter_handler.addParameter('siteUrl', 'http://venom/')
+    gui.addDir(
+        SITE_IDENTIFIER,
+        'showSearch',
+        'Recherche',
+        'search.png',
+        output_parameter_handler)
 
-    oOutputParameterHandler.addParameter('siteUrl', MOVIE_GENRES[0])
-    oGui.addDir(SITE_IDENTIFIER, MOVIE_GENRES[1], 'Films et Séries (Genres)', 'genres.png', oOutputParameterHandler)
+    output_parameter_handler.addParameter('siteUrl', MOVIE_GENRES[0])
+    gui.addDir(
+        SITE_IDENTIFIER,
+        MOVIE_GENRES[1],
+        'Films et Séries (Genres)',
+        'genres.png',
+        output_parameter_handler)
 
-    oOutputParameterHandler.addParameter('siteUrl', MOVIE_NEWS[0])
-    oGui.addDir(SITE_IDENTIFIER, MOVIE_NEWS[1], 'Films (Derniers ajouts)', 'news.png', oOutputParameterHandler)
+    output_parameter_handler.addParameter('siteUrl', MOVIE_NEWS[0])
+    gui.addDir(
+        SITE_IDENTIFIER,
+        MOVIE_NEWS[1],
+        'Films (Derniers ajouts)',
+        'news.png',
+        output_parameter_handler)
 
-    oOutputParameterHandler.addParameter('siteUrl', MOVIE_VIEWS[0])
-    oGui.addDir(SITE_IDENTIFIER, MOVIE_VIEWS[1], 'Films (Les plus commentés)', 'comments.png', oOutputParameterHandler)
+    output_parameter_handler.addParameter('siteUrl', MOVIE_VIEWS[0])
+    gui.addDir(
+        SITE_IDENTIFIER,
+        MOVIE_VIEWS[1],
+        'Films (Les plus commentés)',
+        'comments.png',
+        output_parameter_handler)
 
-    oOutputParameterHandler.addParameter('siteUrl', MOVIE_NOTES[0])
-    oGui.addDir(SITE_IDENTIFIER, MOVIE_NOTES[1], 'Films (Les mieux notés)', 'notes.png', oOutputParameterHandler)
+    output_parameter_handler.addParameter('siteUrl', MOVIE_NOTES[0])
+    gui.addDir(
+        SITE_IDENTIFIER,
+        MOVIE_NOTES[1],
+        'Films (Les mieux notés)',
+        'notes.png',
+        output_parameter_handler)
 
-    oOutputParameterHandler.addParameter('siteUrl', MOVIE_LIST[0])
-    oGui.addDir(SITE_IDENTIFIER, MOVIE_LIST[1], 'Films (Par lettre)', 'az.png', oOutputParameterHandler)
+    output_parameter_handler.addParameter('siteUrl', MOVIE_LIST[0])
+    gui.addDir(
+        SITE_IDENTIFIER,
+        MOVIE_LIST[1],
+        'Films (Par lettre)',
+        'az.png',
+        output_parameter_handler)
 
-    oOutputParameterHandler.addParameter('siteUrl', SERIE_NEWS[0])
-    oGui.addDir(SITE_IDENTIFIER, SERIE_NEWS[1], 'Séries (Derniers ajouts)', 'news.png', oOutputParameterHandler)
+    output_parameter_handler.addParameter('siteUrl', SERIE_NEWS[0])
+    gui.addDir(
+        SITE_IDENTIFIER,
+        SERIE_NEWS[1],
+        'Séries (Derniers ajouts)',
+        'news.png',
+        output_parameter_handler)
 
-    oGui.setEndOfDirectory()
+    gui.setEndOfDirectory()
 
 
 def showMenuMovies():
-    oGui = cGui()
+    gui = Gui()
 
-    oOutputParameterHandler = cOutputParameterHandler()
-    oOutputParameterHandler.addParameter('siteUrl', 'http://venom/')
-    oGui.addDir(SITE_IDENTIFIER, 'showSearch', 'Recherche Film', 'search.png', oOutputParameterHandler)
+    output_parameter_handler = OutputParameterHandler()
+    output_parameter_handler.addParameter('siteUrl', 'http://venom/')
+    gui.addDir(
+        SITE_IDENTIFIER,
+        'showSearch',
+        'Recherche Film',
+        'search.png',
+        output_parameter_handler)
 
-    oOutputParameterHandler.addParameter('siteUrl', MOVIE_NEWS[0])
-    oGui.addDir(SITE_IDENTIFIER, MOVIE_NEWS[1], 'Films (Derniers ajouts)', 'news.png', oOutputParameterHandler)
+    output_parameter_handler.addParameter('siteUrl', MOVIE_NEWS[0])
+    gui.addDir(
+        SITE_IDENTIFIER,
+        MOVIE_NEWS[1],
+        'Films (Derniers ajouts)',
+        'news.png',
+        output_parameter_handler)
 
-    oOutputParameterHandler.addParameter('siteUrl', MOVIE_VIEWS[0])
-    oGui.addDir(SITE_IDENTIFIER, MOVIE_VIEWS[1], 'Films (Les plus commentés)', 'comments.png', oOutputParameterHandler)
+    output_parameter_handler.addParameter('siteUrl', MOVIE_VIEWS[0])
+    gui.addDir(
+        SITE_IDENTIFIER,
+        MOVIE_VIEWS[1],
+        'Films (Les plus commentés)',
+        'comments.png',
+        output_parameter_handler)
 
-    oOutputParameterHandler.addParameter('siteUrl', MOVIE_NOTES[0])
-    oGui.addDir(SITE_IDENTIFIER, MOVIE_NOTES[1], 'Films (Les mieux notés)', 'notes.png', oOutputParameterHandler)
+    output_parameter_handler.addParameter('siteUrl', MOVIE_NOTES[0])
+    gui.addDir(
+        SITE_IDENTIFIER,
+        MOVIE_NOTES[1],
+        'Films (Les mieux notés)',
+        'notes.png',
+        output_parameter_handler)
 
-    oOutputParameterHandler.addParameter('siteUrl', MOVIE_GENRES[0])
-    oGui.addDir(SITE_IDENTIFIER, MOVIE_GENRES[1], 'Films (Genres)', 'genres.png', oOutputParameterHandler)
+    output_parameter_handler.addParameter('siteUrl', MOVIE_GENRES[0])
+    gui.addDir(
+        SITE_IDENTIFIER,
+        MOVIE_GENRES[1],
+        'Films (Genres)',
+        'genres.png',
+        output_parameter_handler)
 
-    oOutputParameterHandler.addParameter('siteUrl', MOVIE_LIST[0])
-    oGui.addDir(SITE_IDENTIFIER, MOVIE_LIST[1], 'Films (Par lettre)', 'az.png', oOutputParameterHandler)
+    output_parameter_handler.addParameter('siteUrl', MOVIE_LIST[0])
+    gui.addDir(
+        SITE_IDENTIFIER,
+        MOVIE_LIST[1],
+        'Films (Par lettre)',
+        'az.png',
+        output_parameter_handler)
 
-    oGui.setEndOfDirectory()
+    gui.setEndOfDirectory()
 
 
 def showMenuTvShows():
-    oGui = cGui()
+    gui = Gui()
 
-    oOutputParameterHandler = cOutputParameterHandler()
-    oOutputParameterHandler.addParameter('siteUrl', 'http://venom/')
-    oGui.addDir(SITE_IDENTIFIER, 'showSearch', 'Recherche Série', 'search.png', oOutputParameterHandler)
+    output_parameter_handler = OutputParameterHandler()
+    output_parameter_handler.addParameter('siteUrl', 'http://venom/')
+    gui.addDir(
+        SITE_IDENTIFIER,
+        'showSearch',
+        'Recherche Série',
+        'search.png',
+        output_parameter_handler)
 
-    oOutputParameterHandler.addParameter('siteUrl', SERIE_NEWS[0])
-    oGui.addDir(SITE_IDENTIFIER, SERIE_NEWS[1], 'Séries (Derniers ajouts)', 'news.png', oOutputParameterHandler)
+    output_parameter_handler.addParameter('siteUrl', SERIE_NEWS[0])
+    gui.addDir(
+        SITE_IDENTIFIER,
+        SERIE_NEWS[1],
+        'Séries (Derniers ajouts)',
+        'news.png',
+        output_parameter_handler)
 
-    oGui.setEndOfDirectory()
+    gui.setEndOfDirectory()
 
 
 def showAlpha():
-    oGui = cGui()
+    gui = Gui()
 
     liste = []
     liste.append(['#', URL_MAIN + 'letter/0-9/'])
@@ -153,40 +227,50 @@ def showAlpha():
     liste.append(['Y', URL_MAIN + 'letter/y/'])
     liste.append(['Z', URL_MAIN + 'letter/z/'])
 
-    oOutputParameterHandler = cOutputParameterHandler()
-    for sTitle, sUrl in liste:
-        oOutputParameterHandler.addParameter('siteUrl', sUrl)
-        oGui.addDir(SITE_IDENTIFIER, 'showMovies', 'Lettre [COLOR coral]' + sTitle + '[/COLOR]', 'listes.png', oOutputParameterHandler)
+    output_parameter_handler = OutputParameterHandler()
+    for title, sUrl in liste:
+        output_parameter_handler.addParameter('siteUrl', sUrl)
+        gui.addDir(
+            SITE_IDENTIFIER,
+            'showMovies',
+            'Lettre [COLOR coral]' +
+            title +
+            '[/COLOR]',
+            'listes.png',
+            output_parameter_handler)
 
-    oGui.setEndOfDirectory()
+    gui.setEndOfDirectory()
 
 
 def showSearch():
-    oGui = cGui()
-    sSearchText = oGui.showKeyBoard()
+    gui = Gui()
+    sSearchText = gui.showKeyBoard()
     if (sSearchText):
         sUrl = URL_SEARCH[0] + sSearchText
         showMovies(sUrl)
-        oGui.setEndOfDirectory()
+        gui.setEndOfDirectory()
     return
 
 
 def showMovieGenres():
-    oGui = cGui()
+    gui = Gui()
 
-    oInputParameterHandler = cInputParameterHandler()
-    siteUrl = oInputParameterHandler.getValue('siteUrl')
+    input_parameter_handler = InputParameterHandler()
+    siteUrl = input_parameter_handler.getValue('siteUrl')
 
-    oRequestHandler = cRequestHandler(siteUrl)
+    oRequestHandler = RequestHandler(siteUrl)
     sHtmlContent = oRequestHandler.request()
 
-    oParser = cParser()
-    sHtmlContent = oParser.abParse(sHtmlContent, '"AAIco-movie_creation">Genres</label>', '</div>')
+    oParser = Parser()
+    sHtmlContent = oParser.abParse(
+        sHtmlContent,
+        '"AAIco-movie_creation">Genres</label>',
+        '</div>')
     sPattern = 'data-val="([^"]+)" data-value="([^"]+)"'
     aResult = oParser.parse(sHtmlContent, sPattern)
 
     if aResult[0]:
-        oOutputParameterHandler = cOutputParameterHandler()
+        output_parameter_handler = OutputParameterHandler()
         for aEntry in aResult[1]:
             sGenre = aEntry[0]
             if sGenre in ('random', 'Uncategorized'):
@@ -194,84 +278,107 @@ def showMovieGenres():
             sFilter = aEntry[1]
             sUrl = siteUrl + '?s=trfilter&trfilter=1&geners%5B%5D=' + sFilter
 
-            oOutputParameterHandler.addParameter('siteUrl', sUrl)
-            oGui.addDir(SITE_IDENTIFIER, 'showMovies', sGenre, 'genres.png', oOutputParameterHandler)
+            output_parameter_handler.addParameter('siteUrl', sUrl)
+            gui.addDir(
+                SITE_IDENTIFIER,
+                'showMovies',
+                sGenre,
+                'genres.png',
+                output_parameter_handler)
 
-    oGui.setEndOfDirectory()
+    gui.setEndOfDirectory()
 
 
 def showMovies(sSearch=''):
-    oGui = cGui()
+    gui = Gui()
 
     if sSearch:
         sUrl = sSearch.replace(' ', '+')
     else:
-        oInputParameterHandler = cInputParameterHandler()
-        sUrl = oInputParameterHandler.getValue('siteUrl')
+        input_parameter_handler = InputParameterHandler()
+        sUrl = input_parameter_handler.getValue('siteUrl')
 
     if URL_MAIN + 'letter/' in sUrl:
         sPattern = '<td class="MvTbImg">.+?href="([^"]+).+?src="([^"]*).+?class="MvTbTtl.+?<strong>([^<]*).+?<td>([^<]*).+?Qlty">([^<]+).+?<td>([^<]*)'
     else:
         sPattern = 'class="TPost C".+?href="([^"]+).+?src="([^"]*).+?Title">([^<]+).+?(?:|Year">([^<]*).+?)(?:|Qlty">([^<]*).+?)Description"><p>([^<]+)'
 
-    oRequestHandler = cRequestHandler(sUrl)
+    oRequestHandler = RequestHandler(sUrl)
     sHtmlContent = oRequestHandler.request()
-    oParser = cParser()
+    oParser = Parser()
     # réécriture pour prendre les séries dans le menu des genres
     # sHtmlContent = sHtmlContent.replace('<span class="Qlty">TV</span></div><h3', '</div><h3')
 
     aResult = oParser.parse(sHtmlContent, sPattern)
 
     if not aResult[0]:
-        oGui.addText(SITE_IDENTIFIER)
+        gui.addText(SITE_IDENTIFIER)
 
     if aResult[0]:
         total = len(aResult[1])
-        progress_ = progress().VScreate(SITE_NAME)
-        oOutputParameterHandler = cOutputParameterHandler()
+        progress_ = Progress().VScreate(SITE_NAME)
+        output_parameter_handler = OutputParameterHandler()
         for aEntry in aResult[1]:
             progress_.VSupdate(progress_, total)
             if progress_.iscanceled():
                 break
 
             siteUrl = aEntry[0]
-            sThumb = re.sub('/w\d+', '/w342', aEntry[1])
+            sThumb = re.sub('/w\\d+', '/w342', aEntry[1])
             if sThumb.startswith('//'):
                 sThumb = 'https:' + sThumb
-            sTitle = aEntry[2]
+            title = aEntry[2]
             sYear = aEntry[3]
             sQual = aEntry[4]
-            sDesc = aEntry[5]
+            desc = aEntry[5]
             if sYear.lower() == 'unknown':
                 sYear = ''
             if sQual.lower() == 'unknown':
                 sQual = ''
 
-            sDisplayTitle = ('%s [%s] (%s)') % (sTitle, sQual, sYear)
+            sDisplayTitle = ('%s [%s] (%s)') % (title, sQual, sYear)
 
-            oOutputParameterHandler.addParameter('siteUrl', siteUrl)
-            oOutputParameterHandler.addParameter('sMovieTitle', sTitle)
-            oOutputParameterHandler.addParameter('sThumb', sThumb)
-            oOutputParameterHandler.addParameter('sDesc', sDesc)
-            oOutputParameterHandler.addParameter('sQual', sQual)
+            output_parameter_handler.addParameter('siteUrl', siteUrl)
+            output_parameter_handler.addParameter('sMovieTitle', title)
+            output_parameter_handler.addParameter('sThumb', sThumb)
+            output_parameter_handler.addParameter('desc', desc)
+            output_parameter_handler.addParameter('sQual', sQual)
 
             if '/serie/' in siteUrl:
-                oGui.addTV(SITE_IDENTIFIER, 'ShowSaisonEpisodes', sDisplayTitle, '', sThumb, sDesc, oOutputParameterHandler)
+                gui.addTV(
+                    SITE_IDENTIFIER,
+                    'ShowSaisonEpisodes',
+                    sDisplayTitle,
+                    '',
+                    sThumb,
+                    desc,
+                    output_parameter_handler)
             else:
-                oGui.addMovie(SITE_IDENTIFIER, 'showHosters', sDisplayTitle, '', sThumb, sDesc, oOutputParameterHandler)
+                gui.addMovie(
+                    SITE_IDENTIFIER,
+                    'showHosters',
+                    sDisplayTitle,
+                    '',
+                    sThumb,
+                    desc,
+                    output_parameter_handler)
 
     if not sSearch:
         sNextPage, sPaging = __checkForNextPage(sHtmlContent)
         if (sNextPage):
-            oOutputParameterHandler = cOutputParameterHandler()
-            oOutputParameterHandler.addParameter('siteUrl', sNextPage)
-            oGui.addNext(SITE_IDENTIFIER, 'showMovies', 'Page ' + sPaging, oOutputParameterHandler)
+            output_parameter_handler = OutputParameterHandler()
+            output_parameter_handler.addParameter('siteUrl', sNextPage)
+            gui.addNext(
+                SITE_IDENTIFIER,
+                'showMovies',
+                'Page ' + sPaging,
+                output_parameter_handler)
 
-        oGui.setEndOfDirectory()
+        gui.setEndOfDirectory()
 
 
 def __checkForNextPage(sHtmlContent):
-    oParser = cParser()
+    oParser = Parser()
     sPattern = '>([^<]+?)</a><a class="next page-numbers" href="([^"]+?)"'
     aResult = oParser.parse(sHtmlContent, sPattern)
     if aResult[0]:
@@ -285,87 +392,102 @@ def __checkForNextPage(sHtmlContent):
 
 
 def ShowSaisonEpisodes():
-    oGui = cGui()
-    oInputParameterHandler = cInputParameterHandler()
-    sUrl = oInputParameterHandler.getValue('siteUrl')
-    sDesc = oInputParameterHandler.getValue('sDesc')
+    gui = Gui()
+    input_parameter_handler = InputParameterHandler()
+    sUrl = input_parameter_handler.getValue('siteUrl')
+    desc = input_parameter_handler.getValue('desc')
 
-    oRequestHandler = cRequestHandler(sUrl)
+    oRequestHandler = RequestHandler(sUrl)
     sHtmlContent = oRequestHandler.request()
 
     sPattern = 'class="Title AA-Season.+?>Season <span>([^<]+)</span>|class="MvTbImg">.+?img src.+?["|;]([^\"]+?)["|;].+?href="([^"]+)">([^<]+)<'
 
-    oParser = cParser()
+    oParser = Parser()
     aResult = oParser.parse(sHtmlContent, sPattern)
 
     if aResult[0]:
-        oOutputParameterHandler = cOutputParameterHandler()
+        output_parameter_handler = OutputParameterHandler()
         for aEntry in aResult[1]:
             if aEntry[0]:
-                oGui.addText(SITE_IDENTIFIER, '[COLOR crimson]Saison: ' + aEntry[0] + '[/COLOR]')
+                gui.addText(
+                    SITE_IDENTIFIER,
+                    '[COLOR crimson]Saison: ' +
+                    aEntry[0] +
+                    '[/COLOR]')
             else:
-                sThumb = re.sub('/w\d+', '/w342', aEntry[1], 1)
+                sThumb = re.sub('/w\\d+', '/w342', aEntry[1], 1)
                 if sThumb.startswith('//'):
                     sThumb = 'https:' + sThumb
                 sUrl2 = aEntry[2]
-                sTitle = aEntry[3]
+                title = aEntry[3]
 
-                oOutputParameterHandler.addParameter('siteUrl', sUrl2)
-                oOutputParameterHandler.addParameter('sMovieTitle', sTitle)
-                oOutputParameterHandler.addParameter('sThumb', sThumb)
-                oOutputParameterHandler.addParameter('sDesc', sDesc)
+                output_parameter_handler.addParameter('siteUrl', sUrl2)
+                output_parameter_handler.addParameter('sMovieTitle', title)
+                output_parameter_handler.addParameter('sThumb', sThumb)
+                output_parameter_handler.addParameter('desc', desc)
 
-                oGui.addEpisode(SITE_IDENTIFIER, 'showHosters', sTitle, '', sThumb, sDesc, oOutputParameterHandler)
+                gui.addEpisode(
+                    SITE_IDENTIFIER,
+                    'showHosters',
+                    title,
+                    '',
+                    sThumb,
+                    desc,
+                    output_parameter_handler)
 
-    oGui.setEndOfDirectory()
+    gui.setEndOfDirectory()
 
 
-def showHosters(oInputParameterHandler = False):
+def showHosters(input_parameter_handler=False):
     # UA = 'Mozilla/5.0 (Windows NT 6.1; Win64; x64; rv:70.0) Gecko/20100101 Firefox/70.0'
-    oGui = cGui()
-    oParser = cParser()
+    gui = Gui()
+    oParser = Parser()
 
-    if not oInputParameterHandler:
-        oInputParameterHandler = cInputParameterHandler()
-    sUrl = oInputParameterHandler.getValue('siteUrl')
-    sMovieTitle = oInputParameterHandler.getValue('sMovieTitle')
-    sThumb = oInputParameterHandler.getValue('sThumb')
+    if not input_parameter_handler:
+        input_parameter_handler = InputParameterHandler()
+    sUrl = input_parameter_handler.getValue('siteUrl')
+    sMovieTitle = input_parameter_handler.getValue('sMovieTitle')
+    sThumb = input_parameter_handler.getValue('sThumb')
 
-    oRequestHandler = cRequestHandler(sUrl)
+    oRequestHandler = RequestHandler(sUrl)
     sHtmlContent = oRequestHandler.request()
 
     # Recuperer variable pour url de base
-    sPattern = 'trembed=(\d+).+?trid=(\d+).+?trtype=(\d+)'
+    sPattern = 'trembed=(\\d+).+?trid=(\\d+).+?trtype=(\\d+)'
     aResult = oParser.parse(sHtmlContent, sPattern)
 
     if not aResult[0]:
-        oGui.addText(SITE_IDENTIFIER)
+        gui.addText(SITE_IDENTIFIER)
 
     if aResult[0]:
         list_site_film = []
         for aEntry in aResult[1]:
 
-            site = URL_MAIN + "?trembed=" + aEntry[0] + "&trid=" + aEntry[1] + "&trtype=" + aEntry[2]
+            site = URL_MAIN + "?trembed=" + \
+                aEntry[0] + "&trid=" + aEntry[1] + "&trtype=" + aEntry[2]
             if aEntry[2] == '1':
                 if site not in list_site_film:
                     list_site_film.append(site)
                 else:
                     continue  # inutile de faire des requetes identiques pour les films
 
-            oRequestHandler = cRequestHandler(site)
+            oRequestHandler = RequestHandler(site)
             sHtmlContent = oRequestHandler.request()
 
-            slug = re.search('"Video".+?src=".+?v=(.+?)"', sHtmlContent).group(1)
+            slug = re.search(
+                '"Video".+?src=".+?v=(.+?)"',
+                sHtmlContent).group(1)
 
             sHosterUrl = "https://geoip.redirect-ads.com/?v=" + slug
 
-            oHoster = cHosterGui().checkHoster(sHosterUrl)
+            oHoster = HosterGui().checkHoster(sHosterUrl)
             if (oHoster):
                 oHoster.setDisplayName(sMovieTitle)
                 oHoster.setFileName(sMovieTitle)
-                cHosterGui().showHoster(oGui, oHoster, sHosterUrl, sThumb, oInputParameterHandler=oInputParameterHandler)
+                HosterGui().showHoster(gui, oHoster, sHosterUrl, sThumb,
+                                       input_parameter_handler=input_parameter_handler)
 
-    oGui.setEndOfDirectory()
+    gui.setEndOfDirectory()
 
 
 def decode(t):

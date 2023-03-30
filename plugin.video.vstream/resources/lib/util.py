@@ -23,10 +23,12 @@ class cUtil:
             label = label.lower()
             label = label.strip()
             label = unicode(label, 'utf-8')
-            label = unicodedata.normalize('NFKD', label).encode('ASCII', 'ignore')
+            label = unicodedata.normalize(
+                'NFKD', label).encode(
+                'ASCII', 'ignore')
             for i in label:
                 count += ord(i)
-        except:
+        except BaseException:
             pass
 
         return count
@@ -48,7 +50,7 @@ class cUtil:
 
         if nbWord == 0:
             return False
-        return 100*nbOccurence/nbWord >= percent
+        return 100 * nbOccurence / nbWord >= percent
 
     def removeHtmlTags(self, sValue, sReplace=''):
         p = re.compile(r'<.*?>')
@@ -68,7 +70,7 @@ class cUtil:
 
     def unescape(self, text):
 
-        # determine si conversion en unicode nécessaire        
+        # determine si conversion en unicode nécessaire
         isStr = isinstance(text, str)
 
         def fixup(m):
@@ -94,7 +96,7 @@ class cUtil:
 
             return text  # leave as is
 
-        return re.sub('&#?\w+;', fixup, text)
+        return re.sub('&#?\\w+;', fixup, text)
 
     def titleWatched(self, title):
         # enlève les accents, si nécessaire
@@ -102,8 +104,11 @@ class cUtil:
         if n2 != title:
             try:
                 if not isMatrix():
-                    title = title.decode('utf8', 'ignore')    # converti en unicode pour aider aux convertions
-                title = unicodedata.normalize('NFD', title).encode('ascii', 'ignore')
+                    # converti en unicode pour aider aux convertions
+                    title = title.decode('utf8', 'ignore')
+                title = unicodedata.normalize(
+                    'NFD', title).encode(
+                    'ascii', 'ignore')
                 if isMatrix():
                     title = title.decode('utf8', 'ignore')
             except Exception as e:
@@ -116,9 +121,26 @@ class cUtil:
         title = re.sub(r'\[.*\]|\(.*\)', r'', str(title))
         title = title.replace('VF', '').replace('VOSTFR', '').replace('FR', '')
         # title = re.sub(r'[0-9]+?', r'', str(title))
-        title = title.replace('-', ' ')  # on garde un espace pour que Orient-express ne devienne pas Orientexpress pour la recherche tmdb
-        title = title.replace('Saison', '').replace('saison', '').replace('Season', '').replace('Episode', '').replace('episode', '')
-        title = re.sub('[^%s]' % (string.ascii_lowercase + string.digits), ' ', title.lower())
+        # on garde un espace pour que Orient-express ne devienne pas
+        # Orientexpress pour la recherche tmdb
+        title = title.replace('-', ' ')
+        title = title.replace(
+            'Saison',
+            '').replace(
+            'saison',
+            '').replace(
+            'Season',
+            '').replace(
+                'Episode',
+                '').replace(
+                    'episode',
+            '')
+        title = re.sub(
+            '[^%s]' %
+            (string.ascii_lowercase +
+             string.digits),
+            ' ',
+            title.lower())
         # title = QuotePlus(title)
         # title = title.decode('string-escape')
         return title
@@ -130,26 +152,29 @@ class cUtil:
 
         # on cherche l'annee
         annee = ''
-        m = re.search('(\([0-9]{4}\))', name)
+        m = re.search('(\\([0-9]{4}\\))', name)
         if m:
             annee = str(m.group(0))
             name = name.replace(annee, '')
 
         # Suppression des ponctuations
-        name = re.sub("[\’\'\-\–\:\+\._]", ' ', name)
-        name = re.sub("[\,\&\?\!]", '', name)
+        name = re.sub("[\\’\'\\-\\–\\:\\+\\._]", ' ', name)
+        name = re.sub("[\\,\\&\\?\\!]", '', name)
 
         # vire tag
-        name = re.sub('[\(\[].+?[\)\]]', '', name)
-        name = name.replace('[', '').replace(']', '') # crochet orphelin
+        name = re.sub('[\\(\\[].+?[\\)\\]]', '', name)
+        name = name.replace('[', '').replace(']', '')  # crochet orphelin
 
         # enlève les accents, si nécessaire
         n2 = re.sub('[^a-zA-Z0-9 ]', '', name)
         if n2 != name:
             try:
                 if not isMatrix():
-                    name = name.decode('utf8', 'ignore')    # converti en unicode pour aider aux convertions
-                name = unicodedata.normalize('NFD', name).encode('ascii', 'ignore')
+                    # converti en unicode pour aider aux convertions
+                    name = name.decode('utf8', 'ignore')
+                name = unicodedata.normalize(
+                    'NFD', name).encode(
+                    'ascii', 'ignore')
                 if isMatrix():
                     name = name.decode('utf8', 'ignore')
             except Exception as e:
@@ -168,8 +193,8 @@ class cUtil:
 
         return name
 
-    def getSerieTitre(self, sTitle):
-        serieTitle = re.sub(r'\[.*\]|\(.*\)', r'', sTitle)
+    def getSerieTitre(self, title):
+        serieTitle = re.sub(r'\[.*\]|\(.*\)', r'', title)
         serieTitle = re.sub('[- –]+$', '', serieTitle)
 
         if '|' in serieTitle:
@@ -177,28 +202,30 @@ class cUtil:
 
         return serieTitle
 
-    def getEpisodeTitre(self, sTitle):
-        string = re.search('(?i)(e(?:[a-z]+sode\s?)*([0-9]+))', sTitle)
+    def getEpisodeTitre(self, title):
+        string = re.search('(?i)(e(?:[a-z]+sode\\s?)*([0-9]+))', title)
         if string:
-            sTitle = sTitle.replace(string.group(1), '')
+            title = title.replace(string.group(1), '')
             self.__Episode = ('%02d' % int(string.group(2)))
-            sTitle = '%s [COLOR %s]E%s[/COLOR]' % (sTitle, self.__sDecoColor, self.__Episode)
+            title = '%s [COLOR %s]E%s[/COLOR]' % (
+                title, self.__sDecoColor, self.__Episode)
             self.addItemValues('Episode', self.__Episode)
-            return sTitle, True
+            return title, True
 
-        return sTitle, False
+        return title, False
 
     def EvalJSString(self, s):
         s = s.replace(' ', '')
         try:
             s = s.replace('!+[]', '1').replace('!![]', '1').replace('[]', '0')
-            s = re.sub(r'(\([^()]+)\+\[\]\)', '(\\1)*10)', s)  # si le bloc fini par +[] >> *10
+            s = re.sub(r'(\([^()]+)\+\[\]\)', '(\\1)*10)',
+                       s)  # si le bloc fini par +[] >> *10
             s = re.sub(r'\[([^\]]+)\]', 'str(\\1)', s)
             if s[0] == '+':
                 s = s[1:]
             val = int(eval(s))
             return val
-        except:
+        except BaseException:
             return 0
 
 

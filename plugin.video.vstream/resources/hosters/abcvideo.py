@@ -7,7 +7,7 @@
 
 import re
 import requests
-from resources.lib.parser import cParser
+from resources.lib.parser import Parser
 from resources.hosters.hoster import iHoster
 from resources.lib.comaddon import dialog
 
@@ -18,7 +18,7 @@ class cHoster(iHoster):
     def __init__(self):
         iHoster.__init__(self, 'abcvideo', 'Abcvideo')
 
-    def _getMediaLinkForGuest(self, autoPlay = False):
+    def _getMediaLinkForGuest(self, autoPlay=False):
         api_call = ''
         key = "6LcOeuUUAAAAANS5Gb3oKwWkBjOdMXxqbj_2cPCy"
         co = "aHR0cHM6Ly9hYmN2aWRlby5jYzo0NDM."
@@ -29,9 +29,9 @@ class cHoster(iHoster):
         urlcode = urlcode.replace('.html', '')
         code = urlcode.split('/')[-1]
 
-        headers1 = {'user-agent': UA,
-                    'Accept': 'text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,image/apng,*/*;q=0.8'
-                    }
+        headers1 = {
+            'user-agent': UA,
+            'Accept': 'text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,image/apng,*/*;q=0.8'}
 
         headers2 = {'user-agent': UA,
                     'Accept': '*/*',
@@ -44,7 +44,8 @@ class cHoster(iHoster):
 
         bvalid, token = get_token(key, co, loc)
         if bvalid:
-            url2 = sUrlPlayer + '?op=video_src&file_code=' + code + '&g-recaptcha-response=' + token
+            url2 = sUrlPlayer + '?op=video_src&file_code=' + \
+                code + '&g-recaptcha-response=' + token
             req = s.get(url2, headers=headers2)
             response = str(req.content)
 
@@ -56,8 +57,8 @@ class cHoster(iHoster):
                 response = str(req.content)
                 list_url = []
                 list_q = []
-                oParser = cParser()
-                sPattern = 'PROGRAM.*?BANDWIDTH.*?RESOLUTION=(\d+x\d+).*?(https.*?m3u8)'
+                oParser = Parser()
+                sPattern = 'PROGRAM.*?BANDWIDTH.*?RESOLUTION=(\\d+x\\d+).*?(https.*?m3u8)'
                 aResult = oParser.parse(response, sPattern)
                 if aResult[0] is True:
                     for aEntry in aResult[1]:
@@ -76,18 +77,18 @@ def get_token(site_key, co, loc):
 
     sa = ''
     cb = '365ae0il5lwn'
-    headers1 = {'user-agent': UA,
-                'Accept': 'text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8',
-                'Content-Type': 'application/x-www-form-urlencoded;charset=utf-8',
-                'Referer': loc
-                }
+    headers1 = {
+        'user-agent': UA,
+        'Accept': 'text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8',
+        'Content-Type': 'application/x-www-form-urlencoded;charset=utf-8',
+        'Referer': loc}
 
     url1 = 'https://www.google.com/recaptcha/api.js'
     s = requests.session()
     req = s.get(url1, headers=headers1)
     data = req.text
 
-    aresult = re.findall("releases\/(.*?)\/", data)
+    aresult = re.findall("releases\\/(.*?)\\/", data)
     if aresult:
         v = aresult[0]
     else:
@@ -107,13 +108,19 @@ def get_token(site_key, co, loc):
 
     url3 = "https://www.google.com/recaptcha/api2/reload?k=" + site_key
 
-    post_data = {'v': v, 'reason': 'q', 'k': site_key, 'c': c, 'sa': sa, 'co': co}
+    post_data = {
+        'v': v,
+        'reason': 'q',
+        'k': site_key,
+        'c': c,
+        'sa': sa,
+        'co': co}
 
-    headers2 = {'user-agent': UA,
-                'Accept': '*/*',
-                'Content-Type': 'application/x-www-form-urlencoded;charset=utf-8',
-                'Referer': url2
-                }
+    headers2 = {
+        'user-agent': UA,
+        'Accept': '*/*',
+        'Content-Type': 'application/x-www-form-urlencoded;charset=utf-8',
+        'Referer': url2}
 
     req_url3 = s.post(url3, data=post_data, headers=headers2)
     data = req_url3.text

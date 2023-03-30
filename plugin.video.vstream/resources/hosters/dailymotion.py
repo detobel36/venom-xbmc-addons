@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 # https://github.com/Kodi-vStream/venom-xbmc-addons
-from resources.lib.handler.requestHandler import cRequestHandler
-from resources.lib.parser import cParser
+from resources.lib.handler.requestHandler import RequestHandler
+from resources.lib.parser import Parser
 from resources.hosters.hoster import iHoster
 from resources.lib.comaddon import dialog
 
@@ -15,31 +15,37 @@ class cHoster(iHoster):
         self._url = str(url)
         if "metadata" not in self._url:
             if 'embed/video' in self._url:
-                self._url = "https://www.dailymotion.com/player/metadata/video/" + self._url.split('/')[5]
+                self._url = "https://www.dailymotion.com/player/metadata/video/" + \
+                    self._url.split('/')[5]
             else:
-                self._url = "https://www.dailymotion.com/player/metadata/video/" + self._url.split('/')[4]
+                self._url = "https://www.dailymotion.com/player/metadata/video/" + \
+                    self._url.split('/')[4]
 
-    def _getMediaLinkForGuest(self, autoPlay = False):
+    def _getMediaLinkForGuest(self, autoPlay=False):
         api_call = False
         url = []
         qua = []
 
-        oRequest = cRequestHandler(self._url)
+        oRequest = RequestHandler(self._url)
         sHtmlContent = oRequest.request()
 
-        oParser = cParser()
+        oParser = Parser()
 
         sPattern = '{"type":"application.+?mpegURL","url":"([^"]+)"}'
         aResult = oParser.parse(sHtmlContent, sPattern)
 
         if aResult[0] is True:
-            oRequest = cRequestHandler(aResult[1][0])
-            oRequest.addHeaderEntry('User-Agent', 'Mozilla/5.0 (Windows NT 6.1; WOW64; rv:70.0) ' +
-                                    'Gecko/20100101 Firefox/70.0')
-            oRequest.addHeaderEntry('Accept-Language', 'fr,fr-FR;q=0.8,en-US;q=0.5,en;q=0.3')
+            oRequest = RequestHandler(aResult[1][0])
+            oRequest.addHeaderEntry(
+                'User-Agent',
+                'Mozilla/5.0 (Windows NT 6.1; WOW64; rv:70.0) ' +
+                'Gecko/20100101 Firefox/70.0')
+            oRequest.addHeaderEntry(
+                'Accept-Language',
+                'fr,fr-FR;q=0.8,en-US;q=0.5,en;q=0.3')
             sHtmlContent = oRequest.request()
 
-            sPattern = 'NAME="([^"]+)"(,PROGRESSIVE-URI="([^"]+)"|http(.+?)\#)'
+            sPattern = 'NAME="([^"]+)"(,PROGRESSIVE-URI="([^"]+)"|http(.+?)\\#)'
             aResult = oParser.parse(sHtmlContent, sPattern)
             if aResult[0] is True:
                 for aEntry in reversed(aResult[1]):

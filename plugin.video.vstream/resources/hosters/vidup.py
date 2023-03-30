@@ -16,7 +16,7 @@ except ImportError:  # Python 3
 import json
 import ssl
 
-from resources.lib.parser import cParser
+from resources.lib.parser import Parser
 from resources.hosters.hoster import iHoster
 from resources.lib.comaddon import dialog
 
@@ -28,15 +28,15 @@ class cHoster(iHoster):
         iHoster.__init__(self, 'vidup', 'VidUp')
 
     def __getIdFromUrl(self, sUrl):
-        sPattern = 'https*:\/\/vidup.+?\/(?:embed-)?(?:embed/)?([0-9a-zA-Z]+)'
-        oParser = cParser()
+        sPattern = 'https*:\\/\\/vidup.+?\\/(?:embed-)?(?:embed/)?([0-9a-zA-Z]+)'
+        oParser = Parser()
         aResult = oParser.parse(sUrl, sPattern)
         if aResult[0] is True:
             return aResult[1][0]
 
         return ''
 
-    def _getMediaLinkForGuest(self, autoPlay = False):
+    def _getMediaLinkForGuest(self, autoPlay=False):
         api_call = False
 
         request_headers = {"User-Agent": UA}
@@ -47,7 +47,8 @@ class cHoster(iHoster):
 
         response.close()
 
-        Json_url = "https://vidup.io/api/serve/video/" + self.__getIdFromUrl(self._url)
+        Json_url = "https://vidup.io/api/serve/video/" + \
+            self.__getIdFromUrl(self._url)
 
         req = urllib2.Request(Json_url, headers=request_headers)
         gcontext = ssl.SSLContext(ssl.PROTOCOL_TLSv1)

@@ -15,7 +15,7 @@
 #
 # You should have received a copy of the GNU General Public License
 # along with librecaptcha.  If not, see <http://www.gnu.org/licenses/>.
-from resources.lib.comaddon import progress, VSlog
+from resources.lib.comaddon import Progress, VSlog
 from . import cli
 from .errors import GtkImportError, UserError
 from .recaptcha import ReCaptcha

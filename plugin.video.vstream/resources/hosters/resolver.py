@@ -11,13 +11,14 @@ class cHoster(iHoster):
         self.__sRealHost = '???'
 
     def setDisplayName(self, displayName):
-        self._displayName = displayName + ' [COLOR violet]'+ self._defaultDisplayName + self.__sRealHost + '[/COLOR]'
+        self._displayName = displayName + \
+            ' [COLOR violet]' + self._defaultDisplayName + self.__sRealHost + '[/COLOR]'
 
     def setRealHost(self, sName):
         self.__sRealHost = sName
 
-    def _getMediaLinkForGuest(self, autoPlay = False):
-        hmf = urlresolver.HostedMediaFile(url = self._url)
+    def _getMediaLinkForGuest(self, autoPlay=False):
+        hmf = urlresolver.HostedMediaFile(url=self._url)
         if hmf.valid_url():
             stream_url = hmf.resolve()
             if stream_url:

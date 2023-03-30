@@ -61,6 +61,7 @@ class cPacker():
             args = re.search(pattern, str, re.DOTALL)
             if args:
                 a = args.groups()
+
                 def openload_re(match):
                     c = match.group(0)
                     b = ord(c) + int(a[1])
@@ -70,7 +71,8 @@ class cPacker():
                 str = Unquote(str)
 
         elif str.find("decodeURIComponent") == 0:
-            str = re.sub(r"(^decodeURIComponent\s*\(\s*('|\"))|(('|\")\s*\)$)", "", str)
+            str = re.sub(
+                r"(^decodeURIComponent\s*\(\s*('|\"))|(('|\")\s*\)$)", "", str)
             str = Unquote(str)
         elif str.find("\"") == 0:
             str = re.sub(r"(^\")|(\"$)|(\".*?\")", "", str)
@@ -82,14 +84,21 @@ class cPacker():
     def _filterargs(self, source):
         """Juice from a source file the four args needed by decoder."""
 
-        source = source.replace(',[],',',0,').replace("\\'", "'")
+        source = source.replace(',[],', ',0,').replace("\\'", "'")
 
-        juicer = (r"}\s*\(\s*(.*?)\s*,\s*(\d+)\s*,\s*(\d+)\s*,\s*\((.*?)\).split\((.*?)\)")
+        juicer = (
+            r"}\s*\(\s*(.*?)\s*,\s*(\d+)\s*,\s*(\d+)\s*,\s*\((.*?)\).split\((.*?)\)")
         args = re.search(juicer, source, re.DOTALL)
         if args:
             a = args.groups()
             try:
-                return self._cleanstr(a[0]), self._cleanstr(a[3]).split(self._cleanstr(a[4])), int(a[1]), int(a[2])
+                return self._cleanstr(
+                    a[0]), self._cleanstr(
+                    a[3]).split(
+                    self._cleanstr(
+                        a[4])), int(
+                    a[1]), int(
+                        a[2])
             except ValueError:
                 raise UnpackingError('Corrupted p.a.c.k.e.r. data.')
 
@@ -104,7 +113,8 @@ class cPacker():
                 raise UnpackingError('Corrupted p.a.c.k.e.r. data.')
 
         # could not find a satisfying regex
-        raise UnpackingError('Could not make sense of p.a.c.k.e.r data (unexpected code structure)')
+        raise UnpackingError(
+            'Could not make sense of p.a.c.k.e.r data (unexpected code structure)')
 
     def _replacestrings(self, source):
         """Strip string lookup table (list) and replace values in source."""
@@ -133,7 +143,7 @@ class Unbaser(object):
     ALPHABET = {
         62: '0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ',
         95: (' !"#$%&\'()*+,-./0123456789:;<=>?@ABCDEFGHIJKLMNOPQRSTUVWXYZ'
-             '[\]^_`abcdefghijklmnopqrstuvwxyz{|}~')
+             '[\\]^_`abcdefghijklmnopqrstuvwxyz{|}~')
     }
 
     def __init__(self, base):
@@ -153,7 +163,9 @@ class Unbaser(object):
                 self.ALPHABET[base] = self.ALPHABET[95][0:base]
             # Build conversion dictionary cache
             try:
-                self.dictionary = dict((cipher, index) for index, cipher in enumerate(self.ALPHABET[base]))
+                self.dictionary = dict(
+                    (cipher, index) for index, cipher in enumerate(
+                        self.ALPHABET[base]))
             except KeyError:
                 raise TypeError('Unsupported base encoding.')
 

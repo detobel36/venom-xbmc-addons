@@ -12,7 +12,7 @@ except ImportError:  # Python 3
 import json
 import ssl
 
-from resources.lib.parser import cParser
+from resources.lib.parser import Parser
 from resources.hosters.hoster import iHoster
 from resources.lib.comaddon import dialog
 
@@ -31,8 +31,8 @@ class cHoster(iHoster):
             https://thevideo.me/embed-1a2b3c4e5d6f.html
             http(s)://thevideo.me/embed-1a2b3c4e5d6f-816x459.html
         """
-        sPattern = '\/(?:embed-)?(\w+)(?:-\d+x\d+)?(?:\.html)?$'
-        aResult = cParser().parse( sUrl, sPattern )
+        sPattern = '\\/(?:embed-)?(\\w+)(?:-\\d+x\\d+)?(?:\\.html)?$'
+        aResult = Parser().parse(sUrl, sPattern)
         if aResult[0] is True:
             return aResult[1][0]
         return ''
@@ -45,7 +45,7 @@ class cHoster(iHoster):
         else:
             self._url = "https://vev.io/embed/" + sId
 
-    def _getMediaLinkForGuest(self, autoPlay = False):
+    def _getMediaLinkForGuest(self, autoPlay=False):
         api_call = False
         aResult = False
 
@@ -59,7 +59,8 @@ class cHoster(iHoster):
         self._url = response.geturl()
         response.close()
 
-        Json_url = 'https://vev.io/api/serve/video/' + self.__getIdFromUrl(self._url)
+        Json_url = 'https://vev.io/api/serve/video/' + \
+            self.__getIdFromUrl(self._url)
 
         req = urllib2.Request(Json_url, headers=request_headers)
         gcontext = ssl.SSLContext(ssl.PROTOCOL_TLSv1)

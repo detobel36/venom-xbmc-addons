@@ -3,19 +3,19 @@
 
 import re
 
-from resources.lib.comaddon import siteManager, isMatrix
-from resources.lib.gui.gui import cGui
-from resources.lib.gui.hoster import cHosterGui
-from resources.lib.handler.inputParameterHandler import cInputParameterHandler
-from resources.lib.handler.outputParameterHandler import cOutputParameterHandler
-from resources.lib.handler.requestHandler import cRequestHandler
-from resources.lib.parser import cParser
+from resources.lib.comaddon import SiteManager, isMatrix
+from resources.lib.gui.gui import Gui
+from resources.lib.gui.hoster import HosterGui
+from resources.lib.handler.inputParameterHandler import InputParameterHandler
+from resources.lib.handler.outputParameterHandler import OutputParameterHandler
+from resources.lib.handler.requestHandler import RequestHandler
+from resources.lib.parser import Parser
 
 
 SITE_IDENTIFIER = 'neymartv'
 SITE_NAME = 'NeymarTV'
 SITE_DESC = 'Toutes les chaines de Sport'
-URL_MAIN = siteManager().getUrlMain(SITE_IDENTIFIER)
+URL_MAIN = SiteManager().getUrlMain(SITE_IDENTIFIER)
 
 SPORT_SPORTS = ('/', 'load')
 SPORT_GENRES = ('p/all-sports-tv-schedule-full-hd.html', 'showGenres')
@@ -30,9 +30,9 @@ channels = {
     'bein Sports 1': ['2023/01/bein-sports-1-full-hd-france.html', 'https://images.beinsports.com/n43EXNeoR62GvZlWW2SXKuQi0GA=/788708-HD1.png'],
 
     'Canal+': ['2023/01/canal-france-full-hd.html', 'https://thumb.canalplus.pro/http/unsafe/epg.canal-plus.com/mycanal/img/CHN43FN/PNG/213X160/CHN43FB_301.PNG'],
-#    'Canal+ sport': ['2022/03/canal-sport-full-hd.html', 'https://thumb.canalplus.pro/http/unsafe/epg.canal-plus.com/mycanal/img/CHN43FN/PNG/213X160/CHN43FB_177.PNG'],
+    #    'Canal+ sport': ['2022/03/canal-sport-full-hd.html', 'https://thumb.canalplus.pro/http/unsafe/epg.canal-plus.com/mycanal/img/CHN43FN/PNG/213X160/CHN43FB_177.PNG'],
     'Foot+': ['2022/03/foot-full-hd.html', 'https://matchpint-cdn.matchpint.cloud/shared/imagenes/channels/284_logo_1599851988.png'],
-#    'GOLF+': ['2022/06/golf-full-hd.html', 'https://thumb.canalplus.pro/http/unsafe/epg.canal-plus.com/mycanal/img/CHN43FN/PNG/213X160/CHN43FB_301.PNG'],
+    #    'GOLF+': ['2022/06/golf-full-hd.html', 'https://thumb.canalplus.pro/http/unsafe/epg.canal-plus.com/mycanal/img/CHN43FN/PNG/213X160/CHN43FB_301.PNG'],
 
     'RMC Sport 1': ['2023/01/rmc-sport-1-full-hd.html', 'https://i0.wp.com/www.planetecsat.com/wp-content/uploads/2018/07/RMC_SPORT1_PNG_500x500px.png?w=500&ssl=1'],
     'RMC Sport 2': ['2023/01/rmc-sport-2-full-hd.html', 'https://i0.wp.com/www.planetecsat.com/wp-content/uploads/2018/07/RMC_SPORT2_PNG_500x500px.png?fit=500%2C500&ssl=1'],
@@ -61,167 +61,210 @@ channels = {
     'RMC SPORT LIVE 9': ['2022/03/rmc-sport-live-9-full-hd.html', 'https://www.planetecsat.com/wp-content/uploads/2022/09/Entete-RMC-Sport.png'],
     'RMC SPORT LIVE 10': ['2022/03/rmc-sport-live-10-full-hd.html', 'https://www.planetecsat.com/wp-content/uploads/2022/09/Entete-RMC-Sport.png'],
 
-    }
+}
 
 
 def load():
-    oGui = cGui()
-    oOutputParameterHandler = cOutputParameterHandler()
+    gui = Gui()
+    output_parameter_handler = OutputParameterHandler()
 
-    oOutputParameterHandler.addParameter('siteUrl', SPORT_GENRES[0])
-    oGui.addDir(SITE_IDENTIFIER, SPORT_GENRES[1], 'Sports (Genres)', 'genres.png', oOutputParameterHandler)
+    output_parameter_handler.addParameter('siteUrl', SPORT_GENRES[0])
+    gui.addDir(
+        SITE_IDENTIFIER,
+        SPORT_GENRES[1],
+        'Sports (Genres)',
+        'genres.png',
+        output_parameter_handler)
 
-    oOutputParameterHandler.addParameter('siteUrl', SPORT_TV[0])
-    oGui.addDir(SITE_IDENTIFIER, SPORT_TV[1], 'Chaines TV Sports', 'sport.png', oOutputParameterHandler)
+    output_parameter_handler.addParameter('siteUrl', SPORT_TV[0])
+    gui.addDir(
+        SITE_IDENTIFIER,
+        SPORT_TV[1],
+        'Chaines TV Sports',
+        'sport.png',
+        output_parameter_handler)
 
-    oGui.setEndOfDirectory()
+    gui.setEndOfDirectory()
 
 
 def showTV():
-    oGui = cGui()
-    oOutputParameterHandler = cOutputParameterHandler()
+    gui = Gui()
+    output_parameter_handler = OutputParameterHandler()
 
     for sDisplayTitle in channels:
         value = channels.get(sDisplayTitle)
         sUrl = value[0]
         sThumb = value[1]
-        oOutputParameterHandler.addParameter('siteUrl', sUrl)
-        oOutputParameterHandler.addParameter('sMovieTitle', sDisplayTitle)
-        oOutputParameterHandler.addParameter('sThumb', sThumb)
-        oGui.addLink(SITE_IDENTIFIER, 'showHoster', sDisplayTitle, sThumb, sDisplayTitle, oOutputParameterHandler)
+        output_parameter_handler.addParameter('siteUrl', sUrl)
+        output_parameter_handler.addParameter('sMovieTitle', sDisplayTitle)
+        output_parameter_handler.addParameter('sThumb', sThumb)
+        gui.addLink(
+            SITE_IDENTIFIER,
+            'showHoster',
+            sDisplayTitle,
+            sThumb,
+            sDisplayTitle,
+            output_parameter_handler)
 
-    oGui.setEndOfDirectory()
+    gui.setEndOfDirectory()
 
 
 def showGenres():
-    oGui = cGui()
+    gui = Gui()
 
-    oInputParameterHandler = cInputParameterHandler()
-    sUrl = oInputParameterHandler.getValue('siteUrl')
-    oRequestHandler = cRequestHandler(URL_MAIN + sUrl)
+    input_parameter_handler = InputParameterHandler()
+    sUrl = input_parameter_handler.getValue('siteUrl')
+    oRequestHandler = RequestHandler(URL_MAIN + sUrl)
     sHtmlContent = oRequestHandler.request()
 
-    oParser = cParser()
-    sPattern = '<h3> (.+?) <\/h3>.+?&#9989;'
+    oParser = Parser()
+    sPattern = '<h3> (.+?) <\\/h3>.+?&#9989;'
     aResult = oParser.parse(sHtmlContent, sPattern)
 
     if not aResult[0]:
-        oGui.addText(SITE_IDENTIFIER)
+        gui.addText(SITE_IDENTIFIER)
     else:
         sportGenre = {}
-        oOutputParameterHandler = cOutputParameterHandler()
-        for sTitle in aResult[1]:
-            sDisplayTitle = sTitle
+        output_parameter_handler = OutputParameterHandler()
+        for title in aResult[1]:
+            sDisplayTitle = title
             sDisplayTitle = sDisplayTitle.replace('ALPINE SKI', 'SKI')
             sDisplayTitle = sDisplayTitle.replace('BOXING', 'BOXE')
             sDisplayTitle = sDisplayTitle.replace('CLIMBING', 'ESCALADE')
             sDisplayTitle = sDisplayTitle.replace('CYCLING', 'CYCLISME')
             sDisplayTitle = sDisplayTitle.replace('DARTS', 'FLECHETTES')
-            sDisplayTitle = sDisplayTitle.replace('HORSE RACING', 'COURSES DE CHEVAUX')
-            sDisplayTitle = sDisplayTitle.replace('ICE HOCKEY', 'HOCKEY SUR GLACE')
+            sDisplayTitle = sDisplayTitle.replace(
+                'HORSE RACING', 'COURSES DE CHEVAUX')
+            sDisplayTitle = sDisplayTitle.replace(
+                'ICE HOCKEY', 'HOCKEY SUR GLACE')
             sDisplayTitle = sDisplayTitle.replace('RUGBY UNION', 'RUGBY')
             sDisplayTitle = sDisplayTitle.replace('SAILING/BOATING', 'VOILE')
             sDisplayTitle = sDisplayTitle.replace('SOCCER', 'FOOTBALL')
-            sDisplayTitle = sDisplayTitle.replace('TABLE TENNIS', 'TENNIS DE TABLE')
-            sportGenre[sDisplayTitle] = sTitle
+            sDisplayTitle = sDisplayTitle.replace(
+                'TABLE TENNIS', 'TENNIS DE TABLE')
+            sportGenre[sDisplayTitle] = title
 
-        for sDisplayTitle, sTitle in sorted(sportGenre.items()):
-            oOutputParameterHandler.addParameter('siteUrl', sUrl)
-            oOutputParameterHandler.addParameter('sMovieTitle', sTitle)
-            oOutputParameterHandler.addParameter('sDesc', sDisplayTitle)
-            oGui.addDir(SITE_IDENTIFIER, 'showMovies', sDisplayTitle, 'genres.png', oOutputParameterHandler)
+        for sDisplayTitle, title in sorted(sportGenre.items()):
+            output_parameter_handler.addParameter('siteUrl', sUrl)
+            output_parameter_handler.addParameter('sMovieTitle', title)
+            output_parameter_handler.addParameter('desc', sDisplayTitle)
+            gui.addDir(
+                SITE_IDENTIFIER,
+                'showMovies',
+                sDisplayTitle,
+                'genres.png',
+                output_parameter_handler)
 
-    oGui.setEndOfDirectory()
+    gui.setEndOfDirectory()
 
 
 def showMovies():
-    oGui = cGui()
-    oParser = cParser()
+    gui = Gui()
+    oParser = Parser()
 
-    oInputParameterHandler = cInputParameterHandler()
-    sTitle = oInputParameterHandler.getValue('sMovieTitle')
-    sUrl = URL_MAIN + oInputParameterHandler.getValue('siteUrl')
+    input_parameter_handler = InputParameterHandler()
+    title = input_parameter_handler.getValue('sMovieTitle')
+    sUrl = URL_MAIN + input_parameter_handler.getValue('siteUrl')
 
-    oRequestHandler = cRequestHandler(sUrl)
+    oRequestHandler = RequestHandler(sUrl)
     sHtmlContent = oRequestHandler.request()
 
-    sPattern = '<h3> %s <' % sTitle
+    sPattern = '<h3> %s <' % title
     sHtmlContent = oParser.abParse(sHtmlContent, sPattern, '<h3>')
 
-    sPattern = '(\d+:\d+) (.+?)<'
+    sPattern = '(\\d+:\\d+) (.+?)<'
     aResult = oParser.parse(sHtmlContent, sPattern)
 
     if not aResult[0]:
-        oGui.addText(SITE_IDENTIFIER)
+        gui.addText(SITE_IDENTIFIER)
     else:
-        oOutputParameterHandler = cOutputParameterHandler()
+        output_parameter_handler = OutputParameterHandler()
         for aEntry in aResult[1]:
             sDate = aEntry[0]
-            sTitle = aEntry[1].strip()
-            sDisplayTitle = sDate + ' - ' + sTitle.strip()
-            sTitle = sDate + ' ' + sTitle
+            title = aEntry[1].strip()
+            sDisplayTitle = sDate + ' - ' + title.strip()
+            title = sDate + ' ' + title
 
-            oOutputParameterHandler.addParameter('siteUrl', sUrl)
-            oOutputParameterHandler.addParameter('sMovieTitle', sTitle)
-            oOutputParameterHandler.addParameter('sDesc', sDisplayTitle)
-            oGui.addDir(SITE_IDENTIFIER, 'showMoviesLinks', sDisplayTitle, 'sport.png', oOutputParameterHandler)
+            output_parameter_handler.addParameter('siteUrl', sUrl)
+            output_parameter_handler.addParameter('sMovieTitle', title)
+            output_parameter_handler.addParameter('desc', sDisplayTitle)
+            gui.addDir(
+                SITE_IDENTIFIER,
+                'showMoviesLinks',
+                sDisplayTitle,
+                'sport.png',
+                output_parameter_handler)
 
-    oGui.setEndOfDirectory()
+    gui.setEndOfDirectory()
 
 
 def showMoviesLinks():
-    oGui = cGui()
-    oParser = cParser()
+    gui = Gui()
+    oParser = Parser()
 
-    oInputParameterHandler = cInputParameterHandler()
-    sTitle = oInputParameterHandler.getValue('sMovieTitle')
-    sUrl = oInputParameterHandler.getValue('siteUrl')
+    input_parameter_handler = InputParameterHandler()
+    title = input_parameter_handler.getValue('sMovieTitle')
+    sUrl = input_parameter_handler.getValue('siteUrl')
 
-    oRequestHandler = cRequestHandler(sUrl)
+    oRequestHandler = RequestHandler(sUrl)
     sHtmlContent = oRequestHandler.request()
 
-    sPattern = '%s' % sTitle
+    sPattern = '%s' % title
     sHtmlContent = oParser.abParse(sHtmlContent, sPattern, '<br ')
 
     sPattern = 'href="(.+?)" target="_blank" rel="noopener">(.+?)<'
     aResult = oParser.parse(sHtmlContent, sPattern)
 
     if not aResult[0]:
-        oGui.addText(SITE_IDENTIFIER)
+        gui.addText(SITE_IDENTIFIER)
     else:
-        oOutputParameterHandler = cOutputParameterHandler()
+        output_parameter_handler = OutputParameterHandler()
         for aEntry in aResult[1]:
             sUrl = aEntry[0]
-            sDisplayTitle = sTitle = aEntry[1].strip()
+            sDisplayTitle = title = aEntry[1].strip()
 
-            oOutputParameterHandler.addParameter('siteUrl', sUrl)
-            oOutputParameterHandler.addParameter('sMovieTitle', sTitle)
-            oOutputParameterHandler.addParameter('sDesc', sDisplayTitle)
-            oGui.addDir(SITE_IDENTIFIER, 'showLink', sDisplayTitle, 'sport.png', oOutputParameterHandler)
+            output_parameter_handler.addParameter('siteUrl', sUrl)
+            output_parameter_handler.addParameter('sMovieTitle', title)
+            output_parameter_handler.addParameter('desc', sDisplayTitle)
+            gui.addDir(
+                SITE_IDENTIFIER,
+                'showLink',
+                sDisplayTitle,
+                'sport.png',
+                output_parameter_handler)
 
-    oGui.setEndOfDirectory()
+    gui.setEndOfDirectory()
 
 
 def showHoster():
-    oGui = cGui()
-    oParser = cParser()
+    gui = Gui()
+    oParser = Parser()
 
-    oInputParameterHandler = cInputParameterHandler()
-    sTitle = oInputParameterHandler.getValue('sMovieTitle')
-    sThumb = oInputParameterHandler.getValue('sThumb')
-    sUrl = URL_MAIN + oInputParameterHandler.getValue('siteUrl')
+    input_parameter_handler = InputParameterHandler()
+    title = input_parameter_handler.getValue('sMovieTitle')
+    sThumb = input_parameter_handler.getValue('sThumb')
+    sUrl = URL_MAIN + input_parameter_handler.getValue('siteUrl')
 
-    oRequestHandler = cRequestHandler(sUrl)
+    oRequestHandler = RequestHandler(sUrl)
     sHtmlContent = oRequestHandler.request()
     sPattern = '<li movieurl=["\']([^"]+)["\']><a>([^<]+)'
     aResult = oParser.parse(sHtmlContent, sPattern)
 
     if not aResult[0]:
-        oGui.addText(SITE_IDENTIFIER)
+        gui.addText(SITE_IDENTIFIER)
     else:
-        blackList = ('.tutele.sx', 'leet365', 'casadelfutbol.net', 'yrsport.top', 'cdn.sportcast.life', '.ustreamix.su',
-                     'sportzonline.to', 'sportkart1.xyz', 'olasports.xyz', 'cricplay2.xyz')
-        oOutputParameterHandler = cOutputParameterHandler()
+        blackList = (
+            '.tutele.sx',
+            'leet365',
+            'casadelfutbol.net',
+            'yrsport.top',
+            'cdn.sportcast.life',
+            '.ustreamix.su',
+            'sportzonline.to',
+            'sportkart1.xyz',
+            'olasports.xyz',
+            'cricplay2.xyz')
+        output_parameter_handler = OutputParameterHandler()
         for aEntry in aResult[1]:
             sUrl = aEntry[0]
             hoster = aEntry[1]
@@ -233,33 +276,39 @@ def showHoster():
             if not sUrl:
                 continue
 
-            sDisplayTitle = sTitle + ' (' + hoster.strip() + ')'
+            sDisplayTitle = title + ' (' + hoster.strip() + ')'
 
             if 'http' not in sUrl:
                 sUrl = URL_MAIN[:-1] + sUrl
 
-            oOutputParameterHandler.addParameter('siteUrl', sUrl)
-            oOutputParameterHandler.addParameter('sMovieTitle', sTitle)
-            oOutputParameterHandler.addParameter('sDesc', sDisplayTitle)
-            oOutputParameterHandler.addParameter('sThumb', sThumb)
-            oGui.addLink(SITE_IDENTIFIER, 'showLink', sDisplayTitle, sThumb, sDisplayTitle, oOutputParameterHandler)
+            output_parameter_handler.addParameter('siteUrl', sUrl)
+            output_parameter_handler.addParameter('sMovieTitle', title)
+            output_parameter_handler.addParameter('desc', sDisplayTitle)
+            output_parameter_handler.addParameter('sThumb', sThumb)
+            gui.addLink(
+                SITE_IDENTIFIER,
+                'showLink',
+                sDisplayTitle,
+                sThumb,
+                sDisplayTitle,
+                output_parameter_handler)
 
-    oGui.setEndOfDirectory()
+    gui.setEndOfDirectory()
 
 
 def showLink():
-    oGui = cGui()
+    gui = Gui()
 
-    oInputParameterHandler = cInputParameterHandler()
-    sUrl = oInputParameterHandler.getValue('siteUrl')
-    sThumb = oInputParameterHandler.getValue('sThumb')
-    sMovieTitle = oInputParameterHandler.getValue('sMovieTitle')
-    siterefer = oInputParameterHandler.getValue('siterefer')
+    input_parameter_handler = InputParameterHandler()
+    sUrl = input_parameter_handler.getValue('siteUrl')
+    sThumb = input_parameter_handler.getValue('sThumb')
+    sMovieTitle = input_parameter_handler.getValue('sMovieTitle')
+    siterefer = input_parameter_handler.getValue('siterefer')
     sHosterUrl = ''
 
 # TODO
-#sUrl = "https://stream.crichd.vip/update/euro1.php"
-#sUrl = "https://www.tutelehd.com/online.php?a=3112"
+# sUrl = "https://stream.crichd.vip/update/euro1.php"
+# sUrl = "https://www.tutelehd.com/online.php?a=3112"
 
     bvalid, shosterurl = getHosterIframe(sUrl, siterefer)
     if bvalid:
@@ -267,13 +316,13 @@ def showLink():
 
     if sHosterUrl:
         sHosterUrl = sHosterUrl.strip()
-        oHoster = cHosterGui().checkHoster(sHosterUrl)
+        oHoster = HosterGui().checkHoster(sHosterUrl)
         if oHoster:
             oHoster.setDisplayName(sMovieTitle)
             oHoster.setFileName(sMovieTitle)
-            cHosterGui().showHoster(oGui, oHoster, sHosterUrl, sThumb)
+            HosterGui().showHoster(gui, oHoster, sHosterUrl, sThumb)
 
-    oGui.setEndOfDirectory()
+    gui.setEndOfDirectory()
 
 
 # Traitement générique
@@ -282,7 +331,7 @@ def getHosterIframe(url, referer):
     if not url.startswith('http'):
         url = URL_MAIN + url
 
-    oRequestHandler = cRequestHandler(url)
+    oRequestHandler = RequestHandler(url)
     if referer:
         oRequestHandler.addHeaderEntry('Referer', referer)
 #    oRequestHandler.disableSSL()
@@ -292,7 +341,7 @@ def getHosterIframe(url, referer):
     if not sHtmlContent or sHtmlContent == 'False':
         return False, False
 
-    sPattern = '(\s*eval\s*\(\s*function(?:.|\s)+?{}\)\))'
+    sPattern = '(\\s*eval\\s*\\(\\s*function(?:.|\\s)+?{}\\)\\))'
     aResult = re.findall(sPattern, sHtmlContent)
     if aResult:
         from resources.lib.packer import cPacker
@@ -301,7 +350,7 @@ def getHosterIframe(url, referer):
             sstr = sstr + ';'
         sHtmlContent = cPacker().unpack(sstr)
 
-    sPattern = '.atob\("(.+?)"'
+    sPattern = '.atob\\("(.+?)"'
     aResult = re.findall(sPattern, sHtmlContent)
     if aResult:
         import base64
@@ -324,7 +373,8 @@ def getHosterIframe(url, referer):
                 url = url[1:]
             if not url.startswith("http"):
                 if not url.startswith("//"):
-                    url = '//' + referer.split('/')[2] + url  # ajout du nom de domaine
+                    # ajout du nom de domaine
+                    url = '//' + referer.split('/')[2] + url
                 url = "https:" + url
             b, url = getHosterIframe(url, referer)
             if b:
@@ -340,11 +390,10 @@ def getHosterIframe(url, referer):
     sPattern = '[^/]source.+?["\'](https.+?)["\']'
     aResult = re.findall(sPattern, sHtmlContent)
     if aResult:
-        oRequestHandler = cRequestHandler(aResult[0])
+        oRequestHandler = RequestHandler(aResult[0])
         oRequestHandler.request()
         sHosterUrl = oRequestHandler.getRealUrl()
-        oRequestHandler = cRequestHandler(sHosterUrl)
+        oRequestHandler = RequestHandler(sHosterUrl)
         h = oRequestHandler.request()
         return True, sHosterUrl + '|referer=' + url
     return False, False
-

@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 # vStream https://github.com/Kodi-vStream/venom-xbmc-addons
-from resources.lib.handler.requestHandler import cRequestHandler
-from resources.lib.parser import cParser
+from resources.lib.handler.requestHandler import RequestHandler
+from resources.lib.parser import Parser
 from resources.hosters.hoster import iHoster
 from resources.lib.comaddon import dialog
 
@@ -15,15 +15,15 @@ class cHoster(iHoster):
 
     def __getIdFromUrl(self, sUrl):
         sPattern = 'id=([a-zA-Z0-9]+)'
-        oParser = cParser()
+        oParser = Parser()
         aResult = oParser.parse(sUrl, sPattern)
 
         if aResult[0] is True:
             return aResult[1][0]
         return ''
 
-    def _getMediaLinkForGuest(self, autoPlay = False):
-        oParser = cParser()
+    def _getMediaLinkForGuest(self, autoPlay=False):
+        oParser = Parser()
 
         urlId = self.__getIdFromUrl(self._url)
 
@@ -32,12 +32,15 @@ class cHoster(iHoster):
         url = []
         qua = []
 
-        oRequest = cRequestHandler(sUrl)
+        oRequest = RequestHandler(sUrl)
         oRequest.addHeaderEntry('User-Agent', UA)
-        oRequest.addHeaderEntry('Referer', 'https://streamax.club/public/dist/index.html?id=' + urlId)
+        oRequest.addHeaderEntry(
+            'Referer',
+            'https://streamax.club/public/dist/index.html?id=' +
+            urlId)
         sHtmlContent = oRequest.request()
 
-        sPattern = 'RESOLUTION=(\d+x\d+)(.+?.m3u8)'
+        sPattern = 'RESOLUTION=(\\d+x\\d+)(.+?.m3u8)'
         aResult = oParser.parse(sHtmlContent, sPattern)
         if aResult[0] is True:
             for aEntry in aResult[1]:

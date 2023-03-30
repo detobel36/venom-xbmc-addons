@@ -9,17 +9,18 @@
 import time
 
 from resources.hosters.hoster import iHoster
-from resources.lib.handler.requestHandler import cRequestHandler
+from resources.lib.handler.requestHandler import RequestHandler
 from resources.lib.comaddon import VSlog
 
 import xbmcaddon
+
 
 class cHoster(iHoster):
 
     def __init__(self):
         iHoster.__init__(self, 'youtube', 'Youtube')
 
-    def _getMediaLinkForGuest(self, autoPlay = False):
+    def _getMediaLinkForGuest(self, autoPlay=False):
         # 0 = Plugin invidious
         # 1 = Plugin Youtube
 
@@ -29,18 +30,18 @@ class cHoster(iHoster):
 
         try:
             xbmcaddon.Addon('plugin.video.invidious')
-        except:
+        except BaseException:
             VSlog('Plugin Invidious non installe')
             MODE = 1
 
         try:
             if (MODE == 1):
                 xbmcaddon.Addon('plugin.video.youtube')
-        except:
+        except BaseException:
             VSlog('Plugin YouTube non installe')
             return False, False
 
-        if 'plugin'  in self._url:
+        if 'plugin' in self._url:
             api_call = self._url
         else:
             videoID = self.__getIdFromUrl()

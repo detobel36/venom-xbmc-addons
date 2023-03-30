@@ -1,30 +1,31 @@
 from resources.lib.jsunpacker import cJsUnpacker
-from resources.lib.parser import cParser
-from resources.lib.handler.requestHandler import cRequestHandler
+from resources.lib.parser import Parser
+from resources.lib.handler.requestHandler import RequestHandler
 from resources.hosters.hoster import iHoster
+
 
 class cHoster(iHoster):
 
     def __init__(self):
         iHoster.__init__(self, 'dankfile', 'DankFile.com')
 
-    def _getMediaLinkForGuest(self, autoPlay = False):
-        oRequest = cRequestHandler(self._url)
+    def _getMediaLinkForGuest(self, autoPlay=False):
+        oRequest = RequestHandler(self._url)
         sHtmlContent = oRequest.request()
 
         return self.__getUrlFromJavascriptCode(sHtmlContent)
 
     def __getUrlFromJavascriptCode(self, sHtmlContent):
-        sPattern = "<script type='text/javascript'>eval.*?return p}\((.*?)</script>"
-        oParser = cParser()
+        sPattern = "<script type='text/javascript'>eval.*?return p}\\((.*?)</script>"
+        oParser = Parser()
         aResult = oParser.parse(sHtmlContent, sPattern)
 
         if aResult[0] is True:
             sJavascript = aResult[1][0]
 
             sUnpacked = cJsUnpacker().unpackByString(sJavascript)
-            sPattern = ".addVariable\('file','([^']+)'"
-            oParser = cParser()
+            sPattern = ".addVariable\\('file','([^']+)'"
+            oParser = Parser()
             aResultLink = oParser.parse(sUnpacked, sPattern)
 
             if aResultLink[0] is True:
@@ -34,4 +35,3 @@ class cHoster(iHoster):
                 return aResult
 
         return False, ''
-

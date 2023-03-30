@@ -9,8 +9,8 @@ import string
 
 from resources.hosters.hoster import iHoster
 from resources.lib.comaddon import dialog, VSlog
-from resources.lib.handler.requestHandler import cRequestHandler
-from resources.lib.parser import cParser
+from resources.lib.handler.requestHandler import RequestHandler
+from resources.lib.parser import Parser
 
 UA = 'Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:100.0) Gecko/20100101 Firefox/100.0'
 MODE = 0
@@ -36,14 +36,14 @@ class cHoster(iHoster):
         videoId = self.__getId(self._url)
         url = host + 'd/' + videoId + '.html'
 
-        oRequest = cRequestHandler(url)
+        oRequest = RequestHandler(url)
         oRequest.addHeaderEntry('User-Agent', UA)
         oRequest.addHeaderEntry('Referer', host)
         sHtmlContent = oRequest.request()
 
         if MODE == 1:  # Non terminé encore
-            sPattern = 'download_video([^"]+)[^\d]+\d+x(\d+)'
-            oParser = cParser()
+            sPattern = 'download_video([^"]+)[^\\d]+\\d+x(\\d+)'
+            oParser = Parser()
             aResult = oParser.parse(sHtmlContent, sPattern)
             if aResult[0] is True:
                 list_data = []
@@ -56,16 +56,18 @@ class cHoster(iHoster):
                     code = list_data[0]
                     mode = list_data[1]
                     hash = list_data[2]
-                    dl_url = host + 'dl?op=download_orig&id=' + code + '&mode=' + mode + '&hash=' + hash
+                    dl_url = host + 'dl?op=download_orig&id=' + \
+                        code + '&mode=' + mode + '&hash=' + hash
                     VSlog(dl_url)
 
-                    oRequest = cRequestHandler(dl_url)
+                    oRequest = RequestHandler(dl_url)
                     sHtmlContent = oRequest.request()
-                    domain = base64.b64encode((host[:-1] + ':443').encode('utf-8')).decode('utf-8').replace('=', '')
+                    domain = base64.b64encode(
+                        (host[:-1] + ':443').encode('utf-8')).decode('utf-8').replace('=', '')
         else:
             eurl = get_embedurl(host, videoId)
 
-            oRequest = cRequestHandler(eurl)
+            oRequest = RequestHandler(eurl)
             oRequest.addHeaderEntry('User-Agent', UA)
             oRequest.addHeaderEntry('Referer', host)
             oRequest.addHeaderEntry('watchsb', 'streamsb')
@@ -83,7 +85,8 @@ class cHoster(iHoster):
                 api_call = data['backup']
 
         if api_call:
-            return True, api_call + '|User-Agent=' + UA + '&Referer=' + host + '&Accept-Language=fr,fr-FR;q=0.8,en-US;q=0.5,en;q=0.3'
+            return True, api_call + '|User-Agent=' + UA + '&Referer=' + \
+                host + '&Accept-Language=fr,fr-FR;q=0.8,en-US;q=0.5,en;q=0.3'
 
         return False, False
 

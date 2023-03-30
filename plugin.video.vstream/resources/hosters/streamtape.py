@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 # vStream https://github.com/Kodi-vStream/venom-xbmc-addons
-from resources.lib.handler.requestHandler import cRequestHandler
-from resources.lib.parser import cParser
+from resources.lib.handler.requestHandler import RequestHandler
+from resources.lib.parser import Parser
 from resources.hosters.hoster import iHoster
 
 UA = 'Mozilla/5.0 (Windows NT 6.1; Win64; x64; rv:68.0) Gecko/20100101 Firefox/68.0'
@@ -11,20 +11,21 @@ class cHoster(iHoster):
     def __init__(self):
         iHoster.__init__(self, 'streamtape', 'Streamtape')
 
-    def _getMediaLinkForGuest(self, autoPlay = False):
+    def _getMediaLinkForGuest(self, autoPlay=False):
         api_call = ''
-        oParser = cParser()
+        oParser = Parser()
 
-        oRequest = cRequestHandler(self._url)
+        oRequest = RequestHandler(self._url)
         sHtmlContent = oRequest.request()
 
-        sPattern1 = 'ById\(\'ideoo.+?=\s*["\']([^"\']+)[\'"].+?["\']([^"\']+)\'\)'
+        sPattern1 = 'ById\\(\'ideoo.+?=\\s*["\']([^"\']+)[\'"].+?["\']([^"\']+)\'\\)'
 
         aResult = oParser.parse(sHtmlContent, sPattern1)
 
         if aResult[0] is True:
             url = aResult[1][0][1]
-            api_call = 'https://streamtape.com/get_video' + url[url.find('?'):] + "&stream=1"
+            api_call = 'https://streamtape.com/get_video' + \
+                url[url.find('?'):] + "&stream=1"
 
         if api_call:
             return True, api_call + '|User-Agent=' + UA + '&Referer=' + self._url

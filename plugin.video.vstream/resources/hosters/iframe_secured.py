@@ -3,11 +3,11 @@
 # stream elite
 import re
 
-from resources.lib.handler.requestHandler import cRequestHandler
-from resources.lib.parser import cParser
+from resources.lib.handler.requestHandler import RequestHandler
+from resources.lib.parser import Parser
 from resources.hosters.hoster import iHoster
 from resources.lib.packer import cPacker
-from resources.lib.gui.hoster import cHosterGui
+from resources.lib.gui.hoster import HosterGui
 
 UA = 'Mozilla/5.0 (Windows NT 6.1; WOW64; rv:61.0) Gecko/20100101 Firefox/61.0'
 
@@ -27,11 +27,13 @@ class cHoster(iHoster):
         self._url = self._url.replace('//iframe-secured.com/embed/', '')
         self._url = 'http://iframe-secured.com/embed/iframe.php?u=%s' % self._url
 
-    def _getMediaLinkForGuest(self, autoPlay = False):
-        oParser = cParser()
-        oRequest = cRequestHandler(self._url)
+    def _getMediaLinkForGuest(self, autoPlay=False):
+        oParser = Parser()
+        oRequest = RequestHandler(self._url)
         oRequest.addHeaderEntry('User-Agent', UA)
-        oRequest.addHeaderEntry('Referer', self._url.replace('iframe.php?u=', ''))
+        oRequest.addHeaderEntry(
+            'Referer', self._url.replace(
+                'iframe.php?u=', ''))
         sHtmlContent = oRequest.request()
 
         sPattern = '<input  id=".+?name="([^"]+)" type="hidden" value="([^"]+)"/><input  id="challenge" ' + \
@@ -39,9 +41,10 @@ class cHoster(iHoster):
 
         aResult = oParser.parse(sHtmlContent, sPattern)
         if aResult[0] is True:
-            postdata = aResult[1][0][0] + '=' + aResult[1][0][1] + '&' + aResult[1][0][2] + '=' + aResult[1][0][3]
+            postdata = aResult[1][0][0] + '=' + aResult[1][0][1] + \
+                '&' + aResult[1][0][2] + '=' + aResult[1][0][3]
 
-            oRequest = cRequestHandler(self._url)
+            oRequest = RequestHandler(self._url)
             oRequest.setRequestType(1)
             oRequest.addHeaderEntry('User-Agent', UA)
             oRequest.addHeaderEntry('Referer', self._url)
@@ -49,14 +52,14 @@ class cHoster(iHoster):
 
             sHtmlContent = oRequest.request()
 
-            sPattern = "(\s*eval\s*\(\s*function(?:.|\s)+?)<\/script>"
+            sPattern = "(\\s*eval\\s*\\(\\s*function(?:.|\\s)+?)<\\/script>"
             aResult = re.findall(sPattern, sHtmlContent)
 
             if aResult:
                 sUnpacked = cPacker().unpack(aResult[0])
                 sHtmlContent = sUnpacked
                 if sHtmlContent:
-                    sPattern = "replace\(.*'(.+?)'"
+                    sPattern = "replace\\(.*'(.+?)'"
                     aResult = oParser.parse(sHtmlContent, sPattern)
 
                     if aResult[0] is True:
@@ -67,7 +70,7 @@ class cHoster(iHoster):
 
                         sHosterUrl = sHosterUrl.replace('\\', '')
 
-                        oHoster = cHosterGui().checkHoster(sHosterUrl)
+                        oHoster = HosterGui().checkHoster(sHosterUrl)
                         oHoster.setUrl(sHosterUrl)
                         api_call = oHoster.getMediaLink(autoPlay)
 

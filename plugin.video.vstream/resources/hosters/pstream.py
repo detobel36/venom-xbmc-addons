@@ -6,22 +6,23 @@ import json
 
 from resources.hosters.hoster import iHoster
 from resources.lib.comaddon import isMatrix
-from resources.lib.handler.requestHandler import cRequestHandler
-from resources.lib.parser import cParser
+from resources.lib.handler.requestHandler import RequestHandler
+from resources.lib.parser import Parser
 from resources.lib.util import urlEncode
 
 try:
     # python2
     from urlparse import urlparse
-except:
+except BaseException:
     # python3
     from urllib.parse import urlparse
 
 UA = "Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:90.0) Gecko/20100101 Firefox/90.0"
 
-headers = {"User-Agent": UA,
-           "Accept": "text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,*/*;q=0.8",
-           "Accept-Language": "fr,fr-FR;q=0.8,en-US;q=0.5,en;q=0.3"}
+headers = {
+    "User-Agent": UA,
+    "Accept": "text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,*/*;q=0.8",
+    "Accept-Language": "fr,fr-FR;q=0.8,en-US;q=0.5,en;q=0.3"}
 
 
 class cHoster(iHoster):
@@ -29,26 +30,32 @@ class cHoster(iHoster):
     def __init__(self):
         iHoster.__init__(self, 'pstream', 'Pstream')
 
-    def _getMediaLinkForGuest(self, autoPlay = False):
+    def _getMediaLinkForGuest(self, autoPlay=False):
         api_call = ''
 
-        oRequest = cRequestHandler(self._url)
+        oRequest = RequestHandler(self._url)
         oRequest.addHeaderEntry('User-Agent', UA)
-        oRequest.addHeaderEntry('Accept', 'text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8')
-        oRequest.addHeaderEntry('Accept-Language', 'fr,fr-FR;q=0.8,en-US;q=0.5,en;q=0.3')
+        oRequest.addHeaderEntry(
+            'Accept', 'text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8')
+        oRequest.addHeaderEntry(
+            'Accept-Language',
+            'fr,fr-FR;q=0.8,en-US;q=0.5,en;q=0.3')
         sHtmlContent = oRequest.request()
 
-        oParser = cParser()
+        oParser = Parser()
         sPattern = '<script src="(.+?)"'
         aResult = oParser.parse(sHtmlContent, sPattern)[1][1]
 
-        oRequest = cRequestHandler(aResult)
+        oRequest = RequestHandler(aResult)
         oRequest.addHeaderEntry('User-Agent', UA)
-        oRequest.addHeaderEntry('Accept', 'text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8')
-        oRequest.addHeaderEntry('Accept-Language', 'fr,fr-FR;q=0.8,en-US;q=0.5,en;q=0.3')
+        oRequest.addHeaderEntry(
+            'Accept', 'text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8')
+        oRequest.addHeaderEntry(
+            'Accept-Language',
+            'fr,fr-FR;q=0.8,en-US;q=0.5,en;q=0.3')
         sHtmlContent = oRequest.request()
 
-        sPattern = 'atob.+?\}\("(.+?)"'
+        sPattern = 'atob.+?\\}\\("(.+?)"'
         code = oParser.parse(sHtmlContent, sPattern)
 
         for i in code[1]:
@@ -58,7 +65,7 @@ class cHoster(iHoster):
                 else:
                     code = base64.b64decode(i)
                 break
-            except:
+            except BaseException:
                 pass
 
         jsonCall = json.loads(code[code.rfind("{"):])
@@ -66,12 +73,14 @@ class cHoster(iHoster):
         for a in jsonCall:
             try:
                 if isMatrix():
-                    d = base64.b64decode(jsonCall[a].split('/')[4].split('.')[0]).decode('ascii')
+                    d = base64.b64decode(
+                        jsonCall[a].split('/')[4].split('.')[0]).decode('ascii')
                 else:
-                    d = base64.b64decode(jsonCall[a].split('/')[4].split('.')[0])
+                    d = base64.b64decode(
+                        jsonCall[a].split('/')[4].split('.')[0])
                 api_call = jsonCall[a]
                 break
-            except:
+            except BaseException:
                 pass
 
         if api_call:

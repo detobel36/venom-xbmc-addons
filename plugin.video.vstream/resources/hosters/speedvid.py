@@ -4,10 +4,10 @@ import re
 
 from resources.hosters.hoster import iHoster
 from resources.lib.comaddon import VSlog
-from resources.lib.handler.requestHandler import cRequestHandler
+from resources.lib.handler.requestHandler import RequestHandler
 from resources.lib.jsparser import JsParser
 from resources.lib.packer import cPacker
-from resources.lib.parser import cParser
+from resources.lib.parser import Parser
 
 UA = 'Mozilla/5.0 (Windows NT 6.1; Win64; x64; rv:56.0) Gecko/20100101 Firefox/56.0'
 
@@ -21,8 +21,8 @@ class cHoster(iHoster):
         host = parts[0] + '//' + parts[1].split('/', 1)[0]
         return host
 
-    def _getMediaLinkForGuest(self, autoPlay = False):
-        oRequest = cRequestHandler(self._url.replace('sn', 'embed'))
+    def _getMediaLinkForGuest(self, autoPlay=False):
+        oRequest = RequestHandler(self._url.replace('sn', 'embed'))
         oRequest.addHeaderEntry('User-Agent', UA)
         oRequest.addHeaderEntry('Host', 'www.speedvid.net')
         sHtmlContent = oRequest.request()
@@ -30,7 +30,7 @@ class cHoster(iHoster):
         # suppression commentaires
         sHtmlContent = re.sub(r'<!--.*?-->', '', sHtmlContent)
 
-        oParser = cParser()
+        oParser = Parser()
 
         # fh = open('c:\\test0.txt', "w")
         # fh.write(sHtmlContent)
@@ -62,7 +62,9 @@ class cHoster(iHoster):
             realurl = red[0]
         else:
             VSlog("2")
-            red = re.findall('location\.assign *\( *"([^"]+)" \)', sHtmlContent)
+            red = re.findall(
+                'location\\.assign *\\( *"([^"]+)" \\)',
+                sHtmlContent)
             if red:
                 realurl = red[0]
 
@@ -78,7 +80,7 @@ class cHoster(iHoster):
 
         VSlog('Real url>> ' + realurl)
 
-        oRequest = cRequestHandler(realurl)
+        oRequest = RequestHandler(realurl)
         oRequest.addHeaderEntry('User-Agent', UA)
         oRequest.addHeaderEntry('Referer', self._url)
 
@@ -90,7 +92,7 @@ class cHoster(iHoster):
 
         api_call = ''
 
-        sPattern = '(eval\(function\(p,a,c,k,e(?:.|\s)+?\)\))<'
+        sPattern = '(eval\\(function\\(p,a,c,k,e(?:.|\\s)+?\\)\\))<'
         aResult = oParser.parse(sHtmlContent, sPattern)
         if aResult[0] is True:
             for packed in aResult[1]:
@@ -104,7 +106,7 @@ class cHoster(iHoster):
                         break
 
         else:
-            sPattern = "file\s*:\s*\'([^\']+.mp4)"
+            sPattern = "file\\s*:\\s*\'([^\']+.mp4)"
             aResult = oParser.parse(sHtmlContent, sPattern)
             if aResult[0] is True:
                 api_call = aResult[1][0]
@@ -112,7 +114,8 @@ class cHoster(iHoster):
         VSlog('API_CALL: ' + api_call)
 
         if api_call:
-            api_call = api_call + '|User-Agent=' + UA  # + #'|Host=' + api_call.replace('http://','').rsplit('/', 2)[0]
+            # + #'|Host=' + api_call.replace('http://','').rsplit('/', 2)[0]
+            api_call = api_call + '|User-Agent=' + UA
 
             return True, api_call
 
@@ -121,7 +124,7 @@ class cHoster(iHoster):
 
 
 def checkCpacker(strToPack):
-    sPattern = '>([^>]+\(p,a,c,k,e(?:.|\s)+?\)\)\s*)<'
+    sPattern = '>([^>]+\\(p,a,c,k,e(?:.|\\s)+?\\)\\)\\s*)<'
     aResult = re.search(sPattern, strToPack, re.DOTALL | re.UNICODE)
     if aResult:
         # VSlog('Cpacker encryption')
@@ -133,18 +136,19 @@ def checkCpacker(strToPack):
         # if not str2.startswith('eval'):
            # str2 = 'eval(function' + str2[4:]
 
-        # Me demandez pas pourquoi mais si je l'affiche pas en log, ca freeze ?????
+        # Me demandez pas pourquoi mais si je l'affiche pas en log, ca freeze ?
         # VSlog(str2)
 
         try:
             tmp = cPacker().unpack(str2)
             # tmp = tmp.replace("\\'", "'")
-        except:
+        except BaseException:
             tmp = ''
 
         # VSlog(tmp)
 
-        return strToPack[:(aResult.start() + 1)] + tmp + strToPack[(aResult.end()-1):]
+        return strToPack[:(aResult.start() + 1)] + tmp + \
+            strToPack[(aResult.end() - 1):]
 
     return strToPack
 
@@ -163,7 +167,10 @@ def checkCpacker(strToPack):
 
 
 def checkAADecoder(stringToDecode):
-    aResult = re.search('([>;]\s*)(ﾟωﾟ.+?\(\'_\'\);)', str, re.DOTALL | re.UNICODE)
+    aResult = re.search(
+        '([>;]\\s*)(ﾟωﾟ.+?\\(\'_\'\\);)',
+        str,
+        re.DOTALL | re.UNICODE)
     if aResult:
         VSlog('AA encryption')
 
@@ -183,7 +190,8 @@ def checkAADecoder(stringToDecode):
             tmp = JP.ProcessJS(js_code, liste_var)
             tmp = JP.LastEval.decode('string-escape').decode('string-escape')
 
-            return stringToDecode[:aResult.start()] + tmp + stringToDecode[aResult.end():]
+            return stringToDecode[:aResult.start()] + \
+                tmp + stringToDecode[aResult.end():]
         except Exception:
             return ''
     return stringToDecode

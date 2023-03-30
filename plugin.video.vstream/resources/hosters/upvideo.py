@@ -4,8 +4,8 @@
 import re
 import base64
 
-from resources.lib.handler.requestHandler import cRequestHandler
-from resources.lib.parser import cParser
+from resources.lib.handler.requestHandler import RequestHandler
+from resources.lib.parser import Parser
 from resources.hosters.hoster import iHoster
 from resources.lib.hunter import hunter
 from resources.lib.comaddon import VSlog, isMatrix
@@ -18,19 +18,19 @@ class cHoster(iHoster):
     def __init__(self):
         iHoster.__init__(self, 'upvideo', 'UpVideo')
 
-    def _getMediaLinkForGuest(self, autoPlay = False):
+    def _getMediaLinkForGuest(self, autoPlay=False):
         api_call = False
-        oParser = cParser()
-        sPattern = 'return decodeURIComponent\(escape\(r\)\)}\("([^,]+)",([^,]+),"([^,]+)",([^,]+),([^,]+),([^,\))]+)\)'
+        oParser = Parser()
+        sPattern = 'return decodeURIComponent\\(escape\\(r\\)\\)}\\("([^,]+)",([^,]+),"([^,]+)",([^,]+),([^,]+),([^,\\))]+)\\)'
 
-        oRequest = cRequestHandler(self._url)
+        oRequest = RequestHandler(self._url)
         oRequest.addHeaderEntry('Cookie', 'popads2=opened')
         sHtmlContent = oRequest.request()
 
         aResult = oParser.parse(sHtmlContent, sPattern)
 
         # Get decode page
-        # oRequest = cRequestHandler("https://upvideo.to/assets/js/tabber.js")
+        # oRequest = RequestHandler("https://upvideo.to/assets/js/tabber.js")
         # oRequest.addHeaderEntry('Referer', self._url)
         # sHtmlContent2 = oRequest.request()
         # aResult2 = oParser.parse(sHtmlContent2, sPattern)
@@ -43,7 +43,12 @@ class cHoster(iHoster):
         if aResult[0] is True:
             l = aResult[1]
             for j in l:
-                data = hunter(j[0],int(j[1]),j[2],int(j[3]),int(j[4]),int(j[5]))
+                data = hunter(
+                    j[0], int(
+                        j[1]), j[2], int(
+                        j[3]), int(
+                        j[4]), int(
+                        j[5]))
                 if "fcbbbdddebad" in data:
                     r = re.search('var fcbbbdddebad *= *"([^"]+)" *;', data)
                     if not r:

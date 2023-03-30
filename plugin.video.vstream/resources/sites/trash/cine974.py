@@ -2,54 +2,59 @@
 # vStream https://github.com/Kodi-vStream/venom-xbmc-addons
 import re
 
-from resources.lib.comaddon import progress, siteManager
-from resources.lib.gui.gui import cGui
-from resources.lib.gui.hoster import cHosterGui
-from resources.lib.handler.inputParameterHandler import cInputParameterHandler
-from resources.lib.handler.outputParameterHandler import cOutputParameterHandler
-from resources.lib.handler.requestHandler import cRequestHandler
-from resources.lib.parser import cParser
+from resources.lib.comaddon import Progress, SiteManager
+from resources.lib.gui.gui import Gui
+from resources.lib.gui.hoster import HosterGui
+from resources.lib.handler.inputParameterHandler import InputParameterHandler
+from resources.lib.handler.outputParameterHandler import OutputParameterHandler
+from resources.lib.handler.requestHandler import RequestHandler
+from resources.lib.parser import Parser
 
 SITE_IDENTIFIER = 'cine974'
 SITE_NAME = 'Ciné 974'
 SITE_DESC = 'Film streaming HD gratuit complet'
 
-URL_MAIN = siteManager().getUrlMain(SITE_IDENTIFIER)
+URL_MAIN = SiteManager().getUrlMain(SITE_IDENTIFIER)
 
 MOVIE_MOVIE = ('http://', 'load')
 MOVIE_NEWS = (URL_MAIN + 'streaming/', 'showMovies')
 
 
 def load():
-    oGui = cGui()
+    gui = Gui()
 
-    oOutputParameterHandler = cOutputParameterHandler()
-    oOutputParameterHandler.addParameter('siteUrl', MOVIE_NEWS[0])
-    oGui.addDir(SITE_IDENTIFIER, MOVIE_NEWS[1], 'Films (Derniers ajouts)', 'news.png', oOutputParameterHandler)
+    output_parameter_handler = OutputParameterHandler()
+    output_parameter_handler.addParameter('siteUrl', MOVIE_NEWS[0])
+    gui.addDir(
+        SITE_IDENTIFIER,
+        MOVIE_NEWS[1],
+        'Films (Derniers ajouts)',
+        'news.png',
+        output_parameter_handler)
 
-    oGui.setEndOfDirectory()
+    gui.setEndOfDirectory()
 
 
 def showMovies():
-    oGui = cGui()
+    gui = Gui()
 
-    oInputParameterHandler = cInputParameterHandler()
-    sUrl = oInputParameterHandler.getValue('siteUrl')
-    oRequestHandler = cRequestHandler(sUrl)
+    input_parameter_handler = InputParameterHandler()
+    sUrl = input_parameter_handler.getValue('siteUrl')
+    oRequestHandler = RequestHandler(sUrl)
     sHtmlContent = oRequestHandler.request()
 
-    oParser = cParser()
+    oParser = Parser()
     sPattern = 'src="([^"]+)" alt="([^"]+)" class="sc.+?synop">([^<]*).+?href="([^"]+)">Regarder'
     aResult = oParser.parse(sHtmlContent, sPattern)
 
     if not aResult[0]:
-        oGui.addText(SITE_IDENTIFIER)
-        oGui.setEndOfDirectory()
+        gui.addText(SITE_IDENTIFIER)
+        gui.setEndOfDirectory()
         return
 
     total = len(aResult[1])
-    progress_ = progress().VScreate(SITE_NAME)
-    oOutputParameterHandler = cOutputParameterHandler()
+    progress_ = Progress().VScreate(SITE_NAME)
+    output_parameter_handler = OutputParameterHandler()
     for aEntry in aResult[1]:
         progress_.VSupdate(progress_, total)
         if progress_.iscanceled():
@@ -58,33 +63,44 @@ def showMovies():
         sThumb = aEntry[0]
         if sThumb.startswith('/'):
             sThumb = URL_MAIN[:-1] + sThumb
-        sTitle = aEntry[1]
-        sDesc = aEntry[2]
+        title = aEntry[1]
+        desc = aEntry[2]
         sUrl2 = aEntry[3]
         if sUrl2.startswith('/'):
             sUrl2 = URL_MAIN[:-1] + sUrl2
 
-        oOutputParameterHandler.addParameter('siteUrl', sUrl2)
-        oOutputParameterHandler.addParameter('sMovieTitle', sTitle)
-        oOutputParameterHandler.addParameter('sThumb', sThumb)
-        oOutputParameterHandler.addParameter('sDesc', sDesc)
+        output_parameter_handler.addParameter('siteUrl', sUrl2)
+        output_parameter_handler.addParameter('sMovieTitle', title)
+        output_parameter_handler.addParameter('sThumb', sThumb)
+        output_parameter_handler.addParameter('desc', desc)
 
-        oGui.addMovie(SITE_IDENTIFIER, 'showHosters', sTitle, '', sThumb, sDesc, oOutputParameterHandler)
+        gui.addMovie(
+            SITE_IDENTIFIER,
+            'showHosters',
+            title,
+            '',
+            sThumb,
+            desc,
+            output_parameter_handler)
 
     progress_.VSclose(progress_)
 
     sNextPage, sPaging = __checkForNextPage(sHtmlContent)
     if sNextPage:
-        oOutputParameterHandler = cOutputParameterHandler()
-        oOutputParameterHandler.addParameter('siteUrl', sNextPage)
-        oGui.addNext(SITE_IDENTIFIER, 'showMovies', 'Page ' + sPaging, oOutputParameterHandler)
+        output_parameter_handler = OutputParameterHandler()
+        output_parameter_handler.addParameter('siteUrl', sNextPage)
+        gui.addNext(
+            SITE_IDENTIFIER,
+            'showMovies',
+            'Page ' + sPaging,
+            output_parameter_handler)
 
-    oGui.setEndOfDirectory()
+    gui.setEndOfDirectory()
 
 
 def __checkForNextPage(sHtmlContent):
-    sPattern = '>(\d+)</a></li><li><a href="([^"]+)"><i class="fa fa-angle-right'
-    oParser = cParser()
+    sPattern = '>(\\d+)</a></li><li><a href="([^"]+)"><i class="fa fa-angle-right'
+    oParser = Parser()
     aResult = oParser.parse(sHtmlContent, sPattern)
     if aResult[0]:
         sNumberMax = aResult[1][0][0]
@@ -97,17 +113,17 @@ def __checkForNextPage(sHtmlContent):
 
 
 def showHosters():
-    oGui = cGui()
+    gui = Gui()
 
-    oInputParameterHandler = cInputParameterHandler()
-    sUrl = oInputParameterHandler.getValue('siteUrl')
-    sMovieTitle = oInputParameterHandler.getValue('sMovieTitle')
-    sThumb = oInputParameterHandler.getValue('sThumb')
+    input_parameter_handler = InputParameterHandler()
+    sUrl = input_parameter_handler.getValue('siteUrl')
+    sMovieTitle = input_parameter_handler.getValue('sMovieTitle')
+    sThumb = input_parameter_handler.getValue('sThumb')
 
-    oRequestHandler = cRequestHandler(sUrl)
+    oRequestHandler = RequestHandler(sUrl)
     sHtmlContent = oRequestHandler.request()
     sPattern = '<iframe width="100%" height="400" src="([^"]+)"'
-    oParser = cParser()
+    oParser = Parser()
     aResult = oParser.parse(sHtmlContent, sPattern)
 
     if aResult[0]:
@@ -117,10 +133,11 @@ def showHosters():
             link = link.replace('?rel=0', '')
             sHosterUrl = 'https://www.youtube.com/watch?v=' + link
 
-            oHoster = cHosterGui().checkHoster(sHosterUrl)
+            oHoster = HosterGui().checkHoster(sHosterUrl)
             if oHoster:
                 oHoster.setDisplayName(sMovieTitle)
                 oHoster.setFileName(sMovieTitle)
-                cHosterGui().showHoster(oGui, oHoster, sHosterUrl, sThumb, oInputParameterHandler=oInputParameterHandler)
+                HosterGui().showHoster(gui, oHoster, sHosterUrl, sThumb,
+                                       input_parameter_handler=input_parameter_handler)
 
-    oGui.setEndOfDirectory()
+    gui.setEndOfDirectory()

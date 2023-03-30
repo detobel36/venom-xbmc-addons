@@ -205,7 +205,12 @@ def run(args):
     if args.debug:
         print("User-agent string: {}".format(user_agent))
 
-    uvtoken = get_token(args.api_key, args.site_url, user_agent, gui=args.gui, debug=args.debug)
+    uvtoken = get_token(
+        args.api_key,
+        args.site_url,
+        user_agent,
+        gui=args.gui,
+        debug=args.debug)
     print(GOT_TOKEN_MSG)
     if random_ua:
         print("Note: The following user-agent string was used:")

@@ -4,7 +4,7 @@ import xbmcaddon
 import time
 
 from resources.lib.comaddon import VSlog, dialog, VSPath, xbmc
-from resources.lib.handler.requestHandler import cRequestHandler
+from resources.lib.handler.requestHandler import RequestHandler
 from resources.lib.config import GestionCookie
 
 UA = 'Mozilla/5.0 (Windows NT 6.1; Win64; x64; rv:56.0) Gecko/20100101 Firefox/56.0'
@@ -25,7 +25,8 @@ class Stormwall(object):
         self.url = ''
 
     def parseInt(self, sin):
-        return int(''.join([c for c in re.split(r'[,.]', str(sin))[0] if c.isdigit()])) if re.match(r'\d+', str(sin), re.M) and not callable(sin) else None
+        return int(''.join([c for c in re.split(r'[,.]', str(sin))[0] if c.isdigit(
+        )])) if re.match(r'\d+', str(sin), re.M) and not callable(sin) else None
 
     def func3(self, _0x32d742, _0x69aeb7):
         _0x5db4b0 = len(self.a) - 1
@@ -72,10 +73,18 @@ class Stormwall(object):
         else:
             parseName = "var"
 
-        self.cE = re.search(parseName + ' cE = "([^"]+)"', str(content)).group(1)
-        self.cK = re.search(parseName + ' cK = ([0-9]+)', str(content)).group(1)
-        self.cN = re.search(parseName + ' cN = "([^"]+)"', str(content)).group(1)
-        self.cO = re.search(parseName + ' cO = "([^"]+)"', str(content)).group(1)
+        self.cE = re.search(
+            parseName + ' cE = "([^"]+)"',
+            str(content)).group(1)
+        self.cK = re.search(
+            parseName + ' cK = ([0-9]+)',
+            str(content)).group(1)
+        self.cN = re.search(
+            parseName + ' cN = "([^"]+)"',
+            str(content)).group(1)
+        self.cO = re.search(
+            parseName + ' cO = "([^"]+)"',
+            str(content)).group(1)
 
         self.a = []
         self.b = {}
@@ -86,12 +95,12 @@ class Stormwall(object):
 
         _0x3b45bc = self.func5(self.cK, self.cE)
 
-        VSlog('cookie : '+ self.cN + "=" + _0x3b45bc)
+        VSlog('cookie : ' + self.cN + "=" + _0x3b45bc)
         return self.cN + "=" + _0x3b45bc
 
     def GetHtml(self, url, data=None):
-        self.hostComplet = re.sub('(https*:\/\/[^/]+)(\/*.*)', '\\1', url)
-        self.host = re.sub('https*:\/\/', '', self.hostComplet)
+        self.hostComplet = re.sub('(https*:\\/\\/[^/]+)(\\/*.*)', '\\1', url)
+        self.host = re.sub('https*:\\/\\/', '', self.hostComplet)
         self.url = url
 
         # on cherche des precedents cookies
@@ -107,7 +116,7 @@ class Stormwall(object):
         # on cherche le nouveau cookie
         try:
             cookies = self.DecryptCookie(htmlcontent)
-        except:
+        except BaseException:
             VSlog('Erreur decodage Stormwall')
             return ''
 
@@ -119,14 +128,15 @@ class Stormwall(object):
         return htmlcontent
 
     def htmlrequest(self, url, cookies, data):
-        oRequestHandler = cRequestHandler(url)
+        oRequestHandler = RequestHandler(url)
         oRequestHandler.disableSSL()
         oRequestHandler.addHeaderEntry('User-Agent', UA)
         oRequestHandler.addHeaderEntry('Accept-Encoding', 'gzip, deflate')
         try:
             if cookies:
-                oRequestHandler.addCookieEntry(cookies.split('=')[0], cookies.split('=')[1])
-        except:
+                oRequestHandler.addCookieEntry(
+                    cookies.split('=')[0], cookies.split('=')[1])
+        except BaseException:
             pass
         oRequestHandler.addHeaderEntry('Referer', url)
         sHtmlContent = oRequestHandler.request()

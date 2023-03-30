@@ -1,6 +1,7 @@
 from resources.hosters.hoster import iHoster
 from resources.lib.handler.hosterHandler import cHosterHandler
 
+
 class cHoster(iHoster):
 
     def __init__(self):
@@ -9,7 +10,7 @@ class cHoster(iHoster):
     def getPattern(self):
         return 'mms://(.*?)"'
 
-    def _getMediaLinkForGuest(self, autoPlay = False):
+    def _getMediaLinkForGuest(self, autoPlay=False):
         oHosterHandler = cHosterHandler()
         aResult = oHosterHandler.getUrl(self)
         if aResult[0] is True:

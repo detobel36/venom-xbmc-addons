@@ -1,48 +1,49 @@
 from resources.lib.jsunpacker import cJsUnpacker
-from resources.lib.parser import cParser
-from resources.lib.handler.requestHandler import cRequestHandler
+from resources.lib.parser import Parser
+from resources.lib.handler.requestHandler import RequestHandler
 from resources.lib.util import cUtil
 from resources.hosters.hoster import iHoster
+
 
 class cHoster(iHoster):
 
     def __init__(self):
         iHoster.__init__(self, 'filebase', 'FileBase.to')
 
-    def _getMediaLinkForGuest(self, autoPlay = False):
-        oRequest = cRequestHandler(self._url)
+    def _getMediaLinkForGuest(self, autoPlay=False):
+        oRequest = RequestHandler(self._url)
         sHtmlContent = oRequest.request()
 
         sPattern = '<form action="#" method="post">.*?id="uid" value="([^"]+)" />'
-        oParser = cParser()
+        oParser = Parser()
         aResult = oParser.parse(sHtmlContent, sPattern)
 
         if aResult[0] is True:
             sUid = aResult[1][0]
 
-            oRequest = cRequestHandler(self._url)
-            oRequest.setRequestType(cRequestHandler.REQUEST_TYPE_POST)
-            oRequest.addParameters('dl_free12','DivX Stream')
+            oRequest = RequestHandler(self._url)
+            oRequest.setRequestType(RequestHandler.REQUEST_TYPE_POST)
+            oRequest.addParameters('dl_free12', 'DivX Stream')
             oRequest.addParameters('uid', sUid)
             sHtmlContent = oRequest.request()
 
             sPattern = '<input type="hidden" id="uid" name="uid" value="([^"]+)" />'
-            oParser = cParser()
+            oParser = Parser()
             aResult = oParser.parse(sHtmlContent, sPattern)
 
             if aResult[0] is True:
                 sUid = aResult[1][0]
 
-                oRequest = cRequestHandler(self._url)
-                oRequest.setRequestType(cRequestHandler.REQUEST_TYPE_POST)
-                oRequest.addParameters('captcha','ok')
-                oRequest.addParameters('filetype','divx')
-                oRequest.addParameters('submit','Download')
+                oRequest = RequestHandler(self._url)
+                oRequest.setRequestType(RequestHandler.REQUEST_TYPE_POST)
+                oRequest.addParameters('captcha', 'ok')
+                oRequest.addParameters('filetype', 'divx')
+                oRequest.addParameters('submit', 'Download')
                 oRequest.addParameters('uid', sUid)
                 sHtmlContent = oRequest.request()
 
                 sPattern = '<param value="([^"]+)" name="src" />'
-                oParser = cParser()
+                oParser = Parser()
                 aResult = oParser.parse(sHtmlContent, sPattern)
 
                 if aResult[0] is True:
@@ -50,4 +51,3 @@ class cHoster(iHoster):
                     return True, sMediaFile
 
         return False, aResult
-

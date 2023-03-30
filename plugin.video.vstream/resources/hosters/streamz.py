@@ -3,8 +3,8 @@
 # https://streamz.cc/xxx
 import re
 
-from resources.lib.handler.requestHandler import cRequestHandler
-from resources.lib.parser import cParser
+from resources.lib.handler.requestHandler import RequestHandler
+from resources.lib.parser import Parser
 from resources.hosters.hoster import iHoster
 from resources.lib.packer import cPacker
 from resources.lib.comaddon import VSlog
@@ -13,7 +13,7 @@ UA = 'Mozilla/5.0 (Windows NT 6.1; Win64; x64; rv:68.0) Gecko/20100101 Firefox/6
 
 
 def getheader(url, c):
-    oRequestHandler = cRequestHandler(url)
+    oRequestHandler = RequestHandler(url)
     oRequestHandler.disableRedirect()
     oRequestHandler.addHeaderEntry('User-Agent', UA)
     oRequestHandler.addHeaderEntry('Cookie', c)
@@ -25,12 +25,12 @@ class cHoster(iHoster):
     def __init__(self):
         iHoster.__init__(self, 'streamz', 'Streamz')
 
-    def _getMediaLinkForGuest(self, autoPlay = False):
+    def _getMediaLinkForGuest(self, autoPlay=False):
         api_call = False
 
-        oParser = cParser()
+        oParser = Parser()
 
-        oRequest = cRequestHandler(self._url)
+        oRequest = RequestHandler(self._url)
         oRequest.addHeaderEntry('User-Agent', UA)
         sHtmlContent = oRequest.request()
 
@@ -42,29 +42,30 @@ class cHoster(iHoster):
         # By-pass fake video
         # Get url
         urlJS = host + '/js/count.js'
-        oRequest = cRequestHandler(urlJS)
+        oRequest = RequestHandler(urlJS)
         oRequest.addHeaderEntry('User-Agent', UA)
         JScode = oRequest.request()
 
         JScode = JScode.replace(' ', '')
 
-        r = "if\(\$\.adblock!=null\){\$\.get\('([^']+)',{([^}]+)}"
+        r = "if\\(\\$\\.adblock!=null\\){\\$\\.get\\('([^']+)',{([^}]+)}"
         aResult = oParser.parse(JScode, r)
 
         if not aResult[0]:
             return False, False
 
         data = aResult[1][0][1].split(':')
-        Fakeurl = aResult[1][0][0] + '?' + data[0] + '=' + data[1].replace("'", "")
+        Fakeurl = aResult[1][0][0] + '?' + \
+            data[0] + '=' + data[1].replace("'", "")
 
         # Request URL
-        oRequest = cRequestHandler(Fakeurl)
+        oRequest = RequestHandler(Fakeurl)
         oRequest.addHeaderEntry('User-Agent', UA)
         try:
             tmp = oRequest.request()
-        except:
+        except BaseException:
             pass
-        sPattern = '(\s*eval\s*\(\s*function(?:.|\s)+?)<\/script>'
+        sPattern = '(\\s*eval\\s*\\(\\s*function(?:.|\\s)+?)<\\/script>'
         aResult = oParser.parse(sHtmlContent, sPattern)
         if aResult[0]:
             for i in aResult[1]:

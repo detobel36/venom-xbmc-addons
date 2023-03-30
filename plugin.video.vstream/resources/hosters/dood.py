@@ -12,7 +12,7 @@ try:  # Python 2
 except ImportError:  # Python 3
     import urllib.request as urllib
 
-from resources.lib.parser import cParser
+from resources.lib.parser import Parser
 from resources.hosters.hoster import iHoster
 
 UA = 'Mozilla/5.0 (Windows NT 6.1; Win64; x64; rv:68.0) Gecko/20100101 Firefox/68.0'
@@ -34,9 +34,10 @@ class cHoster(iHoster):
         iHoster.__init__(self, 'dood', 'Dood')
 
     def setUrl(self, url):
-        self._url = str(url).replace('/d/', '/e/').replace('doodstream.com', 'dood.la')
+        self._url = str(url).replace(
+            '/d/', '/e/').replace('doodstream.com', 'dood.la')
 
-    def _getMediaLinkForGuest(self, autoPlay = False):
+    def _getMediaLinkForGuest(self, autoPlay=False):
         api_call = False
 
         headers = {'User-Agent': UA}
@@ -48,15 +49,15 @@ class cHoster(iHoster):
 
         try:
             sHtmlContent = sHtmlContent.decode('utf8')
-        except:
+        except BaseException:
             pass
 
-        oParser = cParser()
+        oParser = Parser()
 
         possible = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789"
         fin_url = ''.join(random.choice(possible) for _ in range(10))
 
-        sPattern = 'return a\+"(\?token=[^"]+)"'
+        sPattern = 'return a\\+"(\\?token=[^"]+)"'
         aResult = oParser.parse(sHtmlContent, sPattern)
 
         if not aResult[0]:
@@ -64,9 +65,9 @@ class cHoster(iHoster):
 
         d = aResult[1][0]
 
-        fin_url = fin_url + d + str(int(1000*time.time()))
+        fin_url = fin_url + d + str(int(1000 * time.time()))
 
-        sPattern = "\$\.get\('(\/pass_md5[^']+)"
+        sPattern = "\\$\\.get\\('(\\/pass_md5[^']+)"
         aResult = oParser.parse(sHtmlContent, sPattern)
         url2 = 'https://' + urlDownload.split('/')[2] + aResult[1][0]
 
@@ -78,7 +79,7 @@ class cHoster(iHoster):
 
         try:
             sHtmlContent = sHtmlContent.decode('utf8')
-        except:
+        except BaseException:
             pass
 
         api_call = sHtmlContent + fin_url

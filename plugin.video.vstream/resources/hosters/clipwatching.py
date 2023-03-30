@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 # vStream https://github.com/Kodi-vStream/venom-xbmc-addons
-from resources.lib.handler.requestHandler import cRequestHandler
-from resources.lib.parser import cParser
+from resources.lib.handler.requestHandler import RequestHandler
+from resources.lib.parser import Parser
 from resources.hosters.hoster import iHoster
 from resources.lib.comaddon import dialog
 
@@ -14,15 +14,18 @@ class cHoster(iHoster):
     def isDownloadable(self):
         return False
 
-    def _getMediaLinkForGuest(self, autoPlay = False, api_call=None):
-        oParser = cParser()
-        oRequest = cRequestHandler(self._url)
+    def _getMediaLinkForGuest(self, autoPlay=False, api_call=None):
+        oParser = Parser()
+        oRequest = RequestHandler(self._url)
         sHtmlContent = oRequest.request()
 
         # accelère le traitement
-        sHtmlContent = oParser.abParse(sHtmlContent, 'var holaplayer', 'vvplay')
+        sHtmlContent = oParser.abParse(
+            sHtmlContent, 'var holaplayer', 'vvplay')
         # Traitement pour les liens m3u8
-        sHtmlContent = sHtmlContent.replace(',', '').replace('master.m3u8', 'index-v1-a1.m3u8')
+        sHtmlContent = sHtmlContent.replace(
+            ',', '').replace(
+            'master.m3u8', 'index-v1-a1.m3u8')
         sPattern = '"(http[^"]+(?:.m3u8|.mp4))"'
         aResult = oParser.parse(sHtmlContent, sPattern)
 

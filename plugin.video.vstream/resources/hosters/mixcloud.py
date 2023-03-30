@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 # vStream https://github.com/Kodi-vStream/venom-xbmc-addons
-from resources.lib.handler.requestHandler import cRequestHandler
-from resources.lib.parser import cParser
+from resources.lib.handler.requestHandler import RequestHandler
+from resources.lib.parser import Parser
 from resources.hosters.hoster import iHoster
 
 
@@ -10,17 +10,18 @@ class cHoster(iHoster):
     def __init__(self):
         iHoster.__init__(self, 'mixcloud', 'Mixcloud')
 
-    def _getMediaLinkForGuest(self, autoPlay = False):
+    def _getMediaLinkForGuest(self, autoPlay=False):
         api_call = False
 
-        oRequest = cRequestHandler(self._url)
+        oRequest = RequestHandler(self._url)
         sHtmlContent = oRequest.request()
 
-        oParser = cParser()
+        oParser = Parser()
         sPattern = 'https://audiocdn.+?mixcloud.com/previews/(.+?).mp3'
         aResult = oParser.parse(sHtmlContent, sPattern)
         if aResult[0] is True:
-            api_call = 'https://audio4.mixcloud.com/secure/hls/' + aResult[1][0] + '.m4a/index.m3u8'
+            api_call = 'https://audio4.mixcloud.com/secure/hls/' + \
+                aResult[1][0] + '.m4a/index.m3u8'
 
         if api_call:
             return True, api_call

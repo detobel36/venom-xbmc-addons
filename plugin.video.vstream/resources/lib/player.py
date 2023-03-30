@@ -1,12 +1,12 @@
-#-*- coding: utf-8 -*-
+# -*- coding: utf-8 -*-
 # https://github.com/Kodi-vStream/venom-xbmc-addons
 #
-from resources.lib.handler.inputParameterHandler import cInputParameterHandler
-from resources.lib.handler.pluginHandler import cPluginHandler
-from resources.lib.gui.gui import cGui
+from resources.lib.handler.inputParameterHandler import InputParameterHandler
+from resources.lib.handler.pluginHandler import PluginHandler
+from resources.lib.gui.gui import Gui
 from resources.lib.upnext import UpNext
 from resources.lib.comaddon import addon, dialog, xbmc, isKrypton, VSlog, addonManager, isMatrix
-from resources.lib.db import cDb
+from resources.lib.db import Db
 from resources.lib.util import cUtil, Unquote
 import xbmcplugin
 
@@ -17,17 +17,17 @@ except ImportError:  # Python 3
 
 from os.path import splitext
 
-#pour les sous titres
-#https://github.com/amet/service.subtitles.demo/blob/master/service.subtitles.demo/service.py
-#player API
-#http://mirrors.xbmc.org/docs/python-docs/stable/xbmc.html#Player
+# pour les sous titres
+# https://github.com/amet/service.subtitles.demo/blob/master/service.subtitles.demo/service.py
+# player API
+# http://mirrors.xbmc.org/docs/python-docs/stable/xbmc.html#Player
 
 
-class cPlayer(xbmc.Player):
+class Player(xbmc.Player):
 
     ADDON = addon()
 
-    def __init__(self, oInputParameterHandler = False, *args):
+    def __init__(self, input_parameter_handler=False, *args):
 
         sPlayerType = self.__getPlayerType()
         xbmc.Player.__init__(self, sPlayerType)
@@ -35,24 +35,26 @@ class cPlayer(xbmc.Player):
         self.Subtitles_file = []
         self.SubtitleActive = False
 
-        if not oInputParameterHandler:
-            oInputParameterHandler = cInputParameterHandler()
-        self.sHosterIdentifier = oInputParameterHandler.getValue('sHosterIdentifier')
-        self.sTitle = oInputParameterHandler.getValue('sFileName')
-        if self.sTitle:
-            self.sTitle = Unquote(self.sTitle)
-        self.sCat = oInputParameterHandler.getValue('sCat')
-        self.sSaison = oInputParameterHandler.getValue('sSeason')
-        self.sEpisode = oInputParameterHandler.getValue('sEpisode')
-        
-        self.sSite = oInputParameterHandler.getValue('siteUrl')
-        self.sSource = oInputParameterHandler.getValue('sourceName')
-        self.sFav = oInputParameterHandler.getValue('sourceFav')
-        self.saisonUrl = oInputParameterHandler.getValue('saisonUrl')
-        self.nextSaisonFunc = oInputParameterHandler.getValue('nextSaisonFunc')
-        self.movieUrl = oInputParameterHandler.getValue('movieUrl')
-        self.movieFunc = oInputParameterHandler.getValue('movieFunc')
-        self.sTmdbId = oInputParameterHandler.getValue('sTmdbId')
+        if not input_parameter_handler:
+            input_parameter_handler = InputParameterHandler()
+        self.sHosterIdentifier = input_parameter_handler.getValue(
+            'sHosterIdentifier')
+        self.title = input_parameter_handler.getValue('sFileName')
+        if self.title:
+            self.title = Unquote(self.title)
+        self.sCat = input_parameter_handler.getValue('sCat')
+        self.sSaison = input_parameter_handler.getValue('sSeason')
+        self.sEpisode = input_parameter_handler.getValue('sEpisode')
+
+        self.sSite = input_parameter_handler.getValue('siteUrl')
+        self.sSource = input_parameter_handler.getValue('sourceName')
+        self.sFav = input_parameter_handler.getValue('sourceFav')
+        self.saisonUrl = input_parameter_handler.getValue('saisonUrl')
+        self.nextSaisonFunc = input_parameter_handler.getValue(
+            'nextSaisonFunc')
+        self.movieUrl = input_parameter_handler.getValue('movieUrl')
+        self.movieFunc = input_parameter_handler.getValue('movieFunc')
+        self.sTmdbId = input_parameter_handler.getValue('sTmdbId')
 
         self.playBackEventReceived = False
         self.playBackStoppedEventReceived = False
@@ -69,16 +71,16 @@ class cPlayer(xbmc.Player):
         return xbmc.PlayList(xbmc.PLAYLIST_VIDEO)
 
     def addItemToPlaylist(self, oGuiElement):
-        oGui = cGui()
-        oListItem =  oGui.createListItem(oGuiElement)
+        gui = Gui()
+        oListItem = gui.createListItem(oGuiElement)
         self.__addItemToPlaylist(oGuiElement, oListItem)
 
     def __addItemToPlaylist(self, oGuiElement, oListItem):
         oPlaylist = self.__getPlayList()
-        oPlaylist.add(oGuiElement.getMediaUrl(), oListItem )
+        oPlaylist.add(oGuiElement.getMediaUrl(), oListItem)
 
     def AddSubtitles(self, files):
-        if type(files) is list or type(files) is tuple:
+        if isinstance(files, list) or isinstance(files, tuple):
             self.Subtitles_file = files
         else:
             self.Subtitles_file.append(files)
@@ -99,59 +101,62 @@ class cPlayer(xbmc.Player):
         self.totalTime = 0
         self.currentTime = 0
 
-        sPluginHandle = cPluginHandler().getPluginHandle()
+        sPluginHandle = PluginHandler().getPluginHandle()
 
-        oGui = cGui()
-        item = oGui._createListItem(oGuiElement)
+        gui = Gui()
+        item = gui._createListItem(oGuiElement)
         item.setPath(oGuiElement.getMediaUrl())
 
-        #Sous titres
+        # Sous titres
         if (self.Subtitles_file):
             try:
                 item.setSubtitles(self.Subtitles_file)
                 VSlog('Load SubTitle :' + str(self.Subtitles_file))
                 self.SubtitleActive = True
-            except:
+            except BaseException:
                 VSlog("Can't load subtitle:" + str(self.Subtitles_file))
 
         player_conf = self.ADDON.getSetting('playerPlay')
-        #Si lien dash, methode prioritaire
-        if splitext(urlparse(sUrl).path)[-1] in [".mpd",".m3u8"]:
-            if isKrypton() == True:
+        # Si lien dash, methode prioritaire
+        if splitext(urlparse(sUrl).path)[-1] in [".mpd", ".m3u8"]:
+            if isKrypton():
                 addonManager().enableAddon('inputstream.adaptive')
-                item.setProperty('inputstream','inputstream.adaptive')
+                item.setProperty('inputstream', 'inputstream.adaptive')
                 if '.m3u8' in sUrl:
-                    item.setProperty('inputstream.adaptive.manifest_type', 'hls') 
+                    item.setProperty(
+                        'inputstream.adaptive.manifest_type', 'hls')
                 else:
-                    item.setProperty('inputstream.adaptive.manifest_type', 'mpd')
+                    item.setProperty(
+                        'inputstream.adaptive.manifest_type', 'mpd')
                 xbmcplugin.setResolvedUrl(sPluginHandle, True, listitem=item)
                 VSlog('Player use inputstream addon')
             else:
                 dialog().VSerror('Nécessite kodi 17 minimum')
                 return
 
-        #1 er mode de lecture
+        # 1 er mode de lecture
         elif (player_conf == '0'):
             self.play(sUrl, item)
             VSlog('Player use Play() method')
 
-        #2 eme mode non utilise
+        # 2 eme mode non utilise
         elif (player_conf == 'neverused'):
             xbmc.executebuiltin('PlayMedia(' + sUrl + ')')
             VSlog('Player use PlayMedia() method')
 
-        #3 eme mode (defaut)
+        # 3 eme mode (defaut)
         else:
             xbmcplugin.setResolvedUrl(sPluginHandle, True, item)
             VSlog('Player use setResolvedUrl() method')
 
-        #Attend que le lecteur demarre, avec un max de 20s
+        # Attend que le lecteur demarre, avec un max de 20s
         for _ in range(20):
             if self.playBackEventReceived:
                 break
             xbmc.sleep(1000)
 
-        #active/desactive les sous titres suivant l'option choisie dans la config
+        # active/desactive les sous titres suivant l'option choisie dans la
+        # config
         if self.getAvailableSubtitleStreams():
             if (self.ADDON.getSetting('srt-view') == 'true'):
                 self.showSubtitles(True)
@@ -166,7 +171,7 @@ class cPlayer(xbmc.Player):
                 self.currentTime = self.getTime()
 
                 waitingNext += 1
-                if waitingNext == 8: # attendre un peu avant de chercher le prochain épisode d'une série
+                if waitingNext == 8:  # attendre un peu avant de chercher le prochain épisode d'une série
                     self.totalTime = self.getTotalTime()
                     self.infotag = self.getVideoInfoTag()
                     UpNext().nextEpisode(oGuiElement)
@@ -179,15 +184,17 @@ class cPlayer(xbmc.Player):
         if not self.playBackStoppedEventReceived:
             self.onPlayBackStopped()
 
-        #Uniquement avec la lecture avec play()
+        # Uniquement avec la lecture avec play()
         if (player_conf == '0'):
-            r = xbmcplugin.addDirectoryItem(handle=sPluginHandle, url=sUrl, listitem=item, isFolder=False)
+            r = xbmcplugin.addDirectoryItem(
+                handle=sPluginHandle, url=sUrl, listitem=item, isFolder=False)
             return r
 
         VSlog('Closing player')
         return True
 
-    #fonction light servant par exemple pour visualiser les DL ou les chaines de TV
+    # fonction light servant par exemple pour visualiser les DL ou les chaines
+    # de TV
     def startPlayer(self, window=False):
         oPlayList = self.__getPlayList()
         self.play(oPlayList, windowed=window)
@@ -195,10 +202,11 @@ class cPlayer(xbmc.Player):
     def onPlayBackEnded(self):
         self.onPlayBackStopped()
 
-    #Attention pas de stop, si on lance une seconde video sans fermer la premiere
+    # Attention pas de stop, si on lance une seconde video sans fermer la
+    # premiere
     def onPlayBackStopped(self):
         VSlog('player stopped')
-        
+
         # reçu deux fois, on n'en prend pas compte
         if self.playBackStoppedEventReceived:
             return
@@ -206,30 +214,33 @@ class cPlayer(xbmc.Player):
 
         self._setWatched(self.sEpisode)
 
-
     # MARQUER VU
     # utilise les informations de la vidéo qui vient d'etre lue
     # qui n'est pas celle qui a été lancée si plusieurs vidéos se sont enchainées
     # sEpisode = l'épisode précédent en cas d'enchainement d'épisode
-    def _setWatched(self, sEpisode = ''):
+
+    def _setWatched(self, sEpisode=''):
 
         try:
-            with cDb() as db:
+            with Db() as db:
                 if self.isPlaying():
                     self.totalTime = self.getTotalTime()
                     self.currentTime = self.getTime()
                     self.infotag = self.getVideoInfoTag()
-                
+
                 if self.totalTime > 0:
-                    pourcent = float('%.2f' % (self.currentTime / self.totalTime))
-        
+                    pourcent = float('%.2f' %
+                                     (self.currentTime / self.totalTime))
+
                     saisonViewing = False
-                    
-                    #calcul le temp de lecture
+
+                    # calcul le temp de lecture
                     # Dans le cas ou ont a vu intégralement le contenu, percent = 0.0
-                    # Mais on a tout de meme terminé donc le temps actuel est egal au temps total.
-                    if (pourcent > 0.90) or (pourcent == 0.0 and self.currentTime == self.totalTime):
-        
+                    # Mais on a tout de meme terminé donc le temps actuel est
+                    # egal au temps total.
+                    if (pourcent > 0.90) or (pourcent ==
+                                             0.0 and self.currentTime == self.totalTime):
+
                         # Marquer VU dans la BDD Vstream
                         sTitleWatched = self.infotag.getOriginalTitle()
                         if sTitleWatched:
@@ -237,18 +248,19 @@ class cPlayer(xbmc.Player):
                             meta['title'] = sTitleWatched
                             meta['cat'] = self.sCat
                             db.insert_watched(meta)
-        
+
                             # RAZ du point de reprise
                             db.del_resume(meta)
-                            
-                            # Sortie des LECTURE EN COURS pour les films, pour les séries la suppression est manuelle
+
+                            # Sortie des LECTURE EN COURS pour les films, pour
+                            # les séries la suppression est manuelle
                             if self.sCat == '1':
                                 meta['titleWatched'] = sTitleWatched
                                 meta['cat'] = self.sCat
                                 db.del_viewing(meta)
-                            elif self.sCat == '8':      # A la fin de la lecture d'un episode, on met la saison en "Lecture en cours" 
+                            elif self.sCat == '8':      # A la fin de la lecture d'un episode, on met la saison en "Lecture en cours"
                                 saisonViewing = True
-                        
+
                         # Marquer VU dans les comptes perso
                         self.__setWatchlist(sEpisode)
 
@@ -262,23 +274,23 @@ class cPlayer(xbmc.Player):
                             meta['point'] = self.currentTime
                             meta['total'] = self.totalTime
                             matchedrow = db.insert_resume(meta)
-                            
+
                             # Lecture en cours
                             meta['cat'] = self.sCat
                             meta['site'] = self.sSource
                             meta['sTmdbId'] = self.sTmdbId
-                            
-                            # Lecture d'un épisode, on sauvegarde la saison 
+
+                            # Lecture d'un épisode, on sauvegarde la saison
                             if self.sCat == '8':
                                 saisonViewing = True
                             else:   # Lecture d'un film
-                                
+
                                 # les 'divers' de moins de 45 minutes peuvent être de type 'adultes'
                                 # pas de sauvegarde en attendant mieux
                                 if self.sCat == '5' and self.totalTime < 2700:
                                     pass
                                 else:
-                                    meta['title'] = self.sTitle
+                                    meta['title'] = self.title
                                     meta['titleWatched'] = sTitleWatched
                                     if self.movieUrl and self.movieFunc:
                                         meta['siteurl'] = self.movieUrl
@@ -286,18 +298,21 @@ class cPlayer(xbmc.Player):
                                     else:
                                         meta['siteurl'] = self.sSite
                                         meta['fav'] = self.sFav
-                                
+
                                     db.insert_viewing(meta)
-                        
-                    # Lecture d'un épisode, on met la saison "En cours de lecture"
+
+                    # Lecture d'un épisode, on met la saison "En cours de
+                    # lecture"
                     if saisonViewing:
                         meta['cat'] = '4'  # saison
                         meta['sTmdbId'] = self.sTmdbId
                         tvShowTitle = cUtil().titleWatched(self.tvShowTitle).replace(' ', '')
                         if self.sSaison:
                             meta['season'] = self.sSaison
-                            meta['title'] = self.tvShowTitle + " S" + self.sSaison
-                            meta['titleWatched'] = tvShowTitle + "_S" + self.sSaison
+                            meta['title'] = self.tvShowTitle + \
+                                " S" + self.sSaison
+                            meta['titleWatched'] = tvShowTitle + \
+                                "_S" + self.sSaison
                         else:
                             meta['title'] = self.tvShowTitle
                             meta['titleWatched'] = tvShowTitle
@@ -309,20 +324,22 @@ class cPlayer(xbmc.Player):
         except Exception as err:
             VSlog("ERROR Player_setWatched : {0}".format(err))
 
-    #def onPlayBackStarted(self):
+    # def onPlayBackStarted(self):
     def onAVStarted(self):
         VSlog('player started')
 
-        #Si on recoit une nouvelle fois l'event, c'est que ca buggue, on stope tout
+        # Si on recoit une nouvelle fois l'event, c'est que ca buggue, on stope
+        # tout
         if self.playBackEventReceived:
             self.forcestop = True
             return
 
         self.playBackEventReceived = True
 
-        with cDb() as db:
+        with Db() as db:
             # Reprendre la lecture
-            if self.isPlayingVideo() and self.getTime() < 180:  # si supérieur à 3 minutes, la gestion de la reprise est assuré par KODI
+            if self.isPlayingVideo() and self.getTime(
+            ) < 180:  # si supérieur à 3 minutes, la gestion de la reprise est assuré par KODI
                 self.infotag = self.getVideoInfoTag()
                 sTitleWatched = self.infotag.getOriginalTitle()
                 if sTitleWatched:
@@ -330,11 +347,12 @@ class cPlayer(xbmc.Player):
                     meta['title'] = sTitleWatched
                     resumePoint, total = db.get_resume(meta)
                     if resumePoint:
-                        h = resumePoint//3600
-                        ms = resumePoint-h*3600
-                        m = ms//60
-                        s = ms-m*60
-                        ret = dialog().VSselect(['Reprendre depuis %02d:%02d:%02d' %(h, m, s), 'Lire depuis le début'], 'Reprendre la lecture')
+                        h = resumePoint // 3600
+                        ms = resumePoint - h * 3600
+                        m = ms // 60
+                        s = ms - m * 60
+                        ret = dialog().VSselect(['Reprendre depuis %02d:%02d:%02d' % (
+                            h, m, s), 'Lire depuis le début'], 'Reprendre la lecture')
                         if ret == 0:
                             self.seekTime(resumePoint)
                         elif ret == 1:
@@ -342,14 +360,15 @@ class cPlayer(xbmc.Player):
                             # RAZ du point de reprise
                             db.del_resume(meta)
 
-
     def __setWatchlist(self, sEpisode=''):
         # Suivi de lecture dans Trakt si compte
         if self.ADDON.getSetting('bstoken') == '':
             return
-        plugins = __import__('resources.lib.trakt', fromlist=['trakt']).cTrakt()
+        plugins = __import__(
+            'resources.lib.trakt',
+            fromlist=['trakt']).cTrakt()
         function = getattr(plugins, 'getAction')
-        function(Action = "SetWatched", sEpisode = sEpisode)
+        function(Action="SetWatched", sEpisode=sEpisode)
 
     def __getPlayerType(self):
         sPlayerType = self.ADDON.getSetting('playerType')
@@ -366,5 +385,5 @@ class cPlayer(xbmc.Player):
             if (sPlayerType == '2'):
                 VSlog('playertype from config: dvdplayer')
                 return xbmc.PLAYER_CORE_DVDPLAYER
-        except:
+        except BaseException:
             return False

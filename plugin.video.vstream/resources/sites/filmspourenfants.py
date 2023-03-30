@@ -1,18 +1,18 @@
 # -*- coding: utf-8 -*-
 # vStream https://github.com/Kodi-vStream/venom-xbmc-addons
-from resources.lib.gui.hoster import cHosterGui
-from resources.lib.gui.gui import cGui
-from resources.lib.handler.inputParameterHandler import cInputParameterHandler
-from resources.lib.handler.outputParameterHandler import cOutputParameterHandler
-from resources.lib.handler.requestHandler import cRequestHandler
-from resources.lib.parser import cParser
-from resources.lib.comaddon import progress, siteManager
+from resources.lib.gui.hoster import HosterGui
+from resources.lib.gui.gui import Gui
+from resources.lib.handler.inputParameterHandler import InputParameterHandler
+from resources.lib.handler.outputParameterHandler import OutputParameterHandler
+from resources.lib.handler.requestHandler import RequestHandler
+from resources.lib.parser import Parser
+from resources.lib.comaddon import Progress, SiteManager
 
 SITE_IDENTIFIER = 'filmspourenfants'
 SITE_NAME = 'Films pour Enfants'
 SITE_DESC = 'Des films poétiques pour sensibiliser les enfants aux pratiques artistiques. Des films éducatifs pour accompagner les programmes scolaires'
 
-URL_MAIN = siteManager().getUrlMain(SITE_IDENTIFIER)
+URL_MAIN = SiteManager().getUrlMain(SITE_IDENTIFIER)
 
 ANIM_ENFANTS = (True, 'load')
 
@@ -26,105 +26,151 @@ ALL_ALL = (URL_MAIN + 'tous-les-films-pour-enfants.html', 'showMovies')
 
 
 def load():
-    oGui = cGui()
+    gui = Gui()
 
-    oOutputParameterHandler = cOutputParameterHandler()
-    oOutputParameterHandler.addParameter('siteUrl', AGE_3ANS[0])
-    oGui.addDir(SITE_IDENTIFIER, AGE_3ANS[1], 'A partir de 3 ans', 'enfants.png', oOutputParameterHandler)
+    output_parameter_handler = OutputParameterHandler()
+    output_parameter_handler.addParameter('siteUrl', AGE_3ANS[0])
+    gui.addDir(
+        SITE_IDENTIFIER,
+        AGE_3ANS[1],
+        'A partir de 3 ans',
+        'enfants.png',
+        output_parameter_handler)
 
-    oOutputParameterHandler.addParameter('siteUrl', AGE_5ANS[0])
-    oGui.addDir(SITE_IDENTIFIER, AGE_5ANS[1], 'A partir de  5 ans', 'enfants.png', oOutputParameterHandler)
+    output_parameter_handler.addParameter('siteUrl', AGE_5ANS[0])
+    gui.addDir(
+        SITE_IDENTIFIER,
+        AGE_5ANS[1],
+        'A partir de  5 ans',
+        'enfants.png',
+        output_parameter_handler)
 
-    oOutputParameterHandler.addParameter('siteUrl', AGE_7ANS[0])
-    oGui.addDir(SITE_IDENTIFIER, AGE_7ANS[1], 'A partir de 7 ans', 'enfants.png', oOutputParameterHandler)
+    output_parameter_handler.addParameter('siteUrl', AGE_7ANS[0])
+    gui.addDir(
+        SITE_IDENTIFIER,
+        AGE_7ANS[1],
+        'A partir de 7 ans',
+        'enfants.png',
+        output_parameter_handler)
 
-    oOutputParameterHandler.addParameter('siteUrl', AGE_9ANS[0])
-    oGui.addDir(SITE_IDENTIFIER, AGE_9ANS[1], 'A partir de 9 ans', 'enfants.png', oOutputParameterHandler)
+    output_parameter_handler.addParameter('siteUrl', AGE_9ANS[0])
+    gui.addDir(
+        SITE_IDENTIFIER,
+        AGE_9ANS[1],
+        'A partir de 9 ans',
+        'enfants.png',
+        output_parameter_handler)
 
-    oOutputParameterHandler.addParameter('siteUrl', AGE_11ANSETPLUS[0])
-    oGui.addDir(SITE_IDENTIFIER, AGE_11ANSETPLUS[1], 'A partir de 11 ans', 'enfants.png', oOutputParameterHandler)
+    output_parameter_handler.addParameter('siteUrl', AGE_11ANSETPLUS[0])
+    gui.addDir(
+        SITE_IDENTIFIER,
+        AGE_11ANSETPLUS[1],
+        'A partir de 11 ans',
+        'enfants.png',
+        output_parameter_handler)
 
-    oOutputParameterHandler.addParameter('siteUrl', ALL_ALL[0])
-    oGui.addDir(SITE_IDENTIFIER, ALL_ALL[1], 'Tous les ages', 'enfants.png', oOutputParameterHandler)
+    output_parameter_handler.addParameter('siteUrl', ALL_ALL[0])
+    gui.addDir(
+        SITE_IDENTIFIER,
+        ALL_ALL[1],
+        'Tous les ages',
+        'enfants.png',
+        output_parameter_handler)
 
-    # oOutputParameterHandler.addParameter('siteUrl', BY_THEMES[0])
-    # oGui.addDir(SITE_IDENTIFIER, BY_THEMES[1], 'Films pour Enfants (Thèmes)', 'genres.png', oOutputParameterHandler)
+    # output_parameter_handler.addParameter('siteUrl', BY_THEMES[0])
+    # gui.addDir(SITE_IDENTIFIER, BY_THEMES[1], 'Films pour Enfants (Thèmes)', 'genres.png', output_parameter_handler)
 
-    oGui.setEndOfDirectory()
+    gui.setEndOfDirectory()
 
 
 def showThemes():
-    oGui = cGui()
-    oParser = cParser()
-    oRequestHandler = cRequestHandler('siteUrl')
+    gui = Gui()
+    oParser = Parser()
+    oRequestHandler = RequestHandler('siteUrl')
     sHtmlContent = oRequestHandler.request()
 
-    sHtmlContent = oParser.abParse(sHtmlContent, '<lien1>Portail pour les familles</lien1><br>', '<lien1><i class=icon-circle>')
+    sHtmlContent = oParser.abParse(
+        sHtmlContent,
+        '<lien1>Portail pour les familles</lien1><br>',
+        '<lien1><i class=icon-circle>')
 
     sPattern = '<a href=([^>]+)><lien3><i class=icon-circle></i>([^<]+)</lien3></a><br>'
     aResult = oParser.parse(sHtmlContent, sPattern)
 
     if aResult[0]:
-        oOutputParameterHandler = cOutputParameterHandler()
+        output_parameter_handler = OutputParameterHandler()
         for aEntry in aResult[1]:
             sUrl = URL_MAIN + aEntry[0]
-            sTitle = aEntry[1]
+            title = aEntry[1]
 
-            oOutputParameterHandler.addParameter('siteUrl', sUrl)
-            oGui.addDir(SITE_IDENTIFIER, 'showMovies', sTitle, 'genres.png', oOutputParameterHandler)
+            output_parameter_handler.addParameter('siteUrl', sUrl)
+            gui.addDir(
+                SITE_IDENTIFIER,
+                'showMovies',
+                title,
+                'genres.png',
+                output_parameter_handler)
 
-    oGui.setEndOfDirectory()
+    gui.setEndOfDirectory()
 
 
 def showMovies():
-    oGui = cGui()
-    oParser = cParser()
+    gui = Gui()
+    oParser = Parser()
 
-    oInputParameterHandler = cInputParameterHandler()
-    sUrl = oInputParameterHandler.getValue('siteUrl')
+    input_parameter_handler = InputParameterHandler()
+    sUrl = input_parameter_handler.getValue('siteUrl')
 
-    oRequestHandler = cRequestHandler(sUrl)
+    oRequestHandler = RequestHandler(sUrl)
     sHtmlContent = oRequestHandler.request()
-    sPattern = 'class=portfolio-image>.+?src="*([^ ]+\.jpg).+?synopsis>([^<]+)<.+?href="(https[^"]+)".+?<h4>([^<]+)<'
+    sPattern = 'class=portfolio-image>.+?src="*([^ ]+\\.jpg).+?synopsis>([^<]+)<.+?href="(https[^"]+)".+?<h4>([^<]+)<'
     aResult = oParser.parse(sHtmlContent, sPattern)
 
     if aResult[0]:
         total = len(aResult[1])
-        progress_ = progress().VScreate(SITE_NAME)
+        progress_ = Progress().VScreate(SITE_NAME)
 
-        oOutputParameterHandler = cOutputParameterHandler()
+        output_parameter_handler = OutputParameterHandler()
         for aEntry in aResult[1]:
             progress_.VSupdate(progress_, total)
             if progress_.iscanceled():
                 break
 
             sThumb = URL_MAIN + aEntry[0]
-            sDesc = aEntry[1]
+            desc = aEntry[1]
             sUrl = aEntry[2]
-            sTitle = aEntry[3]
+            title = aEntry[3]
 
-            oOutputParameterHandler.addParameter('siteUrl', sUrl)
-            oOutputParameterHandler.addParameter('sMovieTitle', sTitle)
-            oOutputParameterHandler.addParameter('sThumb', sThumb)
-            oGui.addMisc(SITE_IDENTIFIER, 'showHosters', sTitle, 'enfants.png', sThumb, sDesc, oOutputParameterHandler)
+            output_parameter_handler.addParameter('siteUrl', sUrl)
+            output_parameter_handler.addParameter('sMovieTitle', title)
+            output_parameter_handler.addParameter('sThumb', sThumb)
+            gui.addMisc(
+                SITE_IDENTIFIER,
+                'showHosters',
+                title,
+                'enfants.png',
+                sThumb,
+                desc,
+                output_parameter_handler)
 
         progress_.VSclose(progress_)
 
-    oGui.setEndOfDirectory()
+    gui.setEndOfDirectory()
 
 
 def showHosters():
-    oGui = cGui()
-    oInputParameterHandler = cInputParameterHandler()
-    sUrl = oInputParameterHandler.getValue('siteUrl')
-    sMovieTitle = oInputParameterHandler.getValue('sMovieTitle')
-    sThumb = oInputParameterHandler.getValue('sThumb')
+    gui = Gui()
+    input_parameter_handler = InputParameterHandler()
+    sUrl = input_parameter_handler.getValue('siteUrl')
+    sMovieTitle = input_parameter_handler.getValue('sMovieTitle')
+    sThumb = input_parameter_handler.getValue('sThumb')
 
     sHosterUrl = sUrl
-    oHoster = cHosterGui().checkHoster(sHosterUrl)
+    oHoster = HosterGui().checkHoster(sHosterUrl)
     if oHoster:
         oHoster.setDisplayName(sMovieTitle)
         oHoster.setFileName(sMovieTitle)
-        cHosterGui().showHoster(oGui, oHoster, sHosterUrl, sThumb, oInputParameterHandler=oInputParameterHandler)
+        HosterGui().showHoster(gui, oHoster, sHosterUrl, sThumb,
+                               input_parameter_handler=input_parameter_handler)
 
-    oGui.setEndOfDirectory()
+    gui.setEndOfDirectory()

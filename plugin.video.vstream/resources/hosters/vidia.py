@@ -1,8 +1,8 @@
 # -*- coding: utf-8 -*-
 # vStream https://github.com/Kodi-vStream/venom-xbmc-addons
 
-from resources.lib.handler.requestHandler import cRequestHandler
-from resources.lib.parser import cParser
+from resources.lib.handler.requestHandler import RequestHandler
+from resources.lib.parser import Parser
 from resources.hosters.hoster import iHoster
 from resources.lib.packer import cPacker
 
@@ -12,13 +12,13 @@ class cHoster(iHoster):
     def __init__(self):
         iHoster.__init__(self, 'vidia', 'Vidia')
 
-    def _getMediaLinkForGuest(self, autoPlay = False):
+    def _getMediaLinkForGuest(self, autoPlay=False):
         api_call = False
 
-        oRequest = cRequestHandler(self._url)
+        oRequest = RequestHandler(self._url)
         sHtmlContent = oRequest.request()
-        sPattern = "(\s*eval\s*\(\s*function(?:.|\s)+?)<\/script>"
-        oParser = cParser()
+        sPattern = "(\\s*eval\\s*\\(\\s*function(?:.|\\s)+?)<\\/script>"
+        oParser = Parser()
         aResult = oParser.parse(sHtmlContent, sPattern)
 
         if aResult[0] is True:
@@ -27,7 +27,9 @@ class cHoster(iHoster):
             aResult = oParser.parse(sHtmlContent, sPattern)
 
         if aResult[0] is True:
-            api_call = aResult[1][0].replace(',', '').replace('master.m3u8', 'index-v1-a1.m3u8')
+            api_call = aResult[1][0].replace(
+                ',', '').replace(
+                'master.m3u8', 'index-v1-a1.m3u8')
 
         if api_call:
             return True, api_call

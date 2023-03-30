@@ -34,7 +34,7 @@ def Captcha_Get_Reponse(img, cookie):
         "Accept-Language": "fr-FR,fr;q=0.8,en-US;q=0.6,en;q=0.4",
         "Accept-Encoding": "gzip, deflate",
         # "Content-Type": "application/x-www-form-urlencoded",
-        }
+    }
 
     if cookie:
         headers2["Cookie"] = cookie
@@ -50,7 +50,7 @@ def Captcha_Get_Reponse(img, cookie):
             image_on_web.close()
         else:
             return ""
-    except:
+    except BaseException:
         return ""
 
     # on affiche le dialogue
@@ -70,9 +70,11 @@ def Captcha_Get_Reponse(img, cookie):
 
                 def onInit(self):
                     # image background captcha
-                    self.getControl(1).setImage(filename.encode("utf-8"), False)
+                    self.getControl(1).setImage(
+                        filename.encode("utf-8"), False)
                     # image petit captcha memory fail
-                    self.getControl(2).setImage(filename.encode("utf-8"), False)
+                    self.getControl(2).setImage(
+                        filename.encode("utf-8"), False)
                     self.getControl(2).setVisible(False)
                     # Focus clavier
                     self.setFocus(self.getControl(21))
@@ -81,7 +83,8 @@ def Captcha_Get_Reponse(img, cookie):
                     if controlId == 20:
                         # button Valider
                         solution = self.getControl(5000).getLabel()
-                        xbmcgui.Window(10101).setProperty("captcha", str(solution))
+                        xbmcgui.Window(10101).setProperty(
+                            "captcha", str(solution))
                         self.close()
                         return
 
@@ -93,7 +96,8 @@ def Captcha_Get_Reponse(img, cookie):
                     elif controlId == 21:
                         # button clavier
                         self.getControl(2).setVisible(True)
-                        kb = xbmc.Keyboard(self.getControl(5000).getLabel(), "", False)
+                        kb = xbmc.Keyboard(
+                            self.getControl(5000).getLabel(), "", False)
                         kb.doModal()
 
                         if kb.isConfirmed():
@@ -126,12 +130,14 @@ def Captcha_Get_Reponse(img, cookie):
     else:
         # ancien Captcha
         try:
-            img = xbmcgui.ControlImage(450, 0, 400, 130, filename.encode("utf-8"))
+            img = xbmcgui.ControlImage(
+                450, 0, 400, 130, filename.encode("utf-8"))
             wdlg = xbmcgui.WindowDialog()
             wdlg.addControl(img)
             wdlg.show()
             # xbmc.sleep(3000)
-            kb = xbmc.Keyboard("", "Tapez les Lettres/chiffres de l'image", False)
+            kb = xbmc.Keyboard(
+                "", "Tapez les Lettres/chiffres de l'image", False)
             kb.doModal()
             if kb.isConfirmed():
                 solution = kb.getText()

@@ -3,7 +3,7 @@
 # https://vidplayer.cz/v/xxxxxxx
 import json
 
-from resources.lib.handler.requestHandler import cRequestHandler
+from resources.lib.handler.requestHandler import RequestHandler
 from resources.hosters.hoster import iHoster
 from resources.lib.comaddon import dialog
 
@@ -14,10 +14,10 @@ class cHoster(iHoster):
     def __init__(self):
         iHoster.__init__(self, 'vidplayer', 'Vidplayer')
 
-    def _getMediaLinkForGuest(self, autoPlay = False):
+    def _getMediaLinkForGuest(self, autoPlay=False):
         req = self._url.replace('/v/', '/api/source/')
         pdata = 'r'
-        oRequestHandler = cRequestHandler(req)
+        oRequestHandler = RequestHandler(req)
         oRequestHandler.setRequestType(1)
 
         oRequestHandler.addParametersLine(pdata)

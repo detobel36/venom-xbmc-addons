@@ -4,13 +4,13 @@
 import json
 import re
 
-from resources.lib.comaddon import progress, addon, dialog
-from resources.lib.gui.gui import cGui
-from resources.lib.gui.hoster import cHosterGui
-from resources.lib.handler.inputParameterHandler import cInputParameterHandler
-from resources.lib.handler.outputParameterHandler import cOutputParameterHandler
-from resources.lib.handler.requestHandler import cRequestHandler
-from resources.lib.parser import cParser
+from resources.lib.comaddon import Progress, addon, dialog
+from resources.lib.gui.gui import Gui
+from resources.lib.gui.hoster import HosterGui
+from resources.lib.handler.inputParameterHandler import InputParameterHandler
+from resources.lib.handler.outputParameterHandler import OutputParameterHandler
+from resources.lib.handler.requestHandler import RequestHandler
+from resources.lib.parser import Parser
 
 SITE_IDENTIFIER = 'debrid_link'
 SITE_NAME = '[COLOR violet]Debrid Link[/COLOR]'
@@ -20,57 +20,78 @@ URL_HOST = "https://debrid-link.fr"
 
 
 def load():
-    oGui = cGui()
+    gui = Gui()
     oAddon = addon()
 
     URL_HOST = "https://debrid-link.fr"
-    ALL_ALL = (URL_HOST + '/api/v2/downloader/list?page=0&perPage=20', 'showLiens')
-    ALL_MAGNETS = (URL_HOST + '/api/v2/seedbox/list?page=0&perPage=20', 'showLiens')
+    ALL_ALL = (
+        URL_HOST +
+        '/api/v2/downloader/list?page=0&perPage=20',
+        'showLiens')
+    ALL_MAGNETS = (
+        URL_HOST +
+        '/api/v2/seedbox/list?page=0&perPage=20',
+        'showLiens')
     ALL_INFORMATION = (URL_HOST + '/infos/downloader', 'showInfo')
 
-    oOutputParameterHandler = cOutputParameterHandler()
-    oOutputParameterHandler.addParameter('siteUrl', ALL_ALL[0])
-    oGui.addDir(SITE_IDENTIFIER, ALL_ALL[1], 'Liens', 'films.png', oOutputParameterHandler)
+    output_parameter_handler = OutputParameterHandler()
+    output_parameter_handler.addParameter('siteUrl', ALL_ALL[0])
+    gui.addDir(
+        SITE_IDENTIFIER,
+        ALL_ALL[1],
+        'Liens',
+        'films.png',
+        output_parameter_handler)
 
-    oOutputParameterHandler.addParameter('siteUrl', ALL_MAGNETS[0])
-    oGui.addDir(SITE_IDENTIFIER, ALL_MAGNETS[1], 'Magnets', 'films.png', oOutputParameterHandler)
+    output_parameter_handler.addParameter('siteUrl', ALL_MAGNETS[0])
+    gui.addDir(
+        SITE_IDENTIFIER,
+        ALL_MAGNETS[1],
+        'Magnets',
+        'films.png',
+        output_parameter_handler)
 
-    oOutputParameterHandler.addParameter('siteUrl', ALL_INFORMATION[0])
-    oGui.addDir(SITE_IDENTIFIER, ALL_INFORMATION[1], 'Information sur les hébergeurs ', 'films.png', oOutputParameterHandler)
+    output_parameter_handler.addParameter('siteUrl', ALL_INFORMATION[0])
+    gui.addDir(
+        SITE_IDENTIFIER,
+        ALL_INFORMATION[1],
+        'Information sur les hébergeurs ',
+        'films.png',
+        output_parameter_handler)
 
-    oGui.setEndOfDirectory()
+    gui.setEndOfDirectory()
 
 
 def showLiens(sSearch=''):
-    oGui = cGui()
+    gui = Gui()
 
-    oInputParameterHandler = cInputParameterHandler()
-    sUrl = oInputParameterHandler.getValue('siteUrl')
-    numPage = oInputParameterHandler.getValue('numPage')
+    input_parameter_handler = InputParameterHandler()
+    sUrl = input_parameter_handler.getValue('siteUrl')
+    numPage = input_parameter_handler.getValue('numPage')
     if not numPage:
         numPage = 0
     numPage = int(numPage)
 
     Token_debrid_link = "Bearer " + addon().getSetting('hoster_debridlink_token')
-    oRequestHandler = cRequestHandler(sUrl)
+    oRequestHandler = RequestHandler(sUrl)
     oRequestHandler.addHeaderEntry('Accept', 'application/json')
     oRequestHandler.addHeaderEntry('Authorization', Token_debrid_link)
     r = json.loads(oRequestHandler.request())
 
     if (r["success"] == False):
-        oGui.addText(SITE_IDENTIFIER)
+        gui.addText(SITE_IDENTIFIER)
         if (r["error"] == 'badToken'):
             New_token = RenewToken()
 
-            oRequestHandler = cRequestHandler(sUrl)
+            oRequestHandler = RequestHandler(sUrl)
             oRequestHandler.addHeaderEntry('Accept', 'application/json')
             oRequestHandler.addHeaderEntry('Authorization', New_token)
             r = json.loads(oRequestHandler.request())
 
-    if (r["success"] == True):
-        progress_ = progress().VScreate(SITE_NAME)
+    if (r["success"]):
+        progress_ = Progress().VScreate(SITE_NAME)
 
-        oOutputParameterHandler = cOutputParameterHandler()
+        output_parameter_handler = OutputParameterHandler()
         for aEntry in r["value"]:
 
             progress_.VSupdate(progress_, len(aEntry["name"]))
@@ -78,68 +99,84 @@ def showLiens(sSearch=''):
                 break
 
             if 'seedbox' in sUrl:
-                oGui.addText(SITE_IDENTIFIER, '[COLOR red]' + aEntry["name"] + '[/COLOR]')
+                gui.addText(
+                    SITE_IDENTIFIER,
+                    '[COLOR red]' +
+                    aEntry["name"] +
+                    '[/COLOR]')
 
-                sTitle = aEntry["files"][0]["name"]
+                title = aEntry["files"][0]["name"]
                 sUrl2 = aEntry["files"][0]["downloadUrl"]
 
             else:
-                sTitle = aEntry["name"]
+                title = aEntry["name"]
                 sUrl2 = aEntry["downloadUrl"]
 
-            oOutputParameterHandler.addParameter('siteUrl', sUrl2)
-            oOutputParameterHandler.addParameter('sMovieTitle', sTitle)
-            oGui.addEpisode(SITE_IDENTIFIER, 'showHosters', sTitle, '', '', '', oOutputParameterHandler)
+            output_parameter_handler.addParameter('siteUrl', sUrl2)
+            output_parameter_handler.addParameter('sMovieTitle', title)
+            gui.addEpisode(
+                SITE_IDENTIFIER,
+                'showHosters',
+                title,
+                '',
+                '',
+                '',
+                output_parameter_handler)
             progress_.VSclose(progress_)
 
         if not sSearch:
             numPage += 1
             sUrl = re.sub('page=([0-9])', 'page=' + str(numPage), sUrl)
-            oOutputParameterHandler = cOutputParameterHandler()
-            oOutputParameterHandler.addParameter('siteUrl', sUrl)
-            oOutputParameterHandler.addParameter('numPage', numPage)
-            oGui.addNext(SITE_IDENTIFIER, 'showLiens', 'Page ' + str(numPage), oOutputParameterHandler)
+            output_parameter_handler = OutputParameterHandler()
+            output_parameter_handler.addParameter('siteUrl', sUrl)
+            output_parameter_handler.addParameter('numPage', numPage)
+            gui.addNext(
+                SITE_IDENTIFIER,
+                'showLiens',
+                'Page ' + str(numPage),
+                output_parameter_handler)
 
-    oGui.setEndOfDirectory()
+    gui.setEndOfDirectory()
 
 
 def showHosters():
-    oGui = cGui()
-    oInputParameterHandler = cInputParameterHandler()
-    sUrl = oInputParameterHandler.getValue('siteUrl')
-    sMovieTitle = oInputParameterHandler.getValue('sMovieTitle')
+    gui = Gui()
+    input_parameter_handler = InputParameterHandler()
+    sUrl = input_parameter_handler.getValue('siteUrl')
+    sMovieTitle = input_parameter_handler.getValue('sMovieTitle')
 
     sHosterUrl = sUrl
-    oHoster = cHosterGui().checkHoster(sHosterUrl)
+    oHoster = HosterGui().checkHoster(sHosterUrl)
     if oHoster:
         oHoster.setDisplayName(sMovieTitle)
         oHoster.setFileName(sMovieTitle)
-        cHosterGui().showHoster(oGui, oHoster, sHosterUrl, sMovieTitle, oInputParameterHandler=oInputParameterHandler)
+        HosterGui().showHoster(gui, oHoster, sHosterUrl, sMovieTitle,
+                               input_parameter_handler=input_parameter_handler)
 
-    oGui.setEndOfDirectory()
+    gui.setEndOfDirectory()
 
 
 def showInfo():
-    oGui = cGui()
+    gui = Gui()
 
-    oInputParameterHandler = cInputParameterHandler()
-    sUrl = oInputParameterHandler.getValue('siteUrl')
+    input_parameter_handler = InputParameterHandler()
+    sUrl = input_parameter_handler.getValue('siteUrl')
 
-    oRequestHandler = cRequestHandler(sUrl)
+    oRequestHandler = RequestHandler(sUrl)
     sHtmlContent = oRequestHandler.request()
     sPattern = '<i class="sprite sprite-.+?"></i>.+?<li tooltip="([^"]+)" class="([^"]+)">'
 
-    oParser = cParser()
+    oParser = Parser()
     aResult = oParser.parse(sHtmlContent, sPattern)
 
     if not aResult[0]:
-        oGui.addText(SITE_IDENTIFIER)
+        gui.addText(SITE_IDENTIFIER)
 
     if aResult[0]:
         total = len(aResult[1])
-        progress_ = progress().VScreate(SITE_NAME)
+        progress_ = Progress().VScreate(SITE_NAME)
 
-        oOutputParameterHandler = cOutputParameterHandler()
+        output_parameter_handler = OutputParameterHandler()
         for aEntry in aResult[1]:
             progress_.VSupdate(progress_, total)
             if progress_.iscanceled():
@@ -151,43 +188,55 @@ def showInfo():
 
             sDisplayTitle = ('%s (%s)') % (sHebergeur, sDisponible)
 
-            oOutputParameterHandler.addParameter('sMovieTitle', sDisplayTitle)
+            output_parameter_handler.addParameter('sMovieTitle', sDisplayTitle)
 
-            oGui.addText(SITE_IDENTIFIER, sDisplayTitle)
+            gui.addText(SITE_IDENTIFIER, sDisplayTitle)
 
         progress_.VSclose(progress_)
 
-        oGui.setEndOfDirectory()
+        gui.setEndOfDirectory()
 
 
 def RenewToken():
     refreshTok = addon().getSetting('hoster_debridlink_tokenrefresh')
     if refreshTok == "":
-        oRequestHandler = cRequestHandler(URL_HOST + "/api/oauth/device/code")
+        oRequestHandler = RequestHandler(URL_HOST + "/api/oauth/device/code")
         oRequestHandler.setRequestType(1)
-        oRequestHandler.addHeaderEntry('Content-Type', 'application/x-www-form-urlencoded')
-        oRequestHandler.addParameters('client_id', addon().getSetting('hoster_debridlink_ID'))
+        oRequestHandler.addHeaderEntry(
+            'Content-Type', 'application/x-www-form-urlencoded')
+        oRequestHandler.addParameters(
+            'client_id', addon().getSetting('hoster_debridlink_ID'))
         r = json.loads(oRequestHandler.request())
 
-        dialog().VSok('Allez sur la page : https://debrid-link.fr/device\n et rentrer le code ' + r["user_code"] + ' pour autorisez la connection')
+        dialog().VSok(
+            'Allez sur la page : https://debrid-link.fr/device\n et rentrer le code ' +
+            r["user_code"] +
+            ' pour autorisez la connection')
 
-        oRequestHandler = cRequestHandler(URL_HOST + "/api/oauth/token")
+        oRequestHandler = RequestHandler(URL_HOST + "/api/oauth/token")
         oRequestHandler.setRequestType(1)
-        oRequestHandler.addHeaderEntry('Content-Type', 'application/x-www-form-urlencoded')
-        oRequestHandler.addParameters('client_id', addon().getSetting('hoster_debridlink_ID'))
+        oRequestHandler.addHeaderEntry(
+            'Content-Type', 'application/x-www-form-urlencoded')
+        oRequestHandler.addParameters(
+            'client_id', addon().getSetting('hoster_debridlink_ID'))
         oRequestHandler.addParameters("code", r["device_code"])
-        oRequestHandler.addParameters("grant_type", "http://oauth.net/grant_type/device/1.0")
+        oRequestHandler.addParameters(
+            "grant_type", "http://oauth.net/grant_type/device/1.0")
         r = json.loads(oRequestHandler.request())
 
-        addon().setSetting('hoster_debridlink_tokenrefresh', r["refresh_token"])
+        addon().setSetting(
+            'hoster_debridlink_tokenrefresh',
+            r["refresh_token"])
         addon().setSetting('hoster_debridlink_token', r["access_token"])
         return r["access_token"]
 
     else:
-        oRequestHandler = cRequestHandler(URL_HOST + "/api/oauth/token")
+        oRequestHandler = RequestHandler(URL_HOST + "/api/oauth/token")
         oRequestHandler.setRequestType(1)
-        oRequestHandler.addHeaderEntry('Content-Type', 'application/x-www-form-urlencoded')
-        oRequestHandler.addParameters('client_id', addon().getSetting('hoster_debridlink_ID'))
+        oRequestHandler.addHeaderEntry(
+            'Content-Type', 'application/x-www-form-urlencoded')
+        oRequestHandler.addParameters(
+            'client_id', addon().getSetting('hoster_debridlink_ID'))
         oRequestHandler.addParameters("refresh_token", refreshTok)
         oRequestHandler.addParameters("grant_type", "refresh_token")
         r = json.loads(oRequestHandler.request())

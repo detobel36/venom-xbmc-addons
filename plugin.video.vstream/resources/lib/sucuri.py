@@ -16,7 +16,8 @@ import unicodedata
 from resources.lib.comaddon import VSlog, VSPath
 from resources.lib.util import urlEncode
 
-PathCache = VSPath(xbmcaddon.Addon('plugin.video.vstream').getAddonInfo('profile'))
+PathCache = VSPath(xbmcaddon.Addon(
+    'plugin.video.vstream').getAddonInfo('profile'))
 UA = 'Mozilla/5.0 (Windows; U; Windows NT 5.1; de-DE; rv:1.9.0.3) Gecko/2008092417 Firefox/3.0.3'
 
 
@@ -39,13 +40,17 @@ class SucurieBypass(object):
         file = os.path.join(PathCache, 'Cookie_' + str(Domain) + '.txt')
         try:
             os.remove(os.path.join(PathCache, file).decode('utf-8'))
-        except:
+        except BaseException:
             os.remove(os.path.join(PathCache, file))
 
     def SaveCookie(self, Domain, data):
         try:
-            Name = os.path.join(PathCache, 'Cookie_' + str(Domain) + '.txt').decode('utf-8')
-        except:
+            Name = os.path.join(
+                PathCache,
+                'Cookie_' +
+                str(Domain) +
+                '.txt').decode('utf-8')
+        except BaseException:
             Name = os.path.join(PathCache, 'Cookie_' + str(Domain) + '.txt')
 
         # save it
@@ -55,29 +60,33 @@ class SucurieBypass(object):
 
     def Readcookie(self, Domain):
         try:
-            Name = os.path.join(PathCache, 'Cookie_' + str(Domain) + '.txt').decode('utf-8')
-        except:
+            Name = os.path.join(
+                PathCache,
+                'Cookie_' +
+                str(Domain) +
+                '.txt').decode('utf-8')
+        except BaseException:
             Name = os.path.join(PathCache, 'Cookie_' + str(Domain) + '.txt')
 
         try:
             file = open(Name, 'r')
             data = file.read()
             file.close()
-        except:
+        except BaseException:
             return ''
 
         return data
 
     def DecryptCookie(self, htmlcontent):
-        match = re.search("S\s*=\s*'([^']+)", htmlcontent)
+        match = re.search("S\\s*=\\s*'([^']+)", htmlcontent)
         if match:
             s = base64.b64decode(match.group(1))
             s = s.replace(' ', '')
-            s = re.sub('String\.fromCharCode\(([^)]+)\)', r'chr(\1)', s)
-            s = re.sub('\.slice\((\d+),(\d+)\)', r'[\1:\2]', s)
-            s = re.sub('\.charAt\(([^)]+)\)', r'[\1]', s)
-            s = re.sub('\.substr\((\d+),(\d+)\)', r'[\1:\1+\2]', s)
-            s = re.sub(';location.reload\(\);', '', s)
+            s = re.sub('String\\.fromCharCode\\(([^)]+)\\)', r'chr(\1)', s)
+            s = re.sub('\\.slice\\((\\d+),(\\d+)\\)', r'[\1:\2]', s)
+            s = re.sub('\\.charAt\\(([^)]+)\\)', r'[\1]', s)
+            s = re.sub('\\.substr\\((\\d+),(\\d+)\\)', r'[\1:\1+\2]', s)
+            s = re.sub(';location.reload\\(\\);', '', s)
             s = re.sub(r'\n', '', s)
             s = re.sub(r'document\.cookie', 'cookie', s)
             try:
@@ -87,7 +96,7 @@ class SucurieBypass(object):
                 match = re.match('([^=]+)=(.*)', cookie)
                 if match:
                     return match.group(1) + '=' + match.group(2)
-            except:
+            except BaseException:
                 VSlog('Erreur decodage sucuri')
 
         return None
@@ -104,7 +113,7 @@ class SucurieBypass(object):
     def CheckIfActive(self, html):
         try:
             html = html.decode("utf-8")
-        except:
+        except BaseException:
             pass
 
         if 'sucuri_cloudproxy_js' in html:
@@ -115,7 +124,8 @@ class SucurieBypass(object):
         head = []
         head.append(('User-Agent', UA))
         head.append(('Host', self.host))
-        head.append(('Accept', 'text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8'))
+        head.append(
+            ('Accept', 'text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8'))
         head.append(('Referer', self.url))
         head.append(('Content-Type', 'text/html; charset=utf-8'))
         head.append(('Accept-Encodinge', 'identity'))
@@ -136,7 +146,8 @@ class SucurieBypass(object):
             if url2 == url:
                 return htmlcontent
             else:
-                htmlcontent, dummy = self.htmlrequest(url2, cookies, data, False)
+                htmlcontent, dummy = self.htmlrequest(
+                    url2, cookies, data, False)
                 return htmlcontent
 
         # on cherche le nouveau cookie
@@ -184,11 +195,13 @@ class SucurieBypass(object):
             f = gzip.GzipFile(fileobj=buf)
             htmlcontent = f.read()
 
-        #Decodage obligatoire pour python 3
+        # Decodage obligatoire pour python 3
         try:
-            htmlcontent = unicodedata.normalize('NFD', htmlcontent.decode()).encode('ascii', 'ignore').decode('unicode_escape')
+            htmlcontent = unicodedata.normalize(
+                'NFD', htmlcontent.decode()).encode(
+                'ascii', 'ignore').decode('unicode_escape')
             htmlcontent = htmlcontent.encode()
-        except:
+        except BaseException:
             pass
 
         return htmlcontent, redirecturl

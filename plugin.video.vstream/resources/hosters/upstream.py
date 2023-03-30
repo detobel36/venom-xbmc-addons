@@ -3,8 +3,8 @@
 
 import re
 
-from resources.lib.handler.requestHandler import cRequestHandler
-from resources.lib.parser import cParser
+from resources.lib.handler.requestHandler import RequestHandler
+from resources.lib.parser import Parser
 from resources.hosters.hoster import iHoster
 from resources.lib.packer import cPacker
 
@@ -19,22 +19,22 @@ class cHoster(iHoster):
     def isDownloadable(self):
         return False
 
-    def _getMediaLinkForGuest(self, autoPlay = False):
+    def _getMediaLinkForGuest(self, autoPlay=False):
         api_call = ''
 
-        oRequest = cRequestHandler(self._url)
+        oRequest = RequestHandler(self._url)
         oRequest.addHeaderEntry("User-Agent", UA)
         sHtmlContent = oRequest.request()
 
-        sPattern = "(\s*eval\s*\(\s*function(?:.|\s)+?)<\/script>"
+        sPattern = "(\\s*eval\\s*\\(\\s*function(?:.|\\s)+?)<\\/script>"
         aResult_1 = re.findall(sPattern, sHtmlContent)
 
         if aResult_1:
             sUnpacked = cPacker().unpack(aResult_1[0])
             sHtmlContent = sUnpacked
 
-        sPattern = 'sources: *\[\{file:"([^"]+)"'
-        oParser = cParser()
+        sPattern = 'sources: *\\[\\{file:"([^"]+)"'
+        oParser = Parser()
         aResult = oParser.parse(sHtmlContent, sPattern)
 
         if aResult[0] is True:
@@ -42,8 +42,8 @@ class cHoster(iHoster):
         elif len(aResult_1) > 1:
             sUnpacked = cPacker().unpack(aResult_1[1])
             sHtmlContent = sUnpacked
-            sPattern = 'sources: *\[\{file:"([^"]+)"'
-            oParser = cParser()
+            sPattern = 'sources: *\\[\\{file:"([^"]+)"'
+            oParser = Parser()
             aResult = oParser.parse(sHtmlContent, sPattern)
             if aResult[0] is True:
                 api_call = aResult[1][0]

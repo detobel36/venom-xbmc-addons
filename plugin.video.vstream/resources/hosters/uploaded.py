@@ -11,7 +11,7 @@ class cHoster(iHoster):
     def __init__(self):
         iHoster.__init__(self, 'uploaded', 'Uploaded', 'violet')
 
-    def getMediaLink(self, autoPlay = False):
+    def getMediaLink(self, autoPlay=False):
         self.oPremiumHandler = cPremiumHandler(self.getPluginIdentifier())
         print(self.oPremiumHandler.isPremiumModeAvailable())
 
@@ -22,10 +22,10 @@ class cHoster(iHoster):
 
         return self._getMediaLinkByPremiumUser(autoPlay)
 
-    def _getMediaLinkForGuest(self, autoPlay = False):
+    def _getMediaLinkForGuest(self, autoPlay=False):
         pass
 
-    def _getMediaLinkByPremiumUser(self, autoPlay = False):
+    def _getMediaLinkByPremiumUser(self, autoPlay=False):
         api_call = False
 
         if not self.oPremiumHandler.Authentificate():

@@ -3,8 +3,8 @@
 # https://playtube.ws/embed-xxxxx.html
 import re
 
-from resources.lib.handler.requestHandler import cRequestHandler
-from resources.lib.parser import cParser
+from resources.lib.handler.requestHandler import RequestHandler
+from resources.lib.parser import Parser
 from resources.hosters.hoster import iHoster
 from resources.lib.comaddon import dialog
 from resources.lib.packer import cPacker
@@ -17,11 +17,11 @@ class cHoster(iHoster):
     def __init__(self):
         iHoster.__init__(self, 'playtube', 'Playtube')
 
-    def _getMediaLinkForGuest(self, autoPlay = False):
-        oRequestHandler = cRequestHandler(self._url)
+    def _getMediaLinkForGuest(self, autoPlay=False):
+        oRequestHandler = RequestHandler(self._url)
         sHtmlContent = oRequestHandler.request()
 
-        sPattern2 = '(\s*eval\s*\(\s*function(?:.|\s)+?\)\)\))'
+        sPattern2 = '(\\s*eval\\s*\\(\\s*function(?:.|\\s)+?\\)\\)\\))'
         aResult = re.findall(sPattern2, sHtmlContent)
         list_url = []
         list_qua = []
@@ -31,17 +31,17 @@ class cHoster(iHoster):
                 str2 = str2 + ';'
 
             strs = cPacker().unpack(str2)
-            oParser = cParser()
+            oParser = Parser()
             sPattern = '(https.+?.m3u8)'
             aResult = re.findall(sPattern, strs)
             if aResult:
                 urlhost = aResult[0]
-                oRequestHandler = cRequestHandler(urlhost)
+                oRequestHandler = RequestHandler(urlhost)
                 oRequestHandler.addHeaderEntry('User-Agent', UA)
                 oRequestHandler.addHeaderEntry('Referer', self._url)
                 sHtmlContent2 = oRequestHandler.request()
-                oParser = cParser()
-                sPattern = 'PROGRAM.*?BANDWIDTH.*?RESOLUTION=(\d+x\d+).*?(https.*?m3u8)'
+                oParser = Parser()
+                sPattern = 'PROGRAM.*?BANDWIDTH.*?RESOLUTION=(\\d+x\\d+).*?(https.*?m3u8)'
                 aResult = oParser.parse(sHtmlContent2, sPattern)
                 if aResult[0] is True:
                     for aEntry in aResult[1]:

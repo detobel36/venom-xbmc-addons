@@ -2,8 +2,8 @@
 # https://github.com/Kodi-vStream/venom-xbmc-addons
 # french-stream /18117-la-frontire-verte-saison-1.html
 # liens FVS io
-from resources.lib.handler.requestHandler import cRequestHandler
-from resources.lib.parser import cParser
+from resources.lib.handler.requestHandler import RequestHandler
+from resources.lib.parser import Parser
 from resources.hosters.hoster import iHoster
 from resources.lib.comaddon import dialog
 
@@ -15,11 +15,10 @@ class cHoster(iHoster):
     def __init__(self):
         iHoster.__init__(self, 'frenchvid', 'Frenchvid')
 
-
-    def _getMediaLinkForGuest(self, autoPlay = False):
+    def _getMediaLinkForGuest(self, autoPlay=False):
         # Get Redirection
         if 'fembed' in self._url:
-            oRequest = cRequestHandler(self._url)
+            oRequest = RequestHandler(self._url)
             oRequest.addHeaderEntry('User-Agent', UA)
             oRequest.request()
             self._url = oRequest.getRealUrl()
@@ -34,11 +33,11 @@ class cHoster(iHoster):
             baseUrl = 'https://' + self._url.split('/')[2] + '/api/source/'
 
         if 'fem.tohds' in self._url:
-            oRequestHandler = cRequestHandler(self._url)
+            oRequestHandler = RequestHandler(self._url)
             sHtmlContent = oRequestHandler.request()
 
             sPattern = '<iframe src="([^"]+)"'
-            oParser = cParser()
+            oParser = Parser()
             aResult = oParser.parse(sHtmlContent, sPattern)
 
             url = baseUrl + aResult[1][0].rsplit('/', 1)[1]
@@ -47,7 +46,7 @@ class cHoster(iHoster):
             url = baseUrl + self._url.rsplit('/', 1)[1]
             postdata = "r=''" + "&d=" + self._url.split('/')[2]
 
-        oRequest = cRequestHandler(url)
+        oRequest = RequestHandler(url)
         oRequest.setRequestType(1)
         oRequest.addHeaderEntry('User-Agent', UA)
         oRequest.addHeaderEntry('Referer', self._url)
@@ -59,23 +58,22 @@ class cHoster(iHoster):
             for x in page['data']:
                 url.append(x['file'])
                 qua.append(x['label'])
-    
+
             api_call = dialog().VSselectqual(qua, url)
-    
-            oRequest = cRequestHandler(api_call)
+
+            oRequest = RequestHandler(api_call)
             oRequest.addHeaderEntry('Host', 'fvs.io')
             oRequest.addHeaderEntry('User-Agent', UA)
             oRequest.request()
             api_call = oRequest.getRealUrl()
-    
+
             if api_call:
                 return True, api_call + '|User-Agent=' + UA
 
-
-        oRequestHandler = cRequestHandler(self._url)
+        oRequestHandler = RequestHandler(self._url)
         sHtmlContent = oRequestHandler.request()
         sPattern = 'var video_source = "([^"]+)"'
-        oParser = cParser()
+        oParser = Parser()
         aResult = oParser.parse(sHtmlContent, sPattern)
         if aResult:
             return True, aResult[1][0] + '|User-Agent=' + UA

@@ -1,8 +1,9 @@
-#-*- coding: utf-8 -*-
+# -*- coding: utf-8 -*-
 # https://github.com/Kodi-vStream/venom-xbmc-addons
-from resources.lib.handler.requestHandler import cRequestHandler
-from resources.lib.parser import cParser
+from resources.lib.handler.requestHandler import RequestHandler
+from resources.lib.parser import Parser
 from resources.hosters.hoster import iHoster
+
 
 class cHoster(iHoster):
 
@@ -11,7 +12,7 @@ class cHoster(iHoster):
 
     def __getIdFromUrl(self, url):
         sPattern = "http://turbovid.net/([^<]+)"
-        oParser = cParser()
+        oParser = Parser()
         aResult = oParser.parse(url, sPattern)
         if aResult[0] is True:
             return aResult[1][0]
@@ -21,23 +22,24 @@ class cHoster(iHoster):
     def setUrl(self, sUrl):
         if 'embed' not in sUrl:
             self._url = str(self.__getIdFromUrl(sUrl))
-            self._url = 'http://turbovid.net/embed-'+str(self._url)+'.html'
+            self._url = 'http://turbovid.net/embed-' + str(self._url) + '.html'
         else:
             self._url = sUrl
 
-    def _getMediaLinkForGuest(self, autoPlay = False):
-        oRequest = cRequestHandler(self._url)
+    def _getMediaLinkForGuest(self, autoPlay=False):
+        oRequest = RequestHandler(self._url)
         sHtmlContent = oRequest.request()
         if not sHtmlContent:
             return False, False
 
-        sPattern = 'var/type/(.+?)/.+?/provider/mp4/([^<]+)/flash/';
+        sPattern = 'var/type/(.+?)/.+?/provider/mp4/([^<]+)/flash/'
 
-        oParser = cParser()
-        sHtmlContent=sHtmlContent.replace('|','/')
+        oParser = Parser()
+        sHtmlContent = sHtmlContent.replace('|', '/')
         aResult = oParser.parse(sHtmlContent, sPattern)
         if aResult[0] is True:
-            api_call = ('http://178.33.122.207:%s/%s/v.mp4') % (aResult[1][0][0], aResult[1][0][1])
+            api_call = (
+                'http://178.33.122.207:%s/%s/v.mp4') % (aResult[1][0][0], aResult[1][0][1])
             return True, api_call
 
         return False, False

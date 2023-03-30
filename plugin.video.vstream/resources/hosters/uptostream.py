@@ -10,9 +10,9 @@ from resources.hosters.hoster import iHoster
 from resources.lib.comaddon import dialog, VSlog, CountdownDialog, VSPath
 from resources.lib.config import GestionCookie
 from resources.lib.handler.premiumHandler import cPremiumHandler
-from resources.lib.handler.requestHandler import cRequestHandler
+from resources.lib.handler.requestHandler import RequestHandler
 from resources.lib.librecaptcha.gui import cInputWindowYesNo
-from resources.lib.parser import cParser
+from resources.lib.parser import Parser
 
 
 class cHoster(iHoster):
@@ -39,10 +39,10 @@ class cHoster(iHoster):
             return Files
         return False
 
-    def _getMediaLinkForGuest(self, autoPlay = False):
+    def _getMediaLinkForGuest(self, autoPlay=False):
         pass
 
-    def getMediaLink(self, autoPlay = False):
+    def getMediaLink(self, autoPlay=False):
         self.oPremiumHandler = cPremiumHandler('uptobox')
         premium = self.oPremiumHandler.isPremiumModeAvailable()
         if not premium:
@@ -57,12 +57,15 @@ class cHoster(iHoster):
         # Uptostream avec un compte uptobox, pas besoin du QRcode
         token = self.oPremiumHandler.getToken()
         if token:
-            r = requests.get('https://uptobox.com/api/user/me?token=' + token).json()
+            r = requests.get(
+                'https://uptobox.com/api/user/me?token=' +
+                token).json()
         if token and r["data"]["premium"]:
             status = ''
-            url1 = "https://uptobox.com/api/streaming?token=%s&file_code=%s" % (token, filecode)
+            url1 = "https://uptobox.com/api/streaming?token=%s&file_code=%s" % (
+                token, filecode)
             try:
-                oRequestHandler = cRequestHandler(url1)
+                oRequestHandler = RequestHandler(url1)
                 dict_liens = oRequestHandler.request(jsonDecode=True)
                 status = dict_liens["statusCode"]
                 if status == 0:
@@ -81,7 +84,9 @@ class cHoster(iHoster):
 
             s = requests.Session()
             s.headers.update({"Cookie": cookies})
-            r = s.get('https://uptobox.com/api/streaming?file_code=' + filecode).json()
+            r = s.get(
+                'https://uptobox.com/api/streaming?file_code=' +
+                filecode).json()
 
             if r["statusCode"] != 0:  # Erreur
                 dialog().VSinfo(r["data"])
@@ -91,19 +96,26 @@ class cHoster(iHoster):
             tok = re.search('token.+?;.+?;(.+?)&', r1).group(1)
 
             if not xbmc.getCondVisibility('system.platform.android'):
-                # Si possible on ouvre la page automatiquement dans un navigateur internet.
+                # Si possible on ouvre la page automatiquement dans un
+                # navigateur internet.
                 import webbrowser
                 webbrowser.open(r['data']['user_url'])
                 with CountdownDialog("Autorisation nécessaire", "Pour voir cette vidéo, veuillez vous connecter",
                                      "Allez sur ce lien : " + r['data']['user_url'],
                                      "Et valider le pin : " + r['data']['pin'], True, r["data"]['expired_in'], 10) as cd:
-                    js_result = cd.start(self.__check_auth, [r["data"]["check_url"]])["data"]
+                    js_result = cd.start(
+                        self.__check_auth, [
+                            r["data"]["check_url"]])["data"]
             else:
                 import pyqrcode
                 qr = pyqrcode.create(r['data']['user_url'])
-                qr.png(VSPath('special://home/userdata/addon_data/plugin.video.vstream/qrcode.png'), scale=5)
-                oSolver = cInputWindowYesNo(captcha='special://home/userdata/addon_data/plugin.video.vstream/qrcode.png',
-                    msg="Scanner le QRCode pour acceder au lien d'autorisation", roundnum=1)
+                qr.png(
+                    VSPath('special://home/userdata/addon_data/plugin.video.vstream/qrcode.png'),
+                    scale=5)
+                oSolver = cInputWindowYesNo(
+                    captcha='special://home/userdata/addon_data/plugin.video.vstream/qrcode.png',
+                    msg="Scanner le QRCode pour acceder au lien d'autorisation",
+                    roundnum=1)
                 retArg = oSolver.get()
                 DIALOG = dialog()
                 if retArg == "N":
@@ -113,11 +125,12 @@ class cHoster(iHoster):
 
         # Deux modes de fonctionnement different.
         if js_result.get("streamLinks").get('src'):
-            api_call = js_result['streamLinks']['src']#.replace(".m3u8", ".mpd")
+            # .replace(".m3u8", ".mpd")
+            api_call = js_result['streamLinks']['src']
         else:
             sPattern = "'(.+?)': {(.+?)}"
 
-            oParser = cParser()
+            oParser = Parser()
             aResult = oParser.parse(js_result["streamLinks"], sPattern)
 
             url = []
@@ -135,7 +148,7 @@ class cHoster(iHoster):
 
         try:
             SubTitle = self.checkSubtitle(js_result["subs"])
-        except:
+        except BaseException:
             VSlog("Pas de sous-titre")
 
         if api_call:

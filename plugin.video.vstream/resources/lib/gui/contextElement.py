@@ -1,11 +1,11 @@
-from resources.lib.handler.outputParameterHandler import cOutputParameterHandler
+from resources.lib.handler.outputParameterHandler import OutputParameterHandler
 
 
-class cContextElement:
+class ContextElement:
 
     def __init__(self):
         self.__sTitle = ''
-        self.__oOutputParameterHandler = cOutputParameterHandler()
+        self.__oOutputParameterHandler = OutputParameterHandler()
 
     def setFunction(self, sFunctionName):
         self.__sFunctionName = sFunctionName
@@ -19,8 +19,8 @@ class cContextElement:
     def getFile(self):
         return self.__sFile
 
-    def setTitle(self, sTitle):
-        self.__sTitle = sTitle
+    def setTitle(self, title):
+        self.__sTitle = title
 
     def getTitle(self):
         return self.__sTitle
@@ -31,8 +31,8 @@ class cContextElement:
     def getSiteName(self):
         return self.__sSiteName
 
-    def setOutputParameterHandler(self, oOutputParameterHandler):
-        self.__oOutputParameterHandler = oOutputParameterHandler
+    def setOutputParameterHandler(self, output_parameter_handler):
+        self.__oOutputParameterHandler = output_parameter_handler
 
     def getOutputParameterHandler(self):
         return self.__oOutputParameterHandler

@@ -4,14 +4,14 @@
 import ast
 import re
 
-from resources.lib.comaddon import siteManager
-from resources.lib.gui.gui import cGui
-from resources.lib.gui.hoster import cHosterGui
-from resources.lib.handler.inputParameterHandler import cInputParameterHandler
-from resources.lib.handler.outputParameterHandler import cOutputParameterHandler
-from resources.lib.handler.requestHandler import cRequestHandler
+from resources.lib.comaddon import SiteManager
+from resources.lib.gui.gui import Gui
+from resources.lib.gui.hoster import HosterGui
+from resources.lib.handler.inputParameterHandler import InputParameterHandler
+from resources.lib.handler.outputParameterHandler import OutputParameterHandler
+from resources.lib.handler.requestHandler import RequestHandler
 from resources.lib.packer import cPacker
-from resources.lib.parser import cParser
+from resources.lib.parser import Parser
 from resources.lib.util import Quote
 
 try:  # Python 2
@@ -25,7 +25,7 @@ SITE_IDENTIFIER = 'leet365'
 SITE_NAME = 'Leet365'
 SITE_DESC = 'Tous les sports'
 
-URL_MAIN = siteManager().getUrlMain(SITE_IDENTIFIER)
+URL_MAIN = SiteManager().getUrlMain(SITE_IDENTIFIER)
 
 SPORT_SPORTS = (True, 'load')
 TV_TV = (True, 'load')
@@ -75,136 +75,212 @@ channels = {
     30: ['France 2', 'https://www.ffp.asso.fr/wp-content/uploads/2018/10/France-2.png'],
     38: ['France 3', 'https://static.wikia.nocookie.net/hdl-logopedia/images/0/0a/Logo-france-3.png/revision/latest/scale-to-width-down/220?cb=20180220171302&path-prefix=fr'],
     39: ['TMC', 'https://upload.wikimedia.org/wikipedia/commons/e/e2/Tmc_2016.png']
-    }
+}
 
 
 def load():
-    oGui = cGui()
+    gui = Gui()
 
-    oOutputParameterHandler = cOutputParameterHandler()
+    output_parameter_handler = OutputParameterHandler()
 
-    oOutputParameterHandler.addParameter('siteUrl', SPORT_LIVE[0])
-    oGui.addDir(SITE_IDENTIFIER, SPORT_LIVE[1], 'Sports (En direct)', 'replay.png', oOutputParameterHandler)
+    output_parameter_handler.addParameter('siteUrl', SPORT_LIVE[0])
+    gui.addDir(
+        SITE_IDENTIFIER,
+        SPORT_LIVE[1],
+        'Sports (En direct)',
+        'replay.png',
+        output_parameter_handler)
 
-    oOutputParameterHandler.addParameter('siteUrl', SPORT_GENRES[0])
-    oGui.addDir(SITE_IDENTIFIER, SPORT_GENRES[1], 'Sports (Genres)', 'genres.png', oOutputParameterHandler)
+    output_parameter_handler.addParameter('siteUrl', SPORT_GENRES[0])
+    gui.addDir(
+        SITE_IDENTIFIER,
+        SPORT_GENRES[1],
+        'Sports (Genres)',
+        'genres.png',
+        output_parameter_handler)
 
-    oOutputParameterHandler.addParameter('siteUrl', SPORT_TV[0])
-    oGui.addDir(SITE_IDENTIFIER, SPORT_TV[1], 'Chaines TV Sports', 'sport.png', oOutputParameterHandler)
+    output_parameter_handler.addParameter('siteUrl', SPORT_TV[0])
+    gui.addDir(
+        SITE_IDENTIFIER,
+        SPORT_TV[1],
+        'Chaines TV Sports',
+        'sport.png',
+        output_parameter_handler)
 
-    oOutputParameterHandler.addParameter('siteUrl', CHAINE_CINE[0])
-    oGui.addDir(SITE_IDENTIFIER, CHAINE_CINE[1], 'Chaines TV Ciné', 'tv.png', oOutputParameterHandler)
+    output_parameter_handler.addParameter('siteUrl', CHAINE_CINE[0])
+    gui.addDir(
+        SITE_IDENTIFIER,
+        CHAINE_CINE[1],
+        'Chaines TV Ciné',
+        'tv.png',
+        output_parameter_handler)
 
-    oGui.setEndOfDirectory()
+    gui.setEndOfDirectory()
 
 
 def showGenres():
-    oGui = cGui()
-    oInputParameterHandler = cInputParameterHandler()
-    sUrl = URL_MAIN + oInputParameterHandler.getValue('siteUrl')
+    gui = Gui()
+    input_parameter_handler = InputParameterHandler()
+    sUrl = URL_MAIN + input_parameter_handler.getValue('siteUrl')
 
-    oRequestHandler = cRequestHandler(sUrl)
+    oRequestHandler = RequestHandler(sUrl)
     sHtmlContent = oRequestHandler.request()
 
     # Besoin des saut de ligne
     sHtmlContent = sHtmlContent.replace('\n', '@')
-    sPattern = '\d+-\d+-\d+ \(.+?\) (.+?) : .+?@'
+    sPattern = '\\d+-\\d+-\\d+ \\(.+?\\) (.+?) : .+?@'
 
-    oParser = cParser()
+    oParser = Parser()
     aResult = oParser.parse(sHtmlContent, sPattern)
 
     if not aResult[0]:
-        oGui.addText(SITE_IDENTIFIER)
-        oGui.setEndOfDirectory()
+        gui.addText(SITE_IDENTIFIER)
+        gui.setEndOfDirectory()
         return
 
     genres = set()
     for sGenre in aResult[1]:
         genres.add(sGenre)
 
-    oOutputParameterHandler = cOutputParameterHandler()
+    output_parameter_handler = OutputParameterHandler()
     for sGenre in sorted(genres):
-        sTitle = sGenre
-        sDisplayTitle = sTitle
+        title = sGenre
+        sDisplayTitle = title
 
-        oOutputParameterHandler.addParameter('siteUrl', 'genre=' + sGenre)
-        oOutputParameterHandler.addParameter('sMovieTitle', sTitle)
-        oOutputParameterHandler.addParameter('sDesc', sDisplayTitle)
-        oGui.addMisc(SITE_IDENTIFIER, 'showMovies', sDisplayTitle, 'sport.png', '', sDisplayTitle, oOutputParameterHandler)
+        output_parameter_handler.addParameter('siteUrl', 'genre=' + sGenre)
+        output_parameter_handler.addParameter('sMovieTitle', title)
+        output_parameter_handler.addParameter('desc', sDisplayTitle)
+        gui.addMisc(
+            SITE_IDENTIFIER,
+            'showMovies',
+            sDisplayTitle,
+            'sport.png',
+            '',
+            sDisplayTitle,
+            output_parameter_handler)
 
-    oGui.setEndOfDirectory()
+    gui.setEndOfDirectory()
 
 
 def showTV():
-    oGui = cGui()
+    gui = Gui()
 
-    oInputParameterHandler = cInputParameterHandler()
-    sUrl = oInputParameterHandler.getValue('siteUrl')
+    input_parameter_handler = InputParameterHandler()
+    sUrl = input_parameter_handler.getValue('siteUrl')
 
     if 'sport' in sUrl:
-        chaines = [1, 4, 21, 20, 5, 6, 7, 8, 18, 19, 9, 2, 3, 10, 11, 12, 13, 14, 15, 16, 22, 23, 24, 25, 26, 27, 28, 37, 31, 32, 33, 34, 35, 36]
-    else: # Chaines ciné
+        chaines = [
+            1,
+            4,
+            21,
+            20,
+            5,
+            6,
+            7,
+            8,
+            18,
+            19,
+            9,
+            2,
+            3,
+            10,
+            11,
+            12,
+            13,
+            14,
+            15,
+            16,
+            22,
+            23,
+            24,
+            25,
+            26,
+            27,
+            28,
+            37,
+            31,
+            32,
+            33,
+            34,
+            35,
+            36]
+    else:  # Chaines ciné
         chaines = [29, 30, 38, 5, 17, 39]
 
-    oOutputParameterHandler = cOutputParameterHandler()
+    output_parameter_handler = OutputParameterHandler()
     for iChannel in chaines:
         channel = channels.get(iChannel)
         sDisplayTitle = channel[0]
         sThumb = channel[1]
-        oOutputParameterHandler.addParameter('siteUrl', iChannel)
-        oOutputParameterHandler.addParameter('sMovieTitle', sDisplayTitle)
-        oOutputParameterHandler.addParameter('sThumb', sThumb)
-        oGui.addLink(SITE_IDENTIFIER, 'showLink', sDisplayTitle, sThumb, sDisplayTitle, oOutputParameterHandler)
+        output_parameter_handler.addParameter('siteUrl', iChannel)
+        output_parameter_handler.addParameter('sMovieTitle', sDisplayTitle)
+        output_parameter_handler.addParameter('sThumb', sThumb)
+        gui.addLink(
+            SITE_IDENTIFIER,
+            'showLink',
+            sDisplayTitle,
+            sThumb,
+            sDisplayTitle,
+            output_parameter_handler)
 
-    oGui.setEndOfDirectory()
+    gui.setEndOfDirectory()
 
 
 def showMovies():
-    oGui = cGui()
-    oInputParameterHandler = cInputParameterHandler()
-    sUrl = URL_MAIN + oInputParameterHandler.getValue('siteUrl')
+    gui = Gui()
+    input_parameter_handler = InputParameterHandler()
+    sUrl = URL_MAIN + input_parameter_handler.getValue('siteUrl')
     sGenre = ''
 
     if 'genre=' in sUrl:
         sUrl, sGenre = sUrl.split('genre=')
-    oRequestHandler = cRequestHandler(sUrl)
+    oRequestHandler = RequestHandler(sUrl)
     sHtmlContent = oRequestHandler.request()
 
     # Besoin des saut de ligne
     sHtmlContent = sHtmlContent.replace('\n', '@')
-    sPattern = '(\d+-\d+-\d+ \(.+?\)) (.+?) : (.+?)\(CH(.+?)@'
+    sPattern = '(\\d+-\\d+-\\d+ \\(.+?\\)) (.+?) : (.+?)\\(CH(.+?)@'
 
-    oParser = cParser()
+    oParser = Parser()
     aResult = oParser.parse(sHtmlContent, sPattern)
 
     if not aResult[0]:
-        oGui.addText(SITE_IDENTIFIER)
+        gui.addText(SITE_IDENTIFIER)
     else:
-        oOutputParameterHandler = cOutputParameterHandler()
+        output_parameter_handler = OutputParameterHandler()
         for aEntry in aResult[1]:
-            sDate = aEntry[0].replace('-20', '/').replace('-', '/').replace('(', '').replace(')', '')
+            sDate = aEntry[0].replace(
+                '-20', '/').replace('-', '/').replace('(', '').replace(')', '')
             sDesc1 = aEntry[1]
             if sGenre and sGenre != sDesc1:
                 continue
             sDesc2 = aEntry[2]
-            sUrl2 = "('" + aEntry[3].replace(') (', "', '").replace('(CH', "('").replace(')', "')")
-            sTitle = '%s (%s)' % (sDesc2, sDesc1)
-            sDisplayTitle = sDate + ' - ' + sTitle
+            sUrl2 = "('" + aEntry[3].replace(') (',
+                                             "', '").replace('(CH', "('").replace(')', "')")
+            title = '%s (%s)' % (sDesc2, sDesc1)
+            sDisplayTitle = sDate + ' - ' + title
 
-            oOutputParameterHandler.addParameter('siteUrl', sUrl2)
-            oOutputParameterHandler.addParameter('sMovieTitle', sTitle)
-            oOutputParameterHandler.addParameter('sDesc', sDisplayTitle)
-            oGui.addMisc(SITE_IDENTIFIER, 'showLive', sDisplayTitle, 'sport.png', '', sDisplayTitle, oOutputParameterHandler)
+            output_parameter_handler.addParameter('siteUrl', sUrl2)
+            output_parameter_handler.addParameter('sMovieTitle', title)
+            output_parameter_handler.addParameter('desc', sDisplayTitle)
+            gui.addMisc(
+                SITE_IDENTIFIER,
+                'showLive',
+                sDisplayTitle,
+                'sport.png',
+                '',
+                sDisplayTitle,
+                output_parameter_handler)
 
-    oGui.setEndOfDirectory()
+    gui.setEndOfDirectory()
 
 
 def showLive():
-    oGui = cGui()
-    oInputParameterHandler = cInputParameterHandler()
-    sUrl = oInputParameterHandler.getValue('siteUrl')
-    sDesc = oInputParameterHandler.getValue('sDesc')
-    sMovieTitle = oInputParameterHandler.getValue('sMovieTitle')
+    gui = Gui()
+    input_parameter_handler = InputParameterHandler()
+    sUrl = input_parameter_handler.getValue('siteUrl')
+    desc = input_parameter_handler.getValue('desc')
+    sMovieTitle = input_parameter_handler.getValue('sMovieTitle')
 
     links = []
     if ',' in sUrl:
@@ -212,9 +288,9 @@ def showLive():
     else:
         links.append(eval(sUrl))
 
-    oOutputParameterHandler = cOutputParameterHandler()
+    output_parameter_handler = OutputParameterHandler()
     for link in links:
-        aEntry = re.findall('(\d+)(.+)', link)
+        aEntry = re.findall('(\\d+)(.+)', link)
         iChannel = aEntry[0][0]
         sLang = aEntry[0][1]
         channel = channels.get(int(iChannel))
@@ -224,52 +300,66 @@ def showLive():
             sThumb = channel[1]
         sDisplayTitle = '%s - [%s] (%s)' % (sMovieTitle, sChannel, sLang)
 
-        oOutputParameterHandler.addParameter('siteUrl', iChannel)
-        oOutputParameterHandler.addParameter('sMovieTitle', sMovieTitle)
-        oOutputParameterHandler.addParameter('sThumb', sThumb)
-        oGui.addMisc(SITE_IDENTIFIER, 'showLink', sDisplayTitle, 'sport.png', sThumb, sDesc, oOutputParameterHandler)
+        output_parameter_handler.addParameter('siteUrl', iChannel)
+        output_parameter_handler.addParameter('sMovieTitle', sMovieTitle)
+        output_parameter_handler.addParameter('sThumb', sThumb)
+        gui.addMisc(
+            SITE_IDENTIFIER,
+            'showLink',
+            sDisplayTitle,
+            'sport.png',
+            sThumb,
+            desc,
+            output_parameter_handler)
 
-    oGui.setEndOfDirectory()
+    gui.setEndOfDirectory()
 
 
 def showLink():
-    oGui = cGui()
+    gui = Gui()
 
-    oInputParameterHandler = cInputParameterHandler()
-    sUrl = oInputParameterHandler.getValue('siteUrl')
-    sMovieTitle = oInputParameterHandler.getValue('sMovieTitle')
-    sThumb = oInputParameterHandler.getValue('sThumb')
+    input_parameter_handler = InputParameterHandler()
+    sUrl = input_parameter_handler.getValue('siteUrl')
+    sMovieTitle = input_parameter_handler.getValue('sMovieTitle')
+    sThumb = input_parameter_handler.getValue('sThumb')
     if not sThumb:
         sThumb = ''
 
     sHoster = 'https://leet365.cc/fr/%d/%s'
 # alternative    sHoster = 'https://1rowsports.com/player/%d/%s'
 
-    oOutputParameterHandler = cOutputParameterHandler()
-    
+    output_parameter_handler = OutputParameterHandler()
+
     # jusqu'à 6 hosters, mais on vStream ne sait décoder que le 1 et le 5.
     hosters = [1, 5]
 #    for numHost in range(1, 7):
-    i=0
+    i = 0
     for numHost in hosters:
         i += 1
         sDisplayTitle = '%s [Lien %d]' % (sMovieTitle, i)
         sHosterUrl = sHoster % (numHost, sUrl)
-        oOutputParameterHandler.addParameter('siteUrl', sHosterUrl)
-        oOutputParameterHandler.addParameter('sMovieTitle', sMovieTitle)
-        oOutputParameterHandler.addParameter('sThumb', sThumb)
-        oGui.addMisc(SITE_IDENTIFIER, 'showHoster', sDisplayTitle, 'sport.png', sThumb, sDisplayTitle, oOutputParameterHandler)
+        output_parameter_handler.addParameter('siteUrl', sHosterUrl)
+        output_parameter_handler.addParameter('sMovieTitle', sMovieTitle)
+        output_parameter_handler.addParameter('sThumb', sThumb)
+        gui.addMisc(
+            SITE_IDENTIFIER,
+            'showHoster',
+            sDisplayTitle,
+            'sport.png',
+            sThumb,
+            sDisplayTitle,
+            output_parameter_handler)
 
-    oGui.setEndOfDirectory()
+    gui.setEndOfDirectory()
 
 
 def showHoster():
-    oGui = cGui()
+    gui = Gui()
 
-    oInputParameterHandler = cInputParameterHandler()
-    sUrl = oInputParameterHandler.getValue('siteUrl')
-    sMovieTitle = oInputParameterHandler.getValue('sMovieTitle')
-    sThumb = oInputParameterHandler.getValue('sThumb')
+    input_parameter_handler = InputParameterHandler()
+    sUrl = input_parameter_handler.getValue('siteUrl')
+    sMovieTitle = input_parameter_handler.getValue('sMovieTitle')
+    sThumb = input_parameter_handler.getValue('sThumb')
     if not sThumb:
         sThumb = ''
 
@@ -277,18 +367,18 @@ def showHoster():
 
     if sHosterUrl:
         sHosterUrl = sHosterUrl.strip()
-        oHoster = cHosterGui().checkHoster(sHosterUrl)
+        oHoster = HosterGui().checkHoster(sHosterUrl)
         if oHoster:
             oHoster.setDisplayName(sMovieTitle)
             oHoster.setFileName(sMovieTitle)
-            cHosterGui().showHoster(oGui, oHoster, sHosterUrl, sThumb)
+            HosterGui().showHoster(gui, oHoster, sHosterUrl, sThumb)
 
-    oGui.setEndOfDirectory()
+    gui.setEndOfDirectory()
 
 
 def Hoster_Leet365(url, referer):
-    oParser = cParser()
-    oRequestHandler = cRequestHandler(url)
+    oParser = Parser()
+    oRequestHandler = RequestHandler(url)
     oRequestHandler.addHeaderEntry('User-Agent', UA)
     oRequestHandler.addHeaderEntry('Referer', referer)
     sHtmlContent = oRequestHandler.request()
@@ -303,7 +393,7 @@ def Hoster_Leet365(url, referer):
             return Hoster_Laylow(hostUrl, url)
         return Hoster_Wigistream(hostUrl, url)
 
-    sPattern = '<script>fid="(.+?)".+?src="\/\/fclecteur\.com\/footy\.js">'
+    sPattern = '<script>fid="(.+?)".+?src="\\/\\/fclecteur\\.com\\/footy\\.js">'
     aResult = oParser.parse(sHtmlContent, sPattern)
     if aResult[0]:
         referer = url
@@ -314,15 +404,15 @@ def Hoster_Leet365(url, referer):
 
 
 def Hoster_Wigistream(url, referer):
-    
+
     if not url.startswith('http'):
         url = 'https:' + url
-    oRequestHandler = cRequestHandler(url)
+    oRequestHandler = RequestHandler(url)
     oRequestHandler.addHeaderEntry('User-Agent', UA)
     oRequestHandler.addHeaderEntry('Referer', referer)
     sHtmlContent = oRequestHandler.request()
 
-    sPattern = '(\s*eval\s*\(\s*function(?:.|\s)+?{}\)\))'
+    sPattern = '(\\s*eval\\s*\\(\\s*function(?:.|\\s)+?{}\\)\\))'
     aResult = re.findall(sPattern, sHtmlContent)
 
     if aResult:
@@ -333,7 +423,8 @@ def Hoster_Wigistream(url, referer):
         sPattern = 'src="(.+?)"'
         aResult = re.findall(sPattern, sUnpack)
         if aResult:
-            return True, aResult[0] + '|User-Agent=' + UA + '&Referer=' + Quote(url)
+            return True, aResult[0] + '|User-Agent=' + \
+                UA + '&Referer=' + Quote(url)
 
     sPattern = '<iframe.+?src="([^"]+)'  # iframe imbriqué
     aResult = re.findall(sPattern, sHtmlContent)
@@ -344,23 +435,26 @@ def Hoster_Wigistream(url, referer):
 
 
 def Hoster_Pkcast(url, referer):
-    oRequestHandler = cRequestHandler(url)
+    oRequestHandler = RequestHandler(url)
     oRequestHandler.addHeaderEntry('User-Agent', UA)
-    oRequestHandler.addHeaderEntry('Referer', '{uri.scheme}://{uri.netloc}/'.format(uri=urlparse(referer)))
+    oRequestHandler.addHeaderEntry(
+        'Referer', '{uri.scheme}://{uri.netloc}/'.format(uri=urlparse(referer)))
     sHtmlContent = oRequestHandler.request()
 
-    oParser = cParser()
-    sPattern = 'play\(\).+?return\((.+?)\.join'
+    oParser = Parser()
+    sPattern = 'play\\(\\).+?return\\((.+?)\\.join'
     aResult = oParser.parse(sHtmlContent, sPattern)
 
     if aResult:
-        return True, ''.join(ast.literal_eval(aResult[1][0])) + '|User-Agent=' + UA + '&Referer=' + Quote(url)
+        return True, ''.join(
+            ast.literal_eval(
+                aResult[1][0])) + '|User-Agent=' + UA + '&Referer=' + Quote(url)
 
     return False, False
 
 
 def Hoster_Laylow(url, referer):
-    oRequestHandler = cRequestHandler(url)
+    oRequestHandler = RequestHandler(url)
     oRequestHandler.addHeaderEntry('User-Agent', UA)
     oRequestHandler.addHeaderEntry('Referer', referer)
     sHtmlContent = oRequestHandler.request()
@@ -369,6 +463,7 @@ def Hoster_Laylow(url, referer):
     aResult = re.findall(sPattern, sHtmlContent)
 
     if aResult:
-        return True, aResult[0] + '|User-Agent=' + UA + '&Referer=' + Quote(url)
+        return True, aResult[0] + '|User-Agent=' + \
+            UA + '&Referer=' + Quote(url)
 
     return Hoster_Pkcast(url, referer)

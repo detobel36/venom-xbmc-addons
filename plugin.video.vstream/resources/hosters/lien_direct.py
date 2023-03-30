@@ -2,7 +2,7 @@
 # vStream https://github.com/Kodi-vStream/venom-xbmc-addons
 import re
 
-from resources.lib.handler.requestHandler import cRequestHandler
+from resources.lib.handler.requestHandler import RequestHandler
 from resources.hosters.hoster import iHoster
 from resources.lib.comaddon import dialog
 from resources.lib.util import urlEncode, Quote
@@ -14,9 +14,10 @@ class cHoster(iHoster):
         iHoster.__init__(self, 'lien_direct', 'Lien direct')
 
     def setUrl(self, url):
-        self._url = str(url).replace('+', '%20')  # un lien direct n'est pas forcement urlEncoded
+        # un lien direct n'est pas forcement urlEncoded
+        self._url = str(url).replace('+', '%20')
 
-    def _getMediaLinkForGuest(self, autoPlay = False):
+    def _getMediaLinkForGuest(self, autoPlay=False):
         api_call = self._url
 
         if ('hds.' in api_call) or ('bidzen' in api_call):
@@ -30,7 +31,8 @@ class cHoster(iHoster):
 
         # Special pour mangacity
         if 'pixsil' in api_call:
-            api_call = api_call.split('|')[0] + '|Referer=http://www.mangacity.org/jwplayer/player.swf'
+            api_call = api_call.split(
+                '|')[0] + '|Referer=http://www.mangacity.org/jwplayer/player.swf'
 
         # Modif pr aliez
         if 'aplayer1.me' in api_call:
@@ -43,7 +45,7 @@ class cHoster(iHoster):
 
         # Special pour toonanime.
         if 'toonanime' in api_call:
-            oRequest = cRequestHandler(api_call)
+            oRequest = RequestHandler(api_call)
             oRequest.addHeaderEntry('Referer', 'https://lb.toonanime.xyz/')
             sHtmlContent = oRequest.request()
 
@@ -57,14 +59,14 @@ class cHoster(iHoster):
                 qua.append(str(i[0]))
 
             headers = {
-                       "User-Agent": Quote("Mozilla/5.0 (Linux; Android 6.0.1; SM-G930V Build/MMB29M) " +
-                                           "AppleWebKit/537.36 (KHTML, like Gecko) Chrome/50.0.2661.89 Mobile Safari/537.36"),
-                       "Referer": "https://lb.toonanime.xyz/"
-                       }
+                "User-Agent": Quote("Mozilla/5.0 (Linux; Android 6.0.1; SM-G930V Build/MMB29M) " +
+                                    "AppleWebKit/537.36 (KHTML, like Gecko) Chrome/50.0.2661.89 Mobile Safari/537.36"),
+                "Referer": "https://lb.toonanime.xyz/"
+            }
 
             # Affichage du tableau
-            api_call = "http://127.0.0.1:2424?u=https://lb.toonanime.xyz" + dialog().VSselectqual(qua, url) + \
-                       "@" + urlEncode(headers)
+            api_call = "http://127.0.0.1:2424?u=https://lb.toonanime.xyz" + \
+                dialog().VSselectqual(qua, url) + "@" + urlEncode(headers)
 
         if api_call:
             return True, api_call

@@ -1,7 +1,7 @@
 # coding: utf-8
 # vStream https://github.com/Kodi-vStream/venom-xbmc-addons
-from resources.lib.handler.requestHandler import cRequestHandler
-from resources.lib.parser import cParser
+from resources.lib.handler.requestHandler import RequestHandler
+from resources.lib.parser import Parser
 from resources.hosters.hoster import iHoster
 from resources.lib.packer import cPacker
 
@@ -17,16 +17,16 @@ class cHoster(iHoster):
         self._url = str(url)
         self._url = self._url.replace("/f/", "/e/")
 
-    def _getMediaLinkForGuest(self, autoPlay = False):
+    def _getMediaLinkForGuest(self, autoPlay=False):
         api_call = ''
 
-        oParser = cParser()
+        oParser = Parser()
 
-        oRequest = cRequestHandler(self._url)
+        oRequest = RequestHandler(self._url)
         oRequest.addHeaderEntry('Cookie', 'hds2=1')
         sHtmlContent = oRequest.request()
 
-        sPattern = '(\s*eval\s*\(\s*function(?:.|\s)+?)<\/script>'
+        sPattern = '(\\s*eval\\s*\\(\\s*function(?:.|\\s)+?)<\\/script>'
         aResult = oParser.parse(sHtmlContent, sPattern)
 
         if aResult[0] is True:

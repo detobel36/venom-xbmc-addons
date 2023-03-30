@@ -2,9 +2,10 @@ import re
 
 from resources.lib.handler.premiumHandler import cPremiumHandler
 from resources.lib.util import cUtil
-from resources.lib.handler.requestHandler import cRequestHandler
-from resources.lib.parser import cParser
+from resources.lib.handler.requestHandler import RequestHandler
+from resources.lib.parser import Parser
 from resources.hosters.hoster import iHoster
+
 
 class cHoster(iHoster):
 
@@ -22,42 +23,42 @@ class cHoster(iHoster):
 
     def __modifyUrl(self, url):
         if (url.startswith('http://www.megavideo.com/v/')):
-            oRequestHandler = cRequestHandler(url)
+            oRequestHandler = RequestHandler(url)
             oRequestHandler.request()
             sRealUrl = oRequestHandler.getRealUrl()
             self._url = sRealUrl
             return self.__getIdFromUrl()
 
-        return url;
+        return url
 
-    def getMediaLink(self, autoPlay = False):
+    def getMediaLink(self, autoPlay=False):
         oPremiumHandler = cPremiumHandler(self.getPluginIdentifier())
         if (oPremiumHandler.isPremiumModeAvailable()):
             sUsername = oPremiumHandler.getUsername()
             sPassword = oPremiumHandler.getPassword()
-            return self._getMediaLinkByPremiumUser(sUsername, sPassword);
+            return self._getMediaLinkByPremiumUser(sUsername, sPassword)
 
-        return self._getMediaLinkForGuest(autoPlay);
+        return self._getMediaLinkForGuest(autoPlay)
 
     def __getIdFromUrl(self):
         sPattern = "v=([^&]+)"
-        oParser = cParser()
+        oParser = Parser()
         aResult = oParser.parse(self._url, sPattern)
         if aResult[0] is True:
             return aResult[1][0]
 
         return ''
 
-    def _getMediaLinkForGuest(self, autoPlay = False):
+    def _getMediaLinkForGuest(self, autoPlay=False):
         sId = self.__getIdFromUrl()
 
         self._url = 'http://www.megavideo.com/xml/videolink.php?v=' + str(sId)
 
-        oRequest = cRequestHandler(self.getUrl())
+        oRequest = RequestHandler(self.getUrl())
         oRequest.addHeaderEntry('Referer', 'http://www.megavideo.com/')
         sContent = oRequest.request()
 
-        aResult = cParser().parse(sContent, self.getPattern())
+        aResult = Parser().parse(sContent, self.getPattern())
 
         if aResult[0] is False:
             s = re.compile(' s="(.+?)"').findall(sContent)
@@ -65,7 +66,8 @@ class cHoster(iHoster):
             k2 = re.compile(' k2="(.+?)"').findall(sContent)
             un = re.compile(' un="(.+?)"').findall(sContent)
 
-            sUrl = "http://www" + s[0] + ".megavideo.com/files/" + self.__decrypt(un[0], k1[0], k2[0]) + "/?.flv"
+            sUrl = "http://www" + s[0] + ".megavideo.com/files/" + \
+                self.__decrypt(un[0], k1[0], k2[0]) + "/?.flv"
 
             aResult = []
             aResult.append(True)
@@ -77,31 +79,32 @@ class cHoster(iHoster):
         aResult.append('')
         return aResult
 
-
     def _getMediaLinkByPremiumUser(self, sUsername, sPassword):
-        oRequestHandler = cRequestHandler('http://www.megavideo.com/?s=account')
-        oRequestHandler.setRequestType(cRequestHandler.REQUEST_TYPE_POST)
+        oRequestHandler = RequestHandler(
+            'http://www.megavideo.com/?s=account')
+        oRequestHandler.setRequestType(RequestHandler.REQUEST_TYPE_POST)
         oRequestHandler.addParameters('login', '1')
         oRequestHandler.addParameters('username', sUsername)
         oRequestHandler.addParameters('password', sPassword)
         oRequestHandler.request()
 
-        aHeader = oRequestHandler.getResponseHeader();
+        aHeader = oRequestHandler.getResponseHeader()
         sReponseCookie = aHeader.getheader("Set-Cookie")
 
         self._url = self.__getIdFromUrl()
 
         sPattern = 'user=([^;]+);'
-        oParser = cParser()
+        oParser = Parser()
         aResult = oParser.parse(sReponseCookie, sPattern)
         if aResult[0] is True:
             sUserId = aResult[1][0]
-            sUrl = 'http://www.megavideo.com/xml/player_login.php?u=' + str(sUserId) + '&v=' + str(self._url)
-            oRequestHandler = cRequestHandler(sUrl)
+            sUrl = 'http://www.megavideo.com/xml/player_login.php?u=' + \
+                str(sUserId) + '&v=' + str(self._url)
+            oRequestHandler = RequestHandler(sUrl)
             sXmlContent = oRequestHandler.request()
 
             sPattern = 'downloadurl="([^"]+)"'
-            oParser = cParser()
+            oParser = Parser()
             aResult = oParser.parse(sXmlContent, sPattern)
 
             if aResult[0] is True:
@@ -150,19 +153,24 @@ class cHoster(iHoster):
                                                         __reg1.append("1010")
                                                     else:
                                                         if (__reg0 == "b"):
-                                                            __reg1.append("1011")
+                                                            __reg1.append(
+                                                                "1011")
                                                         else:
                                                             if (__reg0 == "c"):
-                                                                __reg1.append("1100")
+                                                                __reg1.append(
+                                                                    "1100")
                                                             else:
                                                                 if (__reg0 == "d"):
-                                                                    __reg1.append("1101")
+                                                                    __reg1.append(
+                                                                        "1101")
                                                                 else:
                                                                     if (__reg0 == "e"):
-                                                                        __reg1.append("1110")
+                                                                        __reg1.append(
+                                                                            "1110")
                                                                     else:
                                                                         if (__reg0 == "f"):
-                                                                            __reg1.append("1111")
+                                                                            __reg1.append(
+                                                                                "1111")
 
         __reg3 = __reg3 + 1
 
@@ -190,7 +198,8 @@ class cHoster(iHoster):
         __reg3 = 0
         while (__reg3 < 128):
 
-            __reg1[__reg3] = int(__reg1[__reg3]) ^ int(__reg6[__reg3 + 256]) & 1
+            __reg1[__reg3] = int(__reg1[__reg3]) ^ int(
+                __reg6[__reg3 + 256]) & 1
             __reg3 = __reg3 + 1
 
         __reg12 = self.__ajoin(__reg1)
@@ -201,7 +210,6 @@ class cHoster(iHoster):
             __reg9 = __reg12[__reg3:__reg3 + 4]
             __reg7.append(__reg9)
             __reg3 = __reg3 + 4
-
 
         __reg2 = []
         __reg3 = 0
@@ -245,17 +253,25 @@ class cHoster(iHoster):
                                                         if (__reg0 == "1011"):
                                                             __reg2.append("b")
                                                         else:
-                                                            if (__reg0 == "1100"):
-                                                                __reg2.append("c")
+                                                            if (__reg0 ==
+                                                                    "1100"):
+                                                                __reg2.append(
+                                                                    "c")
                                                             else:
-                                                                if (__reg0 == "1101"):
-                                                                    __reg2.append("d")
+                                                                if (__reg0 ==
+                                                                        "1101"):
+                                                                    __reg2.append(
+                                                                        "d")
                                                                 else:
-                                                                    if (__reg0 == "1110"):
-                                                                        __reg2.append("e")
+                                                                    if (__reg0 ==
+                                                                            "1110"):
+                                                                        __reg2.append(
+                                                                            "e")
                                                                     else:
-                                                                        if (__reg0 == "1111"):
-                                                                            __reg2.append("f")
+                                                                        if (__reg0 ==
+                                                                                "1111"):
+                                                                            __reg2.append(
+                                                                                "f")
 
             __reg3 = __reg3 + 1
 

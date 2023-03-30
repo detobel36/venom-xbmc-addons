@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 # vStream https://github.com/Kodi-vStream/venom-xbmc-addons
 
-from resources.lib.handler.requestHandler import cRequestHandler
+from resources.lib.handler.requestHandler import RequestHandler
 from resources.lib.comaddon import addon, dialog, VSlog
 
 
@@ -52,14 +52,21 @@ class cJDownloaderHandler:
         bAutomaticDownload = self.__getAutomaticStart()
         bLinkGrabber = self.__getLinkGrabber()
 
-        sLinkForJd = self.__createJDUrl(sFileUrl, sHost, sPort, bAutomaticDownload, bLinkGrabber)
+        sLinkForJd = self.__createJDUrl(
+            sFileUrl, sHost, sPort, bAutomaticDownload, bLinkGrabber)
         VSlog("JD Link " + str(sLinkForJd))
 
-        oRequestHandler = cRequestHandler(sLinkForJd)
+        oRequestHandler = RequestHandler(sLinkForJd)
         oRequestHandler.request()
         return True
 
-    def __createJDUrl(self, sFileUrl, sHost, sPort, bAutomaticDownload, bLinkGrabber):
+    def __createJDUrl(
+            self,
+            sFileUrl,
+            sHost,
+            sPort,
+            bAutomaticDownload,
+            bLinkGrabber):
         sGrabber = '0'
         if bLinkGrabber is True:
             sGrabber = '1'
@@ -68,7 +75,8 @@ class cJDownloaderHandler:
         if bAutomaticDownload is True:
             sAutomaticStart = '1'
 
-        sUrl = 'http://' + str(sHost) + ':' + str(sPort) + '/action/add/links/grabber' + str(sGrabber) + '/start' + str(sAutomaticStart) + '/' + sFileUrl
+        sUrl = 'http://' + str(sHost) + ':' + str(sPort) + '/action/add/links/grabber' + \
+            str(sGrabber) + '/start' + str(sAutomaticStart) + '/' + sFileUrl
         return sUrl
 
     def __checkConnection(self):
@@ -79,7 +87,7 @@ class cJDownloaderHandler:
         sLinkForJd = 'http://' + str(sHost) + ':' + str(sPort)
 
         try:
-            oRequestHandler = cRequestHandler(sLinkForJd)
+            oRequestHandler = RequestHandler(sLinkForJd)
             oRequestHandler.request()
             return True
         except Exception as e:

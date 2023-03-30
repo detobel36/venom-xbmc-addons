@@ -2,9 +2,9 @@
 # vStream https://github.com/Kodi-vStream/venom-xbmc-addons
 # https://www.vidbem.com/embed-xxx.html
 
-from resources.lib.handler.requestHandler import cRequestHandler
+from resources.lib.handler.requestHandler import RequestHandler
 from resources.hosters.hoster import iHoster
-from resources.lib.parser import cParser
+from resources.lib.parser import Parser
 from resources.lib.aadecode import AADecoder
 from resources.lib.comaddon import dialog
 
@@ -19,22 +19,23 @@ class cHoster(iHoster):
     def isDownloadable(self):
         return False
 
-    def _getMediaLinkForGuest(self, autoPlay = False):
+    def _getMediaLinkForGuest(self, autoPlay=False):
         api_call = False
 
-        oRequest = cRequestHandler(self._url)
+        oRequest = RequestHandler(self._url)
         oRequest.addHeaderEntry('User-Agent', UA)
         oRequest.addHeaderEntry('Referer', self._url)
-        oRequest.addHeaderEntry('Accept', 'text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8')
+        oRequest.addHeaderEntry(
+            'Accept', 'text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8')
 
-        oRequest = cRequestHandler(self._url)
+        oRequest = RequestHandler(self._url)
         sHtmlContent = oRequest.request()
 
         list_url = []
         list_q = []
-        oParser = cParser()
+        oParser = Parser()
 
-        sPattern = '(?:[>;]\s*)(ﾟωﾟ.+?\(\'_\'\);)'
+        sPattern = '(?:[>;]\\s*)(ﾟωﾟ.+?\\(\'_\'\\);)'
         aResult = oParser.parse(sHtmlContent, sPattern)
 
         if aResult[0] is True:  # 1 seul à vérifier ici ?

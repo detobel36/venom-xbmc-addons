@@ -1,25 +1,25 @@
 # -*- coding: utf-8 -*-
 # vStream https://github.com/Kodi-vStream/venom-xbmc-addons
 # Makoto
-from resources.lib.gui.hoster import cHosterGui
-from resources.lib.gui.gui import cGui
-from resources.lib.handler.inputParameterHandler import cInputParameterHandler
-from resources.lib.handler.outputParameterHandler import cOutputParameterHandler
-from resources.lib.handler.requestHandler import cRequestHandler
-from resources.lib.parser import cParser
-from resources.lib.comaddon import progress, siteManager
+from resources.lib.gui.hoster import HosterGui
+from resources.lib.gui.gui import Gui
+from resources.lib.handler.inputParameterHandler import InputParameterHandler
+from resources.lib.handler.outputParameterHandler import OutputParameterHandler
+from resources.lib.handler.requestHandler import RequestHandler
+from resources.lib.parser import Parser
+from resources.lib.comaddon import Progress, SiteManager
 
 SITE_IDENTIFIER = 'skyanimes'
 SITE_NAME = 'Sky-Animes'
 SITE_DESC = 'Animés, Dramas en Direct Download'
 
-URL_MAIN = siteManager().getUrlMain(SITE_IDENTIFIER)
+URL_MAIN = SiteManager().getUrlMain(SITE_IDENTIFIER)
 
 STREAM = 'index.php?file=Media&nuked_nude=index&op=do_dl&dl_id='
 
 INDEX = 'index.php?file=Search&op=mod_search&searchtype=matchand&autor=&module=Download&limit=100&main='
 URL_SEARCH_ANIMS = (URL_MAIN + INDEX, 'showEpisode')
-#URL_SEARCH_DRAMAS = (URL_MAIN + INDEX, 'showEpisode')
+# URL_SEARCH_DRAMAS = (URL_MAIN + INDEX, 'showEpisode')
 FUNCTION_SEARCH = 'showEpisode'
 
 ANIM_ANIMS = (True, 'showMenuAnims')
@@ -32,74 +32,119 @@ DRAMA_GENRES = (True, 'showGenresD')
 
 
 def load():
-    oGui = cGui()
+    gui = Gui()
 
-    oOutputParameterHandler = cOutputParameterHandler()
-    oOutputParameterHandler.addParameter('siteUrl', ANIM_ANIMS[0])
-    oGui.addDir(SITE_IDENTIFIER, ANIM_ANIMS[1], 'Animés', 'animes.png', oOutputParameterHandler)
+    output_parameter_handler = OutputParameterHandler()
+    output_parameter_handler.addParameter('siteUrl', ANIM_ANIMS[0])
+    gui.addDir(
+        SITE_IDENTIFIER,
+        ANIM_ANIMS[1],
+        'Animés',
+        'animes.png',
+        output_parameter_handler)
 
-    oOutputParameterHandler.addParameter('siteUrl', DRAMA_DRAMAS[0])
-    oGui.addDir(SITE_IDENTIFIER, DRAMA_DRAMAS[1], 'Dramas', 'dramas.png', oOutputParameterHandler)
+    output_parameter_handler.addParameter('siteUrl', DRAMA_DRAMAS[0])
+    gui.addDir(
+        SITE_IDENTIFIER,
+        DRAMA_DRAMAS[1],
+        'Dramas',
+        'dramas.png',
+        output_parameter_handler)
 
-    oGui.setEndOfDirectory()
+    gui.setEndOfDirectory()
 
 
 def showMenuAnims():
-    oGui = cGui()
+    gui = Gui()
 
-    oOutputParameterHandler = cOutputParameterHandler()
-    oOutputParameterHandler.addParameter('siteUrl', URL_SEARCH_ANIMS[0])
-    oGui.addDir(SITE_IDENTIFIER, 'showSearch', 'Recherche', 'search.png', oOutputParameterHandler)
+    output_parameter_handler = OutputParameterHandler()
+    output_parameter_handler.addParameter('siteUrl', URL_SEARCH_ANIMS[0])
+    gui.addDir(
+        SITE_IDENTIFIER,
+        'showSearch',
+        'Recherche',
+        'search.png',
+        output_parameter_handler)
 
-    oOutputParameterHandler.addParameter('siteUrl', ANIM_VOSTFRS[0])
-    oGui.addDir(SITE_IDENTIFIER, ANIM_VOSTFRS[1], 'Animés (Films)', 'films.png', oOutputParameterHandler)
+    output_parameter_handler.addParameter('siteUrl', ANIM_VOSTFRS[0])
+    gui.addDir(
+        SITE_IDENTIFIER,
+        ANIM_VOSTFRS[1],
+        'Animés (Films)',
+        'films.png',
+        output_parameter_handler)
 
-    oOutputParameterHandler.addParameter('siteUrl', ANIM_GENRES[0])
-    oGui.addDir(SITE_IDENTIFIER, ANIM_GENRES[1], 'Animés (Genres)', 'genres.png', oOutputParameterHandler)
+    output_parameter_handler.addParameter('siteUrl', ANIM_GENRES[0])
+    gui.addDir(
+        SITE_IDENTIFIER,
+        ANIM_GENRES[1],
+        'Animés (Genres)',
+        'genres.png',
+        output_parameter_handler)
 
     liste = []
     liste.append(['En Cours', URL_MAIN + 'streaming-animes-en-cours?p=-1'])
     liste.append(['Terminés', URL_MAIN + 'download-animes-termines?p=-1'])
 
-    for sTitle, sUrl in liste:
-        oOutputParameterHandler.addParameter('siteUrl', sUrl)
-        oGui.addDir(SITE_IDENTIFIER, 'showSeries', sTitle, 'animes.png', oOutputParameterHandler)
+    for title, sUrl in liste:
+        output_parameter_handler.addParameter('siteUrl', sUrl)
+        gui.addDir(
+            SITE_IDENTIFIER,
+            'showSeries',
+            title,
+            'animes.png',
+            output_parameter_handler)
 
-    oGui.setEndOfDirectory()
+    gui.setEndOfDirectory()
 
 
 def showMenuDramas():
-    oGui = cGui()
+    gui = Gui()
 
-    oOutputParameterHandler = cOutputParameterHandler()
-    oOutputParameterHandler.addParameter('siteUrl', URL_SEARCH_ANIMS[0])
-    oGui.addDir(SITE_IDENTIFIER, 'showSearch', 'Recherche', 'search.png', oOutputParameterHandler)
+    output_parameter_handler = OutputParameterHandler()
+    output_parameter_handler.addParameter('siteUrl', URL_SEARCH_ANIMS[0])
+    gui.addDir(
+        SITE_IDENTIFIER,
+        'showSearch',
+        'Recherche',
+        'search.png',
+        output_parameter_handler)
 
-    oOutputParameterHandler.addParameter('siteUrl', DRAMA_GENRES[0])
-    oGui.addDir(SITE_IDENTIFIER, DRAMA_GENRES[1], 'Dramas (Genres)', 'genres.png', oOutputParameterHandler)
+    output_parameter_handler.addParameter('siteUrl', DRAMA_GENRES[0])
+    gui.addDir(
+        SITE_IDENTIFIER,
+        DRAMA_GENRES[1],
+        'Dramas (Genres)',
+        'genres.png',
+        output_parameter_handler)
 
     # contenu à contrôler
-    # oOutputParameterHandler.addParameter('siteUrl', ANIM_OAVS[0])
-    # oGui.addDir(SITE_IDENTIFIER, ANIM_OAVS[1], 'Dramas (OAVS)', 'dramas.png', oOutputParameterHandler)
+    # output_parameter_handler.addParameter('siteUrl', ANIM_OAVS[0])
+    # gui.addDir(SITE_IDENTIFIER, ANIM_OAVS[1], 'Dramas (OAVS)', 'dramas.png', output_parameter_handler)
 
     liste = []
     liste.append(['En Cours', URL_MAIN + 'download-dramas-en-cours?p=-1'])
     liste.append(['Terminés', URL_MAIN + 'download-dramas-termines?p=-1'])
 
-    for sTitle, sUrl in liste:
-        oOutputParameterHandler.addParameter('siteUrl', sUrl)
-        oGui.addDir(SITE_IDENTIFIER, 'showSeries', sTitle, 'dramas.png', oOutputParameterHandler)
+    for title, sUrl in liste:
+        output_parameter_handler.addParameter('siteUrl', sUrl)
+        gui.addDir(
+            SITE_IDENTIFIER,
+            'showSeries',
+            title,
+            'dramas.png',
+            output_parameter_handler)
 
-    oGui.setEndOfDirectory()
+    gui.setEndOfDirectory()
 
 
 def showGenresA():
-    oGui = cGui()
-    oParser = cParser()
+    gui = Gui()
+    oParser = Parser()
 
     sUrl = URL_MAIN + 'streaming-animes-en-cours'
 
-    oRequestHandler = cRequestHandler(sUrl)
+    oRequestHandler = RequestHandler(sUrl)
     sHtmlContent = oRequestHandler.request()
     sStart = 'id="id_genre"'
     sEnd = '<select id="triGenre"'
@@ -109,28 +154,33 @@ def showGenresA():
     aResult = oParser.parse(sHtmlContent, sPattern)
 
     if not aResult[0]:
-        oGui.addText(SITE_IDENTIFIER)
+        gui.addText(SITE_IDENTIFIER)
 
     if aResult[0]:
-        oOutputParameterHandler = cOutputParameterHandler()
+        output_parameter_handler = OutputParameterHandler()
         for aEntry in aResult[1]:
             sUrl = URL_MAIN + aEntry[0]
-            sTitle = aEntry[1]
+            title = aEntry[1]
 
-            oOutputParameterHandler.addParameter('siteUrl', sUrl)
-            oOutputParameterHandler.addParameter('sMovieTitle', sTitle)
-            oGui.addDir(SITE_IDENTIFIER, 'showSeries', sTitle, 'genres.png', oOutputParameterHandler)
+            output_parameter_handler.addParameter('siteUrl', sUrl)
+            output_parameter_handler.addParameter('sMovieTitle', title)
+            gui.addDir(
+                SITE_IDENTIFIER,
+                'showSeries',
+                title,
+                'genres.png',
+                output_parameter_handler)
 
-        oGui.setEndOfDirectory()
+        gui.setEndOfDirectory()
 
 
 def showGenresD():
-    oGui = cGui()
-    oParser = cParser()
+    gui = Gui()
+    oParser = Parser()
 
     sUrl = URL_MAIN + 'download-dramas-en-cours?p=-1'
 
-    oRequestHandler = cRequestHandler(sUrl)
+    oRequestHandler = RequestHandler(sUrl)
     sHtmlContent = oRequestHandler.request()
     sStart = 'id="id_genre"'
     sEnd = '<select id="triGenre"'
@@ -140,96 +190,126 @@ def showGenresD():
     aResult = oParser.parse(sHtmlContent, sPattern)
 
     if not aResult[0]:
-        oGui.addText(SITE_IDENTIFIER)
+        gui.addText(SITE_IDENTIFIER)
 
     if aResult[0]:
-        oOutputParameterHandler = cOutputParameterHandler()
+        output_parameter_handler = OutputParameterHandler()
         for aEntry in aResult[1]:
             sUrl = URL_MAIN + aEntry[0]
-            sTitle = aEntry[1]
+            title = aEntry[1]
 
-            oOutputParameterHandler.addParameter('siteUrl', sUrl)
-            oOutputParameterHandler.addParameter('sMovieTitle', sTitle)
-            oGui.addDir(SITE_IDENTIFIER, 'showSeries', sTitle, 'genres.png', oOutputParameterHandler)
+            output_parameter_handler.addParameter('siteUrl', sUrl)
+            output_parameter_handler.addParameter('sMovieTitle', title)
+            gui.addDir(
+                SITE_IDENTIFIER,
+                'showSeries',
+                title,
+                'genres.png',
+                output_parameter_handler)
 
-        oGui.setEndOfDirectory()
+        gui.setEndOfDirectory()
 
 
 def showSearch():
-    oGui = cGui()
-    oInputParameterHandler = cInputParameterHandler()
-    sUrl = oInputParameterHandler.getValue('siteUrl')
+    gui = Gui()
+    input_parameter_handler = InputParameterHandler()
+    sUrl = input_parameter_handler.getValue('siteUrl')
 
-    sSearchText = oGui.showKeyBoard()
+    sSearchText = gui.showKeyBoard()
     if sSearchText:
         sUrl = sUrl + sSearchText.replace(' ', '+')
         showEpisode(sUrl)
-        oGui.setEndOfDirectory()
+        gui.setEndOfDirectory()
         return
 
 
 def showSeries():
-    oGui = cGui()
-    oInputParameterHandler = cInputParameterHandler()
-    sUrl = oInputParameterHandler.getValue('siteUrl').replace('+', '%2B').replace('é', 'e').replace('ô', 'o')\
-                                                     .replace('É', 'E').replace('ï', 'i').replace('è', 'e')
+    gui = Gui()
+    input_parameter_handler = InputParameterHandler()
+    sUrl = input_parameter_handler.getValue('siteUrl').replace(
+        '+',
+        '%2B').replace(
+        'é',
+        'e').replace(
+            'ô',
+            'o') .replace(
+                'É',
+                'E').replace(
+                    'ï',
+                    'i').replace(
+                        'è',
+        'e')
 
-    oRequestHandler = cRequestHandler(sUrl)
+    oRequestHandler = RequestHandler(sUrl)
     sHtmlContent = oRequestHandler.request()
 
-    oParser = cParser()
+    oParser = Parser()
     sPattern = '<a href="([^"]+)"><img src="([^"]+)" width.+?alt="([^"]+).+?></a>'
 
     aResult = oParser.parse(sHtmlContent, sPattern)
 
     if not aResult[0]:
-        oGui.addText(SITE_IDENTIFIER)
+        gui.addText(SITE_IDENTIFIER)
 
     if aResult[0]:
         total = len(aResult[1])
-        progress_ = progress().VScreate(SITE_NAME, large=(total>50))
-        oOutputParameterHandler = cOutputParameterHandler()
+        progress_ = Progress().VScreate(SITE_NAME, large=(total > 50))
+        output_parameter_handler = OutputParameterHandler()
         for aEntry in aResult[1]:
             progress_.VSupdate(progress_, total)
             if progress_.iscanceled():
                 break
 
-            sTitle = aEntry[2]
+            title = aEntry[2]
             sUrl2 = URL_MAIN + aEntry[0]
             sThumb = URL_MAIN + aEntry[1].replace(' ', '%20')
-            sDesc = ''
+            desc = ''
 
-            sTitle = sTitle.replace(', telecharger en ddl', '')
+            title = title.replace(', telecharger en ddl', '')
 
-            oOutputParameterHandler.addParameter('siteUrl', sUrl2)
-            oOutputParameterHandler.addParameter('sThumb', sThumb)
+            output_parameter_handler.addParameter('siteUrl', sUrl2)
+            output_parameter_handler.addParameter('sThumb', sThumb)
 
             if '-animes-' in sUrl:
-                oGui.addAnime(SITE_IDENTIFIER, 'showEpisode', sTitle, '', sThumb, sDesc, oOutputParameterHandler)
+                gui.addAnime(
+                    SITE_IDENTIFIER,
+                    'showEpisode',
+                    title,
+                    '',
+                    sThumb,
+                    desc,
+                    output_parameter_handler)
             else:
-                oGui.addDrama(SITE_IDENTIFIER, 'showEpisode', sTitle, '', sThumb, sDesc, oOutputParameterHandler)
+                gui.addDrama(
+                    SITE_IDENTIFIER,
+                    'showEpisode',
+                    title,
+                    '',
+                    sThumb,
+                    desc,
+                    output_parameter_handler)
 
         progress_.VSclose(progress_)
 
-        oGui.setEndOfDirectory()
+        gui.setEndOfDirectory()
 
 
 def showEpisode(sSearch=''):
-    oGui = cGui()
+    gui = Gui()
 
-    oInputParameterHandler = cInputParameterHandler()
-    sUrl = oInputParameterHandler.getValue('siteUrl')
-    sThumb = oInputParameterHandler.getValue('sThumb')
+    input_parameter_handler = InputParameterHandler()
+    sUrl = input_parameter_handler.getValue('siteUrl')
+    sThumb = input_parameter_handler.getValue('sThumb')
     if sThumb:
         sThumb = sThumb.replace(' ', '%20')
 
     if sSearch:
         sUrl = sSearch
 
-    oRequestHandler = cRequestHandler(sUrl)
+    oRequestHandler = RequestHandler(sUrl)
     sHtmlContent = oRequestHandler.request()
 
-    oParser = cParser()
+    oParser = Parser()
     if sSearch:
         sPattern = '<a href=".+?id=([^"]+)"><b>(.+?)</b>'
     else:
@@ -238,57 +318,81 @@ def showEpisode(sSearch=''):
     aResult = oParser.parse(sHtmlContent, sPattern)
 
     if not aResult[0]:
-        oGui.addText(SITE_IDENTIFIER)
+        gui.addText(SITE_IDENTIFIER)
 
     if aResult[0]:
         total = len(aResult[1])
-        progress_ = progress().VScreate(SITE_NAME)
-        oOutputParameterHandler = cOutputParameterHandler()
+        progress_ = Progress().VScreate(SITE_NAME)
+        output_parameter_handler = OutputParameterHandler()
         for aEntry in sorted(aResult[1]):
             progress_.VSupdate(progress_, total)
             if progress_.iscanceled():
                 break
 
             if sSearch:
-                sTitle = aEntry[1]
-                sTitle, sTitle1 = sTitle.replace('1080p', '').replace('BD', '').replace('V2', '').replace('FIN', '')\
-                                        .replace('Fin', '').replace('fin', '').replace('OAV', '').replace('Bluray', '')\
-                                        .replace('Blu-Ray', '').rstrip().rsplit(' ', 1)
-                sTitle = 'E' + sTitle1 + ' ' + sTitle
+                title = aEntry[1]
+                title, sTitle1 = title.replace(
+                    '1080p', '').replace(
+                    'BD', '').replace(
+                    'V2', '').replace(
+                    'FIN', '') .replace(
+                    'Fin', '').replace(
+                        'fin', '').replace(
+                            'OAV', '').replace(
+                                'Bluray', '') .replace(
+                                    'Blu-Ray', '').rstrip().rsplit(
+                                        ' ', 1)
+                title = 'E' + sTitle1 + ' ' + title
                 sUrl2 = URL_MAIN + STREAM + aEntry[0]
                 sThumb = ''
             else:
-                sTitle = aEntry[1]
-                sTitle, sTitle1 = sTitle.replace('1080p', '').replace('BD', '').replace('V2', '').replace('FIN', '')\
-                                        .replace('Fin', '').replace('fin', '').replace('OAV', '').replace('Bluray', '')\
-                                        .replace('Blu-Ray', '').rstrip().rsplit(' ', 1)
-                sTitle = 'E' + sTitle1 + ' ' + sTitle
+                title = aEntry[1]
+                title, sTitle1 = title.replace(
+                    '1080p', '').replace(
+                    'BD', '').replace(
+                    'V2', '').replace(
+                    'FIN', '') .replace(
+                    'Fin', '').replace(
+                        'fin', '').replace(
+                            'OAV', '').replace(
+                                'Bluray', '') .replace(
+                                    'Blu-Ray', '').rstrip().rsplit(
+                                        ' ', 1)
+                title = 'E' + sTitle1 + ' ' + title
                 sUrl2 = URL_MAIN + STREAM + aEntry[0]
                 sUrl2 = sUrl2.replace('#', '')
 
-            oOutputParameterHandler.addParameter('siteUrl', sUrl2)
-            oOutputParameterHandler.addParameter('sMovieTitle', sTitle)
-            oOutputParameterHandler.addParameter('sThumb', sThumb)
-            oGui.addEpisode(SITE_IDENTIFIER, 'showHosters', sTitle, '', sThumb, '', oOutputParameterHandler)
+            output_parameter_handler.addParameter('siteUrl', sUrl2)
+            output_parameter_handler.addParameter('sMovieTitle', title)
+            output_parameter_handler.addParameter('sThumb', sThumb)
+            gui.addEpisode(
+                SITE_IDENTIFIER,
+                'showHosters',
+                title,
+                '',
+                sThumb,
+                '',
+                output_parameter_handler)
 
         progress_.VSclose(progress_)
     if not sSearch:
-        oGui.setEndOfDirectory()
+        gui.setEndOfDirectory()
 
 
 def showHosters():
-    oGui = cGui()
-    oInputParameterHandler = cInputParameterHandler()
-    sUrl = oInputParameterHandler.getValue('siteUrl')
-    sMovieTitle = oInputParameterHandler.getValue('sMovieTitle')
-    sThumb = oInputParameterHandler.getValue('sThumb')
+    gui = Gui()
+    input_parameter_handler = InputParameterHandler()
+    sUrl = input_parameter_handler.getValue('siteUrl')
+    sMovieTitle = input_parameter_handler.getValue('sMovieTitle')
+    sThumb = input_parameter_handler.getValue('sThumb')
     if sThumb:
         sThumb = sThumb.replace(' ', '%20')
-    oHoster = cHosterGui().checkHoster('.m3u8')
+    oHoster = HosterGui().checkHoster('.m3u8')
 
     if oHoster:
         oHoster.setDisplayName(sMovieTitle)
         oHoster.setFileName(sMovieTitle)
-        cHosterGui().showHoster(oGui, oHoster, sUrl, sThumb, oInputParameterHandler=oInputParameterHandler)
+        HosterGui().showHoster(gui, oHoster, sUrl, sThumb,
+                               input_parameter_handler=input_parameter_handler)
 
-    oGui.setEndOfDirectory()
+    gui.setEndOfDirectory()

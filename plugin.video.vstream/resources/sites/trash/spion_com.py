@@ -1,16 +1,16 @@
 # -*- coding: utf-8 -*-
 # vStream https://github.com/Kodi-vStream/venom-xbmc-addons
 # Par jojotango
-return False
-import re
-
-from resources.lib.gui.hoster import cHosterGui
-from resources.lib.gui.gui import cGui
-from resources.lib.handler.inputParameterHandler import cInputParameterHandler
-from resources.lib.handler.outputParameterHandler import cOutputParameterHandler
-from resources.lib.handler.requestHandler import cRequestHandler
-from resources.lib.parser import cParser
 from resources.lib.comaddon import dialog
+from resources.lib.parser import Parser
+from resources.lib.handler.requestHandler import RequestHandler
+from resources.lib.handler.outputParameterHandler import OutputParameterHandler
+from resources.lib.handler.inputParameterHandler import InputParameterHandler
+from resources.lib.gui.gui import Gui
+from resources.lib.gui.hoster import HosterGui
+import re
+return False
+
 
 SITE_IDENTIFIER = 'spion_com'
 SITE_NAME = 'Spi0n'
@@ -40,33 +40,48 @@ def showCensure():
 
 
 def load():
-    oGui = cGui()
+    gui = Gui()
 
-    oOutputParameterHandler = cOutputParameterHandler()
-    oOutputParameterHandler.addParameter('siteUrl', 'http://venom/')
-    oGui.addDir(SITE_IDENTIFIER, 'showSearch', 'Recherche', 'search.png', oOutputParameterHandler)
+    output_parameter_handler = OutputParameterHandler()
+    output_parameter_handler.addParameter('siteUrl', 'http://venom/')
+    gui.addDir(
+        SITE_IDENTIFIER,
+        'showSearch',
+        'Recherche',
+        'search.png',
+        output_parameter_handler)
 
-    oOutputParameterHandler.addParameter('siteUrl', NETS_NEWS[0])
-    oGui.addDir(SITE_IDENTIFIER, NETS_NEWS[1], 'Vidéos (Derniers ajouts)', 'news.png', oOutputParameterHandler)
+    output_parameter_handler.addParameter('siteUrl', NETS_NEWS[0])
+    gui.addDir(
+        SITE_IDENTIFIER,
+        NETS_NEWS[1],
+        'Vidéos (Derniers ajouts)',
+        'news.png',
+        output_parameter_handler)
 
-    oOutputParameterHandler.addParameter('siteUrl', NETS_GENRES[0])
-    oGui.addDir(SITE_IDENTIFIER, NETS_GENRES[1], 'Vidéos (Genres)', 'genres.png', oOutputParameterHandler)
+    output_parameter_handler.addParameter('siteUrl', NETS_GENRES[0])
+    gui.addDir(
+        SITE_IDENTIFIER,
+        NETS_GENRES[1],
+        'Vidéos (Genres)',
+        'genres.png',
+        output_parameter_handler)
 
-    oGui.setEndOfDirectory()
+    gui.setEndOfDirectory()
 
 
 def showSearch():
-    oGui = cGui()
-    sSearchText = oGui.showKeyBoard()
+    gui = Gui()
+    sSearchText = gui.showKeyBoard()
     if (sSearchText):
         sUrl = URL_SEARCH[0] + sSearchText
         showMovies(sUrl)
-        oGui.setEndOfDirectory()
+        gui.setEndOfDirectory()
         return
 
 
 def showGenres():
-    oGui = cGui()
+    gui = Gui()
 
     liste = []
     liste.append(['Actualité', URL_MAIN + 'category/actualite/'])
@@ -86,7 +101,8 @@ def showGenres():
     liste.append(['Rewind', URL_MAIN + 'category/rewind/'])
     liste.append(['Santé', URL_MAIN + 'category/sante-corps/'])
     liste.append(['Sport', URL_MAIN + 'category/sport/'])
-    liste.append(['Technologie', URL_MAIN + 'category/technologie-innovations/'])
+    liste.append(['Technologie', URL_MAIN +
+                  'category/technologie-innovations/'])
     liste.append(['Transport', URL_MAIN + 'category/auto-transport/'])
     liste.append(['TV & Cinéma', URL_MAIN + 'category/tv-cinema/'])
     liste.append(['WTF?!', URL_MAIN + 'category/wtf/'])
@@ -96,41 +112,46 @@ def showGenres():
         liste.append(['NSFW (+18)', URL_MAIN + 'nsfw/'])
         liste.append(['Trash (+18)', URL_MAIN + 'category/trash-gore/'])
 
-    oOutputParameterHandler = cOutputParameterHandler()
-    for sTitle, sUrl in liste:
-        oOutputParameterHandler.addParameter('siteUrl', sUrl)
-        oGui.addDir(SITE_IDENTIFIER, 'showMovies', sTitle, 'genres.png', oOutputParameterHandler)
+    output_parameter_handler = OutputParameterHandler()
+    for title, sUrl in liste:
+        output_parameter_handler.addParameter('siteUrl', sUrl)
+        gui.addDir(
+            SITE_IDENTIFIER,
+            'showMovies',
+            title,
+            'genres.png',
+            output_parameter_handler)
 
-    oGui.setEndOfDirectory()
+    gui.setEndOfDirectory()
 
 
 def showMovies(sSearch=''):
-    oGui = cGui()
+    gui = Gui()
 
     if sSearch:
         sUrl = sSearch.replace(' ', '+')
     else:
-        oInputParameterHandler = cInputParameterHandler()
-        sUrl = oInputParameterHandler.getValue('siteUrl')
+        input_parameter_handler = InputParameterHandler()
+        sUrl = input_parameter_handler.getValue('siteUrl')
 
-    oRequestHandler = cRequestHandler(sUrl)
+    oRequestHandler = RequestHandler(sUrl)
     sHtmlContent = oRequestHandler.request()
     sHtmlContent = sHtmlContent.replace('<span class="likeThis">', '')
 
     sPattern = 'id="(post-[0-9]+)".+?src="([^"]+?)".+?href="([^"]+?)" rel="bookmark" title="([^"]+?)".+?title="([^"]+)'
 
-    oParser = cParser()
+    oParser = Parser()
     aResult = oParser.parse(sHtmlContent, sPattern)
 
     if not aResult[0]:
-        oGui.addText(SITE_IDENTIFIER)
+        gui.addText(SITE_IDENTIFIER)
 
     if aResult[0]:
-        oOutputParameterHandler = cOutputParameterHandler()
+        output_parameter_handler = OutputParameterHandler()
         for aEntry in aResult[1]:
             sPoster = aEntry[1]
             sUrlp = aEntry[2]
-            sTitle = aEntry[3]
+            title = aEntry[3]
 
             # categorie video
             sCat = aEntry[4]
@@ -138,32 +159,57 @@ def showMovies(sSearch=''):
             # vire lien categorie image
             if (sCat != 'Image'):
 
-                oOutputParameterHandler.addParameter('siteUrl', sUrlp)
-                oOutputParameterHandler.addParameter('sMovieTitle', sTitle)
-                oOutputParameterHandler.addParameter('sThumb', sPoster)
+                output_parameter_handler.addParameter('siteUrl', sUrlp)
+                output_parameter_handler.addParameter('sMovieTitle', title)
+                output_parameter_handler.addParameter('sThumb', sPoster)
 
-                if (SPION_CENSURE == True):
+                if (SPION_CENSURE):
                     if (sCat == 'NSFW') or (sCat == 'Trash'):
                         sPoster = LOGO_CSA
-                        oGui.addMisc(SITE_IDENTIFIER, 'showCensure', sTitle, '', sPoster, '', oOutputParameterHandler)
+                        gui.addMisc(
+                            SITE_IDENTIFIER,
+                            'showCensure',
+                            title,
+                            '',
+                            sPoster,
+                            '',
+                            output_parameter_handler)
                     else:
-                        oGui.addMisc(SITE_IDENTIFIER, 'showHosters', sTitle, '', sPoster, '', oOutputParameterHandler)
+                        gui.addMisc(
+                            SITE_IDENTIFIER,
+                            'showHosters',
+                            title,
+                            '',
+                            sPoster,
+                            '',
+                            output_parameter_handler)
                 else:
-                    oGui.addMisc(SITE_IDENTIFIER, 'showHosters', sTitle, '', sPoster, '', oOutputParameterHandler)
+                    gui.addMisc(
+                        SITE_IDENTIFIER,
+                        'showHosters',
+                        title,
+                        '',
+                        sPoster,
+                        '',
+                        output_parameter_handler)
 
         sNextPage = __checkForNextPage(sHtmlContent)
         if (sNextPage):
-            oOutputParameterHandler = cOutputParameterHandler()
-            oOutputParameterHandler.addParameter('siteUrl', sNextPage)
+            output_parameter_handler = OutputParameterHandler()
+            output_parameter_handler.addParameter('siteUrl', sNextPage)
             number = re.search('/page/([0-9]+)', sNextPage).group(1)
-            oGui.addNext(SITE_IDENTIFIER, 'showMovies', 'Page ' + number, oOutputParameterHandler)
+            gui.addNext(
+                SITE_IDENTIFIER,
+                'showMovies',
+                'Page ' + number,
+                output_parameter_handler)
 
     if not sSearch:
-        oGui.setEndOfDirectory()
+        gui.setEndOfDirectory()
 
 
 def __checkForNextPage(sHtmlContent):
-    oParser = cParser()
+    oParser = Parser()
     sPattern = '<div class="nav-previous"><a href="([^"<>]+/[0-9]/?[^"]+)" class="nq_previous">'
     aResult = oParser.parse(sHtmlContent, sPattern)
     if aResult[0]:
@@ -173,19 +219,24 @@ def __checkForNextPage(sHtmlContent):
 
 
 def showHosters():
-    oGui = cGui()
-    oInputParameterHandler = cInputParameterHandler()
-    sUrl = oInputParameterHandler.getValue('siteUrl')
-    sMovieTitle = oInputParameterHandler.getValue('sMovieTitle')
-    sThumb = oInputParameterHandler.getValue('sThumb')
+    gui = Gui()
+    input_parameter_handler = InputParameterHandler()
+    sUrl = input_parameter_handler.getValue('siteUrl')
+    sMovieTitle = input_parameter_handler.getValue('sMovieTitle')
+    sThumb = input_parameter_handler.getValue('sThumb')
 
-    oRequestHandler = cRequestHandler(sUrl)
+    oRequestHandler = RequestHandler(sUrl)
     sHtmlContent = oRequestHandler.request()
-    sHtmlContent = sHtmlContent.replace('<iframe src="//www.facebook.com/', '')\
-                               .replace('<iframe src=\'http://creative.rev2pub.com', '')\
-                               .replace('dai.ly', 'www.dailymotion.com/video')\
-                               .replace('youtu.be/', 'www.youtube.com/watch?v=')
-    oParser = cParser()
+    sHtmlContent = sHtmlContent.replace(
+        '<iframe src="//www.facebook.com/',
+        '') .replace(
+        '<iframe src=\'http://creative.rev2pub.com',
+        '') .replace(
+            'dai.ly',
+            'www.dailymotion.com/video') .replace(
+                'youtu.be/',
+        'www.youtube.com/watch?v=')
+    oParser = Parser()
 
     # prise en compte lien direct mp4
     sPattern = '<iframe.+?src="(.+?)"'
@@ -203,10 +254,11 @@ def showHosters():
             if sHosterUrl[:4] != 'http':
                 sHosterUrl = 'http:' + sHosterUrl
 
-            oHoster = cHosterGui().checkHoster(sHosterUrl)
+            oHoster = HosterGui().checkHoster(sHosterUrl)
             if (oHoster):
                 oHoster.setDisplayName(sMovieTitle)
                 oHoster.setFileName(sMovieTitle)
-                cHosterGui().showHoster(oGui, oHoster, sHosterUrl, sThumb, oInputParameterHandler=oInputParameterHandler)
+                HosterGui().showHoster(gui, oHoster, sHosterUrl, sThumb,
+                                       input_parameter_handler=input_parameter_handler)
 
-    oGui.setEndOfDirectory()
+    gui.setEndOfDirectory()

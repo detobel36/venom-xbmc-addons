@@ -2,8 +2,8 @@
 # https://github.com/Kodi-vStream/venom-xbmc-addons
 # https://aparat.cam/embed-xxxxx.html
 
-from resources.lib.handler.requestHandler import cRequestHandler
-from resources.lib.parser import cParser
+from resources.lib.handler.requestHandler import RequestHandler
+from resources.lib.parser import Parser
 from resources.hosters.hoster import iHoster
 from resources.lib.comaddon import dialog
 
@@ -13,7 +13,7 @@ class cHoster(iHoster):
     def __init__(self):
         iHoster.__init__(self, 'aparat', 'Aparat')
 
-    def _getMediaLinkForGuest(self, autoPlay = False):
+    def _getMediaLinkForGuest(self, autoPlay=False):
         VideoType = 2  # dl mp4 lien existant non utilisé ici
         VideoType = 1  # m3u8
 
@@ -21,27 +21,28 @@ class cHoster(iHoster):
         list_url = []
 
         if VideoType == 1:
-            oRequestHandler = cRequestHandler(self._url)
+            oRequestHandler = RequestHandler(self._url)
             sHtmlContent = oRequestHandler.request()
 
-            oParser = cParser()
-            sPattern = 'src:\s+"([^"]+)'
+            oParser = Parser()
+            sPattern = 'src:\\s+"([^"]+)'
             aResult = oParser.parse(sHtmlContent, sPattern)
 
             if aResult[0] is True:
                 url2 = aResult[1][0]
-                oRequestHandler = cRequestHandler(url2)
+                oRequestHandler = RequestHandler(url2)
                 sHtmlContent2 = oRequestHandler.request()
 
                 # prend tous les formats (peu créer problèmes CODECS avc1)
                 # sPattern = 'RESOLUTION=(\w+).+?(https.+?m3u8)'
 
                 # limite les formats
-                sPattern = 'PROGRAM-ID.+?RESOLUTION=(\w+).+?(https.+?m3u8)'
+                sPattern = 'PROGRAM-ID.+?RESOLUTION=(\\w+).+?(https.+?m3u8)'
                 aResult = oParser.parse(sHtmlContent2, sPattern)
                 for aEntry in aResult[1]:
                     list_q.append(aEntry[0])
-                    list_url.append(aEntry[1])  # parfois lien de meme qualité avec url différentes
+                    # parfois lien de meme qualité avec url différentes
+                    list_url.append(aEntry[1])
 
             if list_url:
                 api_call = dialog().VSselectqual(list_q, list_url)
@@ -49,11 +50,11 @@ class cHoster(iHoster):
                     return True, api_call
 
         if VideoType == 2:
-            oRequestHandler = cRequestHandler(self._url)
+            oRequestHandler = RequestHandler(self._url)
             sHtmlContent = oRequestHandler.request()
 
-            oParser = cParser()
-            sPattern = 'file_code=(\w+)&hash=([^&]+)'
+            oParser = Parser()
+            sPattern = 'file_code=(\\w+)&hash=([^&]+)'
             aResult = oParser.parse(sHtmlContent, sPattern)
 
             if aResult[0] is True:
@@ -62,7 +63,7 @@ class cHoster(iHoster):
                 url = 'https://aparat.cam/dl?op=download_orig&id=' + resultId + \
                       '&mode=0&hash=' + resultHash  # + '&embed=1&adb=0'
                 data = 'op=download_orig&id=' + resultId + '&mode=n&hash=' + resultHash
-                oRequestHandler = cRequestHandler(url)
+                oRequestHandler = RequestHandler(url)
                 oRequestHandler.setRequestType(1)
                 oRequestHandler.addHeaderEntry('Referer', url)
                 oRequestHandler.addParametersLine(data)

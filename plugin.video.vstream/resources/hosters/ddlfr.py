@@ -3,8 +3,8 @@
 # import re
 import base64
 
-from resources.lib.handler.requestHandler import cRequestHandler
-from resources.lib.parser import cParser
+from resources.lib.handler.requestHandler import RequestHandler
+from resources.lib.parser import Parser
 from resources.hosters.hoster import iHoster
 from resources.lib.comaddon import dialog
 # from resources.lib.comaddon import VSlog
@@ -15,15 +15,15 @@ class cHoster(iHoster):
     def __init__(self):
         iHoster.__init__(self, 'ddlfr', 'ddlfr')
 
-    def _getMediaLinkForGuest(self, autoPlay = False):
+    def _getMediaLinkForGuest(self, autoPlay=False):
         api_call = ''
 
-        oRequest = cRequestHandler(self._url)
+        oRequest = RequestHandler(self._url)
         oRequest.addHeaderEntry('Referer', self._url)
         sHtmlContent = oRequest.request()
         # VSlog(sHtmlContent)
-        oParser = cParser()
-        sPattern = 'JuicyCodes\.Run\("(.+?)"\);'
+        oParser = Parser()
+        sPattern = 'JuicyCodes\\.Run\\("(.+?)"\\);'
         aResult = oParser.parse(sHtmlContent, sPattern)
         # VSlog(aResult)
         if aResult[0] is True:

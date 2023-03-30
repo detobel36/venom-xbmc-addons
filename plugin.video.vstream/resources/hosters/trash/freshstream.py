@@ -1,39 +1,40 @@
-#-*- coding: utf-8 -*-
-#Vstream https://github.com/Kodi-vStream/venom-xbmc-addons
-#Arias800
-from resources.lib.handler.requestHandler import cRequestHandler
-from resources.lib.parser import cParser
+# -*- coding: utf-8 -*-
+# Vstream https://github.com/Kodi-vStream/venom-xbmc-addons
+# Arias800
+from resources.lib.handler.requestHandler import RequestHandler
+from resources.lib.parser import Parser
 from resources.hosters.hoster import iHoster
-from resources.lib.comaddon import dialog#, VSlog
+from resources.lib.comaddon import dialog  # , VSlog
 
 # import re
+
 
 class cHoster(iHoster):
 
     def __init__(self):
         iHoster.__init__(self, 'freshstream', 'Freshstream')
 
-    def _getMediaLinkForGuest(self, autoPlay = False):
+    def _getMediaLinkForGuest(self, autoPlay=False):
         api_call = False
 
-        oRequest = cRequestHandler(self._url)
+        oRequest = RequestHandler(self._url)
         sHtmlContent = oRequest.request()
 
-        oParser = cParser()
-        sPattern =  "var vsuri = \'(.+?)\'"
+        oParser = Parser()
+        sPattern = "var vsuri = \'(.+?)\'"
         aResult = oParser.parse(sHtmlContent, sPattern)
 
         if (aResult[0]):
-            oRequest = cRequestHandler(aResult[1][0])
+            oRequest = RequestHandler(aResult[1][0])
             sHtmlContent1 = oRequest.request()
 
-            sPattern1 =  '"([^"]+)":"([^"]+)"'
+            sPattern1 = '"([^"]+)":"([^"]+)"'
             aResult1 = oParser.parse(sHtmlContent1, sPattern1)
 
         if (aResult1[0]):
 
-            url=[]
-            qua=[]
+            url = []
+            qua = []
             api_call = False
 
             for aEntry in aResult1[1]:

@@ -1,8 +1,8 @@
 # coding: utf-8
 # vStream https://github.com/Kodi-vStream/venom-xbmc-addons
 # Vidcloud / vcstream.to
-from resources.lib.handler.requestHandler import cRequestHandler
-from resources.lib.parser import cParser
+from resources.lib.handler.requestHandler import RequestHandler
+from resources.lib.parser import Parser
 from resources.hosters.hoster import iHoster
 
 
@@ -14,23 +14,23 @@ class cHoster(iHoster):
     def __getIdFromUrl(self, sUrl):
         # https://vcstream.to/embed/5bcf5b4c39aff/The.Spy.Who.Dumped.Me.mp4
         sPattern = 'vcstream.to/embed/([^<]+)/'
-        oParser = cParser()
+        oParser = Parser()
         aResult = oParser.parse(sUrl, sPattern)
         if aResult[0]:
             return aResult[1][0]
         return ''
 
-    def _getMediaLinkForGuest(self, autoPlay = False):
+    def _getMediaLinkForGuest(self, autoPlay=False):
         api_call = False
 
         sId = self.__getIdFromUrl(self._url)
         url = 'https://vcstream.to/player?fid=%s&page=embed' % sId
 
-        sPattern = 'file.+?\\"([^<]+)\\"\}'
-        oRequest = cRequestHandler(url)
+        sPattern = 'file.+?\\"([^<]+)\\"\\}'
+        oRequest = RequestHandler(url)
         sHtmlContent = oRequest.request()
 
-        oParser = cParser()
+        oParser = Parser()
         aResult = oParser.parse(sHtmlContent, sPattern)
 
         if aResult[0]:

@@ -2,8 +2,8 @@
 # vStream https://github.com/Kodi-vStream/venom-xbmc-addons
 import re
 
-from resources.lib.handler.requestHandler import cRequestHandler
-from resources.lib.parser import cParser
+from resources.lib.handler.requestHandler import RequestHandler
+from resources.lib.parser import Parser
 from resources.lib.packer import cPacker
 from resources.hosters.hoster import iHoster
 
@@ -14,11 +14,12 @@ class cHoster(iHoster):
         iHoster.__init__(self, 'letwatch', 'LetWatch')
 
     def __getUrlFromJavascriptCode(self, sHtmlContent):
-        # oParser = cParser()
+        # oParser = Parser()
         # sPattern = "(eval\(function.*?)(.+?)</script>"
         # aResult = oParser.parse(sHtmlContent, sPattern)
 
-        aResult = re.search('(eval\(function.*?)\s*</script>', sHtmlContent, re.DOTALL)
+        aResult = re.search(
+            '(eval\\(function.*?)\\s*</script>', sHtmlContent, re.DOTALL)
 
         if aResult.group(1):
             sJavascript = aResult.group(1)
@@ -30,8 +31,8 @@ class cHoster(iHoster):
 
         return False
 
-    def _getMediaLinkForGuest(self, autoPlay = False):
-        oRequest = cRequestHandler(self._url)
+    def _getMediaLinkForGuest(self, autoPlay=False):
+        oRequest = RequestHandler(self._url)
         sHtmlContent = oRequest.request()
 
         sUnpacked = self.__getUrlFromJavascriptCode(sHtmlContent)
@@ -41,9 +42,9 @@ class cHoster(iHoster):
         # image:"http://94.242.57.154/i/03/00249/d8g74g00wtuv.jpg",skin:"",duration:"5314",width:680,height:390,
         # primary:"flash",startparam:"start",plugins:{"http://letwatch.us/player6/lightsout.js
 
-        sPattern = 'sources:\[{file:"(.+?)"'
+        sPattern = 'sources:\\[{file:"(.+?)"'
 
-        oParser = cParser()
+        oParser = Parser()
         aResult = oParser.parse(sUnpacked, sPattern)
 
         if aResult[0] is True:

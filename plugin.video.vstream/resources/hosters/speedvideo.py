@@ -7,8 +7,8 @@ try:  # Python 2
 except ImportError:  # Python 3
     import urllib.request as urllib2
 
-from resources.lib.handler.requestHandler import cRequestHandler
-from resources.lib.parser import cParser
+from resources.lib.handler.requestHandler import RequestHandler
+from resources.lib.parser import Parser
 from resources.hosters.hoster import iHoster
 from resources.lib.comaddon import VSlog
 
@@ -25,22 +25,23 @@ class cHoster(iHoster):
 
     def setUrl(self, url):
         self._url = str(url)
-        sPattern = 'https*:\/\/speedvideo.[a-z]{3}\/(?:embed-)?([0-9a-zA-Z]+)'
-        oParser = cParser()
+        sPattern = 'https*:\\/\\/speedvideo.[a-z]{3}\\/(?:embed-)?([0-9a-zA-Z]+)'
+        oParser = Parser()
         aResult = oParser.parse(url, sPattern)
         if aResult[0] is True:
-            self._url = 'https://speedvideo.net/embed-' + aResult[1][0] + '.html'
+            self._url = 'https://speedvideo.net/embed-' + \
+                aResult[1][0] + '.html'
         else:
             VSlog('ID error')
 
-    def _getMediaLinkForGuest(self, autoPlay = False):
+    def _getMediaLinkForGuest(self, autoPlay=False):
         api_call = False
 
-        oRequest = cRequestHandler(self._url)
+        oRequest = RequestHandler(self._url)
         sHtmlContent = oRequest.request()
-        sPattern = 'var linkfile\s*=\s*"([^"]+)"'
+        sPattern = 'var linkfile\\s*=\\s*"([^"]+)"'
 
-        oParser = cParser()
+        oParser = Parser()
         aResult = oParser.parse(sHtmlContent, sPattern)
         if aResult[0] is True:
             sUrl = aResult[1][0]

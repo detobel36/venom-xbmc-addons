@@ -9,7 +9,7 @@ import requests.packages.urllib3.util.connection as urllib3_cn
 import socket
 
 
-class cRequestHandler:
+class RequestHandler:
     REQUEST_TYPE_GET = 0
     REQUEST_TYPE_POST = 1
 
@@ -107,7 +107,8 @@ class cRequestHandler:
     def addParametersLine(self, mParameterValue):
         self.__aParamatersLine = mParameterValue
 
-    # egg addMultipartFiled({'sess_id': sId, 'upload_type': 'url', 'srv_tmp_url': sTmp})
+    # egg addMultipartFiled({'sess_id': sId, 'upload_type': 'url',
+    # 'srv_tmp_url': sTmp})
     def addMultipartFiled(self, fields):
         mpartdata = MPencode(fields)
         self.__aParamatersLine = mpartdata[1]
@@ -147,8 +148,12 @@ class cRequestHandler:
         return ''
 
     def __setDefaultHeader(self):
-        self.addHeaderEntry('User-Agent', 'Mozilla/5.0 (Windows NT 6.1; WOW64; rv:50.0) Gecko/20100101 Firefox/50.0')
-        self.addHeaderEntry('Accept-Language', 'fr,fr-FR;q=0.8,en-US;q=0.5,en;q=0.3')
+        self.addHeaderEntry(
+            'User-Agent',
+            'Mozilla/5.0 (Windows NT 6.1; WOW64; rv:50.0) Gecko/20100101 Firefox/50.0')
+        self.addHeaderEntry(
+            'Accept-Language',
+            'fr,fr-FR;q=0.8,en-US;q=0.5,en;q=0.3')
         self.addHeaderEntry('Accept-Charset', 'ISO-8859-1,utf-8;q=0.7,*;q=0.7')
 
     def __callRequest(self, jsonDecode=False):
@@ -161,7 +166,7 @@ class cRequestHandler:
         else:
             sParameters = self.__aParamaters
 
-        if (self.__cType == cRequestHandler.REQUEST_TYPE_GET):
+        if (self.__cType == RequestHandler.REQUEST_TYPE_GET):
             if (len(sParameters) > 0):
                 if (self.__sUrl.find('?') == -1):
                     self.__sUrl = self.__sUrl + '?' + str(sParameters)
@@ -172,10 +177,10 @@ class cRequestHandler:
 
         sContent = ''
 
-        if self.BUG_SSL == True:
+        if self.BUG_SSL:
             self.verify = False
 
-        if self.__cType == cRequestHandler.REQUEST_TYPE_GET:
+        if self.__cType == RequestHandler.REQUEST_TYPE_GET:
             method = "GET"
         else:
             method = "POST"
@@ -184,7 +189,10 @@ class cRequestHandler:
             urllib3_cn.allowed_gai_family = self.allowed_gai_family
 
         try:
-            _request = Request(method, self.__sUrl, headers=self.__aHeaderEntries)
+            _request = Request(
+                method,
+                self.__sUrl,
+                headers=self.__aHeaderEntries)
             if method in ['POST']:
                 _request.data = sParameters
 
@@ -197,11 +205,15 @@ class cRequestHandler:
             prepped = _request.prepare()
             self.s.headers.update(self.__aHeaderEntries)
 
-            self.oResponse = self.s.send(prepped, timeout=self.__timeout, allow_redirects=self.redirects, verify=self.verify)
+            self.oResponse = self.s.send(
+                prepped,
+                timeout=self.__timeout,
+                allow_redirects=self.redirects,
+                verify=self.verify)
             self.__sResponseHeader = self.oResponse.headers
             self.__sRealUrl = self.oResponse.url
 
-            if jsonDecode == True:
+            if jsonDecode:
                 sContent = self.oResponse.json()
             else:
                 sContent = self.oResponse.content
@@ -209,23 +221,26 @@ class cRequestHandler:
                 if isMatrix() and 'youtube' not in self.oResponse.url:
                     try:
                         sContent = sContent.decode()
-                    except:
+                    except BaseException:
                         # Decodage minimum obligatoire.
                         try:
                             sContent = sContent.decode('unicode-escape')
-                        except:
+                        except BaseException:
                             pass
 
         except ConnectionError as e:
             # Retry with DNS only if addon is present
-            if 'getaddrinfo failed' in str(e) or 'Failed to establish a new connection' in str(e) and self.__enableDNS == False:
+            if 'getaddrinfo failed' in str(e) or 'Failed to establish a new connection' in str(
+                    e) and self.__enableDNS == False:
                 # Retry with DNS only if addon is present
                 import xbmcvfs
-                if xbmcvfs.exists('special://home/addons/script.module.dnspython/'):
+                if xbmcvfs.exists(
+                        'special://home/addons/script.module.dnspython/'):
                     self.__enableDNS = True
                     return self.__callRequest()
                 else:
-                    error_msg = '%s (%s)' % (addon().VSlang(30470), urlHostName(self.__sUrl))
+                    error_msg = '%s (%s)' % (addon().VSlang(
+                        30470), urlHostName(self.__sUrl))
                     dialog().VSerror(error_msg)
                     sContent = ''
             else:
@@ -239,13 +254,16 @@ class cRequestHandler:
             elif 'getaddrinfo failed' in str(e) and self.__enableDNS == False:
                 # Retry with DNS only if addon is present
                 import xbmcvfs
-                if xbmcvfs.exists('special://home/addons/script.module.dnspython/'):
+                if xbmcvfs.exists(
+                        'special://home/addons/script.module.dnspython/'):
                     self.__enableDNS = True
                     return self.__callRequest()
                 else:
-                    error_msg = '%s (%s)' % (addon().VSlang(30470), urlHostName(self.__sUrl))
+                    error_msg = '%s (%s)' % (addon().VSlang(
+                        30470), urlHostName(self.__sUrl))
             else:
-                error_msg = "%s (%s),%s" % (addon().VSlang(30205), e, self.__sUrl)
+                error_msg = "%s (%s),%s" % (
+                    addon().VSlang(30205), e, self.__sUrl)
 
             dialog().VSerror(error_msg)
             sContent = ''
@@ -263,29 +281,37 @@ class cRequestHandler:
                             'cmd': 'request.%s' % method.lower(),
                             'url': self.__sUrl
                         })
-                    except:
-                        dialog().VSerror("%s (%s)" % ("Page protegee par Cloudflare, essayez FlareSolverr", urlHostName(self.__sUrl)))
+                    except BaseException:
+                        dialog().VSerror(
+                            "%s (%s)" %
+                            ("Page protegee par Cloudflare, essayez FlareSolverr",
+                             urlHostName(
+                                 self.__sUrl)))
 
                     if json_response:
                         response = json_response.json()
                         if 'solution' in response:
                             if self.__sUrl != response['solution']['url']:
                                 self.__sRealUrl = response['solution']['url']
-    
+
                             sContent = response['solution']['response']
 
             if self.oResponse and not sContent:
                 # Ignorer ces deux codes erreurs.
                 ignoreStatus = [200, 302]
                 if self.oResponse.status_code not in ignoreStatus:
-                    dialog().VSerror("%s (%d),%s" % (addon().VSlang(30205), self.oResponse.status_code, self.__sUrl))
+                    dialog().VSerror(
+                        "%s (%d),%s" %
+                        (addon().VSlang(30205),
+                         self.oResponse.status_code,
+                         self.__sUrl))
 
         if sContent:
-            if (self.__bRemoveNewLines == True):
+            if (self.__bRemoveNewLines):
                 sContent = sContent.replace("\n", "")
                 sContent = sContent.replace("\r\t", "")
 
-            if (self.__bRemoveBreakLines == True):
+            if (self.__bRemoveBreakLines):
                 sContent = sContent.replace("&nbsp;", "")
 
         if self.__enableDNS:
@@ -300,9 +326,11 @@ class cRequestHandler:
             import dns.resolver
 
             if isMatrix():
-                path = VSPath('special://home/addons/script.module.dnspython/lib/')
+                path = VSPath(
+                    'special://home/addons/script.module.dnspython/lib/')
             else:
-                path = VSPath('special://home/addons/script.module.dnspython/lib/').decode('utf-8')
+                path = VSPath(
+                    'special://home/addons/script.module.dnspython/lib/').decode('utf-8')
 
             if path not in sys.path:
                 sys.path.append(path)
@@ -315,12 +343,18 @@ class cRequestHandler:
                 host = host[:host.find("/")]
             resolver = dns.resolver.Resolver(configure=False)
             # Résolveurs DNS ouverts: https://www.fdn.fr/actions/dns/
-            resolver.nameservers = ['80.67.169.12', '2001:910:800::12', '80.67.169.40', '2001:910:800::40']
+            resolver.nameservers = [
+                '80.67.169.12',
+                '2001:910:800::12',
+                '80.67.169.40',
+                '2001:910:800::40']
             answer = resolver.query(host, 'a')
             host_found = str(answer[0])
             VSlog("new_getaddrinfo found host %s" % host_found)
-            # Keep same return schema as socket.getaddrinfo (family, type, proto, canonname, sockaddr)
-            return [(2, 1, 0, '', (host_found, port)), (2, 1, 0, '', (host_found, port))]
+            # Keep same return schema as socket.getaddrinfo (family, type,
+            # proto, canonname, sockaddr)
+            return [(2, 1, 0, '', (host_found, port)),
+                    (2, 1, 0, '', (host_found, port))]
         except Exception as e:
             VSlog("new_getaddrinfo ERROR: {0}".format(e))
             return self.save_getaddrinfo(*args)
@@ -339,20 +373,25 @@ def MPencode(fields):
     if fields:
         try:
             data = fields.iteritems()
-        except:
+        except BaseException:
             data = fields.items()
 
         for (key, value) in data:
             if not hasattr(value, 'read'):
-                itemstr = '--%s\r\nContent-Disposition: form-data; name="%s"\r\n\r\n%s\r\n' % (random_boundary, key, value)
+                itemstr = '--%s\r\nContent-Disposition: form-data; name="%s"\r\n\r\n%s\r\n' % (
+                    random_boundary, key, value)
                 form_data.append(itemstr)
             elif hasattr(value, 'read'):
                 with value:
-                    file_mimetype = mimetypes.guess_type(value.name)[0] if mimetypes.guess_type(value.name)[0] else 'application/octet-stream'
-                    itemstr = '--%s\r\nContent-Disposition: form-data; name="%s"; filename="%s"\r\nContent-Type: %s\r\n\r\n%s\r\n' % (random_boundary, key, value.name, file_mimetype, value.read())
+                    file_mimetype = mimetypes.guess_type(
+                        value.name)[0] if mimetypes.guess_type(
+                        value.name)[0] else 'application/octet-stream'
+                    itemstr = '--%s\r\nContent-Disposition: form-data; name="%s"; filename="%s"\r\nContent-Type: %s\r\n\r\n%s\r\n' % (
+                        random_boundary, key, value.name, file_mimetype, value.read())
                 form_data.append(itemstr)
             else:
-                raise Exception(value, 'Field is neither a file handle or any other decodable type.')
+                raise Exception(
+                    value, 'Field is neither a file handle or any other decodable type.')
     else:
         pass
 

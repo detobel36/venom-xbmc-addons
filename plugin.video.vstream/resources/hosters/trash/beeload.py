@@ -1,9 +1,9 @@
-#-*- coding: utf-8 -*-
-#Vstream https://github.com/Kodi-vStream/venom-xbmc-addons
+# -*- coding: utf-8 -*-
+# Vstream https://github.com/Kodi-vStream/venom-xbmc-addons
 import re
 
-from resources.lib.handler.requestHandler import cRequestHandler
-from resources.lib.parser import cParser
+from resources.lib.handler.requestHandler import RequestHandler
+from resources.lib.parser import Parser
 from resources.lib.packer import cPacker
 # from resources.lib.comaddon import VSlog
 from resources.hosters.hoster import iHoster
@@ -14,22 +14,22 @@ class cHoster(iHoster):
     def __init__(self):
         iHoster.__init__(self, 'beeload', 'Beeload')
 
-    def _getMediaLinkForGuest(self, autoPlay = False):
-        oRequest = cRequestHandler(self._url)
+    def _getMediaLinkForGuest(self, autoPlay=False):
+        oRequest = RequestHandler(self._url)
         sHtmlContent = oRequest.request()
 
         api_call = ''
 
-        oParser = cParser()
+        oParser = Parser()
 
-        sPattern = "(\s*eval\s*\(\s*function(?:.|\s)+?)<\/script>"
+        sPattern = "(\\s*eval\\s*\\(\\s*function(?:.|\\s)+?)<\\/script>"
         aResult = re.findall(sPattern, sHtmlContent)
 
         if (aResult):
             sUnpacked = cPacker().unpack(aResult[0])
             sHtmlContent = sUnpacked
 
-            sPattern = "'([^<>']+?\.mp4)"
+            sPattern = "'([^<>']+?\\.mp4)"
             aResult = oParser.parse(sHtmlContent, sPattern)
             if aResult[0] is True:
                 api_call = aResult[1][0]

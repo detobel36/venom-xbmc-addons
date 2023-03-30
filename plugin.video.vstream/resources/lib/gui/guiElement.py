@@ -4,7 +4,7 @@ import re
 import xbmc
 
 from resources.lib.comaddon import addon, isMatrix, isNexus
-from resources.lib.db import cDb
+from resources.lib.db import Db
 from resources.lib.util import cUtil, QuoteSafe
 
 # rouge E26543
@@ -14,7 +14,7 @@ from resources.lib.util import cUtil, QuoteSafe
 # bleu foncé 08435A / non utilisé
 
 
-class cGuiElement:
+class GuiElement:
 
     DEFAULT_FOLDER_ICON = 'icon.png'
 
@@ -50,8 +50,10 @@ class cGuiElement:
         self.__Episode = ''
         self.__sIcon = self.DEFAULT_FOLDER_ICON
         self.__sFanart = 'special://home/addons/plugin.video.vstream/fanart.jpg'
-        self.poster = 'https://image.tmdb.org/t/p/%s' % self.addons.getSetting('poster_tmdb')
-        self.fanart = 'https://image.tmdb.org/t/p/%s' % self.addons.getSetting('backdrop_tmdb')
+        self.poster = 'https://image.tmdb.org/t/p/%s' % self.addons.getSetting(
+            'poster_tmdb')
+        self.fanart = 'https://image.tmdb.org/t/p/%s' % self.addons.getSetting(
+            'backdrop_tmdb')
         # For meta search
         # TmdbId the movie database https://developers.themoviedb.org/
         self.__TmdbId = ''
@@ -73,7 +75,7 @@ class cGuiElement:
     # def __len__(self): return self.__sCount
 
     # def getCount(self):
-    #     return cGuiElement.COUNT
+    #     return GuiElement.COUNT
 
     def setType(self, sType):
         self.__sType = sType
@@ -190,75 +192,109 @@ class cGuiElement:
     def getFunction(self):
         return self.__sFunctionName
 
-    def TraiteTitre(self, sTitle):
+    def TraiteTitre(self, title):
 
         # convertion unicode ne fonctionne pas avec les accents
         try:
-            # traitement du titre pour retirer le - quand c'est une Saison. Tiret, tiret moyen et cadratin
-            sTitle = sTitle.replace('Season', 'saison').replace('season', 'saison').replace('SEASON', 'saison')\
-                           .replace('Saison', 'saison').replace('SAISON', 'saison')
-            sTitle = sTitle.replace(' - saison', ' saison').replace(' – saison', ' saison')\
-                           .replace(' — saison', ' saison')
+            # traitement du titre pour retirer le - quand c'est une Saison.
+            # Tiret, tiret moyen et cadratin
+            title = title.replace(
+                'Season',
+                'saison').replace(
+                'season',
+                'saison').replace(
+                'SEASON',
+                'saison') .replace(
+                'Saison',
+                'saison').replace(
+                    'SAISON',
+                'saison')
+            title = title.replace(
+                ' - saison',
+                ' saison').replace(
+                ' – saison',
+                ' saison') .replace(
+                ' — saison',
+                ' saison')
 
             if not isMatrix():
-                sTitle = sTitle.decode('utf-8')
-        except:
+                title = title.decode('utf-8')
+        except BaseException:
             pass
 
         """ Début du nettoyage du titre """
         # vire doubles espaces et double points
-        sTitle = re.sub(' +', ' ', sTitle)
-        sTitle = re.sub('\.+', '.', sTitle)
+        title = re.sub(' +', ' ', title)
+        title = re.sub('\\.+', '.', title)
 
         # enleve les crochets et les parentheses si elles sont vides
-        sTitle = sTitle.replace('()', '').replace('[]', '').replace('- -', '-')
+        title = title.replace('()', '').replace('[]', '').replace('- -', '-')
 
         # vire espace et - a la fin
-        sTitle = re.sub('[- –_\.]+$', '', sTitle)
+        title = re.sub('[- –_\\.]+$', '', title)
         # et au debut
-        sTitle = re.sub('^[- –_\.]+', '', sTitle)
+        title = re.sub('^[- –_\\.]+', '', title)
 
         """ Fin du nettoyage du titre """
 
-        # recherche l'année, uniquement si entre caractere special a cause de 2001 odysse de l'espace ou k2000
-        string = re.search('[^\w ]([0-9]{4})[^\w ]', sTitle)
+        # recherche l'année, uniquement si entre caractere special a cause de
+        # 2001 odysse de l'espace ou k2000
+        string = re.search('[^\\w ]([0-9]{4})[^\\w ]', title)
         if string:
-            sTitle = sTitle.replace(string.group(0), '')
+            title = title.replace(string.group(0), '')
             self.__Year = str(string.group(1))
             self.addItemValues('year', self.__Year)
 
         # recherche une date
-        string = re.search('([\d]{2}[\/|-]\d{2}[\/|-]\d{4})', sTitle)
+        string = re.search('([\\d]{2}[\\/|-]\\d{2}[\\/|-]\\d{4})', title)
         if string:
-            sTitle = sTitle.replace(string.group(0), '')
+            title = title.replace(string.group(0), '')
             self.__Date = str(string.group(0))
-            sTitle = '%s (%s) ' % (sTitle, self.__Date)
+            title = '%s (%s) ' % (title, self.__Date)
 
         # recherche les Tags restant : () ou [] sauf tag couleur
         sDecoColor = self.addons.getSetting('deco_color')
-        sTitle = re.sub('([\(|\[](?!\/*COLOR)[^\)\(\]\[]+?[\]|\)])', '[COLOR ' + sDecoColor + ']\\1[/COLOR]', sTitle)
+        title = re.sub(
+            '([\\(|\\[](?!\\/*COLOR)[^\\)\\(\\]\\[]+?[\\]|\\)])',
+            '[COLOR ' + sDecoColor + ']\\1[/COLOR]',
+            title)
 
         # Recherche saisons et episodes
         sa = ep = ''
-        m = re.search('(|S|saison)(\s?|\.)(\d+)(\s?|\.)(E|Ep|x|\wpisode)(\s?|\.)(\d+)', sTitle, re.UNICODE)
+        m = re.search(
+            '(|S|saison)(\\s?|\\.)(\\d+)(\\s?|\\.)(E|Ep|x|\\wpisode)(\\s?|\\.)(\\d+)',
+            title,
+            re.UNICODE)
         if m:
-            sTitle = sTitle.replace(m.group(0), '')
+            title = title.replace(m.group(0), '')
             sa = m.group(3)
             ep = m.group(7)
         else:  # Juste l'épisode
-            m = re.search('(^|\s|\.)(E|Ep|\wpisode)(\s?|\.)(\d+)', sTitle, re.UNICODE)
+            m = re.search(
+                '(^|\\s|\\.)(E|Ep|\\wpisode)(\\s?|\\.)(\\d+)',
+                title,
+                re.UNICODE)
             if m:
-                sTitle = sTitle.replace(m.group(0), '')
+                title = title.replace(m.group(0), '')
                 ep = m.group(4)
             else:  # juste la saison
-                m = re.search('( S|saison)(\s?|\.)(\d+)', sTitle, re.UNICODE)
+                m = re.search(
+                    '( S|saison)(\\s?|\\.)(\\d+)',
+                    title,
+                    re.UNICODE)
                 if m:
-                    sTitle = sTitle.replace(m.group(0), '')
+                    title = title.replace(m.group(0), '')
                     sa = m.group(3)
 
         # enleve les crochets et les parentheses si elles sont vides
         if sa or ep:
-            sTitle = sTitle.replace('()', '').replace('[]', '').replace('- -', '-')
+            title = title.replace(
+                '()',
+                '').replace(
+                '[]',
+                '').replace(
+                '- -',
+                '-')
 
         if sa:
             self.__Season = sa
@@ -270,8 +306,8 @@ class cGuiElement:
         # on repasse en utf-8
         if not isMatrix():
             try:
-                sTitle = sTitle.encode('utf-8')
-            except:
+                title = title.encode('utf-8')
+            except BaseException:
                 pass
 
         # on reformate SXXEXX Titre [tag] (Annee)
@@ -281,47 +317,53 @@ class cGuiElement:
         if self.__Episode:
             sTitle2 = sTitle2 + 'E%02d' % int(self.__Episode)
 
-        # Titre unique pour marquer VU (avec numéro de l'épisode pour les séries)
-        self.__sTitleWatched = cUtil().titleWatched(sTitle).replace(' ', '')
+        # Titre unique pour marquer VU (avec numéro de l'épisode pour les
+        # séries)
+        self.__sTitleWatched = cUtil().titleWatched(title).replace(' ', '')
         if sTitle2:
-            self.addItemValues('tvshowtitle', cUtil().getSerieTitre(sTitle))
+            self.addItemValues('tvshowtitle', cUtil().getSerieTitre(title))
             self.__sTitleWatched += '_' + sTitle2
         self.addItemValues('originaltitle', self.__sTitleWatched)
 
         if sTitle2:
             sTitle2 = '[COLOR %s]%s[/COLOR] ' % (sDecoColor, sTitle2)
 
-        sTitle2 = sTitle2 + sTitle
+        sTitle2 = sTitle2 + title
 
         if self.__Year:
-            sTitle2 = '%s [COLOR %s](%s)[/COLOR]' % (sTitle2, sDecoColor, self.__Year)
+            sTitle2 = '%s [COLOR %s](%s)[/COLOR]' % (sTitle2,
+                                                     sDecoColor, self.__Year)
 
         return sTitle2
 
-    def setTitle(self, sTitle):
+    def setTitle(self, title):
         # Nom en clair sans les langues, qualités, et autres décorations
-        self.__sCleanTitle = re.sub('\[.*\]|\(.*\)', '', sTitle)
+        self.__sCleanTitle = re.sub('\\[.*\\]|\\(.*\\)', '', title)
         if not self.__sCleanTitle:
-            self.__sCleanTitle = re.sub('\[.+?\]|\(.+?\)', '', sTitle)
+            self.__sCleanTitle = re.sub('\\[.+?\\]|\\(.+?\\)', '', title)
             if not self.__sCleanTitle:
-                self.__sCleanTitle = sTitle.replace('[', '').replace(']', '').replace('(', '').replace(')', '')
+                self.__sCleanTitle = title.replace(
+                    '[', '').replace(
+                    ']', '').replace(
+                    '(', '').replace(
+                    ')', '')
 
         if isMatrix():
-            # Python 3 decode sTitle
+            # Python 3 decode title
             try:
-                sTitle = str(sTitle.encode('latin-1'), 'utf-8')
-            except:
+                title = str(title.encode('latin-1'), 'utf-8')
+            except BaseException:
                 pass
         else:
             try:
-                sTitle = str(sTitle.strip().decode('utf-8'))
-            except:
+                title = str(title.strip().decode('utf-8'))
+            except BaseException:
                 pass
 
-        if not sTitle.startswith('[COLOR'):
-            self.__sTitle = self.TraiteTitre(sTitle)
+        if not title.startswith('[COLOR'):
+            self.__sTitle = self.TraiteTitre(title)
         else:
-            self.__sTitle = sTitle
+            self.__sTitle = title
 
     def getTitle(self):
         return self.__sTitle
@@ -340,10 +382,11 @@ class cGuiElement:
         if isMatrix():
             try:
                 if 'Ã' in sDescription or '\\xc' in sDescription:
-                    self.__sDescription = str(sDescription.encode('latin-1'), 'utf-8')
+                    self.__sDescription = str(
+                        sDescription.encode('latin-1'), 'utf-8')
                 else:
                     self.__sDescription = sDescription
-            except:
+            except BaseException:
                 self.__sDescription = sDescription
         else:
             self.__sDescription = sDescription
@@ -351,8 +394,8 @@ class cGuiElement:
     def getDescription(self):
         return self.__sDescription
 
-    def setThumbnail(self, sThumbnail):
-        self.__sThumbnail = sThumbnail
+    def setThumbnail(self, thumbnail):
+        self.__sThumbnail = thumbnail
 
     def getThumbnail(self):
         return self.__sThumbnail
@@ -388,7 +431,7 @@ class cGuiElement:
             return
         try:
             self.__sIcon = unicode(sIcon, 'utf-8')
-        except:
+        except BaseException:
             self.__sIcon = sIcon
         self.__sIcon = self.__sIcon.encode('utf-8')
         self.__sIcon = QuoteSafe(self.__sIcon)
@@ -420,7 +463,7 @@ class cGuiElement:
                 'cat': self.getCat()
                 }
 
-        with cDb() as db:
+        with Db() as db:
             data = db.get_watched(meta)
         return data
 
@@ -479,55 +522,69 @@ class cGuiElement:
             self.addItemProperties('fanart_image', '')
             return
 
-        from resources.lib.tmdb import cTMDb
-        TMDb = cTMDb()
+        from resources.lib.tmdb import TMDb
+        TMDb = TMDb()
 
-        sTitle = self.__sFileName
+        title = self.__sFileName
 
-        # sTitle = self.__sTitle.decode('latin-1').encode('utf-8')
-        # sTitle = re.sub(r'\[.*\]|\(.*\)', r'', str(self.__sFileName))
-        # sTitle = sTitle.replace('VF', '').replace('VOSTFR', '').replace('FR', '')
+        # title = self.__sTitle.decode('latin-1').encode('utf-8')
+        # title = re.sub(r'\[.*\]|\(.*\)', r'', str(self.__sFileName))
+        # title = title.replace('VF', '').replace('VOSTFR', '').replace('FR', '')
 
         # On nettoie le titre pour la recherche
-        sTitle = sTitle.replace('version longue', '')
+        title = title.replace('version longue', '')
 
         # Integrale de films, on nettoie le titre pour la recherche
         if metaType == 3:
-            sTitle = sTitle.replace('integrales', '')
-            sTitle = sTitle.replace('integrale', '')
-            sTitle = sTitle.replace('2 films', '')
-            sTitle = sTitle.replace('6 films', '')
-            sTitle = sTitle.replace('7 films', '')
-            sTitle = sTitle.replace('trilogie', '')
-            sTitle = sTitle.replace('trilogy', '')
-            sTitle = sTitle.replace('quadrilogie', '')
-            sTitle = sTitle.replace('pentalogie', '')
-            sTitle = sTitle.replace('octalogie', '')
-            sTitle = sTitle.replace('hexalogie', '')
-            sTitle = sTitle.replace('tetralogie', '')
-            sTitle = sTitle.strip()
-            if sTitle.endswith(' les'):
-                sTitle = sTitle[:-4]
-            elif sTitle.endswith(' la'):
-                sTitle = sTitle[:-3]
-            elif sTitle.endswith(' l'):
-                sTitle = sTitle[:-2]
-            sTitle = sTitle.strip()
+            title = title.replace('integrales', '')
+            title = title.replace('integrale', '')
+            title = title.replace('2 films', '')
+            title = title.replace('6 films', '')
+            title = title.replace('7 films', '')
+            title = title.replace('trilogie', '')
+            title = title.replace('trilogy', '')
+            title = title.replace('quadrilogie', '')
+            title = title.replace('pentalogie', '')
+            title = title.replace('octalogie', '')
+            title = title.replace('hexalogie', '')
+            title = title.replace('tetralogie', '')
+            title = title.strip()
+            if title.endswith(' les'):
+                title = title[:-4]
+            elif title.endswith(' la'):
+                title = title[:-3]
+            elif title.endswith(' l'):
+                title = title[:-2]
+            title = title.strip()
 
         # tvshow
         if metaType in (2, 4, 5, 6):
             tvshowtitle = self.getItemValue('tvshowtitle')
             if tvshowtitle:
-                sTitle = tvshowtitle
+                title = tvshowtitle
 
-        sType = str(metaType).replace('1', 'movie').replace('2', 'tvshow').replace('3', 'collection')\
-                             .replace('4', 'anime').replace('5', 'season').replace('6', 'episode')\
-                             .replace('7', 'person').replace('8', 'network')
+        sType = str(metaType).replace(
+            '1',
+            'movie').replace(
+            '2',
+            'tvshow').replace(
+            '3',
+            'collection') .replace(
+                '4',
+                'anime').replace(
+                    '5',
+                    'season').replace(
+                        '6',
+                        'episode') .replace(
+                            '7',
+                            'person').replace(
+                                '8',
+            'network')
 
         meta = {}
         try:
             if sType:
-                args = (sType, sTitle)
+                args = (sType, title)
                 kwargs = {}
                 if self.__ImdbId:
                     kwargs['imdb_id'] = self.__ImdbId
@@ -545,7 +602,7 @@ class cGuiElement:
                     return
             else:
                 return
-        except:
+        except BaseException:
             return
 
         if 'media_type' in meta:
@@ -657,7 +714,8 @@ class cGuiElement:
         # tmdbid
         if self.getTmdbId():
             self.addItemProperties('TmdbId', str(self.getTmdbId()))
-            # only for library content : self.addItemValues('DBID', str(self.getTmdbId()))
+            # only for library content : self.addItemValues('DBID',
+            # str(self.getTmdbId()))
 
         # imdbid
         if self.getImdbId():
@@ -679,16 +737,18 @@ class cGuiElement:
             if self.getTrailer():
                 self.addItemValues('trailer', self.getTrailer())
             else:
-                self.addItemValues('trailer', 'plugin')  # Faux trailer qui ne se lance pas mais evite une erreur
+                # Faux trailer qui ne se lance pas mais evite une erreur
+                self.addItemValues('trailer', 'plugin')
                 # self.addItemValues('trailer', self.getDefaultTrailer())
 
         # Used only if there is data in db, overwrite getMetadonne()
         sCat = str(self.getCat())
         try:
-            if sCat and int(sCat) in (1, 2, 3, 4, 5, 8, 9):  # Vérifier seulement si de type média
+            if sCat and int(sCat) in (
+                    1, 2, 3, 4, 5, 8, 9):  # Vérifier seulement si de type média
                 if self.getWatched():
                     self.addItemValues('playcount', 1)
-        except:
+        except BaseException:
             sCat = False
 
         self.addItemProperties('siteUrl', self.getSiteUrl())
@@ -705,11 +765,20 @@ class cGuiElement:
 
         if sCat:
             self.addItemProperties('sCat', sCat)
-            mediatypes = {'1': 'movie', '2': 'tvshow', '3': 'tvshow', '4': 'season', '5': 'video',
-                          '6': 'video', '7': 'season', '8': 'episode', '9': 'tvshow'}
+            mediatypes = {
+                '1': 'movie',
+                '2': 'tvshow',
+                '3': 'tvshow',
+                '4': 'season',
+                '5': 'video',
+                '6': 'video',
+                '7': 'season',
+                '8': 'episode',
+                '9': 'tvshow'}
             if sCat in mediatypes.keys():
                 mediatype = mediatypes.get(sCat)
-                self.addItemValues('mediatype', mediatype)  # video, movie, tvshow, season, episode, musicvideo
+                # video, movie, tvshow, season, episode, musicvideo
+                self.addItemValues('mediatype', mediatype)
 
         if self.getSeason():
             self.addItemValues('season', int(self.getSeason()))

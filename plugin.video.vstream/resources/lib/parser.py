@@ -4,12 +4,13 @@ from operator import itemgetter
 import re
 
 
-class cParser:
+class Parser:
 
     def sorted_nicely(self, l, key):
         """ Sort the given iterable in the way that humans expect."""
-        convert = lambda text: int(text) if text.isdigit() else text
-        alphanum_key = lambda item: [convert(c) for c in re.split('([0-9]+)', key(item))]
+        def convert(text): return int(text) if text.isdigit() else text
+        def alphanum_key(item): return [convert(c)
+                                        for c in re.split('([0-9]+)', key(item))]
         return sorted(l, key=alphanum_key)
 
     def parseSingleResult(self, sHtmlContent, sPattern):
@@ -20,7 +21,7 @@ class cParser:
         return False, aMatches
 
     def __replaceSpecialCharacters(self, sString):
-        """ /!\ pas les mêmes tirets, tiret moyen et cadratin."""
+        """ /!\\ pas les mêmes tirets, tiret moyen et cadratin."""
         return sString.replace('\r', '').replace('\n', '').replace('\t', '').replace('\\/', '/').replace('&amp;', '&')\
                       .replace('&#039;', "'").replace('&#8211;', '-').replace('&#8212;', '-').replace('&eacute;', 'é')\
                       .replace('&acirc;', 'â').replace('&ecirc;', 'ê').replace('&icirc;', 'î').replace('&ocirc;', 'ô')\
@@ -52,7 +53,7 @@ class cParser:
         return re.escape(sValue)
 
     def getNumberFromString(self, sValue):
-        sPattern = '\d+'
+        sPattern = '\\d+'
         aMatches = re.findall(sPattern, sValue)
         if (len(aMatches) > 0):
             return aMatches[0]
@@ -64,7 +65,7 @@ class cParser:
         try:
             [m.groupdict() for m in aMatches.finditer(sHtmlContent)]
             return m.groupdict()
-        except:
+        except BaseException:
             return {'title': sHtmlContent}
 
     def abParse(self, sHtmlContent, start, end=None, startoffset=0):
@@ -80,7 +81,12 @@ class cParser:
             startIdx = 0
 
         if end:
-            endIdx = sHtmlContent[startoffset + startIdx + len(start):].find(end)
+            endIdx = sHtmlContent[startoffset +
+                                  startIdx + len(start):].find(end)
             if endIdx > 0:
-                return sHtmlContent[startoffset + startIdx: startoffset + startIdx + endIdx + len(start)]
+                return sHtmlContent[startoffset +
+                                    startIdx: startoffset +
+                                    startIdx +
+                                    endIdx +
+                                    len(start)]
         return sHtmlContent[startoffset + startIdx:]

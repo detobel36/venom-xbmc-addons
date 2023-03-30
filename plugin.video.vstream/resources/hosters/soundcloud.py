@@ -1,14 +1,14 @@
 # -*- coding: utf-8 -*-
 # vStream https://github.com/Kodi-vStream/venom-xbmc-addons
 
-from resources.lib.handler.requestHandler import cRequestHandler
-from resources.lib.parser import cParser
+from resources.lib.handler.requestHandler import RequestHandler
+from resources.lib.parser import Parser
 from resources.hosters.hoster import iHoster
 from resources.lib.comaddon import VSlog
 
 try:
     import json
-except:
+except BaseException:
     import simplejson as json
 
 UA = 'Mozilla/5.0 (Windows NT 6.1; Win64; x64; rv:56.0) Gecko/20100101 Firefox/56.0'
@@ -18,18 +18,18 @@ class cHoster(iHoster):
     def __init__(self):
         iHoster.__init__(self, 'soundcloud', 'Soundcloud')
 
-    def _getMediaLinkForGuest(self, autoPlay = False):
+    def _getMediaLinkForGuest(self, autoPlay=False):
         url2 = ''
         VSlog(self._url)
 
-        oRequest = cRequestHandler(self._url)
+        oRequest = RequestHandler(self._url)
         oRequest.addHeaderEntry('User-Agent', UA)
         sHtmlContent = oRequest.request()
 
-        oParser = cParser()
+        oParser = Parser()
 
         # Magic number
-        sPattern = 'soundcloud:\/\/sounds:([0-9]+)">'
+        sPattern = 'soundcloud:\\/\\/sounds:([0-9]+)">'
         aResult = oParser.parse(sHtmlContent, sPattern)
         if aResult[0]:
             n = aResult[1][0]
@@ -54,7 +54,7 @@ class cHoster(iHoster):
             VSlog('err url2')
             return False
 
-        oRequest = cRequestHandler(url2)
+        oRequest = RequestHandler(url2)
         oRequest.addHeaderEntry('User-Agent', UA)
         sHtmlContent = oRequest.request()
 
@@ -69,10 +69,10 @@ class cHoster(iHoster):
         # Need track
         TrackUrl = 'https://api-v2.soundcloud.com/tracks?ids=' + n + '&client_id=' + sId
         VSlog('TrackUrl : ' + TrackUrl)
-        oRequest = cRequestHandler(TrackUrl)
+        oRequest = RequestHandler(TrackUrl)
         oRequest.addHeaderEntry('User-Agent', UA)
         sHtmlContent = oRequest.request()
-        sPattern = 'soundcloud:tracks:([^"]+\/)stream'
+        sPattern = 'soundcloud:tracks:([^"]+\\/)stream'
         aResult = oParser.parse(sHtmlContent, sPattern)
         if aResult[0]:
             sTrack = aResult[1][0]
@@ -80,10 +80,11 @@ class cHoster(iHoster):
             VSlog('err tracks')
             return False
 
-        jsonurl = 'https://api-v2.soundcloud.com/media/soundcloud:tracks:' + sTrack + 'stream/hls?client_id=' + sId
+        jsonurl = 'https://api-v2.soundcloud.com/media/soundcloud:tracks:' + \
+            sTrack + 'stream/hls?client_id=' + sId
         VSlog('jsonurl : ' + jsonurl)
 
-        oRequest = cRequestHandler(jsonurl)
+        oRequest = RequestHandler(jsonurl)
         oRequest.addHeaderEntry('User-Agent', UA)
         sHtmlContent = oRequest.request()
 

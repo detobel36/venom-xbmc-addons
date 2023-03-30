@@ -6,7 +6,7 @@ import sys
 from resources.lib.util import UnquotePlus, Unquote
 
 
-class cInputParameterHandler:
+class InputParameterHandler:
     def __init__(self):
         aParams = dict()
         if len(sys.argv) >= 2 and len(sys.argv[2]) > 0:

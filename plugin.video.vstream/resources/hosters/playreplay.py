@@ -21,19 +21,19 @@ class cHoster(iHoster):
         iHoster.__init__(self, 'playreplay', 'PlayReplay')
 
     def __getIdFromUrl(self, sUrl):
-        sPattern = 'http:..playreplay.net\/framevideo\/(.+?)\?'
+        sPattern = 'http:..playreplay.net\\/framevideo\\/(.+?)\\?'
         aResult = re.findall(sPattern, sUrl)
         if aResult:
             return aResult[0]
 
         return ''
 
-    def _getMediaLinkForGuest(self, autoPlay = False):
+    def _getMediaLinkForGuest(self, autoPlay=False):
         vUrl = False
         sId = self.__getIdFromUrl(self._url)
 
-        query_args = {'r': '["tVL0gjqo5",["preview/flv_image",{"uid":"' + sId + '"}],' +
-                           '["preview/flv_link",{"uid":"' + sId + '"}]]'}
+        query_args = {'r': '["tVL0gjqo5",["preview/flv_image",{"uid":"' + \
+            sId + '"}],' + '["preview/flv_link",{"uid":"' + sId + '"}]]'}
 
         data = urlEncode(query_args)
         headers = {'User-Agent': 'Mozilla 5.10'}

@@ -7,8 +7,8 @@
 
 import re
 
-from resources.lib.handler.requestHandler import cRequestHandler
-from resources.lib.parser import cParser
+from resources.lib.handler.requestHandler import RequestHandler
+from resources.lib.parser import Parser
 from resources.hosters.hoster import iHoster
 from resources.lib.packer import cPacker
 UA = 'Mozilla/5.0 (Windows NT 6.1; WOW64; rv:69.0) Gecko/20100101 Firefox/69.0'
@@ -30,29 +30,29 @@ class cHoster(iHoster):
             self._url = self._url + '.html'
 
     def extractSmil(self, smil):
-        oRequest = cRequestHandler(smil)
+        oRequest = RequestHandler(smil)
         oRequest.addParameters('referer', self._url)
         sHtmlContent = oRequest.request()
         Base = re.search('<meta base="(.+?)"', sHtmlContent)
         Src = re.search('<video src="(.+?)"', sHtmlContent)
         return Base.group(1) + Src.group(1)
 
-    def _getMediaLinkForGuest(self, autoPlay = False):
+    def _getMediaLinkForGuest(self, autoPlay=False):
         api_call = ''
 
-        oParser = cParser()
-        oRequest = cRequestHandler(self._url)
+        oParser = Parser()
+        oRequest = RequestHandler(self._url)
         oRequest.addHeaderEntry('Referer', self._url)
         oRequest.addParameters('User-Agent', UA)
         sHtmlContent = oRequest.request()
 
-        sPattern = 'sources:* \[(?:{file:)*"([^"]+)"'
+        sPattern = 'sources:* \\[(?:{file:)*"([^"]+)"'
         aResult = oParser.parse(sHtmlContent, sPattern)
         if aResult[0] is True:
             api_call = aResult[1][0]
 
         else:
-            sPattern = '(eval\(function\(p,a,c,k,e(?:.|\s)+?\))<\/script>'
+            sPattern = '(eval\\(function\\(p,a,c,k,e(?:.|\\s)+?\\))<\\/script>'
             aResult = oParser.parse(sHtmlContent, sPattern)
             if aResult[0] is True:
                 sHtmlContent = cPacker().unpack(aResult[1][0])

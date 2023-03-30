@@ -1,7 +1,7 @@
 # coding: utf-8
 
-from resources.lib.handler.requestHandler import cRequestHandler
-from resources.lib.parser import cParser
+from resources.lib.handler.requestHandler import RequestHandler
+from resources.lib.parser import Parser
 from resources.hosters.hoster import iHoster
 
 
@@ -11,13 +11,13 @@ class cHoster(iHoster):
         iHoster.__init__(self, 'voe', 'Voe')
 
     def _getMediaLinkForGuest(self):
-        oRequest = cRequestHandler(self._url)
+        oRequest = RequestHandler(self._url)
         sHtmlContent = oRequest.request()
 
         api_call = ''
 
-        oParser = cParser()
-        sPattern = '"hls":\s*"([^"]+)"'
+        oParser = Parser()
+        sPattern = '"hls":\\s*"([^"]+)"'
         aResult = oParser.parse(sHtmlContent, sPattern)
 
         if aResult[0] is True:

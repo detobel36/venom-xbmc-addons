@@ -4,12 +4,12 @@
 import re
 import unicodedata
 
-from resources.lib.comaddon import progress
-from resources.lib.gui.gui import cGui
-from resources.lib.handler.inputParameterHandler import cInputParameterHandler
-from resources.lib.handler.outputParameterHandler import cOutputParameterHandler
-from resources.lib.handler.requestHandler import cRequestHandler
-from resources.lib.parser import cParser
+from resources.lib.comaddon import Progress
+from resources.lib.gui.gui import Gui
+from resources.lib.handler.inputParameterHandler import InputParameterHandler
+from resources.lib.handler.outputParameterHandler import OutputParameterHandler
+from resources.lib.handler.requestHandler import RequestHandler
+from resources.lib.parser import Parser
 from resources.lib.util import cUtil, Quote
 
 try:
@@ -25,8 +25,14 @@ URL_MAIN = 'https://www.imdb.com/'
 POSTER_URL = 'https://ia.media-imdb.com/images/m/'
 FANART_URL = 'https://ia.media-.imdb.com/images/m/'
 
-MOVIE_WORLD = (URL_MAIN + 'search/title?groups=top_1000&sort=user_rating,desc&start=1', 'showMovies')
-MOVIE_TOP250 = (URL_MAIN + 'search/title?count=100&groups=top_250', 'showMovies')
+MOVIE_WORLD = (
+    URL_MAIN +
+    'search/title?groups=top_1000&sort=user_rating,desc&start=1',
+    'showMovies')
+MOVIE_TOP250 = (
+    URL_MAIN +
+    'search/title?count=100&groups=top_250',
+    'showMovies')
 MOVIE_ANNEES = (True, 'showMovieYears')
 
 
@@ -54,98 +60,143 @@ def unescape(text):
             except KeyError:
                 pass
         return text  # leave as is
-    return re.sub("&#?\w+;", fixup, text)
+    return re.sub("&#?\\w+;", fixup, text)
 
 
 def load():
-    oGui = cGui()
+    gui = Gui()
 
-    oOutputParameterHandler = cOutputParameterHandler()
-    oOutputParameterHandler.addParameter('siteUrl', MOVIE_WORLD[0])
-    oGui.addDir(SITE_IDENTIFIER, MOVIE_WORLD[1], 'Top Films Mondial', 'films.png', oOutputParameterHandler)
+    output_parameter_handler = OutputParameterHandler()
+    output_parameter_handler.addParameter('siteUrl', MOVIE_WORLD[0])
+    gui.addDir(
+        SITE_IDENTIFIER,
+        MOVIE_WORLD[1],
+        'Top Films Mondial',
+        'films.png',
+        output_parameter_handler)
 
-    oOutputParameterHandler.addParameter('siteUrl', MOVIE_TOP250[0])
-    oGui.addDir(SITE_IDENTIFIER, MOVIE_TOP250[1], 'Top 250', 'films.png', oOutputParameterHandler)
+    output_parameter_handler.addParameter('siteUrl', MOVIE_TOP250[0])
+    gui.addDir(
+        SITE_IDENTIFIER,
+        MOVIE_TOP250[1],
+        'Top 250',
+        'films.png',
+        output_parameter_handler)
 
-    oOutputParameterHandler.addParameter('siteUrl', MOVIE_ANNEES[0])
-    oGui.addDir(SITE_IDENTIFIER, MOVIE_ANNEES[1], 'Top (Par Années)', 'annees.png', oOutputParameterHandler)
+    output_parameter_handler.addParameter('siteUrl', MOVIE_ANNEES[0])
+    gui.addDir(
+        SITE_IDENTIFIER,
+        MOVIE_ANNEES[1],
+        'Top (Par Années)',
+        'annees.png',
+        output_parameter_handler)
 
-    oGui.setEndOfDirectory()
+    gui.setEndOfDirectory()
 
 
 def showMovieYears():
-    oGui = cGui()
+    gui = Gui()
 
     import datetime
     now = datetime.datetime.now()
 
-    oOutputParameterHandler = cOutputParameterHandler()
-    for i in reversed(xrange(1903, int(now.year)+1)):
-        oOutputParameterHandler.addParameter('siteUrl', URL_MAIN + 'search/title?year=' + str(i) + ',' + str(i) + '&title_type=feature&explore=languages')
-        oGui.addDir(SITE_IDENTIFIER, 'showMovies', str(i), 'annees.png', oOutputParameterHandler)
+    output_parameter_handler = OutputParameterHandler()
+    for i in reversed(xrange(1903, int(now.year) + 1)):
+        output_parameter_handler.addParameter(
+            'siteUrl',
+            URL_MAIN +
+            'search/title?year=' +
+            str(i) +
+            ',' +
+            str(i) +
+            '&title_type=feature&explore=languages')
+        gui.addDir(
+            SITE_IDENTIFIER,
+            'showMovies',
+            str(i),
+            'annees.png',
+            output_parameter_handler)
 
-    oGui.setEndOfDirectory()
+    gui.setEndOfDirectory()
 
 
 def showMovies(sSearch=''):
-    oGui = cGui()
-    oParser = cParser()
+    gui = Gui()
+    oParser = Parser()
     # bGlobal_Search = False
 
-    oInputParameterHandler = cInputParameterHandler()
+    input_parameter_handler = InputParameterHandler()
     if sSearch:
         sUrl = sSearch
     else:
-        sUrl = oInputParameterHandler.getValue('siteUrl')
+        sUrl = input_parameter_handler.getValue('siteUrl')
     # if URL_SEARCH[0] in sSearch:
         # bGlobal_Search = True
 
-    oRequestHandler = cRequestHandler(sUrl)
-    oRequestHandler.addHeaderEntry('Accept-Language', 'fr,fr-FR;q=0.8,en-US;q=0.5,en;q=0.3')
+    oRequestHandler = RequestHandler(sUrl)
+    oRequestHandler.addHeaderEntry(
+        'Accept-Language',
+        'fr,fr-FR;q=0.8,en-US;q=0.5,en;q=0.3')
     sHtmlContent = oRequestHandler.request()
 
-    sPattern = 'img alt="([^"]+).+?loadlate="([^"]+).+?primary">([^<]+).+?unbold">([^<]+).+?(?:|rated this(.+?)\s.+?)muted">([^<]+)'
+    sPattern = 'img alt="([^"]+).+?loadlate="([^"]+).+?primary">([^<]+).+?unbold">([^<]+).+?(?:|rated this(.+?)\\s.+?)muted">([^<]+)'
     aResult = oParser.parse(sHtmlContent, sPattern)
 
     if aResult[0]:
         total = len(aResult[1])
-        progress_ = progress().VScreate(SITE_NAME)
-        oOutputParameterHandler = cOutputParameterHandler()
+        progress_ = Progress().VScreate(SITE_NAME)
+        output_parameter_handler = OutputParameterHandler()
         for aEntry in aResult[1]:
             progress_.VSupdate(progress_, total)
             if progress_.iscanceled():
                 break
 
-            # sTitle = unicode(aEntry[0], 'utf-8')  # converti en unicode
-            # sTitle = unicodedata.normalize('NFD', sTitle).encode('ascii', 'ignore')  # vire accent
-            # sTitle = unescape(str(aEntry[1]))
-            # sTitle = sTitle.encode( "utf-8")
+            # title = unicode(aEntry[0], 'utf-8')  # converti en unicode
+            # title = unicodedata.normalize('NFD', title).encode('ascii', 'ignore')  # vire accent
+            # title = unescape(str(aEntry[1]))
+            # title = title.encode( "utf-8")
 
-            sTitle = ('%s %s [COLOR fuchsia]%s[/COLOR]') % (aEntry[2], aEntry[0], aEntry[4])
-            sThumb = aEntry[1].replace('UX67', 'UX328').replace('UY98', 'UY492').replace('67', '0').replace('98', '0')
+            title = (
+                '%s %s [COLOR fuchsia]%s[/COLOR]') % (aEntry[2], aEntry[0], aEntry[4])
+            sThumb = aEntry[1].replace(
+                'UX67',
+                'UX328').replace(
+                'UY98',
+                'UY492').replace(
+                '67',
+                '0').replace(
+                '98',
+                '0')
             sYear = re.search('([0-9]{4})', aEntry[3]).group(1)
-            sDesc = aEntry[5]
+            desc = aEntry[5]
 
-            oOutputParameterHandler.addParameter('siteUrl', 'none')
-            oOutputParameterHandler.addParameter('sMovieTitle', str(aEntry[0]))
-            oOutputParameterHandler.addParameter('sYear', sYear)
-            oOutputParameterHandler.addParameter('searchtext', showTitle(str(aEntry[0]), str('none')))
-            oGui.addMovie('globalSearch', 'showSearch', sTitle, '', sThumb, sDesc, oOutputParameterHandler)
+            output_parameter_handler.addParameter('siteUrl', 'none')
+            output_parameter_handler.addParameter(
+                'sMovieTitle', str(aEntry[0]))
+            output_parameter_handler.addParameter('sYear', sYear)
+            output_parameter_handler.addParameter(
+                'searchtext', showTitle(str(aEntry[0]), str('none')))
+            gui.addMovie('globalSearch', 'showSearch', title, '',
+                         sThumb, desc, output_parameter_handler)
 
         progress_.VSclose(progress_)
 
         sNextPage = __checkForNextPage(sHtmlContent)
         if sNextPage:
-            oOutputParameterHandler = cOutputParameterHandler()
-            oOutputParameterHandler.addParameter('siteUrl', sNextPage)
-            oGui.addNext(SITE_IDENTIFIER, 'showMovies', 'Suivant', oOutputParameterHandler)
+            output_parameter_handler = OutputParameterHandler()
+            output_parameter_handler.addParameter('siteUrl', sNextPage)
+            gui.addNext(
+                SITE_IDENTIFIER,
+                'showMovies',
+                'Suivant',
+                output_parameter_handler)
 
     if not sSearch:
-        oGui.setEndOfDirectory('500')
+        gui.setEndOfDirectory('500')
 
 
 def __checkForNextPage(sHtmlContent):
-    oParser = cParser()
+    oParser = Parser()
     sPattern = 'href="([^"]+?)"class="lister-page-next'
     aResult = oParser.parse(sHtmlContent, sPattern)
 

@@ -25,7 +25,8 @@ class iHoster:
         return self._displayName
 
     def setDisplayName(self, displayName):
-        self._displayName = displayName + ' [COLOR ' + self.color + ']' + self._defaultDisplayName + '[/COLOR]'
+        self._displayName = displayName + \
+            ' [COLOR ' + self.color + ']' + self._defaultDisplayName + '[/COLOR]'
 
     def isDownloadable(self):
         return True
@@ -36,11 +37,11 @@ class iHoster:
     def getUrl(self):
         return self._url
 
-    def getMediaLink(self, autoPlay = False):
+    def getMediaLink(self, autoPlay=False):
         return self._getMediaLinkForGuest(autoPlay)
 
-    def _getMediaLinkForGuest(self, autoPlay = False):
+    def _getMediaLinkForGuest(self, autoPlay=False):
         raise NotImplementedError()
 
-    def _getMediaLinkByPremiumUser(self, autoPlay = False):
+    def _getMediaLinkByPremiumUser(self, autoPlay=False):
         pass

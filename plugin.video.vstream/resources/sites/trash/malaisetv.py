@@ -1,19 +1,19 @@
-#-*- coding: utf-8 -*-
-#Venom.kodigoal
-#from resources.lib.gui.hoster import cHosterGui
-#ne fonctionne plus : une reprise depuis twitter vraiment utile ?
-return False
-from resources.lib.gui.gui import cGui
-from resources.lib.handler.inputParameterHandler import cInputParameterHandler
-from resources.lib.handler.outputParameterHandler import cOutputParameterHandler
-from resources.lib.handler.requestHandler import cRequestHandler
-from resources.lib.parser import cParser
-from resources.lib import util
-import xbmc
-#player
-from resources.lib.gui.guiElement import cGuiElement
-from resources.lib.player import cPlayer
+# -*- coding: utf-8 -*-
+# Venom.kodigoal
+# from resources.lib.gui.hoster import HosterGui
+# ne fonctionne plus : une reprise depuis twitter vraiment utile ?
 import xbmcgui
+from resources.lib.player import Player
+from resources.lib.gui.guiElement import GuiElement
+import xbmc
+from resources.lib import util
+from resources.lib.parser import Parser
+from resources.lib.handler.requestHandler import RequestHandler
+from resources.lib.handler.outputParameterHandler import OutputParameterHandler
+from resources.lib.handler.inputParameterHandler import InputParameterHandler
+from resources.lib.gui.gui import Gui
+return False
+# player
 
 SITE_IDENTIFIER = 'malaisetv'
 SITE_NAME = 'Malaise TV'
@@ -26,34 +26,39 @@ NETS_NEWS = (URL_MAIN, 'showMovies')
 
 
 def load():
-    oGui = cGui()
+    gui = Gui()
 
-    oOutputParameterHandler = cOutputParameterHandler()
-    oOutputParameterHandler.addParameter('siteUrl', NETS_NEWS[0])
-    oGui.addDir(SITE_IDENTIFIER, NETS_NEWS[1], 'Vidéos (Derniers ajouts)', 'news.png', oOutputParameterHandler)
+    output_parameter_handler = OutputParameterHandler()
+    output_parameter_handler.addParameter('siteUrl', NETS_NEWS[0])
+    gui.addDir(
+        SITE_IDENTIFIER,
+        NETS_NEWS[1],
+        'Vidéos (Derniers ajouts)',
+        'news.png',
+        output_parameter_handler)
 
-    oGui.setEndOfDirectory()
+    gui.setEndOfDirectory()
 
 
-def showMovies(sSearch = ''):
-    oGui = cGui()
+def showMovies(sSearch=''):
+    gui = Gui()
 
     if sSearch:
-      sUrl = sSearch
+        sUrl = sSearch
     else:
-        oInputParameterHandler = cInputParameterHandler()
-        sUrl = oInputParameterHandler.getValue('siteUrl')
+        input_parameter_handler = InputParameterHandler()
+        sUrl = input_parameter_handler.getValue('siteUrl')
 
-    oRequestHandler = cRequestHandler(sUrl)
+    oRequestHandler = RequestHandler(sUrl)
     sHtmlContent = oRequestHandler.request()
 
-    sPattern = '<a href="([^"]+)" class="tweet.+?" title=".+?\-([^"]+)".+?background-image:url((.+?))">'
+    sPattern = '<a href="([^"]+)" class="tweet.+?" title=".+?\\-([^"]+)".+?background-image:url((.+?))">'
 
-    oParser = cParser()
+    oParser = Parser()
     aResult = oParser.parse(sHtmlContent, sPattern)
 
     if not aResult[0]:
-		oGui.addText(SITE_IDENTIFIER)
+        gui.addText(SITE_IDENTIFIER)
 
     if aResult[0]:
         total = len(aResult[1])
@@ -62,75 +67,95 @@ def showMovies(sSearch = ''):
         for aEntry in aResult[1]:
             util.updateDialog(dialog, total)
 
-            sUrl   =  'https://twitter.com' + str(aEntry[0])
+            sUrl = 'https://twitter.com' + str(aEntry[0])
 
-            sThumbnail = str(aEntry[2]).replace("'", '').replace('(', '').replace(')', '')
+            thumbnail = str(
+                aEntry[2]).replace(
+                "'",
+                '').replace(
+                '(',
+                '').replace(
+                ')',
+                '')
 
-            sTitle  = (' %s ') % (str(aEntry[1]))
+            title = (' %s ') % (str(aEntry[1]))
 
-            #recup id last tweet pour NextPage
-            sNext = str(aEntry[0]).replace( '/malaisetele/status/' , '')
+            # recup id last tweet pour NextPage
+            sNext = str(aEntry[0]).replace('/malaisetele/status/', '')
 
-            oOutputParameterHandler = cOutputParameterHandler()
-            oOutputParameterHandler.addParameter('siteUrl', sUrl)
-            oOutputParameterHandler.addParameter('sMovieTitle', sTitle)
-            oOutputParameterHandler.addParameter('sThumbnail', sThumbnail)
+            output_parameter_handler = OutputParameterHandler()
+            output_parameter_handler.addParameter('siteUrl', sUrl)
+            output_parameter_handler.addParameter('sMovieTitle', title)
+            output_parameter_handler.addParameter('thumbnail', thumbnail)
 
-
-            oGui.addMovie(SITE_IDENTIFIER, 'showLinks', sTitle, 'films.png', sThumbnail, '', oOutputParameterHandler)
+            gui.addMovie(
+                SITE_IDENTIFIER,
+                'showLinks',
+                title,
+                'films.png',
+                thumbnail,
+                '',
+                output_parameter_handler)
 
         util.finishDialog(dialog)
 
         sNextPage = __checkForNextPage(sNext)
         if (sNextPage):
-            oOutputParameterHandler = cOutputParameterHandler()
-            oOutputParameterHandler.addParameter('siteUrl', sNextPage)
-            oGui.addNext(SITE_IDENTIFIER, 'showMovies', '[COLOR teal]Next >>>[/COLOR]', oOutputParameterHandler)
+            output_parameter_handler = OutputParameterHandler()
+            output_parameter_handler.addParameter('siteUrl', sNextPage)
+            gui.addNext(
+                SITE_IDENTIFIER,
+                'showMovies',
+                '[COLOR teal]Next >>>[/COLOR]',
+                output_parameter_handler)
 
     if not sSearch:
-        oGui.setEndOfDirectory()
+        gui.setEndOfDirectory()
+
 
 def __checkForNextPage(url):
 
-    sUrl = 'https://twitter.com/malaisetele/media?include_available_features=1&include_entities=1&lang=fr&max_position=' + url + '&reset_error_state=false'
+    sUrl = 'https://twitter.com/malaisetele/media?include_available_features=1&include_entities=1&lang=fr&max_position=' + \
+        url + '&reset_error_state=false'
     return sUrl
 
+
 def showLinks():
-    oGui = cGui()
+    gui = Gui()
 
-    oInputParameterHandler = cInputParameterHandler()
-    sUrl = oInputParameterHandler.getValue('siteUrl')
-    sMovieTitle = oInputParameterHandler.getValue('sMovieTitle')
-    sThumbnail = oInputParameterHandler.getValue('sThumbnail')
+    input_parameter_handler = InputParameterHandler()
+    sUrl = input_parameter_handler.getValue('siteUrl')
+    sMovieTitle = input_parameter_handler.getValue('sMovieTitle')
+    thumbnail = input_parameter_handler.getValue('thumbnail')
 
-    #recup lien mp4 video twitter via twdown.net
+    # recup lien mp4 video twitter via twdown.net
     sUrl2 = 'http://twdown.net/download.php'
 
-    oRequestHandler = cRequestHandler(sUrl2)
-    oRequestHandler.setRequestType(cRequestHandler.REQUEST_TYPE_POST)
+    oRequestHandler = RequestHandler(sUrl2)
+    oRequestHandler.setRequestType(RequestHandler.REQUEST_TYPE_POST)
     oRequestHandler.addParameters('URL', sUrl)
     oRequestHandler.addParameters('submit', 'Download')
     oRequestHandler.addParameters('submit', '')
     sHtmlContent = oRequestHandler.request()
 
-    #recup du lien mp4
+    # recup du lien mp4
     sPattern = '<td>[0-9]+P</td>.+?<a download href="([^"]+)"'
 
-    oParser = cParser()
+    oParser = Parser()
     aResult = oParser.parse(sHtmlContent, sPattern)
 
     if aResult[0]:
 
         sUrl = str(aResult[1][0])
 
-        #on lance video directement
-        oGuiElement = cGuiElement()
+        # on lance video directement
+        oGuiElement = GuiElement()
         oGuiElement.setSiteName(SITE_IDENTIFIER)
         oGuiElement.setTitle(sMovieTitle)
         oGuiElement.setMediaUrl(sUrl)
-        oGuiElement.setThumbnail(sThumbnail)
+        oGuiElement.setThumbnail(thumbnail)
 
-        oPlayer = cPlayer()
+        oPlayer = Player()
         oPlayer.clearPlayList()
         oPlayer.addItemToPlaylist(oGuiElement)
         oPlayer.startPlayer()
@@ -139,4 +164,4 @@ def showLinks():
     else:
         return
 
-    oGui.setEndOfDirectory()
+    gui.setEndOfDirectory()

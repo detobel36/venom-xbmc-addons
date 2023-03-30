@@ -6,19 +6,19 @@ import xbmcvfs
 import xbmc
 
 from resources.lib.comaddon import dialog, addon, VSlog, VSPath, isMatrix, VSProfil
-from resources.lib.handler.inputParameterHandler import cInputParameterHandler
+from resources.lib.handler.inputParameterHandler import InputParameterHandler
 from resources.lib.util import QuotePlus, Unquote
 
-SITE_IDENTIFIER = 'cDb'
+SITE_IDENTIFIER = 'Db'
 SITE_NAME = 'DB'
 
 try:
     from sqlite3 import dbapi2 as sqlite
-except:
+except BaseException:
     from pysqlite2 import dbapi2 as sqlite
 
 
-class cDb(object):
+class Db(object):
     def __enter__(self):
         name = VSProfil()
 
@@ -26,7 +26,8 @@ class cDb(object):
         if name == 'Master user':
             DB = 'special://home/userdata/addon_data/plugin.video.vstream/vstream.db'
         else:
-            DB = 'special://home/userdata/profiles/' + name + '/addon_data/plugin.video.vstream/vstream.db'
+            DB = 'special://home/userdata/profiles/' + name + \
+                '/addon_data/plugin.video.vstream/vstream.db'
 
         try:
             REALDB = VSPath(DB).decode('utf-8')
@@ -45,8 +46,8 @@ class cDb(object):
             if self.dbcur.fetchone() is None:
                 self._create_tables()
             return self
-            
-        except:
+
+        except BaseException:
             VSlog('Error: Unable to access to %s' % REALDB)
             pass
 
@@ -55,7 +56,7 @@ class cDb(object):
         try:
             self.dbcur.close()
             self.db.close()
-        except:
+        except BaseException:
             pass
 
     def _create_tables(self, dropTable=''):
@@ -145,11 +146,14 @@ class cDb(object):
                 except AttributeError:
                     pass
             import unicodedata
-            data = unicodedata.normalize('NFKD', data).encode('ascii', 'ignore')
+            data = unicodedata.normalize(
+                'NFKD', data).encode(
+                'ascii', 'ignore')
 
             try:
-                data = data.decode('string-escape')  # ATTENTION: bugs pour les chemins a cause du caractere '/'
-            except:
+                # ATTENTION: bugs pour les chemins a cause du caractere '/'
+                data = data.decode('string-escape')
+            except BaseException:
                 pass
 
         else:
@@ -175,7 +179,8 @@ class cDb(object):
             VSlog('SQL INSERT history Successfully')
         except Exception as e:
             if 'UNIQUE constraint failed' in str(e):
-                ex = "UPDATE history set title = '%s', disp = '%s', icone= '%s' WHERE title = '%s'" % (title, disp, icon, title)
+                ex = "UPDATE history set title = '%s', disp = '%s', icone= '%s' WHERE title = '%s'" % (
+                    title, disp, icon, title)
                 self.dbcur.execute(ex)
                 self.db.commit()
                 VSlog('SQL UPDATE history Successfully')
@@ -196,11 +201,12 @@ class cDb(object):
             return None
 
     def del_history(self):
-        from resources.lib.gui.gui import cGui
-        oGui = cGui()
-        oInputParameterHandler = cInputParameterHandler()
-        if oInputParameterHandler.exist('searchtext'):
-            sql_delete = "DELETE FROM history WHERE title = '%s'" % (oInputParameterHandler.getValue('searchtext'))
+        from resources.lib.gui.gui import Gui
+        gui = Gui()
+        input_parameter_handler = InputParameterHandler()
+        if input_parameter_handler.exist('searchtext'):
+            sql_delete = "DELETE FROM history WHERE title = '%s'" % (
+                input_parameter_handler.getValue('searchtext'))
         else:
             sql_delete = 'DELETE FROM history;'
 
@@ -208,7 +214,7 @@ class cDb(object):
             self.dbcur.execute(sql_delete)
             self.db.commit()
             dialog().VSinfo(addon().VSlang(30041))
-            oGui.updateDirectory()
+            gui.updateDirectory()
             return False, False
         except Exception as e:
             VSlog('SQL ERROR DELETE : %s' % sql_delete)
@@ -230,9 +236,11 @@ class cDb(object):
             self.db.commit()
             VSlog('SQL INSERT watched Successfully')
         except Exception as e:
-            if 'no such column' in str(e) or 'no column named' in str(e) or 'no such table' in str(e):
+            if 'no such column' in str(e) or 'no column named' in str(
+                    e) or 'no such table' in str(e):
                 if 'named cat' in str(e):  # ajout nouvelle colonne 'cat'
-                    self.dbcur.execute("ALTER TABLE watched add column cat TEXT")
+                    self.dbcur.execute(
+                        "ALTER TABLE watched add column cat TEXT")
                     self.db.commit()
                     VSlog('Table recreated : watched')
 
@@ -265,7 +273,8 @@ class cDb(object):
                 return True
             return False
         except Exception as e:
-            if 'no such column' in str(e) or 'no column named' in str(e) or 'no such table' in str(e):
+            if 'no such column' in str(e) or 'no column named' in str(
+                    e) or 'no such table' in str(e):
                 # Deuxieme tentative, sans la cat
                 sql_select = "SELECT * FROM watched WHERE title = '%s'" % title
                 self.dbcur.execute(sql_select)
@@ -309,7 +318,8 @@ class cDb(object):
             self.dbcur.execute(ex, (title, site, point, total))
             self.db.commit()
         except Exception as e:
-            if 'no such column' in str(e) or 'no column named' in str(e) or 'no such table' in str(e):
+            if 'no such column' in str(e) or 'no column named' in str(
+                    e) or 'no such table' in str(e):
                 self._create_tables('resume')
                 VSlog('Table recreated : resume')
 
@@ -365,12 +375,20 @@ class cDb(object):
 
         try:
             sIcon = meta['icon'].decode('UTF-8')
-        except:
+        except BaseException:
             sIcon = meta['icon']
 
         try:
             ex = 'INSERT INTO favorite (title, siteurl, site, fav, cat, icon, fanart) VALUES (?, ?, ?, ?, ?, ?, ?)'
-            self.dbcur.execute(ex, (title, siteurl, meta['site'], meta['fav'], meta['cat'], sIcon, meta['fanart']))
+            self.dbcur.execute(
+                ex,
+                (title,
+                 siteurl,
+                 meta['site'],
+                    meta['fav'],
+                    meta['cat'],
+                    sIcon,
+                    meta['fanart']))
 
             self.db.commit()
 
@@ -408,7 +426,8 @@ class cDb(object):
             siteUrl = QuotePlus(sSiteUrl)
             title = self.str_conv(sMovieTitle)
             title = title.replace("'", r"''")
-            sql_delete = "DELETE FROM favorite WHERE siteurl = '%s' AND title = '%s'" % (siteUrl, title)
+            sql_delete = "DELETE FROM favorite WHERE siteurl = '%s' AND title = '%s'" % (
+                siteUrl, title)
 
         # Supprimer un bookmark selon son url
         elif sSiteUrl:
@@ -425,7 +444,7 @@ class cDb(object):
             sql_delete = "DELETE FROM favorite WHERE cat in %s" % str(catList)
 
         if sql_delete:
-            from resources.lib.gui.gui import cGui
+            from resources.lib.gui.gui import Gui
             try:
                 self.dbcur.execute(sql_delete)
                 self.db.commit()
@@ -436,7 +455,7 @@ class cDb(object):
                     return self.del_bookmark(sSiteUrl)
 
                 dialog().VSinfo(addon().VSlang(30044))
-                cGui().updateDirectory()
+                Gui().updateDirectory()
                 return True
             except Exception as e:
                 VSlog('SQL ERROR %s' % sql_delete)
@@ -460,7 +479,8 @@ class cDb(object):
         saison = meta['season'] if 'season' in meta else ''
         sTmdbId = meta['sTmdbId'] if 'sTmdbId' in meta else ''
 
-        ex = "DELETE FROM viewing WHERE title_id = '%s' and cat = '%s'" % (titleWatched, cat)
+        ex = "DELETE FROM viewing WHERE title_id = '%s' and cat = '%s'" % (
+            titleWatched, cat)
         try:
             self.dbcur.execute(ex)
         except Exception as e:
@@ -469,17 +489,37 @@ class cDb(object):
 
         try:
             ex = 'INSERT INTO viewing (tmdb_id, title_id, title, siteurl, site, fav, cat, season) VALUES (?, ?, ?, ?, ?, ?, ?, ?)'
-            self.dbcur.execute(ex, (sTmdbId, titleWatched, title, siteurl, meta['site'], meta['fav'], cat, saison))
+            self.dbcur.execute(
+                ex,
+                (sTmdbId,
+                 titleWatched,
+                 title,
+                 siteurl,
+                 meta['site'],
+                    meta['fav'],
+                    cat,
+                    saison))
             self.db.commit()
 
             VSlog('SQL INSERT viewing Successfully')
         except Exception as e:
-            if 'no such column' in str(e) or 'no column named' in str(e) or 'no such table' in str(e):
+            if 'no such column' in str(e) or 'no column named' in str(
+                    e) or 'no such table' in str(e):
                 self._create_tables('viewing')
                 VSlog('Table recreated : viewing')
 
                 # Deuxieme tentative
-                self.dbcur.execute(ex, (meta['sTmdbId'], titleWatched, title, siteurl, meta['site'], meta['fav'], meta['cat'], saison, episode))
+                self.dbcur.execute(
+                    ex,
+                    (meta['sTmdbId'],
+                     titleWatched,
+                     title,
+                     siteurl,
+                     meta['site'],
+                        meta['fav'],
+                        meta['cat'],
+                        saison,
+                        episode))
                 self.db.commit()
             else:
                 VSlog('SQL ERROR INSERT : %s' % e)
@@ -505,7 +545,7 @@ class cDb(object):
             if 'cat' in meta:
                 sql_delete += " where cat = '%s'" % meta['cat']
         else:
-            sql_delete= "DELETE FROM viewing WHERE title_id = '%s'" % sTitleWatched
+            sql_delete = "DELETE FROM viewing WHERE title_id = '%s'" % sTitleWatched
             if 'cat' in meta:
                 sql_delete += " and cat = '%s'" % meta['cat']
 
@@ -539,7 +579,8 @@ class cDb(object):
         ex = 'INSERT INTO download (title, url, path, cat, icon, size, totalsize, status) VALUES (?, ?, ?, ?, ?, ?, ?, ?)'
 
         try:
-            self.dbcur.execute(ex, (title, url, sPath, meta['cat'], sIcon, '', '', 0))
+            self.dbcur.execute(
+                ex, (title, url, sPath, meta['cat'], sIcon, '', '', 0))
             self.db.commit()
             VSlog('SQL INSERT download Successfully')
         except Exception as e:
@@ -623,7 +664,8 @@ class cDb(object):
         totalsize = meta['totalsize']
         status = meta['status']
 
-        sql_select = "UPDATE download set size = '%s', totalsize = '%s', status= '%s' WHERE path = '%s'" % (size, totalsize, status, path)
+        sql_select = "UPDATE download set size = '%s', totalsize = '%s', status= '%s' WHERE path = '%s'" % (
+            size, totalsize, status, path)
 
         try:
             self.dbcur.execute(sql_select)

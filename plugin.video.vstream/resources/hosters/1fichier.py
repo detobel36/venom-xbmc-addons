@@ -9,8 +9,8 @@ import urllib3
 from resources.hosters.hoster import iHoster
 from resources.lib.comaddon import dialog, VSlog
 from resources.lib.handler.premiumHandler import cPremiumHandler
-from resources.lib.handler.requestHandler import cRequestHandler
-from resources.lib.parser import cParser
+from resources.lib.handler.requestHandler import RequestHandler
+from resources.lib.parser import Parser
 
 UA = 'Mozilla/5.0 (Windows NT 6.1; WOW64; rv:39.0) Gecko/20100101 Firefox/39.0'
 
@@ -30,14 +30,15 @@ class cHoster(iHoster):
 
         return sId
 
-    def getMediaLink(self ,autoPlay = False):
+    def getMediaLink(self, autoPlay=False):
         self.oPremiumHandler = cPremiumHandler(self.getPluginIdentifier())
         print(self.oPremiumHandler.isPremiumModeAvailable())
 
-        if ('site=cDownload&function' not in sys.argv[2]) and not (self.oPremiumHandler.isPremiumModeAvailable()):
+        if ('site=cDownload&function' not in sys.argv[2]) and not (
+                self.oPremiumHandler.isPremiumModeAvailable()):
             if not autoPlay:
                 oDialog = dialog().VSok("Pas de streaming sans premium.\n" +
-                    "Pour voir le film passer par l'option 'Télécharger et Lire' du menu contextuel.")
+                                        "Pour voir le film passer par l'option 'Télécharger et Lire' du menu contextuel.")
             return False, False
 
         if self.oPremiumHandler.isPremiumModeAvailable():
@@ -45,20 +46,24 @@ class cHoster(iHoster):
         else:
             return self._getMediaLinkForGuest(autoPlay)
 
-    def _getMediaLinkForGuest(self, autoPlay = False):
+    def _getMediaLinkForGuest(self, autoPlay=False):
         api_call = False
         url = 'https://1fichier.com/?' + self.__getIdFromUrl(self._url)
 
         adcode = random.uniform(000.000000000, 999.999999999)
 
-        oRequestHandler = cRequestHandler(url)
+        oRequestHandler = RequestHandler(url)
         oRequestHandler.setRequestType(1)
         oRequestHandler.addHeaderEntry('Host', url.split('/')[2])
         oRequestHandler.addHeaderEntry('Referer', url)
-        oRequestHandler.addHeaderEntry('Accept', 'text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8')
+        oRequestHandler.addHeaderEntry(
+            'Accept', 'text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8')
         oRequestHandler.addHeaderEntry('User-Agent', UA)
-        oRequestHandler.addHeaderEntry('Accept-Language', 'fr,fr-FR;q=0.8,en-US;q=0.5,en;q=0.3')
-        oRequestHandler.addHeaderEntry('Content-Type', 'application/x-www-form-urlencoded')
+        oRequestHandler.addHeaderEntry(
+            'Accept-Language',
+            'fr,fr-FR;q=0.8,en-US;q=0.5,en;q=0.3')
+        oRequestHandler.addHeaderEntry(
+            'Content-Type', 'application/x-www-form-urlencoded')
 
         oRequestHandler.addParameters('dl_no_ssl', 'on')
         oRequestHandler.addParameters('adz', adcode)
@@ -77,7 +82,7 @@ class cHoster(iHoster):
 
     def getMedialinkDL(self, sHtmlContent):
 
-        oParser = cParser()
+        oParser = Parser()
         api_call = False
 
         sPattern = 'Vous devez attendre encore [0-9]+ minutes'
@@ -87,13 +92,14 @@ class cHoster(iHoster):
             return False
 
         sPattern = '<a href="([^<>"]+?)"  style="float:none;margin:auto;font-weight:bold;padding: 10px;margin: ' + \
-                   '10px;font-size:\+1\.6em;border:2px solid red" class="ok btn-general btn-orange">'
+                   '10px;font-size:\\+1\\.6em;border:2px solid red" class="ok btn-general btn-orange">'
         aResult = oParser.parse(sHtmlContent, sPattern)
 
         if aResult[0] is True:
             # xbmc.sleep(1*1000)
             # VSlog(  aResult[1][0] )
-            api_call = aResult[1][0] + '|User-Agent=' + UA  # + '&Referer=' + self._url
+            api_call = aResult[1][0] + '|User-Agent=' + \
+                UA  # + '&Referer=' + self._url
             return api_call
 
         return False
@@ -120,25 +126,28 @@ class cHoster(iHoster):
             m = re.search('^(.*);.*;.*;.*$', sHtmlContent)
             if m:
                 url = m.group(1)
-            # L'option est activée : pour récupérer le lien direct il faut POSTer le formulaire demandant le download
+            # L'option est activée : pour récupérer le lien direct il faut
+            # POSTer le formulaire demandant le download
             else:
                 cookie = self.oPremiumHandler.AddCookies().replace('Cookie=', '', 1)
                 data = {
                     'submit': 'download'
                 }
-                # Seul le Cookie est nécessaire, néanmoins autant rendre les headers cohérents
-                headers = {'User-Agent': UA,
-                           'Host': '1fichier.com',
-                           'Referer': url,
-                           'Accept': 'text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8',
-                           'Accept-Language': 'fr,fr-FR;q=0.8,en-US;q=0.5,en;q=0.3',
-                           'Cookie': cookie,
-                           'Content-Length': '15',
-                           'Content-Type': 'application/x-www-form-urlencoded'
-                           }
+                # Seul le Cookie est nécessaire, néanmoins autant rendre les
+                # headers cohérents
+                headers = {
+                    'User-Agent': UA,
+                    'Host': '1fichier.com',
+                    'Referer': url,
+                    'Accept': 'text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8',
+                    'Accept-Language': 'fr,fr-FR;q=0.8,en-US;q=0.5,en;q=0.3',
+                    'Cookie': cookie,
+                    'Content-Length': '15',
+                    'Content-Type': 'application/x-www-form-urlencoded'}
                 try:
                     http = urllib3.PoolManager()
-                    response = http.request(method='POST', url=url, fields=data, headers=headers)
+                    response = http.request(
+                        method='POST', url=url, fields=data, headers=headers)
                 except urllib3.exceptions.HTTPError as e:
                     VSlog(e.read())
                     VSlog(e.reason)

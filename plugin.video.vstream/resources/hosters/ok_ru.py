@@ -10,7 +10,7 @@ except ImportError:  # Python 3
 import json
 import requests
 
-from resources.lib.parser import cParser
+from resources.lib.parser import Parser
 from resources.hosters.hoster import iHoster
 from resources.lib.comaddon import dialog
 from resources.lib.util import cUtil
@@ -21,27 +21,32 @@ class cHoster(iHoster):
         iHoster.__init__(self, 'ok_ru', 'Ok.ru')
 
     def getHostAndIdFromUrl(self, sUrl):
-        sPattern = 'https*:\/\/.*?((?:(?:ok)|(?:odnoklassniki))\.ru)\/.+?\/([0-9]+)'
-        oParser = cParser()
+        sPattern = 'https*:\\/\\/.*?((?:(?:ok)|(?:odnoklassniki))\\.ru)\\/.+?\\/([0-9]+)'
+        oParser = Parser()
         aResult = oParser.parse(sUrl, sPattern)
         if aResult[0] is True:
             return aResult[1][0]
         return ''
 
-    def _getMediaLinkForGuest(self, autoPlay = False):
+    def _getMediaLinkForGuest(self, autoPlay=False):
         v = self.getHostAndIdFromUrl(self._url)
         sId = v[1]
         sHost = v[0]
         web_url = 'http://' + sHost + '/videoembed/' + sId
 
-        HEADERS = {'User-Agent': 'Mozilla/5.0 (Windows NT 6.1; WOW64; rv:52.0) Gecko/20100101 Firefox/52.0',
-                   'Accept': 'text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8'}
+        HEADERS = {
+            'User-Agent': 'Mozilla/5.0 (Windows NT 6.1; WOW64; rv:52.0) Gecko/20100101 Firefox/52.0',
+            'Accept': 'text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8'}
 
-        St=requests.Session()
+        St = requests.Session()
         sHtmlContent = St.get(web_url).content.decode('utf-8')
-        oParser = cParser()
+        oParser = Parser()
 
-        sHtmlContent = oParser.abParse(sHtmlContent, 'data-options=', '" data-player-container', 14)
+        sHtmlContent = oParser.abParse(
+            sHtmlContent,
+            'data-options=',
+            '" data-player-container',
+            14)
         sHtmlContent = cUtil().removeHtmlTags(sHtmlContent)
         sHtmlContent = cUtil().unescape(sHtmlContent)
 

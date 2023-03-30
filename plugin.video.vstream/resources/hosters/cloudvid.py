@@ -3,9 +3,9 @@
 # http://cloudvid.co/embed-xxxx.html
 # https://clipwatching.com/embed-xxx.html
 
-from resources.lib.handler.requestHandler import cRequestHandler
+from resources.lib.handler.requestHandler import RequestHandler
 from resources.hosters.hoster import iHoster
-from resources.lib.parser import cParser
+from resources.lib.parser import Parser
 from resources.lib.packer import cPacker
 from resources.lib.comaddon import dialog
 
@@ -23,15 +23,15 @@ class cHoster(iHoster):
         if not self._url.endswith('.html'):
             self._url = self._url + '.html'
 
-    def _getMediaLinkForGuest(self, autoPlay = False, api_call=None):
-        oRequest = cRequestHandler(self._url)
+    def _getMediaLinkForGuest(self, autoPlay=False, api_call=None):
+        oRequest = RequestHandler(self._url)
         sHtmlContent = oRequest.request()
 
         if 'File was deleted' in sHtmlContent:
             return False, False
 
-        oParser = cParser()
-        sPattern = '(eval\(function\(p,a,c,k,e(?:.|\s)+?\))<\/script>'
+        oParser = Parser()
+        sPattern = '(eval\\(function\\(p,a,c,k,e(?:.|\\s)+?\\))<\\/script>'
         aResult = oParser.parse(sHtmlContent, sPattern)
 
         if aResult[0] is True:
@@ -53,10 +53,11 @@ class cHoster(iHoster):
                 sPattern = 'src:"([^"]+)"'
                 aResult = oParser.parse(sHtmlContent2, sPattern)
                 if aResult[0]:
-                    api_call = aResult[1][0].replace(',', '').replace('.urlset', '')
+                    api_call = aResult[1][0].replace(
+                        ',', '').replace('.urlset', '')
 
         if not api_call:
-            sPattern = 'sources: *\[{src: "([^"]+)", *type: "video/mp4"'
+            sPattern = 'sources: *\\[{src: "([^"]+)", *type: "video/mp4"'
             aResult = oParser.parse(sHtmlContent, sPattern)
             if aResult[0]:
                 api_call = aResult[1][0]

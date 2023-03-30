@@ -1,10 +1,10 @@
 # -*- coding: utf-8 -*-
 # vStream https://github.com/Kodi-vStream/venom-xbmc-addons
-from resources.lib.handler.requestHandler import cRequestHandler
+from resources.lib.handler.requestHandler import RequestHandler
 
 from resources.lib.comaddon import addon, dialog, VSlog
 from resources.lib.config import GestionCookie
-from resources.lib.parser import cParser
+from resources.lib.parser import Parser
 
 UA = 'Mozilla/5.0 (Windows NT 6.1; WOW64; rv:56.0) Gecko/20100101 Firefox/56.0'
 
@@ -20,27 +20,33 @@ class cPremiumHandler:
         self.__LoginTry = False
         self.__ssl = False
 
-        # hack pour garder la compatiblité avec ceux qui ont déjà reglé les settings
+        # hack pour garder la compatiblité avec ceux qui ont déjà reglé les
+        # settings
         if self.__sHosterIdentifier == '1fichier':
             self.__sHosterIdentifier = 'onefichier'
 
         self.__Ispremium = False
-        bIsPremium = self.ADDON.getSetting('hoster_' + str(self.__sHosterIdentifier) + '_premium')
+        bIsPremium = self.ADDON.getSetting(
+            'hoster_' + str(self.__sHosterIdentifier) + '_premium')
         if (bIsPremium == 'true'):
-            VSlog("Utilise compte premium pour hoster " + str(self.__sHosterIdentifier))
+            VSlog("Utilise compte premium pour hoster " +
+                  str(self.__sHosterIdentifier))
             self.__Ispremium = True
         else:
-            VSlog("Utilise compte gratuit pour hoster " + str(self.__sHosterIdentifier))
+            VSlog("Utilise compte gratuit pour hoster " +
+                  str(self.__sHosterIdentifier))
 
     def isPremiumModeAvailable(self):
         return self.__Ispremium
 
     def getUsername(self):
-        sUsername = self.ADDON.getSetting('hoster_' + str(self.__sHosterIdentifier) + '_username')
+        sUsername = self.ADDON.getSetting(
+            'hoster_' + str(self.__sHosterIdentifier) + '_username')
         return sUsername
 
     def getPassword(self):
-        sPassword = self.ADDON.getSetting('hoster_' + str(self.__sHosterIdentifier) + '_password')
+        sPassword = self.ADDON.getSetting(
+            'hoster_' + str(self.__sHosterIdentifier) + '_password')
         return sPassword
 
     def AddCookies(self):
@@ -53,7 +59,8 @@ class cPremiumHandler:
                 return True
 
         if 'onefichier' in self.__sHosterIdentifier:
-            if 'premium' in code or 'jqueryFileTree' in code or '1fichier.com/logout' in code:  # test ok mais pas convaincu....
+            # test ok mais pas convaincu....
+            if 'premium' in code or 'jqueryFileTree' in code or '1fichier.com/logout' in code:
                 return True
 
         return False
@@ -98,15 +105,17 @@ class cPremiumHandler:
         else:
             return False
 
-        oRequestHandler = cRequestHandler(url)
+        oRequestHandler = RequestHandler(url)
         oRequestHandler.setRequestType(1)
 
         if 'uptobox' in self.__sHosterIdentifier:
             oRequestHandler.disableRedirect()
 
             oRequestHandler.addHeaderEntry('User-Agent', UA)
-            oRequestHandler.addHeaderEntry('Content-Type', "application/x-www-form-urlencoded")
-            oRequestHandler.addHeaderEntry('Content-Length', str(len(post_data)))
+            oRequestHandler.addHeaderEntry(
+                'Content-Type', "application/x-www-form-urlencoded")
+            oRequestHandler.addHeaderEntry(
+                'Content-Length', str(len(post_data)))
 
         for data in post_data:
             oRequestHandler.addParameters(data, post_data[data])
@@ -118,19 +127,25 @@ class cPremiumHandler:
             if 'Set-Cookie' in head and 'xfss' in head['Set-Cookie']:
                 self.isLogin = True
             else:
-                self.DIALOG.VSinfo('Authentification rate', self.__sDisplayName)
+                self.DIALOG.VSinfo(
+                    'Authentification rate',
+                    self.__sDisplayName)
                 return False
         elif 'onefichier' in self.__sHosterIdentifier:
             if 'You are logged in. This page will redirect you.' in sHtmlContent:
                 self.isLogin = True
             else:
-                self.DIALOG.VSinfo('Authentification rate', self.__sDisplayName)
+                self.DIALOG.VSinfo(
+                    'Authentification rate',
+                    self.__sDisplayName)
                 return False
         elif 'uploaded' in self.__sHosterIdentifier:
             if sHtmlContent == '':
                 self.isLogin = True
             else:
-                self.DIALOG.VSinfo('Authentification rate', self.__sDisplayName)
+                self.DIALOG.VSinfo(
+                    'Authentification rate',
+                    self.__sDisplayName)
                 return False
         else:
             return False
@@ -138,11 +153,11 @@ class cPremiumHandler:
         # get cookie
         cookies = ''
         if 'Set-Cookie' in head:
-            oParser = cParser()
-            sPattern = '(?:^|,) *([^;,]+?)=([^;,\/]+?);'
+            oParser = Parser()
+            sPattern = '(?:^|,) *([^;,]+?)=([^;,\\/]+?);'
             aResult = oParser.parse(str(head['Set-Cookie']), sPattern)
             # print(aResult)
-            if (aResult[0] == True):
+            if (aResult[0]):
                 for cook in aResult[1]:
                     if 'deleted' in cook[1]:
                         continue
@@ -157,9 +172,9 @@ class cPremiumHandler:
         return True
 
     def GetHtmlwithcookies(self, url, data, cookies):
-        oRequestHandler = cRequestHandler(url)
+        oRequestHandler = RequestHandler(url)
         oRequestHandler.addHeaderEntry('User-Agent', UA)
-        if not (data == None):
+        if not (data is None):
             oRequestHandler.addParametersLine(data)
             oRequestHandler.addHeaderEntry('Referer', url)
 
@@ -179,8 +194,10 @@ class cPremiumHandler:
 
         sHtmlContent = self.GetHtmlwithcookies(url, data, cookies)
 
-        # Les cookies ne sont plus valables, mais on teste QUE si la personne n'a pas essaye de s'authentifier
-        if not self.Checklogged(sHtmlContent) and not self.__LoginTry and self.__Ispremium:
+        # Les cookies ne sont plus valables, mais on teste QUE si la personne
+        # n'a pas essaye de s'authentifier
+        if not self.Checklogged(
+                sHtmlContent) and not self.__LoginTry and self.__Ispremium:
             VSlog('Cookies non valables')
             self.Authentificate()
             if self.isLogin:
@@ -192,7 +209,9 @@ class cPremiumHandler:
         return sHtmlContent
 
     def setToken(self, sToken):
-        self.ADDON.setSetting('hoster_' + str(self.__sHosterIdentifier) + '_token', sToken)
+        self.ADDON.setSetting('hoster_' +
+                              str(self.__sHosterIdentifier) +
+                              '_token', sToken)
 
     def getToken(self):
 
@@ -201,15 +220,18 @@ class cPremiumHandler:
             return None
 
         # le token est connu, on le retourne
-        sToken = self.ADDON.getSetting('hoster_' + str(self.__sHosterIdentifier) + '_token')
+        sToken = self.ADDON.getSetting(
+            'hoster_' + str(self.__sHosterIdentifier) + '_token')
         if sToken:
             return sToken
 
         # token alldebrid était connu avec un aute setting
         if 'alldebrid' in self.__sHosterIdentifier:
-            sToken = self.ADDON.getSetting('token_alldebrid')  # ancien nom, à supprimer après quelques temps
+            # ancien nom, à supprimer après quelques temps
+            sToken = self.ADDON.getSetting('token_alldebrid')
             if sToken:
-                self.ADDON.setSetting('hoster_' + str(self.__sHosterIdentifier) + '_token', sToken)
+                self.ADDON.setSetting(
+                    'hoster_' + str(self.__sHosterIdentifier) + '_token', sToken)
             return sToken
 
         # Si pas de token pour uptobox, on le récupère depuis le compte
@@ -222,10 +244,11 @@ class cPremiumHandler:
             if self.isLogin:
                 sHtmlContent = self.GetHtml('https://uptobox.com/my_account')
                 sPattern = 'data-clipboard-text="(.+?)" data-tippy-content="Token'
-                aResult = cParser().parse(sHtmlContent, sPattern, 1)
+                aResult = Parser().parse(sHtmlContent, sPattern, 1)
                 if aResult[0]:
                     sToken = aResult[1][0]
-                    self.ADDON.setSetting('hoster_' + str(self.__sHosterIdentifier) + '_token', sToken)
+                    self.ADDON.setSetting(
+                        'hoster_' + str(self.__sHosterIdentifier) + '_token', sToken)
                     return sToken
 
         return None

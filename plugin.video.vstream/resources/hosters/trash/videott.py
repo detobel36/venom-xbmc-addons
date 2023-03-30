@@ -1,20 +1,23 @@
-#-*- coding: utf-8 -*-
-#Vstream https://github.com/Kodi-vStream/venom-xbmc-addons
+# -*- coding: utf-8 -*-
+# Vstream https://github.com/Kodi-vStream/venom-xbmc-addons
 import re
 
-try: # Python 2
+try:  # Python 2
     import urllib2
 except ImportError:  # Python 3
     import urllib.request as urllib2
 
-try:    import json
-except: import simplejson as json
+try:
+    import json
+except BaseException:
+    import simplejson as json
 
-from resources.lib.handler.requestHandler import cRequestHandler
-#from t0mm0.common.net import Net
-from resources.lib.parser import cParser
+from resources.lib.handler.requestHandler import RequestHandler
+# from t0mm0.common.net import Net
+from resources.lib.parser import Parser
 from resources.hosters.hoster import iHoster
 from resources.lib.comaddon import dialog
+
 
 class cHoster(iHoster):
 
@@ -22,14 +25,14 @@ class cHoster(iHoster):
         iHoster.__init__(self, 'videott', 'VideoTT')
 
     def __getIdFromUrl(self, sUrl):
-        sPattern = 'http:..(?:www.)*video.tt\/e(?:mbed)*\/([^<]+)'
-        aResult = re.findall(sPattern,sUrl)
+        sPattern = 'http:..(?:www.)*video.tt\\/e(?:mbed)*\\/([^<]+)'
+        aResult = re.findall(sPattern, sUrl)
         if (aResult):
             return aResult[0]
 
         return ''
 
-    def _getMediaLinkForGuest(self, autoPlay = False):
+    def _getMediaLinkForGuest(self, autoPlay=False):
         sId = self.__getIdFromUrl(self._url)
 
         json_url = 'http://www.video.tt/player_control/settings.php?v=%s' % sId
@@ -40,7 +43,9 @@ class cHoster(iHoster):
 
             reponse = urllib2.urlopen(json_url)
 
-            data = json.loads(reponse.read().decode(reponse.info().getparam('charset') or 'utf-8'))
+            data = json.loads(
+                reponse.read().decode(
+                    reponse.info().getparam('charset') or 'utf-8'))
 
             vids = data['settings']['res']
 
@@ -70,7 +75,6 @@ class cHoster(iHoster):
         except Exception as e:
             print(e.read())
             print(e.reason)
-
 
         if (vUrl):
             api_call = vUrl

@@ -1,9 +1,9 @@
 # -*- coding: utf-8 -*-
 # vStream https://github.com/Kodi-vStream/venom-xbmc-addons
-from resources.lib.handler.requestHandler import cRequestHandler
+from resources.lib.handler.requestHandler import RequestHandler
 from resources.hosters.hoster import iHoster
 from resources.lib.packer import cPacker
-from resources.lib.parser import cParser
+from resources.lib.parser import Parser
 
 UA = 'Mozilla/5.0 (Windows NT 6.1; WOW64; rv:39.0) Gecko/20100101 Firefox/39.0'
 
@@ -13,14 +13,14 @@ class cHoster(iHoster):
     def __init__(self):
         iHoster.__init__(self, 'hdvid', 'HdVid')
 
-    def _getMediaLinkForGuest(self, autoPlay = False):
-        oRequest = cRequestHandler(self._url)
+    def _getMediaLinkForGuest(self, autoPlay=False):
+        oRequest = RequestHandler(self._url)
         sHtmlContent = oRequest.request()
-        oParser = cParser()
+        oParser = Parser()
 
         api_call = False
 
-        sPattern = '(eval\(function\(p,a,c,k,e(?:.|\s)+?\)\)\s*)<\/script>'
+        sPattern = '(eval\\(function\\(p,a,c,k,e(?:.|\\s)+?\\)\\)\\s*)<\\/script>'
         aResult = oParser.parse(sHtmlContent, sPattern)
         if aResult[0] is True:
             sHtmlContent = cPacker().unpack(aResult[1][0])
@@ -33,7 +33,8 @@ class cHoster(iHoster):
             sPattern = 'file:"([^"]+)",label:"[0-9]+"}'
             aResult = oParser.parse(sHtmlContent, sPattern)
             if aResult[0] is True:
-                api_call = aResult[1][0] + '|User-Agent=' + UA  # + '&Referer=' + self._url
+                api_call = aResult[1][0] + '|User-Agent=' + \
+                    UA  # + '&Referer=' + self._url
 
         if api_call:
             return True, api_call

@@ -8,7 +8,7 @@
 import json
 
 from resources.hosters.hoster import iHoster
-from resources.lib.handler.requestHandler import cRequestHandler
+from resources.lib.handler.requestHandler import RequestHandler
 
 UA = 'Mozilla/5.0 (Windows NT 6.1; WOW64; rv:70.0) Gecko/20100101 Firefox/70.0'
 
@@ -31,7 +31,7 @@ class cHoster(iHoster):
 
         url1 = "https://" + host + "/api/make/hash/" + videoId
 
-        oRequest = cRequestHandler(url1)
+        oRequest = RequestHandler(url1)
         oRequest.addHeaderEntry('User-Agent', UA)
         oRequest.addHeaderEntry('Referer', "https://" + host)
         sHtmlContent = oRequest.request()
@@ -41,7 +41,7 @@ class cHoster(iHoster):
 
         url2 = "https://" + host + "/api/player/setup"
 
-        oRequest = cRequestHandler(url2)
+        oRequest = RequestHandler(url2)
         oRequest.setRequestType(1)
         oRequest.addHeaderEntry('User-Agent', UA)
         oRequest.addHeaderEntry('Referer', "https://" + host)
@@ -173,11 +173,12 @@ def tear_decode(data_file, data_seed):
         a87 = 0
 
         for a86 in range(32):
-            a85 += i32((((i32(a83).value << 4) ^ rshift(i32(a83).value, 5)) + a83) ^ (a87 + a80[(a87 & 3)])).value
+            a85 += i32((((i32(a83).value << 4) ^ rshift(i32(a83).value, 5)
+                         ) + a83) ^ (a87 + a80[(a87 & 3)])).value
             a85 = i32(a85 | 0).value
             a87 = i32(a87).value - i32(1640531527).value
-            a83 += i32(
-                (((i32(a85).value << 4) ^ rshift(i32(a85).value, 5)) + a85) ^ (a87 + a80[(rshift(a87, 11) & 3)])).value
+            a83 += i32((((i32(a85).value << 4) ^ rshift(i32(a85).value, 5)
+                         ) + a85) ^ (a87 + a80[(rshift(a87, 11) & 3)])).value
             a83 = i32(a83 | 0).value
         return [a85, a83]
 
@@ -210,13 +211,71 @@ def tear_decode(data_file, data_seed):
         return [a62[0], a62[1], a61[0], a61[1]]
 
     def ascii2bytes(a99):
-        a2b = {'A': 0, 'B': 1, 'C': 2, 'D': 3, 'E': 4, 'F': 5, 'G': 6, 'H': 7, 'I': 8, 'J': 9, 'K': 10,
-               'L': 11, 'M': 12, 'N': 13, 'O': 14, 'P': 15, 'Q': 16, 'R': 17, 'S': 18, 'T': 19, 'U': 20,
-               'V': 21, 'W': 22, 'X': 23, 'Y': 24, 'Z': 25, 'a': 26, 'b': 27, 'c': 28, 'd': 29, 'e': 30,
-               'f': 31, 'g': 32, 'h': 33, 'i': 34, 'j': 35, 'k': 36, 'l': 37, 'm': 38, 'n': 39, 'o': 40,
-               'p': 41, 'q': 42, 'r': 43, 's': 44, 't': 45, 'u': 46, 'v': 47, 'w': 48, 'x': 49, 'y': 50,
-               'z': 51, '0': 52, '1': 53, '2': 54, '3': 55, '4': 56, '5': 57, '6': 58, '7': 59, '8': 60,
-               '9': 61, '-': 62, '_': 63}
+        a2b = {
+            'A': 0,
+            'B': 1,
+            'C': 2,
+            'D': 3,
+            'E': 4,
+            'F': 5,
+            'G': 6,
+            'H': 7,
+            'I': 8,
+            'J': 9,
+            'K': 10,
+            'L': 11,
+            'M': 12,
+            'N': 13,
+            'O': 14,
+            'P': 15,
+            'Q': 16,
+            'R': 17,
+            'S': 18,
+            'T': 19,
+            'U': 20,
+            'V': 21,
+            'W': 22,
+            'X': 23,
+            'Y': 24,
+            'Z': 25,
+            'a': 26,
+            'b': 27,
+            'c': 28,
+            'd': 29,
+            'e': 30,
+            'f': 31,
+            'g': 32,
+            'h': 33,
+            'i': 34,
+            'j': 35,
+            'k': 36,
+            'l': 37,
+            'm': 38,
+            'n': 39,
+            'o': 40,
+            'p': 41,
+            'q': 42,
+            'r': 43,
+            's': 44,
+            't': 45,
+            'u': 46,
+            'v': 47,
+            'w': 48,
+            'x': 49,
+            'y': 50,
+            'z': 51,
+            '0': 52,
+            '1': 53,
+            '2': 54,
+            '3': 55,
+            '4': 56,
+            '5': 57,
+            '6': 58,
+            '7': 59,
+            '8': 60,
+            '9': 61,
+            '-': 62,
+            '_': 63}
         a6 = -1
         a7 = len(a99)
         a9 = 0
@@ -275,13 +334,13 @@ def tear_decode(data_file, data_seed):
         a96 = a90[1]
         a97 = i32(-957401312).value
         for a98 in range(32):
-            a96 = i32(a96).value - ((((i32(a95).value << 4) ^ rshift(i32(a95).value, 5)) + a95) ^ (
-                a97 + a91[(rshift(i32(a97).value, 11) & 3)]))
+            a96 = i32(a96).value - ((((i32(a95).value << 4) ^ rshift(i32(a95).value, 5)
+                                      ) + a95) ^ (a97 + a91[(rshift(i32(a97).value, 11) & 3)]))
             a96 = i32(a96 | 0).value
             a97 = i32(a97).value + 1640531527
             a97 = i32(a97 | 0).value
-            a95 = i32(a95).value - i32(
-                (((i32(a96).value << 4) ^ rshift(i32(a96).value, 5)) + a96) ^ (a97 + a91[(a97 & 3)])).value
+            a95 = i32(a95).value - i32((((i32(a96).value << 4) ^
+                                         rshift(i32(a96).value, 5)) + a96) ^ (a97 + a91[(a97 & 3)])).value
             a95 = i32(a95 | 0).value
         return [a95, a96]
 

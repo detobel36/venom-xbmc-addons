@@ -3,8 +3,8 @@
 # Wholecloud-Movshare
 import re
 
-from resources.lib.handler.requestHandler import cRequestHandler
-from resources.lib.parser import cParser
+from resources.lib.handler.requestHandler import RequestHandler
+from resources.lib.parser import Parser
 from resources.hosters.hoster import iHoster
 
 
@@ -14,25 +14,26 @@ class cHoster(iHoster):
 
     def __getIdFromUrl(self):
         sPattern = 'v=([^<]+)'
-        oParser = cParser()
+        oParser = Parser()
         aResult = oParser.parse(self._url, sPattern)
         if aResult[0] is True:
             return aResult[1][0]
 
         return ''
 
-    def _getMediaLinkForGuest(self, autoPlay = False):
+    def _getMediaLinkForGuest(self, autoPlay=False):
         api_call = False
 
         sId = self.__getIdFromUrl()
 
-        oRequest = cRequestHandler(self._url)
+        oRequest = RequestHandler(self._url)
         sHtmlContent = oRequest.request()
 
         r = re.search('var fkzd="([^"]+)"', sHtmlContent)
         if r:
-            url = 'http://www.wholecloud.net/api/player.api.php?key=' + r.group(1) + '&file=' + sId
-            oRequest = cRequestHandler(url)
+            url = 'http://www.wholecloud.net/api/player.api.php?key=' + \
+                r.group(1) + '&file=' + sId
+            oRequest = RequestHandler(url)
             sHtmlContent = oRequest.request()
             r2 = re.search('^url=([^&]+)&', sHtmlContent)
             if r2:

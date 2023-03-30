@@ -7,10 +7,10 @@ import sys
 import re
 from base64 import b64encode
 from resources.lib.comaddon import dialog, addon, addonManager, VSlog, isMatrix
-from resources.lib.gui.gui import cGui
-from resources.lib.gui.hoster import cHosterGui
-from resources.lib.handler.inputParameterHandler import cInputParameterHandler
-from resources.lib.handler.outputParameterHandler import cOutputParameterHandler
+from resources.lib.gui.gui import Gui
+from resources.lib.gui.hoster import HosterGui
+from resources.lib.handler.inputParameterHandler import InputParameterHandler
+from resources.lib.handler.outputParameterHandler import OutputParameterHandler
 from resources.lib.util import UnquotePlus
 
 # Utilisation de l'extension UpNext
@@ -30,19 +30,19 @@ class UpNext:
             return
 
         # La source
-        oInputParameterHandler = cInputParameterHandler()
-        sSiteName = oInputParameterHandler.getValue('sourceName')
+        input_parameter_handler = InputParameterHandler()
+        sSiteName = input_parameter_handler.getValue('sourceName')
         if not sSiteName:
             return
 
         # La saison
-        sSaison = oInputParameterHandler.getValue('sSeason')
+        sSaison = input_parameter_handler.getValue('sSeason')
 
         # l'ID tmdb
-        sTmdbId = oInputParameterHandler.getValue('sTmdbId')
+        sTmdbId = input_parameter_handler.getValue('sTmdbId')
 
         # Calcule l'épisode suivant à partir de l'épisode courant
-        sEpisode = oInputParameterHandler.getValue('sEpisode')
+        sEpisode = input_parameter_handler.getValue('sEpisode')
         if not sEpisode:
             sEpisode = str(guiElement.getEpisode())
             if not sEpisode:
@@ -51,7 +51,9 @@ class UpNext:
         # tvShowTitle n'est pas toujours disponible.
         tvShowTitle = guiElement.getItemValue('tvshowtitle')
         if not tvShowTitle:
-            tvShowTitle = re.search('\[\/COLOR\](.+?)\[COLOR', guiElement.getItemValue('title')).group(1)
+            tvShowTitle = re.search(
+                '\\[\\/COLOR\\](.+?)\\[COLOR',
+                guiElement.getItemValue('title')).group(1)
 
         sMovieTitle = tvShowTitle
 
@@ -59,32 +61,35 @@ class UpNext:
         nextEpisode = numEpisode + 1
         sNextEpisode = '%02d' % nextEpisode
 
-        saisonUrl = oInputParameterHandler.getValue('saisonUrl')
-        oOutputParameterHandler = cOutputParameterHandler()
-        oOutputParameterHandler.addParameter('siteUrl', saisonUrl)
-        oOutputParameterHandler.addParameter('sMovieTitle', sMovieTitle)
-        oOutputParameterHandler.addParameter('tvshowtitle', sMovieTitle)
-        oOutputParameterHandler.addParameter('sTmdbId', sTmdbId)
-        sParams = oOutputParameterHandler.getParameterAsUri()
+        saisonUrl = input_parameter_handler.getValue('saisonUrl')
+        output_parameter_handler = OutputParameterHandler()
+        output_parameter_handler.addParameter('siteUrl', saisonUrl)
+        output_parameter_handler.addParameter('sMovieTitle', sMovieTitle)
+        output_parameter_handler.addParameter('tvshowtitle', sMovieTitle)
+        output_parameter_handler.addParameter('sTmdbId', sTmdbId)
+        sParams = output_parameter_handler.getParameterAsUri()
 
-        sHosterIdentifier = oInputParameterHandler.getValue('sHosterIdentifier')
-        nextSaisonFunc = oInputParameterHandler.getValue('nextSaisonFunc')
-        sLang = oInputParameterHandler.getValue('sLang')
+        sHosterIdentifier = input_parameter_handler.getValue(
+            'sHosterIdentifier')
+        nextSaisonFunc = input_parameter_handler.getValue('nextSaisonFunc')
+        sLang = input_parameter_handler.getValue('sLang')
 
         try:
             # sauvegarde des parametres d'appel
-            oldParams = sys.argv[2] 
-            
-            sHosterIdentifier, sMediaUrl, nextTitle, sDesc, sThumb = self.getMediaUrl(sSiteName, nextSaisonFunc, sParams, sSaison, nextEpisode, sLang, sHosterIdentifier)
+            oldParams = sys.argv[2]
+
+            sHosterIdentifier, sMediaUrl, nextTitle, desc, sThumb = self.getMediaUrl(
+                sSiteName, nextSaisonFunc, sParams, sSaison, nextEpisode, sLang, sHosterIdentifier)
 
             # restauration des anciens params
             sys.argv[2] = oldParams
-            
+
             # pas d'épisode suivant
             if not sMediaUrl:
                 return
 
-            sFileName = tvShowTitle.replace(' & ', ' and ')   # interdit dans un titre
+            sFileName = tvShowTitle.replace(
+                ' & ', ' and ')   # interdit dans un titre
             sFileName += ' - '
             if sSaison:
                 sFileName += 'S%s' % sSaison
@@ -96,29 +101,32 @@ class UpNext:
 
             episodeTitle = nextTitle
 
-            saisonUrl = oInputParameterHandler.getValue('saisonUrl')
-            oOutputParameterHandler = cOutputParameterHandler()
-            oOutputParameterHandler.addParameter('sHosterIdentifier', sHosterIdentifier)
-            oOutputParameterHandler.addParameter('sourceName', sSiteName)
-            oOutputParameterHandler.addParameter('sFileName', sFileName)
-            oOutputParameterHandler.addParameter('sTitle', sFileName)
-            oOutputParameterHandler.addParameter('sCat', 8)  # Catégorie épisode
-            oOutputParameterHandler.addParameter('sMeta', 6)  # Meta épisode
-            oOutputParameterHandler.addParameter('sFav', 'play')
-            oOutputParameterHandler.addParameter('sMediaUrl', str(sMediaUrl))
-            oOutputParameterHandler.addParameter('saisonUrl', saisonUrl)
-            oOutputParameterHandler.addParameter('nextSaisonFunc', nextSaisonFunc)
-            oOutputParameterHandler.addParameter('sSeason', sSaison)
-            oOutputParameterHandler.addParameter('sEpisode', sNextEpisode)
-            oOutputParameterHandler.addParameter('sLang', sLang)
-            oOutputParameterHandler.addParameter('tvshowtitle', tvShowTitle)
-            oOutputParameterHandler.addParameter('sTmdbId', sTmdbId)
+            saisonUrl = input_parameter_handler.getValue('saisonUrl')
+            output_parameter_handler = OutputParameterHandler()
+            output_parameter_handler.addParameter(
+                'sHosterIdentifier', sHosterIdentifier)
+            output_parameter_handler.addParameter('sourceName', sSiteName)
+            output_parameter_handler.addParameter('sFileName', sFileName)
+            output_parameter_handler.addParameter('title', sFileName)
+            output_parameter_handler.addParameter(
+                'sCat', 8)  # Catégorie épisode
+            output_parameter_handler.addParameter('sMeta', 6)  # Meta épisode
+            output_parameter_handler.addParameter('sFav', 'play')
+            output_parameter_handler.addParameter('sMediaUrl', str(sMediaUrl))
+            output_parameter_handler.addParameter('saisonUrl', saisonUrl)
+            output_parameter_handler.addParameter(
+                'nextSaisonFunc', nextSaisonFunc)
+            output_parameter_handler.addParameter('sSeason', sSaison)
+            output_parameter_handler.addParameter('sEpisode', sNextEpisode)
+            output_parameter_handler.addParameter('sLang', sLang)
+            output_parameter_handler.addParameter('tvshowtitle', tvShowTitle)
+            output_parameter_handler.addParameter('sTmdbId', sTmdbId)
 
-            sParams = oOutputParameterHandler.getParameterAsUri()
-            url = 'plugin://plugin.video.vstream/?site=cHosterGui&function=play&%s' % sParams
+            sParams = output_parameter_handler.getParameterAsUri()
+            url = 'plugin://plugin.video.vstream/?site=HosterGui&function=play&%s' % sParams
 
-            # sThumbnail = guiElement.getThumbnail()
-            sThumbnail = sThumb
+            # thumbnail = guiElement.getThumbnail()
+            thumbnail = sThumb
 
             nextInfo = dict(
                 current_episode=dict(
@@ -130,7 +138,7 @@ class UpNext:
                     title='',
                     plot='',
                     art={
-                        'thumb': sThumbnail,
+                        'thumb': thumbnail,
                         'tvshow.clearart': '',
                         'tvshow.clearlogo': '',
                         'tvshow.fanart': '',
@@ -145,14 +153,14 @@ class UpNext:
                     season=sSaison if sSaison else '',  # déjà dans le titre
                     episode=sNextEpisode,  # déjà dans le titre
                     title=nextTitle,  # titre de l'épisode
-                    plot=sDesc,
+                    plot=desc,
                     art={
-                        'thumb': sThumbnail,
+                        'thumb': thumbnail,
                         'tvshow.clearart': '',
                         'tvshow.clearlogo': '',
-                        'tvshow.fanart': sThumbnail,  # guiElement.getFanart(),
-                        'tvshow.landscape': sThumbnail,  # guiElement.getPoster(),
-                        'tvshow.poster': sThumbnail,  # guiElement.getPoster(),
+                        'tvshow.fanart': thumbnail,  # guiElement.getFanart(),
+                        'tvshow.landscape': thumbnail,  # guiElement.getPoster(),
+                        'tvshow.poster': thumbnail,  # guiElement.getPoster(),
                     },
                 ),
                 play_url=url  # provide either `play_info` or `play_url`
@@ -162,49 +170,66 @@ class UpNext:
         except Exception as e:
             VSlog('UpNext : %s' % e)
 
-    def getMediaUrl(self, sSiteName, sFunction, sParams, sSaison, iEpisode, sLang, sHosterIdentifier, sTitle='', sDesc='', sThumb=''):
+    def getMediaUrl(
+            self,
+            sSiteName,
+            function,
+            sParams,
+            sSaison,
+            iEpisode,
+            sLang,
+            sHosterIdentifier,
+            title='',
+            desc='',
+            sThumb=''):
 
         try:
             sys.argv[2] = '?%s' % sParams
-            plugins = __import__('resources.sites.%s' % sSiteName, fromlist=[sSiteName])
-            function = getattr(plugins, sFunction)
+            plugins = __import__(
+                'resources.sites.%s' %
+                sSiteName, fromlist=[sSiteName])
+            function = getattr(plugins, function)
             function()
         except Exception as e:
             VSlog('could not load site: ' + sSiteName + ' error: ' + str(e))
             return None, None, None, None, None
 
         sMediaUrl = ''
-        for sUrl, listItem, isFolder in cGui().getEpisodeListing():
+        for sUrl, listItem, isFolder in Gui().getEpisodeListing():
             sParams = sUrl.split('?', 1)[1]
             aParams = dict(param.split('=') for param in sParams.split('&'))
-            sFunction = aParams['function']
-            if sFunction == 'DoNothing':
+            function = aParams['function']
+            if function == 'DoNothing':
                 continue
 
-            if sLang and 'sLang' in aParams and UnquotePlus(aParams['sLang']) != sLang:
+            if sLang and 'sLang' in aParams and UnquotePlus(
+                    aParams['sLang']) != sLang:
                 continue           # La langue est connue, mais ce n'est pas la bonne
 
-            if sSaison and 'sSeason' in aParams and aParams['sSeason'] and int(aParams['sSeason']) != int(sSaison):
+            if sSaison and 'sSeason' in aParams and aParams['sSeason'] and int(
+                    aParams['sSeason']) != int(sSaison):
                 continue           # La saison est connue, mais ce n'est pas la bonne
 
-            if 'sEpisode' in aParams and aParams['sEpisode'] and int(aParams['sEpisode']) != iEpisode:
+            if 'sEpisode' in aParams and aParams['sEpisode'] and int(
+                    aParams['sEpisode']) != iEpisode:
                 continue           # L'épisode est connu, mais ce n'est pas le bon
 
             sMediaUrl = aParams['sMediaUrl'] if 'sMediaUrl' in aParams else None
             infoTag = listItem.getVideoInfoTag()
             tagLine = infoTag.getTagLine()
             if tagLine:
-                sTitle = tagLine
+                title = tagLine
             else:
-                sTitle = listItem.getLabel()
+                title = listItem.getLabel()
 
-            if not sDesc:
-                sDesc = infoTag.getPlot()
+            if not desc:
+                desc = infoTag.getPlot()
 
-            if not sTitle:
-                sTitle = UnquotePlus(aParams['sTitle']) if 'sTitle' in aParams else None
+            if not title:
+                title = UnquotePlus(
+                    aParams['title']) if 'title' in aParams else None
             if 'sHost' in aParams and aParams['sHost']:
-                oHoster = cHosterGui().checkHoster(aParams['sHost'])
+                oHoster = HosterGui().checkHoster(aParams['sHost'])
                 if not oHoster:
                     continue
                 hostName = oHoster.getPluginIdentifier()
@@ -220,17 +245,27 @@ class UpNext:
             sThumb = listItem.getArt('thumb')
             if 'sThumb' in aParams and aParams['sThumb']:
                 sThumb = UnquotePlus(aParams['sThumb'])
-            if not sDesc and 'sDesc' in aParams and aParams['sDesc']:
-                sDesc = UnquotePlus(aParams['sDesc'])
+            if not desc and 'desc' in aParams and aParams['desc']:
+                desc = UnquotePlus(aParams['desc'])
 
             if sMediaUrl:
-                return hostName, sMediaUrl, sTitle, sDesc, sThumb
+                return hostName, sMediaUrl, title, desc, sThumb
 
-            # if sFunction != 'play':
-            return self.getMediaUrl(sSiteName, sFunction, sParams, sSaison, iEpisode, sLang, sHosterIdentifier, sTitle, sDesc, sThumb)
+            # if function != 'play':
+            return self.getMediaUrl(
+                sSiteName,
+                function,
+                sParams,
+                sSaison,
+                iEpisode,
+                sLang,
+                sHosterIdentifier,
+                title,
+                desc,
+                sThumb)
 
         if sMediaUrl:    # si on n'a pas trouvé le bon host on en retourne un autre, il pourrait fonctionner
-            return hostName, sMediaUrl, sTitle, sDesc, sThumb
+            return hostName, sMediaUrl, title, desc, sThumb
 
         return None, None, None, None, None
 
@@ -283,10 +318,14 @@ class UpNext:
                 addons.setSetting('upnext', 'false')
                 return False
 
-            addon_xml = xbmc.translatePath('special://home/addons/%s/addon.xml' % upnext_id)
-            if xbmcvfs.exists(addon_xml):  # si addon.xml existe, add-on présent mais désactivé
+            addon_xml = xbmc.translatePath(
+                'special://home/addons/%s/addon.xml' %
+                upnext_id)
+            if xbmcvfs.exists(
+                    addon_xml):  # si addon.xml existe, add-on présent mais désactivé
 
-                # Impossible d'activer UpNext ou si on confirme de ne pas vouloir l'utiliser
+                # Impossible d'activer UpNext ou si on confirme de ne pas
+                # vouloir l'utiliser
                 if not addonManager().enableAddon(upnext_id):
                     addons.setSetting('upnext', 'false')
                     return False
@@ -294,5 +333,6 @@ class UpNext:
                 return True  # addon activé
             else:                          # UpNext non installé, on l'installe et on l'utilise
                 addonManager().installAddon(upnext_id)
-                # ce n'est pas pris en compte à l'installation de l'addon, donc return False, il faudra attendre le prochain épisode
+                # ce n'est pas pris en compte à l'installation de l'addon, donc
+                # return False, il faudra attendre le prochain épisode
                 return False

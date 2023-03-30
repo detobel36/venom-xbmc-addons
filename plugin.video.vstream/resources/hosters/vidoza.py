@@ -2,8 +2,8 @@
 # vStream https://github.com/Kodi-vStream/venom-xbmc-addons
 # https://vidoza.net/embed-xxx.html
 
-from resources.lib.handler.requestHandler import cRequestHandler
-from resources.lib.parser import cParser
+from resources.lib.handler.requestHandler import RequestHandler
+from resources.lib.parser import Parser
 from resources.hosters.hoster import iHoster
 from resources.lib.comaddon import dialog
 
@@ -16,15 +16,15 @@ class cHoster(iHoster):
     def isDownloadable(self):
         return False
 
-    def _getMediaLinkForGuest(self, autoPlay = False):
-        oRequest = cRequestHandler(self._url)
+    def _getMediaLinkForGuest(self, autoPlay=False):
+        oRequest = RequestHandler(self._url)
         sHtmlContent = oRequest.request()
-        
+
         if 'File was deleted' in sHtmlContent:
             return False, False
-        
+
         sPattern = 'src: *"([^"]+)".+?label:"([^"]+)"'
-        oParser = cParser()
+        oParser = Parser()
         aResult = oParser.parse(sHtmlContent, sPattern)
         if aResult[0] is True:
             # initialisation des tableaux

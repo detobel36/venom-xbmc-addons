@@ -3,23 +3,23 @@
 import re
 import string
 
-from resources.lib.comaddon import progress, addon, dialog, siteManager
-from resources.lib.enregistrement import cEnregistremement
+from resources.lib.comaddon import Progress, addon, dialog, SiteManager
+from resources.lib.enregistrement import Enregistremement
 from resources.lib.epg import cePg
-from resources.lib.gui.gui import cGui
-from resources.lib.gui.guiElement import cGuiElement
-from resources.lib.gui.hoster import cHosterGui
-from resources.lib.handler.inputParameterHandler import cInputParameterHandler
-from resources.lib.handler.outputParameterHandler import cOutputParameterHandler
-from resources.lib.handler.requestHandler import cRequestHandler
-from resources.lib.parser import cParser
+from resources.lib.gui.gui import Gui
+from resources.lib.gui.guiElement import GuiElement
+from resources.lib.gui.hoster import HosterGui
+from resources.lib.handler.inputParameterHandler import InputParameterHandler
+from resources.lib.handler.outputParameterHandler import OutputParameterHandler
+from resources.lib.handler.requestHandler import RequestHandler
+from resources.lib.parser import Parser
 from resources.lib.util import Unquote
 
 SITE_IDENTIFIER = 'freebox'
 SITE_NAME = 'Free Télévision/Radio'
 SITE_DESC = 'Regarder la télévision'
 
-URL_MAIN = siteManager().getUrlMain(SITE_IDENTIFIER)
+URL_MAIN = SiteManager().getUrlMain(SITE_IDENTIFIER)
 URL_WEB = 'https://raw.githubusercontent.com/Kodi-vStream/venom-xbmc-addons/Beta/repo/resources/webtv2.m3u'
 URL_RADIO = 'https://raw.githubusercontent.com/Kodi-vStream/venom-xbmc-addons/master/repo/resources/radio.m3u'
 
@@ -44,49 +44,81 @@ class track:
 
 
 def load():
-    oGui = cGui()
+    gui = Gui()
     addons = addon()
 
-    oOutputParameterHandler = cOutputParameterHandler()
-    oGui.addDir(SITE_IDENTIFIER, 'showMenuTV', addons.VSlang(30115), 'tv.png', oOutputParameterHandler)
-    oGui.addDir(SITE_IDENTIFIER, 'showMenuMusic', addons.VSlang(30137), 'music.png', oOutputParameterHandler)
-    oGui.setEndOfDirectory()
+    output_parameter_handler = OutputParameterHandler()
+    gui.addDir(
+        SITE_IDENTIFIER,
+        'showMenuTV',
+        addons.VSlang(30115),
+        'tv.png',
+        output_parameter_handler)
+    gui.addDir(
+        SITE_IDENTIFIER,
+        'showMenuMusic',
+        addons.VSlang(30137),
+        'music.png',
+        output_parameter_handler)
+    gui.setEndOfDirectory()
 
 
 def showMenuTV():
-    oGui = cGui()
+    gui = Gui()
     addons = addon()
 
-    oOutputParameterHandler = cOutputParameterHandler()
-    oOutputParameterHandler.addParameter('siteUrl', URL_WEB)
-    oGui.addDir(SITE_IDENTIFIER, 'showWeb', addons.VSlang(30332), 'tv.png', oOutputParameterHandler)
-    oGui.setEndOfDirectory()
+    output_parameter_handler = OutputParameterHandler()
+    output_parameter_handler.addParameter('siteUrl', URL_WEB)
+    gui.addDir(
+        SITE_IDENTIFIER,
+        'showWeb',
+        addons.VSlang(30332),
+        'tv.png',
+        output_parameter_handler)
+    gui.setEndOfDirectory()
 
 
 def showMenuMusic():
-    oGui = cGui()
+    gui = Gui()
     addons = addon()
 
-    oOutputParameterHandler = cOutputParameterHandler()
-    oOutputParameterHandler.addParameter('siteUrl', URL_RADIO)
-    oGui.addDir('radio', 'showWeb', addons.VSlang(30203), 'music.png', oOutputParameterHandler)
+    output_parameter_handler = OutputParameterHandler()
+    output_parameter_handler.addParameter('siteUrl', URL_RADIO)
+    gui.addDir(
+        'radio',
+        'showWeb',
+        addons.VSlang(30203),
+        'music.png',
+        output_parameter_handler)
 
-    oOutputParameterHandler.addParameter('siteUrl', 'http://')
-    oGui.addDir('radio', 'showGenres', addons.VSlang(30203) + ' (Genres)', 'genres.png', oOutputParameterHandler)
+    output_parameter_handler.addParameter('siteUrl', 'http://')
+    gui.addDir(
+        'radio',
+        'showGenres',
+        addons.VSlang(30203) +
+        ' (Genres)',
+        'genres.png',
+        output_parameter_handler)
 
-    oOutputParameterHandler.addParameter('siteUrl', URL_RADIO)
-    oGui.addDir('radio', 'showAZ', addons.VSlang(30203) + ' (Alphabétique)', 'az.png', oOutputParameterHandler)
+    output_parameter_handler.addParameter('siteUrl', URL_RADIO)
+    gui.addDir(
+        'radio',
+        'showAZ',
+        addons.VSlang(30203) +
+        ' (Alphabétique)',
+        'az.png',
+        output_parameter_handler)
 
-    oGui.setEndOfDirectory()
+    gui.setEndOfDirectory()
 
 
 def parseM3U(sUrl=None):  # Traite les m3u local
-    
-    if not sUrl:
-        oInputParameterHandler = cInputParameterHandler()
-        sUrl = oInputParameterHandler.getValue('siteUrl')
 
-    oRequestHandler = cRequestHandler(sUrl)
+    if not sUrl:
+        input_parameter_handler = InputParameterHandler()
+        sUrl = input_parameter_handler.getValue('siteUrl')
+
+    oRequestHandler = RequestHandler(sUrl)
     oRequestHandler.addHeaderEntry('User-Agent', UA)
     inf = oRequestHandler.request().split('\n')
 
@@ -101,13 +133,14 @@ def parseM3U(sUrl=None):  # Traite les m3u local
             try:
                 licon = line.split('#EXTINF:')[1].partition('tvg-logo=')[2]
                 icon = licon.split('"')[1]
-            except:
+            except BaseException:
                 icon = 'tv.png'
             ValidEntry = True
             song = track(length, title, None, icon)
 
         elif len(line) != 0:
-            if ValidEntry and (not (line.startswith('!') or line.startswith('#'))):
+            if ValidEntry and (
+                    not (line.startswith('!') or line.startswith('#'))):
                 ValidEntry = False
                 song.path = line
                 playlist.append(song)
@@ -117,10 +150,10 @@ def parseM3U(sUrl=None):  # Traite les m3u local
 
 
 def showWeb():  # Code qui s'occupe de liens TV du Web
-    oGui = cGui()
+    gui = Gui()
 
-    oInputParameterHandler = cInputParameterHandler()
-    sUrl = oInputParameterHandler.getValue('siteUrl')
+    input_parameter_handler = InputParameterHandler()
+    sUrl = input_parameter_handler.getValue('siteUrl')
     if sUrl == 'TV':
         sUrl = URL_WEB
     elif sUrl == 'RADIO':
@@ -128,24 +161,28 @@ def showWeb():  # Code qui s'occupe de liens TV du Web
 
     playlist = parseM3U(sUrl=sUrl)
 
-    if oInputParameterHandler.exist('AZ'):
-        sAZ = oInputParameterHandler.getValue('AZ')
-        string = filter(lambda t: t.title.strip().capitalize().startswith(sAZ), playlist)
+    if input_parameter_handler.exist('AZ'):
+        sAZ = input_parameter_handler.getValue('AZ')
+        string = filter(
+            lambda t: t.title.strip().capitalize().startswith(sAZ),
+            playlist)
         playlist = sorted(string, key=lambda t: t.title.strip().capitalize())
     else:
         playlist = sorted(playlist, key=lambda t: t.title.strip().capitalize())
 
     if not playlist:
-        oOutputParameterHandler = cOutputParameterHandler()
-        oOutputParameterHandler.addParameter('siteUrl', 'http://')
-        oGui.addText(SITE_IDENTIFIER, '[COLOR red]Problème de lecture avec la playlist[/COLOR]')
+        output_parameter_handler = OutputParameterHandler()
+        output_parameter_handler.addParameter('siteUrl', 'http://')
+        gui.addText(
+            SITE_IDENTIFIER,
+            '[COLOR red]Problème de lecture avec la playlist[/COLOR]')
 
     else:
         cEpg = cePg()
-        EPG = cEpg.getEpg('', 'direct',noTextBox=True)
+        EPG = cEpg.getEpg('', 'direct', noTextBox=True)
 
         total = len(playlist)
-        progress_ = progress().VScreate(SITE_NAME)
+        progress_ = Progress().VScreate(SITE_NAME)
         for track in playlist:
             progress_.VSupdate(progress_, total)
             if progress_.iscanceled():
@@ -154,64 +191,78 @@ def showWeb():  # Code qui s'occupe de liens TV du Web
             if not sThumb:
                 sThumb = 'tv.png'
 
-            channelName = track.title.replace('sport','sports').replace('(en clair)','')
-            sDesc = cEpg.getChannelEpg(EPG, channelName)
+            channelName = track.title.replace(
+                'sport', 'sports').replace(
+                '(en clair)', '')
+            desc = cEpg.getChannelEpg(EPG, channelName)
 
             # les + ne peuvent pas passer
             url2 = track.path.replace('+', 'P_L_U_S')
 
             thumb = '/'.join([sRootArt, sThumb])
 
-            oOutputParameterHandler = cOutputParameterHandler()
-            oOutputParameterHandler.addParameter('siteUrl', url2)
-            oOutputParameterHandler.addParameter('sMovieTitle', track.title)
-            oOutputParameterHandler.addParameter('sThumbnail', thumb)
-            oOutputParameterHandler.addParameter('sDesc', sDesc)
-            oOutputParameterHandler.addParameter('EpgData', EPG)
+            output_parameter_handler = OutputParameterHandler()
+            output_parameter_handler.addParameter('siteUrl', url2)
+            output_parameter_handler.addParameter('sMovieTitle', track.title)
+            output_parameter_handler.addParameter('thumbnail', thumb)
+            output_parameter_handler.addParameter('desc', desc)
+            output_parameter_handler.addParameter('EpgData', EPG)
 
-            oGuiElement = cGuiElement()
+            oGuiElement = GuiElement()
             oGuiElement.setSiteName(SITE_IDENTIFIER)
             oGuiElement.setFunction('play__')
-            oGuiElement.setDescription(sDesc)
+            oGuiElement.setDescription(desc)
             oGuiElement.setTitle(track.title)
             oGuiElement.setFileName(track.title)
-            
+
             oGuiElement.setIcon('tv.png')
             oGuiElement.setMeta(0)
             oGuiElement.setThumbnail(thumb)
             oGuiElement.setDirectTvFanart()
             oGuiElement.setCat(6)
 
-            oGui.createSimpleMenu(oGuiElement, oOutputParameterHandler, SITE_IDENTIFIER, SITE_IDENTIFIER, 'direct_epg', 'Guide tv Direct')
-            oGui.createSimpleMenu(oGuiElement, oOutputParameterHandler, SITE_IDENTIFIER, SITE_IDENTIFIER, 'soir_epg', 'Guide tv Soir')
-            # oGui.createSimpleMenu(oGuiElement, oOutputParameterHandler, SITE_IDENTIFIER, SITE_IDENTIFIER, 'enregistrement', 'Enregistrement')
-            oGui.addFolder(oGuiElement, oOutputParameterHandler)
+            gui.createSimpleMenu(
+                oGuiElement,
+                output_parameter_handler,
+                SITE_IDENTIFIER,
+                SITE_IDENTIFIER,
+                'direct_epg',
+                'Guide tv Direct')
+            gui.createSimpleMenu(
+                oGuiElement,
+                output_parameter_handler,
+                SITE_IDENTIFIER,
+                SITE_IDENTIFIER,
+                'soir_epg',
+                'Guide tv Soir')
+            # gui.createSimpleMenu(oGuiElement, output_parameter_handler, SITE_IDENTIFIER, SITE_IDENTIFIER, 'enregistrement', 'Enregistrement')
+            gui.addFolder(oGuiElement, output_parameter_handler)
 
         progress_.VSclose(progress_)
 
-    oGui.setEndOfDirectory()
+    gui.setEndOfDirectory()
 
 
 def direct_epg():  # Code qui gerent l'epg
-    # oGuiElement = cGuiElement()
-    oInputParameterHandler = cInputParameterHandler()
-    # aParams = oInputParameterHandler.getAllParameter()
-    sTitle = oInputParameterHandler.getValue('sMovieTitle')
-    text = oInputParameterHandler.getValue('EpgData')
-    cePg().view_epg(sTitle, 'direct', text=text)
+    # oGuiElement = GuiElement()
+    input_parameter_handler = InputParameterHandler()
+    # aParams = input_parameter_handler.getAllParameter()
+    title = input_parameter_handler.getValue('sMovieTitle')
+    text = input_parameter_handler.getValue('EpgData')
+    cePg().view_epg(title, 'direct', text=text)
 
 
 def soir_epg():  # Code qui gerent l'epg
-    # oGuiElement = cGuiElement()
-    oInputParameterHandler = cInputParameterHandler()
-    sTitle = oInputParameterHandler.getValue('sMovieTitle')
-    cePg().view_epg(sTitle, 'soir')
+    # oGuiElement = GuiElement()
+    input_parameter_handler = InputParameterHandler()
+    title = input_parameter_handler.getValue('sMovieTitle')
+    cePg().view_epg(title, 'soir')
 
 
 def enregistrement():  # Code qui gerent l'enregistrement
-    # oGuiElement = cGuiElement()
-    oInputParameterHandler = cInputParameterHandler()
-    sUrl = oInputParameterHandler.getValue('siteUrl').replace('P_L_U_S', '+')
+    # oGuiElement = GuiElement()
+    input_parameter_handler = InputParameterHandler()
+    sUrl = input_parameter_handler.getValue('siteUrl').replace('P_L_U_S', '+')
 
     enregistrementIsActif = ADDON.getSetting('enregistrement_activer')
     if enregistrementIsActif == 'false':
@@ -224,82 +275,106 @@ def enregistrement():  # Code qui gerent l'enregistrement
     if 'plugin' in sUrl:
         url = re.findall('url=(.+?)&amp', ''.join(sUrl))
         sUrl = Unquote(url[0])
-    cEnregistremement().programmation_enregistrement(sUrl)
+    Enregistremement().programmation_enregistrement(sUrl)
 
 
 def showAZ():
-    oGui = cGui()
-    oInputParameterHandler = cInputParameterHandler()
-    sUrl = oInputParameterHandler.getValue('siteUrl')
+    gui = Gui()
+    input_parameter_handler = InputParameterHandler()
+    sUrl = input_parameter_handler.getValue('siteUrl')
 
-    oOutputParameterHandler = cOutputParameterHandler()
+    output_parameter_handler = OutputParameterHandler()
     for i in string.digits:
-        oOutputParameterHandler.addParameter('siteUrl', sUrl)
-        oOutputParameterHandler.addParameter('AZ', i)
-        oGui.addDir(SITE_IDENTIFIER, 'showTV', i, 'az.png', oOutputParameterHandler)
+        output_parameter_handler.addParameter('siteUrl', sUrl)
+        output_parameter_handler.addParameter('AZ', i)
+        gui.addDir(
+            SITE_IDENTIFIER,
+            'showTV',
+            i,
+            'az.png',
+            output_parameter_handler)
 
     for i in string.ascii_uppercase:
-        oOutputParameterHandler.addParameter('siteUrl', sUrl)
-        oOutputParameterHandler.addParameter('AZ', i)
-        oGui.addDir(SITE_IDENTIFIER, 'showTV', i, 'az.png', oOutputParameterHandler)
+        output_parameter_handler.addParameter('siteUrl', sUrl)
+        output_parameter_handler.addParameter('AZ', i)
+        gui.addDir(
+            SITE_IDENTIFIER,
+            'showTV',
+            i,
+            'az.png',
+            output_parameter_handler)
 
-    oGui.setEndOfDirectory()
+    gui.setEndOfDirectory()
 
 
 def showAZRadio():
-    oGui = cGui()
-    oInputParameterHandler = cInputParameterHandler()
-    sUrl = oInputParameterHandler.getValue('siteUrl')
+    gui = Gui()
+    input_parameter_handler = InputParameterHandler()
+    sUrl = input_parameter_handler.getValue('siteUrl')
 
-    oOutputParameterHandler = cOutputParameterHandler()
+    output_parameter_handler = OutputParameterHandler()
     for i in string.digits:
-        oOutputParameterHandler.addParameter('siteUrl', sUrl)
-        oOutputParameterHandler.addParameter('AZ', i)
-        oGui.addDir(SITE_IDENTIFIER, 'showWeb', i, 'az.png', oOutputParameterHandler)
+        output_parameter_handler.addParameter('siteUrl', sUrl)
+        output_parameter_handler.addParameter('AZ', i)
+        gui.addDir(
+            SITE_IDENTIFIER,
+            'showWeb',
+            i,
+            'az.png',
+            output_parameter_handler)
 
     for i in string.ascii_uppercase:
-        oOutputParameterHandler.addParameter('siteUrl', sUrl)
-        oOutputParameterHandler.addParameter('AZ', i)
-        oGui.addDir(SITE_IDENTIFIER, 'showWeb', i, 'az.png', oOutputParameterHandler)
+        output_parameter_handler.addParameter('siteUrl', sUrl)
+        output_parameter_handler.addParameter('AZ', i)
+        gui.addDir(
+            SITE_IDENTIFIER,
+            'showWeb',
+            i,
+            'az.png',
+            output_parameter_handler)
 
-    oGui.setEndOfDirectory()
+    gui.setEndOfDirectory()
 
 
 def showTV():
-    oGui = cGui()
-    oInputParameterHandler = cInputParameterHandler()
-    sUrl = oInputParameterHandler.getValue('siteUrl')
+    gui = Gui()
+    input_parameter_handler = InputParameterHandler()
+    sUrl = input_parameter_handler.getValue('siteUrl')
 
-    oRequestHandler = cRequestHandler(sUrl)
+    oRequestHandler = RequestHandler(sUrl)
     sHtmlContent = oRequestHandler.request()
 
-    oParser = cParser()
+    oParser = Parser()
     sPattern = '<title>(.+?)</title><link>(.+?)</link>'
     aResult = oParser.parse(sHtmlContent, sPattern)
 
     if aResult[0]:
-        progress_ = progress().VScreate(SITE_NAME)
+        progress_ = Progress().VScreate(SITE_NAME)
 
         # affiche par
-        if oInputParameterHandler.exist('AZ'):
-            sAZ = oInputParameterHandler.getValue('AZ')
-            string = filter(lambda t: t[0].strip().capitalize().startswith(sAZ), aResult[1])
+        if input_parameter_handler.exist('AZ'):
+            sAZ = input_parameter_handler.getValue('AZ')
+            string = filter(
+                lambda t: t[0].strip().capitalize().startswith(sAZ),
+                aResult[1])
             string = sorted(string, key=lambda t: t[0].strip().capitalize())
         else:
-            string = sorted(aResult[1], key=lambda t: t[0].strip().capitalize())
+            string = sorted(
+                aResult[1],
+                key=lambda t: t[0].strip().capitalize())
 
         total = len(string)
-        oOutputParameterHandler = cOutputParameterHandler()
+        output_parameter_handler = OutputParameterHandler()
         for aEntry in string:
             progress_.VSupdate(progress_, total)
             if progress_.iscanceled():
                 break
 
-            oOutputParameterHandler.addParameter('siteUrl', aEntry[1])
-            oOutputParameterHandler.addParameter('sMovieTitle', aEntry[0])
-            oOutputParameterHandler.addParameter('sThumbnail', 'tv.png')
+            output_parameter_handler.addParameter('siteUrl', aEntry[1])
+            output_parameter_handler.addParameter('sMovieTitle', aEntry[0])
+            output_parameter_handler.addParameter('thumbnail', 'tv.png')
 
-            oGuiElement = cGuiElement()
+            oGuiElement = GuiElement()
             oGuiElement.setSiteName(SITE_IDENTIFIER)
             oGuiElement.setFunction('play__')
             oGuiElement.setTitle(aEntry[0])
@@ -310,24 +385,36 @@ def showTV():
             oGuiElement.setDirectTvFanart()
             oGuiElement.setCat(6)
 
-            oGui.createSimpleMenu(oGuiElement, oOutputParameterHandler, SITE_IDENTIFIER, SITE_IDENTIFIER, 'direct_epg', 'Guide tv Direct')
-            oGui.createSimpleMenu(oGuiElement, oOutputParameterHandler, SITE_IDENTIFIER, SITE_IDENTIFIER, 'soir_epg', 'Guide tv Soir')
-            # oGui.createSimpleMenu(oGuiElement, oOutputParameterHandler, SITE_IDENTIFIER, SITE_IDENTIFIER, 'enregistrement', 'Enregistrement')
-            oGui.createContexMenuBookmark(oGuiElement, oOutputParameterHandler)
-            oGui.addFolder(oGuiElement, oOutputParameterHandler)
+            gui.createSimpleMenu(
+                oGuiElement,
+                output_parameter_handler,
+                SITE_IDENTIFIER,
+                SITE_IDENTIFIER,
+                'direct_epg',
+                'Guide tv Direct')
+            gui.createSimpleMenu(
+                oGuiElement,
+                output_parameter_handler,
+                SITE_IDENTIFIER,
+                SITE_IDENTIFIER,
+                'soir_epg',
+                'Guide tv Soir')
+            # gui.createSimpleMenu(oGuiElement, output_parameter_handler, SITE_IDENTIFIER, SITE_IDENTIFIER, 'enregistrement', 'Enregistrement')
+            gui.createContexMenuBookmark(oGuiElement, output_parameter_handler)
+            gui.addFolder(oGuiElement, output_parameter_handler)
 
         progress_.VSclose(progress_)
 
-    oGui.setEndOfDirectory()
+    gui.setEndOfDirectory()
 
 
 def play__():  # Lancer les liens
-    oGui = cGui()
-    oInputParameterHandler = cInputParameterHandler()
-    sUrl = oInputParameterHandler.getValue('siteUrl').replace('P_L_U_S', '+')
-    sTitle = oInputParameterHandler.getValue('sMovieTitle')
-    sThumbnail = oInputParameterHandler.getValue('sThumbnail')
-    sDesc = oInputParameterHandler.getValue('sDesc')
+    gui = Gui()
+    input_parameter_handler = InputParameterHandler()
+    sUrl = input_parameter_handler.getValue('siteUrl').replace('P_L_U_S', '+')
+    title = input_parameter_handler.getValue('sMovieTitle')
+    thumbnail = input_parameter_handler.getValue('thumbnail')
+    desc = input_parameter_handler.getValue('desc')
 
     # Special url with tag
     if '[' in sUrl and ']' in sUrl:
@@ -336,29 +423,30 @@ def play__():  # Lancer les liens
     # Bug specifique au flux france TV
     # eof detectedL
     if 'ftven.fr' in sUrl:
-        oGuiElement = cGuiElement()
+        oGuiElement = GuiElement()
         oGuiElement.setSiteName(SITE_IDENTIFIER)
-        oGuiElement.setTitle(sTitle)
+        oGuiElement.setTitle(title)
         sUrl = sUrl.replace(' ', '%20')
         oGuiElement.setMediaUrl(sUrl)
-        oGuiElement.setThumbnail(sThumbnail)
-        oGuiElement.setDescription(sDesc)
+        oGuiElement.setThumbnail(thumbnail)
+        oGuiElement.setDescription(desc)
 
-        from resources.lib.player import cPlayer
-        oPlayer = cPlayer()
+        from resources.lib.player import Player
+        oPlayer = Player()
         oPlayer.clearPlayList()
         oPlayer.addItemToPlaylist(oGuiElement)
         oPlayer.startPlayer()
 
     else:
-        oHoster = cHosterGui().checkHoster(sUrl)
+        oHoster = HosterGui().checkHoster(sUrl)
 
         if oHoster:
-            oHoster.setDisplayName(sTitle)
-            oHoster.setFileName(sTitle)
-            cHosterGui().showHoster(oGui, oHoster, sUrl, sThumbnail, oInputParameterHandler=oInputParameterHandler)
+            oHoster.setDisplayName(title)
+            oHoster.setFileName(title)
+            HosterGui().showHoster(gui, oHoster, sUrl, thumbnail,
+                                   input_parameter_handler=input_parameter_handler)
 
-        oGui.setEndOfDirectory()
+        gui.setEndOfDirectory()
 
 
 """
@@ -370,7 +458,7 @@ Fonction diverse:
 
 
 def getRealUrl(chain):
-    oParser = cParser()
+    oParser = Parser()
 
     UA2 = UA
     url = chain
@@ -378,36 +466,36 @@ def getRealUrl(chain):
     param = ""
     head = None
 
-    r = re.search('\[[DECODENRJ]+\](.+?)(?:(?:\[[A-Z]+\])|$)', chain)
+    r = re.search('\\[[DECODENRJ]+\\](.+?)(?:(?:\\[[A-Z]+\\])|$)', chain)
     if r:
         url = decodeNrj(r.group(1))
 
-    r = re.search('\[[BRIGHTCOVEKEY]+\](.+?)(?:(?:\[[A-Z]+\])|$)', chain)
+    r = re.search('\\[[BRIGHTCOVEKEY]+\\](.+?)(?:(?:\\[[A-Z]+\\])|$)', chain)
     if r:
         url = getBrightcoveKey(r.group(1))
 
-    r = re.search('\[[REGEX]+\](.+?)(?:(?:\[[A-Z]+\])|$)', chain)
+    r = re.search('\\[[REGEX]+\\](.+?)(?:(?:\\[[A-Z]+\\])|$)', chain)
     if r:
         regex = r.group(1)
 
-    r = re.search('\[[UA]+\](.+?)(?:(?:\[[A-Z]+\])|$)', chain)
+    r = re.search('\\[[UA]+\\](.+?)(?:(?:\\[[A-Z]+\\])|$)', chain)
     if r:
         UA2 = r.group(1)
 
-    r = re.search('\[[URL]+\](.+?)(?:(?:\[[A-Z]+\])|$)', chain)
+    r = re.search('\\[[URL]+\\](.+?)(?:(?:\\[[A-Z]+\\])|$)', chain)
     if r:
         url = r.group(1)
 
-    r = re.search('\[[HEAD]+\](.+?)(?:(?:\[[A-Z]+\])|$)',chain)
+    r = re.search('\\[[HEAD]+\\](.+?)(?:(?:\\[[A-Z]+\\])|$)', chain)
     if r:
         head = r.group(1)
 
     # post metehod ?
-    r = re.search('\[[POSTFORM]+\](.+?)(?:(?:\[[A-Z]+\])|$)', chain)
+    r = re.search('\\[[POSTFORM]+\\](.+?)(?:(?:\\[[A-Z]+\\])|$)', chain)
     if r:
         param = r.group(1)
 
-    oRequestHandler = cRequestHandler(url)
+    oRequestHandler = RequestHandler(url)
     if param:
         oRequestHandler.setRequestType(1)
         oRequestHandler.addHeaderEntry('Accept-Encoding', 'identity')
@@ -416,7 +504,7 @@ def getRealUrl(chain):
         import json
         head = json.loads(head)
         for a in head:
-            oRequestHandler.addHeaderEntry(a,head[a])
+            oRequestHandler.addHeaderEntry(a, head[a])
     sHtmlContent = oRequestHandler.request()
 
     if regex:
@@ -430,56 +518,73 @@ def getRealUrl(chain):
 
 
 def decodeNrj(d):
-    oRequestHandler = cRequestHandler(d)
+    oRequestHandler = RequestHandler(d)
     sHtmlContent = oRequestHandler.request()
 
     title = re.search('data-program_title="([^"]+)"', sHtmlContent).group(1)
     ids = re.search('data-ref="([^"]+)"', sHtmlContent).group(1)
 
-    url = 'https://www.nrj-play.fr/compte/live?channel=' + d.split('/')[3] + '&channel=' + d.split('/')[3] + '&title='
-    url += title + '&channel=' + d.split('/')[3] + '&ref=' + ids + '&formId=formDirect'
+    url = 'https://www.nrj-play.fr/compte/live?channel=' + \
+        d.split('/')[3] + '&channel=' + d.split('/')[3] + '&title='
+    url += title + '&channel=' + \
+        d.split('/')[3] + '&ref=' + ids + '&formId=formDirect'
 
-    oRequestHandler = cRequestHandler(url)
+    oRequestHandler = RequestHandler(url)
     sHtmlContent = oRequestHandler.request()
-    dataUrl = re.search('"contentUrl" content="([^"]+)"', sHtmlContent).group(1)
+    dataUrl = re.search(
+        '"contentUrl" content="([^"]+)"',
+        sHtmlContent).group(1)
 
     return dataUrl
 
 
 def getBrightcoveKey(sUrl):
-    oRequestHandler = cRequestHandler(sUrl)
+    oRequestHandler = RequestHandler(sUrl)
     sHtmlContent = oRequestHandler.request()
 
     if "rmcdecouverte" in sUrl:
-        url = re.search('<script type="application/javascript" src="([^"]+)"></script>', sHtmlContent).group(1)
+        url = re.search(
+            '<script type="application/javascript" src="([^"]+)"></script>',
+            sHtmlContent).group(1)
 
-        oRequestHandler = cRequestHandler("https://" + sUrl.split('/')[2] + url)
+        oRequestHandler = RequestHandler(
+            "https://" + sUrl.split('/')[2] + url)
         sHtmlContent = oRequestHandler.request()
-        result = re.search('N="([^"]+)",y="([^"]+)"\)', sHtmlContent)
+        result = re.search('N="([^"]+)",y="([^"]+)"\\)', sHtmlContent)
         player = result.group(1)
         video = result.group(2)
 
-        oRequestHandler = cRequestHandler("https://static.bfmtv.com/ressources/next-player/cleo-player/playerBridge.js")
+        oRequestHandler = RequestHandler(
+            "https://static.bfmtv.com/ressources/next-player/cleo-player/playerBridge.js")
         sHtmlContent = oRequestHandler.request().lower()
 
         ID = sUrl.split('/')[2].split('.')[0]
-        account = re.search("\n(.+?): '" + ID + "'", sHtmlContent).group(1).replace('            ', '')
+        account = re.search(
+            "\n(.+?): '" + ID + "'",
+            sHtmlContent).group(1).replace(
+            '            ',
+            '')
 
     else:
-        result = re.search('<div class="video_block" id="video_player_.+?" accountid="([^"]+)" playerid="([^"]+)" videoid="([^"]+)"', sHtmlContent)
+        result = re.search(
+            '<div class="video_block" id="video_player_.+?" accountid="([^"]+)" playerid="([^"]+)" videoid="([^"]+)"',
+            sHtmlContent)
 
         account = result.group(1)
         player = result.group(2)
         video = result.group(3)
 
-    url = 'http://players.brightcove.net/%s/%s_default/index.min.js' % (account, player)
-    oRequestHandler = cRequestHandler(url)
+    url = 'http://players.brightcove.net/%s/%s_default/index.min.js' % (
+        account, player)
+    oRequestHandler = RequestHandler(url)
     sHtmlContent = oRequestHandler.request()
     policyKey = re.search('policyKey:"(.+?)"', sHtmlContent).group(1)
 
-    url = "https://edge.api.brightcove.com/playback/v1/accounts/%s/videos/%s" % (account, video)
-    oRequestHandler = cRequestHandler(url)
-    oRequestHandler.addHeaderEntry('Accept', "application/json;pk=" + policyKey)
+    url = "https://edge.api.brightcove.com/playback/v1/accounts/%s/videos/%s" % (
+        account, video)
+    oRequestHandler = RequestHandler(url)
+    oRequestHandler.addHeaderEntry(
+        'Accept', "application/json;pk=" + policyKey)
     sHtmlContent = oRequestHandler.request()
     url = re.search('"sources":.+?src":"([^"]+)"', sHtmlContent).group(1)
 

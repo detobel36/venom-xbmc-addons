@@ -10,7 +10,7 @@ except ImportError:  # Python 3
 
 import xbmc
 
-from resources.lib.parser import cParser
+from resources.lib.parser import Parser
 from resources.hosters.hoster import iHoster
 from resources.lib.comaddon import dialog
 
@@ -19,15 +19,15 @@ class cHoster(iHoster):
     def __init__(self):
         iHoster.__init__(self, 'uplea', 'Uplea', 'violet')
 
-    def getMediaLink(self, autoPlay = False):
+    def getMediaLink(self, autoPlay=False):
         if 'site=cDownload&function' not in sys.argv[2]:
             if not autoPlay:
-                oDialog = dialog().VSok("ATTENTION, Pas de streaming sans premium\n" + \
-                    "Pour voir le film passer par l'option 'Télécharger et Lire' du menu contextuel.")
+                oDialog = dialog().VSok("ATTENTION, Pas de streaming sans premium\n" +
+                                        "Pour voir le film passer par l'option 'Télécharger et Lire' du menu contextuel.")
             return False, False
         return self._getMediaLinkForGuest(autoPlay)
 
-    def _getMediaLinkForGuest(self, autoPlay = False):
+    def _getMediaLinkForGuest(self, autoPlay=False):
         # http:///dl/12345XXYEEEEREERERE
 
         UA = 'Mozilla/5.0 (Windows NT 6.1; WOW64; rv:39.0) Gecko/20100101 Firefox/39.0'
@@ -45,11 +45,11 @@ class cHoster(iHoster):
         head = response.headers
         response.close()
 
-        oParser = cParser()
+        oParser = Parser()
 
         # get step
         urlstep = ''
-        sPattern = '<a href="(\/step\/[^<>"]+)">'
+        sPattern = '<a href="(\\/step\\/[^<>"]+)">'
         aResult = oParser.parse(sHtmlContent, sPattern)
         if aResult[0] is True:
             urlstep = aResult[1][0]
@@ -80,7 +80,7 @@ class cHoster(iHoster):
 
         # waiting time
         waitingtime = 20
-        sPattern = "ulCounter\({'timer':([0-9]+)}\);"
+        sPattern = "ulCounter\\({'timer':([0-9]+)}\\);"
         aResult = oParser.parse(sHtmlContent, sPattern)
         if aResult[0] is True:
             waitingtime = int(aResult[1][0]) + 2
@@ -90,10 +90,11 @@ class cHoster(iHoster):
 
         if aResult[0] is True:
             dialog.VSinfo('Waiting time', self._displayName, waitingtime)
-            xbmc.sleep(waitingtime*1000)
+            xbmc.sleep(waitingtime * 1000)
 
             # print(aResult[1][0])
 
-            return True, aResult[1][0] + '|User-Agent=' + UA  # + '&Referer=' + self._url
+            return True, aResult[1][0] + '|User-Agent=' + \
+                UA  # + '&Referer=' + self._url
 
         return False, False

@@ -1,9 +1,10 @@
-#-*- coding: utf-8 -*-
+# -*- coding: utf-8 -*-
 # https://github.com/Kodi-vStream/venom-xbmc-addons
 import re
 
-from resources.lib.handler.requestHandler import cRequestHandler
+from resources.lib.handler.requestHandler import RequestHandler
 from resources.hosters.hoster import iHoster
+
 
 class cHoster(iHoster):
 
@@ -11,7 +12,7 @@ class cHoster(iHoster):
         iHoster.__init__(self, 'streamango', 'Streamango')
 
     def decode(self, encoded, code):
-        #from https://github.com/jsergio123/script.module.urlresolver
+        # from https://github.com/jsergio123/script.module.urlresolver
         _0x59b81a = ""
         k = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/='
         k = k[::-1]
@@ -43,16 +44,17 @@ class cHoster(iHoster):
 
         return _0x59b81a
 
-    def _getMediaLinkForGuest(self, autoPlay = False):
+    def _getMediaLinkForGuest(self, autoPlay=False):
         api_call = False
-        oRequest = cRequestHandler(self._url)
+        oRequest = RequestHandler(self._url)
         sHtmlContent = oRequest.request()
 
-        r1 = re.search("{type:\"video/mp4\",src:\w+\('([^']+)',(\d+)", sHtmlContent)
+        r1 = re.search(
+            "{type:\"video/mp4\",src:\\w+\\('([^']+)',(\\d+)", sHtmlContent)
         if (r1):
             api_call = self.decode(r1.group(1), int(r1.group(2)))
             if api_call.endswith('@'):
-               api_call = api_call[:-1]
+                api_call = api_call[:-1]
 
             api_call = 'http:' + api_call
 

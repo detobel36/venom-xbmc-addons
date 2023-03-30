@@ -10,18 +10,18 @@ import xbmcvfs
 import xbmc
 
 from resources.lib.comaddon import addon, dialog, VSPath
-from resources.lib.gui.gui import cGui
-from resources.lib.handler.inputParameterHandler import cInputParameterHandler
-from resources.lib.handler.outputParameterHandler import cOutputParameterHandler
-from resources.lib.util import cUtil, QuotePlus
+from resources.lib.gui.gui import Gui
+from resources.lib.handler.inputParameterHandler import InputParameterHandler
+from resources.lib.handler.outputParameterHandler import OutputParameterHandler
+from resources.lib.util import QuotePlus
 
-SITE_IDENTIFIER = 'cLibrary'
+SITE_IDENTIFIER = 'Library'
 SITE_NAME = 'Library'
 
 # sources.xml
 
 
-class cLibrary:
+class Library:
     ADDON = addon()
 
     def __init__(self):
@@ -43,12 +43,14 @@ class cLibrary:
         self.__sTitle = ''
 
     def setLibrary(self):
-        oInputParameterHandler = cInputParameterHandler()
-        sHosterIdentifier = oInputParameterHandler.getValue('sHosterIdentifier')
-        sFileName = oInputParameterHandler.getValue('sFileName')
-        sMediaUrl = oInputParameterHandler.getValue('sMediaUrl')
+        input_parameter_handler = InputParameterHandler()
+        sHosterIdentifier = input_parameter_handler.getValue(
+            'sHosterIdentifier')
+        sFileName = input_parameter_handler.getValue('sFileName')
+        sMediaUrl = input_parameter_handler.getValue('sMediaUrl')
 
-        ret = dialog().VSselect(['Film', 'Série'], 'Sélectionner une catégorie')
+        ret = dialog().VSselect(['Film', 'Série'],
+                                'Sélectionner une catégorie')
         if ret == 0:
             sCat = '1'
         elif ret == -1:
@@ -57,30 +59,32 @@ class cLibrary:
             sCat = '2'
 
         sMediaUrl = QuotePlus(sMediaUrl)
-        #sFileName = QuotePlus(sFileName)
+        # sFileName = QuotePlus(sFileName)
 
-        sLink = 'plugin://plugin.video.vstream/?function=play&site=cHosterGui&sFileName='
-        sLink += sFileName + '&sMediaUrl=' + sMediaUrl + '&sHosterIdentifier=' + sHosterIdentifier
+        sLink = 'plugin://plugin.video.vstream/?function=play&site=HosterGui&sFileName='
+        sLink += sFileName + '&sMediaUrl=' + sMediaUrl + \
+            '&sHosterIdentifier=' + sHosterIdentifier
 
-        sTitle = sFileName
+        title = sFileName
 
         if sCat == '1':  # film
-            #sTitle = cUtil().CleanName(sTitle)
-            sTitle = self.showKeyBoard(sTitle, 'Nom du fichier')
+            # title = cUtil().CleanName(title)
+            title = self.showKeyBoard(title, 'Nom du fichier')
 
             try:
-                sPath = '/'.join([self.__sMovieFolder, sTitle])
+                sPath = '/'.join([self.__sMovieFolder, title])
 
                 if not xbmcvfs.exists(sPath):
                     xbmcvfs.mkdir(sPath)
 
-                self.MakeFile(sPath, sTitle, sLink)
-            except:
+                self.MakeFile(sPath, title, sLink)
+            except BaseException:
                 dialog().VSinfo('Rajout impossible')
 
         elif sCat == '2':  # serie
-            #sTitle = cUtil().CleanName(sTitle)
-            sFTitle = self.showKeyBoard(sTitle, 'Saison : Recommandé NomDeSerie/Saison01')
+            # title = cUtil().CleanName(title)
+            sFTitle = self.showKeyBoard(
+                title, 'Saison : Recommandé NomDeSerie/Saison01')
 
             try:
 
@@ -89,10 +93,11 @@ class cLibrary:
                 if not xbmcvfs.exists(sPath):
                     xbmcvfs.mkdir(sPath)
 
-                sTitle = self.showKeyBoard(sTitle, 'Épisode : Recommandé NomDeSerie S01E01')
+                title = self.showKeyBoard(
+                    title, 'Épisode : Recommandé NomDeSerie S01E01')
 
-                self.MakeFile(sPath, sTitle, sLink)
-            except:
+                self.MakeFile(sPath, title, sLink)
+            except BaseException:
                 dialog().VSinfo('Rajout impossible')
 
     def MakeFile(self, folder, name, content):
@@ -106,36 +111,50 @@ class cLibrary:
             dialog().VSinfo('Rajout impossible')
 
     def getLibrary(self):
-        oGui = cGui()
-        oOutputParameterHandler = cOutputParameterHandler()
+        gui = Gui()
+        output_parameter_handler = OutputParameterHandler()
 
         folder = self.ADDON.getSetting('Library_folder_Movies')
-        oOutputParameterHandler.addParameter('siteUrl', folder)
-        oGui.addDir(SITE_IDENTIFIER, 'openLibrary', self.ADDON.VSlang(30120), 'films.png', oOutputParameterHandler)
+        output_parameter_handler.addParameter('siteUrl', folder)
+        gui.addDir(
+            SITE_IDENTIFIER,
+            'openLibrary',
+            self.ADDON.VSlang(30120),
+            'films.png',
+            output_parameter_handler)
 
         folder = self.ADDON.getSetting('Library_folder_TVs')
-        oOutputParameterHandler.addParameter('siteUrl', folder)
-        oGui.addDir(SITE_IDENTIFIER, 'openLibrary', self.ADDON.VSlang(30121), 'series.png', oOutputParameterHandler)
+        output_parameter_handler.addParameter('siteUrl', folder)
+        gui.addDir(
+            SITE_IDENTIFIER,
+            'openLibrary',
+            self.ADDON.VSlang(30121),
+            'series.png',
+            output_parameter_handler)
 
-        oGui.setEndOfDirectory()
-
+        gui.setEndOfDirectory()
 
     def getRecords(self):
-        oGui = cGui()
+        gui = Gui()
 
         folder = self.ADDON.getSetting('path_enregistrement')
         if not folder:
             folder = 'special://userdata/addon_data/plugin.video.vstream/Enregistrement"/>'
-        oOutputParameterHandler = cOutputParameterHandler()
-        oOutputParameterHandler.addParameter('siteUrl', folder)
-        oGui.addDir(SITE_IDENTIFIER, 'openLibrary', self.ADDON.VSlang(30225), 'download.png', oOutputParameterHandler)
+        output_parameter_handler = OutputParameterHandler()
+        output_parameter_handler.addParameter('siteUrl', folder)
+        gui.addDir(
+            SITE_IDENTIFIER,
+            'openLibrary',
+            self.ADDON.VSlang(30225),
+            'download.png',
+            output_parameter_handler)
 
-        oGui.setEndOfDirectory()
+        gui.setEndOfDirectory()
 
     def openLibrary(self):
-        oGui = cGui()
-        oInputParameterHandler = cInputParameterHandler()
-        sFile = oInputParameterHandler.getValue('siteUrl')
+        gui = Gui()
+        input_parameter_handler = InputParameterHandler()
+        sFile = input_parameter_handler.getValue('siteUrl')
 
         listDir = xbmcvfs.listdir(sFile)
 
@@ -146,41 +165,51 @@ class cLibrary:
 
         addon_handle = None
         for i in data:
-            path = VSPath(sFile + '/' + i)  # Suppression du special: pour plus tard
-            sTitle = os.path.basename(path)  # Titre du fichier .strm
+            # Suppression du special: pour plus tard
+            path = VSPath(sFile + '/' + i)
+            title = os.path.basename(path)  # Titre du fichier .strm
 
             if '.strm' in i:
                 sHosterUrl = sFile + '/' + i
                 addon_handle = int(sys.argv[1])
                 xbmcplugin.setContent(addon_handle, 'video')
-                li = xbmcgui.ListItem(sTitle)
-                xbmcplugin.addDirectoryItem(handle=addon_handle, url=sHosterUrl, listitem=li)
+                li = xbmcgui.ListItem(title)
+                xbmcplugin.addDirectoryItem(
+                    handle=addon_handle, url=sHosterUrl, listitem=li)
 
             else:
-                oOutputParameterHandler = cOutputParameterHandler()
-                oOutputParameterHandler.addParameter('siteUrl', sFile + '/' + i)
-                oGui.addDir(SITE_IDENTIFIER, 'openLibrary', sTitle, 'films.png', oOutputParameterHandler)
+                output_parameter_handler = OutputParameterHandler()
+                output_parameter_handler.addParameter(
+                    'siteUrl', sFile + '/' + i)
+                gui.addDir(
+                    SITE_IDENTIFIER,
+                    'openLibrary',
+                    title,
+                    'films.png',
+                    output_parameter_handler)
 
         if addon_handle:
             xbmcplugin.endOfDirectory(addon_handle)
         else:
-            oGui.setEndOfDirectory()
+            gui.setEndOfDirectory()
 
     def Delfile(self):
-        oInputParameterHandler = cInputParameterHandler()
-        sFile = oInputParameterHandler.getValue('sFile')
+        input_parameter_handler = InputParameterHandler()
+        sFile = input_parameter_handler.getValue('sFile')
 
         xbmcvfs.delete(sFile)
 
-        runClean = self.DIALOG.VSyesno('Voulez vous mettre à jour la librairie maintenant (non conseillé)', 'Fichier supprimé')
+        runClean = self.DIALOG.VSyesno(
+            'Voulez vous mettre à jour la librairie maintenant (non conseillé)',
+            'Fichier supprimé')
         if not runClean:
             return
 
         xbmc.executebuiltin('CleanLibrary(video)')
 
     def ShowContent(self):
-        oInputParameterHandler = cInputParameterHandler()
-        sFolder = oInputParameterHandler.getValue('folder')
+        input_parameter_handler = InputParameterHandler()
+        sFolder = input_parameter_handler.getValue('folder')
         xbmc.executebuiltin('Container.Update(' + sFolder + ')')
 
     def showKeyBoard(self, sDefaultText='', Heading=''):

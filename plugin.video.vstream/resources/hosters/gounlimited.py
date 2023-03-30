@@ -2,8 +2,8 @@
 # vStream https://github.com/Kodi-vStream/venom-xbmc-addons
 # https://gounlimited.to/embed-xxx.html
 # top_replay robin des droits
-from resources.lib.handler.requestHandler import cRequestHandler
-from resources.lib.parser import cParser
+from resources.lib.handler.requestHandler import RequestHandler
+from resources.lib.parser import Parser
 from resources.hosters.hoster import iHoster
 from resources.lib.packer import cPacker
 
@@ -14,15 +14,15 @@ class cHoster(iHoster):
     def __init__(self):
         iHoster.__init__(self, 'gounlimited', 'Gounlimited')
 
-    def _getMediaLinkForGuest(self, autoPlay = False):
+    def _getMediaLinkForGuest(self, autoPlay=False):
         api_call = False
 
         if not self._url.endswith('.mp4'):
-            oParser = cParser()
-            oRequest = cRequestHandler(self._url)
+            oParser = Parser()
+            oRequest = RequestHandler(self._url)
             sHtmlContent = oRequest.request()
 
-            sPattern = '(\s*eval\s*\(\s*function\(p,a,c,k,e(?:.|\s)+?)<\/script>'
+            sPattern = '(\\s*eval\\s*\\(\\s*function\\(p,a,c,k,e(?:.|\\s)+?)<\\/script>'
             aResult = oParser.parse(sHtmlContent, sPattern)
             if aResult[0] is True:
                 sHtmlContent = cPacker().unpack(aResult[1][0])

@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 # https://github.com/Kodi-vStream/venom-xbmc-addons
-from resources.lib.handler.requestHandler import cRequestHandler
-from resources.lib.parser import cParser
+from resources.lib.handler.requestHandler import RequestHandler
+from resources.lib.parser import Parser
 from resources.hosters.hoster import iHoster
 
 
@@ -16,7 +16,7 @@ class cHoster(iHoster):
         url = 'http://filetrip.net/embed?' + str(url)
         return url
 
-    def _getMediaLinkForGuest(self, autoPlay = False):
+    def _getMediaLinkForGuest(self, autoPlay=False):
         # lien deja decode
         if self._url[-4] == '.':
             return True, self._url
@@ -24,11 +24,11 @@ class cHoster(iHoster):
         # Sinon on decode
         self._url = self.reformat(self._url)
 
-        oRequest = cRequestHandler(self._url)
+        oRequest = RequestHandler(self._url)
         sHtmlContent = oRequest.request()
 
         sPattern = "file': '(.+?)',"
-        oParser = cParser()
+        oParser = Parser()
         aResult = oParser.parse(sHtmlContent, sPattern)
 
         if aResult[0] is True:

@@ -15,7 +15,7 @@ class cHoster(iHoster):
     def __init__(self):
         iHoster.__init__(self, 'evoload', 'Evoload')
 
-    def _getMediaLinkForGuest(self, autoPlay = False):
+    def _getMediaLinkForGuest(self, autoPlay=False):
         api_call = ''
         sUrlSecurePlayer = "https://evoload.io/SecurePlayer"
 
@@ -27,9 +27,9 @@ class cHoster(iHoster):
                    'Referer': 'https://evoload.io/'
                    }
 
-        headers1 = {'user-agent': UA,
-                    'Accept': 'text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,image/apng,*/*;q=0.8'
-                    }
+        headers1 = {
+            'user-agent': UA,
+            'Accept': 'text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,image/apng,*/*;q=0.8'}
 
         headers2 = {'user-agent': UA,
                     'Accept': 'Accept: application/json, text/plain, */*',
@@ -39,12 +39,17 @@ class cHoster(iHoster):
 
         s = requests.session()
 
-        crsv = requests.get('https://csrv.evosrv.com/captcha?m412548', headers=headers).text
+        crsv = requests.get(
+            'https://csrv.evosrv.com/captcha?m412548',
+            headers=headers).text
 
         html = s.get(self._url, headers=headers1).text
-        passe = re.search('<div id="captcha_pass" value="(.+?)"></div>', html).group(1)
+        passe = re.search(
+            '<div id="captcha_pass" value="(.+?)"></div>',
+            html).group(1)
 
-        post = '{"code":"' + code + '","csrv_token":"'+crsv+'","pass":"' + passe + '","token":"ok"}'
+        post = '{"code":"' + code + '","csrv_token":"' + \
+            crsv + '","pass":"' + passe + '","token":"ok"}'
 
         req = s.post(sUrlSecurePlayer, data=post, headers=headers2)
         response = str(req.content)
