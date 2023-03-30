@@ -29,18 +29,18 @@ MOVIE_GENRES = (True, 'showGenres')
 def load():
     oGui = Gui()
 
-    oOutputParameterHandler = OutputParameterHandler()
-    oOutputParameterHandler.addParameter('siteUrl', 'http://venom/')
-    oGui.addDir(SITE_IDENTIFIER, 'showSearch', 'Recherche', 'search.png', oOutputParameterHandler)
+    output_parameter_handler = OutputParameterHandler()
+    output_parameter_handler.addParameter('siteUrl', 'http://venom/')
+    oGui.addDir(SITE_IDENTIFIER, 'showSearch', 'Recherche', 'search.png', output_parameter_handler)
 
-    oOutputParameterHandler.addParameter('siteUrl', MOVIE_NEWS[0])
-    oGui.addDir(SITE_IDENTIFIER, MOVIE_NEWS[1], 'Films (Derniers ajouts)', 'news.png', oOutputParameterHandler)
+    output_parameter_handler.addParameter('siteUrl', MOVIE_NEWS[0])
+    oGui.addDir(SITE_IDENTIFIER, MOVIE_NEWS[1], 'Films (Derniers ajouts)', 'news.png', output_parameter_handler)
 
-    oOutputParameterHandler.addParameter('siteUrl', MOVIE_TOP[0])
-    oGui.addDir(SITE_IDENTIFIER, MOVIE_TOP[1], 'Films (Populaires)', 'star.png', oOutputParameterHandler)
+    output_parameter_handler.addParameter('siteUrl', MOVIE_TOP[0])
+    oGui.addDir(SITE_IDENTIFIER, MOVIE_TOP[1], 'Films (Populaires)', 'star.png', output_parameter_handler)
 
-    oOutputParameterHandler.addParameter('siteUrl', MOVIE_GENRES[0])
-    oGui.addDir(SITE_IDENTIFIER, MOVIE_GENRES[1], 'Films (Genres)', 'genres.png', oOutputParameterHandler)
+    output_parameter_handler.addParameter('siteUrl', MOVIE_GENRES[0])
+    oGui.addDir(SITE_IDENTIFIER, MOVIE_GENRES[1], 'Films (Genres)', 'genres.png', output_parameter_handler)
 
     oGui.setEndOfDirectory()
 
@@ -68,7 +68,7 @@ def showGenres():
         oGui.addText(SITE_IDENTIFIER)
     else:
         triAlpha = []
-        oOutputParameterHandler = OutputParameterHandler()
+        output_parameter_handler = OutputParameterHandler()
         for aEntry in aResult[1]:
             if aEntry[1] in ('Liste De Films De Noël', 'Films De Noël', 'Top Films Streaming', 'Top Films',
                              'Prochainement', 'Uncategorized', 'Genres', 'Tendance'):
@@ -82,8 +82,8 @@ def showGenres():
         triAlpha = sorted(triAlpha, key=lambda genre: genre[0])
 
         for sTitle, sUrl in triAlpha:
-            oOutputParameterHandler.addParameter('siteUrl', sUrl)
-            oGui.addDir(SITE_IDENTIFIER, 'showMovies', sTitle, 'genres.png', oOutputParameterHandler)
+            output_parameter_handler.addParameter('siteUrl', sUrl)
+            oGui.addDir(SITE_IDENTIFIER, 'showMovies', sTitle, 'genres.png', output_parameter_handler)
     oGui.setEndOfDirectory()
 
 
@@ -94,8 +94,8 @@ def showMovies(sSearch=''):
         sSearchText = oUtil.CleanName(sSearch.replace(URL_SEARCH_MOVIES[0], ''))
         sUrl = URL_SEARCH_MOVIES[0] + sSearchText.replace(' ', '+')
     else:
-        oInputParameterHandler = InputParameterHandler()
-        sUrl = oInputParameterHandler.getValue('siteUrl')
+        input_parameter_handler = InputParameterHandler()
+        sUrl = input_parameter_handler.getValue('siteUrl')
 
     oRequestHandler = RequestHandler(sUrl)
     sHtmlContent = oRequestHandler.request()
@@ -107,7 +107,7 @@ def showMovies(sSearch=''):
     if not aResult[0]:
         oGui.addText(SITE_IDENTIFIER)
     else:
-        oOutputParameterHandler = OutputParameterHandler()
+        output_parameter_handler = OutputParameterHandler()
         for aEntry in aResult[1]:
             sUrl2 = aEntry[0]
             sThumb = re.sub('/w\\d+/', '/w342/', aEntry[1])
@@ -122,19 +122,19 @@ def showMovies(sSearch=''):
 
             sDisplayTitle = ('%s [%s]') % (sTitle, sQual)
 
-            oOutputParameterHandler.addParameter('siteUrl', sUrl2)
-            oOutputParameterHandler.addParameter('sMovieTitle', sTitle)
-            oOutputParameterHandler.addParameter('sThumb', sThumb)
-            oOutputParameterHandler.addParameter('sDesc', sDesc)
+            output_parameter_handler.addParameter('siteUrl', sUrl2)
+            output_parameter_handler.addParameter('sMovieTitle', sTitle)
+            output_parameter_handler.addParameter('sThumb', sThumb)
+            output_parameter_handler.addParameter('sDesc', sDesc)
 
-            oGui.addMovie(SITE_IDENTIFIER, 'showHosters', sDisplayTitle, '', sThumb, sDesc, oOutputParameterHandler)
+            oGui.addMovie(SITE_IDENTIFIER, 'showHosters', sDisplayTitle, '', sThumb, sDesc, output_parameter_handler)
 
     if not sSearch:
         sNextPage, sPaging = __checkForNextPage(sHtmlContent)
         if sNextPage:
-            oOutputParameterHandler = OutputParameterHandler()
-            oOutputParameterHandler.addParameter('siteUrl', sNextPage)
-            oGui.addNext(SITE_IDENTIFIER, 'showMovies', 'Page ' + sPaging, oOutputParameterHandler)
+            output_parameter_handler = OutputParameterHandler()
+            output_parameter_handler.addParameter('siteUrl', sNextPage)
+            oGui.addNext(SITE_IDENTIFIER, 'showMovies', 'Page ' + sPaging, output_parameter_handler)
 
         oGui.setEndOfDirectory()
 
@@ -166,10 +166,10 @@ def __checkForNextPage(sHtmlContent):
 def showHosters():
     oGui = Gui()
     oParser = cParser()
-    oInputParameterHandler = InputParameterHandler()
-    sUrl = oInputParameterHandler.getValue('siteUrl')
-    sMovieTitle = oInputParameterHandler.getValue('sMovieTitle')
-    sThumb = oInputParameterHandler.getValue('sThumb')
+    input_parameter_handler = InputParameterHandler()
+    sUrl = input_parameter_handler.getValue('siteUrl')
+    sMovieTitle = input_parameter_handler.getValue('sMovieTitle')
+    sThumb = input_parameter_handler.getValue('sThumb')
 
     oRequestHandler = RequestHandler(sUrl)
     sHtmlContent = oRequestHandler.request()

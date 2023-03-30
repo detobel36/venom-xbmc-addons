@@ -34,33 +34,33 @@ MOVIE_MMA = (URL_MAIN + 'wwe-mma/', 'showMovies')
 def load():
     oGui = Gui()
 
-    oOutputParameterHandler = OutputParameterHandler()
-    oOutputParameterHandler.addParameter('siteUrl', URL_SEARCH[0])
-    oGui.addDir(SITE_IDENTIFIER, 'showSearch', 'Recherche', 'search.png', oOutputParameterHandler)
+    output_parameter_handler = OutputParameterHandler()
+    output_parameter_handler.addParameter('siteUrl', URL_SEARCH[0])
+    oGui.addDir(SITE_IDENTIFIER, 'showSearch', 'Recherche', 'search.png', output_parameter_handler)
 
-    oOutputParameterHandler.addParameter('siteUrl', MOVIE_AFL[0])
-    oGui.addDir(SITE_IDENTIFIER, MOVIE_AFL[1], 'AFL', 'sport.png', oOutputParameterHandler)
+    output_parameter_handler.addParameter('siteUrl', MOVIE_AFL[0])
+    oGui.addDir(SITE_IDENTIFIER, MOVIE_AFL[1], 'AFL', 'sport.png', output_parameter_handler)
 
-    oOutputParameterHandler.addParameter('siteUrl', MOVIE_MOTOR[0])
-    oGui.addDir(SITE_IDENTIFIER, MOVIE_MOTOR[1], 'MOTORSPORT', 'sport.png', oOutputParameterHandler)
+    output_parameter_handler.addParameter('siteUrl', MOVIE_MOTOR[0])
+    oGui.addDir(SITE_IDENTIFIER, MOVIE_MOTOR[1], 'MOTORSPORT', 'sport.png', output_parameter_handler)
 
-    oOutputParameterHandler.addParameter('siteUrl', MOVIE_NBA[0])
-    oGui.addDir(SITE_IDENTIFIER, MOVIE_NBA[1], 'NBA', 'sport.png', oOutputParameterHandler)
+    output_parameter_handler.addParameter('siteUrl', MOVIE_NBA[0])
+    oGui.addDir(SITE_IDENTIFIER, MOVIE_NBA[1], 'NBA', 'sport.png', output_parameter_handler)
 
-    oOutputParameterHandler.addParameter('siteUrl', MOVIE_NFL[0])
-    oGui.addDir(SITE_IDENTIFIER, MOVIE_NFL[1], 'NFL', 'sport.png', oOutputParameterHandler)
+    output_parameter_handler.addParameter('siteUrl', MOVIE_NFL[0])
+    oGui.addDir(SITE_IDENTIFIER, MOVIE_NFL[1], 'NFL', 'sport.png', output_parameter_handler)
 
-    oOutputParameterHandler.addParameter('siteUrl', MOVIE_NHL[0])
-    oGui.addDir(SITE_IDENTIFIER, MOVIE_NHL[1], 'NHL', 'sport.png', oOutputParameterHandler)
+    output_parameter_handler.addParameter('siteUrl', MOVIE_NHL[0])
+    oGui.addDir(SITE_IDENTIFIER, MOVIE_NHL[1], 'NHL', 'sport.png', output_parameter_handler)
 
-    oOutputParameterHandler.addParameter('siteUrl', MOVIE_MLB[0])
-    oGui.addDir(SITE_IDENTIFIER, MOVIE_MLB[1], 'MLB', 'sport.png', oOutputParameterHandler)
+    output_parameter_handler.addParameter('siteUrl', MOVIE_MLB[0])
+    oGui.addDir(SITE_IDENTIFIER, MOVIE_MLB[1], 'MLB', 'sport.png', output_parameter_handler)
 
-    oOutputParameterHandler.addParameter('siteUrl', MOVIE_RUGBY[0])
-    oGui.addDir(SITE_IDENTIFIER, MOVIE_RUGBY[1], 'RUGBY', 'sport.png', oOutputParameterHandler)
+    output_parameter_handler.addParameter('siteUrl', MOVIE_RUGBY[0])
+    oGui.addDir(SITE_IDENTIFIER, MOVIE_RUGBY[1], 'RUGBY', 'sport.png', output_parameter_handler)
 
-    oOutputParameterHandler.addParameter('siteUrl', MOVIE_MMA[0])
-    oGui.addDir(SITE_IDENTIFIER, MOVIE_MMA[1], 'WWE-MMA', 'sport.png', oOutputParameterHandler)
+    output_parameter_handler.addParameter('siteUrl', MOVIE_MMA[0])
+    oGui.addDir(SITE_IDENTIFIER, MOVIE_MMA[1], 'WWE-MMA', 'sport.png', output_parameter_handler)
 
     oGui.setEndOfDirectory()
 
@@ -82,8 +82,8 @@ def showMovies(sSearch=''):
         sUrl = sSearch
         sPattern = '(?:<div class="td_module_16 td_module_wrap td-animation-stack">|<div class="td-module-container td-category-pos-image">.+?<div class="td-module-thumb">).+?href="([^"]+).+?title="([^"]+).+?.+?(?:src="([^"]+)|url.+?([^\']+))'
     else:
-        oInputParameterHandler = InputParameterHandler()
-        sUrl = oInputParameterHandler.getValue('siteUrl')
+        input_parameter_handler = InputParameterHandler()
+        sUrl = input_parameter_handler.getValue('siteUrl')
         sPattern = '(?:<div class="td_module_mx7 td_module_wrap td-animation-stack">|<div class="td-module-container td-category-pos-image">.+?<div class="td-module-thumb">).+?href="([^"]+).+?title="([^"]+).+?.+?(?:src="([^"]+)|url.+?([^\']+))'
 
     oRequestHandler = RequestHandler(sUrl)
@@ -98,7 +98,7 @@ def showMovies(sSearch=''):
     if aResult[0]:
         total = len(aResult[1])
         progress_ = progress().VScreate(SITE_NAME)
-        oOutputParameterHandler = OutputParameterHandler()
+        output_parameter_handler = OutputParameterHandler()
         for aEntry in aResult[1]:
             progress_.VSupdate(progress_, total)
             if progress_.iscanceled():
@@ -109,10 +109,10 @@ def showMovies(sSearch=''):
             sTitle = aEntry[1]
             sDisplayTitle = sTitle
 
-            oOutputParameterHandler.addParameter('siteUrl', sUrl)
-            oOutputParameterHandler.addParameter('sMovieTitle', sTitle)
-            oOutputParameterHandler.addParameter('sThumb', sThumb)
-            oGui.addMovie(SITE_IDENTIFIER, 'showLink', sDisplayTitle, '', sThumb, '', oOutputParameterHandler)
+            output_parameter_handler.addParameter('siteUrl', sUrl)
+            output_parameter_handler.addParameter('sMovieTitle', sTitle)
+            output_parameter_handler.addParameter('sThumb', sThumb)
+            oGui.addMovie(SITE_IDENTIFIER, 'showLink', sDisplayTitle, '', sThumb, '', output_parameter_handler)
         progress_.VSclose(progress_)
 
         oGui.setEndOfDirectory()
@@ -121,10 +121,10 @@ def showMovies(sSearch=''):
 def showLink():
     oGui = Gui()
 
-    oInputParameterHandler = InputParameterHandler()
-    sUrl = oInputParameterHandler.getValue('siteUrl')
-    sThumb = oInputParameterHandler.getValue('sThumb')
-    sMovieTitle = oInputParameterHandler.getValue('sMovieTitle')
+    input_parameter_handler = InputParameterHandler()
+    sUrl = input_parameter_handler.getValue('siteUrl')
+    sThumb = input_parameter_handler.getValue('sThumb')
+    sMovieTitle = input_parameter_handler.getValue('sMovieTitle')
 
     oRequestHandler = RequestHandler(sUrl)
     sHtmlContent = oRequestHandler.request()

@@ -34,21 +34,21 @@ SPORT_SPORTS = (True, 'load')
 
 def load():
     oGui = Gui()
-    oOutputParameterHandler = OutputParameterHandler()
+    output_parameter_handler = OutputParameterHandler()
 
-    oOutputParameterHandler.addParameter('siteUrl', SPORT_GENRES[0])
-    oGui.addDir(SITE_IDENTIFIER, SPORT_GENRES[1], 'Les sports (Genres)', 'genres.png', oOutputParameterHandler)
+    output_parameter_handler.addParameter('siteUrl', SPORT_GENRES[0])
+    oGui.addDir(SITE_IDENTIFIER, SPORT_GENRES[1], 'Les sports (Genres)', 'genres.png', output_parameter_handler)
 
-    oOutputParameterHandler.addParameter('siteUrl', SPORT_LIVE[0])
-    oGui.addDir(SITE_IDENTIFIER, SPORT_LIVE[1], 'Les sports (En direct)', 'news.png', oOutputParameterHandler)
+    output_parameter_handler.addParameter('siteUrl', SPORT_LIVE[0])
+    oGui.addDir(SITE_IDENTIFIER, SPORT_LIVE[1], 'Les sports (En direct)', 'news.png', output_parameter_handler)
 
     oGui.setEndOfDirectory()
 
 
 def showLive():
     oGui = Gui()
-    oInputParameterHandler = InputParameterHandler()
-    sUrl = oInputParameterHandler.getValue('siteUrl')
+    input_parameter_handler = InputParameterHandler()
+    sUrl = input_parameter_handler.getValue('siteUrl')
 
     oRequestHandler = RequestHandler(sUrl)
     sHtmlContent = oRequestHandler.request()
@@ -63,7 +63,7 @@ def showLive():
     if aResult[0]:
         total = len(aResult[1])
         progress_ = progress().VScreate(SITE_NAME)
-        oOutputParameterHandler = OutputParameterHandler()
+        output_parameter_handler = OutputParameterHandler()
         for aEntry in aResult[1]:
             progress_.VSupdate(progress_, total)
             if progress_.iscanceled():
@@ -83,9 +83,9 @@ def showLive():
             except BaseException:
                 pass
 
-            oOutputParameterHandler.addParameter('siteUrl3', sUrl3)
-            oOutputParameterHandler.addParameter('sMovieTitle2', sTitle2)
-            oGui.addDir(SITE_IDENTIFIER, 'showMovies3', sTitle2, 'sport.png', oOutputParameterHandler)
+            output_parameter_handler.addParameter('siteUrl3', sUrl3)
+            output_parameter_handler.addParameter('sMovieTitle2', sTitle2)
+            oGui.addDir(SITE_IDENTIFIER, 'showMovies3', sTitle2, 'sport.png', output_parameter_handler)
 
         progress_.VSclose(progress_)
 
@@ -95,8 +95,8 @@ def showLive():
 def showMovies():  # affiche les catégories qui ont des lives'
     oGui = Gui()
 
-    oInputParameterHandler = InputParameterHandler()
-    sUrl = oInputParameterHandler.getValue('siteUrl')
+    input_parameter_handler = InputParameterHandler()
+    sUrl = input_parameter_handler.getValue('siteUrl')
 
     oRequestHandler = RequestHandler(sUrl)
     sHtmlContent = oRequestHandler.request()
@@ -107,7 +107,7 @@ def showMovies():  # affiche les catégories qui ont des lives'
     if not aResult[0]:
         oGui.addText(SITE_IDENTIFIER)
     else:
-        oOutputParameterHandler = OutputParameterHandler()
+        output_parameter_handler = OutputParameterHandler()
         for aEntry in aResult[1]:
             sUrl2 = URL_MAIN + aEntry[0]
             sTitle = aEntry[1]
@@ -124,9 +124,9 @@ def showMovies():  # affiche les catégories qui ont des lives'
             except BaseException:
                 pass
 
-            oOutputParameterHandler.addParameter('siteUrl2', sUrl2)
-            oOutputParameterHandler.addParameter('sMovieTitle', sTitle)
-            oGui.addDir(SITE_IDENTIFIER, 'showMovies2', sTitle, 'genres.png', oOutputParameterHandler)
+            output_parameter_handler.addParameter('siteUrl2', sUrl2)
+            output_parameter_handler.addParameter('sMovieTitle', sTitle)
+            oGui.addDir(SITE_IDENTIFIER, 'showMovies2', sTitle, 'genres.png', output_parameter_handler)
 
         oGui.setEndOfDirectory()
 
@@ -134,8 +134,8 @@ def showMovies():  # affiche les catégories qui ont des lives'
 def showMovies2():  # affiche les matchs en direct depuis la section showMovie
 
     oGui = Gui()
-    oInputParameterHandler = InputParameterHandler()
-    sUrl2 = oInputParameterHandler.getValue('siteUrl2')
+    input_parameter_handler = InputParameterHandler()
+    sUrl2 = input_parameter_handler.getValue('siteUrl2')
 
     oRequestHandler = RequestHandler(sUrl2)
     sHtmlContent = oRequestHandler.request()
@@ -163,7 +163,7 @@ def showMovies2():  # affiche les matchs en direct depuis la section showMovie
             'décembre']
         total = len(aResult[1])
         progress_ = progress().VScreate(SITE_NAME, large=True)
-        oOutputParameterHandler = OutputParameterHandler()
+        output_parameter_handler = OutputParameterHandler()
         for aEntry in aResult[1]:
             progress_.VSupdate(progress_, total)
             if progress_.iscanceled():
@@ -209,10 +209,10 @@ def showMovies2():  # affiche les matchs en direct depuis la section showMovie
             sTitle2 = ('%s - %s [COLOR yellow]%s[/COLOR]') % (sDate, sTitle2, sQual)
             sDisplayTitle = sTitle2 + taglive
 
-            oOutputParameterHandler.addParameter('siteUrl3', sUrl3)
-            oOutputParameterHandler.addParameter('sMovieTitle2', sTitle2)
-            oOutputParameterHandler.addParameter('sThumb', sThumb)
-            oGui.addDir(SITE_IDENTIFIER, 'showMovies3', sDisplayTitle, 'sport.png', oOutputParameterHandler)
+            output_parameter_handler.addParameter('siteUrl3', sUrl3)
+            output_parameter_handler.addParameter('sMovieTitle2', sTitle2)
+            output_parameter_handler.addParameter('sThumb', sThumb)
+            oGui.addDir(SITE_IDENTIFIER, 'showMovies3', sDisplayTitle, 'sport.png', output_parameter_handler)
 
         progress_.VSclose(progress_)
 
@@ -221,12 +221,12 @@ def showMovies2():  # affiche les matchs en direct depuis la section showMovie
 
 def showMovies3():  # affiche les videos disponible du live
     oGui = Gui()
-    oInputParameterHandler = InputParameterHandler()
-    sUrl3 = oInputParameterHandler.getValue('siteUrl3')
+    input_parameter_handler = InputParameterHandler()
+    sUrl3 = input_parameter_handler.getValue('siteUrl3')
 
     oRequestHandler = RequestHandler(sUrl3)
     sHtmlContent = oRequestHandler.request()
-    sMovieTitle2 = oInputParameterHandler.getValue('sMovieTitle2')
+    sMovieTitle2 = input_parameter_handler.getValue('sMovieTitle2')
 
     sPattern = '<td width=16><img title="(.*?)".+?<a title=".+?" *href="(.+?)"'
     oParser = cParser()
@@ -239,7 +239,7 @@ def showMovies3():  # affiche les videos disponible du live
     if aResult[0]:
         total = len(aResult[1])
         progress_ = progress().VScreate(SITE_NAME)
-        oOutputParameterHandler = OutputParameterHandler()
+        output_parameter_handler = OutputParameterHandler()
         for aEntry in aResult[1]:
             progress_.VSupdate(progress_, total)
             if progress_.iscanceled():
@@ -259,10 +259,10 @@ def showMovies3():  # affiche les videos disponible du live
             sTitle = ('%s (%s)') % (sMovieTitle2, sLang[:4])
             sThumb = ''
 
-            oOutputParameterHandler.addParameter('siteUrl4', sUrl4)
-            oOutputParameterHandler.addParameter('sMovieTitle2', sTitle)
-            oOutputParameterHandler.addParameter('sThumb', sThumb)
-            oGui.addDir(SITE_IDENTIFIER, 'showHosters', sTitle, 'sport.png', oOutputParameterHandler)
+            output_parameter_handler.addParameter('siteUrl4', sUrl4)
+            output_parameter_handler.addParameter('sMovieTitle2', sTitle)
+            output_parameter_handler.addParameter('sThumb', sThumb)
+            oGui.addDir(SITE_IDENTIFIER, 'showHosters', sTitle, 'sport.png', output_parameter_handler)
 
         progress_.VSclose(progress_)
 
@@ -272,10 +272,10 @@ def showMovies3():  # affiche les videos disponible du live
 def showHosters():  # affiche les videos disponible du live
     oGui = Gui()
     UA = 'Mozilla/5.0 (Windows NT 6.1; Win64; x64; rv:56.0) Gecko/20100101 Firefox/56.0'
-    oInputParameterHandler = InputParameterHandler()
-    sUrl4 = oInputParameterHandler.getValue('siteUrl4')
-    sMovieTitle2 = oInputParameterHandler.getValue('sMovieTitle2')
-    sThumb = oInputParameterHandler.getValue('sThumb')
+    input_parameter_handler = InputParameterHandler()
+    sUrl4 = input_parameter_handler.getValue('siteUrl4')
+    sMovieTitle2 = input_parameter_handler.getValue('sMovieTitle2')
+    sThumb = input_parameter_handler.getValue('sThumb')
 
     oRequestHandler = RequestHandler(sUrl4)
     sHtmlContent = oRequestHandler.request()

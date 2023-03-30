@@ -32,28 +32,28 @@ REPLAYTV_INVESTIGATION = (URL_MAIN + 'category/emissions-tv/reportages-investiga
 def load():
     oGui = Gui()
 
-    oOutputParameterHandler = OutputParameterHandler()
-    oOutputParameterHandler.addParameter('siteUrl', 'http://venom/')
-    oGui.addDir(SITE_IDENTIFIER, 'showSearch', 'Recherche', 'search.png', oOutputParameterHandler)
+    output_parameter_handler = OutputParameterHandler()
+    output_parameter_handler.addParameter('siteUrl', 'http://venom/')
+    oGui.addDir(SITE_IDENTIFIER, 'showSearch', 'Recherche', 'search.png', output_parameter_handler)
 
-    oOutputParameterHandler.addParameter('siteUrl', REPLAYTV_NEWS[0])
-    oGui.addDir(SITE_IDENTIFIER, REPLAYTV_NEWS[1], 'Toutes les emissions', 'news.png', oOutputParameterHandler)
+    output_parameter_handler.addParameter('siteUrl', REPLAYTV_NEWS[0])
+    oGui.addDir(SITE_IDENTIFIER, REPLAYTV_NEWS[1], 'Toutes les emissions', 'news.png', output_parameter_handler)
 
-    oOutputParameterHandler.addParameter('siteUrl', REPLAYTV_DIVERTISSEMENT[0])
+    output_parameter_handler.addParameter('siteUrl', REPLAYTV_DIVERTISSEMENT[0])
     oGui.addDir(
         SITE_IDENTIFIER,
         REPLAYTV_DIVERTISSEMENT[1],
         'Emissions de Divertissements/Téléréalité',
         'tv.png',
-        oOutputParameterHandler)
+        output_parameter_handler)
 
-    oOutputParameterHandler.addParameter('siteUrl', REPLAYTV_INVESTIGATION[0])
+    output_parameter_handler.addParameter('siteUrl', REPLAYTV_INVESTIGATION[0])
     oGui.addDir(
         SITE_IDENTIFIER,
         REPLAYTV_INVESTIGATION[1],
         'Emissions de Reportages/Investigations',
         'tv.png',
-        oOutputParameterHandler)
+        output_parameter_handler)
 
     oGui.setEndOfDirectory()
 
@@ -78,8 +78,8 @@ def showMovies(sSearch=''):
         sUrl = sSearch.replace(' ', '+')
         sPattern = '<h1 class="title"><a href="([^"]+)" title="([^"]+)">.+?<p>.+?Synopsis :([^"]+)</p>'
     else:
-        oInputParameterHandler = InputParameterHandler()
-        sUrl = oInputParameterHandler.getValue('siteUrl')
+        input_parameter_handler = InputParameterHandler()
+        sUrl = input_parameter_handler.getValue('siteUrl')
         sPattern = '<h1 class="title"><a href="([^"]+)" title="([^"]+).+?<img.+?class="alignleft.+?src="([^"]+).+?Synopsis :(.+?)</p>'
 
     oRequestHandler = RequestHandler(sUrl)
@@ -92,7 +92,7 @@ def showMovies(sSearch=''):
         oGui.addText(SITE_IDENTIFIER)
 
     if aResult[0]:
-        oOutputParameterHandler = OutputParameterHandler()
+        output_parameter_handler = OutputParameterHandler()
         for aEntry in aResult[1]:
             if sSearch:
                 sUrl2 = aEntry[0]
@@ -107,18 +107,18 @@ def showMovies(sSearch=''):
                 sThumb = aEntry[2]
                 sDesc = aEntry[3].replace('</strong>', '')
 
-            oOutputParameterHandler.addParameter('siteUrl', sUrl2)
-            oOutputParameterHandler.addParameter('sMovieTitle', sTitle)
-            oOutputParameterHandler.addParameter('sThumb', sThumb)
+            output_parameter_handler.addParameter('siteUrl', sUrl2)
+            output_parameter_handler.addParameter('sMovieTitle', sTitle)
+            output_parameter_handler.addParameter('sThumb', sThumb)
 
-            oGui.addMisc(SITE_IDENTIFIER, 'showHosters', sTitle, '', sThumb, sDesc, oOutputParameterHandler)
+            oGui.addMisc(SITE_IDENTIFIER, 'showHosters', sTitle, '', sThumb, sDesc, output_parameter_handler)
 
     if not sSearch:
         sNextPage, sPaging = __checkForNextPage(sHtmlContent)
         if sNextPage:
-            oOutputParameterHandler = OutputParameterHandler()
-            oOutputParameterHandler.addParameter('siteUrl', sNextPage)
-            oGui.addNext(SITE_IDENTIFIER, 'showMovies', 'Page ' + sPaging, oOutputParameterHandler)
+            output_parameter_handler = OutputParameterHandler()
+            output_parameter_handler.addParameter('siteUrl', sNextPage)
+            oGui.addNext(SITE_IDENTIFIER, 'showMovies', 'Page ' + sPaging, output_parameter_handler)
 
         oGui.setEndOfDirectory()
 
@@ -140,10 +140,10 @@ def __checkForNextPage(sHtmlContent):
 
 def showHosters():
     oGui = Gui()
-    oInputParameterHandler = InputParameterHandler()
-    sUrl = oInputParameterHandler.getValue('siteUrl')
-    sMovieTitle = oInputParameterHandler.getValue('sMovieTitle')
-    sThumb = oInputParameterHandler.getValue('sThumb')
+    input_parameter_handler = InputParameterHandler()
+    sUrl = input_parameter_handler.getValue('siteUrl')
+    sMovieTitle = input_parameter_handler.getValue('sMovieTitle')
+    sThumb = input_parameter_handler.getValue('sThumb')
 
     oRequestHandler = RequestHandler(sUrl)
     sHtmlContent = GetAllLink(oRequestHandler.request())

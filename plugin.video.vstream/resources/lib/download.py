@@ -341,15 +341,15 @@ class cDownload:
         xbmcplugin.addDirectoryItem(sPluginHandle, sItemUrl, item, isFolder=False)
 
         oGui = Gui()
-        oOutputParameterHandler = OutputParameterHandler()
-        oGui.addDir(SITE_IDENTIFIER, 'StopDownloadList', self.ADDON.VSlang(30025), 'none.png', oOutputParameterHandler)
-        oGui.addDir(SITE_IDENTIFIER, 'getDownloadList', self.ADDON.VSlang(30039), 'listes.png', oOutputParameterHandler)
+        output_parameter_handler = OutputParameterHandler()
+        oGui.addDir(SITE_IDENTIFIER, 'StopDownloadList', self.ADDON.VSlang(30025), 'none.png', output_parameter_handler)
+        oGui.addDir(SITE_IDENTIFIER, 'getDownloadList', self.ADDON.VSlang(30039), 'listes.png', output_parameter_handler)
         oGui.addDir(
             SITE_IDENTIFIER,
             'CleanDownloadList',
             self.ADDON.VSlang(30040),
             'trash.png',
-            oOutputParameterHandler)
+            output_parameter_handler)
         oGui.setEndOfDirectory()
 
     def CleanDownloadList(self):
@@ -375,8 +375,8 @@ class cDownload:
         return self.StartDownload(meta)
 
     def ResetDownload(self):
-        oInputParameterHandler = InputParameterHandler()
-        url = oInputParameterHandler.getValue('sUrl')
+        input_parameter_handler = InputParameterHandler()
+        url = input_parameter_handler.getValue('sUrl')
         meta = {}
         meta['url'] = url
 
@@ -391,9 +391,9 @@ class cDownload:
         return
 
     def ReadDownload(self):
-        oInputParameterHandler = InputParameterHandler()
-        path = oInputParameterHandler.getValue('sPath')
-        sTitle = oInputParameterHandler.getValue('sMovieTitle')
+        input_parameter_handler = InputParameterHandler()
+        path = input_parameter_handler.getValue('sPath')
+        sTitle = input_parameter_handler.getValue('sMovieTitle')
 
         oGuiElement = GuiElement()
         oGuiElement.setSiteName(SITE_IDENTIFIER)
@@ -406,8 +406,8 @@ class cDownload:
         oPlayer.startPlayer()
 
     def DelFile(self):
-        oInputParameterHandler = InputParameterHandler()
-        path = oInputParameterHandler.getValue('sPath')
+        input_parameter_handler = InputParameterHandler()
+        path = input_parameter_handler.getValue('sPath')
 
         oDialog = self.DIALOG.VSyesno(self.ADDON.VSlang(30074))
         if (oDialog == 1):
@@ -438,8 +438,8 @@ class cDownload:
         return None
 
     def GetOnefile(self):
-        oInputParameterHandler = InputParameterHandler()
-        url = oInputParameterHandler.getValue('sUrl')
+        input_parameter_handler = InputParameterHandler()
+        url = input_parameter_handler.getValue('sUrl')
 
         meta = {}
         meta['url'] = url
@@ -489,7 +489,7 @@ class cDownload:
         with Db() as db:
             row = db.get_download()
 
-        oOutputParameterHandler = OutputParameterHandler()
+        output_parameter_handler = OutputParameterHandler()
         for data in row:
 
             title = data[1]
@@ -508,11 +508,11 @@ class cDownload:
             totalsize = data[7]
             status = data[8]
 
-            oOutputParameterHandler.addParameter('sUrl', url)
-            oOutputParameterHandler.addParameter('sMovieTitle', title)
-            oOutputParameterHandler.addParameter('sThumbnail', thumbnail)
-            oOutputParameterHandler.addParameter('sPath', path)
-            oOutputParameterHandler.addParameter('sStatus', status)
+            output_parameter_handler.addParameter('sUrl', url)
+            output_parameter_handler.addParameter('sMovieTitle', title)
+            output_parameter_handler.addParameter('sThumbnail', thumbnail)
+            output_parameter_handler.addParameter('sPath', path)
+            output_parameter_handler.addParameter('sStatus', status)
 
             if status == '0':
                 sStatus = ''
@@ -549,17 +549,17 @@ class cDownload:
             oGuiElement.setMeta(0)
             oGuiElement.setThumbnail(thumbnail)
 
-            oGui.createContexMenuDownload(oGuiElement, oOutputParameterHandler, status)
+            oGui.createContexMenuDownload(oGuiElement, output_parameter_handler, status)
 
-            oGui.addFolder(oGuiElement, oOutputParameterHandler)
+            oGui.addFolder(oGuiElement, output_parameter_handler)
 
         oGui.setEndOfDirectory()
 
         return
 
     def delDownload(self):
-        oInputParameterHandler = InputParameterHandler()
-        url = oInputParameterHandler.getValue('sUrl')
+        input_parameter_handler = InputParameterHandler()
+        url = input_parameter_handler.getValue('sUrl')
         meta = {}
         meta['url'] = url
         meta['path'] = ''
@@ -627,13 +627,13 @@ class cDownload:
         return False
 
     def AddtoDownloadList(self):
-        oInputParameterHandler = InputParameterHandler()
-        sMediaUrl = oInputParameterHandler.getValue('sMediaUrl')
-        sFileName = oInputParameterHandler.getValue('sFileName')
+        input_parameter_handler = InputParameterHandler()
+        sMediaUrl = input_parameter_handler.getValue('sMediaUrl')
+        sFileName = input_parameter_handler.getValue('sFileName')
 
         meta = {}
         meta['url'] = sMediaUrl
-        meta['cat'] = oInputParameterHandler.getValue('sCat')
+        meta['cat'] = input_parameter_handler.getValue('sCat')
         meta['title'] = sFileName
         meta['icon'] = xbmc.getInfoLabel('ListItem.Art(thumb)')
 
@@ -651,13 +651,13 @@ class cDownload:
         return
 
     def AddtoDownloadListandview(self):
-        oInputParameterHandler = InputParameterHandler()
-        sMediaUrl = oInputParameterHandler.getValue('sMediaUrl')
-        sFileName = oInputParameterHandler.getValue('sFileName')
+        input_parameter_handler = InputParameterHandler()
+        sMediaUrl = input_parameter_handler.getValue('sMediaUrl')
+        sFileName = input_parameter_handler.getValue('sFileName')
 
         meta = {}
         meta['url'] = sMediaUrl
-        meta['cat'] = oInputParameterHandler.getValue('sCat')
+        meta['cat'] = input_parameter_handler.getValue('sCat')
         meta['title'] = sFileName
         meta['icon'] = xbmc.getInfoLabel('ListItem.Art(thumb)')
 

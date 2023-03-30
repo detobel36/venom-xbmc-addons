@@ -97,22 +97,22 @@ def _DecryptProtectStream(url):
 def load():  # function charger automatiquement par l'addon l'index de votre navigation.
     oGui = Gui()  # ouvre l'affichage
 
-    oOutputParameterHandler = OutputParameterHandler()  # apelle la function pour sortir un parametre
+    output_parameter_handler = OutputParameterHandler()  # apelle la function pour sortir un parametre
     # sortis du parametres siteUrl oublier pas la Majuscule
-    oOutputParameterHandler.addParameter('siteUrl', 'http://venom/')
-    oGui.addDir(SITE_IDENTIFIER, 'showSearch', 'Recherche', 'search.png', oOutputParameterHandler)
+    output_parameter_handler.addParameter('siteUrl', 'http://venom/')
+    oGui.addDir(SITE_IDENTIFIER, 'showSearch', 'Recherche', 'search.png', output_parameter_handler)
 
-    oOutputParameterHandler = OutputParameterHandler()
-    oOutputParameterHandler.addParameter('siteUrl', SERIE_SERIES[0])
-    oGui.addDir(SITE_IDENTIFIER, SERIE_SERIES[1], 'Liste Series', 'series.png', oOutputParameterHandler)
+    output_parameter_handler = OutputParameterHandler()
+    output_parameter_handler.addParameter('siteUrl', SERIE_SERIES[0])
+    oGui.addDir(SITE_IDENTIFIER, SERIE_SERIES[1], 'Liste Series', 'series.png', output_parameter_handler)
 
-    oOutputParameterHandler = OutputParameterHandler()
-    oOutputParameterHandler.addParameter('siteUrl', ANIM_ANIMS[0])
-    oGui.addDir(SITE_IDENTIFIER, ANIM_ANIMS[1], 'Liste Animes', 'series.png', oOutputParameterHandler)
+    output_parameter_handler = OutputParameterHandler()
+    output_parameter_handler.addParameter('siteUrl', ANIM_ANIMS[0])
+    oGui.addDir(SITE_IDENTIFIER, ANIM_ANIMS[1], 'Liste Animes', 'series.png', output_parameter_handler)
 
-    oOutputParameterHandler = OutputParameterHandler()
-    oOutputParameterHandler.addParameter('siteUrl', MOVIE_NEWS[0])
-    oGui.addDir(SITE_IDENTIFIER, MOVIE_NEWS[1], 'Liste Films', 'series.png', oOutputParameterHandler)
+    output_parameter_handler = OutputParameterHandler()
+    output_parameter_handler.addParameter('siteUrl', MOVIE_NEWS[0])
+    oGui.addDir(SITE_IDENTIFIER, MOVIE_NEWS[1], 'Liste Films', 'series.png', output_parameter_handler)
 
     oGui.setEndOfDirectory()  # ferme l'affichage
 
@@ -130,10 +130,10 @@ def showSearch():
 def showAlpha(sLettre=''):
     oGui = Gui()
 
-    oInputParameterHandler = InputParameterHandler()
-    sUrl = oInputParameterHandler.getValue('siteUrl')
-    sTitle = oInputParameterHandler.getValue('sMovieTitle')
-    sLettre = oInputParameterHandler.getValue('sLettre')
+    input_parameter_handler = InputParameterHandler()
+    sUrl = input_parameter_handler.getValue('siteUrl')
+    sTitle = input_parameter_handler.getValue('sMovieTitle')
+    sLettre = input_parameter_handler.getValue('sLettre')
 
     dialog = cConfig().createDialog(SITE_NAME)
 
@@ -147,10 +147,10 @@ def showAlpha(sLettre=''):
             if sTitle == '@':
                 sTitle = '[0-9]'
 
-            oOutputParameterHandler = OutputParameterHandler()
-            oOutputParameterHandler.addParameter('sMovieTitle', sTitle)
-            oOutputParameterHandler.addParameter('sLettre', sTitle)
-            oOutputParameterHandler.addParameter('siteUrl', sUrl)
+            output_parameter_handler = OutputParameterHandler()
+            output_parameter_handler.addParameter('sMovieTitle', sTitle)
+            output_parameter_handler.addParameter('sLettre', sTitle)
+            output_parameter_handler.addParameter('siteUrl', sUrl)
             oGui.addTV(
                 SITE_IDENTIFIER,
                 'showAlpha',
@@ -160,7 +160,7 @@ def showAlpha(sLettre=''):
                 '',
                 '',
                 '',
-                oOutputParameterHandler)
+                output_parameter_handler)
     else:
 
         oRequestHandler = RequestHandler(sUrl)
@@ -187,10 +187,10 @@ def showAlpha(sLettre=''):
                 sTitle = unicodedata.normalize('NFD', sTitle).encode('ascii', 'ignore')
                 sTitle = unescape(sTitle)
 
-                oOutputParameterHandler = OutputParameterHandler()
-                oOutputParameterHandler.addParameter('siteUrl', str(URL_MAIN) + '/' + str(aEntry[0]))
-                oOutputParameterHandler.addParameter('sMovieTitle', sTitle)
-                oGui.addTV(SITE_IDENTIFIER, 'showEpisode', sTitle, '', '', '', oOutputParameterHandler)
+                output_parameter_handler = OutputParameterHandler()
+                output_parameter_handler.addParameter('siteUrl', str(URL_MAIN) + '/' + str(aEntry[0]))
+                output_parameter_handler.addParameter('sMovieTitle', sTitle)
+                oGui.addTV(SITE_IDENTIFIER, 'showEpisode', sTitle, '', '', '', output_parameter_handler)
 
     cConfig().finishDialog(dialog)
 
@@ -200,13 +200,13 @@ def showAlpha(sLettre=''):
 def showMovies(sSearch=''):
     oGui = Gui()
 
-    oInputParameterHandler = InputParameterHandler()
+    input_parameter_handler = InputParameterHandler()
 
     if sSearch:
         # on redecode la recherhce codé il y a meme pas une seconde par l'addon
         sSearch = urllib2.unquote(sSearch)
 
-        sDisp = oInputParameterHandler.getValue('disp')
+        sDisp = input_parameter_handler.getValue('disp')
         # print sSearch
 
         if (sDisp == 'search3'):  # anime
@@ -237,7 +237,7 @@ def showMovies(sSearch=''):
 
     else:
 
-        sUrl = oInputParameterHandler.getValue('siteUrl')
+        sUrl = input_parameter_handler.getValue('siteUrl')
 
         oRequestHandler = RequestHandler(sUrl)
         sHtmlContent = oRequestHandler.request()
@@ -284,29 +284,29 @@ def showMovies(sSearch=''):
             sCom = unescape(sCom)  # decode html
             sCom = re.sub('<.*?>', '', sCom)  # remove html tags
 
-            oOutputParameterHandler = OutputParameterHandler()
-            oOutputParameterHandler.addParameter('siteUrl', sUrl2)
-            oOutputParameterHandler.addParameter('sMovieTitle', str(sTitle))
-            oOutputParameterHandler.addParameter('sThumbnail', sThumb)
+            output_parameter_handler = OutputParameterHandler()
+            output_parameter_handler.addParameter('siteUrl', sUrl2)
+            output_parameter_handler.addParameter('sMovieTitle', str(sTitle))
+            output_parameter_handler.addParameter('sThumbnail', sThumb)
 
             if ('-episode-' in sUrl2):
-                oGui.addTV(SITE_IDENTIFIER, 'showEpisode', sTitle, '', sThumb, sCom, oOutputParameterHandler)
+                oGui.addTV(SITE_IDENTIFIER, 'showEpisode', sTitle, '', sThumb, sCom, output_parameter_handler)
             else:
-                oGui.addTV(SITE_IDENTIFIER, 'showListHosters', sTitle, '', sThumb, sCom, oOutputParameterHandler)
+                oGui.addTV(SITE_IDENTIFIER, 'showListHosters', sTitle, '', sThumb, sCom, output_parameter_handler)
 
         cConfig().finishDialog(dialog)
 
         sNextPage = __checkForNextPage(sHtmlContent)
         if (sNextPage):
             # print sNextPage
-            oOutputParameterHandler = OutputParameterHandler()
-            oOutputParameterHandler.addParameter('siteUrl', str(URL_MAIN) + sNextPage)
+            output_parameter_handler = OutputParameterHandler()
+            output_parameter_handler.addParameter('siteUrl', str(URL_MAIN) + sNextPage)
             oGui.addDir(
                 SITE_IDENTIFIER,
                 'showMovies',
                 '[COLOR teal]Next >>>[/COLOR]',
                 'next.png',
-                oOutputParameterHandler)
+                output_parameter_handler)
 
     if not sSearch:
         oGui.setEndOfDirectory()
@@ -325,10 +325,10 @@ def __checkForNextPage(sHtmlContent):
 def showEpisode():
     oGui = Gui()  # ouvre l'affichage
 
-    oInputParameterHandler = InputParameterHandler()
-    sUrl = oInputParameterHandler.getValue('siteUrl')
-    sTitle = oInputParameterHandler.getValue('sMovieTitle')
-    sThumbnail = oInputParameterHandler.getValue('sThumbnail')
+    input_parameter_handler = InputParameterHandler()
+    sUrl = input_parameter_handler.getValue('siteUrl')
+    sTitle = input_parameter_handler.getValue('sMovieTitle')
+    sThumbnail = input_parameter_handler.getValue('sThumbnail')
 
     # print sUrl
 
@@ -392,9 +392,9 @@ def showEpisode():
             sTitle = sTitle.encode('ascii', 'ignore').decode('ascii')
 
             if aEntry[0]:
-                oOutputParameterHandler = OutputParameterHandler()
-                oOutputParameterHandler.addParameter('siteUrl', sUrl)
-                oOutputParameterHandler.addParameter('sMovieTitle', str(sTitle))
+                output_parameter_handler = OutputParameterHandler()
+                output_parameter_handler.addParameter('siteUrl', sUrl)
+                output_parameter_handler.addParameter('sMovieTitle', str(sTitle))
 
                 oGui.addTV(
                     SITE_IDENTIFIER,
@@ -405,14 +405,14 @@ def showEpisode():
                     '',
                     sThumbnail,
                     '',
-                    oOutputParameterHandler)
+                    output_parameter_handler)
             else:
-                oOutputParameterHandler = OutputParameterHandler()
-                oOutputParameterHandler.addParameter('siteUrl', str(URL_MAIN) + '/' + aEntry[1])
-                oOutputParameterHandler.addParameter('sMovieTitle', str(sTitle))
-                oOutputParameterHandler.addParameter('sThumbnail', sThumbnail)
+                output_parameter_handler = OutputParameterHandler()
+                output_parameter_handler.addParameter('siteUrl', str(URL_MAIN) + '/' + aEntry[1])
+                output_parameter_handler.addParameter('sMovieTitle', str(sTitle))
+                output_parameter_handler.addParameter('sThumbnail', sThumbnail)
 
-                oGui.addTV(SITE_IDENTIFIER, 'showListHosters', sTitle, '', sThumbnail, sCom, oOutputParameterHandler)
+                oGui.addTV(SITE_IDENTIFIER, 'showListHosters', sTitle, '', sThumbnail, sCom, output_parameter_handler)
 
         cConfig().finishDialog(dialog)
 
@@ -422,10 +422,10 @@ def showEpisode():
 def showListHosters():
     oGui = Gui()  # ouvre l'affichage
 
-    oInputParameterHandler = InputParameterHandler()
-    sUrl = oInputParameterHandler.getValue('siteUrl')
-    sTitle = oInputParameterHandler.getValue('sMovieTitle')
-    sThumbnail = oInputParameterHandler.getValue('sThumbnail')
+    input_parameter_handler = InputParameterHandler()
+    sUrl = input_parameter_handler.getValue('siteUrl')
+    sTitle = input_parameter_handler.getValue('sMovieTitle')
+    sThumbnail = input_parameter_handler.getValue('sThumbnail')
 
     print sUrl
 
@@ -464,9 +464,9 @@ def showListHosters():
                 sHost = str(aEntry[4])
                 sUrl = 'http://www.protect-stream.com/PS_DL_' + str(aEntry[3])
 
-            oOutputParameterHandler = OutputParameterHandler()
-            oOutputParameterHandler.addParameter('siteUrl', sUrl)
-            oOutputParameterHandler.addParameter('sMovieTitle', str(sTitle))
+            output_parameter_handler = OutputParameterHandler()
+            output_parameter_handler.addParameter('siteUrl', sUrl)
+            output_parameter_handler.addParameter('sMovieTitle', str(sTitle))
 
             oGui.addTV(
                 SITE_IDENTIFIER,
@@ -475,7 +475,7 @@ def showListHosters():
                 '',
                 sThumbnail,
                 '',
-                oOutputParameterHandler)
+                output_parameter_handler)
 
         cConfig().finishDialog(dialog)  # dialog
 
@@ -485,10 +485,10 @@ def showListHosters():
 def showHosters():
     oGui = Gui()
 
-    oInputParameterHandler = InputParameterHandler()
-    sUrl = oInputParameterHandler.getValue('siteUrl')
-    sMovieTitle = oInputParameterHandler.getValue('sMovieTitle')
-    sThumbnail = oInputParameterHandler.getValue('sThumbnail')
+    input_parameter_handler = InputParameterHandler()
+    sUrl = input_parameter_handler.getValue('siteUrl')
+    sMovieTitle = input_parameter_handler.getValue('sMovieTitle')
+    sThumbnail = input_parameter_handler.getValue('sThumbnail')
 
     # on decrypte le seul lien present
     cConfig().showInfo('Decryptage', 'Please wait 10s')

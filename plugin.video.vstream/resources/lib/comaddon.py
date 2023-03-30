@@ -340,14 +340,14 @@ class listitem(xbmcgui.ListItem):
         pass
 
     # Permet l'ajout d'un menu après la création d'un item
-    def addMenu(self, sFile, sFunction, sTitle, oOutputParameterHandler=False):
+    def addMenu(self, sFile, sFunction, sTitle, output_parameter_handler=False):
         sPluginPath = 'plugin://plugin.video.vstream/'  # cPluginHandler().getPluginPath()
         nbContextMenu = self.getProperty('nbcontextmenu')
         nbContextMenu = int(nbContextMenu) if nbContextMenu else 0
 
         sUrl = '%s?site=%s&function=%s' % (sPluginPath, sFile, sFunction)
-        if oOutputParameterHandler:
-            sUrl += '&%s' % oOutputParameterHandler.getParameterAsUri()
+        if output_parameter_handler:
+            sUrl += '&%s' % output_parameter_handler.getParameterAsUri()
 
         property = 'contextmenulabel(%d)' % nbContextMenu
         self.setProperty(property, sTitle)

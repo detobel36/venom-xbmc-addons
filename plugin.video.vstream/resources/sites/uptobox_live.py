@@ -28,20 +28,20 @@ SERIE_SERIES = ('series', 'load')
 
 def load():
     oGui = Gui()
-    oOutputParameterHandler = OutputParameterHandler()
+    output_parameter_handler = OutputParameterHandler()
 
-    oInputParameterHandler = InputParameterHandler()
-    sUrl = oInputParameterHandler.getValue('siteUrl')
+    input_parameter_handler = InputParameterHandler()
+    sUrl = input_parameter_handler.getValue('siteUrl')
 
     if 'series' not in sUrl:
-        oOutputParameterHandler.addParameter('siteUrl', URL_SEARCH_MOVIES[0])
-        oOutputParameterHandler.addParameter('sMovieTitle', 'movie')
-        oGui.addDir(SITE_IDENTIFIER, 'showSearch', 'Recherche (Films)', 'search.png', oOutputParameterHandler)
+        output_parameter_handler.addParameter('siteUrl', URL_SEARCH_MOVIES[0])
+        output_parameter_handler.addParameter('sMovieTitle', 'movie')
+        oGui.addDir(SITE_IDENTIFIER, 'showSearch', 'Recherche (Films)', 'search.png', output_parameter_handler)
 
     if 'films' not in sUrl:
-        oOutputParameterHandler.addParameter('siteUrl', URL_SEARCH_SERIES[0])
-        oOutputParameterHandler.addParameter('sMovieTitle', 'tv')
-        oGui.addDir(SITE_IDENTIFIER, 'showSearch', 'Recherche (Séries)', 'search.png', oOutputParameterHandler)
+        output_parameter_handler.addParameter('siteUrl', URL_SEARCH_SERIES[0])
+        output_parameter_handler.addParameter('sMovieTitle', 'tv')
+        oGui.addDir(SITE_IDENTIFIER, 'showSearch', 'Recherche (Séries)', 'search.png', output_parameter_handler)
 
     oGui.setEndOfDirectory()
 
@@ -53,9 +53,9 @@ def opensetting():
 def showSearch(path='//'):
     oGui = Gui()
 
-    oInputParameterHandler = InputParameterHandler()
-    sUrl = oInputParameterHandler.getValue('siteUrl')
-    sTitle = oInputParameterHandler.getValue('sMovieTitle')
+    input_parameter_handler = InputParameterHandler()
+    sUrl = input_parameter_handler.getValue('siteUrl')
+    sTitle = input_parameter_handler.getValue('sMovieTitle')
 
     sSearchText = oGui.showKeyBoard()
     if sSearchText:
@@ -69,7 +69,7 @@ def showSearch(path='//'):
 
 def getAuthorizedID():
     oParser = cParser()
-    oInputParameterHandler = InputParameterHandler()
+    input_parameter_handler = InputParameterHandler()
     oRequest = RequestHandler(URL_MAIN)
     sHtmlContent = oRequest.request()
     sPattern = "Authorization': '(.+?)'"
@@ -104,8 +104,8 @@ def showMovies(sSearch='', searchLocal=False):
 
     if not sSearch:
         searchLocal = True
-        oInputParameterHandler = InputParameterHandler()
-        sSearch = oInputParameterHandler.getValue('siteUrl')
+        input_parameter_handler = InputParameterHandler()
+        sSearch = input_parameter_handler.getValue('siteUrl')
     sSearchText = sSearch.replace(URL_SEARCH_MOVIES[0], '')
     sSearchText = Unquote(sSearchText)
     sSearchText = oUtil.CleanName(sSearchText)
@@ -113,7 +113,7 @@ def showMovies(sSearch='', searchLocal=False):
     sUrl = sSearch.replace('-', '\\-').replace('.', '%20')
     content = getContent(sUrl)
 
-    oOutputParameterHandler = OutputParameterHandler()
+    output_parameter_handler = OutputParameterHandler()
     movies = set()
     bMatrix = isMatrix()
     for movie in content:
@@ -173,12 +173,12 @@ def showMovies(sSearch='', searchLocal=False):
 
         movies.add(sSearchTitle)
 
-        oOutputParameterHandler.clearParameter()
-        oOutputParameterHandler.addParameter('siteUrl', siteUrl)
-        oOutputParameterHandler.addParameter('sMovieTitle', sSearchTitle)
-        oOutputParameterHandler.addParameter('sYear', sYear)
-        oOutputParameterHandler.addParameter('sTmdbId', sTmdbId)
-        oGui.addMovie(SITE_IDENTIFIER, 'showHosters', sMovieTitle, 'films.png', '', '', oOutputParameterHandler)
+        output_parameter_handler.clearParameter()
+        output_parameter_handler.addParameter('siteUrl', siteUrl)
+        output_parameter_handler.addParameter('sMovieTitle', sSearchTitle)
+        output_parameter_handler.addParameter('sYear', sYear)
+        output_parameter_handler.addParameter('sTmdbId', sTmdbId)
+        oGui.addMovie(SITE_IDENTIFIER, 'showHosters', sMovieTitle, 'films.png', '', '', output_parameter_handler)
 
     if searchLocal:
         oGui.setEndOfDirectory()
@@ -199,7 +199,7 @@ def showSeries(sSearch='', searchLocal=False, isAnime=False):
     sUrl = sSearch.replace('-', '\\-')
 
     series = set()
-    oOutputParameterHandler = OutputParameterHandler()
+    output_parameter_handler = OutputParameterHandler()
 
     # deux url pour plus de résultats
     urls = [sUrl, sUrl.replace('order=asc', 'order=desc')]
@@ -250,15 +250,15 @@ def showSeries(sSearch='', searchLocal=False, isAnime=False):
                     continue
                 series.add(sMovieTitle)
 
-                oOutputParameterHandler.clearParameter()
-                oOutputParameterHandler.addParameter('siteUrl', sUrl)
-                oOutputParameterHandler.addParameter('sMovieTitle', sMovieTitle)
-                oOutputParameterHandler.addParameter('sYear', sYear)
-                oOutputParameterHandler.addParameter('sTmdbId', sTmdbId)  # Utilisé par TMDB
+                output_parameter_handler.clearParameter()
+                output_parameter_handler.addParameter('siteUrl', sUrl)
+                output_parameter_handler.addParameter('sMovieTitle', sMovieTitle)
+                output_parameter_handler.addParameter('sYear', sYear)
+                output_parameter_handler.addParameter('sTmdbId', sTmdbId)  # Utilisé par TMDB
                 if isAnime:
-                    oGui.addAnime(SITE_IDENTIFIER, 'showSaisons', sDisplayTitle, '', '', '', oOutputParameterHandler)
+                    oGui.addAnime(SITE_IDENTIFIER, 'showSaisons', sDisplayTitle, '', '', '', output_parameter_handler)
                 else:
-                    oGui.addTV(SITE_IDENTIFIER, 'showSaisons', sDisplayTitle, '', '', '', oOutputParameterHandler)
+                    oGui.addTV(SITE_IDENTIFIER, 'showSaisons', sDisplayTitle, '', '', '', output_parameter_handler)
 
     if searchLocal:
         oGui.setEndOfDirectory()
@@ -270,14 +270,14 @@ def showSaisons():
     saisons = {}
     oUtil = cUtil()
 
-    oInputParameterHandler = InputParameterHandler()
-    # sUrl = oInputParameterHandler.getValue('siteUrl')
-    sSearchTitle = oInputParameterHandler.getValue('sMovieTitle')
+    input_parameter_handler = InputParameterHandler()
+    # sUrl = input_parameter_handler.getValue('siteUrl')
+    sSearchTitle = input_parameter_handler.getValue('sMovieTitle')
     sSearchYear, pos = getYear(sSearchTitle, len(sSearchTitle))
     if sSearchYear:
         sSearchTitle = sSearchTitle[:pos].strip()
     else:
-        sSearchYear = oInputParameterHandler.getValue('sYear')
+        sSearchYear = input_parameter_handler.getValue('sYear')
 
     # recherche depuis le titre sélectionné, pas depuis les mots clefs recherchés
     sUrl = URL_SEARCH_SERIES[0] + sSearchTitle.replace('-', '\\-')
@@ -339,17 +339,17 @@ def showSaisons():
                 if sMovieTitle == sSearchTitle:
                     saisons[saison] = sUrl
 
-    oOutputParameterHandler = OutputParameterHandler()
+    output_parameter_handler = OutputParameterHandler()
     for saison, sUrl in sorted(saisons.items(), key=lambda s: s[0]):
         sDisplayTitle = '%s S%s' % (sSearchTitle, saison)
         siteUrl = '%s|%s' % (sUrl, saison)
-        oOutputParameterHandler.addParameter('siteUrl', siteUrl)
+        output_parameter_handler.addParameter('siteUrl', siteUrl)
         sSaisonTitle = '%s S%s' % (sSearchTitle, saison)
         if sSearchYear:
             sSaisonTitle = '%s (%s)' % (sSaisonTitle, sSearchYear)
-            oOutputParameterHandler.addParameter('sYear', sSearchYear)
-        oOutputParameterHandler.addParameter('sMovieTitle', sSaisonTitle)
-        oGui.addSeason(SITE_IDENTIFIER, 'showEpisodes', sDisplayTitle, '', '', '', oOutputParameterHandler)
+            output_parameter_handler.addParameter('sYear', sSearchYear)
+        output_parameter_handler.addParameter('sMovieTitle', sSaisonTitle)
+        oGui.addSeason(SITE_IDENTIFIER, 'showEpisodes', sDisplayTitle, '', '', '', output_parameter_handler)
 
     oGui.setEndOfDirectory()
 
@@ -359,16 +359,16 @@ def showEpisodes():
     oGui = Gui()
     oUtil = cUtil()
 
-    oInputParameterHandler = InputParameterHandler()
-    sUrl, sSearchSaison = oInputParameterHandler.getValue('siteUrl').split('|')
-    sSearchTitle = oInputParameterHandler.getValue('sMovieTitle')
+    input_parameter_handler = InputParameterHandler()
+    sUrl, sSearchSaison = input_parameter_handler.getValue('siteUrl').split('|')
+    sSearchTitle = input_parameter_handler.getValue('sMovieTitle')
     sSearchTitle = sSearchTitle.replace(' S%s' % sSearchSaison, '')
 
     sSearchYear, pos = getYear(sSearchTitle, len(sSearchTitle))
     if sSearchYear:
         sSearchTitle = sSearchTitle[:pos].strip()
     else:
-        sSearchYear = oInputParameterHandler.getValue('sYear')
+        sSearchYear = input_parameter_handler.getValue('sYear')
 
     content = getContent(sUrl)
 
@@ -420,16 +420,16 @@ def showEpisodes():
 
         episodes.add(episode)
 
-    oOutputParameterHandler = OutputParameterHandler()
+    output_parameter_handler = OutputParameterHandler()
     for episode in sorted(episodes):
         sDisplayTitle = '%s S%sE%s' % (sSearchTitle, sSearchSaison, episode)
 
         siteUrl = '%s|%s|%s' % (sUrl, sSearchSaison, episode)
-        oOutputParameterHandler.addParameter('siteUrl', siteUrl)
+        output_parameter_handler.addParameter('siteUrl', siteUrl)
         sEpTitle = '%s S%sE%s' % (sSearchTitle, sSearchSaison, episode)
-        oOutputParameterHandler.addParameter('sMovieTitle', sEpTitle)
-        oOutputParameterHandler.addParameter('sYear', sSearchYear)
-        oGui.addEpisode(SITE_IDENTIFIER, 'showHosters', sDisplayTitle, '', '', '', oOutputParameterHandler)
+        output_parameter_handler.addParameter('sMovieTitle', sEpTitle)
+        output_parameter_handler.addParameter('sYear', sSearchYear)
+        oGui.addEpisode(SITE_IDENTIFIER, 'showHosters', sDisplayTitle, '', '', '', output_parameter_handler)
 
     oGui.setEndOfDirectory()
 
@@ -442,16 +442,16 @@ def showHosters():
     hoster = oHosterGui.getHoster('lien_direct')
     oUtil = cUtil()
 
-    oInputParameterHandler = InputParameterHandler()
-    # sSearchTmdbId = oInputParameterHandler.getValue('sTmdbId')
-    sSearchTitle = oInputParameterHandler.getValue('sMovieTitle')
+    input_parameter_handler = InputParameterHandler()
+    # sSearchTmdbId = input_parameter_handler.getValue('sTmdbId')
+    sSearchTitle = input_parameter_handler.getValue('sMovieTitle')
     sSearchYear, pos = getYear(sSearchTitle, len(sSearchTitle))
     if sSearchYear:
         sSearchTitle = sSearchTitle[:pos].strip()
     else:
-        sSearchYear = oInputParameterHandler.getValue('sYear')
+        sSearchYear = input_parameter_handler.getValue('sYear')
 
-    sUrl = oInputParameterHandler.getValue('siteUrl')
+    sUrl = input_parameter_handler.getValue('siteUrl')
     sSearchSaison = ''
     if '|' in sUrl:
         sUrl, sSearchSaison, sSearchEpisode = sUrl.split('|')

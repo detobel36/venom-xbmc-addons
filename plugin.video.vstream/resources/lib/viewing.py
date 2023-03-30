@@ -19,9 +19,9 @@ class cViewing:
 
     # Suppression d'un bookmark, d'une catégorie, ou tous les bookmarks
     def delViewing(self):
-        oInputParameterHandler = InputParameterHandler()
-        sTitleWatched = oInputParameterHandler.getValue('sTitleWatched')
-        sCat = oInputParameterHandler.getValue('sCat')
+        input_parameter_handler = InputParameterHandler()
+        sTitleWatched = input_parameter_handler.getValue('sTitleWatched')
+        sCat = input_parameter_handler.getValue('sCat')
 
         if not sTitleWatched:  # confirmation if delete ALL
             if not self.DIALOG.VSyesno(self.ADDON.VSlang(30456)):
@@ -59,14 +59,14 @@ class cViewing:
         oGui = Gui()
         addons = addon()
 
-        oOutputParameterHandler = OutputParameterHandler()
-        oGui.addDir(SITE_IDENTIFIER, 'getViewing', addons.VSlang(30126), 'genres.png', oOutputParameterHandler)
+        output_parameter_handler = OutputParameterHandler()
+        oGui.addDir(SITE_IDENTIFIER, 'getViewing', addons.VSlang(30126), 'genres.png', output_parameter_handler)
 
-        oOutputParameterHandler = OutputParameterHandler()
-        oOutputParameterHandler.addParameter('sCat', '1')       # films
-        oGui.addDir(SITE_IDENTIFIER, 'getViewing', addons.VSlang(30120), 'films.png', oOutputParameterHandler)
+        output_parameter_handler = OutputParameterHandler()
+        output_parameter_handler.addParameter('sCat', '1')       # films
+        oGui.addDir(SITE_IDENTIFIER, 'getViewing', addons.VSlang(30120), 'films.png', output_parameter_handler)
 
-        oOutputParameterHandler.addParameter('sCat', '4')       # saisons
+        output_parameter_handler.addParameter('sCat', '4')       # saisons
         oGui.addDir(
             SITE_IDENTIFIER,
             'getViewing',
@@ -74,18 +74,18 @@ class cViewing:
             (self.ADDON.VSlang(30121),
              self.ADDON.VSlang(30122)),
             'series.png',
-            oOutputParameterHandler)
+            output_parameter_handler)
 
-        oOutputParameterHandler.addParameter('sCat', '5')       # Divers
-        oGui.addDir(SITE_IDENTIFIER, 'getViewing', self.ADDON.VSlang(30410), 'buzz.png', oOutputParameterHandler)
+        output_parameter_handler.addParameter('sCat', '5')       # Divers
+        oGui.addDir(SITE_IDENTIFIER, 'getViewing', self.ADDON.VSlang(30410), 'buzz.png', output_parameter_handler)
 
         oGui.setEndOfDirectory()
 
     def getViewing(self):
         oGui = Gui()
 
-        oInputParameterHandler = InputParameterHandler()
-        catFilter = oInputParameterHandler.getValue('sCat')
+        input_parameter_handler = InputParameterHandler()
+        catFilter = input_parameter_handler.getValue('sCat')
 
         with Db() as DB:
             row = DB.get_viewing()
@@ -122,45 +122,45 @@ class cViewing:
                     if catFilter is not False and cat != catFilter:
                         continue
 
-                    oOutputParameterHandler = OutputParameterHandler()
-                    oOutputParameterHandler.addParameter('siteUrl', siteurl)
-                    oOutputParameterHandler.addParameter('sMovieTitle', title)
-                    oOutputParameterHandler.addParameter('sTmdbId', sTmdbId)
-                    oOutputParameterHandler.addParameter('sTitleWatched', sTitleWatched)
-                    oOutputParameterHandler.addParameter('sSeason', sSeason)
-                    oOutputParameterHandler.addParameter('sCat', cat)
-                    oOutputParameterHandler.addParameter('isViewing', True)
+                    output_parameter_handler = OutputParameterHandler()
+                    output_parameter_handler.addParameter('siteUrl', siteurl)
+                    output_parameter_handler.addParameter('sMovieTitle', title)
+                    output_parameter_handler.addParameter('sTmdbId', sTmdbId)
+                    output_parameter_handler.addParameter('sTitleWatched', sTitleWatched)
+                    output_parameter_handler.addParameter('sSeason', sSeason)
+                    output_parameter_handler.addParameter('sCat', cat)
+                    output_parameter_handler.addParameter('isViewing', True)
 
                     # pourcentage de lecture
                     meta = {}
                     meta['title'] = sTitleWatched
                     resumetime, totaltime = DB.get_resume(meta)
-                    oOutputParameterHandler.addParameter('ResumeTime', resumetime)
-                    oOutputParameterHandler.addParameter('TotalTime', totaltime)
+                    output_parameter_handler.addParameter('ResumeTime', resumetime)
+                    output_parameter_handler.addParameter('TotalTime', totaltime)
 
                     if cat == '1':
                         oListItem = oGui.addMovie(site, function, title, 'films.png',
-                                                  '', title, oOutputParameterHandler)
+                                                  '', title, output_parameter_handler)
                     elif cat == '4':
                         oListItem = oGui.addSeason(site, function, title, 'series.png',
-                                                   '', title, oOutputParameterHandler)
+                                                   '', title, output_parameter_handler)
                     elif cat == '5':
-                        oListItem = oGui.addMisc(site, function, title, 'buzz.png', '', title, oOutputParameterHandler)
+                        oListItem = oGui.addMisc(site, function, title, 'buzz.png', '', title, output_parameter_handler)
                     else:
-                        oListItem = oGui.addTV(site, function, title, 'series.png', '', title, oOutputParameterHandler)
+                        oListItem = oGui.addTV(site, function, title, 'series.png', '', title, output_parameter_handler)
 
-                    oOutputParameterHandler.addParameter('sTitleWatched', sTitleWatched)
-                    oOutputParameterHandler.addParameter('sCat', cat)
-                    oListItem.addMenu(SITE_IDENTIFIER, 'delViewing', self.ADDON.VSlang(30412), oOutputParameterHandler)
+                    output_parameter_handler.addParameter('sTitleWatched', sTitleWatched)
+                    output_parameter_handler.addParameter('sCat', cat)
+                    oListItem.addMenu(SITE_IDENTIFIER, 'delViewing', self.ADDON.VSlang(30412), output_parameter_handler)
 
                 except Exception as e:
                     pass
 
         # Vider toute la catégorie n'est pas accessible lors de l'utilisation en Widget
         if not xbmc.getCondVisibility('Window.IsActive(home)'):
-            oOutputParameterHandler = OutputParameterHandler()
-            oOutputParameterHandler.addParameter('sCat', catFilter)
-            oGui.addDir(SITE_IDENTIFIER, 'delViewing', self.ADDON.VSlang(30211), 'trash.png', oOutputParameterHandler)
+            output_parameter_handler = OutputParameterHandler()
+            output_parameter_handler.addParameter('sCat', catFilter)
+            oGui.addDir(SITE_IDENTIFIER, 'delViewing', self.ADDON.VSlang(30211), 'trash.png', output_parameter_handler)
 
         oGui.setEndOfDirectory()
 

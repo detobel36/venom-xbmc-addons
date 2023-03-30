@@ -51,12 +51,12 @@ def getData():
 def load():
     oGui = Gui()
 
-    oOutputParameterHandler = OutputParameterHandler()
-    oOutputParameterHandler.addParameter('siteUrl', CHAINE_DIRECT[0])
-    oGui.addDir(SITE_IDENTIFIER, CHAINE_DIRECT[1], 'Chaines en direct', 'tv.png', oOutputParameterHandler)
+    output_parameter_handler = OutputParameterHandler()
+    output_parameter_handler.addParameter('siteUrl', CHAINE_DIRECT[0])
+    oGui.addDir(SITE_IDENTIFIER, CHAINE_DIRECT[1], 'Chaines en direct', 'tv.png', output_parameter_handler)
 
-    oOutputParameterHandler.addParameter('siteUrl', VOD[0])
-    oGui.addDir(SITE_IDENTIFIER, VOD[1], 'Programmes disponibles en VOD', 'films.png', oOutputParameterHandler)
+    output_parameter_handler.addParameter('siteUrl', VOD[0])
+    oGui.addDir(SITE_IDENTIFIER, VOD[1], 'Programmes disponibles en VOD', 'films.png', output_parameter_handler)
 
     oGui.setEndOfDirectory()
 
@@ -64,8 +64,8 @@ def load():
 def showTV():
     oGui = Gui()
 
-    oInputParameterHandler = InputParameterHandler()
-    sUrl = oInputParameterHandler.getValue('siteUrl')
+    input_parameter_handler = InputParameterHandler()
+    sUrl = input_parameter_handler.getValue('siteUrl')
 
     clientID, deviceID, sid = getData()
 
@@ -74,7 +74,7 @@ def showTV():
     sHtmlContent = oRequestHandler.request(jsonDecode=True)
 
     if sHtmlContent:
-        oOutputParameterHandler = OutputParameterHandler()
+        output_parameter_handler = OutputParameterHandler()
         for aEntry in sHtmlContent:
             sThumb = aEntry["featuredImage"]["path"]
             sTitle = aEntry["name"]
@@ -86,10 +86,10 @@ def showTV():
             sUrl2 += "&appVersion=5.14.0-0f5ca04c21649b8c8aad4e56266a23b96d73b83a&serverSideAds=true&channelSlug="
             sUrl2 += aEntry["slug"] + "&episodeSlugs=&clientID=" + clientID + "&clientModelNumber=na"
 
-            oOutputParameterHandler.addParameter('siteUrl', sUrl2)
-            oOutputParameterHandler.addParameter('sMovieTitle', sTitle)
-            oOutputParameterHandler.addParameter('sThumb', sThumb)
-            oGui.addMisc(SITE_IDENTIFIER, 'showHosters', sTitle, 'tv.png', sThumb, '', oOutputParameterHandler)
+            output_parameter_handler.addParameter('siteUrl', sUrl2)
+            output_parameter_handler.addParameter('sMovieTitle', sTitle)
+            output_parameter_handler.addParameter('sThumb', sThumb)
+            oGui.addMisc(SITE_IDENTIFIER, 'showHosters', sTitle, 'tv.png', sThumb, '', output_parameter_handler)
 
     oGui.setEndOfDirectory()
 
@@ -97,8 +97,8 @@ def showTV():
 def showGenre():
     oGui = Gui()
 
-    oInputParameterHandler = InputParameterHandler()
-    sUrl = oInputParameterHandler.getValue('siteUrl')
+    input_parameter_handler = InputParameterHandler()
+    sUrl = input_parameter_handler.getValue('siteUrl')
 
     oRequestHandler = RequestHandler(sUrl)
     oRequestHandler.addHeaderEntry('User-Agent', UA)
@@ -106,17 +106,17 @@ def showGenre():
 
     sID = 1
     if sHtmlContent:
-        oOutputParameterHandler = OutputParameterHandler()
+        output_parameter_handler = OutputParameterHandler()
         for aEntry in sHtmlContent["categories"]:
             sTitle = aEntry["name"]
             if not isMatrix():
                 sTitle = sTitle.encode('utf8')
 
-            oOutputParameterHandler.addParameter('siteUrl', sUrl)
-            oOutputParameterHandler.addParameter('sID', int(sID))
+            output_parameter_handler.addParameter('siteUrl', sUrl)
+            output_parameter_handler.addParameter('sID', int(sID))
             sID = sID + 1
 
-            oGui.addDir(SITE_IDENTIFIER, 'showVOD', sTitle, 'genres.png', oOutputParameterHandler)
+            oGui.addDir(SITE_IDENTIFIER, 'showVOD', sTitle, 'genres.png', output_parameter_handler)
 
     oGui.setEndOfDirectory()
 
@@ -124,9 +124,9 @@ def showGenre():
 def showVOD():
     oGui = Gui()
 
-    oInputParameterHandler = InputParameterHandler()
-    sUrl = oInputParameterHandler.getValue('siteUrl')
-    sID = oInputParameterHandler.getValue('sID')
+    input_parameter_handler = InputParameterHandler()
+    sUrl = input_parameter_handler.getValue('siteUrl')
+    sID = input_parameter_handler.getValue('sID')
 
     oRequestHandler = RequestHandler(sUrl)
     oRequestHandler.addHeaderEntry('User-Agent', UA)
@@ -137,7 +137,7 @@ def showVOD():
         total = len(items)
         progress_ = progress().VScreate(SITE_NAME)
 
-        oOutputParameterHandler = OutputParameterHandler()
+        output_parameter_handler = OutputParameterHandler()
         for aEntry in items:
             progress_.VSupdate(progress_, total)
             if progress_.iscanceled():
@@ -153,23 +153,23 @@ def showVOD():
                 sTitle = sTitle.encode('utf8')
                 sDesc = sDesc.encode('utf8')
 
-            oOutputParameterHandler.addParameter('sMovieTitle', sTitle)
-            oOutputParameterHandler.addParameter('sThumb', sThumb)
-            oOutputParameterHandler.addParameter('sDesc', sDesc)
+            output_parameter_handler.addParameter('sMovieTitle', sTitle)
+            output_parameter_handler.addParameter('sThumb', sThumb)
+            output_parameter_handler.addParameter('sDesc', sDesc)
 
             VOD_SERIES = "https://service-vod.clusters.pluto.tv/v3/vod/series/"
             if aEntry["type"] == "series":
                 sUrl = VOD_SERIES + ids + "/seasons?includeItems=true&deviceType=web"
-                oOutputParameterHandler.addParameter('siteUrl', sUrl)
-                oGui.addTV(SITE_IDENTIFIER, 'showSerieSxE', sTitle, '', sThumb, sDesc, oOutputParameterHandler)
+                output_parameter_handler.addParameter('siteUrl', sUrl)
+                oGui.addTV(SITE_IDENTIFIER, 'showSerieSxE', sTitle, '', sThumb, sDesc, output_parameter_handler)
             elif aEntry["type"] == "Anime":
                 sUrl = VOD_SERIES + ids + "/seasons?includeItems=true&deviceType=web"
-                oOutputParameterHandler.addParameter('siteUrl', sUrl)
-                oGui.addAnime(SITE_IDENTIFIER, 'showSerieSxE', sTitle, '', sThumb, sDesc, oOutputParameterHandler)
+                output_parameter_handler.addParameter('siteUrl', sUrl)
+                oGui.addAnime(SITE_IDENTIFIER, 'showSerieSxE', sTitle, '', sThumb, sDesc, output_parameter_handler)
             else:
                 siteUrl = "https://service-stitcher.clusters.pluto.tv/stitch/hls/episode/" + ids + "/master.m3u8"
-                oOutputParameterHandler.addParameter('siteUrl', siteUrl)
-                oGui.addMovie(SITE_IDENTIFIER, 'seriesHosters', sTitle, '', sThumb, sDesc, oOutputParameterHandler)
+                output_parameter_handler.addParameter('siteUrl', siteUrl)
+                oGui.addMovie(SITE_IDENTIFIER, 'seriesHosters', sTitle, '', sThumb, sDesc, output_parameter_handler)
 
         progress_.VSclose(progress_)
 
@@ -179,27 +179,27 @@ def showVOD():
 def showSerieSxE():
     oGui = Gui()
 
-    oInputParameterHandler = InputParameterHandler()
-    sUrl = oInputParameterHandler.getValue('siteUrl')
-    sThumb = oInputParameterHandler.getValue('sThumb')
-    sMovieTitle = oInputParameterHandler.getValue('sMovieTitle')
-    sDesc = oInputParameterHandler.getValue('sDesc')
+    input_parameter_handler = InputParameterHandler()
+    sUrl = input_parameter_handler.getValue('siteUrl')
+    sThumb = input_parameter_handler.getValue('sThumb')
+    sMovieTitle = input_parameter_handler.getValue('sMovieTitle')
+    sDesc = input_parameter_handler.getValue('sDesc')
 
     oRequestHandler = RequestHandler(sUrl)
     oRequestHandler.addHeaderEntry('User-Agent', UA)
     sHtmlContent = oRequestHandler.request(jsonDecode=True)
 
     if sHtmlContent:
-        oOutputParameterHandler = OutputParameterHandler()
+        output_parameter_handler = OutputParameterHandler()
         for aEntry in sHtmlContent["seasons"]:
             for a in aEntry["episodes"]:
                 sTitle = sMovieTitle + " S" + str(a["season"]) + " E" + str(a["number"])
                 sID = a["_id"]
 
                 siteUrl = "https://service-stitcher.clusters.pluto.tv/stitch/hls/episode/" + sID + "/master.m3u8"
-                oOutputParameterHandler.addParameter('siteUrl', siteUrl)
-                oOutputParameterHandler.addParameter('sMovieTitle', sTitle)
-                oOutputParameterHandler.addParameter('sThumb', sThumb)
+                output_parameter_handler.addParameter('siteUrl', siteUrl)
+                output_parameter_handler.addParameter('sMovieTitle', sTitle)
+                output_parameter_handler.addParameter('sThumb', sThumb)
                 oGui.addEpisode(
                     SITE_IDENTIFIER,
                     'seriesHosters',
@@ -207,17 +207,17 @@ def showSerieSxE():
                     'series.png',
                     sThumb,
                     sDesc,
-                    oOutputParameterHandler)
+                    output_parameter_handler)
 
     oGui.setEndOfDirectory()
 
 
 def showHosters():
     oGui = Gui()
-    oInputParameterHandler = InputParameterHandler()
-    sUrl = oInputParameterHandler.getValue('siteUrl')
-    sMovieTitle = oInputParameterHandler.getValue('sMovieTitle')
-    sThumb = oInputParameterHandler.getValue('sThumb')
+    input_parameter_handler = InputParameterHandler()
+    sUrl = input_parameter_handler.getValue('siteUrl')
+    sMovieTitle = input_parameter_handler.getValue('sMovieTitle')
+    sThumb = input_parameter_handler.getValue('sThumb')
 
     oRequestHandler = RequestHandler(sUrl)
     oRequestHandler.addHeaderEntry('User-Agent', UA)
@@ -237,10 +237,10 @@ def showHosters():
 
 def seriesHosters():
     oGui = Gui()
-    oInputParameterHandler = InputParameterHandler()
-    sUrl = oInputParameterHandler.getValue('siteUrl')
-    sThumb = oInputParameterHandler.getValue('sThumb')
-    sMovieTitle = oInputParameterHandler.getValue('sMovieTitle')
+    input_parameter_handler = InputParameterHandler()
+    sUrl = input_parameter_handler.getValue('siteUrl')
+    sThumb = input_parameter_handler.getValue('sThumb')
+    sMovieTitle = input_parameter_handler.getValue('sMovieTitle')
 
     clientID, deviceID, sid = getData()
 

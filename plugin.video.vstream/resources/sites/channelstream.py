@@ -31,9 +31,9 @@ UA = 'Mozilla/5.0 (Windows NT 6.1; Win64; x64; rv:56.0) Gecko/20100101 Firefox/5
 def load():
     oGui = Gui()
 
-    oOutputParameterHandler = OutputParameterHandler()
-    oOutputParameterHandler.addParameter('siteUrl', SPORT_LIVE[0])
-    oGui.addDir(SITE_IDENTIFIER, SPORT_LIVE[1], 'Sports (En direct)', 'replay.png', oOutputParameterHandler)
+    output_parameter_handler = OutputParameterHandler()
+    output_parameter_handler.addParameter('siteUrl', SPORT_LIVE[0])
+    oGui.addDir(SITE_IDENTIFIER, SPORT_LIVE[1], 'Sports (En direct)', 'replay.png', output_parameter_handler)
 
     oGui.setEndOfDirectory()
 
@@ -42,8 +42,8 @@ def showMovies():
     oGui = Gui()
     oParser = cParser()
 
-    oInputParameterHandler = InputParameterHandler()
-    sUrl = URL_MAIN + oInputParameterHandler.getValue('siteUrl')
+    input_parameter_handler = InputParameterHandler()
+    sUrl = URL_MAIN + input_parameter_handler.getValue('siteUrl')
 
     oRequestHandler = RequestHandler(sUrl)
     sHtmlContent = oRequestHandler.request()
@@ -59,7 +59,7 @@ def showMovies():
     aResult = oParser.parse(sHtmlContent, sPattern)
 
     if aResult[0]:
-        oOutputParameterHandler = OutputParameterHandler()
+        output_parameter_handler = OutputParameterHandler()
         for aEntry in aResult[1]:
             sUrl2 = aEntry[1]
             sDate = aEntry[2].replace('<br />', ' ')
@@ -86,12 +86,12 @@ def showMovies():
             sDisplayTitle = sTitle
             sDesc = sDisplayTitle
 
-            oOutputParameterHandler.addParameter('siteUrl', sUrl2)
-            oOutputParameterHandler.addParameter('sMovieTitle', sTitle)
-            oOutputParameterHandler.addParameter('sThumb', sThumb)
-            oOutputParameterHandler.addParameter('sDesc', sDesc)
+            output_parameter_handler.addParameter('siteUrl', sUrl2)
+            output_parameter_handler.addParameter('sMovieTitle', sTitle)
+            output_parameter_handler.addParameter('sThumb', sThumb)
+            output_parameter_handler.addParameter('sDesc', sDesc)
 
-            oGui.addLink(SITE_IDENTIFIER, 'showHoster', sTitle, sThumb, sDisplayTitle, oOutputParameterHandler)
+            oGui.addLink(SITE_IDENTIFIER, 'showHoster', sTitle, sThumb, sDisplayTitle, output_parameter_handler)
 
     oGui.setEndOfDirectory()
 
@@ -100,13 +100,13 @@ def showHoster():
     oGui = Gui()
     oParser = cParser()
 
-    oInputParameterHandler = InputParameterHandler()
-    sUrl = oInputParameterHandler.getValue('siteUrl')
+    input_parameter_handler = InputParameterHandler()
+    sUrl = input_parameter_handler.getValue('siteUrl')
     if not sUrl.startswith('http'):
         sUrl = URL_MAIN + sUrl
-    sTitle = oInputParameterHandler.getValue('sMovieTitle')
-    sDesc = oInputParameterHandler.getValue('sDesc')
-    sThumb = oInputParameterHandler.getValue('sThumb')
+    sTitle = input_parameter_handler.getValue('sMovieTitle')
+    sDesc = input_parameter_handler.getValue('sDesc')
+    sThumb = input_parameter_handler.getValue('sThumb')
     sCat = 6
     sMeta = 0
 
@@ -122,16 +122,16 @@ def showHoster():
         return
 
     for entry in aResult[1]:
-        oOutputParameterHandler = OutputParameterHandler()
+        output_parameter_handler = OutputParameterHandler()
         iframeURL1 = entry[0]
         canal = entry[1]
         sMovieTitle = sTitle
         if canal not in sMovieTitle:
             sMovieTitle += ' [' + canal + ']'
 
-        oOutputParameterHandler.addParameter('sMovieTitle', sTitle)
-        oOutputParameterHandler.addParameter('sThumbnail', sThumb)
-        oOutputParameterHandler.addParameter('sDesc', sDesc)
+        output_parameter_handler.addParameter('sMovieTitle', sTitle)
+        output_parameter_handler.addParameter('sThumbnail', sThumb)
+        output_parameter_handler.addParameter('sDesc', sDesc)
 
         oGuiElement = GuiElement()
         oGuiElement.setTitle(sMovieTitle)
@@ -147,13 +147,13 @@ def showHoster():
         oGuiElement.setMeta(sMeta)
 
         if 'dailymotion' in iframeURL1:
-            oOutputParameterHandler.addParameter('sHosterIdentifier', 'dailymotion')
-            oOutputParameterHandler.addParameter('sMediaUrl', iframeURL1)
-            oOutputParameterHandler.addParameter('siteUrl', sHosterUrl)  # variable manquante
-            oOutputParameterHandler.addParameter('sFileName', sMovieTitle)
+            output_parameter_handler.addParameter('sHosterIdentifier', 'dailymotion')
+            output_parameter_handler.addParameter('sMediaUrl', iframeURL1)
+            output_parameter_handler.addParameter('siteUrl', sHosterUrl)  # variable manquante
+            output_parameter_handler.addParameter('sFileName', sMovieTitle)
             oGuiElement.setFunction('play')
             oGuiElement.setSiteName('HosterGui')
-            oGui.addHost(oGuiElement, oOutputParameterHandler)  # addHost absent ???? del 20/08/2021
+            oGui.addHost(oGuiElement, output_parameter_handler)  # addHost absent ???? del 20/08/2021
             Gui.CONTENT = 'movies'
             oGui.setEndOfDirectory()
             return
@@ -195,8 +195,8 @@ def showHoster():
                         sHosterUrl = getHosterWigistream(urlHoster, iframeURL1)
 
         if sHosterUrl:
-            oOutputParameterHandler.addParameter('siteUrl', sHosterUrl)
-            oGui.addFolder(oGuiElement, oOutputParameterHandler)
+            output_parameter_handler.addParameter('siteUrl', sHosterUrl)
+            oGui.addFolder(oGuiElement, output_parameter_handler)
 
     Gui.CONTENT = 'files'
     oGui.setEndOfDirectory()

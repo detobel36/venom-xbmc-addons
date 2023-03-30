@@ -42,23 +42,23 @@ def load():
         if not aResult[0]:
             oGui.addText(SITE_IDENTIFIER)
         else:
-            oOutputParameterHandler = OutputParameterHandler()
+            output_parameter_handler = OutputParameterHandler()
             for aEntry in aResult[1]:
                 sUrl = aEntry[0]
                 sTitle = aEntry[1]
-                oOutputParameterHandler.addParameter('siteUrl', sUrl)
-                oOutputParameterHandler.addParameter('sMovieTitle', sTitle)
-                oOutputParameterHandler.addParameter('sDesc', sTitle)
-                oGui.addDir(SITE_IDENTIFIER, 'showLink', sTitle, 'genres.png', oOutputParameterHandler)
+                output_parameter_handler.addParameter('siteUrl', sUrl)
+                output_parameter_handler.addParameter('sMovieTitle', sTitle)
+                output_parameter_handler.addParameter('sDesc', sTitle)
+                oGui.addDir(SITE_IDENTIFIER, 'showLink', sTitle, 'genres.png', output_parameter_handler)
 
     oGui.setEndOfDirectory()
 
 
 def showGenres():
     oGui = Gui()
-    oOutputParameterHandler = OutputParameterHandler()
-    oOutputParameterHandler.addParameter('siteUrl', SPORT_GENRES[0])
-    oGui.addDir(SITE_IDENTIFIER, 'load', 'Football', 'genres.png', oOutputParameterHandler)
+    output_parameter_handler = OutputParameterHandler()
+    output_parameter_handler.addParameter('siteUrl', SPORT_GENRES[0])
+    oGui.addDir(SITE_IDENTIFIER, 'load', 'Football', 'genres.png', output_parameter_handler)
     oGui.setEndOfDirectory()
 
 
@@ -66,9 +66,9 @@ def showLink():
     oGui = Gui()
     oParser = cParser()
 
-    oInputParameterHandler = InputParameterHandler()
-    sUrl = oInputParameterHandler.getValue('siteUrl')
-    sMovieTitle = oInputParameterHandler.getValue('sMovieTitle')
+    input_parameter_handler = InputParameterHandler()
+    sUrl = input_parameter_handler.getValue('siteUrl')
+    sMovieTitle = input_parameter_handler.getValue('sMovieTitle')
 
     sPattern = 'player = new Clappr\\.Player.+?source: "([^"]+)'
     oRequestHandler = RequestHandler(sUrl)

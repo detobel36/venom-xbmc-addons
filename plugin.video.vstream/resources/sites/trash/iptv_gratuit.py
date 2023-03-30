@@ -42,101 +42,101 @@ IPTV_VOD = URL_MAIN + 'iptv-vod/'
 def load():
     oGui = Gui()
 
-    oOutputParameterHandler = OutputParameterHandler()
-    oOutputParameterHandler.addParameter('siteUrl', URL_MAIN)
-    oGui.addDir(SITE_IDENTIFIER, 'showDailyList', 'Dernieres listes', 'tv.png', oOutputParameterHandler)
+    output_parameter_handler = OutputParameterHandler()
+    output_parameter_handler.addParameter('siteUrl', URL_MAIN)
+    oGui.addDir(SITE_IDENTIFIER, 'showDailyList', 'Dernieres listes', 'tv.png', output_parameter_handler)
 
-    oOutputParameterHandler = OutputParameterHandler()
-    oOutputParameterHandler.addParameter('siteUrl', IPTV_WORLD)
-    oGui.addDir(SITE_IDENTIFIER, 'showDailyList', 'Dernieres listes mondial', 'tv.png', oOutputParameterHandler)
+    output_parameter_handler = OutputParameterHandler()
+    output_parameter_handler.addParameter('siteUrl', IPTV_WORLD)
+    oGui.addDir(SITE_IDENTIFIER, 'showDailyList', 'Dernieres listes mondial', 'tv.png', output_parameter_handler)
 
-    oOutputParameterHandler = OutputParameterHandler()
-    oOutputParameterHandler.addParameter('siteUrl', IPTV_FRANCE)
-    oGui.addDir(SITE_IDENTIFIER, 'showDailyList', 'listes France', 'tv.png', oOutputParameterHandler)
+    output_parameter_handler = OutputParameterHandler()
+    output_parameter_handler.addParameter('siteUrl', IPTV_FRANCE)
+    oGui.addDir(SITE_IDENTIFIER, 'showDailyList', 'listes France', 'tv.png', output_parameter_handler)
 
-    oOutputParameterHandler = OutputParameterHandler()
-    oOutputParameterHandler.addParameter('siteUrl', IPTV_AFRIQUE)
-    oGui.addDir(SITE_IDENTIFIER, 'showDailyList', 'listes Afrique', 'tv.png', oOutputParameterHandler)
+    output_parameter_handler = OutputParameterHandler()
+    output_parameter_handler.addParameter('siteUrl', IPTV_AFRIQUE)
+    oGui.addDir(SITE_IDENTIFIER, 'showDailyList', 'listes Afrique', 'tv.png', output_parameter_handler)
 
-    oOutputParameterHandler = OutputParameterHandler()
-    oOutputParameterHandler.addParameter('siteUrl', IPTV_ALLEMAGNE)
-    oGui.addDir(SITE_IDENTIFIER, 'showDailyList', 'listes Allemande', 'tv.png', oOutputParameterHandler)
+    output_parameter_handler = OutputParameterHandler()
+    output_parameter_handler.addParameter('siteUrl', IPTV_ALLEMAGNE)
+    oGui.addDir(SITE_IDENTIFIER, 'showDailyList', 'listes Allemande', 'tv.png', output_parameter_handler)
 
-    oOutputParameterHandler = OutputParameterHandler()
-    oOutputParameterHandler.addParameter('siteUrl', IPTV_ANGLETERRE)
-    oGui.addDir(SITE_IDENTIFIER, 'showDailyList', 'listes Anglaise', 'tv.png', oOutputParameterHandler)
+    output_parameter_handler = OutputParameterHandler()
+    output_parameter_handler.addParameter('siteUrl', IPTV_ANGLETERRE)
+    oGui.addDir(SITE_IDENTIFIER, 'showDailyList', 'listes Anglaise', 'tv.png', output_parameter_handler)
 
-    oOutputParameterHandler = OutputParameterHandler()
-    oOutputParameterHandler.addParameter('siteUrl', IPTV_ARABIC)
-    oGui.addDir(SITE_IDENTIFIER, 'showDailyList', 'listes Arabe', 'tv.png', oOutputParameterHandler)
+    output_parameter_handler = OutputParameterHandler()
+    output_parameter_handler.addParameter('siteUrl', IPTV_ARABIC)
+    oGui.addDir(SITE_IDENTIFIER, 'showDailyList', 'listes Arabe', 'tv.png', output_parameter_handler)
 
-    # oOutputParameterHandler = OutputParameterHandler()
-    # oOutputParameterHandler.addParameter('siteUrl', IPTV_AUTRICHE)
-    # oGui.addDir(SITE_IDENTIFIER, 'showDailyList', 'listes Autriche', 'tv.png', oOutputParameterHandler)
+    # output_parameter_handler = OutputParameterHandler()
+    # output_parameter_handler.addParameter('siteUrl', IPTV_AUTRICHE)
+    # oGui.addDir(SITE_IDENTIFIER, 'showDailyList', 'listes Autriche', 'tv.png', output_parameter_handler)
 
-    oOutputParameterHandler = OutputParameterHandler()
-    oOutputParameterHandler.addParameter('siteUrl', IPTV_BELGIQUE)
-    oGui.addDir(SITE_IDENTIFIER, 'showDailyList', 'listes Belgique', 'tv.png', oOutputParameterHandler)
+    output_parameter_handler = OutputParameterHandler()
+    output_parameter_handler.addParameter('siteUrl', IPTV_BELGIQUE)
+    oGui.addDir(SITE_IDENTIFIER, 'showDailyList', 'listes Belgique', 'tv.png', output_parameter_handler)
 
-    oOutputParameterHandler = OutputParameterHandler()
-    oOutputParameterHandler.addParameter('siteUrl', IPTV_BRESIL)
-    oGui.addDir(SITE_IDENTIFIER, 'showDailyList', 'listes Brésil', 'tv.png', oOutputParameterHandler)
+    output_parameter_handler = OutputParameterHandler()
+    output_parameter_handler.addParameter('siteUrl', IPTV_BRESIL)
+    oGui.addDir(SITE_IDENTIFIER, 'showDailyList', 'listes Brésil', 'tv.png', output_parameter_handler)
 
-    oOutputParameterHandler = OutputParameterHandler()
-    oOutputParameterHandler.addParameter('siteUrl', IPTV_CANADA)
-    oGui.addDir(SITE_IDENTIFIER, 'showDailyList', 'listes Canada', 'tv.png', oOutputParameterHandler)
+    output_parameter_handler = OutputParameterHandler()
+    output_parameter_handler.addParameter('siteUrl', IPTV_CANADA)
+    oGui.addDir(SITE_IDENTIFIER, 'showDailyList', 'listes Canada', 'tv.png', output_parameter_handler)
 
-    oOutputParameterHandler = OutputParameterHandler()
-    oOutputParameterHandler.addParameter('siteUrl', IPTV_CHINE)
-    oGui.addDir(SITE_IDENTIFIER, 'showDailyList', 'listes Chine', 'tv.png', oOutputParameterHandler)
+    output_parameter_handler = OutputParameterHandler()
+    output_parameter_handler.addParameter('siteUrl', IPTV_CHINE)
+    oGui.addDir(SITE_IDENTIFIER, 'showDailyList', 'listes Chine', 'tv.png', output_parameter_handler)
 
-    oOutputParameterHandler = OutputParameterHandler()
-    oOutputParameterHandler.addParameter('siteUrl', IPTV_ESPAGNE)
-    oGui.addDir(SITE_IDENTIFIER, 'showDailyList', 'listes Espagne', 'tv.png', oOutputParameterHandler)
+    output_parameter_handler = OutputParameterHandler()
+    output_parameter_handler.addParameter('siteUrl', IPTV_ESPAGNE)
+    oGui.addDir(SITE_IDENTIFIER, 'showDailyList', 'listes Espagne', 'tv.png', output_parameter_handler)
 
-    oOutputParameterHandler = OutputParameterHandler()
-    oOutputParameterHandler.addParameter('siteUrl', IPTV_HOLLANDE)
-    oGui.addDir(SITE_IDENTIFIER, 'showDailyList', 'listes Hollande', 'tv.png', oOutputParameterHandler)
+    output_parameter_handler = OutputParameterHandler()
+    output_parameter_handler.addParameter('siteUrl', IPTV_HOLLANDE)
+    oGui.addDir(SITE_IDENTIFIER, 'showDailyList', 'listes Hollande', 'tv.png', output_parameter_handler)
 
-    oOutputParameterHandler = OutputParameterHandler()
-    oOutputParameterHandler.addParameter('siteUrl', IPTV_ITALIE)
-    oGui.addDir(SITE_IDENTIFIER, 'showDailyList', 'listes Italie', 'tv.png', oOutputParameterHandler)
+    output_parameter_handler = OutputParameterHandler()
+    output_parameter_handler.addParameter('siteUrl', IPTV_ITALIE)
+    oGui.addDir(SITE_IDENTIFIER, 'showDailyList', 'listes Italie', 'tv.png', output_parameter_handler)
 
-    oOutputParameterHandler = OutputParameterHandler()
-    oOutputParameterHandler.addParameter('siteUrl', IPTV_PORTUGAL)
-    oGui.addDir(SITE_IDENTIFIER, 'showDailyList', 'listes Portugal', 'tv.png', oOutputParameterHandler)
+    output_parameter_handler = OutputParameterHandler()
+    output_parameter_handler.addParameter('siteUrl', IPTV_PORTUGAL)
+    oGui.addDir(SITE_IDENTIFIER, 'showDailyList', 'listes Portugal', 'tv.png', output_parameter_handler)
 
-    oOutputParameterHandler = OutputParameterHandler()
-    oOutputParameterHandler.addParameter('siteUrl', IPTV_SUISSE)
-    oGui.addDir(SITE_IDENTIFIER, 'showDailyList', 'listes Suisse', 'tv.png', oOutputParameterHandler)
+    output_parameter_handler = OutputParameterHandler()
+    output_parameter_handler.addParameter('siteUrl', IPTV_SUISSE)
+    oGui.addDir(SITE_IDENTIFIER, 'showDailyList', 'listes Suisse', 'tv.png', output_parameter_handler)
 
-    oOutputParameterHandler = OutputParameterHandler()
-    oOutputParameterHandler.addParameter('siteUrl', IPTV_SUISSE)
-    oGui.addDir(SITE_IDENTIFIER, 'showDailyList', 'listes Russie', 'tv.png', oOutputParameterHandler)
+    output_parameter_handler = OutputParameterHandler()
+    output_parameter_handler.addParameter('siteUrl', IPTV_SUISSE)
+    oGui.addDir(SITE_IDENTIFIER, 'showDailyList', 'listes Russie', 'tv.png', output_parameter_handler)
 
-    oOutputParameterHandler = OutputParameterHandler()
-    oOutputParameterHandler.addParameter('siteUrl', IPTV_TURK)
-    oGui.addDir(SITE_IDENTIFIER, 'showDailyList', 'listes Turque', 'tv.png', oOutputParameterHandler)
+    output_parameter_handler = OutputParameterHandler()
+    output_parameter_handler.addParameter('siteUrl', IPTV_TURK)
+    oGui.addDir(SITE_IDENTIFIER, 'showDailyList', 'listes Turque', 'tv.png', output_parameter_handler)
 
-    oOutputParameterHandler = OutputParameterHandler()
-    oOutputParameterHandler.addParameter('siteUrl', IPTV_USA)
-    oGui.addDir(SITE_IDENTIFIER, 'showDailyList', 'listes USA', 'tv.png', oOutputParameterHandler)
+    output_parameter_handler = OutputParameterHandler()
+    output_parameter_handler.addParameter('siteUrl', IPTV_USA)
+    oGui.addDir(SITE_IDENTIFIER, 'showDailyList', 'listes USA', 'tv.png', output_parameter_handler)
 
-    oOutputParameterHandler = OutputParameterHandler()
-    oOutputParameterHandler.addParameter('siteUrl', IPTV_SPORT)
-    oGui.addDir(SITE_IDENTIFIER, 'showDailyList', 'listes SPORT', 'tv.png', oOutputParameterHandler)
+    output_parameter_handler = OutputParameterHandler()
+    output_parameter_handler.addParameter('siteUrl', IPTV_SPORT)
+    oGui.addDir(SITE_IDENTIFIER, 'showDailyList', 'listes SPORT', 'tv.png', output_parameter_handler)
 
-    oOutputParameterHandler = OutputParameterHandler()
-    oOutputParameterHandler.addParameter('siteUrl', IPTV_VOD)
-    oGui.addDir(SITE_IDENTIFIER, 'showDailyList', 'listes VOD', 'tv.png', oOutputParameterHandler)
+    output_parameter_handler = OutputParameterHandler()
+    output_parameter_handler.addParameter('siteUrl', IPTV_VOD)
+    oGui.addDir(SITE_IDENTIFIER, 'showDailyList', 'listes VOD', 'tv.png', output_parameter_handler)
 
     oGui.setEndOfDirectory()
 
 
 def showDailyList():
     oGui = Gui()
-    oInputParameterHandler = InputParameterHandler()
-    sUrl = oInputParameterHandler.getValue('siteUrl')
+    input_parameter_handler = InputParameterHandler()
+    sUrl = input_parameter_handler.getValue('siteUrl')
 
     oParser = cParser()
     sHtmlContent = getHtml(sUrl)
@@ -155,20 +155,20 @@ def showDailyList():
             sUrl2 = aEntry[0]
             sTitle = aEntry[1]
 
-            oOutputParameterHandler = OutputParameterHandler()
-            oOutputParameterHandler.addParameter('siteUrl', sUrl2)
-            oOutputParameterHandler.addParameter('sMovieTitle', sTitle)
+            output_parameter_handler = OutputParameterHandler()
+            output_parameter_handler.addParameter('siteUrl', sUrl2)
+            output_parameter_handler.addParameter('sMovieTitle', sTitle)
 
-            oGui.addDir(SITE_IDENTIFIER, 'showAllPlaylist', sTitle, 'listes.png', oOutputParameterHandler)
+            oGui.addDir(SITE_IDENTIFIER, 'showAllPlaylist', sTitle, 'listes.png', output_parameter_handler)
 
         progress_.VSclose(progress_)
 
         sNextPage = __checkForNextPage(sHtmlContent)
         if (sNextPage):
-            oOutputParameterHandler = OutputParameterHandler()
-            oOutputParameterHandler.addParameter('siteUrl', sNextPage)
+            output_parameter_handler = OutputParameterHandler()
+            output_parameter_handler.addParameter('siteUrl', sNextPage)
             sNumPage = re.search('pages/([0-9]+)', sNextPage).group(1)
-            oGui.addNext(SITE_IDENTIFIER, 'showDailyList', 'Page ' + sNumPage, oOutputParameterHandler)
+            oGui.addNext(SITE_IDENTIFIER, 'showDailyList', 'Page ' + sNumPage, output_parameter_handler)
 
     oGui.setEndOfDirectory()
 
@@ -187,9 +187,9 @@ def __checkForNextPage(sHtmlContent):
 def showAllPlaylist():  # On recupere les differentes playlist si il y en a
     oGui = Gui()
 
-    oInputParameterHandler = InputParameterHandler()
-    sUrl = oInputParameterHandler.getValue('siteUrl')
-    sTitle = oInputParameterHandler.getValue('sMovieTitle')
+    input_parameter_handler = InputParameterHandler()
+    sUrl = input_parameter_handler.getValue('siteUrl')
+    sTitle = input_parameter_handler.getValue('sMovieTitle')
 
     oParser = cParser()
     sHtmlContent = getHtml(sUrl)
@@ -214,11 +214,11 @@ def showAllPlaylist():  # On recupere les differentes playlist si il y en a
             else:
                 sTitleTest = sTitle
 
-            oOutputParameterHandler = OutputParameterHandler()
-            oOutputParameterHandler.addParameter('siteUrl', sUrl2)
-            oOutputParameterHandler.addParameter('sMovieTitle', sTitle)
+            output_parameter_handler = OutputParameterHandler()
+            output_parameter_handler.addParameter('siteUrl', sUrl2)
+            output_parameter_handler.addParameter('sMovieTitle', sTitle)
 
-            oGui.addDir(SITE_IDENTIFIER, 'showWeb', sTitle, '', oOutputParameterHandler)
+            oGui.addDir(SITE_IDENTIFIER, 'showWeb', sTitle, '', output_parameter_handler)
 
         progress_.VSclose(progress_)
 
@@ -227,9 +227,9 @@ def showAllPlaylist():  # On recupere les differentes playlist si il y en a
 
 def showAllPlaylist2():  # On recupere les differentes playlist si il y en a
     oGui = Gui()
-    oInputParameterHandler = InputParameterHandler()
-    sUrl = oInputParameterHandler.getValue('siteUrl')
-    sTitle = oInputParameterHandler.getValue('sMovieTitle')
+    input_parameter_handler = InputParameterHandler()
+    sUrl = input_parameter_handler.getValue('siteUrl')
+    sTitle = input_parameter_handler.getValue('sMovieTitle')
 
     sHtmlContent = getHtml(sUrl)
     sUrl2 = getDownloadLink(sHtmlContent)
@@ -243,9 +243,9 @@ def showAllPlaylist2():  # On recupere les differentes playlist si il y en a
         else:
             oGui.addText(SITE_IDENTIFIER, 'rien')
 
-        oOutputParameterHandler = OutputParameterHandler()
-        oOutputParameterHandler.addParameter('siteUrl', sUrl)
+        output_parameter_handler = OutputParameterHandler()
+        output_parameter_handler.addParameter('siteUrl', sUrl)
 
-        oGui.addDir(SITE_IDENTIFIER, 'showWeb', sTitle, '', oOutputParameterHandler)
+        oGui.addDir(SITE_IDENTIFIER, 'showWeb', sTitle, '', output_parameter_handler)
 
     oGui.setEndOfDirectory()

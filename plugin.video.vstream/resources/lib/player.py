@@ -35,23 +35,23 @@ class cPlayer(xbmc.Player):
         self.Subtitles_file = []
         self.SubtitleActive = False
 
-        oInputParameterHandler = InputParameterHandler()
-        self.sHosterIdentifier = oInputParameterHandler.getValue('sHosterIdentifier')
-        self.sTitle = oInputParameterHandler.getValue('sFileName')
+        input_parameter_handler = InputParameterHandler()
+        self.sHosterIdentifier = input_parameter_handler.getValue('sHosterIdentifier')
+        self.sTitle = input_parameter_handler.getValue('sFileName')
         if self.sTitle:
             self.sTitle = Unquote(self.sTitle)
-        self.sCat = oInputParameterHandler.getValue('sCat')
-        self.sSaison = oInputParameterHandler.getValue('sSeason')
-        self.sEpisode = oInputParameterHandler.getValue('sEpisode')
+        self.sCat = input_parameter_handler.getValue('sCat')
+        self.sSaison = input_parameter_handler.getValue('sSeason')
+        self.sEpisode = input_parameter_handler.getValue('sEpisode')
 
-        self.sSite = oInputParameterHandler.getValue('siteUrl')
-        self.sSource = oInputParameterHandler.getValue('sourceName')
-        self.sFav = oInputParameterHandler.getValue('sourceFav')
-        self.saisonUrl = oInputParameterHandler.getValue('saisonUrl')
-        self.nextSaisonFunc = oInputParameterHandler.getValue('nextSaisonFunc')
-        self.movieUrl = oInputParameterHandler.getValue('movieUrl')
-        self.movieFunc = oInputParameterHandler.getValue('movieFunc')
-        self.sTmdbId = oInputParameterHandler.getValue('sTmdbId')
+        self.sSite = input_parameter_handler.getValue('siteUrl')
+        self.sSource = input_parameter_handler.getValue('sourceName')
+        self.sFav = input_parameter_handler.getValue('sourceFav')
+        self.saisonUrl = input_parameter_handler.getValue('saisonUrl')
+        self.nextSaisonFunc = input_parameter_handler.getValue('nextSaisonFunc')
+        self.movieUrl = input_parameter_handler.getValue('movieUrl')
+        self.movieFunc = input_parameter_handler.getValue('movieFunc')
+        self.sTmdbId = input_parameter_handler.getValue('sTmdbId')
 
         self.playBackEventReceived = False
         self.playBackStoppedEventReceived = False

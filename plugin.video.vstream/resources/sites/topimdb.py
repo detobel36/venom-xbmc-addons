@@ -60,15 +60,15 @@ def unescape(text):
 def load():
     oGui = Gui()
 
-    oOutputParameterHandler = OutputParameterHandler()
-    oOutputParameterHandler.addParameter('siteUrl', MOVIE_WORLD[0])
-    oGui.addDir(SITE_IDENTIFIER, MOVIE_WORLD[1], 'Top Films Mondial', 'films.png', oOutputParameterHandler)
+    output_parameter_handler = OutputParameterHandler()
+    output_parameter_handler.addParameter('siteUrl', MOVIE_WORLD[0])
+    oGui.addDir(SITE_IDENTIFIER, MOVIE_WORLD[1], 'Top Films Mondial', 'films.png', output_parameter_handler)
 
-    oOutputParameterHandler.addParameter('siteUrl', MOVIE_TOP250[0])
-    oGui.addDir(SITE_IDENTIFIER, MOVIE_TOP250[1], 'Top 250', 'films.png', oOutputParameterHandler)
+    output_parameter_handler.addParameter('siteUrl', MOVIE_TOP250[0])
+    oGui.addDir(SITE_IDENTIFIER, MOVIE_TOP250[1], 'Top 250', 'films.png', output_parameter_handler)
 
-    oOutputParameterHandler.addParameter('siteUrl', MOVIE_ANNEES[0])
-    oGui.addDir(SITE_IDENTIFIER, MOVIE_ANNEES[1], 'Top (Par Années)', 'annees.png', oOutputParameterHandler)
+    output_parameter_handler.addParameter('siteUrl', MOVIE_ANNEES[0])
+    oGui.addDir(SITE_IDENTIFIER, MOVIE_ANNEES[1], 'Top (Par Années)', 'annees.png', output_parameter_handler)
 
     oGui.setEndOfDirectory()
 
@@ -79,9 +79,9 @@ def showMovieYears():
     import datetime
     now = datetime.datetime.now()
 
-    oOutputParameterHandler = OutputParameterHandler()
+    output_parameter_handler = OutputParameterHandler()
     for i in reversed(xrange(1903, int(now.year) + 1)):
-        oOutputParameterHandler.addParameter(
+        output_parameter_handler.addParameter(
             'siteUrl',
             URL_MAIN +
             'search/title?year=' +
@@ -89,7 +89,7 @@ def showMovieYears():
             ',' +
             str(i) +
             '&title_type=feature&explore=languages')
-        oGui.addDir(SITE_IDENTIFIER, 'showMovies', str(i), 'annees.png', oOutputParameterHandler)
+        oGui.addDir(SITE_IDENTIFIER, 'showMovies', str(i), 'annees.png', output_parameter_handler)
 
     oGui.setEndOfDirectory()
 
@@ -99,11 +99,11 @@ def showMovies(sSearch=''):
     oParser = cParser()
     # bGlobal_Search = False
 
-    oInputParameterHandler = InputParameterHandler()
+    input_parameter_handler = InputParameterHandler()
     if sSearch:
         sUrl = sSearch
     else:
-        sUrl = oInputParameterHandler.getValue('siteUrl')
+        sUrl = input_parameter_handler.getValue('siteUrl')
     # if URL_SEARCH[0] in sSearch:
         # bGlobal_Search = True
 
@@ -117,7 +117,7 @@ def showMovies(sSearch=''):
     if aResult[0]:
         total = len(aResult[1])
         progress_ = progress().VScreate(SITE_NAME)
-        oOutputParameterHandler = OutputParameterHandler()
+        output_parameter_handler = OutputParameterHandler()
         for aEntry in aResult[1]:
             progress_.VSupdate(progress_, total)
             if progress_.iscanceled():
@@ -133,19 +133,19 @@ def showMovies(sSearch=''):
             sYear = re.search('([0-9]{4})', aEntry[3]).group(1)
             sDesc = aEntry[5]
 
-            oOutputParameterHandler.addParameter('siteUrl', 'none')
-            oOutputParameterHandler.addParameter('sMovieTitle', str(aEntry[0]))
-            oOutputParameterHandler.addParameter('sYear', sYear)
-            oOutputParameterHandler.addParameter('searchtext', showTitle(str(aEntry[0]), str('none')))
-            oGui.addMovie('globalSearch', 'showSearch', sTitle, '', sThumb, sDesc, oOutputParameterHandler)
+            output_parameter_handler.addParameter('siteUrl', 'none')
+            output_parameter_handler.addParameter('sMovieTitle', str(aEntry[0]))
+            output_parameter_handler.addParameter('sYear', sYear)
+            output_parameter_handler.addParameter('searchtext', showTitle(str(aEntry[0]), str('none')))
+            oGui.addMovie('globalSearch', 'showSearch', sTitle, '', sThumb, sDesc, output_parameter_handler)
 
         progress_.VSclose(progress_)
 
         sNextPage = __checkForNextPage(sHtmlContent)
         if sNextPage:
-            oOutputParameterHandler = OutputParameterHandler()
-            oOutputParameterHandler.addParameter('siteUrl', sNextPage)
-            oGui.addNext(SITE_IDENTIFIER, 'showMovies', 'Suivant', oOutputParameterHandler)
+            output_parameter_handler = OutputParameterHandler()
+            output_parameter_handler.addParameter('siteUrl', sNextPage)
+            oGui.addNext(SITE_IDENTIFIER, 'showMovies', 'Suivant', output_parameter_handler)
 
     if not sSearch:
         oGui.setEndOfDirectory('500')

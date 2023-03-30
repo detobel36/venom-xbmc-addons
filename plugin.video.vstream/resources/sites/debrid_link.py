@@ -28,20 +28,20 @@ def load():
     ALL_MAGNETS = (URL_HOST + '/api/v2/seedbox/list?page=0&perPage=20', 'showLiens')
     ALL_INFORMATION = (URL_HOST + '/infos/downloader', 'showInfo')
 
-    oOutputParameterHandler = OutputParameterHandler()
-    oOutputParameterHandler.addParameter('siteUrl', ALL_ALL[0])
-    oGui.addDir(SITE_IDENTIFIER, ALL_ALL[1], 'Liens', 'films.png', oOutputParameterHandler)
+    output_parameter_handler = OutputParameterHandler()
+    output_parameter_handler.addParameter('siteUrl', ALL_ALL[0])
+    oGui.addDir(SITE_IDENTIFIER, ALL_ALL[1], 'Liens', 'films.png', output_parameter_handler)
 
-    oOutputParameterHandler.addParameter('siteUrl', ALL_MAGNETS[0])
-    oGui.addDir(SITE_IDENTIFIER, ALL_MAGNETS[1], 'Magnets', 'films.png', oOutputParameterHandler)
+    output_parameter_handler.addParameter('siteUrl', ALL_MAGNETS[0])
+    oGui.addDir(SITE_IDENTIFIER, ALL_MAGNETS[1], 'Magnets', 'films.png', output_parameter_handler)
 
-    oOutputParameterHandler.addParameter('siteUrl', ALL_INFORMATION[0])
+    output_parameter_handler.addParameter('siteUrl', ALL_INFORMATION[0])
     oGui.addDir(
         SITE_IDENTIFIER,
         ALL_INFORMATION[1],
         'Information sur les hébergeurs ',
         'films.png',
-        oOutputParameterHandler)
+        output_parameter_handler)
 
     oGui.setEndOfDirectory()
 
@@ -49,9 +49,9 @@ def load():
 def showLiens(sSearch=''):
     oGui = Gui()
 
-    oInputParameterHandler = InputParameterHandler()
-    sUrl = oInputParameterHandler.getValue('siteUrl')
-    numPage = oInputParameterHandler.getValue('numPage')
+    input_parameter_handler = InputParameterHandler()
+    sUrl = input_parameter_handler.getValue('siteUrl')
+    numPage = input_parameter_handler.getValue('numPage')
     if not numPage:
         numPage = 0
     numPage = int(numPage)
@@ -75,7 +75,7 @@ def showLiens(sSearch=''):
     if (r["success"]):
         progress_ = progress().VScreate(SITE_NAME)
 
-        oOutputParameterHandler = OutputParameterHandler()
+        output_parameter_handler = OutputParameterHandler()
         for aEntry in r["value"]:
 
             progress_.VSupdate(progress_, len(aEntry["name"]))
@@ -92,27 +92,27 @@ def showLiens(sSearch=''):
                 sTitle = aEntry["name"]
                 sUrl2 = aEntry["downloadUrl"]
 
-            oOutputParameterHandler.addParameter('siteUrl', sUrl2)
-            oOutputParameterHandler.addParameter('sMovieTitle', sTitle)
-            oGui.addEpisode(SITE_IDENTIFIER, 'showHosters', sTitle, '', '', '', oOutputParameterHandler)
+            output_parameter_handler.addParameter('siteUrl', sUrl2)
+            output_parameter_handler.addParameter('sMovieTitle', sTitle)
+            oGui.addEpisode(SITE_IDENTIFIER, 'showHosters', sTitle, '', '', '', output_parameter_handler)
             progress_.VSclose(progress_)
 
         if not sSearch:
             numPage += 1
             sUrl = re.sub('page=([0-9])', 'page=' + str(numPage), sUrl)
-            oOutputParameterHandler = OutputParameterHandler()
-            oOutputParameterHandler.addParameter('siteUrl', sUrl)
-            oOutputParameterHandler.addParameter('numPage', numPage)
-            oGui.addNext(SITE_IDENTIFIER, 'showLiens', 'Page ' + str(numPage), oOutputParameterHandler)
+            output_parameter_handler = OutputParameterHandler()
+            output_parameter_handler.addParameter('siteUrl', sUrl)
+            output_parameter_handler.addParameter('numPage', numPage)
+            oGui.addNext(SITE_IDENTIFIER, 'showLiens', 'Page ' + str(numPage), output_parameter_handler)
 
     oGui.setEndOfDirectory()
 
 
 def showHosters():
     oGui = Gui()
-    oInputParameterHandler = InputParameterHandler()
-    sUrl = oInputParameterHandler.getValue('siteUrl')
-    sMovieTitle = oInputParameterHandler.getValue('sMovieTitle')
+    input_parameter_handler = InputParameterHandler()
+    sUrl = input_parameter_handler.getValue('siteUrl')
+    sMovieTitle = input_parameter_handler.getValue('sMovieTitle')
 
     sHosterUrl = sUrl
     oHoster = HosterGui().checkHoster(sHosterUrl)
@@ -127,8 +127,8 @@ def showHosters():
 def showInfo():
     oGui = Gui()
 
-    oInputParameterHandler = InputParameterHandler()
-    sUrl = oInputParameterHandler.getValue('siteUrl')
+    input_parameter_handler = InputParameterHandler()
+    sUrl = input_parameter_handler.getValue('siteUrl')
 
     oRequestHandler = RequestHandler(sUrl)
     sHtmlContent = oRequestHandler.request()
@@ -144,7 +144,7 @@ def showInfo():
         total = len(aResult[1])
         progress_ = progress().VScreate(SITE_NAME)
 
-        oOutputParameterHandler = OutputParameterHandler()
+        output_parameter_handler = OutputParameterHandler()
         for aEntry in aResult[1]:
             progress_.VSupdate(progress_, total)
             if progress_.iscanceled():
@@ -156,7 +156,7 @@ def showInfo():
 
             sDisplayTitle = ('%s (%s)') % (sHebergeur, sDisponible)
 
-            oOutputParameterHandler.addParameter('sMovieTitle', sDisplayTitle)
+            output_parameter_handler.addParameter('sMovieTitle', sDisplayTitle)
 
             oGui.addText(SITE_IDENTIFIER, sDisplayTitle)
 

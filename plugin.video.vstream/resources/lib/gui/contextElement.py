@@ -31,8 +31,8 @@ class cContextElement:
     def getSiteName(self):
         return self.__sSiteName
 
-    def setOutputParameterHandler(self, oOutputParameterHandler):
-        self.__oOutputParameterHandler = oOutputParameterHandler
+    def setOutputParameterHandler(self, output_parameter_handler):
+        self.__oOutputParameterHandler = output_parameter_handler
 
     def getOutputParameterHandler(self):
         return self.__oOutputParameterHandler

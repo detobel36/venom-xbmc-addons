@@ -19,9 +19,9 @@ class cSearch:
     def searchGlobal(self, sSearchText='', sCat=''):
         try:
             if not sSearchText:
-                oInputParameterHandler = InputParameterHandler()
-                sSearchText = oInputParameterHandler.getValue('searchtext')
-                sCat = oInputParameterHandler.getValue('sCat')
+                input_parameter_handler = InputParameterHandler()
+                sSearchText = input_parameter_handler.getValue('searchtext')
+                sCat = input_parameter_handler.getValue('sCat')
 
             sSearchText = sSearchText.replace(':', ' ')
 

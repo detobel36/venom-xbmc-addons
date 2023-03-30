@@ -41,21 +41,21 @@ def load():
     oGui = Gui()
     addons = addon()
 
-    oOutputParameterHandler = OutputParameterHandler()
-    oOutputParameterHandler.addParameter('siteUrl', 'http://')
-    oGui.addDir(SITE_IDENTIFIER, 'showWeb', addons.VSlang(30203), 'music.png', oOutputParameterHandler)
+    output_parameter_handler = OutputParameterHandler()
+    output_parameter_handler.addParameter('siteUrl', 'http://')
+    oGui.addDir(SITE_IDENTIFIER, 'showWeb', addons.VSlang(30203), 'music.png', output_parameter_handler)
 
-    oOutputParameterHandler.addParameter('siteUrl', 'http://')
+    output_parameter_handler.addParameter('siteUrl', 'http://')
     oGui.addDir(
         SITE_IDENTIFIER,
         'showGenres',
         addons.VSlang(30203) +
         ' (Genres)',
         'genres.png',
-        oOutputParameterHandler)
+        output_parameter_handler)
 
-    oOutputParameterHandler.addParameter('siteUrl', 'http://')
-    oGui.addDir(SITE_IDENTIFIER, 'showAZ', addons.VSlang(30203) + ' (Alphabétique)', 'az.png', oOutputParameterHandler)
+    output_parameter_handler.addParameter('siteUrl', 'http://')
+    oGui.addDir(SITE_IDENTIFIER, 'showAZ', addons.VSlang(30203) + ' (Alphabétique)', 'az.png', output_parameter_handler)
 
     oGui.setEndOfDirectory()
 
@@ -68,11 +68,11 @@ def showGenres():
              ['Hits', 'Hits'], ['Jazz', 'Jazz'], ['Lounge', 'Lounge'], ['Metal', 'Metal'],
              ['News', 'News'], ['Pop', 'Pop'], ['Rock', 'Rock'], ['Slow', 'Slow'], ['Trance', 'Trance']]
 
-    oOutputParameterHandler = OutputParameterHandler()
+    output_parameter_handler = OutputParameterHandler()
     for sTitle, sIdent in liste:
-        oOutputParameterHandler.addParameter('siteUrl', '')
-        oOutputParameterHandler.addParameter('ident', sIdent)
-        oGui.addDir(SITE_IDENTIFIER, 'showWeb', sTitle, 'genres.png', oOutputParameterHandler)
+        output_parameter_handler.addParameter('siteUrl', '')
+        output_parameter_handler.addParameter('ident', sIdent)
+        oGui.addDir(SITE_IDENTIFIER, 'showWeb', sTitle, 'genres.png', output_parameter_handler)
 
     oGui.setEndOfDirectory()
 
@@ -106,34 +106,34 @@ def parseWebM3U():  # Traite les m3u
 
 def showWeb():  # Code qui s'occupe de liens TV du Web
     oGui = Gui()
-    oInputParameterHandler = InputParameterHandler()
+    input_parameter_handler = InputParameterHandler()
     playlist = parseWebM3U()
 
-    if oInputParameterHandler.exist('AZ'):
-        sAZ = oInputParameterHandler.getValue('AZ')
+    if input_parameter_handler.exist('AZ'):
+        sAZ = input_parameter_handler.getValue('AZ')
         string = filter(lambda t: t.title.strip().capitalize().startswith(sAZ), playlist)
         playlist = sorted(string, key=lambda t: t.title.strip().capitalize())
-    elif oInputParameterHandler.exist('ident'):
-        sIdent = oInputParameterHandler.getValue('ident')
+    elif input_parameter_handler.exist('ident'):
+        sIdent = input_parameter_handler.getValue('ident')
         string = filter(lambda t: t.ident.strip().capitalize().startswith(sIdent), playlist)
         playlist = sorted(string, key=lambda t: t.ident.strip().capitalize())
     else:
         playlist = sorted(playlist, key=lambda t: t.title.strip().capitalize())
 
     if not playlist:
-        oOutputParameterHandler = OutputParameterHandler()
-        oOutputParameterHandler.addParameter('siteUrl', 'http://')
+        output_parameter_handler = OutputParameterHandler()
+        output_parameter_handler.addParameter('siteUrl', 'http://')
         oGui.addText(SITE_IDENTIFIER, '[COLOR red]Aucun résultat[/COLOR] ')
     else:
-        oOutputParameterHandler = OutputParameterHandler()
+        output_parameter_handler = OutputParameterHandler()
         for track in playlist:
             sThumb = track.image
             if not sThumb:
                 sThumb = 'music.png'
 
-            oOutputParameterHandler.addParameter('siteUrl', track.location)
-            oOutputParameterHandler.addParameter('sMovieTitle', track.title)
-            oOutputParameterHandler.addParameter('sThumbnail', sThumb)
+            output_parameter_handler.addParameter('siteUrl', track.location)
+            output_parameter_handler.addParameter('sMovieTitle', track.title)
+            output_parameter_handler.addParameter('sThumbnail', sThumb)
 
             oGuiElement = GuiElement()
             oGuiElement.setSiteName(SITE_IDENTIFIER)
@@ -146,8 +146,8 @@ def showWeb():  # Code qui s'occupe de liens TV du Web
             oGuiElement.setDirectTvFanart()
             oGuiElement.setCat(6)
 
-            oGui.createContexMenuBookmark(oGuiElement, oOutputParameterHandler)
-            oGui.addFolder(oGuiElement, oOutputParameterHandler)
+            oGui.createContexMenuBookmark(oGuiElement, output_parameter_handler)
+            oGui.addFolder(oGuiElement, output_parameter_handler)
 
     oGui.setEndOfDirectory()
 
@@ -155,29 +155,29 @@ def showWeb():  # Code qui s'occupe de liens TV du Web
 def showAZ():
 
     oGui = Gui()
-    oInputParameterHandler = InputParameterHandler()
-    sUrl = oInputParameterHandler.getValue('siteUrl')
+    input_parameter_handler = InputParameterHandler()
+    sUrl = input_parameter_handler.getValue('siteUrl')
 
-    oOutputParameterHandler = OutputParameterHandler()
+    output_parameter_handler = OutputParameterHandler()
     for i in string.digits:
-        oOutputParameterHandler.addParameter('siteUrl', sUrl)
-        oOutputParameterHandler.addParameter('AZ', i)
-        oGui.addDir(SITE_IDENTIFIER, 'showWeb', i, 'az.png', oOutputParameterHandler)
+        output_parameter_handler.addParameter('siteUrl', sUrl)
+        output_parameter_handler.addParameter('AZ', i)
+        oGui.addDir(SITE_IDENTIFIER, 'showWeb', i, 'az.png', output_parameter_handler)
 
-    oOutputParameterHandler = OutputParameterHandler()
+    output_parameter_handler = OutputParameterHandler()
     for i in string.ascii_uppercase:
-        oOutputParameterHandler.addParameter('siteUrl', sUrl)
-        oOutputParameterHandler.addParameter('AZ', i)
-        oGui.addDir(SITE_IDENTIFIER, 'showWeb', i, 'az.png', oOutputParameterHandler)
+        output_parameter_handler.addParameter('siteUrl', sUrl)
+        output_parameter_handler.addParameter('AZ', i)
+        oGui.addDir(SITE_IDENTIFIER, 'showWeb', i, 'az.png', output_parameter_handler)
 
     oGui.setEndOfDirectory()
 
 
 def play__():  # Lancer les liens
-    oInputParameterHandler = InputParameterHandler()
-    sUrl = oInputParameterHandler.getValue('siteUrl').replace('P_L_U_S', '+')
-    sTitle = oInputParameterHandler.getValue('sMovieTitle')
-    sThumbnail = oInputParameterHandler.getValue('sThumbnail')
+    input_parameter_handler = InputParameterHandler()
+    sUrl = input_parameter_handler.getValue('siteUrl').replace('P_L_U_S', '+')
+    sTitle = input_parameter_handler.getValue('sMovieTitle')
+    sThumbnail = input_parameter_handler.getValue('sThumbnail')
 
     # Special url with tag
     if '[' in sUrl and ']' in sUrl:

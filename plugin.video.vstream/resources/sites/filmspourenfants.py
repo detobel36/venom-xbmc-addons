@@ -28,27 +28,27 @@ ALL_ALL = (URL_MAIN + 'tous-les-films-pour-enfants.html', 'showMovies')
 def load():
     oGui = Gui()
 
-    oOutputParameterHandler = OutputParameterHandler()
-    oOutputParameterHandler.addParameter('siteUrl', AGE_3ANS[0])
-    oGui.addDir(SITE_IDENTIFIER, AGE_3ANS[1], 'A partir de 3 ans', 'enfants.png', oOutputParameterHandler)
+    output_parameter_handler = OutputParameterHandler()
+    output_parameter_handler.addParameter('siteUrl', AGE_3ANS[0])
+    oGui.addDir(SITE_IDENTIFIER, AGE_3ANS[1], 'A partir de 3 ans', 'enfants.png', output_parameter_handler)
 
-    oOutputParameterHandler.addParameter('siteUrl', AGE_5ANS[0])
-    oGui.addDir(SITE_IDENTIFIER, AGE_5ANS[1], 'A partir de  5 ans', 'enfants.png', oOutputParameterHandler)
+    output_parameter_handler.addParameter('siteUrl', AGE_5ANS[0])
+    oGui.addDir(SITE_IDENTIFIER, AGE_5ANS[1], 'A partir de  5 ans', 'enfants.png', output_parameter_handler)
 
-    oOutputParameterHandler.addParameter('siteUrl', AGE_7ANS[0])
-    oGui.addDir(SITE_IDENTIFIER, AGE_7ANS[1], 'A partir de 7 ans', 'enfants.png', oOutputParameterHandler)
+    output_parameter_handler.addParameter('siteUrl', AGE_7ANS[0])
+    oGui.addDir(SITE_IDENTIFIER, AGE_7ANS[1], 'A partir de 7 ans', 'enfants.png', output_parameter_handler)
 
-    oOutputParameterHandler.addParameter('siteUrl', AGE_9ANS[0])
-    oGui.addDir(SITE_IDENTIFIER, AGE_9ANS[1], 'A partir de 9 ans', 'enfants.png', oOutputParameterHandler)
+    output_parameter_handler.addParameter('siteUrl', AGE_9ANS[0])
+    oGui.addDir(SITE_IDENTIFIER, AGE_9ANS[1], 'A partir de 9 ans', 'enfants.png', output_parameter_handler)
 
-    oOutputParameterHandler.addParameter('siteUrl', AGE_11ANSETPLUS[0])
-    oGui.addDir(SITE_IDENTIFIER, AGE_11ANSETPLUS[1], 'A partir de 11 ans', 'enfants.png', oOutputParameterHandler)
+    output_parameter_handler.addParameter('siteUrl', AGE_11ANSETPLUS[0])
+    oGui.addDir(SITE_IDENTIFIER, AGE_11ANSETPLUS[1], 'A partir de 11 ans', 'enfants.png', output_parameter_handler)
 
-    oOutputParameterHandler.addParameter('siteUrl', ALL_ALL[0])
-    oGui.addDir(SITE_IDENTIFIER, ALL_ALL[1], 'Tous les ages', 'enfants.png', oOutputParameterHandler)
+    output_parameter_handler.addParameter('siteUrl', ALL_ALL[0])
+    oGui.addDir(SITE_IDENTIFIER, ALL_ALL[1], 'Tous les ages', 'enfants.png', output_parameter_handler)
 
-    # oOutputParameterHandler.addParameter('siteUrl', BY_THEMES[0])
-    # oGui.addDir(SITE_IDENTIFIER, BY_THEMES[1], 'Films pour Enfants (Thèmes)', 'genres.png', oOutputParameterHandler)
+    # output_parameter_handler.addParameter('siteUrl', BY_THEMES[0])
+    # oGui.addDir(SITE_IDENTIFIER, BY_THEMES[1], 'Films pour Enfants (Thèmes)', 'genres.png', output_parameter_handler)
 
     oGui.setEndOfDirectory()
 
@@ -68,13 +68,13 @@ def showThemes():
     aResult = oParser.parse(sHtmlContent, sPattern)
 
     if aResult[0]:
-        oOutputParameterHandler = OutputParameterHandler()
+        output_parameter_handler = OutputParameterHandler()
         for aEntry in aResult[1]:
             sUrl = URL_MAIN + aEntry[0]
             sTitle = aEntry[1]
 
-            oOutputParameterHandler.addParameter('siteUrl', sUrl)
-            oGui.addDir(SITE_IDENTIFIER, 'showMovies', sTitle, 'genres.png', oOutputParameterHandler)
+            output_parameter_handler.addParameter('siteUrl', sUrl)
+            oGui.addDir(SITE_IDENTIFIER, 'showMovies', sTitle, 'genres.png', output_parameter_handler)
 
     oGui.setEndOfDirectory()
 
@@ -83,8 +83,8 @@ def showMovies():
     oGui = Gui()
     oParser = cParser()
 
-    oInputParameterHandler = InputParameterHandler()
-    sUrl = oInputParameterHandler.getValue('siteUrl')
+    input_parameter_handler = InputParameterHandler()
+    sUrl = input_parameter_handler.getValue('siteUrl')
 
     oRequestHandler = RequestHandler(sUrl)
     sHtmlContent = oRequestHandler.request()
@@ -95,7 +95,7 @@ def showMovies():
         total = len(aResult[1])
         progress_ = progress().VScreate(SITE_NAME)
 
-        oOutputParameterHandler = OutputParameterHandler()
+        output_parameter_handler = OutputParameterHandler()
         for aEntry in aResult[1]:
             progress_.VSupdate(progress_, total)
             if progress_.iscanceled():
@@ -106,10 +106,10 @@ def showMovies():
             sUrl = aEntry[2]
             sTitle = aEntry[3]
 
-            oOutputParameterHandler.addParameter('siteUrl', sUrl)
-            oOutputParameterHandler.addParameter('sMovieTitle', sTitle)
-            oOutputParameterHandler.addParameter('sThumb', sThumb)
-            oGui.addMisc(SITE_IDENTIFIER, 'showHosters', sTitle, 'enfants.png', sThumb, sDesc, oOutputParameterHandler)
+            output_parameter_handler.addParameter('siteUrl', sUrl)
+            output_parameter_handler.addParameter('sMovieTitle', sTitle)
+            output_parameter_handler.addParameter('sThumb', sThumb)
+            oGui.addMisc(SITE_IDENTIFIER, 'showHosters', sTitle, 'enfants.png', sThumb, sDesc, output_parameter_handler)
 
         progress_.VSclose(progress_)
 
@@ -118,10 +118,10 @@ def showMovies():
 
 def showHosters():
     oGui = Gui()
-    oInputParameterHandler = InputParameterHandler()
-    sUrl = oInputParameterHandler.getValue('siteUrl')
-    sMovieTitle = oInputParameterHandler.getValue('sMovieTitle')
-    sThumb = oInputParameterHandler.getValue('sThumb')
+    input_parameter_handler = InputParameterHandler()
+    sUrl = input_parameter_handler.getValue('siteUrl')
+    sMovieTitle = input_parameter_handler.getValue('sMovieTitle')
+    sThumb = input_parameter_handler.getValue('sThumb')
 
     sHosterUrl = sUrl
     oHoster = HosterGui().checkHoster(sHosterUrl)

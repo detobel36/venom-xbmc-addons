@@ -81,27 +81,27 @@ channels = {
 def load():
     oGui = Gui()
 
-    oOutputParameterHandler = OutputParameterHandler()
+    output_parameter_handler = OutputParameterHandler()
 
-    oOutputParameterHandler.addParameter('siteUrl', SPORT_LIVE[0])
-    oGui.addDir(SITE_IDENTIFIER, SPORT_LIVE[1], 'Sports (En direct)', 'replay.png', oOutputParameterHandler)
+    output_parameter_handler.addParameter('siteUrl', SPORT_LIVE[0])
+    oGui.addDir(SITE_IDENTIFIER, SPORT_LIVE[1], 'Sports (En direct)', 'replay.png', output_parameter_handler)
 
-    oOutputParameterHandler.addParameter('siteUrl', SPORT_GENRES[0])
-    oGui.addDir(SITE_IDENTIFIER, SPORT_GENRES[1], 'Sports (Genres)', 'genres.png', oOutputParameterHandler)
+    output_parameter_handler.addParameter('siteUrl', SPORT_GENRES[0])
+    oGui.addDir(SITE_IDENTIFIER, SPORT_GENRES[1], 'Sports (Genres)', 'genres.png', output_parameter_handler)
 
-    oOutputParameterHandler.addParameter('siteUrl', SPORT_TV[0])
-    oGui.addDir(SITE_IDENTIFIER, SPORT_TV[1], 'Chaines TV Sports', 'sport.png', oOutputParameterHandler)
+    output_parameter_handler.addParameter('siteUrl', SPORT_TV[0])
+    oGui.addDir(SITE_IDENTIFIER, SPORT_TV[1], 'Chaines TV Sports', 'sport.png', output_parameter_handler)
 
-    oOutputParameterHandler.addParameter('siteUrl', CHAINE_CINE[0])
-    oGui.addDir(SITE_IDENTIFIER, CHAINE_CINE[1], 'Chaines TV Ciné', 'tv.png', oOutputParameterHandler)
+    output_parameter_handler.addParameter('siteUrl', CHAINE_CINE[0])
+    oGui.addDir(SITE_IDENTIFIER, CHAINE_CINE[1], 'Chaines TV Ciné', 'tv.png', output_parameter_handler)
 
     oGui.setEndOfDirectory()
 
 
 def showGenres():
     oGui = Gui()
-    oInputParameterHandler = InputParameterHandler()
-    sUrl = URL_MAIN + oInputParameterHandler.getValue('siteUrl')
+    input_parameter_handler = InputParameterHandler()
+    sUrl = URL_MAIN + input_parameter_handler.getValue('siteUrl')
 
     oRequestHandler = RequestHandler(sUrl)
     sHtmlContent = oRequestHandler.request()
@@ -122,14 +122,14 @@ def showGenres():
     for sGenre in aResult[1]:
         genres.add(sGenre)
 
-    oOutputParameterHandler = OutputParameterHandler()
+    output_parameter_handler = OutputParameterHandler()
     for sGenre in sorted(genres):
         sTitle = sGenre
         sDisplayTitle = sTitle
 
-        oOutputParameterHandler.addParameter('siteUrl', 'genre=' + sGenre)
-        oOutputParameterHandler.addParameter('sMovieTitle', sTitle)
-        oOutputParameterHandler.addParameter('sDesc', sDisplayTitle)
+        output_parameter_handler.addParameter('siteUrl', 'genre=' + sGenre)
+        output_parameter_handler.addParameter('sMovieTitle', sTitle)
+        output_parameter_handler.addParameter('sDesc', sDisplayTitle)
         oGui.addMisc(
             SITE_IDENTIFIER,
             'showMovies',
@@ -137,7 +137,7 @@ def showGenres():
             'sport.png',
             '',
             sDisplayTitle,
-            oOutputParameterHandler)
+            output_parameter_handler)
 
     oGui.setEndOfDirectory()
 
@@ -145,8 +145,8 @@ def showGenres():
 def showTV():
     oGui = Gui()
 
-    oInputParameterHandler = InputParameterHandler()
-    sUrl = oInputParameterHandler.getValue('siteUrl')
+    input_parameter_handler = InputParameterHandler()
+    sUrl = input_parameter_handler.getValue('siteUrl')
 
     if 'sport' in sUrl:
         chaines = [1, 4, 21, 20, 5, 6, 7, 8, 18, 19, 9, 2, 3, 10, 11, 12, 13,
@@ -154,23 +154,23 @@ def showTV():
     else:  # Chaines ciné
         chaines = [29, 30, 38, 5, 17, 39]
 
-    oOutputParameterHandler = OutputParameterHandler()
+    output_parameter_handler = OutputParameterHandler()
     for iChannel in chaines:
         channel = channels.get(iChannel)
         sDisplayTitle = channel[0]
         sThumb = channel[1]
-        oOutputParameterHandler.addParameter('siteUrl', iChannel)
-        oOutputParameterHandler.addParameter('sMovieTitle', sDisplayTitle)
-        oOutputParameterHandler.addParameter('sThumb', sThumb)
-        oGui.addLink(SITE_IDENTIFIER, 'showLink', sDisplayTitle, sThumb, sDisplayTitle, oOutputParameterHandler)
+        output_parameter_handler.addParameter('siteUrl', iChannel)
+        output_parameter_handler.addParameter('sMovieTitle', sDisplayTitle)
+        output_parameter_handler.addParameter('sThumb', sThumb)
+        oGui.addLink(SITE_IDENTIFIER, 'showLink', sDisplayTitle, sThumb, sDisplayTitle, output_parameter_handler)
 
     oGui.setEndOfDirectory()
 
 
 def showMovies():
     oGui = Gui()
-    oInputParameterHandler = InputParameterHandler()
-    sUrl = URL_MAIN + oInputParameterHandler.getValue('siteUrl')
+    input_parameter_handler = InputParameterHandler()
+    sUrl = URL_MAIN + input_parameter_handler.getValue('siteUrl')
     sGenre = ''
 
     if 'genre=' in sUrl:
@@ -188,7 +188,7 @@ def showMovies():
     if not aResult[0]:
         oGui.addText(SITE_IDENTIFIER)
     else:
-        oOutputParameterHandler = OutputParameterHandler()
+        output_parameter_handler = OutputParameterHandler()
         for aEntry in aResult[1]:
             sDate = aEntry[0].replace('-20', '/').replace('-', '/').replace('(', '').replace(')', '')
             sDesc1 = aEntry[1]
@@ -199,9 +199,9 @@ def showMovies():
             sTitle = '%s (%s)' % (sDesc2, sDesc1)
             sDisplayTitle = sDate + ' - ' + sTitle
 
-            oOutputParameterHandler.addParameter('siteUrl', sUrl2)
-            oOutputParameterHandler.addParameter('sMovieTitle', sTitle)
-            oOutputParameterHandler.addParameter('sDesc', sDisplayTitle)
+            output_parameter_handler.addParameter('siteUrl', sUrl2)
+            output_parameter_handler.addParameter('sMovieTitle', sTitle)
+            output_parameter_handler.addParameter('sDesc', sDisplayTitle)
             oGui.addMisc(
                 SITE_IDENTIFIER,
                 'showLive',
@@ -209,17 +209,17 @@ def showMovies():
                 'sport.png',
                 '',
                 sDisplayTitle,
-                oOutputParameterHandler)
+                output_parameter_handler)
 
     oGui.setEndOfDirectory()
 
 
 def showLive():
     oGui = Gui()
-    oInputParameterHandler = InputParameterHandler()
-    sUrl = oInputParameterHandler.getValue('siteUrl')
-    sDesc = oInputParameterHandler.getValue('sDesc')
-    sMovieTitle = oInputParameterHandler.getValue('sMovieTitle')
+    input_parameter_handler = InputParameterHandler()
+    sUrl = input_parameter_handler.getValue('siteUrl')
+    sDesc = input_parameter_handler.getValue('sDesc')
+    sMovieTitle = input_parameter_handler.getValue('sMovieTitle')
 
     links = []
     if ',' in sUrl:
@@ -227,7 +227,7 @@ def showLive():
     else:
         links.append(eval(sUrl))
 
-    oOutputParameterHandler = OutputParameterHandler()
+    output_parameter_handler = OutputParameterHandler()
     for link in links:
         aEntry = re.findall('(\\d+)(.+)', link)
         iChannel = aEntry[0][0]
@@ -239,10 +239,10 @@ def showLive():
             sThumb = channel[1]
         sDisplayTitle = '%s - [%s] (%s)' % (sMovieTitle, sChannel, sLang)
 
-        oOutputParameterHandler.addParameter('siteUrl', iChannel)
-        oOutputParameterHandler.addParameter('sMovieTitle', sMovieTitle)
-        oOutputParameterHandler.addParameter('sThumb', sThumb)
-        oGui.addMisc(SITE_IDENTIFIER, 'showLink', sDisplayTitle, 'sport.png', sThumb, sDesc, oOutputParameterHandler)
+        output_parameter_handler.addParameter('siteUrl', iChannel)
+        output_parameter_handler.addParameter('sMovieTitle', sMovieTitle)
+        output_parameter_handler.addParameter('sThumb', sThumb)
+        oGui.addMisc(SITE_IDENTIFIER, 'showLink', sDisplayTitle, 'sport.png', sThumb, sDesc, output_parameter_handler)
 
     oGui.setEndOfDirectory()
 
@@ -250,17 +250,17 @@ def showLive():
 def showLink():
     oGui = Gui()
 
-    oInputParameterHandler = InputParameterHandler()
-    sUrl = oInputParameterHandler.getValue('siteUrl')
-    sMovieTitle = oInputParameterHandler.getValue('sMovieTitle')
-    sThumb = oInputParameterHandler.getValue('sThumb')
+    input_parameter_handler = InputParameterHandler()
+    sUrl = input_parameter_handler.getValue('siteUrl')
+    sMovieTitle = input_parameter_handler.getValue('sMovieTitle')
+    sThumb = input_parameter_handler.getValue('sThumb')
     if not sThumb:
         sThumb = ''
 
     sHoster = 'https://leet365.cc/fr/%d/%s'
 # alternative    sHoster = 'https://1rowsports.com/player/%d/%s'
 
-    oOutputParameterHandler = OutputParameterHandler()
+    output_parameter_handler = OutputParameterHandler()
 
     # jusqu'à 6 hosters, mais on vStream ne sait décoder que le 1 et le 5.
     hosters = [1, 5]
@@ -270,9 +270,9 @@ def showLink():
         i += 1
         sDisplayTitle = '%s [Lien %d]' % (sMovieTitle, i)
         sHosterUrl = sHoster % (numHost, sUrl)
-        oOutputParameterHandler.addParameter('siteUrl', sHosterUrl)
-        oOutputParameterHandler.addParameter('sMovieTitle', sMovieTitle)
-        oOutputParameterHandler.addParameter('sThumb', sThumb)
+        output_parameter_handler.addParameter('siteUrl', sHosterUrl)
+        output_parameter_handler.addParameter('sMovieTitle', sMovieTitle)
+        output_parameter_handler.addParameter('sThumb', sThumb)
         oGui.addMisc(
             SITE_IDENTIFIER,
             'showHoster',
@@ -280,7 +280,7 @@ def showLink():
             'sport.png',
             sThumb,
             sDisplayTitle,
-            oOutputParameterHandler)
+            output_parameter_handler)
 
     oGui.setEndOfDirectory()
 
@@ -288,10 +288,10 @@ def showLink():
 def showHoster():
     oGui = Gui()
 
-    oInputParameterHandler = InputParameterHandler()
-    sUrl = oInputParameterHandler.getValue('siteUrl')
-    sMovieTitle = oInputParameterHandler.getValue('sMovieTitle')
-    sThumb = oInputParameterHandler.getValue('sThumb')
+    input_parameter_handler = InputParameterHandler()
+    sUrl = input_parameter_handler.getValue('siteUrl')
+    sMovieTitle = input_parameter_handler.getValue('sMovieTitle')
+    sThumb = input_parameter_handler.getValue('sThumb')
     if not sThumb:
         sThumb = ''
 

@@ -58,19 +58,19 @@ def GetUrlMain():
 def load():
     oGui = Gui()
 
-    oOutputParameterHandler = OutputParameterHandler()
+    output_parameter_handler = OutputParameterHandler()
 
-    oOutputParameterHandler.addParameter('siteUrl', SPORT_LIVE[0])
-    oGui.addDir(SITE_IDENTIFIER, SPORT_LIVE[1], 'Sports (En direct)', 'replay.png', oOutputParameterHandler)
+    output_parameter_handler.addParameter('siteUrl', SPORT_LIVE[0])
+    oGui.addDir(SITE_IDENTIFIER, SPORT_LIVE[1], 'Sports (En direct)', 'replay.png', output_parameter_handler)
 
-    # oOutputParameterHandler.addParameter('siteUrl', SPORT_GENRES[0])
-    # oGui.addDir(SITE_IDENTIFIER, SPORT_GENRES[1], 'Sports (Genres)', 'genres.png', oOutputParameterHandler)
+    # output_parameter_handler.addParameter('siteUrl', SPORT_GENRES[0])
+    # oGui.addDir(SITE_IDENTIFIER, SPORT_GENRES[1], 'Sports (Genres)', 'genres.png', output_parameter_handler)
     #
-    oOutputParameterHandler.addParameter('siteUrl', SPORT_TV[0])
-    oGui.addDir(SITE_IDENTIFIER, SPORT_TV[1], 'Chaines TV Sports', 'sport.png', oOutputParameterHandler)
+    output_parameter_handler.addParameter('siteUrl', SPORT_TV[0])
+    oGui.addDir(SITE_IDENTIFIER, SPORT_TV[1], 'Chaines TV Sports', 'sport.png', output_parameter_handler)
 
-    # oOutputParameterHandler.addParameter('siteUrl', CHAINE_CINE[0])
-    # oGui.addDir(SITE_IDENTIFIER, CHAINE_CINE[1], 'Chaines TV Ciné', 'tv.png', oOutputParameterHandler)
+    # output_parameter_handler.addParameter('siteUrl', CHAINE_CINE[0])
+    # oGui.addDir(SITE_IDENTIFIER, CHAINE_CINE[1], 'Chaines TV Ciné', 'tv.png', output_parameter_handler)
 
     oGui.setEndOfDirectory()
 
@@ -83,20 +83,20 @@ def showGenres():
     genres = [('Basket', '3'), ('Football', '1'), ('Rugby', '2'), ('Tennis', '5'),
               ('Fomule1', '4'), ('Handball', '6'), ('Moto', '7')]
 
-    oOutputParameterHandler = OutputParameterHandler()
+    output_parameter_handler = OutputParameterHandler()
     for title, url in genres:
         sUrl = urlMain + url + genreURL
-        oOutputParameterHandler.addParameter('siteUrl', sUrl)
-        oOutputParameterHandler.addParameter('sMovieTitle', title)
-        oGui.addMisc(SITE_IDENTIFIER, 'showMovies', title, 'genres.png', '', title, oOutputParameterHandler)
+        output_parameter_handler.addParameter('siteUrl', sUrl)
+        output_parameter_handler.addParameter('sMovieTitle', title)
+        oGui.addMisc(SITE_IDENTIFIER, 'showMovies', title, 'genres.png', '', title, output_parameter_handler)
 
     oGui.setEndOfDirectory()
 
 
 def showMovies(sSearch=''):
     oGui = Gui()
-    oInputParameterHandler = InputParameterHandler()
-    sUrl = oInputParameterHandler.getValue('siteUrl')
+    input_parameter_handler = InputParameterHandler()
+    sUrl = input_parameter_handler.getValue('siteUrl')
     urlMain = GetUrlMain()
     if 'http' not in sUrl:
         sUrl = urlMain + sUrl
@@ -114,7 +114,7 @@ def showMovies(sSearch=''):
         oGui.addText(SITE_IDENTIFIER)
     else:
         # total = len(aResult[1])
-        oOutputParameterHandler = OutputParameterHandler()
+        output_parameter_handler = OutputParameterHandler()
         for aEntry in aResult[1]:
             sThumb = aEntry[0]
             sUrl2 = aEntry[1]
@@ -146,12 +146,12 @@ def showMovies(sSearch=''):
             if 'http' not in sThumb:
                 sThumb = urlMain[:-1] + sThumb
 
-            oOutputParameterHandler.addParameter('siteUrl', sUrl2)
-            oOutputParameterHandler.addParameter('sMovieTitle', sTitle)
-            oOutputParameterHandler.addParameter('sDesc', sDisplayTitle)
-            oOutputParameterHandler.addParameter('sThumb', sThumb)
+            output_parameter_handler.addParameter('siteUrl', sUrl2)
+            output_parameter_handler.addParameter('sMovieTitle', sTitle)
+            output_parameter_handler.addParameter('sDesc', sDisplayTitle)
+            output_parameter_handler.addParameter('sThumb', sThumb)
 
-            oGui.addLink(SITE_IDENTIFIER, 'showLive', sDisplayTitle, sThumb, sDisplayTitle, oOutputParameterHandler)
+            oGui.addLink(SITE_IDENTIFIER, 'showLive', sDisplayTitle, sThumb, sDisplayTitle, output_parameter_handler)
 
     if not sSearch:
         oGui.setEndOfDirectory()
@@ -159,11 +159,11 @@ def showMovies(sSearch=''):
 
 def showLive():
     oGui = Gui()
-    oInputParameterHandler = InputParameterHandler()
-    sUrl = oInputParameterHandler.getValue('siteUrl')
-    sThumb = oInputParameterHandler.getValue('sThumb')
-    sDesc = oInputParameterHandler.getValue('sDesc')
-    sMovieTitle = oInputParameterHandler.getValue('sMovieTitle')
+    input_parameter_handler = InputParameterHandler()
+    sUrl = input_parameter_handler.getValue('siteUrl')
+    sThumb = input_parameter_handler.getValue('sThumb')
+    sDesc = input_parameter_handler.getValue('sDesc')
+    sMovieTitle = input_parameter_handler.getValue('sMovieTitle')
 
     oRequestHandler = RequestHandler(sUrl)
     sHtmlContent = oRequestHandler.request()
@@ -175,7 +175,7 @@ def showLive():
 
     i = 0
     if aResult[0]:
-        oOutputParameterHandler = OutputParameterHandler()
+        output_parameter_handler = OutputParameterHandler()
         if aResult[1]:
             for aEntry in aResult[1]:
                 i += 1
@@ -185,11 +185,11 @@ def showLive():
                 sDisplayTitle = '%s - Lien %d (%s)' % (sMovieTitle, i, sLang1 if len(sLang1)
                                                        == 2 else sLang2 if len(sLang2) == 2 else '')
 
-                oOutputParameterHandler.addParameter('siteUrl', sUrl2)
-                oOutputParameterHandler.addParameter('sMovieTitle', sMovieTitle)
-                oOutputParameterHandler.addParameter('sThumb', sThumb)
-                oOutputParameterHandler.addParameter('siterefer', sUrl)
-                oGui.addLink(SITE_IDENTIFIER, 'showLink', sDisplayTitle, sThumb, sDesc, oOutputParameterHandler)
+                output_parameter_handler.addParameter('siteUrl', sUrl2)
+                output_parameter_handler.addParameter('sMovieTitle', sMovieTitle)
+                output_parameter_handler.addParameter('sThumb', sThumb)
+                output_parameter_handler.addParameter('siterefer', sUrl)
+                oGui.addLink(SITE_IDENTIFIER, 'showLink', sDisplayTitle, sThumb, sDesc, output_parameter_handler)
 
     # # 1 seul liens tv telerium
     # sPattern = 'iframe id="video" src.+?id=([^"]+)'
@@ -197,12 +197,12 @@ def showLive():
     # if aResult[0] is True:
     #     sUrl2 = GetUrlMain() + 'go/' + aResult[1][0]
     #     sDisplayTitle = sMovieTitle
-    #     oOutputParameterHandler = OutputParameterHandler()
-    #     oOutputParameterHandler.addParameter('siteUrl', sUrl2)
-    #     oOutputParameterHandler.addParameter('sMovieTitle', sMovieTitle)
-    #     oOutputParameterHandler.addParameter('sThumb', sThumb)
-    #     oOutputParameterHandler.addParameter('siterefer', sUrl)
-    #     oGui.addLink(SITE_IDENTIFIER, 'showLink', sDisplayTitle, sThumb, sDesc, oOutputParameterHandler)
+    #     output_parameter_handler = OutputParameterHandler()
+    #     output_parameter_handler.addParameter('siteUrl', sUrl2)
+    #     output_parameter_handler.addParameter('sMovieTitle', sMovieTitle)
+    #     output_parameter_handler.addParameter('sThumb', sThumb)
+    #     output_parameter_handler.addParameter('siterefer', sUrl)
+    #     oGui.addLink(SITE_IDENTIFIER, 'showLink', sDisplayTitle, sThumb, sDesc, output_parameter_handler)
 
     oGui.setEndOfDirectory()
 
@@ -210,11 +210,11 @@ def showLive():
 def showLink():
     oGui = Gui()
 
-    oInputParameterHandler = InputParameterHandler()
-    sUrl = oInputParameterHandler.getValue('siteUrl')
-    sThumb = oInputParameterHandler.getValue('sThumb')
-    sMovieTitle = oInputParameterHandler.getValue('sMovieTitle')
-    siterefer = oInputParameterHandler.getValue('siterefer')
+    input_parameter_handler = InputParameterHandler()
+    sUrl = input_parameter_handler.getValue('siteUrl')
+    sThumb = input_parameter_handler.getValue('sThumb')
+    sMovieTitle = input_parameter_handler.getValue('sMovieTitle')
+    siterefer = input_parameter_handler.getValue('siterefer')
     sHosterUrl = ''
 
     if 'yahoo' in sUrl:  # redirection

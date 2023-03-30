@@ -76,18 +76,18 @@ class cTrakt:
     def search(self):
         oGui = Gui()
 
-        oOutputParameterHandler = OutputParameterHandler()
-        oOutputParameterHandler.addParameter('siteUrl', 'https://')
-        oOutputParameterHandler.addParameter('type', 'movie')
-        oGui.addDir('themoviedb_org', 'showSearchMovie', self.ADDON.VSlang(30423), 'films.png', oOutputParameterHandler)
+        output_parameter_handler = OutputParameterHandler()
+        output_parameter_handler.addParameter('siteUrl', 'https://')
+        output_parameter_handler.addParameter('type', 'movie')
+        oGui.addDir('themoviedb_org', 'showSearchMovie', self.ADDON.VSlang(30423), 'films.png', output_parameter_handler)
 
-        oOutputParameterHandler.addParameter('type', 'show')
+        output_parameter_handler.addParameter('type', 'show')
         oGui.addDir(
             'themoviedb_org',
             'showSearchSerie',
             self.ADDON.VSlang(30424),
             'series.png',
-            oOutputParameterHandler)
+            output_parameter_handler)
 
         oGui.setEndOfDirectory()
 
@@ -96,12 +96,12 @@ class cTrakt:
         # self.getToken()
         oGui = Gui()
 
-        oOutputParameterHandler = OutputParameterHandler()
+        output_parameter_handler = OutputParameterHandler()
         if self.ADDON.getSetting('bstoken') == '':
             VSlog('bstoken invalid')
-            oOutputParameterHandler.addParameter('siteUrl', 'https://')
-            oOutputParameterHandler.addParameter('type', 'movie')
-            oGui.addDir(SITE_IDENTIFIER, 'getToken', self.ADDON.VSlang(30305), 'trakt.png', oOutputParameterHandler)
+            output_parameter_handler.addParameter('siteUrl', 'https://')
+            output_parameter_handler.addParameter('type', 'movie')
+            oGui.addDir(SITE_IDENTIFIER, 'getToken', self.ADDON.VSlang(30305), 'trakt.png', output_parameter_handler)
         else:
             # nom de l'user
             try:
@@ -118,55 +118,55 @@ class cTrakt:
 
             if (total > 0):
                 sUsername = sHtmlContent['username']
-                oOutputParameterHandler.addParameter('siteUrl', 'https://')
+                output_parameter_handler.addParameter('siteUrl', 'https://')
                 oGui.addText(SITE_IDENTIFIER, (self.ADDON.VSlang(30306)) % sUsername)
 
-            oOutputParameterHandler.addParameter('siteUrl', 'https://')
-            oOutputParameterHandler.addParameter('type', 'movie')
-            oGui.addDir(SITE_IDENTIFIER, 'search', self.ADDON.VSlang(30330), 'search.png', oOutputParameterHandler)
+            output_parameter_handler.addParameter('siteUrl', 'https://')
+            output_parameter_handler.addParameter('type', 'movie')
+            oGui.addDir(SITE_IDENTIFIER, 'search', self.ADDON.VSlang(30330), 'search.png', output_parameter_handler)
 
-            oOutputParameterHandler.addParameter('type', 'movie')
-            oGui.addDir(SITE_IDENTIFIER, 'getLists', self.ADDON.VSlang(30120), 'films.png', oOutputParameterHandler)
+            output_parameter_handler.addParameter('type', 'movie')
+            oGui.addDir(SITE_IDENTIFIER, 'getLists', self.ADDON.VSlang(30120), 'films.png', output_parameter_handler)
 
-            oOutputParameterHandler.addParameter('type', 'show')
-            oGui.addDir(SITE_IDENTIFIER, 'getLists', self.ADDON.VSlang(30121), 'series.png', oOutputParameterHandler)
+            output_parameter_handler.addParameter('type', 'show')
+            oGui.addDir(SITE_IDENTIFIER, 'getLists', self.ADDON.VSlang(30121), 'series.png', output_parameter_handler)
 
             if self.ADDON.getSetting('trakt_show_lists') == 'true':
-                oOutputParameterHandler.addParameter('type', 'custom-lists')
-                oGui.addDir(SITE_IDENTIFIER, 'menuList', "Listes", 'trakt.png', oOutputParameterHandler)
+                output_parameter_handler.addParameter('type', 'custom-lists')
+                oGui.addDir(SITE_IDENTIFIER, 'menuList', "Listes", 'trakt.png', output_parameter_handler)
 
-            oOutputParameterHandler.addParameter('siteUrl', URL_API + 'users/me/history?page=1&limit=' + str(MAXRESULT))
-            oGui.addDir(SITE_IDENTIFIER, 'getTrakt', self.ADDON.VSlang(30308), 'trakt.png', oOutputParameterHandler)
+            output_parameter_handler.addParameter('siteUrl', URL_API + 'users/me/history?page=1&limit=' + str(MAXRESULT))
+            oGui.addDir(SITE_IDENTIFIER, 'getTrakt', self.ADDON.VSlang(30308), 'trakt.png', output_parameter_handler)
 
-            oOutputParameterHandler.addParameter('siteUrl', URL_API + 'oauth/revoke')
+            output_parameter_handler.addParameter('siteUrl', URL_API + 'oauth/revoke')
             oGui.addDir(
                 SITE_IDENTIFIER,
                 'getCalendrier',
                 self.ADDON.VSlang(30331),
                 'trakt.png',
-                oOutputParameterHandler)
+                output_parameter_handler)
 
-            oOutputParameterHandler.addParameter('siteUrl', URL_API + 'oauth/revoke')
-            oGui.addDir(SITE_IDENTIFIER, 'getBsout', self.ADDON.VSlang(30309), 'trakt.png', oOutputParameterHandler)
+            output_parameter_handler.addParameter('siteUrl', URL_API + 'oauth/revoke')
+            oGui.addDir(SITE_IDENTIFIER, 'getBsout', self.ADDON.VSlang(30309), 'trakt.png', output_parameter_handler)
 
         oGui.setEndOfDirectory()
 
     def menuList(self):
         oGui = Gui()
 
-        oOutputParameterHandler = OutputParameterHandler()
-        oOutputParameterHandler.addParameter('siteUrl', 'https://')
-        oOutputParameterHandler.addParameter('type', 'lists-tendances')
-        oGui.addDir(SITE_IDENTIFIER, 'getLists', "Listes tendances", 'trakt.png', oOutputParameterHandler)
+        output_parameter_handler = OutputParameterHandler()
+        output_parameter_handler.addParameter('siteUrl', 'https://')
+        output_parameter_handler.addParameter('type', 'lists-tendances')
+        oGui.addDir(SITE_IDENTIFIER, 'getLists', "Listes tendances", 'trakt.png', output_parameter_handler)
 
-        oOutputParameterHandler.addParameter('type', 'lists-pop')
-        oGui.addDir(SITE_IDENTIFIER, 'getLists', "Listes populaires", 'trakt.png', oOutputParameterHandler)
+        output_parameter_handler.addParameter('type', 'lists-pop')
+        oGui.addDir(SITE_IDENTIFIER, 'getLists', "Listes populaires", 'trakt.png', output_parameter_handler)
 
-        oOutputParameterHandler.addParameter('type', 'custom-lists')
-        oGui.addDir(SITE_IDENTIFIER, 'getLists', self.ADDON.VSlang(30360), 'trakt.png', oOutputParameterHandler)
+        output_parameter_handler.addParameter('type', 'custom-lists')
+        oGui.addDir(SITE_IDENTIFIER, 'getLists', self.ADDON.VSlang(30360), 'trakt.png', output_parameter_handler)
 
-        oOutputParameterHandler.addParameter('type', 'liked-lists')
-        oGui.addDir(SITE_IDENTIFIER, 'getLists', 'Mes listes aimées', 'trakt.png', oOutputParameterHandler)
+        output_parameter_handler.addParameter('type', 'liked-lists')
+        oGui.addDir(SITE_IDENTIFIER, 'getLists', 'Mes listes aimées', 'trakt.png', output_parameter_handler)
 
         oGui.setEndOfDirectory()
 
@@ -183,17 +183,17 @@ class cTrakt:
 
         for sTitle, sUrl in liste:
 
-            oOutputParameterHandler = OutputParameterHandler()
-            oOutputParameterHandler.addParameter('siteUrl', sUrl)
-            oGui.addDir(SITE_IDENTIFIER, 'getTrakt', sTitle, 'genres.png', oOutputParameterHandler)
+            output_parameter_handler = OutputParameterHandler()
+            output_parameter_handler.addParameter('siteUrl', sUrl)
+            oGui.addDir(SITE_IDENTIFIER, 'getTrakt', sTitle, 'genres.png', output_parameter_handler)
 
         oGui.setEndOfDirectory()
 
     def getLists(self):
         oGui = Gui()
 
-        oInputParameterHandler = InputParameterHandler()
-        sType = oInputParameterHandler.getValue('type')
+        input_parameter_handler = InputParameterHandler()
+        sType = input_parameter_handler.getValue('type')
 
         # stats user
         oRequestHandler = RequestHandler(URL_API + 'users/me/stats')
@@ -301,15 +301,15 @@ class cTrakt:
                 liste.append([self.decode((List['list']['name'] + ' (' + str(List['list']['item_count']) + ')')), url])
 
         for sTitle, sUrl in liste:
-            oOutputParameterHandler = OutputParameterHandler()
-            oOutputParameterHandler.addParameter('siteUrl', sUrl)
-            oGui.addDir(SITE_IDENTIFIER, 'getTrakt', sTitle, 'genres.png', oOutputParameterHandler)
+            output_parameter_handler = OutputParameterHandler()
+            output_parameter_handler.addParameter('siteUrl', sUrl)
+            oGui.addDir(SITE_IDENTIFIER, 'getTrakt', sTitle, 'genres.png', output_parameter_handler)
 
         oGui.setEndOfDirectory()
 
     def getBsout(self):
-        oInputParameterHandler = InputParameterHandler()
-        sUrl = oInputParameterHandler.getValue('siteUrl')
+        input_parameter_handler = InputParameterHandler()
+        sUrl = input_parameter_handler.getValue('siteUrl')
 
         oRequestHandler = RequestHandler(sUrl)
         oRequestHandler.addHeaderEntry('Content-Type', 'application/json')
@@ -350,12 +350,12 @@ class cTrakt:
     def getTrakt(self, url2=None):
         oGui = Gui()
 
-        oInputParameterHandler = InputParameterHandler()
+        input_parameter_handler = InputParameterHandler()
         if url2:
             sUrl = url2
         else:
-            sCurrentLimit = oInputParameterHandler.getValue('limite')
-            sUrl = oInputParameterHandler.getValue('siteUrl')
+            sCurrentLimit = input_parameter_handler.getValue('limite')
+            sUrl = input_parameter_handler.getValue('siteUrl')
 
         sUrl = sUrl + "?page=1&limit=" + MAXRESULT
 
@@ -662,12 +662,12 @@ class cTrakt:
                     return
 
                 if sTitle:
-                    oOutputParameterHandler = OutputParameterHandler()
-                    oOutputParameterHandler.addParameter('siteUrl', sUrl + str(sTrakt))
-                    oOutputParameterHandler.addParameter('file', sFile)
-                    oOutputParameterHandler.addParameter('key', sKey)
-                    oOutputParameterHandler.addParameter('searchtext', searchtext)
-                    self.getFolder(oGui, sId, sTitle, sFile, sFunction, sImdb, sTmdb, oOutputParameterHandler)
+                    output_parameter_handler = OutputParameterHandler()
+                    output_parameter_handler.addParameter('siteUrl', sUrl + str(sTrakt))
+                    output_parameter_handler.addParameter('file', sFile)
+                    output_parameter_handler.addParameter('key', sKey)
+                    output_parameter_handler.addParameter('searchtext', searchtext)
+                    self.getFolder(oGui, sId, sTitle, sFile, sFunction, sImdb, sTmdb, output_parameter_handler)
                     sKey += 1
 
             progress_.VSclose(progress_)
@@ -675,29 +675,29 @@ class cTrakt:
             try:
                 if (sPage != sMaxPage):
                     sNextPage = sUrl.replace('page=' + str(sPage), 'page=' + str(int(sPage) + 1))
-                    oOutputParameterHandler = OutputParameterHandler()
-                    oOutputParameterHandler.addParameter('siteUrl', sNextPage)
+                    output_parameter_handler = OutputParameterHandler()
+                    output_parameter_handler.addParameter('siteUrl', sNextPage)
                     oGui.addNext(SITE_IDENTIFIER, 'getTrakt', 'Page ' +
-                                 str(int(sPage) + 1) + '/' + sMaxPage, oOutputParameterHandler)
+                                 str(int(sPage) + 1) + '/' + sMaxPage, output_parameter_handler)
             except BaseException:
                 pass
 
             if 'X-Pagination-Page-Count' not in sHeaders and len(sHtmlContent) > int(MAXRESULT):
-                oOutputParameterHandler = OutputParameterHandler()
-                oOutputParameterHandler.addParameter('siteUrl', sUrl)
-                oOutputParameterHandler.addParameter('limite', int(sCurrentLimit) + int(MAXRESULT))
-                oGui.addNext(SITE_IDENTIFIER, 'getTrakt', 'Page suivante', oOutputParameterHandler)
+                output_parameter_handler = OutputParameterHandler()
+                output_parameter_handler.addParameter('siteUrl', sUrl)
+                output_parameter_handler.addParameter('limite', int(sCurrentLimit) + int(MAXRESULT))
+                oGui.addNext(SITE_IDENTIFIER, 'getTrakt', 'Page suivante', output_parameter_handler)
 
         oGui.setEndOfDirectory()
 
     def getBseasons(self):
         oGui = Gui()
 
-        oInputParameterHandler = InputParameterHandler()
-        sUrl = oInputParameterHandler.getValue('siteUrl')
-        sFile = oInputParameterHandler.getValue('file')
-        sKey = oInputParameterHandler.getValue('key')
-        searchtext = oInputParameterHandler.getValue('searchtext')
+        input_parameter_handler = InputParameterHandler()
+        sUrl = input_parameter_handler.getValue('siteUrl')
+        sFile = input_parameter_handler.getValue('file')
+        sKey = input_parameter_handler.getValue('key')
+        searchtext = input_parameter_handler.getValue('searchtext')
 
         oRequestHandler = RequestHandler(sUrl)
         oRequestHandler.addHeaderEntry('Content-Type', 'application/json')
@@ -718,14 +718,14 @@ class cTrakt:
                     return
 
                 sTitle2 = ('%s - (S%02d)') % (self.decode(sFile), int(sNumber))
-                oOutputParameterHandler = OutputParameterHandler()
-                oOutputParameterHandler.addParameter('siteUrl', sUrl + str(sNumber))
-                oOutputParameterHandler.addParameter('Key', sKey)
-                oOutputParameterHandler.addParameter('sNum', sNum)
-                oOutputParameterHandler.addParameter('file', sFile)
-                oOutputParameterHandler.addParameter('title', sTitle2)
-                oOutputParameterHandler.addParameter('searchtext', searchtext)
-                self.getFolder(oGui, SITE_IDENTIFIER, sTitle2, sFile, 'getBepisodes', '', '', oOutputParameterHandler)
+                output_parameter_handler = OutputParameterHandler()
+                output_parameter_handler.addParameter('siteUrl', sUrl + str(sNumber))
+                output_parameter_handler.addParameter('Key', sKey)
+                output_parameter_handler.addParameter('sNum', sNum)
+                output_parameter_handler.addParameter('file', sFile)
+                output_parameter_handler.addParameter('title', sTitle2)
+                output_parameter_handler.addParameter('searchtext', searchtext)
+                self.getFolder(oGui, SITE_IDENTIFIER, sTitle2, sFile, 'getBepisodes', '', '', output_parameter_handler)
                 sNum += 1
 
         oGui.setEndOfDirectory()
@@ -769,13 +769,13 @@ class cTrakt:
     def getBepisodes(self):
         oGui = Gui()
 
-        oInputParameterHandler = InputParameterHandler()
-        sUrl = oInputParameterHandler.getValue('siteUrl')
-        sTitle = oInputParameterHandler.getValue('title')
-        sFile = oInputParameterHandler.getValue('file')
-        sKey = oInputParameterHandler.getValue('key')
-        sNum = oInputParameterHandler.getValue('sNum')
-        searchtext = oInputParameterHandler.getValue('searchtext')
+        input_parameter_handler = InputParameterHandler()
+        sUrl = input_parameter_handler.getValue('siteUrl')
+        sTitle = input_parameter_handler.getValue('title')
+        sFile = input_parameter_handler.getValue('file')
+        sKey = input_parameter_handler.getValue('key')
+        sNum = input_parameter_handler.getValue('sNum')
+        searchtext = input_parameter_handler.getValue('searchtext')
 
         cTrakt.CONTENT = '2'
 
@@ -805,16 +805,16 @@ class cTrakt:
                 else:
                     return
 
-                oOutputParameterHandler = OutputParameterHandler()
-                oOutputParameterHandler.addParameter('siteUrl', sUrl + str(sNumber))
-                oOutputParameterHandler.addParameter('file', sFile)
-                oOutputParameterHandler.addParameter('searchtext', searchtext)
-                self.getFolder(oGui, 'globalSearch', sTitle2, sFile, 'showSearch', '', '', oOutputParameterHandler)
+                output_parameter_handler = OutputParameterHandler()
+                output_parameter_handler.addParameter('siteUrl', sUrl + str(sNumber))
+                output_parameter_handler.addParameter('file', sFile)
+                output_parameter_handler.addParameter('searchtext', searchtext)
+                self.getFolder(oGui, 'globalSearch', sTitle2, sFile, 'showSearch', '', '', output_parameter_handler)
 
         oGui.setEndOfDirectory()
         return
 
-    def getFolder(self, oGui, sId, sTitle, sFile, sFunction, sImdb, sTmdb, oOutputParameterHandler):
+    def getFolder(self, oGui, sId, sTitle, sFile, sFunction, sImdb, sTmdb, output_parameter_handler):
 
         oGuiElement = GuiElement()
         oGuiElement.setSiteName(sId)
@@ -837,7 +837,7 @@ class cTrakt:
             oGuiElement.setCat(1)
             Gui.CONTENT = 'movies'
 
-        oGui.addFolder(oGuiElement, oOutputParameterHandler)
+        oGui.addFolder(oGuiElement, output_parameter_handler)
 
     def getContext(self):
 
@@ -885,21 +885,21 @@ class cTrakt:
             self.DIALOG.VSinfo('Vous devez être connecté')
             return
 
-        oInputParameterHandler = InputParameterHandler()
+        input_parameter_handler = InputParameterHandler()
 
         if not Action == "SetWatched":
-            sAction = oInputParameterHandler.getValue('sAction')
+            sAction = input_parameter_handler.getValue('sAction')
             if not sAction:
                 sAction = self.getContext()
             if not sAction:
                 return
 
-        sType = oInputParameterHandler.getValue('sCat')
+        sType = input_parameter_handler.getValue('sCat')
         if not sType:
             sType = self.getType()
         # entrer imdb ? venant d'ou?
-        sImdb = oInputParameterHandler.getValue('sImdbId')
-        sTMDB = oInputParameterHandler.getValue('sTmdbId')
+        sImdb = input_parameter_handler.getValue('sImdbId')
+        sTMDB = input_parameter_handler.getValue('sTmdbId')
         sSeason = False
         sEpisode = False
 
@@ -921,18 +921,18 @@ class cTrakt:
 
         # Mettre en vu automatiquement.
         if Action == "SetWatched":
-            sFileName = oInputParameterHandler.getValue('sFileName')
+            sFileName = input_parameter_handler.getValue('sFileName')
 
             if sType == "shows":
                 if self.ADDON.getSetting('trakt_tvshows_activate_scrobbling') == 'false':
                     return
 
-                sTitle = oInputParameterHandler.getValue('tvshowtitle')
-                sSeason = oInputParameterHandler.getValue('sSeason')
+                sTitle = input_parameter_handler.getValue('tvshowtitle')
+                sSeason = input_parameter_handler.getValue('sSeason')
                 if not sSeason:
                     sSeason = re.search('(?i)( s(?:aison +)*([0-9]+(?:\\-[0-9\\?]+)*))', sTitle).group(2)
                 if not sEpisode:
-                    sEpisode = oInputParameterHandler.getValue('sEpisode')
+                    sEpisode = input_parameter_handler.getValue('sEpisode')
                 if not sEpisode:
                     sEpisode = re.search(
                         '(?i)(?:^|[^a-z])((?:E|(?:\\wpisode\\s?))([0-9]+(?:[\\-\\.][0-9\\?]+)*))',
@@ -945,9 +945,9 @@ class cTrakt:
             sAction = URL_API + 'sync/history'
 
             if not sTitle:
-                sTitle = oInputParameterHandler.getValue('sMovieTitle')
+                sTitle = input_parameter_handler.getValue('sMovieTitle')
         else:
-            sTitle = oInputParameterHandler.getValue('sMovieTitle')
+            sTitle = input_parameter_handler.getValue('sMovieTitle')
 
         if not sImdb:
             if not sTMDB:
@@ -1003,11 +1003,11 @@ class cTrakt:
         except UnboundLocalError:
             self.DIALOG.VSinfo("Erreur")
 
-        if (oInputParameterHandler.exist('sReload')):
+        if (input_parameter_handler.exist('sReload')):
             xbmc.executebuiltin('Container.Refresh')
         return
 
-    def createContexTrakt(self, oGui, oGuiElement, oOutputParameterHandler=''):
+    def createContexTrakt(self, oGui, oGuiElement, output_parameter_handler=''):
 
         liste = []
         liste.append(['[COLOR teal]' + self.ADDON.VSlang(30221) + ' ' +
@@ -1036,23 +1036,23 @@ class cTrakt:
                       'sync/history/remove'])
 
         for sTitle, sUrl in liste:
-            oOutputParameterHandler = OutputParameterHandler()
+            output_parameter_handler = OutputParameterHandler()
             if cTrakt.CONTENT == '2':
-                oOutputParameterHandler.addParameter('sType', 'shows')
+                output_parameter_handler.addParameter('sType', 'shows')
             else:
-                oOutputParameterHandler.addParameter('sType', 'movies')
-            oOutputParameterHandler.addParameter('siteUrl', sUrl)
-            oOutputParameterHandler.addParameter('sAction', sUrl)
-            oOutputParameterHandler.addParameter('sReload', True)
-            # oOutputParameterHandler.addParameter('sImdb', oGuiElement.getImdbId())
-            oOutputParameterHandler.addParameter('sTmdbId', oGuiElement.getTmdbId())
-            oGui.createSimpleMenu(oGuiElement, oOutputParameterHandler, 'cTrakt', 'cTrakt', 'getAction', sTitle)
+                output_parameter_handler.addParameter('sType', 'movies')
+            output_parameter_handler.addParameter('siteUrl', sUrl)
+            output_parameter_handler.addParameter('sAction', sUrl)
+            output_parameter_handler.addParameter('sReload', True)
+            # output_parameter_handler.addParameter('sImdb', oGuiElement.getImdbId())
+            output_parameter_handler.addParameter('sTmdbId', oGuiElement.getTmdbId())
+            oGui.createSimpleMenu(oGuiElement, output_parameter_handler, 'cTrakt', 'cTrakt', 'getAction', sTitle)
         return
 
     def showHosters(self):
 
-        oInputParameterHandler = InputParameterHandler()
-        sMovieTitle = oInputParameterHandler.getValue('file')
+        input_parameter_handler = InputParameterHandler()
+        sMovieTitle = input_parameter_handler.getValue('file')
         sMovieTitle = self.decode(sMovieTitle, Unicode=True).lower()  # on repasse en utf-8
         sMovieTitle = Quote(sMovieTitle)
         sMovieTitle = re.sub('\\(.+?\\)', ' ', sMovieTitle)  # vire les tags entre parentheses
@@ -1111,7 +1111,7 @@ class cTrakt:
 
     def getTmdbID(self, sTitle, sType):
 
-        oInputParameterHandler = InputParameterHandler()
+        input_parameter_handler = InputParameterHandler()
 
         from resources.lib.tmdb import cTMDb
         grab = cTMDb()

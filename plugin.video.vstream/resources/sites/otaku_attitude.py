@@ -37,21 +37,21 @@ OST_ANIME = (True, 'showGenres')
 def load():
     oGui = Gui()
 
-    oOutputParameterHandler = OutputParameterHandler()
-    oOutputParameterHandler.addParameter('siteUrl', URL_SEARCH_ANIMS[0])
-    oGui.addDir(SITE_IDENTIFIER, 'showSearch', 'Recherche (Animés)', 'search.png', oOutputParameterHandler)
+    output_parameter_handler = OutputParameterHandler()
+    output_parameter_handler.addParameter('siteUrl', URL_SEARCH_ANIMS[0])
+    oGui.addDir(SITE_IDENTIFIER, 'showSearch', 'Recherche (Animés)', 'search.png', output_parameter_handler)
 
-    oOutputParameterHandler.addParameter('siteUrl', URL_SEARCH_DRAMAS[0])
-    oGui.addDir(SITE_IDENTIFIER, 'showSearch', 'Recherche (Dramas)', 'search.png', oOutputParameterHandler)
+    output_parameter_handler.addParameter('siteUrl', URL_SEARCH_DRAMAS[0])
+    oGui.addDir(SITE_IDENTIFIER, 'showSearch', 'Recherche (Dramas)', 'search.png', output_parameter_handler)
 
-    oOutputParameterHandler.addParameter('siteUrl', ANIM_VOSTFRS[0])
-    oGui.addDir(SITE_IDENTIFIER, ANIM_VOSTFRS[1], 'Animés (VOSTFR)', 'animes.png', oOutputParameterHandler)
+    output_parameter_handler.addParameter('siteUrl', ANIM_VOSTFRS[0])
+    oGui.addDir(SITE_IDENTIFIER, ANIM_VOSTFRS[1], 'Animés (VOSTFR)', 'animes.png', output_parameter_handler)
 
-    oOutputParameterHandler.addParameter('siteUrl', DRAMA_SERIES[0])
-    oGui.addDir(SITE_IDENTIFIER, DRAMA_SERIES[1], 'Dramas (VOSTFR)', 'dramas.png', oOutputParameterHandler)
+    output_parameter_handler.addParameter('siteUrl', DRAMA_SERIES[0])
+    oGui.addDir(SITE_IDENTIFIER, DRAMA_SERIES[1], 'Dramas (VOSTFR)', 'dramas.png', output_parameter_handler)
 
-    oOutputParameterHandler.addParameter('siteUrl', OST_ANIME[0])
-    oGui.addDir(SITE_IDENTIFIER, OST_ANIME[1], 'Musicbox (OST)', 'music.png', oOutputParameterHandler)
+    output_parameter_handler.addParameter('siteUrl', OST_ANIME[0])
+    oGui.addDir(SITE_IDENTIFIER, OST_ANIME[1], 'Musicbox (OST)', 'music.png', output_parameter_handler)
 
     oGui.setEndOfDirectory()
 
@@ -61,18 +61,18 @@ def showGenres():
 
     liste = [['Animés', '1-anime'], ['Dramas', '6-drama'], ['Jeux Vidéo', '7-jeu-vidéo']]
 
-    oOutputParameterHandler = OutputParameterHandler()
+    output_parameter_handler = OutputParameterHandler()
     for sTitle, sUrl in liste:
-        oOutputParameterHandler.addParameter('siteUrl', OST_MAIN + sUrl + '/')
-        oGui.addDir(SITE_IDENTIFIER, 'showOst', sTitle, 'music.png', oOutputParameterHandler)
+        output_parameter_handler.addParameter('siteUrl', OST_MAIN + sUrl + '/')
+        oGui.addDir(SITE_IDENTIFIER, 'showOst', sTitle, 'music.png', output_parameter_handler)
 
     oGui.setEndOfDirectory()
 
 
 def showSearch():
     oGui = Gui()
-    oInputParameterHandler = InputParameterHandler()
-    sUrl = oInputParameterHandler.getValue('siteUrl')
+    input_parameter_handler = InputParameterHandler()
+    sUrl = input_parameter_handler.getValue('siteUrl')
 
     sSearchText = oGui.showKeyBoard()
     if sSearchText:
@@ -84,8 +84,8 @@ def showSearch():
 
 def showAnimes(sSearch=''):
     oGui = Gui()
-    oInputParameterHandler = InputParameterHandler()
-    sUrl = oInputParameterHandler.getValue('siteUrl')
+    input_parameter_handler = InputParameterHandler()
+    sUrl = input_parameter_handler.getValue('siteUrl')
     if sSearch:
         sUrl = sSearch
 
@@ -95,8 +95,8 @@ def showAnimes(sSearch=''):
             memorisedUrl = sUrl
             Page = 1
         else:
-            memorisedUrl = oInputParameterHandler.getValue('memorisedUrl')
-            Page = oInputParameterHandler.getValue('Page')
+            memorisedUrl = input_parameter_handler.getValue('memorisedUrl')
+            Page = input_parameter_handler.getValue('Page')
 
     oRequestHandler = RequestHandler(sUrl)
     oRequestHandler.disableSSL()
@@ -120,7 +120,7 @@ def showAnimes(sSearch=''):
     if aResult[0]:
         total = len(aResult[1])
         progress_ = progress().VScreate(SITE_NAME)
-        oOutputParameterHandler = OutputParameterHandler()
+        output_parameter_handler = OutputParameterHandler()
         for aEntry in aResult[1]:
             progress_.VSupdate(progress_, total)
             if progress_.iscanceled():
@@ -136,37 +136,37 @@ def showAnimes(sSearch=''):
                 if not oUtil.CheckOccurence(sSearchText, sTitle):
                     continue
 
-            oOutputParameterHandler.addParameter('siteUrl', sUrl2)
-            oOutputParameterHandler.addParameter('sMovieTitle', sTitle)
-            oOutputParameterHandler.addParameter('sThumb', sThumb)
-            oOutputParameterHandler.addParameter('sDesc', sDesc)
-            oGui.addAnime(SITE_IDENTIFIER, 'showEpisodes', sTitle, '', sThumb, sDesc, oOutputParameterHandler)
+            output_parameter_handler.addParameter('siteUrl', sUrl2)
+            output_parameter_handler.addParameter('sMovieTitle', sTitle)
+            output_parameter_handler.addParameter('sThumb', sThumb)
+            output_parameter_handler.addParameter('sDesc', sDesc)
+            oGui.addAnime(SITE_IDENTIFIER, 'showEpisodes', sTitle, '', sThumb, sDesc, output_parameter_handler)
 
         progress_.VSclose(progress_)
 
     if not sSearch:
         Page = int(Page) + 1
-        oOutputParameterHandler = OutputParameterHandler()
-        oOutputParameterHandler.addParameter('siteUrl', memorisedUrl + '?&scroll=' + str(Page))
+        output_parameter_handler = OutputParameterHandler()
+        output_parameter_handler.addParameter('siteUrl', memorisedUrl + '?&scroll=' + str(Page))
         # On renvoie l'url memoriser et le numero de page pour l'incrementer a chaque fois
-        oOutputParameterHandler.addParameter('memorisedUrl', memorisedUrl)
-        oOutputParameterHandler.addParameter('Page', Page)
-        oGui.addNext(SITE_IDENTIFIER, 'showAnimes', 'Page ' + str(Page), oOutputParameterHandler)
+        output_parameter_handler.addParameter('memorisedUrl', memorisedUrl)
+        output_parameter_handler.addParameter('Page', Page)
+        oGui.addNext(SITE_IDENTIFIER, 'showAnimes', 'Page ' + str(Page), output_parameter_handler)
 
         oGui.setEndOfDirectory()
 
 
 def showOst():
     oGui = Gui()
-    oInputParameterHandler = InputParameterHandler()
-    sUrl = oInputParameterHandler.getValue('siteUrl')
+    input_parameter_handler = InputParameterHandler()
+    sUrl = input_parameter_handler.getValue('siteUrl')
 
     if 'page' not in sUrl:
         memorisedUrl = sUrl
         Page = 1
     else:
-        memorisedUrl = oInputParameterHandler.getValue('memorisedUrl')
-        Page = oInputParameterHandler.getValue('Page')
+        memorisedUrl = input_parameter_handler.getValue('memorisedUrl')
+        Page = input_parameter_handler.getValue('Page')
 
     oRequestHandler = RequestHandler(sUrl)
     oRequestHandler.disableSSL()
@@ -182,7 +182,7 @@ def showOst():
     if aResult[0]:
         total = len(aResult[1])
         progress_ = progress().VScreate(SITE_NAME)
-        oOutputParameterHandler = OutputParameterHandler()
+        output_parameter_handler = OutputParameterHandler()
         for aEntry in aResult[1]:
             progress_.VSupdate(progress_, total)
             if progress_.iscanceled():
@@ -192,21 +192,21 @@ def showOst():
             sTitle = aEntry[1].replace('- Artiste non défini', '')
             sThumb = aEntry[2]
 
-            oOutputParameterHandler.addParameter('siteUrl', sUrl2)
-            oOutputParameterHandler.addParameter('sMovieTitle', sTitle)
-            oOutputParameterHandler.addParameter('sThumb', sThumb)
+            output_parameter_handler.addParameter('siteUrl', sUrl2)
+            output_parameter_handler.addParameter('sMovieTitle', sTitle)
+            output_parameter_handler.addParameter('sThumb', sThumb)
 
-            oGui.addAnime(SITE_IDENTIFIER, 'showMusic', sTitle, '', sThumb, '', oOutputParameterHandler)
+            oGui.addAnime(SITE_IDENTIFIER, 'showMusic', sTitle, '', sThumb, '', output_parameter_handler)
 
         progress_.VSclose(progress_)
 
         Page = int(Page) + 1
-        oOutputParameterHandler = OutputParameterHandler()
-        oOutputParameterHandler.addParameter('siteUrl', memorisedUrl + '?page=' + str(Page))
+        output_parameter_handler = OutputParameterHandler()
+        output_parameter_handler.addParameter('siteUrl', memorisedUrl + '?page=' + str(Page))
         # On renvoie l'url memoriser et le numero de page pour l'incrementer a chaque fois
-        oOutputParameterHandler.addParameter('memorisedUrl', memorisedUrl)
-        oOutputParameterHandler.addParameter('Page', Page)
-        oGui.addNext(SITE_IDENTIFIER, 'showOst', 'Page ' + str(Page), oOutputParameterHandler)
+        output_parameter_handler.addParameter('memorisedUrl', memorisedUrl)
+        output_parameter_handler.addParameter('Page', Page)
+        oGui.addNext(SITE_IDENTIFIER, 'showOst', 'Page ' + str(Page), output_parameter_handler)
 
         oGui.setEndOfDirectory()
 
@@ -214,11 +214,11 @@ def showOst():
 def showEpisodes():
     oGui = Gui()
     oParser = cParser()
-    oInputParameterHandler = InputParameterHandler()
-    sUrl = oInputParameterHandler.getValue('siteUrl')
-    sMovieTitle = oInputParameterHandler.getValue('sMovieTitle')
-    sThumb = oInputParameterHandler.getValue('sThumb')
-    sDesc = oInputParameterHandler.getValue('sDesc')
+    input_parameter_handler = InputParameterHandler()
+    sUrl = input_parameter_handler.getValue('siteUrl')
+    sMovieTitle = input_parameter_handler.getValue('sMovieTitle')
+    sThumb = input_parameter_handler.getValue('sThumb')
+    sDesc = input_parameter_handler.getValue('sDesc')
 
     oRequestHandler = RequestHandler(sUrl)
     oRequestHandler.disableSSL()
@@ -234,7 +234,7 @@ def showEpisodes():
         oGui.addText(SITE_IDENTIFIER)
 
     if aResult[0]:
-        oOutputParameterHandler = OutputParameterHandler()
+        output_parameter_handler = OutputParameterHandler()
         for aEntry in sorted(aResult[1], key=lambda aResult: aResult[1]):
             sQual = aEntry[2]
 
@@ -260,21 +260,21 @@ def showEpisodes():
             sDisplayTitle = sTitle + ' ' + sQual
             idEpisode = aEntry[0]
 
-            oOutputParameterHandler.addParameter('sMovieTitle', sTitle)
-            oOutputParameterHandler.addParameter('siteUrl', sUrl)
-            oOutputParameterHandler.addParameter('sThumb', sThumb)
-            oOutputParameterHandler.addParameter('serieID', serieID)
-            oOutputParameterHandler.addParameter('idEpisode', idEpisode)
-            oGui.addEpisode(SITE_IDENTIFIER, 'showHosters', sDisplayTitle, '', sThumb, sDesc, oOutputParameterHandler)
+            output_parameter_handler.addParameter('sMovieTitle', sTitle)
+            output_parameter_handler.addParameter('siteUrl', sUrl)
+            output_parameter_handler.addParameter('sThumb', sThumb)
+            output_parameter_handler.addParameter('serieID', serieID)
+            output_parameter_handler.addParameter('idEpisode', idEpisode)
+            oGui.addEpisode(SITE_IDENTIFIER, 'showHosters', sDisplayTitle, '', sThumb, sDesc, output_parameter_handler)
 
     oGui.setEndOfDirectory()
 
 
 def showMusic():
     oGui = Gui()
-    oInputParameterHandler = InputParameterHandler()
-    sUrl = oInputParameterHandler.getValue('siteUrl')
-    sThumb = oInputParameterHandler.getValue('sThumb')
+    input_parameter_handler = InputParameterHandler()
+    sUrl = input_parameter_handler.getValue('siteUrl')
+    sThumb = input_parameter_handler.getValue('sThumb')
 
     oParser = cParser()
     oRequestHandler = RequestHandler(sUrl)
@@ -287,25 +287,25 @@ def showMusic():
         oGui.addText(SITE_IDENTIFIER)
 
     if aResult[0]:
-        oOutputParameterHandler = OutputParameterHandler()
+        output_parameter_handler = OutputParameterHandler()
         for aEntry in aResult[1]:
             sTitle = aEntry[2] + ' ' + aEntry[1]
             mp3Url = aEntry[0]
 
-            oOutputParameterHandler.addParameter('sMovieTitle', sTitle)
-            oOutputParameterHandler.addParameter('mp3Url', mp3Url)
-            oOutputParameterHandler.addParameter('sThumb', sThumb)
-            oGui.addEpisode(SITE_IDENTIFIER, 'showMp3', sTitle, '', sThumb, '', oOutputParameterHandler)
+            output_parameter_handler.addParameter('sMovieTitle', sTitle)
+            output_parameter_handler.addParameter('mp3Url', mp3Url)
+            output_parameter_handler.addParameter('sThumb', sThumb)
+            oGui.addEpisode(SITE_IDENTIFIER, 'showMp3', sTitle, '', sThumb, '', output_parameter_handler)
 
     oGui.setEndOfDirectory()
 
 
 def showMp3():
     oGui = Gui()
-    oInputParameterHandler = InputParameterHandler()
-    mp3Url = oInputParameterHandler.getValue('mp3Url')
-    sMovieTitle = oInputParameterHandler.getValue('sMovieTitle')
-    sThumb = oInputParameterHandler.getValue('sThumb')
+    input_parameter_handler = InputParameterHandler()
+    mp3Url = input_parameter_handler.getValue('mp3Url')
+    sMovieTitle = input_parameter_handler.getValue('sMovieTitle')
+    sThumb = input_parameter_handler.getValue('sThumb')
 
 #     if 'mp3' in mp3Url:
 #         sHosterUrl = mp3Url
@@ -321,12 +321,12 @@ def showMp3():
 
 def showHosters():
     oGui = Gui()
-    oInputParameterHandler = InputParameterHandler()
-    sUrl = oInputParameterHandler.getValue('siteUrl')
-    sMovieTitle = oInputParameterHandler.getValue('sMovieTitle')
-    sThumb = oInputParameterHandler.getValue('sThumb')
-    serieID = oInputParameterHandler.getValue('serieID')
-    idEpisode = oInputParameterHandler.getValue('idEpisode')
+    input_parameter_handler = InputParameterHandler()
+    sUrl = input_parameter_handler.getValue('siteUrl')
+    sMovieTitle = input_parameter_handler.getValue('sMovieTitle')
+    sThumb = input_parameter_handler.getValue('sThumb')
+    serieID = input_parameter_handler.getValue('serieID')
+    idEpisode = input_parameter_handler.getValue('idEpisode')
 
     sHosterUrl = ''
     if 'fiche-anime' in sUrl:

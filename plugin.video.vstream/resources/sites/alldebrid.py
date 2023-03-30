@@ -27,20 +27,20 @@ def load():
     ALL_MAGNETS = (URL_HOST + 'magnets/', 'showMagnets')
     ALL_INFORMATION = ('https://alldebrid.fr', 'showInfo')
 
-    oOutputParameterHandler = OutputParameterHandler()
-    oOutputParameterHandler.addParameter('siteUrl', ALL_ALL[0])
-    oGui.addDir(SITE_IDENTIFIER, ALL_ALL[1], 'Liens', 'films.png', oOutputParameterHandler)
+    output_parameter_handler = OutputParameterHandler()
+    output_parameter_handler.addParameter('siteUrl', ALL_ALL[0])
+    oGui.addDir(SITE_IDENTIFIER, ALL_ALL[1], 'Liens', 'films.png', output_parameter_handler)
 
-    oOutputParameterHandler.addParameter('siteUrl', ALL_MAGNETS[0])
-    oGui.addDir(SITE_IDENTIFIER, ALL_MAGNETS[1], 'Magnets', 'films.png', oOutputParameterHandler)
+    output_parameter_handler.addParameter('siteUrl', ALL_MAGNETS[0])
+    oGui.addDir(SITE_IDENTIFIER, ALL_MAGNETS[1], 'Magnets', 'films.png', output_parameter_handler)
 
-    oOutputParameterHandler.addParameter('siteUrl', ALL_INFORMATION[0])
+    output_parameter_handler.addParameter('siteUrl', ALL_INFORMATION[0])
     oGui.addDir(
         SITE_IDENTIFIER,
         ALL_INFORMATION[1],
         'Information sur les hébergeurs ',
         'films.png',
-        oOutputParameterHandler)
+        output_parameter_handler)
 
     oGui.setEndOfDirectory()
 
@@ -48,10 +48,10 @@ def load():
 def showLiens(sSearch=''):
     oGui = Gui()
 
-    oInputParameterHandler = InputParameterHandler()
-    sUrl = oInputParameterHandler.getValue('siteUrl')
-    numItem = oInputParameterHandler.getValue('numItem')
-    numPage = oInputParameterHandler.getValue('numPage')
+    input_parameter_handler = InputParameterHandler()
+    sUrl = input_parameter_handler.getValue('siteUrl')
+    numItem = input_parameter_handler.getValue('numItem')
+    numPage = input_parameter_handler.getValue('numPage')
     if not numItem:
         numItem = 0
         numPage = 1
@@ -91,23 +91,23 @@ def showLiens(sSearch=''):
             sThumb = ''
             sDesc = ''
 
-            oOutputParameterHandler = OutputParameterHandler()
-            oOutputParameterHandler.addParameter('siteUrl', sUrl2)
-            oOutputParameterHandler.addParameter('sMovieTitle', sTitle)
-            oOutputParameterHandler.addParameter('sDesc', sDesc)
-            oOutputParameterHandler.addParameter('referer', sUrl)
-            oOutputParameterHandler.addParameter('sThumb', sThumb)
-            oGui.addEpisode(SITE_IDENTIFIER, 'showHosters', sTitle, '', sThumb, sDesc, oOutputParameterHandler)
+            output_parameter_handler = OutputParameterHandler()
+            output_parameter_handler.addParameter('siteUrl', sUrl2)
+            output_parameter_handler.addParameter('sMovieTitle', sTitle)
+            output_parameter_handler.addParameter('sDesc', sDesc)
+            output_parameter_handler.addParameter('referer', sUrl)
+            output_parameter_handler.addParameter('sThumb', sThumb)
+            oGui.addEpisode(SITE_IDENTIFIER, 'showHosters', sTitle, '', sThumb, sDesc, output_parameter_handler)
             progress_.VSclose(progress_)
 
             if not sSearch:
                 if nbItem % ITEM_PAR_PAGE == 0:  # cherche la page suivante
                     numPage += 1
-                    oOutputParameterHandler = OutputParameterHandler()
-                    oOutputParameterHandler.addParameter('siteUrl', sUrl)
-                    oOutputParameterHandler.addParameter('numItem', numItem)
-                    oOutputParameterHandler.addParameter('numPage', numPage)
-                    oGui.addNext(SITE_IDENTIFIER, 'showLiens', 'Page ' + str(numPage), oOutputParameterHandler)
+                    output_parameter_handler = OutputParameterHandler()
+                    output_parameter_handler.addParameter('siteUrl', sUrl)
+                    output_parameter_handler.addParameter('numItem', numItem)
+                    output_parameter_handler.addParameter('numPage', numPage)
+                    oGui.addNext(SITE_IDENTIFIER, 'showLiens', 'Page ' + str(numPage), output_parameter_handler)
                     break
 
         oGui.setEndOfDirectory()
@@ -116,12 +116,12 @@ def showLiens(sSearch=''):
 def showMagnets(sSearch=''):
     oGui = Gui()
 
-    oInputParameterHandler = InputParameterHandler()
-    sUrl = oInputParameterHandler.getValue('siteUrl')
-    sThumb = oInputParameterHandler.getValue('sThumb')
-    sDesc = oInputParameterHandler.getValue('sDesc')
-    numItem = oInputParameterHandler.getValue('numItem')
-    numPage = oInputParameterHandler.getValue('numPage')
+    input_parameter_handler = InputParameterHandler()
+    sUrl = input_parameter_handler.getValue('siteUrl')
+    sThumb = input_parameter_handler.getValue('sThumb')
+    sDesc = input_parameter_handler.getValue('sDesc')
+    numItem = input_parameter_handler.getValue('numItem')
+    numPage = input_parameter_handler.getValue('numPage')
     if not numItem:
         numItem = 0
         numPage = 1
@@ -158,19 +158,19 @@ def showMagnets(sSearch=''):
             sTitle = aEntry[0]
             sUrl2 = sUrl + aEntry[1]
 
-            oOutputParameterHandler = OutputParameterHandler()
-            oOutputParameterHandler.addParameter('siteUrl', sUrl2)
-            oOutputParameterHandler.addParameter('sMovieTitle', sTitle)
-            oOutputParameterHandler.addParameter('sThumb', sThumb)
+            output_parameter_handler = OutputParameterHandler()
+            output_parameter_handler.addParameter('siteUrl', sUrl2)
+            output_parameter_handler.addParameter('sMovieTitle', sTitle)
+            output_parameter_handler.addParameter('sThumb', sThumb)
 
             if not sSearch:
                 if nbItem % ITEM_PAR_PAGE == 0:  # cherche la page suivante
                     numPage += 1
-                    oOutputParameterHandler = OutputParameterHandler()
-                    oOutputParameterHandler.addParameter('siteUrl', sUrl)
-                    oOutputParameterHandler.addParameter('numItem', numItem)
-                    oOutputParameterHandler.addParameter('numPage', numPage)
-                    oGui.addNext(SITE_IDENTIFIER, 'showLiens', 'Page ' + str(numPage), oOutputParameterHandler)
+                    output_parameter_handler = OutputParameterHandler()
+                    output_parameter_handler.addParameter('siteUrl', sUrl)
+                    output_parameter_handler.addParameter('numItem', numItem)
+                    output_parameter_handler.addParameter('numPage', numPage)
+                    oGui.addNext(SITE_IDENTIFIER, 'showLiens', 'Page ' + str(numPage), output_parameter_handler)
                     break
 
             if 'mp4' in sUrl2 or 'avi' in sUrl2 or 'mkv' in sUrl2:
@@ -181,7 +181,7 @@ def showMagnets(sSearch=''):
                     'series.png',
                     sThumb,
                     sDesc,
-                    oOutputParameterHandler)
+                    output_parameter_handler)
             else:
                 oGui.addMovie(
                     SITE_IDENTIFIER,
@@ -190,7 +190,7 @@ def showMagnets(sSearch=''):
                     'movies.png',
                     sThumb,
                     sDesc,
-                    oOutputParameterHandler)
+                    output_parameter_handler)
 
         progress_.VSclose(progress_)
 
@@ -200,11 +200,11 @@ def showMagnets(sSearch=''):
 def showseriesHoster(sSearch=''):
     oGui = Gui()
 
-    oInputParameterHandler = InputParameterHandler()
-    sUrl = oInputParameterHandler.getValue('siteUrl')
-    sMovieTitle = oInputParameterHandler.getValue('sMovieTitle')
-    numItem = oInputParameterHandler.getValue('numItem')
-    numPage = oInputParameterHandler.getValue('numPage')
+    input_parameter_handler = InputParameterHandler()
+    sUrl = input_parameter_handler.getValue('siteUrl')
+    sMovieTitle = input_parameter_handler.getValue('sMovieTitle')
+    numItem = input_parameter_handler.getValue('numItem')
+    numPage = input_parameter_handler.getValue('numPage')
     if not numItem:
         numItem = 0
         numPage = 1
@@ -258,22 +258,22 @@ def showseriesHoster(sSearch=''):
             sThumb = ''
             sDesc = ''
 
-            oOutputParameterHandler = OutputParameterHandler()
-            oOutputParameterHandler.addParameter('siteUrl', sUrl2)
-            oOutputParameterHandler.addParameter('sMovieTitle', sTitle)
-            oOutputParameterHandler.addParameter('sDesc', sDesc)
-            oOutputParameterHandler.addParameter('referer', sUrl)
-            oOutputParameterHandler.addParameter('sThumb', sThumb)
-            oGui.addEpisode(SITE_IDENTIFIER, 'showHosters', sTitle, '', sThumb, sDesc, oOutputParameterHandler)
+            output_parameter_handler = OutputParameterHandler()
+            output_parameter_handler.addParameter('siteUrl', sUrl2)
+            output_parameter_handler.addParameter('sMovieTitle', sTitle)
+            output_parameter_handler.addParameter('sDesc', sDesc)
+            output_parameter_handler.addParameter('referer', sUrl)
+            output_parameter_handler.addParameter('sThumb', sThumb)
+            oGui.addEpisode(SITE_IDENTIFIER, 'showHosters', sTitle, '', sThumb, sDesc, output_parameter_handler)
 
             if not sSearch:
                 if nbItem % ITEM_PAR_PAGE == 0:  # cherche la page suivante
                     numPage += 1
-                    oOutputParameterHandler = OutputParameterHandler()
-                    oOutputParameterHandler.addParameter('siteUrl', sUrl)
-                    oOutputParameterHandler.addParameter('numItem', numItem)
-                    oOutputParameterHandler.addParameter('numPage', numPage)
-                    oGui.addNext(SITE_IDENTIFIER, 'showLiens', 'Page ' + str(numPage), oOutputParameterHandler)
+                    output_parameter_handler = OutputParameterHandler()
+                    output_parameter_handler.addParameter('siteUrl', sUrl)
+                    output_parameter_handler.addParameter('numItem', numItem)
+                    output_parameter_handler.addParameter('numPage', numPage)
+                    oGui.addNext(SITE_IDENTIFIER, 'showLiens', 'Page ' + str(numPage), output_parameter_handler)
                     break
 
             progress_.VSclose(progress_)
@@ -283,9 +283,9 @@ def showseriesHoster(sSearch=''):
 
 def showHosters():
     oGui = Gui()
-    oInputParameterHandler = InputParameterHandler()
-    sUrl = oInputParameterHandler.getValue('siteUrl')
-    sMovieTitle = oInputParameterHandler.getValue('sMovieTitle')
+    input_parameter_handler = InputParameterHandler()
+    sUrl = input_parameter_handler.getValue('siteUrl')
+    sMovieTitle = input_parameter_handler.getValue('sMovieTitle')
 
     sHosterUrl = sUrl
     oHoster = HosterGui().checkHoster(sHosterUrl)
@@ -300,8 +300,8 @@ def showHosters():
 def showInfo():
     oGui = Gui()
 
-    oInputParameterHandler = InputParameterHandler()
-    sUrl = oInputParameterHandler.getValue('siteUrl')
+    input_parameter_handler = InputParameterHandler()
+    sUrl = input_parameter_handler.getValue('siteUrl')
 
     oRequestHandler = RequestHandler(sUrl)
     sHtmlContent = oRequestHandler.request()
@@ -328,8 +328,8 @@ def showInfo():
 
             sDisplayTitle = ('%s (%s)') % (sHebergeur, sDisponible)
 
-            oOutputParameterHandler = OutputParameterHandler()
-            oOutputParameterHandler.addParameter('sMovieTitle', sDisplayTitle)
+            output_parameter_handler = OutputParameterHandler()
+            output_parameter_handler.addParameter('sMovieTitle', sDisplayTitle)
 
             oGui.addText(SITE_IDENTIFIER, sDisplayTitle)
 

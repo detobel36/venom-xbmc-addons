@@ -73,86 +73,86 @@ BLURAY_NEWS = (URL_MAIN + 'films-hd/full-bluray', 'showMovies')  # derniers Blu-
 def load():
     oGui = Gui()
 
-    oOutputParameterHandler = OutputParameterHandler()
-    oOutputParameterHandler.addParameter('siteUrl', 'http://venom/')
+    output_parameter_handler = OutputParameterHandler()
+    output_parameter_handler.addParameter('siteUrl', 'http://venom/')
     oGui.addDir(
         SITE_IDENTIFIER,
         'showSearchMovies',
         'Recherche de films ou series',
         'search.png',
-        oOutputParameterHandler)
+        output_parameter_handler)
 
-    oOutputParameterHandler = OutputParameterHandler()
-    oOutputParameterHandler.addParameter('siteUrl', MOVIE_BDRIPSD[0])
-    oGui.addDir(SITE_IDENTIFIER, MOVIE_BDRIPSD[1], 'films BDRIP_DVDRIP', 'news.png', oOutputParameterHandler)
+    output_parameter_handler = OutputParameterHandler()
+    output_parameter_handler.addParameter('siteUrl', MOVIE_BDRIPSD[0])
+    oGui.addDir(SITE_IDENTIFIER, MOVIE_BDRIPSD[1], 'films BDRIP_DVDRIP', 'news.png', output_parameter_handler)
 
-    oOutputParameterHandler = OutputParameterHandler()
-    oOutputParameterHandler.addParameter('siteUrl', MOVIE_VOSTFRSD[0])
-    oGui.addDir(SITE_IDENTIFIER, MOVIE_VOSTFRSD[1], 'films VOSTFR', 'news.png', oOutputParameterHandler)
+    output_parameter_handler = OutputParameterHandler()
+    output_parameter_handler.addParameter('siteUrl', MOVIE_VOSTFRSD[0])
+    oGui.addDir(SITE_IDENTIFIER, MOVIE_VOSTFRSD[1], 'films VOSTFR', 'news.png', output_parameter_handler)
 
-    oOutputParameterHandler = OutputParameterHandler()
-    oOutputParameterHandler.addParameter('siteUrl', MOVIE_BDRIPHD[0])
-    oGui.addDir(SITE_IDENTIFIER, MOVIE_BDRIPHD[1], 'films BDRIP 720P', 'news.png', oOutputParameterHandler)
+    output_parameter_handler = OutputParameterHandler()
+    output_parameter_handler.addParameter('siteUrl', MOVIE_BDRIPHD[0])
+    oGui.addDir(SITE_IDENTIFIER, MOVIE_BDRIPHD[1], 'films BDRIP 720P', 'news.png', output_parameter_handler)
 
-    oOutputParameterHandler = OutputParameterHandler()
-    oOutputParameterHandler.addParameter('siteUrl', MOVIE_BLURAY720P[0])
-    oGui.addDir(SITE_IDENTIFIER, MOVIE_BLURAY720P[1], 'films BluRay 720P', 'films.png', oOutputParameterHandler)
+    output_parameter_handler = OutputParameterHandler()
+    output_parameter_handler.addParameter('siteUrl', MOVIE_BLURAY720P[0])
+    oGui.addDir(SITE_IDENTIFIER, MOVIE_BLURAY720P[1], 'films BluRay 720P', 'films.png', output_parameter_handler)
 
-    oOutputParameterHandler = OutputParameterHandler()
-    oOutputParameterHandler.addParameter('siteUrl', MOVIE_BLURAY1080P[0])
-    oGui.addDir(SITE_IDENTIFIER, MOVIE_BLURAY1080P[1], 'films BluRay 1080P', 'films.png', oOutputParameterHandler)
+    output_parameter_handler = OutputParameterHandler()
+    output_parameter_handler.addParameter('siteUrl', MOVIE_BLURAY1080P[0])
+    oGui.addDir(SITE_IDENTIFIER, MOVIE_BLURAY1080P[1], 'films BluRay 1080P', 'films.png', output_parameter_handler)
 
-    oOutputParameterHandler = OutputParameterHandler()
-    oOutputParameterHandler.addParameter('siteUrl', MOVIE_BLURAYVOSTFR[0])
-    oGui.addDir(SITE_IDENTIFIER, MOVIE_BLURAYVOSTFR[1], 'films BluRay VOSTFR', 'films.png', oOutputParameterHandler)
+    output_parameter_handler = OutputParameterHandler()
+    output_parameter_handler.addParameter('siteUrl', MOVIE_BLURAYVOSTFR[0])
+    oGui.addDir(SITE_IDENTIFIER, MOVIE_BLURAYVOSTFR[1], 'films BluRay VOSTFR', 'films.png', output_parameter_handler)
 
-    oOutputParameterHandler = OutputParameterHandler()
-    oOutputParameterHandler.addParameter('siteUrl', MOVIE_BLURAY3D[0])
-    oGui.addDir(SITE_IDENTIFIER, MOVIE_BLURAY3D[0], 'films BluRay 3D', 'films.png', oOutputParameterHandler)
+    output_parameter_handler = OutputParameterHandler()
+    output_parameter_handler.addParameter('siteUrl', MOVIE_BLURAY3D[0])
+    oGui.addDir(SITE_IDENTIFIER, MOVIE_BLURAY3D[0], 'films BluRay 3D', 'films.png', output_parameter_handler)
 
-    oOutputParameterHandler = OutputParameterHandler()
-    oOutputParameterHandler.addParameter('siteUrl', BLURAY_NEWS[0])
-    oGui.addDir(SITE_IDENTIFIER, 'BLURAY_NEWS[1]', 'derniers Blu-Rays', 'films.png', oOutputParameterHandler)
+    output_parameter_handler = OutputParameterHandler()
+    output_parameter_handler.addParameter('siteUrl', BLURAY_NEWS[0])
+    oGui.addDir(SITE_IDENTIFIER, 'BLURAY_NEWS[1]', 'derniers Blu-Rays', 'films.png', output_parameter_handler)
 
-    oOutputParameterHandler = OutputParameterHandler()
-    oOutputParameterHandler.addParameter('siteUrl', ANIM_FILMS[0])
-    oGui.addDir(SITE_IDENTIFIER, 'ANIM_FILMS[1]', 'Film MANGAS', 'series.png', oOutputParameterHandler)
+    output_parameter_handler = OutputParameterHandler()
+    output_parameter_handler.addParameter('siteUrl', ANIM_FILMS[0])
+    oGui.addDir(SITE_IDENTIFIER, 'ANIM_FILMS[1]', 'Film MANGAS', 'series.png', output_parameter_handler)
 
-    oOutputParameterHandler = OutputParameterHandler()
-    oOutputParameterHandler.addParameter('siteUrl', ANIM_VF[0])
-    oGui.addDir(SITE_IDENTIFIER, 'ANIM_VF[1]', 'ANIMES VF', 'series.png', oOutputParameterHandler)
+    output_parameter_handler = OutputParameterHandler()
+    output_parameter_handler.addParameter('siteUrl', ANIM_VF[0])
+    oGui.addDir(SITE_IDENTIFIER, 'ANIM_VF[1]', 'ANIMES VF', 'series.png', output_parameter_handler)
 
-    oOutputParameterHandler = OutputParameterHandler()
-    oOutputParameterHandler.addParameter('siteUrl', ANIM_VOSTFR[0])
-    oGui.addDir(SITE_IDENTIFIER, 'ANIM_VOSTFR[1]', 'ANIMES VOSTFR', 'series.png', oOutputParameterHandler)
+    output_parameter_handler = OutputParameterHandler()
+    output_parameter_handler.addParameter('siteUrl', ANIM_VOSTFR[0])
+    oGui.addDir(SITE_IDENTIFIER, 'ANIM_VOSTFR[1]', 'ANIMES VOSTFR', 'series.png', output_parameter_handler)
 
-    oOutputParameterHandler = OutputParameterHandler()
-    oOutputParameterHandler.addParameter('siteUrl', MOVIE_GENRES[0])
-    oGui.addDir(SITE_IDENTIFIER, MOVIE_GENRES[1], 'Films Genre', 'genres.png', oOutputParameterHandler)
+    output_parameter_handler = OutputParameterHandler()
+    output_parameter_handler.addParameter('siteUrl', MOVIE_GENRES[0])
+    oGui.addDir(SITE_IDENTIFIER, MOVIE_GENRES[1], 'Films Genre', 'genres.png', output_parameter_handler)
 
-    oOutputParameterHandler = OutputParameterHandler()
-    oOutputParameterHandler.addParameter('siteUrl', SERIE_SDVF[0])
-    oGui.addDir(SITE_IDENTIFIER, SERIE_VF[1], 'serie SD VF', 'series.png', oOutputParameterHandler)
+    output_parameter_handler = OutputParameterHandler()
+    output_parameter_handler.addParameter('siteUrl', SERIE_SDVF[0])
+    oGui.addDir(SITE_IDENTIFIER, SERIE_VF[1], 'serie SD VF', 'series.png', output_parameter_handler)
 
-    oOutputParameterHandler = OutputParameterHandler()
-    oOutputParameterHandler.addParameter('siteUrl', SERIE_SDVOSTFR[0])
-    oGui.addDir(SITE_IDENTIFIER, SERIE_VOSTFR[1], 'serie SD VOSTFR', 'series.png', oOutputParameterHandler)
+    output_parameter_handler = OutputParameterHandler()
+    output_parameter_handler.addParameter('siteUrl', SERIE_SDVOSTFR[0])
+    oGui.addDir(SITE_IDENTIFIER, SERIE_VOSTFR[1], 'serie SD VOSTFR', 'series.png', output_parameter_handler)
 
-    oOutputParameterHandler = OutputParameterHandler()
-    oOutputParameterHandler.addParameter('siteUrl', SERIE_PACKSD[0])
-    oGui.addDir(SITE_IDENTIFIER, SERIE_PACKSD[1], 'serie PACK SERIES SD', 'series.png', oOutputParameterHandler)
+    output_parameter_handler = OutputParameterHandler()
+    output_parameter_handler.addParameter('siteUrl', SERIE_PACKSD[0])
+    oGui.addDir(SITE_IDENTIFIER, SERIE_PACKSD[1], 'serie PACK SERIES SD', 'series.png', output_parameter_handler)
 
-    oOutputParameterHandler = OutputParameterHandler()
-    oOutputParameterHandler.addParameter('siteUrl', SERIE_HDVF[0])
-    oGui.addDir(SITE_IDENTIFIER, SERIE_HDVF[1], 'serie HD VF', 'series.png', oOutputParameterHandler)
+    output_parameter_handler = OutputParameterHandler()
+    output_parameter_handler.addParameter('siteUrl', SERIE_HDVF[0])
+    oGui.addDir(SITE_IDENTIFIER, SERIE_HDVF[1], 'serie HD VF', 'series.png', output_parameter_handler)
 
-    oOutputParameterHandler = OutputParameterHandler()
-    oOutputParameterHandler.addParameter('siteUrl', SERIE_HDVOSTFR[0])
-    oGui.addDir(SITE_IDENTIFIER, 'SERIE_HDVOSTFR[1]', 'serie HD VOSTFR', 'films.png', oOutputParameterHandler)
+    output_parameter_handler = OutputParameterHandler()
+    output_parameter_handler.addParameter('siteUrl', SERIE_HDVOSTFR[0])
+    oGui.addDir(SITE_IDENTIFIER, 'SERIE_HDVOSTFR[1]', 'serie HD VOSTFR', 'films.png', output_parameter_handler)
 
-    oOutputParameterHandler = OutputParameterHandler()
-    oOutputParameterHandler.addParameter('siteUrl', SERIE_PACKHD[0])
-    oGui.addDir(SITE_IDENTIFIER, 'showMovies', 'serie PACK SERIES HD', 'films.png', oOutputParameterHandler)
+    output_parameter_handler = OutputParameterHandler()
+    output_parameter_handler.addParameter('siteUrl', SERIE_PACKHD[0])
+    oGui.addDir(SITE_IDENTIFIER, 'showMovies', 'serie PACK SERIES HD', 'films.png', output_parameter_handler)
 
     oGui.setEndOfDirectory()
 
@@ -206,9 +206,9 @@ def showGenre():
 
     for sTitle, sUrl in liste:
 
-        oOutputParameterHandler = OutputParameterHandler()
-        oOutputParameterHandler.addParameter('siteUrl', sUrl)
-        oGui.addDir(SITE_IDENTIFIER, 'showMovies', sTitle, 'genres.png', oOutputParameterHandler)
+        output_parameter_handler = OutputParameterHandler()
+        output_parameter_handler.addParameter('siteUrl', sUrl)
+        oGui.addDir(SITE_IDENTIFIER, 'showMovies', sTitle, 'genres.png', output_parameter_handler)
 
     oGui.setEndOfDirectory()
 
@@ -219,8 +219,8 @@ def showMovies(sSearch=''):
         sUrl = sSearch
 
     else:
-        oInputParameterHandler = InputParameterHandler()
-        sUrl = oInputParameterHandler.getValue('siteUrl')
+        input_parameter_handler = InputParameterHandler()
+        sUrl = input_parameter_handler.getValue('siteUrl')
 
     oRequestHandler = RequestHandler(sUrl)
     sHtmlContent = oRequestHandler.request()
@@ -240,10 +240,10 @@ def showMovies(sSearch=''):
             sUrl2 = aEntry[0]
             sFanart = aEntry[1]
             sThumbnail = aEntry[1]
-            oOutputParameterHandler = OutputParameterHandler()
-            oOutputParameterHandler.addParameter('siteUrl', str(sUrl2))
-            oOutputParameterHandler.addParameter('sMovieTitle', str(sTitle))
-            oOutputParameterHandler.addParameter('sThumbnail', sThumbnail)
+            output_parameter_handler = OutputParameterHandler()
+            output_parameter_handler.addParameter('siteUrl', str(sUrl2))
+            output_parameter_handler.addParameter('sMovieTitle', str(sTitle))
+            output_parameter_handler.addParameter('sThumbnail', sThumbnail)
 
             sDisplayTitle = cUtil().DecoTitle(sTitle)
 
@@ -254,18 +254,18 @@ def showMovies(sSearch=''):
                 'films.png',
                 sThumbnail,
                 sFanart,
-                oOutputParameterHandler)
+                output_parameter_handler)
 
         sNextPage = __checkForNextPage(sHtmlContent)  # cherche la page suivante
         if (sNextPage):
-            oOutputParameterHandler = OutputParameterHandler()
-            oOutputParameterHandler.addParameter('siteUrl', sNextPage)
+            output_parameter_handler = OutputParameterHandler()
+            output_parameter_handler.addParameter('siteUrl', sNextPage)
             oGui.addDir(
                 SITE_IDENTIFIER,
                 'showMovies',
                 '[COLOR teal]Next >>>[/COLOR]',
                 'next.png',
-                oOutputParameterHandler)
+                output_parameter_handler)
 
     # tPassage en mode vignette sauf en cas de recherche globale
     if 'index.php?q=' not in sUrl:
@@ -289,8 +289,8 @@ def __checkForNextPage(sHtmlContent):
 
 def showLinks():
 
-    oInputParameterHandler = InputParameterHandler()
-    sUrl = oInputParameterHandler.getValue('siteUrl')
+    input_parameter_handler = InputParameterHandler()
+    sUrl = input_parameter_handler.getValue('siteUrl')
 
     # print sUrl
 
@@ -316,10 +316,10 @@ def showMoviesLinks(sHtmlContent):
 
     oGui = Gui()
 
-    oInputParameterHandler = InputParameterHandler()
-    sUrl = oInputParameterHandler.getValue('siteUrl')
-    sMovieTitle = oInputParameterHandler.getValue('sMovieTitle')
-    sThumbnail = oInputParameterHandler.getValue('sThumbnail')
+    input_parameter_handler = InputParameterHandler()
+    sUrl = input_parameter_handler.getValue('siteUrl')
+    sMovieTitle = input_parameter_handler.getValue('sMovieTitle')
+    sThumbnail = input_parameter_handler.getValue('sThumbnail')
 
     # print sUrl
 
@@ -344,11 +344,11 @@ def showMoviesLinks(sHtmlContent):
     aResult = oParser.parse(sHtmlContent, sPattern)
     if (aResult[0]):
         sBA = aResult[1][0]
-        oOutputParameterHandler = OutputParameterHandler()
-        oOutputParameterHandler.addParameter('sUrl', sBA)
-        oOutputParameterHandler.addParameter('sMovieTitle', 'Bande annonce')
-        oOutputParameterHandler.addParameter('sThumbnail', str(sThumbnail))
-        oGui.addMovie(SITE_IDENTIFIER, 'ShowBA', 'Bande annonce', '', sThumbnail, '', oOutputParameterHandler)
+        output_parameter_handler = OutputParameterHandler()
+        output_parameter_handler.addParameter('sUrl', sBA)
+        output_parameter_handler.addParameter('sMovieTitle', 'Bande annonce')
+        output_parameter_handler.addParameter('sThumbnail', str(sThumbnail))
+        oGui.addMovie(SITE_IDENTIFIER, 'ShowBA', 'Bande annonce', '', sThumbnail, '', output_parameter_handler)
 
     # Affichage du menu
     oGui.addText(SITE_IDENTIFIER, '[COLOR olive]QualitÃ©s disponibles pour ce film :[/COLOR]')
@@ -364,11 +364,11 @@ def showMoviesLinks(sHtmlContent):
 
     sTitle = sMovieTitle + ' - [COLOR skyblue]' + sQual + '[/COLOR]'
 
-    oOutputParameterHandler = OutputParameterHandler()
-    oOutputParameterHandler.addParameter('siteUrl', sUrl)
-    oOutputParameterHandler.addParameter('sMovieTitle', str(sMovieTitle))
-    oOutputParameterHandler.addParameter('sThumbnail', str(sThumbnail))
-    oGui.addMovie(SITE_IDENTIFIER, 'showHosters', sTitle, '', sThumbnail, sCom, oOutputParameterHandler)
+    output_parameter_handler = OutputParameterHandler()
+    output_parameter_handler.addParameter('siteUrl', sUrl)
+    output_parameter_handler.addParameter('sMovieTitle', str(sMovieTitle))
+    output_parameter_handler.addParameter('sThumbnail', str(sThumbnail))
+    oGui.addMovie(SITE_IDENTIFIER, 'showHosters', sTitle, '', sThumbnail, sCom, output_parameter_handler)
 
     # on regarde si dispo dans d'autres qualitÃ©s
     sPattern = '<a title="TÃ©lÃ©chargez.+?en (.+?)" href="(.+?)"><button class="button_subcat"'
@@ -383,11 +383,11 @@ def showMoviesLinks(sHtmlContent):
                 break
 
             sTitle = sMovieTitle + ' - [COLOR skyblue]' + aEntry[0] + '[/COLOR]'
-            oOutputParameterHandler = OutputParameterHandler()
-            oOutputParameterHandler.addParameter('siteUrl', aEntry[1])
-            oOutputParameterHandler.addParameter('sMovieTitle', str(sMovieTitle))
-            oOutputParameterHandler.addParameter('sThumbnail', str(sThumbnail))
-            oGui.addMovie(SITE_IDENTIFIER, 'showHosters', sTitle, '', sThumbnail, sCom, oOutputParameterHandler)
+            output_parameter_handler = OutputParameterHandler()
+            output_parameter_handler.addParameter('siteUrl', aEntry[1])
+            output_parameter_handler.addParameter('sMovieTitle', str(sMovieTitle))
+            output_parameter_handler.addParameter('sThumbnail', str(sThumbnail))
+            oGui.addMovie(SITE_IDENTIFIER, 'showHosters', sTitle, '', sThumbnail, sCom, output_parameter_handler)
 
         cConfig().finishDialog(dialog)
 
@@ -398,10 +398,10 @@ def showSeriesLinks(sHtmlContent):
     xbmc.log('mode serie')
 
     oGui = Gui()
-    oInputParameterHandler = InputParameterHandler()
-    sUrl = oInputParameterHandler.getValue('siteUrl')
-    sMovieTitle = oInputParameterHandler.getValue('sMovieTitle')
-    sThumbnail = oInputParameterHandler.getValue('sThumbnail')
+    input_parameter_handler = InputParameterHandler()
+    sUrl = input_parameter_handler.getValue('siteUrl')
+    sMovieTitle = input_parameter_handler.getValue('sMovieTitle')
+    sThumbnail = input_parameter_handler.getValue('sThumbnail')
 
     # print sUrl
 
@@ -429,11 +429,11 @@ def showSeriesLinks(sHtmlContent):
 
     sDisplayTitle = cUtil().DecoTitle(sMovieTitle) + ' - [COLOR skyblue]' + sQual + '[/COLOR]'
 
-    oOutputParameterHandler = OutputParameterHandler()
-    oOutputParameterHandler.addParameter('siteUrl', sUrl)
-    oOutputParameterHandler.addParameter('sMovieTitle', str(sMovieTitle))
-    oOutputParameterHandler.addParameter('sThumbnail', str(sThumbnail))
-    oGui.addMovie(SITE_IDENTIFIER, 'showSeriesHosters', sDisplayTitle, '', sThumbnail, '', oOutputParameterHandler)
+    output_parameter_handler = OutputParameterHandler()
+    output_parameter_handler.addParameter('siteUrl', sUrl)
+    output_parameter_handler.addParameter('sMovieTitle', str(sMovieTitle))
+    output_parameter_handler.addParameter('sThumbnail', str(sThumbnail))
+    oGui.addMovie(SITE_IDENTIFIER, 'showSeriesHosters', sDisplayTitle, '', sThumbnail, '', output_parameter_handler)
 
     # on regarde si dispo dans d'autres qualitÃ©s
     sPattern1 = '<a title="TÃ©lÃ©chargez.+?en ([^"]+?)" href="([^"]+?)"><button class="button_subcat"'
@@ -449,10 +449,10 @@ def showSeriesLinks(sHtmlContent):
                 break
 
             sDisplayTitle = cUtil().DecoTitle(sMovieTitle) + ' - [COLOR skyblue]' + aEntry[0] + '[/COLOR]'
-            oOutputParameterHandler = OutputParameterHandler()
-            oOutputParameterHandler.addParameter('siteUrl', aEntry[1])
-            oOutputParameterHandler.addParameter('sMovieTitle', str(sMovieTitle))
-            oOutputParameterHandler.addParameter('sThumbnail', str(sThumbnail))
+            output_parameter_handler = OutputParameterHandler()
+            output_parameter_handler.addParameter('siteUrl', aEntry[1])
+            output_parameter_handler.addParameter('sMovieTitle', str(sMovieTitle))
+            output_parameter_handler.addParameter('sThumbnail', str(sThumbnail))
             oGui.addMovie(
                 SITE_IDENTIFIER,
                 'showSeriesHosters',
@@ -460,7 +460,7 @@ def showSeriesLinks(sHtmlContent):
                 '',
                 sThumbnail,
                 '',
-                oOutputParameterHandler)
+                output_parameter_handler)
 
         cConfig().finishDialog(dialog)
 
@@ -476,11 +476,11 @@ def showSeriesLinks(sHtmlContent):
         for aEntry in aResult2[1]:
 
             sTitle = '[COLOR skyblue]' + aEntry[1] + '[/COLOR]'
-            oOutputParameterHandler = OutputParameterHandler()
-            oOutputParameterHandler.addParameter('siteUrl', aEntry[0])
-            oOutputParameterHandler.addParameter('sMovieTitle', str(sMovieTitle))
-            oOutputParameterHandler.addParameter('sThumbnail', str(sThumbnail))
-            oGui.addTV(SITE_IDENTIFIER, 'showLinks', sTitle, 'series.png', sThumbnail, '', oOutputParameterHandler)
+            output_parameter_handler = OutputParameterHandler()
+            output_parameter_handler.addParameter('siteUrl', aEntry[0])
+            output_parameter_handler.addParameter('sMovieTitle', str(sMovieTitle))
+            output_parameter_handler.addParameter('sThumbnail', str(sThumbnail))
+            oGui.addTV(SITE_IDENTIFIER, 'showLinks', sTitle, 'series.png', sThumbnail, '', output_parameter_handler)
 
     oGui.setEndOfDirectory()
 
@@ -489,10 +489,10 @@ def showHosters():  # recherche et affiche les hotes
     # print "ZT:showHosters"
 
     oGui = Gui()
-    oInputParameterHandler = InputParameterHandler()  # apelle l'entree de paramettre
-    sMovieTitle = oInputParameterHandler.getValue('sMovieTitle')
-    sUrl = oInputParameterHandler.getValue('siteUrl')
-    sThumbnail = oInputParameterHandler.getValue('sThumbnail')
+    input_parameter_handler = InputParameterHandler()  # apelle l'entree de paramettre
+    sMovieTitle = input_parameter_handler.getValue('sMovieTitle')
+    sUrl = input_parameter_handler.getValue('siteUrl')
+    sThumbnail = input_parameter_handler.getValue('sThumbnail')
 
     xbmc.log(sUrl)
 
@@ -523,28 +523,28 @@ def showHosters():  # recherche et affiche les hotes
                 break
 
             if aEntry[2]:
-                oOutputParameterHandler = OutputParameterHandler()
-                oOutputParameterHandler.addParameter('siteUrl', str(sUrl))
-                oOutputParameterHandler.addParameter('sMovieTitle', str(sMovieTitle))
-                oOutputParameterHandler.addParameter('sThumbnail', str(sThumbnail))
+                output_parameter_handler = OutputParameterHandler()
+                output_parameter_handler.addParameter('siteUrl', str(sUrl))
+                output_parameter_handler.addParameter('sMovieTitle', str(sMovieTitle))
+                output_parameter_handler.addParameter('sThumbnail', str(sThumbnail))
                 if 'TÃ©lÃ©charger' in aEntry[2]:
                     oGui.addText(SITE_IDENTIFIER, '[COLOR olive]' + str(aEntry[2]) + '[/COLOR]')
                 else:
                     oGui.addText(SITE_IDENTIFIER, '[COLOR red]' + str(aEntry[2]) + '[/COLOR]')
 
             elif aEntry[3]:
-                oOutputParameterHandler = OutputParameterHandler()
-                oOutputParameterHandler.addParameter('siteUrl', str(sUrl))
-                oOutputParameterHandler.addParameter('sMovieTitle', str(sMovieTitle))
-                oOutputParameterHandler.addParameter('sThumbnail', str(sThumbnail))
+                output_parameter_handler = OutputParameterHandler()
+                output_parameter_handler.addParameter('siteUrl', str(sUrl))
+                output_parameter_handler.addParameter('sMovieTitle', str(sMovieTitle))
+                output_parameter_handler.addParameter('sThumbnail', str(sThumbnail))
                 oGui.addText(SITE_IDENTIFIER, '[COLOR olive]' + str(aEntry[3]) + '[/COLOR]')
 
             else:
                 sTitle = '[COLOR skyblue]' + aEntry[0] + '[/COLOR] ' + sMovieTitle
-                oOutputParameterHandler = OutputParameterHandler()
-                oOutputParameterHandler.addParameter('siteUrl', aEntry[1])
-                oOutputParameterHandler.addParameter('sMovieTitle', str(sMovieTitle))
-                oOutputParameterHandler.addParameter('sThumbnail', str(sThumbnail))
+                output_parameter_handler = OutputParameterHandler()
+                output_parameter_handler.addParameter('siteUrl', aEntry[1])
+                output_parameter_handler.addParameter('sMovieTitle', str(sMovieTitle))
+                output_parameter_handler.addParameter('sThumbnail', str(sThumbnail))
                 oGui.addMovie(
                     SITE_IDENTIFIER,
                     'Display_protected_link',
@@ -552,7 +552,7 @@ def showHosters():  # recherche et affiche les hotes
                     '',
                     sThumbnail,
                     '',
-                    oOutputParameterHandler)
+                    output_parameter_handler)
 
             cConfig().finishDialog(dialog)
 
@@ -562,10 +562,10 @@ def showHosters():  # recherche et affiche les hotes
 def showSeriesHosters():  # recherche et affiche les hotes
     # print "ZT:showSeriesHosters"
     oGui = Gui()
-    oInputParameterHandler = InputParameterHandler()  # apelle l'entree de paramettre
-    sMovieTitle = oInputParameterHandler.getValue('sMovieTitle')
-    sUrl = oInputParameterHandler.getValue('siteUrl')
-    sThumbnail = oInputParameterHandler.getValue('sThumbnail')
+    input_parameter_handler = InputParameterHandler()  # apelle l'entree de paramettre
+    sMovieTitle = input_parameter_handler.getValue('sMovieTitle')
+    sUrl = input_parameter_handler.getValue('siteUrl')
+    sThumbnail = input_parameter_handler.getValue('sThumbnail')
 
     oRequestHandler = RequestHandler(sUrl)
     sHtmlContent = oRequestHandler.request()
@@ -593,10 +593,10 @@ def showSeriesHosters():  # recherche et affiche les hotes
                 break
 
             if aEntry[2]:
-                oOutputParameterHandler = OutputParameterHandler()
-                oOutputParameterHandler.addParameter('siteUrl', str(sUrl))
-                oOutputParameterHandler.addParameter('sMovieTitle', str(sMovieTitle))
-                oOutputParameterHandler.addParameter('sThumbnail', str(sThumbnail))
+                output_parameter_handler = OutputParameterHandler()
+                output_parameter_handler.addParameter('siteUrl', str(sUrl))
+                output_parameter_handler.addParameter('sMovieTitle', str(sMovieTitle))
+                output_parameter_handler.addParameter('sThumbnail', str(sThumbnail))
                 if 'TÃ©lÃ©charger' in aEntry[2]:
                     oGui.addText(SITE_IDENTIFIER, '[COLOR olive]' + str(aEntry[2]) + '[/COLOR]')
                 else:
@@ -609,10 +609,10 @@ def showSeriesHosters():  # recherche et affiche les hotes
                 sTitle = sMovieTitle + ' ' + sName
                 sDisplayTitle = cUtil().DecoTitle(sTitle)
 
-                oOutputParameterHandler = OutputParameterHandler()
-                oOutputParameterHandler.addParameter('siteUrl', aEntry[0])
-                oOutputParameterHandler.addParameter('sMovieTitle', str(sMovieTitle))
-                oOutputParameterHandler.addParameter('sThumbnail', str(sThumbnail))
+                output_parameter_handler = OutputParameterHandler()
+                output_parameter_handler.addParameter('siteUrl', aEntry[0])
+                output_parameter_handler.addParameter('sMovieTitle', str(sMovieTitle))
+                output_parameter_handler.addParameter('sThumbnail', str(sThumbnail))
                 oGui.addMovie(
                     SITE_IDENTIFIER,
                     'Display_protected_link',
@@ -620,7 +620,7 @@ def showSeriesHosters():  # recherche et affiche les hotes
                     '',
                     sThumbnail,
                     '',
-                    oOutputParameterHandler)
+                    output_parameter_handler)
 
             cConfig().finishDialog(dialog)
 
@@ -630,10 +630,10 @@ def showSeriesHosters():  # recherche et affiche les hotes
 def Display_protected_link():
 
     oGui = Gui()
-    oInputParameterHandler = InputParameterHandler()
-    sMovieTitle = oInputParameterHandler.getValue('sMovieTitle')
-    sUrl = oInputParameterHandler.getValue('siteUrl')
-    sThumbnail = oInputParameterHandler.getValue('sThumbnail')
+    input_parameter_handler = InputParameterHandler()
+    sMovieTitle = input_parameter_handler.getValue('sMovieTitle')
+    sUrl = input_parameter_handler.getValue('siteUrl')
+    sThumbnail = input_parameter_handler.getValue('sThumbnail')
 
     oParser = cParser()
 
@@ -736,8 +736,8 @@ def CutPremiumlinks(sHtmlContent):
 
 
 def ShowBA():
-    oInputParameterHandler = InputParameterHandler()
-    sUrl = oInputParameterHandler.getValue('sUrl')
+    input_parameter_handler = InputParameterHandler()
+    sUrl = input_parameter_handler.getValue('sUrl')
 
     oRequestHandler = RequestHandler(sUrl)
     sHtmlContent = oRequestHandler.request()

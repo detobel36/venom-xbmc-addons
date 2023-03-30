@@ -62,9 +62,9 @@ class cBseries:
 
     def delFavourites(self):
 
-        oInputParameterHandler = InputParameterHandler()
-        siteUrl = oInputParameterHandler.getValue('siteUrl')
-        sMovieTitle = oInputParameterHandler.getValue('sMovieTitle')
+        input_parameter_handler = InputParameterHandler()
+        siteUrl = input_parameter_handler.getValue('siteUrl')
+        sMovieTitle = input_parameter_handler.getValue('sMovieTitle')
 
         meta = {}
         meta['title'] = xbmc.getInfoLabel('ListItem.title')
@@ -100,57 +100,57 @@ class cBseries:
 
             if (total > 0):
 
-                oOutputParameterHandler = OutputParameterHandler()
-                oOutputParameterHandler.addParameter('siteUrl', 'https://')
+                output_parameter_handler = OutputParameterHandler()
+                output_parameter_handler.addParameter('siteUrl', 'https://')
                 oGui.addText(
                     SITE_IDENTIFIER,
                     '[COLOR khaki]Bonjour, ' +
                     result['member']['login'] +
                     '[/COLOR]',
-                    oOutputParameterHandler)
+                    output_parameter_handler)
 
                 # for i in result['shows']:
                 # sId, sTitle = i['id'], i['name']
                 if (result['member']['stats']['shows'] > 0):
-                    oOutputParameterHandler = OutputParameterHandler()
-                    oOutputParameterHandler.addParameter('siteUrl', 'https://api.betaseries.com/members/infos')
-                    oOutputParameterHandler.addParameter('param', 'shows')
+                    output_parameter_handler = OutputParameterHandler()
+                    output_parameter_handler.addParameter('siteUrl', 'https://api.betaseries.com/members/infos')
+                    output_parameter_handler.addParameter('param', 'shows')
                     oGui.addDir(SITE_IDENTIFIER,
                                 'getBseries',
                                 'Series (' + str(result['member']['stats']['shows']) + ')',
                                 'mark.png',
-                                oOutputParameterHandler)
+                                output_parameter_handler)
 
                 if (result['member']['stats']['movies'] > 0):
-                    oOutputParameterHandler = OutputParameterHandler()
-                    oOutputParameterHandler.addParameter('siteUrl', 'https://api.betaseries.com/members/infos')
-                    oOutputParameterHandler.addParameter('param', 'movies')
+                    output_parameter_handler = OutputParameterHandler()
+                    output_parameter_handler.addParameter('siteUrl', 'https://api.betaseries.com/members/infos')
+                    output_parameter_handler.addParameter('param', 'movies')
                     oGui.addDir(SITE_IDENTIFIER,
                                 'getBseries',
                                 'Films (' + str(result['member']['stats']['movies']) + ')',
                                 'mark.png',
-                                oOutputParameterHandler)
+                                output_parameter_handler)
 
-        oOutputParameterHandler = OutputParameterHandler()
-        oOutputParameterHandler.addParameter('siteUrl', 'https://api.betaseries.com/movies/member')
-        oGui.addDir(SITE_IDENTIFIER, 'getBseries', 'Films (favories)', 'mark.png', oOutputParameterHandler)
+        output_parameter_handler = OutputParameterHandler()
+        output_parameter_handler.addParameter('siteUrl', 'https://api.betaseries.com/movies/member')
+        oGui.addDir(SITE_IDENTIFIER, 'getBseries', 'Films (favories)', 'mark.png', output_parameter_handler)
 
-        oOutputParameterHandler = OutputParameterHandler()
-        oOutputParameterHandler.addParameter('siteUrl', 'https://api.betaseries.com/shows/member')
-        oGui.addDir(SITE_IDENTIFIER, 'getBseries', 'Series (favories)', 'mark.png', oOutputParameterHandler)
+        output_parameter_handler = OutputParameterHandler()
+        output_parameter_handler.addParameter('siteUrl', 'https://api.betaseries.com/shows/member')
+        oGui.addDir(SITE_IDENTIFIER, 'getBseries', 'Series (favories)', 'mark.png', output_parameter_handler)
 
-        oOutputParameterHandler = OutputParameterHandler()
-        oOutputParameterHandler.addParameter('siteUrl', 'https://api.betaseries.com/timeline/member')
-        oGui.addDir(SITE_IDENTIFIER, 'getBseries', 'Testt (favories)', 'mark.png', oOutputParameterHandler)
+        output_parameter_handler = OutputParameterHandler()
+        output_parameter_handler.addParameter('siteUrl', 'https://api.betaseries.com/timeline/member')
+        oGui.addDir(SITE_IDENTIFIER, 'getBseries', 'Testt (favories)', 'mark.png', output_parameter_handler)
 
-        oOutputParameterHandler = OutputParameterHandler()
-        oOutputParameterHandler.addParameter('siteUrl', 'http://')
-        oOutputParameterHandler.addParameter('userID', result['member']['id'])
-        oGui.addDir(SITE_IDENTIFIER, 'getBtimeline', 'Timeline', 'mark.png', oOutputParameterHandler)
+        output_parameter_handler = OutputParameterHandler()
+        output_parameter_handler.addParameter('siteUrl', 'http://')
+        output_parameter_handler.addParameter('userID', result['member']['id'])
+        oGui.addDir(SITE_IDENTIFIER, 'getBtimeline', 'Timeline', 'mark.png', output_parameter_handler)
 
-        oOutputParameterHandler = OutputParameterHandler()
-        oOutputParameterHandler.addParameter('siteUrl', 'https://api.betaseries.com/members/destroy')
-        oGui.addDir(SITE_IDENTIFIER, 'getBsout', 'Deconnection', 'mark.png', oOutputParameterHandler)
+        output_parameter_handler = OutputParameterHandler()
+        output_parameter_handler.addParameter('siteUrl', 'https://api.betaseries.com/members/destroy')
+        oGui.addDir(SITE_IDENTIFIER, 'getBsout', 'Deconnection', 'mark.png', output_parameter_handler)
 
         oGui.setEndOfDirectory()
 
@@ -161,8 +161,8 @@ class cBseries:
         # self.getToken()
         oGui = Gui()
 
-        oInputParameterHandler = InputParameterHandler()
-        userID = oInputParameterHandler.getValue('userID')
+        input_parameter_handler = InputParameterHandler()
+        userID = input_parameter_handler.getValue('userID')
 
         # timeline
         oRequestHandler = RequestHandler('https://api.betaseries.com/timeline/member')
@@ -190,16 +190,16 @@ class cBseries:
                     *(time.strptime(i['date'], "%Y-%m-%d %H:%M:%S")[0:6])).strftime('%d-%m-%Y %H:%M')
 
                 sTitle = ('%s - %s') % (date, titre)
-                oOutputParameterHandler = OutputParameterHandler()
-                oOutputParameterHandler.addParameter('siteUrl', 'http://')
-                oGui.addText(SITE_IDENTIFIER, sTitle, oOutputParameterHandler)
+                output_parameter_handler = OutputParameterHandler()
+                output_parameter_handler.addParameter('siteUrl', 'http://')
+                oGui.addText(SITE_IDENTIFIER, sTitle, output_parameter_handler)
 
         oGui.setEndOfDirectory()
 
     def getBsout(self):
 
-        oInputParameterHandler = InputParameterHandler()
-        sUrl = oInputParameterHandler.getValue('siteUrl')
+        input_parameter_handler = InputParameterHandler()
+        sUrl = input_parameter_handler.getValue('siteUrl')
 
         oGui = Gui()
 
@@ -223,9 +223,9 @@ class cBseries:
 
     def getBseries(self):
 
-        oInputParameterHandler = InputParameterHandler()
-        sUrl = oInputParameterHandler.getValue('siteUrl')
-        sParam = oInputParameterHandler.getValue('param')
+        input_parameter_handler = InputParameterHandler()
+        sUrl = input_parameter_handler.getValue('siteUrl')
+        sParam = input_parameter_handler.getValue('param')
 
         oGui = Gui()
 
@@ -259,8 +259,8 @@ class cBseries:
 
                     sTitle = ('%s - (%s) / %s') % (sTitle.encode("utf-8"), int(sYear), sStatus)
 
-                oOutputParameterHandler = OutputParameterHandler()
-                oOutputParameterHandler.addParameter('siteUrl', 'http://')
+                output_parameter_handler = OutputParameterHandler()
+                output_parameter_handler.addParameter('siteUrl', 'http://')
 
                 oGuiElement = GuiElement()
 
@@ -274,11 +274,11 @@ class cBseries:
                 oGuiElement.setDescription(sDesc)
                 # oGuiElement.setFanart(fanart)
 
-                # oGui.createContexMenuDelFav(oGuiElement, oOutputParameterHandler)
+                # oGui.createContexMenuDelFav(oGuiElement, output_parameter_handler)
 
-                # oGui.addHost(oGuiElement, oOutputParameterHandler)
-                oGui.addFolder(oGuiElement, oOutputParameterHandler)
-                # oGui.addDir(SITE_IDENTIFIER, 'showMovies', sTitle, 'next.png', oOutputParameterHandler)
+                # oGui.addHost(oGuiElement, output_parameter_handler)
+                oGui.addFolder(oGuiElement, output_parameter_handler)
+                # oGui.addDir(SITE_IDENTIFIER, 'showMovies', sTitle, 'next.png', output_parameter_handler)
 
             oGui.setEndOfDirectory()
         return
@@ -286,14 +286,14 @@ class cBseries:
     def getBseries2(self):
         oGui = Gui()
 
-        oInputParameterHandler = InputParameterHandler()
-        sUrl = oInputParameterHandler.getValue('siteUrl')
+        input_parameter_handler = InputParameterHandler()
+        sUrl = input_parameter_handler.getValue('siteUrl')
 
-        # aParams = oInputParameterHandler.getAllParameter()
+        # aParams = input_parameter_handler.getAllParameter()
 
         iPage = 1
-        if (oInputParameterHandler.exist('page')):
-            iPage = oInputParameterHandler.getValue('page')
+        if (input_parameter_handler.exist('page')):
+            iPage = input_parameter_handler.getValue('page')
 
         oRequestHandler = RequestHandler(sUrl)
         oRequestHandler.addHeaderEntry('X-BetaSeries-Key', API_KEY)
@@ -324,16 +324,16 @@ class cBseries:
                 if thumbnail == '':
                     thumbnail = 'False'
 
-                oOutputParameterHandler = OutputParameterHandler()
-                oOutputParameterHandler.addParameter('siteUrl', siteurl)
-                oOutputParameterHandler.addParameter('sMovieTitle', title)
-                oOutputParameterHandler.addParameter('sThumbnail', thumbnail)
+                output_parameter_handler = OutputParameterHandler()
+                output_parameter_handler.addParameter('siteUrl', siteurl)
+                output_parameter_handler.addParameter('sMovieTitle', title)
+                output_parameter_handler.addParameter('sThumbnail', thumbnail)
 
                 if (function == 'play'):
                     oHoster = HosterGui().checkHoster(siteurl)
-                    oOutputParameterHandler.addParameter('sHosterIdentifier', oHoster.getPluginIdentifier())
-                    oOutputParameterHandler.addParameter('sFileName', oHoster.getFileName())
-                    oOutputParameterHandler.addParameter('sMediaUrl', siteurl)
+                    output_parameter_handler.addParameter('sHosterIdentifier', oHoster.getPluginIdentifier())
+                    output_parameter_handler.addParameter('sFileName', oHoster.getFileName())
+                    output_parameter_handler.addParameter('sMediaUrl', siteurl)
 
                 if (cat == sCat):
                     oGuiElement = GuiElement()
@@ -346,14 +346,14 @@ class cBseries:
                     oGuiElement.setThumbnail(thumbnail)
                     oGuiElement.setFanart(fanart)
 
-                    oGui.createContexMenuDelFav(oGuiElement, oOutputParameterHandler)
+                    oGui.createContexMenuDelFav(oGuiElement, output_parameter_handler)
 
                     if (function == 'play'):
-                        oGui.addHost(oGuiElement, oOutputParameterHandler)
+                        oGui.addHost(oGuiElement, output_parameter_handler)
                     else:
-                        oGui.addFolder(oGuiElement, oOutputParameterHandler)
+                        oGui.addFolder(oGuiElement, output_parameter_handler)
 
-                    # oGui.addFav(site, function, title, "mark.png", thumbnail, fanart, oOutputParameterHandler)
+                    # oGui.addFav(site, function, title, "mark.png", thumbnail, fanart, output_parameter_handler)
 
             oGui.setEndOfDirectory()
         except BaseException:
@@ -361,18 +361,18 @@ class cBseries:
         return
 
     def setFavorite(self):
-        oInputParameterHandler = InputParameterHandler()
-        # xbmc.log(str(oInputParameterHandler.getAllParameter()))
+        input_parameter_handler = InputParameterHandler()
+        # xbmc.log(str(input_parameter_handler.getAllParameter()))
 
-        if int(oInputParameterHandler.getValue('sCat')) < 1:
+        if int(input_parameter_handler.getValue('sCat')) < 1:
             cConfig().showInfo('Error', 'Mise en Favoris non possible pour ce lien')
             return
 
         meta = {}
-        meta['siteurl'] = oInputParameterHandler.getValue('siteUrl')
-        meta['site'] = oInputParameterHandler.getValue('sId')
-        meta['fav'] = oInputParameterHandler.getValue('sFav')
-        meta['cat'] = oInputParameterHandler.getValue('sCat')
+        meta['siteurl'] = input_parameter_handler.getValue('siteUrl')
+        meta['site'] = input_parameter_handler.getValue('sId')
+        meta['fav'] = input_parameter_handler.getValue('sFav')
+        meta['cat'] = input_parameter_handler.getValue('sCat')
 
         meta['title'] = xbmc.getInfoLabel('ListItem.title')
         meta['icon'] = xbmc.getInfoLabel('ListItem.Art(thumb)')

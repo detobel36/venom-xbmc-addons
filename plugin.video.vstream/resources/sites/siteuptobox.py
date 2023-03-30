@@ -46,18 +46,18 @@ def load():
     if (addons.getSetting('hoster_uptobox_username') == '') or (addons.getSetting(
             'hoster_uptobox_password') == '') or not cPremiumHandler('uptobox').getToken():
         oGui.addText(SITE_IDENTIFIER, '[COLOR red]' + 'Nécessite un Compte Uptobox Premium ou Gratuit' + '[/COLOR]')
-        oOutputParameterHandler = OutputParameterHandler()
-        oOutputParameterHandler.addParameter('siteUrl', '//')
-        oGui.addDir(SITE_IDENTIFIER, 'opensetting', addon().VSlang(30023), 'none.png', oOutputParameterHandler)
+        output_parameter_handler = OutputParameterHandler()
+        output_parameter_handler.addParameter('siteUrl', '//')
+        oGui.addDir(SITE_IDENTIFIER, 'opensetting', addon().VSlang(30023), 'none.png', output_parameter_handler)
         oGui.setEndOfDirectory()
         return
 
-    oOutputParameterHandler = OutputParameterHandler()
-    oOutputParameterHandler.addParameter('siteUrl', URL_MOVIE[0])
-    oGui.addDir(SITE_IDENTIFIER, URL_MOVIE[1], 'Mes vidéos', 'films.png', oOutputParameterHandler)
+    output_parameter_handler = OutputParameterHandler()
+    output_parameter_handler.addParameter('siteUrl', URL_MOVIE[0])
+    oGui.addDir(SITE_IDENTIFIER, URL_MOVIE[1], 'Mes vidéos', 'films.png', output_parameter_handler)
 
-    oOutputParameterHandler.addParameter('siteUrl', URL_MOVIE[0])
-    oGui.addDir(SITE_IDENTIFIER, 'showFile', 'Mes Fichiers', 'genres.png', oOutputParameterHandler)
+    output_parameter_handler.addParameter('siteUrl', URL_MOVIE[0])
+    oGui.addDir(SITE_IDENTIFIER, 'showFile', 'Mes Fichiers', 'genres.png', output_parameter_handler)
 
     oGui.setEndOfDirectory()
 
@@ -69,9 +69,9 @@ def opensetting():
 def showSearch(path='//'):
     oGui = Gui()
 
-    oInputParameterHandler = InputParameterHandler()
-    sPath = oInputParameterHandler.getValue('siteUrl')
-    sType = oInputParameterHandler.getValue('sMovieTitle')
+    input_parameter_handler = InputParameterHandler()
+    sPath = input_parameter_handler.getValue('siteUrl')
+    sType = input_parameter_handler.getValue('sMovieTitle')
 
     sSearchText = oGui.showKeyBoard()
     if sSearchText:
@@ -93,8 +93,8 @@ def showSearch(path='//'):
 def showFile(sSearch=''):
 
     oGui = Gui()
-    oInputParameterHandler = InputParameterHandler()
-    sUrl = oInputParameterHandler.getValue('siteUrl')
+    input_parameter_handler = InputParameterHandler()
+    sUrl = input_parameter_handler.getValue('siteUrl')
 
     offset = 0
     limit = NB_FILES
@@ -129,10 +129,10 @@ def showFile(sSearch=''):
         return
 
     # menu de recherche
-    oOutputParameterHandler = OutputParameterHandler()
+    output_parameter_handler = OutputParameterHandler()
     if path == '//' and not sSearch:
-        oOutputParameterHandler.addParameter('siteUrl', URL_MOVIE[0])
-        oGui.addDir(SITE_IDENTIFIER, 'showSearch', 'Rechercher', 'search.png', oOutputParameterHandler)
+        output_parameter_handler.addParameter('siteUrl', URL_MOVIE[0])
+        oGui.addDir(SITE_IDENTIFIER, 'showSearch', 'Rechercher', 'search.png', output_parameter_handler)
 
     sPath = getpath(content)
 
@@ -148,9 +148,9 @@ def showFile(sSearch=''):
                 sFoldername = sFoldername.encode('utf-8')
             sUrl = '&path=' + Quote(sFoldername).replace('//', '%2F%2F')
 
-            oOutputParameterHandler.addParameter('siteUrl', sUrl)
-            oOutputParameterHandler.addParameter('sMovieTitle', sTitle)
-            oGui.addDir(SITE_IDENTIFIER, 'showFile', sTitle, 'genres.png', oOutputParameterHandler)
+            output_parameter_handler.addParameter('siteUrl', sUrl)
+            output_parameter_handler.addParameter('sMovieTitle', sTitle)
+            oGui.addDir(SITE_IDENTIFIER, 'showFile', sTitle, 'genres.png', output_parameter_handler)
 
     # les fichiers
     nbFile = 0
@@ -177,10 +177,10 @@ def showFile(sSearch=''):
         offset = nextPage * NB_FILES
         siteUrl = '&offset=%d&limit=%d&path=%s' % (offset, limit, sPath)
 
-        oOutputParameterHandler = OutputParameterHandler()
-        oOutputParameterHandler.addParameter('siteUrl', siteUrl)
-        oOutputParameterHandler.addParameter('sMovieTitle', 'sMovieTitle')
-        oGui.addNext(SITE_IDENTIFIER, 'showFile', 'Page %d' % (nextPage + 1), oOutputParameterHandler)
+        output_parameter_handler = OutputParameterHandler()
+        output_parameter_handler.addParameter('siteUrl', siteUrl)
+        output_parameter_handler.addParameter('sMovieTitle', 'sMovieTitle')
+        oGui.addNext(SITE_IDENTIFIER, 'showFile', 'Page %d' % (nextPage + 1), output_parameter_handler)
 
     oGui.setEndOfDirectory()
 
@@ -188,13 +188,13 @@ def showFile(sSearch=''):
 def showMedias(sSearch='', sType=None):
 
     oGui = Gui()
-    oInputParameterHandler = InputParameterHandler()
-    sMovieTitle = oInputParameterHandler.getValue('sMovieTitle')
+    input_parameter_handler = InputParameterHandler()
+    sMovieTitle = input_parameter_handler.getValue('sMovieTitle')
 
     if sSearch:
         sSiteUrl = sSearch
     else:
-        sSiteUrl = oInputParameterHandler.getValue('siteUrl')
+        sSiteUrl = input_parameter_handler.getValue('siteUrl')
 
     oPremiumHandler = cPremiumHandler('uptobox')
     sToken = oPremiumHandler.getToken()
@@ -244,17 +244,17 @@ def showMedias(sSearch='', sType=None):
 
     # Rechercher Film
     if path == '//' and not sSearch:
-        oOutputParameterHandler = OutputParameterHandler()
-        oOutputParameterHandler.addParameter('siteUrl', path)
-        oOutputParameterHandler.addParameter('sMovieTitle', 'film')
-        oGui.addDir(SITE_IDENTIFIER, 'showSearch', 'Rechercher (Films)', 'search.png', oOutputParameterHandler)
+        output_parameter_handler = OutputParameterHandler()
+        output_parameter_handler.addParameter('siteUrl', path)
+        output_parameter_handler.addParameter('sMovieTitle', 'film')
+        oGui.addDir(SITE_IDENTIFIER, 'showSearch', 'Rechercher (Films)', 'search.png', output_parameter_handler)
 
     # Rechercher Séries
     if path == '//' and not sSearch:
-        oOutputParameterHandler = OutputParameterHandler()
-        oOutputParameterHandler.addParameter('siteUrl', path)
-        oOutputParameterHandler.addParameter('sMovieTitle', 'serie')
-        oGui.addDir(SITE_IDENTIFIER, 'showSearch', 'Rechercher (Séries)', 'search.png', oOutputParameterHandler)
+        output_parameter_handler = OutputParameterHandler()
+        output_parameter_handler.addParameter('siteUrl', path)
+        output_parameter_handler.addParameter('sMovieTitle', 'serie')
+        oGui.addDir(SITE_IDENTIFIER, 'showSearch', 'Rechercher (Séries)', 'search.png', output_parameter_handler)
 
     if sSearch and sType == 'film':
         isMovie = True
@@ -288,10 +288,10 @@ def showMedias(sSearch='', sType=None):
         offset = nextPage * NB_FILES
         siteUrl = '&offset=%d&limit=%d&path=%s' % (offset, limit, sPath)
 
-        oOutputParameterHandler = OutputParameterHandler()
-        oOutputParameterHandler.addParameter('siteUrl', siteUrl)
-        oOutputParameterHandler.addParameter('sMovieTitle', sMovieTitle)
-        oGui.addNext(SITE_IDENTIFIER, 'showMedias', 'Page %d' % (nextPage + 1), oOutputParameterHandler)
+        output_parameter_handler = OutputParameterHandler()
+        output_parameter_handler.addParameter('siteUrl', siteUrl)
+        output_parameter_handler.addParameter('sMovieTitle', sMovieTitle)
+        oGui.addNext(SITE_IDENTIFIER, 'showMedias', 'Page %d' % (nextPage + 1), output_parameter_handler)
 
     oGui.setEndOfDirectory()
 
@@ -305,7 +305,7 @@ def addFolders(oGui, content, searchFolder=None):
 
     # Sous-dossiers virtuels identifiés par les deux-points
     subFolders = set()
-    oOutputParameterHandler = OutputParameterHandler()
+    output_parameter_handler = OutputParameterHandler()
 
     for folder in folders:
 
@@ -370,9 +370,9 @@ def addFolders(oGui, content, searchFolder=None):
 
         sUrl = '&path=' + Quote(sFoldername).replace('//', '%2F%2F')
 
-        oOutputParameterHandler.addParameter('siteUrl', sUrl)
-        oOutputParameterHandler.addParameter('sMovieTitle', sTitle)
-        oGui.addDir(SITE_IDENTIFIER, 'showMedias', sTitle, sThumb, oOutputParameterHandler)
+        output_parameter_handler.addParameter('siteUrl', sUrl)
+        output_parameter_handler.addParameter('sMovieTitle', sTitle)
+        oGui.addDir(SITE_IDENTIFIER, 'showMedias', sTitle, sThumb, output_parameter_handler)
 
 
 def showMovies(oGui, content, sType=None):
@@ -426,14 +426,14 @@ def showMovie(oGui, sTitle, sHosterUrl, sType=None):
     if sLang:
         sMovieTitle += ' (%s)' % sLang
 
-    oOutputParameterHandler = OutputParameterHandler()
-    oOutputParameterHandler.addParameter('siteUrl', sHosterUrl)
-    oOutputParameterHandler.addParameter('sMovieTitle', sMovieTitle)
-    oOutputParameterHandler.addParameter('sYear', sYear)
-    oOutputParameterHandler.addParameter('sRes', sRes)
-    oOutputParameterHandler.addParameter('sLang', sLang)
-    oOutputParameterHandler.addParameter('sTmdbId', sTmdbId)
-    oGui.addMovie(SITE_IDENTIFIER, 'showHosters', sTitle, 'films.png', '', '', oOutputParameterHandler)
+    output_parameter_handler = OutputParameterHandler()
+    output_parameter_handler.addParameter('siteUrl', sHosterUrl)
+    output_parameter_handler.addParameter('sMovieTitle', sMovieTitle)
+    output_parameter_handler.addParameter('sYear', sYear)
+    output_parameter_handler.addParameter('sRes', sRes)
+    output_parameter_handler.addParameter('sLang', sLang)
+    output_parameter_handler.addParameter('sTmdbId', sTmdbId)
+    oGui.addMovie(SITE_IDENTIFIER, 'showHosters', sTitle, 'films.png', '', '', output_parameter_handler)
 
 
 def showSeries(oGui, content, searchFolder, numPage):
@@ -455,7 +455,7 @@ def showSeries(oGui, content, searchFolder, numPage):
 
     # Sous-dossiers virtuels identifiés par les deux-points
     subFolders = set()
-    oOutputParameterHandler = OutputParameterHandler()
+    output_parameter_handler = OutputParameterHandler()
 
     for folder in folders:
 
@@ -510,13 +510,13 @@ def showSeries(oGui, content, searchFolder, numPage):
 
         sUrl = '&path=' + Quote(sFoldername).replace('//', '%2F%2F')
 
-        oOutputParameterHandler.addParameter('siteUrl', sUrl)
-        oOutputParameterHandler.addParameter('sMovieTitle', sTitle)
-        oOutputParameterHandler.addParameter('sYear', sYear)
-        oOutputParameterHandler.addParameter('sTmdbId', sTmdbId)
+        output_parameter_handler.addParameter('siteUrl', sUrl)
+        output_parameter_handler.addParameter('sMovieTitle', sTitle)
+        output_parameter_handler.addParameter('sYear', sYear)
+        output_parameter_handler.addParameter('sTmdbId', sTmdbId)
 
         if isSubFolder:   # dossier
-            oGui.addDir(SITE_IDENTIFIER, 'showMedias', sTitle, 'genres.png', oOutputParameterHandler)
+            oGui.addDir(SITE_IDENTIFIER, 'showMedias', sTitle, 'genres.png', output_parameter_handler)
         else:           # série
             saison = None
             if 'SAISON' in sTitle.upper() or 'SEASON' in sTitle.upper():
@@ -534,17 +534,17 @@ def showSeries(oGui, content, searchFolder, numPage):
                 sMovieTitle = sMovieTitle[:pos]
 
                 sUrl += '&sSeason=%d' % saison
-                oOutputParameterHandler.addParameter('siteUrl', sUrl)
-                oOutputParameterHandler.addParameter('sMovieTitle', sMovieTitle)
-                oOutputParameterHandler.addParameter('sYear', sYear)
-                oOutputParameterHandler.addParameter('sTmdbId', sTmdbId)
+                output_parameter_handler.addParameter('siteUrl', sUrl)
+                output_parameter_handler.addParameter('sMovieTitle', sMovieTitle)
+                output_parameter_handler.addParameter('sYear', sYear)
+                output_parameter_handler.addParameter('sTmdbId', sTmdbId)
 
                 oGui.addSeason(SITE_IDENTIFIER, 'showMedias', sMovieTitle +
-                               ' ' + sTitle, '', '', '', oOutputParameterHandler)
+                               ' ' + sTitle, '', '', '', output_parameter_handler)
             elif sMovieTitle.upper() == 'ANIMES' or sMovieTitle.upper() == 'ANIMÉS' or 'MANGA' in sMovieTitle.upper() or 'JAPAN' in sMovieTitle.upper():
-                oGui.addAnime(SITE_IDENTIFIER, 'showMedias', sTitle, '', '', '', oOutputParameterHandler)
+                oGui.addAnime(SITE_IDENTIFIER, 'showMedias', sTitle, '', '', '', output_parameter_handler)
             else:
-                oGui.addTV(SITE_IDENTIFIER, 'showMedias', sTitle, '', '', '', oOutputParameterHandler)
+                oGui.addTV(SITE_IDENTIFIER, 'showMedias', sTitle, '', '', '', output_parameter_handler)
 
         nbSeries += 1
         if nbSeries == NB_FILES:
@@ -573,13 +573,13 @@ def showEpisodes(oGui, sMovieTitle, content, sSiteUrl, sSeason):
 
         # plusieurs saisons, on les découpe
         if len(saisons) > 0:
-            oOutputParameterHandler = OutputParameterHandler()
+            output_parameter_handler = OutputParameterHandler()
             for saison in saisons:
                 sUrl = sSiteUrl + '&sSeason=%d' % saison
                 sTitle = 'Saison %d ' % saison + sMovieTitle
-                oOutputParameterHandler.addParameter('siteUrl', sUrl)
-                oOutputParameterHandler.addParameter('sMovieTitle', sMovieTitle)
-                oGui.addSeason(SITE_IDENTIFIER, 'showMedias', sTitle, '', '', '', oOutputParameterHandler)
+                output_parameter_handler.addParameter('siteUrl', sUrl)
+                output_parameter_handler.addParameter('sMovieTitle', sMovieTitle)
+                oGui.addSeason(SITE_IDENTIFIER, 'showMedias', sTitle, '', '', '', output_parameter_handler)
             return nbFile
 
     pos = len(sMovieTitle)
@@ -588,7 +588,7 @@ def showEpisodes(oGui, sMovieTitle, content, sSiteUrl, sSeason):
 
     # ajout des fichiers
     nbFile = 0
-    oOutputParameterHandler = OutputParameterHandler()
+    output_parameter_handler = OutputParameterHandler()
     for file in content['files']:
         sFileName = file['file_name']
         if not isMatrix():
@@ -624,10 +624,10 @@ def showEpisodes(oGui, sMovieTitle, content, sSiteUrl, sSeason):
         sHosterUrl = URL_MAIN + file['file_code']
 
         nbFile += 1
-        oOutputParameterHandler.addParameter('siteUrl', sHosterUrl)
-        oOutputParameterHandler.addParameter('sMovieTitle', sDisplayTitle)
-        oOutputParameterHandler.addParameter('sYear', sYear)
-        oGui.addEpisode(SITE_IDENTIFIER, 'showHosters', sTitle, '', '', '', oOutputParameterHandler)
+        output_parameter_handler.addParameter('siteUrl', sHosterUrl)
+        output_parameter_handler.addParameter('sMovieTitle', sDisplayTitle)
+        output_parameter_handler.addParameter('sYear', sYear)
+        oGui.addEpisode(SITE_IDENTIFIER, 'showHosters', sTitle, '', '', '', output_parameter_handler)
 
     return nbFile
 
@@ -705,9 +705,9 @@ def searchSerie(oGui, sUrl, path, searchName):
 
 def showHosters():
     oGui = Gui()
-    oInputParameterHandler = InputParameterHandler()
-    sHosterUrl = oInputParameterHandler.getValue('siteUrl')
-    sTitle = oInputParameterHandler.getValue('sMovieTitle')
+    input_parameter_handler = InputParameterHandler()
+    sHosterUrl = input_parameter_handler.getValue('siteUrl')
+    sTitle = input_parameter_handler.getValue('sMovieTitle')
     oHoster = HosterGui().checkHoster(sHosterUrl)
     if oHoster:
         oHoster.setDisplayName(sTitle)
@@ -816,9 +816,9 @@ def upToMyAccount():
     if (addons.getSetting('hoster_uptobox_username') == '') and (addons.getSetting('hoster_uptobox_password') == ''):
         return
 
-    oInputParameterHandler = InputParameterHandler()
-    sMediaUrl = oInputParameterHandler.getValue('sMediaUrl')
-    sMovieTitle = oInputParameterHandler.getValue('sTitle')
+    input_parameter_handler = InputParameterHandler()
+    sMediaUrl = input_parameter_handler.getValue('sMediaUrl')
+    sMovieTitle = input_parameter_handler.getValue('sTitle')
 
     oPremiumHandler = cPremiumHandler('uptobox')
     sHtmlContent = oPremiumHandler.GetHtml(URL_MAIN)

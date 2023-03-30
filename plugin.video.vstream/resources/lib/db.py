@@ -199,9 +199,9 @@ class Db(object):
     def del_history(self):
         from resources.lib.gui.gui import Gui
         oGui = Gui()
-        oInputParameterHandler = InputParameterHandler()
-        if oInputParameterHandler.exist('searchtext'):
-            sql_delete = "DELETE FROM history WHERE title = '%s'" % (oInputParameterHandler.getValue('searchtext'))
+        input_parameter_handler = InputParameterHandler()
+        if input_parameter_handler.exist('searchtext'):
+            sql_delete = "DELETE FROM history WHERE title = '%s'" % (input_parameter_handler.getValue('searchtext'))
         else:
             sql_delete = 'DELETE FROM history;'
 

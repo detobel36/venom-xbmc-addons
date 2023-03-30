@@ -30,19 +30,19 @@ class UpNext:
             return
 
         # La source
-        oInputParameterHandler = InputParameterHandler()
-        sSiteName = oInputParameterHandler.getValue('sourceName')
+        input_parameter_handler = InputParameterHandler()
+        sSiteName = input_parameter_handler.getValue('sourceName')
         if not sSiteName:
             return
 
         # La saison
-        sSaison = oInputParameterHandler.getValue('sSeason')
+        sSaison = input_parameter_handler.getValue('sSeason')
 
         # l'ID tmdb
-        sTmdbId = oInputParameterHandler.getValue('sTmdbId')
+        sTmdbId = input_parameter_handler.getValue('sTmdbId')
 
         # Calcule l'épisode suivant à partir de l'épisode courant
-        sEpisode = oInputParameterHandler.getValue('sEpisode')
+        sEpisode = input_parameter_handler.getValue('sEpisode')
         if not sEpisode:
             sEpisode = str(guiElement.getEpisode())
             if not sEpisode:
@@ -59,17 +59,17 @@ class UpNext:
         nextEpisode = numEpisode + 1
         sNextEpisode = '%02d' % nextEpisode
 
-        saisonUrl = oInputParameterHandler.getValue('saisonUrl')
-        oOutputParameterHandler = OutputParameterHandler()
-        oOutputParameterHandler.addParameter('siteUrl', saisonUrl)
-        oOutputParameterHandler.addParameter('sMovieTitle', sMovieTitle)
-        oOutputParameterHandler.addParameter('tvshowtitle', sMovieTitle)
-        oOutputParameterHandler.addParameter('sTmdbId', sTmdbId)
-        sParams = oOutputParameterHandler.getParameterAsUri()
+        saisonUrl = input_parameter_handler.getValue('saisonUrl')
+        output_parameter_handler = OutputParameterHandler()
+        output_parameter_handler.addParameter('siteUrl', saisonUrl)
+        output_parameter_handler.addParameter('sMovieTitle', sMovieTitle)
+        output_parameter_handler.addParameter('tvshowtitle', sMovieTitle)
+        output_parameter_handler.addParameter('sTmdbId', sTmdbId)
+        sParams = output_parameter_handler.getParameterAsUri()
 
-        sHosterIdentifier = oInputParameterHandler.getValue('sHosterIdentifier')
-        nextSaisonFunc = oInputParameterHandler.getValue('nextSaisonFunc')
-        sLang = oInputParameterHandler.getValue('sLang')
+        sHosterIdentifier = input_parameter_handler.getValue('sHosterIdentifier')
+        nextSaisonFunc = input_parameter_handler.getValue('nextSaisonFunc')
+        sLang = input_parameter_handler.getValue('sLang')
 
         try:
             # sauvegarde des parametres d'appel
@@ -97,25 +97,25 @@ class UpNext:
 
             episodeTitle = nextTitle
 
-            saisonUrl = oInputParameterHandler.getValue('saisonUrl')
-            oOutputParameterHandler = OutputParameterHandler()
-            oOutputParameterHandler.addParameter('sHosterIdentifier', sHosterIdentifier)
-            oOutputParameterHandler.addParameter('sourceName', sSiteName)
-            oOutputParameterHandler.addParameter('sFileName', sFileName)
-            oOutputParameterHandler.addParameter('sTitle', sFileName)
-            oOutputParameterHandler.addParameter('sCat', 8)  # Catégorie épisode
-            oOutputParameterHandler.addParameter('sMeta', 6)  # Meta épisode
-            oOutputParameterHandler.addParameter('sFav', 'play')
-            oOutputParameterHandler.addParameter('sMediaUrl', str(sMediaUrl))
-            oOutputParameterHandler.addParameter('saisonUrl', saisonUrl)
-            oOutputParameterHandler.addParameter('nextSaisonFunc', nextSaisonFunc)
-            oOutputParameterHandler.addParameter('sSeason', sSaison)
-            oOutputParameterHandler.addParameter('sEpisode', sNextEpisode)
-            oOutputParameterHandler.addParameter('sLang', sLang)
-            oOutputParameterHandler.addParameter('tvshowtitle', tvShowTitle)
-            oOutputParameterHandler.addParameter('sTmdbId', sTmdbId)
+            saisonUrl = input_parameter_handler.getValue('saisonUrl')
+            output_parameter_handler = OutputParameterHandler()
+            output_parameter_handler.addParameter('sHosterIdentifier', sHosterIdentifier)
+            output_parameter_handler.addParameter('sourceName', sSiteName)
+            output_parameter_handler.addParameter('sFileName', sFileName)
+            output_parameter_handler.addParameter('sTitle', sFileName)
+            output_parameter_handler.addParameter('sCat', 8)  # Catégorie épisode
+            output_parameter_handler.addParameter('sMeta', 6)  # Meta épisode
+            output_parameter_handler.addParameter('sFav', 'play')
+            output_parameter_handler.addParameter('sMediaUrl', str(sMediaUrl))
+            output_parameter_handler.addParameter('saisonUrl', saisonUrl)
+            output_parameter_handler.addParameter('nextSaisonFunc', nextSaisonFunc)
+            output_parameter_handler.addParameter('sSeason', sSaison)
+            output_parameter_handler.addParameter('sEpisode', sNextEpisode)
+            output_parameter_handler.addParameter('sLang', sLang)
+            output_parameter_handler.addParameter('tvshowtitle', tvShowTitle)
+            output_parameter_handler.addParameter('sTmdbId', sTmdbId)
 
-            sParams = oOutputParameterHandler.getParameterAsUri()
+            sParams = output_parameter_handler.getParameterAsUri()
             url = 'plugin://plugin.video.vstream/?site=HosterGui&function=play&%s' % sParams
 
             # sThumbnail = guiElement.getThumbnail()

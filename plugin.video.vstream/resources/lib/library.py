@@ -43,10 +43,10 @@ class cLibrary:
         self.__sTitle = ''
 
     def setLibrary(self):
-        oInputParameterHandler = InputParameterHandler()
-        sHosterIdentifier = oInputParameterHandler.getValue('sHosterIdentifier')
-        sFileName = oInputParameterHandler.getValue('sFileName')
-        sMediaUrl = oInputParameterHandler.getValue('sMediaUrl')
+        input_parameter_handler = InputParameterHandler()
+        sHosterIdentifier = input_parameter_handler.getValue('sHosterIdentifier')
+        sFileName = input_parameter_handler.getValue('sFileName')
+        sMediaUrl = input_parameter_handler.getValue('sMediaUrl')
 
         ret = dialog().VSselect(['Film', 'Série'], 'Sélectionner une catégorie')
         if ret == 0:
@@ -107,15 +107,15 @@ class cLibrary:
 
     def getLibrary(self):
         oGui = Gui()
-        oOutputParameterHandler = OutputParameterHandler()
+        output_parameter_handler = OutputParameterHandler()
 
         folder = self.ADDON.getSetting('Library_folder_Movies')
-        oOutputParameterHandler.addParameter('siteUrl', folder)
-        oGui.addDir(SITE_IDENTIFIER, 'openLibrary', self.ADDON.VSlang(30120), 'films.png', oOutputParameterHandler)
+        output_parameter_handler.addParameter('siteUrl', folder)
+        oGui.addDir(SITE_IDENTIFIER, 'openLibrary', self.ADDON.VSlang(30120), 'films.png', output_parameter_handler)
 
         folder = self.ADDON.getSetting('Library_folder_TVs')
-        oOutputParameterHandler.addParameter('siteUrl', folder)
-        oGui.addDir(SITE_IDENTIFIER, 'openLibrary', self.ADDON.VSlang(30121), 'series.png', oOutputParameterHandler)
+        output_parameter_handler.addParameter('siteUrl', folder)
+        oGui.addDir(SITE_IDENTIFIER, 'openLibrary', self.ADDON.VSlang(30121), 'series.png', output_parameter_handler)
 
         oGui.setEndOfDirectory()
 
@@ -125,16 +125,16 @@ class cLibrary:
         folder = self.ADDON.getSetting('path_enregistrement')
         if not folder:
             folder = 'special://userdata/addon_data/plugin.video.vstream/Enregistrement"/>'
-        oOutputParameterHandler = OutputParameterHandler()
-        oOutputParameterHandler.addParameter('siteUrl', folder)
-        oGui.addDir(SITE_IDENTIFIER, 'openLibrary', self.ADDON.VSlang(30225), 'download.png', oOutputParameterHandler)
+        output_parameter_handler = OutputParameterHandler()
+        output_parameter_handler.addParameter('siteUrl', folder)
+        oGui.addDir(SITE_IDENTIFIER, 'openLibrary', self.ADDON.VSlang(30225), 'download.png', output_parameter_handler)
 
         oGui.setEndOfDirectory()
 
     def openLibrary(self):
         oGui = Gui()
-        oInputParameterHandler = InputParameterHandler()
-        sFile = oInputParameterHandler.getValue('siteUrl')
+        input_parameter_handler = InputParameterHandler()
+        sFile = input_parameter_handler.getValue('siteUrl')
 
         listDir = xbmcvfs.listdir(sFile)
 
@@ -156,9 +156,9 @@ class cLibrary:
                 xbmcplugin.addDirectoryItem(handle=addon_handle, url=sHosterUrl, listitem=li)
 
             else:
-                oOutputParameterHandler = OutputParameterHandler()
-                oOutputParameterHandler.addParameter('siteUrl', sFile + '/' + i)
-                oGui.addDir(SITE_IDENTIFIER, 'openLibrary', sTitle, 'films.png', oOutputParameterHandler)
+                output_parameter_handler = OutputParameterHandler()
+                output_parameter_handler.addParameter('siteUrl', sFile + '/' + i)
+                oGui.addDir(SITE_IDENTIFIER, 'openLibrary', sTitle, 'films.png', output_parameter_handler)
 
         if addon_handle:
             xbmcplugin.endOfDirectory(addon_handle)
@@ -166,8 +166,8 @@ class cLibrary:
             oGui.setEndOfDirectory()
 
     def Delfile(self):
-        oInputParameterHandler = InputParameterHandler()
-        sFile = oInputParameterHandler.getValue('sFile')
+        input_parameter_handler = InputParameterHandler()
+        sFile = input_parameter_handler.getValue('sFile')
 
         xbmcvfs.delete(sFile)
 
@@ -180,8 +180,8 @@ class cLibrary:
         xbmc.executebuiltin('CleanLibrary(video)')
 
     def ShowContent(self):
-        oInputParameterHandler = InputParameterHandler()
-        sFolder = oInputParameterHandler.getValue('folder')
+        input_parameter_handler = InputParameterHandler()
+        sFolder = input_parameter_handler.getValue('folder')
         xbmc.executebuiltin('Container.Update(' + sFolder + ')')
 
     def showKeyBoard(self, sDefaultText='', Heading=''):

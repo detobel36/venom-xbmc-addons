@@ -33,21 +33,21 @@ ANIM_ANIMS = (URL_MAIN + 'anime-list-all/', 'showMovies2')  # anime vrac
 def load():  # fonction chargee automatiquement par l'addon l'index de votre navigation.
     oGui = Gui()  # ouvre l'affichage
 
-    oOutputParameterHandler = OutputParameterHandler()  # apelle la function pour sortir un parametre
+    output_parameter_handler = OutputParameterHandler()  # apelle la function pour sortir un parametre
     # sortie du parametres siteUrl n'oubliez pas la Majuscule
-    oOutputParameterHandler.addParameter('siteUrl', 'siteUrl')
-    oGui.addDir(SITE_IDENTIFIER, 'showSearch', 'Recherche', 'search.png', oOutputParameterHandler)
+    output_parameter_handler.addParameter('siteUrl', 'siteUrl')
+    oGui.addDir(SITE_IDENTIFIER, 'showSearch', 'Recherche', 'search.png', output_parameter_handler)
     # Ajoute lien dossier (identifant, function a attendre, nom, icon, parametre de sortie)
     # Puisque nous ne voulons pas atteindre une url on peut mettre ce qu'on veut dans le parametre siteUrl
 
-    oOutputParameterHandler = OutputParameterHandler()
-    oOutputParameterHandler.addParameter('siteUrl', ANIM_NEWS[0])
-    oGui.addDir(SITE_IDENTIFIER, ANIM_NEWS[1], 'Animes Nouveautés', 'news.png', oOutputParameterHandler)
+    output_parameter_handler = OutputParameterHandler()
+    output_parameter_handler.addParameter('siteUrl', ANIM_NEWS[0])
+    oGui.addDir(SITE_IDENTIFIER, ANIM_NEWS[1], 'Animes Nouveautés', 'news.png', output_parameter_handler)
     # ici la function showMovies a besoin d'une url ici le racourci MOVIE_NEWS
 
-    oOutputParameterHandler = OutputParameterHandler()
-    oOutputParameterHandler.addParameter('siteUrl', ANIM_ANIMS[0])
-    oGui.addDir(SITE_IDENTIFIER, ANIM_ANIMS[1], 'Animes liste complete', 'series.png', oOutputParameterHandler)
+    output_parameter_handler = OutputParameterHandler()
+    output_parameter_handler.addParameter('siteUrl', ANIM_ANIMS[0])
+    oGui.addDir(SITE_IDENTIFIER, ANIM_ANIMS[1], 'Animes liste complete', 'series.png', output_parameter_handler)
 
     oGui.setEndOfDirectory()  # ferme l'affichage
 
@@ -68,8 +68,8 @@ def showMovies(sSearch=''):
     if sSearch:  # si une url et envoyer directement grace a la function showSearch
         sUrl = sSearch
     else:
-        oInputParameterHandler = InputParameterHandler()
-        sUrl = oInputParameterHandler.getValue('siteUrl')  # recupere l'url sortie en parametre
+        input_parameter_handler = InputParameterHandler()
+        sUrl = input_parameter_handler.getValue('siteUrl')  # recupere l'url sortie en parametre
 
     oRequestHandler = RequestHandler(sUrl)  # envoye une requete a l'url
     sHtmlContent = oRequestHandler.request()  # requete aussi
@@ -108,12 +108,12 @@ def showMovies(sSearch=''):
 
             Sthumb = 'http:' + Sthumb
 
-            oOutputParameterHandler = OutputParameterHandler()
-            oOutputParameterHandler.addParameter('siteUrl', sUrl)  # sortie de l'url
-            oOutputParameterHandler.addParameter('sMovieTitle', sTitle)  # sortie du titre
-            oOutputParameterHandler.addParameter('sThumbnail', Sthumb)  # sortie du poster
+            output_parameter_handler = OutputParameterHandler()
+            output_parameter_handler.addParameter('siteUrl', sUrl)  # sortie de l'url
+            output_parameter_handler.addParameter('sMovieTitle', sTitle)  # sortie du titre
+            output_parameter_handler.addParameter('sThumbnail', Sthumb)  # sortie du poster
 
-            oGui.addTV(SITE_IDENTIFIER, 'seriesListEpisodes', sTitle, '', Sthumb, '', oOutputParameterHandler)
+            oGui.addTV(SITE_IDENTIFIER, 'seriesListEpisodes', sTitle, '', Sthumb, '', output_parameter_handler)
 
             # il existe aussis addMisc(identifiant, function, titre, icon, poster, description, sortie parametre)
             # la difference et pour les metadonner serie, films ou sans
@@ -122,14 +122,14 @@ def showMovies(sSearch=''):
 
         sNextPage = __checkForNextPage(sHtmlContent)  # cherche la page suivante
         if (sNextPage):
-            oOutputParameterHandler = OutputParameterHandler()
-            oOutputParameterHandler.addParameter('siteUrl', sNextPage)
+            output_parameter_handler = OutputParameterHandler()
+            output_parameter_handler.addParameter('siteUrl', sNextPage)
             oGui.addDir(
                 SITE_IDENTIFIER,
                 'showMovies',
                 '[COLOR teal]Next >>>[/COLOR]',
                 'next.png',
-                oOutputParameterHandler)
+                output_parameter_handler)
             # Ajoute une entree pour le lien Next | pas de addMisc pas de poster et de description inutile donc
 
     if not sSearch:
@@ -141,8 +141,8 @@ def showMovies2(sSearch=''):
     if sSearch:
         sUrl = sSearch
     else:
-        oInputParameterHandler = InputParameterHandler()
-        sUrl = oInputParameterHandler.getValue('siteUrl')
+        input_parameter_handler = InputParameterHandler()
+        sUrl = input_parameter_handler.getValue('siteUrl')
 
     oRequestHandler = RequestHandler(sUrl)
     sHtmlContent = oRequestHandler.request()
@@ -158,13 +158,13 @@ def showMovies2(sSearch=''):
             if progress_.iscanceled():
                 break
 
-            oOutputParameterHandler = OutputParameterHandler()
-            oOutputParameterHandler.addParameter('siteUrl', str(aEntry[0]))
-            oOutputParameterHandler.addParameter('sMovieTitle', str(aEntry[1]))
+            output_parameter_handler = OutputParameterHandler()
+            output_parameter_handler.addParameter('siteUrl', str(aEntry[0]))
+            output_parameter_handler.addParameter('sMovieTitle', str(aEntry[1]))
             if 'type2=1' in sUrl:
-                oGui.addTV(SITE_IDENTIFIER, 'seriesHosters', aEntry[1], 'series.png', '', '', oOutputParameterHandler)
+                oGui.addTV(SITE_IDENTIFIER, 'seriesHosters', aEntry[1], 'series.png', '', '', output_parameter_handler)
             else:
-                oGui.addTV(SITE_IDENTIFIER, 'seriesHosters', aEntry[1], 'animes.png', '', '', oOutputParameterHandler)
+                oGui.addTV(SITE_IDENTIFIER, 'seriesHosters', aEntry[1], 'animes.png', '', '', output_parameter_handler)
 
         progress_.VSclose(progress_)
 
@@ -185,10 +185,10 @@ def __checkForNextPage(sHtmlContent):  # cherche la page suivante
 
 def showHosters():  # recherche et affiche les hotes
     oGui = Gui()  # ouvre l'affichage
-    oInputParameterHandler = InputParameterHandler()  # apelle l'entree de paramettre
-    sUrl = oInputParameterHandler.getValue('siteUrl')  # apelle siteUrl
-    sMovieTitle = oInputParameterHandler.getValue('sMovieTitle')  # apelle le titre
-    sThumbnail = oInputParameterHandler.getValue('sThumbnail')  # apelle le poster
+    input_parameter_handler = InputParameterHandler()  # apelle l'entree de paramettre
+    sUrl = input_parameter_handler.getValue('siteUrl')  # apelle siteUrl
+    sMovieTitle = input_parameter_handler.getValue('sMovieTitle')  # apelle le titre
+    sThumbnail = input_parameter_handler.getValue('sThumbnail')  # apelle le poster
 
     oRequestHandler = RequestHandler(sUrl)  # requete sur l'url
     sHtmlContent = oRequestHandler.request()  # requete sur l'url
@@ -222,10 +222,10 @@ def showHosters():  # recherche et affiche les hotes
 
 def seriesListEpisodes():  # cherche les episode de series
     oGui = Gui()
-    oInputParameterHandler = InputParameterHandler()
-    sUrl = oInputParameterHandler.getValue('siteUrl')
-    sMovieTitle = oInputParameterHandler.getValue('sMovieTitle')
-    sThumbnail = oInputParameterHandler.getValue('sThumbnail')
+    input_parameter_handler = InputParameterHandler()
+    sUrl = input_parameter_handler.getValue('siteUrl')
+    sMovieTitle = input_parameter_handler.getValue('sMovieTitle')
+    sThumbnail = input_parameter_handler.getValue('sThumbnail')
 
     oRequestHandler = RequestHandler(sUrl)
     sHtmlContent = oRequestHandler.request()
@@ -247,9 +247,9 @@ def seriesListEpisodes():  # cherche les episode de series
             sTitle = aEntry[1]
             sUrl2 = aEntry[0]
 
-            oOutputParameterHandler = OutputParameterHandler()
-            oOutputParameterHandler.addParameter('siteUrl', sUrl2)
-            oOutputParameterHandler.addParameter('sMovieTitle', sTitle)
-            oGui.addTV(SITE_IDENTIFIER, 'showHosters', sTitle, 'series.png', '', '', oOutputParameterHandler)
+            output_parameter_handler = OutputParameterHandler()
+            output_parameter_handler.addParameter('siteUrl', sUrl2)
+            output_parameter_handler.addParameter('sMovieTitle', sTitle)
+            oGui.addTV(SITE_IDENTIFIER, 'showHosters', sTitle, 'series.png', '', '', output_parameter_handler)
 
     oGui.setEndOfDirectory()

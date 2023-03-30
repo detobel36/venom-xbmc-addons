@@ -34,27 +34,27 @@ COMPIL = (URL_MAIN + 'videos/compilations-longues/', 'showEpisode')
 def load():
     oGui = Gui()
 
-    oOutputParameterHandler = OutputParameterHandler()
-    oOutputParameterHandler.addParameter('siteUrl', AGE_2A4ANS[0])
-    oGui.addDir(SITE_IDENTIFIER, AGE_2A4ANS[1], 'Dessins animés 2 à 8 ans', 'enfants.png', oOutputParameterHandler)
+    output_parameter_handler = OutputParameterHandler()
+    output_parameter_handler.addParameter('siteUrl', AGE_2A4ANS[0])
+    oGui.addDir(SITE_IDENTIFIER, AGE_2A4ANS[1], 'Dessins animés 2 à 8 ans', 'enfants.png', output_parameter_handler)
 
-    oOutputParameterHandler.addParameter('siteUrl', VIDEO_EDU2_4[0])
-    oGui.addDir(SITE_IDENTIFIER, VIDEO_EDU2_4[1], 'Vidéos éducative 2 à 8 ans', 'enfants.png', oOutputParameterHandler)
+    output_parameter_handler.addParameter('siteUrl', VIDEO_EDU2_4[0])
+    oGui.addDir(SITE_IDENTIFIER, VIDEO_EDU2_4[1], 'Vidéos éducative 2 à 8 ans', 'enfants.png', output_parameter_handler)
 
-    # oOutputParameterHandler.addParameter('siteUrl', AGE_4A6ANS[0])
-    # oGui.addDir(SITE_IDENTIFIER, AGE_4A6ANS[1], 'Dessins animés 4 à 6 ans', 'enfants.png', oOutputParameterHandler)
+    # output_parameter_handler.addParameter('siteUrl', AGE_4A6ANS[0])
+    # oGui.addDir(SITE_IDENTIFIER, AGE_4A6ANS[1], 'Dessins animés 4 à 6 ans', 'enfants.png', output_parameter_handler)
     #
-    # oOutputParameterHandler.addParameter('siteUrl', VIDEO_EDU4_6[0])
-    # oGui.addDir(SITE_IDENTIFIER, VIDEO_EDU4_6[1], 'Vidéos éducative 4 à 6 ans', 'enfants.png', oOutputParameterHandler)
+    # output_parameter_handler.addParameter('siteUrl', VIDEO_EDU4_6[0])
+    # oGui.addDir(SITE_IDENTIFIER, VIDEO_EDU4_6[1], 'Vidéos éducative 4 à 6 ans', 'enfants.png', output_parameter_handler)
     #
-    # oOutputParameterHandler.addParameter('siteUrl', AGE_6A8ANS[0])
-    # oGui.addDir(SITE_IDENTIFIER, AGE_6A8ANS[1], 'Dessins animés 6 à 8 ans', 'enfants.png', oOutputParameterHandler)
+    # output_parameter_handler.addParameter('siteUrl', AGE_6A8ANS[0])
+    # oGui.addDir(SITE_IDENTIFIER, AGE_6A8ANS[1], 'Dessins animés 6 à 8 ans', 'enfants.png', output_parameter_handler)
     #
-    # oOutputParameterHandler.addParameter('siteUrl', VIDEO_EDU6_8[0])
-    # oGui.addDir(SITE_IDENTIFIER, VIDEO_EDU6_8[1], 'Vidéos éducative 6 à 8 ans', 'enfants.png', oOutputParameterHandler)
+    # output_parameter_handler.addParameter('siteUrl', VIDEO_EDU6_8[0])
+    # oGui.addDir(SITE_IDENTIFIER, VIDEO_EDU6_8[1], 'Vidéos éducative 6 à 8 ans', 'enfants.png', output_parameter_handler)
 
-    oOutputParameterHandler.addParameter('siteUrl', COMPIL[0])
-    oGui.addDir(SITE_IDENTIFIER, COMPIL[1], 'Compilation dessins animés', 'enfants.png', oOutputParameterHandler)
+    output_parameter_handler.addParameter('siteUrl', COMPIL[0])
+    oGui.addDir(SITE_IDENTIFIER, COMPIL[1], 'Compilation dessins animés', 'enfants.png', output_parameter_handler)
 
     oGui.setEndOfDirectory()
 
@@ -63,8 +63,8 @@ def showMovies():
     oGui = Gui()
     oParser = cParser()
 
-    oInputParameterHandler = InputParameterHandler()
-    sUrl = oInputParameterHandler.getValue('siteUrl')
+    input_parameter_handler = InputParameterHandler()
+    sUrl = input_parameter_handler.getValue('siteUrl')
 
     oRequestHandler = RequestHandler(sUrl)
     sHtml = oRequestHandler.request()
@@ -72,15 +72,15 @@ def showMovies():
     aResult = oParser.parse(sHtml, sPattern)
 
     if aResult[0]:
-        oOutputParameterHandler = OutputParameterHandler()
+        output_parameter_handler = OutputParameterHandler()
         for aEntry in aResult[1]:
             sThumb = aEntry[0]
             sUrl = aEntry[1]
             sTitle = (sUrl.split('/')[-1]).replace('-', ' ')
 
-            oOutputParameterHandler.addParameter('siteUrl', sUrl)
-            oOutputParameterHandler.addParameter('sThumb', sThumb)
-            oGui.addMisc(SITE_IDENTIFIER, 'showEpisode', sTitle, 'enfants.png', sThumb, sTitle, oOutputParameterHandler)
+            output_parameter_handler.addParameter('siteUrl', sUrl)
+            output_parameter_handler.addParameter('sThumb', sThumb)
+            oGui.addMisc(SITE_IDENTIFIER, 'showEpisode', sTitle, 'enfants.png', sThumb, sTitle, output_parameter_handler)
 
     oGui.setEndOfDirectory()
 
@@ -89,8 +89,8 @@ def showEpisode():
     oGui = Gui()
     oHosterGui = HosterGui()
     oParser = cParser()
-    oInputParameterHandler = InputParameterHandler()
-    sUrl = oInputParameterHandler.getValue('siteUrl')
+    input_parameter_handler = InputParameterHandler()
+    sUrl = input_parameter_handler.getValue('siteUrl')
 
     oRequestHandler = RequestHandler(sUrl)
     sHtml = oRequestHandler.request()
@@ -98,7 +98,7 @@ def showEpisode():
     aResult = oParser.parse(sHtml, sPattern)
 
     if aResult[0]:
-        oOutputParameterHandler = OutputParameterHandler()
+        output_parameter_handler = OutputParameterHandler()
         for aEntry in aResult[1]:
 
             sTitle = aEntry[0]
