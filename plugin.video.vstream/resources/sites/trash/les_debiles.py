@@ -32,7 +32,7 @@ def load():
     gui = Gui()
 
     output_parameter_handler = OutputParameterHandler()
-    output_parameter_handler.addParameter('siteUrl', 'http://venom/')
+    output_parameter_handler.addParameter('site_url', 'http://venom/')
     gui.addDir(
         SITE_IDENTIFIER,
         'showSearch',
@@ -40,7 +40,7 @@ def load():
         'search.png',
         output_parameter_handler)
 
-    output_parameter_handler.addParameter('siteUrl', NETS_NEWS[0])
+    output_parameter_handler.addParameter('site_url', NETS_NEWS[0])
     gui.addDir(
         SITE_IDENTIFIER,
         NETS_NEWS[1],
@@ -48,7 +48,7 @@ def load():
         'buzz.png',
         output_parameter_handler)
 
-    output_parameter_handler.addParameter('siteUrl', NETS_GENRES[0])
+    output_parameter_handler.addParameter('site_url', NETS_GENRES[0])
     gui.addDir(
         SITE_IDENTIFIER,
         NETS_GENRES[1],
@@ -56,7 +56,7 @@ def load():
         'genres.png',
         output_parameter_handler)
 
-    output_parameter_handler.addParameter('siteUrl', NETS_CATS[0])
+    output_parameter_handler.addParameter('site_url', NETS_CATS[0])
     gui.addDir(
         SITE_IDENTIFIER,
         NETS_CATS[1],
@@ -70,10 +70,10 @@ def load():
 def showSearch():
     gui = Gui()
 
-    sSearchText = gui.showKeyBoard()
-    if sSearchText:
-        sUrl = URL_SEARCH[0] + sSearchText
-        showMovies(sUrl)
+    search_text = gui.showKeyBoard()
+    if search_text:
+        url = URL_SEARCH[0] + search_text
+        showMovies(url)
         gui.setEndOfDirectory()
         return
 
@@ -85,9 +85,9 @@ def showGenre():
              ['Hit Parade', 'videos-s5-1'], ['Fatality', 'videos-s7-1'], ['Vidéos Longues', 'videos-s3-1']]
 
     output_parameter_handler = OutputParameterHandler()
-    for title, sUrl in liste:
+    for title, url in liste:
         output_parameter_handler.addParameter(
-            'siteUrl', URL_MAIN + sUrl + '.html')
+            'site_url', URL_MAIN + url + '.html')
         gui.addDir(
             SITE_IDENTIFIER,
             'showMovies',
@@ -100,21 +100,21 @@ def showGenre():
 
 def showGenres():
     gui = Gui()
-    oParser = Parser()
-    oRequestHandler = RequestHandler(URL_MAIN + 'categories.html')
-    sHtmlContent = oRequestHandler.request()
+    parser = Parser()
+    request_handler = RequestHandler(URL_MAIN + 'categories.html')
+    html_content = request_handler.request()
 
-    sPattern = '<li><a href="([^>]+)">([^<]+)</a></li>'
-    aResult = oParser.parse(sHtmlContent, sPattern)
+    pattern = '<li><a href="([^>]+)">([^<]+)</a></li>'
+    results = parser.parse(html_content, pattern)
 
-    if aResult[0]:
+    if results[0]:
         output_parameter_handler = OutputParameterHandler()
-        for aEntry in aResult[1]:
+        for entry in results[1]:
 
-            sUrl = aEntry[0]
-            title = aEntry[1]
+            url = entry[0]
+            title = entry[1]
 
-            output_parameter_handler.addParameter('siteUrl', sUrl)
+            output_parameter_handler.addParameter('site_url', url)
             gui.addDir(
                 SITE_IDENTIFIER,
                 'showMovies',
@@ -125,132 +125,132 @@ def showGenres():
     gui.setEndOfDirectory()
 
 
-def showMovies(sSearch=''):
+def showMovies(search=''):
     gui = Gui()
-    oParser = Parser()
+    parser = Parser()
 
-    if sSearch:
-        idx = sSearch.rfind("/") + 1
-        sUrl = sSearch[:idx] + "".join([i for i in sSearch[idx:] if i.isalpha() or i in [
+    if search:
+        idx = search.rfind("/") + 1
+        url = search[:idx] + "".join([i for i in search[idx:] if i.isalpha() or i in [
                                        " ", "/"]]).replace(" ", "-") + '-s0-r1.html'.replace(' ', '+')
     else:
         input_parameter_handler = InputParameterHandler()
-        sUrl = input_parameter_handler.getValue('siteUrl')
+        url = input_parameter_handler.getValue('site_url')
 
-    oRequestHandler = RequestHandler(sUrl)
-    sHtmlContent = oRequestHandler.request()
-    sHtmlContent = sHtmlContent.replace('&gt;&gt;', 'suivante')
+    request_handler = RequestHandler(url)
+    html_content = request_handler.request()
+    html_content = html_content.replace('&gt;&gt;', 'suivante')
 
-    sPattern = 'class="blockthumb">.+?class="imageitem" src="([^"]+)".+?class="titleitem"><a href="([^"]+)">(.+?)</a>'
+    pattern = 'class="blockthumb">.+?class="imageitem" src="([^"]+)".+?class="titleitem"><a href="([^"]+)">(.+?)</a>'
 
-    aResult = oParser.parse(sHtmlContent, sPattern)
+    results = parser.parse(html_content, pattern)
 
-    if not aResult[0]:
+    if not results[0]:
         gui.addText(SITE_IDENTIFIER)
 
-    if aResult[0]:
-        total = len(aResult[1])
+    if results[0]:
+        total = len(results[1])
         progress_ = Progress().VScreate(SITE_NAME)
         output_parameter_handler = OutputParameterHandler()
-        for aEntry in aResult[1]:
+        for entry in results[1]:
             progress_.VSupdate(progress_, total)
             if progress_.iscanceled():
                 break
 
-            sThumb = aEntry[0]
-            sUrl = aEntry[1]
-            title = aEntry[2]
+            thumb = entry[0]
+            url = entry[1]
+            title = entry[2]
 
-            output_parameter_handler.addParameter('siteUrl', sUrl)
-            output_parameter_handler.addParameter('sMovieTitle', title)
-            output_parameter_handler.addParameter('sThumb', sThumb)
+            output_parameter_handler.addParameter('site_url', url)
+            output_parameter_handler.addParameter('movie_title', title)
+            output_parameter_handler.addParameter('thumb', thumb)
             gui.addMovie(
                 SITE_IDENTIFIER,
                 'showHosters',
                 title,
                 '',
-                sThumb,
+                thumb,
                 '',
                 output_parameter_handler)
 
         progress_.VSclose(progress_)
 
-        sNextPage = __checkForNextPage(sHtmlContent)
-        if sNextPage:
+        next_page = __checkForNextPage(html_content)
+        if next_page:
             output_parameter_handler = OutputParameterHandler()
-            output_parameter_handler.addParameter('siteUrl', sNextPage)
-            sPaging = re.search('-([0-9]+).html', sNextPage).group(1)
+            output_parameter_handler.addParameter('site_url', next_page)
+            paging = re.search('-([0-9]+).html', next_page).group(1)
             gui.addNext(
                 SITE_IDENTIFIER,
                 'showMovies',
-                'Page ' + sPaging,
+                'Page ' + paging,
                 output_parameter_handler)
 
-    if not sSearch:
+    if not search:
         gui.setEndOfDirectory()
 
 
-def __checkForNextPage(sHtmlContent):
-    oParser = Parser()
-    sPattern = '<a href="([^"]+)">suivante</a></li>'
-    aResult = oParser.parse(sHtmlContent, sPattern)
-    if aResult[0]:
-        return aResult[1][0]
+def __checkForNextPage(html_content):
+    parser = Parser()
+    pattern = '<a href="([^"]+)">suivante</a></li>'
+    results = parser.parse(html_content, pattern)
+    if results[0]:
+        return results[1][0]
 
     return False
 
 
 def showHosters():
     gui = Gui()
-    oParser = Parser()
+    parser = Parser()
     input_parameter_handler = InputParameterHandler()
-    sUrl = input_parameter_handler.getValue('siteUrl')
-    sMovieTitle = input_parameter_handler.getValue('sMovieTitle')
-    sThumb = input_parameter_handler.getValue('sThumb')
+    url = input_parameter_handler.getValue('site_url')
+    movie_title = input_parameter_handler.getValue('movie_title')
+    thumb = input_parameter_handler.getValue('thumb')
 
-    oRequestHandler = RequestHandler(sUrl)
-    sHtmlContent = oRequestHandler.request()
+    request_handler = RequestHandler(url)
+    html_content = request_handler.request()
 
     # lien direct mp4
-    sPattern = "<source src='([^']+)' type='video/mp4'"
-    aResult = oParser.parse(sHtmlContent, sPattern)
+    pattern = "<source src='([^']+)' type='video/mp4'"
+    results = parser.parse(html_content, pattern)
 
     # lien dailymotion
-    if not aResult[0]:
-        sPattern = 'src="([^"]+)\\?.+?" allowfullscreen></iframe>'
-        aResult = oParser.parse(sHtmlContent, sPattern)
+    if not results[0]:
+        pattern = 'src="([^"]+)\\?.+?" allowfullscreen></iframe>'
+        results = parser.parse(html_content, pattern)
 
-    if aResult[0]:
-        for aEntry in aResult[1]:
+    if results[0]:
+        for entry in results[1]:
 
-            sHosterUrl = aEntry
+            hoster_url = entry
             # Certains URL "dailymotion" sont écrits : //www.dailymotion.com
-            if sHosterUrl[:4] != 'http':
-                sHosterUrl = 'http:' + sHosterUrl
+            if hoster_url[:4] != 'http':
+                hoster_url = 'http:' + hoster_url
 
-            oHoster = HosterGui().checkHoster(sHosterUrl)
-            if oHoster:
-                oHoster.setDisplayName(sMovieTitle)
-                oHoster.setFileName(sMovieTitle)
-                HosterGui().showHoster(gui, oHoster, sHosterUrl, sThumb,
+            hoster = HosterGui().checkHoster(hoster_url)
+            if hoster:
+                hoster.setDisplayName(movie_title)
+                hoster.setFileName(movie_title)
+                HosterGui().showHoster(gui, hoster, hoster_url, thumb,
                                        input_parameter_handler=input_parameter_handler)
     else:
         # play premium vid
-        vidpremium = sHtmlContent.find('alt="Video Premium"')
+        vidpremium = html_content.find('alt="Video Premium"')
         if vidpremium != -1:
-            sPattern = "window.location.href = '([^']+)';"
-            aResult = oParser.parse(sHtmlContent, sPattern)
-            if aResult[0]:
-                sHosterUrl = aResult[1][0].replace(
+            pattern = "window.location.href = '([^']+)';"
+            results = parser.parse(html_content, pattern)
+            if results[0]:
+                hoster_url = results[1][0].replace(
                     'download-', '').replace('.html', '')
 
-                sHosterUrl = 'http://videos.lesdebiles.com/' + sHosterUrl + '.mp4'
+                hoster_url = 'http://videos.lesdebiles.com/' + hoster_url + '.mp4'
 
-                oHoster = HosterGui().checkHoster(sHosterUrl)
-                if oHoster:
-                    oHoster.setDisplayName(sMovieTitle)
-                    oHoster.setFileName(sMovieTitle)
-                    HosterGui().showHoster(gui, oHoster, sHosterUrl, sThumb,
+                hoster = HosterGui().checkHoster(hoster_url)
+                if hoster:
+                    hoster.setDisplayName(movie_title)
+                    hoster.setFileName(movie_title)
+                    HosterGui().showHoster(gui, hoster, hoster_url, thumb,
                                            input_parameter_handler=input_parameter_handler)
         else:
             gui.addText(SITE_IDENTIFIER, '(Video non visible)')

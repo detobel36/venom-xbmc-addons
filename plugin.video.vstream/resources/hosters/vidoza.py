@@ -16,22 +16,22 @@ class cHoster(iHoster):
     def isDownloadable(self):
         return False
 
-    def _getMediaLinkForGuest(self, autoPlay=False):
-        oRequest = RequestHandler(self._url)
-        sHtmlContent = oRequest.request()
+    def _getMediaLinkForGuest(self, auto_play=False):
+        request = RequestHandler(self._url)
+        html_content = request.request()
 
-        if 'File was deleted' in sHtmlContent:
+        if 'File was deleted' in html_content:
             return False, False
 
-        sPattern = 'src: *"([^"]+)".+?label:"([^"]+)"'
-        oParser = Parser()
-        aResult = oParser.parse(sHtmlContent, sPattern)
-        if aResult[0] is True:
+        pattern = 'src: *"([^"]+)".+?label:"([^"]+)"'
+        parser = Parser()
+        results = parser.parse(html_content, pattern)
+        if results[0] is True:
             # initialisation des tableaux
             url = []
             qua = []
             # Remplissage des tableaux
-            for i in aResult[1]:
+            for i in results[1]:
                 url.append(str(i[0]))
                 qua.append(str(i[1]))
 

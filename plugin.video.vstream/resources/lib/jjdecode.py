@@ -20,35 +20,35 @@ class JJDecoder(object):
     def clean(self):
         return re.sub('^\\s+|\\s+$', '', self.encoded_str)
 
-    def checkPalindrome(self, Str):
-        startpos = -1
-        endpos = -1
+    def checkPalindrome(self, str_to_check):
+        start_pos = -1
+        end_pos = -1
         gv, gvl = -1, -1
 
-        index = Str.find('"\'\\"+\'+",')
+        index = str_to_check.find('"\'\\"+\'+",')
 
         if index == 0:
-            startpos = Str.find('$$+"\\""+') + 8
-            endpos = Str.find('"\\"")())()')
-            gv = Str[Str.find('"\'\\"+\'+",') + 9:Str.find('=~[]')]
+            start_pos = str_to_check.find('$$+"\\""+') + 8
+            end_pos = str_to_check.find('"\\"")())()')
+            gv = str_to_check[str_to_check.find('"\'\\"+\'+",') + 9:str_to_check.find('=~[]')]
             gvl = len(gv)
         else:
-            gv = Str[0:Str.find('=')]
+            gv = str_to_check[0:str_to_check.find('=')]
             gvl = len(gv)
-            startpos = Str.find('"\\""+') + 5
-            endpos = Str.find('"\\"")())()')
+            start_pos = str_to_check.find('"\\""+') + 5
+            end_pos = str_to_check.find('"\\"")())()')
 
-        return startpos, endpos, gv, gvl
+        return start_pos, end_pos, gv, gvl
 
     def decode(self):
 
         self.encoded_str = self.clean()
-        startpos, endpos, gv, gvl = self.checkPalindrome(self.encoded_str)
+        start_pos, end_pos, gv, gvl = self.checkPalindrome(self.encoded_str)
 
-        if startpos == endpos:
+        if start_pos == end_pos:
             raise Exception('No data!')
 
-        data = self.encoded_str[startpos:endpos]
+        data = self.encoded_str[start_pos:end_pos]
 
         b = [
             '___+',

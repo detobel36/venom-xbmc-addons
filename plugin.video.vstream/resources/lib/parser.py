@@ -13,9 +13,9 @@ class Parser:
                                         for c in re.split('([0-9]+)', key(item))]
         return sorted(l, key=alphanum_key)
 
-    def parseSingleResult(self, sHtmlContent, sPattern):
-        aMatches = re.compile(sPattern).findall(sHtmlContent)
-        if (len(aMatches) == 1):
+    def parseSingleResult(self, html_content, pattern):
+        aMatches = re.compile(pattern).findall(html_content)
+        if len(aMatches) == 1:
             aMatches[0] = self.__replaceSpecialCharacters(aMatches[0])
             return True, aMatches[0]
         return False, aMatches
@@ -33,60 +33,60 @@ class Parser:
                       .replace('&#038;', '&').replace('&iuml;', 'ï').replace('&#8220;', '"').replace('&#8221;', '"')\
                       .replace('–', '-').replace('—', '-').replace('&#58;', ':')
 
-    def parse(self, sHtmlContent, sPattern, iMinFoundValue=1):
-        sHtmlContent = self.__replaceSpecialCharacters(str(sHtmlContent))
-        aMatches = re.compile(sPattern, re.IGNORECASE).findall(sHtmlContent)
+    def parse(self, html_content, pattern, iMinFoundValue=1):
+        html_content = self.__replaceSpecialCharacters(str(html_content))
+        aMatches = re.compile(pattern, re.IGNORECASE).findall(html_content)
 
         # extrait la page html après retraitement vStream
         # fh = open('c:\\test.txt', "w")
-        # fh.write(sHtmlContent)
+        # fh.write(html_content)
         # fh.close()
 
-        if (len(aMatches) >= iMinFoundValue):
+        if len(aMatches) >= iMinFoundValue:
             return True, aMatches
         return False, aMatches
 
-    def replace(self, sPattern, sReplaceString, sValue):
-        return re.sub(sPattern, sReplaceString, sValue)
+    def replace(self, pattern, sReplaceString, sValue):
+        return re.sub(pattern, sReplaceString, sValue)
 
     def escape(self, sValue):
         return re.escape(sValue)
 
     def getNumberFromString(self, sValue):
-        sPattern = '\\d+'
-        aMatches = re.findall(sPattern, sValue)
-        if (len(aMatches) > 0):
+        pattern = '\\d+'
+        aMatches = re.findall(pattern, sValue)
+        if len(aMatches) > 0:
             return aMatches[0]
         return 0
 
-    def titleParse(self, sHtmlContent, sPattern):
-        sHtmlContent = self.__replaceSpecialCharacters(str(sHtmlContent))
-        aMatches = re.compile(sPattern, re.IGNORECASE)
+    def titleParse(self, html_content, pattern):
+        html_content = self.__replaceSpecialCharacters(str(html_content))
+        aMatches = re.compile(pattern, re.IGNORECASE)
         try:
-            [m.groupdict() for m in aMatches.finditer(sHtmlContent)]
+            [m.groupdict() for m in aMatches.finditer(html_content)]
             return m.groupdict()
         except BaseException:
-            return {'title': sHtmlContent}
+            return {'title': html_content}
 
-    def abParse(self, sHtmlContent, start, end=None, startoffset=0):
-        # usage oParser.abParse(sHtmlContent, 'start', 'end')
+    def abParse(self, html_content, start, end=None, startoffset=0):
+        # usage parser.abParse(html_content, 'start', 'end')
         # startoffset (int) décale le début pour ne pas prendre en compte start dans le résultat final si besoin
         # la fin est recherchée forcement après le début
         # la recherche de fin n'est pas obligatoire
-        # usage2 oParser.abParse(sHtmlContent, 'start', 'end', 6)
+        # usage2 parser.abParse(html_content, 'start', 'end', 6)
         # ex youtube.py
 
-        startIdx = sHtmlContent.find(start)
+        startIdx = html_content.find(start)
         if startIdx == -1:  # rien trouvé, on prend depuis le début
             startIdx = 0
 
         if end:
-            endIdx = sHtmlContent[startoffset +
+            endIdx = html_content[startoffset +
                                   startIdx + len(start):].find(end)
             if endIdx > 0:
-                return sHtmlContent[startoffset +
+                return html_content[startoffset +
                                     startIdx: startoffset +
                                     startIdx +
                                     endIdx +
                                     len(start)]
-        return sHtmlContent[startoffset + startIdx:]
+        return html_content[startoffset + startIdx:]

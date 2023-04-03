@@ -46,16 +46,16 @@ class cHoster(iHoster):
     def __getMediaLinkForGuest(self):
         api_call = False
 
-        oRequest = RequestHandler(self._url)
-        # oRequest.addHeaderEntry('Referer', 'http://www.google.fr/')  # Rajoute un header
-        sHtmlContent = oRequest.request()
+        request = RequestHandler(self._url)
+        # request.addHeaderEntry('Referer', 'http://www.google.fr/')  # Rajoute un header
+        html_content = request.request()
 
-        oParser = Parser()
-        sPattern = 'file: *"([^<>"]+?mp4)"'
-        aResult = oParser.parse(sHtmlContent, sPattern)
+        parser = Parser()
+        pattern = 'file: *"([^<>"]+?mp4)"'
+        results = parser.parse(html_content, pattern)
 
-        if aResult[0]:
-            api_call = aResult[1][0]
+        if results[0]:
+            api_call = results[1][0]
 
         if api_call:
             # Rajout d'un header ?
@@ -77,9 +77,9 @@ class cHoster(iHoster):
 #            qua = []
 #            api_call = False
 #
-#            for aEntry in aResult[1]:
-#                url.append(aEntry[0])
-#                qua.append(aEntry[1])
+#            for entry in results[1]:
+#                url.append(entry[0])
+#                qua.append(entry[1])
 #
 #            # Affichage du tableau
 #            api_call = dialog().VSselectqual(qua, url)

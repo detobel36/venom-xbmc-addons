@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 from resources.lib.gui.gui import Gui
-from resources.lib.comaddon import addon, xbmcgui, dialog, VSPath
+from resources.lib.comaddon import Addon, xbmcgui, dialog, VSPath
 import xbmcvfs
 import datetime
 import time
@@ -11,14 +11,17 @@ SITE_NAME = 'enregistrement'
 
 class Enregistremement:
 
-    def programmation_enregistrement(self, sUrl):
+    def programmation_enregistrement(self, url):
         gui = Gui()
-        ADDON = addon()
-        if '.m3u8' in sUrl:
-            header = '-fflags +genpts+igndts -y -i "' + sUrl + '"'
+        ADDON = Addon()
+        if '.m3u8' in url:
+            header = '-fflags +genpts+igndts -y -i "' + url + '"'
         else:
-            header = '-re -reconnect 1 -reconnect_at_eof 1 -reconnect_streamed 1 -reconnect_delay_max 4294 -timeout 2000000000 -f mpegts -re -flags +global_header -fflags +genpts+igndts -y -i "' + sUrl + \
-                '" -headers "User-Agent: Mozilla/5.0+(X11;+Linux+i686)+AppleWebKit/537.36+(KHTML,+like+Gecko)+Ubuntu+Chromium/48.0.2564.116+Chrome/48.0.2564.116+Safari/537.36" -sn -c:v libx264 -c:a copy -map 0 -segment_format mpegts -segment_time -1'
+            header = '-re -reconnect 1 -reconnect_at_eof 1 -reconnect_streamed 1 -reconnect_delay_max 4294 ' \
+                     '-timeout 2000000000 -f mpegts -re -flags +global_header -fflags +genpts+igndts -y -i "' + url + \
+                '" -headers "User-Agent: Mozilla/5.0+(X11;+Linux+i686)+AppleWebKit/537.36+(KHTML,+like+Gecko)' \
+                '+Ubuntu+Chromium/48.0.2564.116+Chrome/48.0.2564.116+Safari/537.36" -sn -c:v libx264 -c:a ' \
+                'copy -map 0 -segment_format mpegts -segment_time -1'
 
         pathEnregistrement = ADDON.getSetting(
             'path_enregistrement_programmation')

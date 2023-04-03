@@ -12,24 +12,24 @@ class cHoster(iHoster):
     def __init__(self):
         iHoster.__init__(self, 'up2stream', 'Up2Stream')
 
-    def _getMediaLinkForGuest(self, autoPlay=False):
+    def _getMediaLinkForGuest(self, auto_play=False):
         api_call = False
 
-        oRequest = RequestHandler(self._url)
-        sHtmlContent = oRequest.request()
+        request = RequestHandler(self._url)
+        html_content = request.request()
 
-        oParser = Parser()
-        sPattern = '(eval\\(function\\(p,a,c,k,e(?:.|\\s)+?\\))<\\/script>'
+        parser = Parser()
+        pattern = '(eval\\(function\\(p,a,c,k,e(?:.|\\s)+?\\))<\\/script>'
 
-        aResult = oParser.parse(sHtmlContent, sPattern)
+        results = parser.parse(html_content, pattern)
 
-        if aResult[0] is True:
-            sHtmlContent = cPacker().unpack(aResult[1][0])
+        if results[0] is True:
+            html_content = cPacker().unpack(results[1][0])
 
-        sPattern = '\\("src","([^"]+)"\\)'
-        aResult = oParser.parse(sHtmlContent, sPattern)
-        if aResult[0]:
-            api_call = aResult[1][0]
+        pattern = '\\("src","([^"]+)"\\)'
+        results = parser.parse(html_content, pattern)
+        if results[0]:
+            api_call = results[1][0]
 
         if api_call:
             return True, api_call

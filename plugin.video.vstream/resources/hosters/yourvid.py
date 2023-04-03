@@ -15,15 +15,15 @@ class cHoster(iHoster):
     def _getMediaLinkForGuest(self):
         api_call = False
 
-        oRequest = RequestHandler(self._url)
-        sHtmlContent = oRequest.request()
+        request = RequestHandler(self._url)
+        html_content = request.request()
 
-        oParser = Parser()
-        sPattern = 'sources:\\s*\\["([^"]+)"'
-        aResult = oParser.parse(sHtmlContent, sPattern)
+        parser = Parser()
+        pattern = 'sources:\\s*\\["([^"]+)"'
+        results = parser.parse(html_content, pattern)
 
-        if aResult[0]:
-            api_call = aResult[1][0]
+        if results[0]:
+            api_call = results[1][0]
 
         if api_call:
             return True, api_call

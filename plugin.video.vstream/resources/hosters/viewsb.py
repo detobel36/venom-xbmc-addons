@@ -36,21 +36,21 @@ class cHoster(iHoster):
         videoId = self.__getId(self._url)
         url = host + 'd/' + videoId + '.html'
 
-        oRequest = RequestHandler(url)
-        oRequest.addHeaderEntry('User-Agent', UA)
-        oRequest.addHeaderEntry('Referer', host)
-        sHtmlContent = oRequest.request()
+        request = RequestHandler(url)
+        request.addHeaderEntry('User-Agent', UA)
+        request.addHeaderEntry('Referer', host)
+        html_content = request.request()
 
         if MODE == 1:  # Non terminé encore
-            sPattern = 'download_video([^"]+)[^\\d]+\\d+x(\\d+)'
-            oParser = Parser()
-            aResult = oParser.parse(sHtmlContent, sPattern)
-            if aResult[0] is True:
+            pattern = 'download_video([^"]+)[^\\d]+\\d+x(\\d+)'
+            parser = Parser()
+            results = parser.parse(html_content, pattern)
+            if results[0] is True:
                 list_data = []
                 list_q = []
-                for aEntry in aResult[1]:
-                    list_data.append(aEntry[0])
-                    list_q.append(aEntry[1])
+                for entry in results[1]:
+                    list_data.append(entry[0])
+                    list_q.append(entry[1])
                 if list_data:
                     data = dialog().VSselectqual(list_q, list_data)
                     code = list_data[0]
@@ -60,24 +60,24 @@ class cHoster(iHoster):
                         code + '&mode=' + mode + '&hash=' + hash
                     VSlog(dl_url)
 
-                    oRequest = RequestHandler(dl_url)
-                    sHtmlContent = oRequest.request()
+                    request = RequestHandler(dl_url)
+                    html_content = request.request()
                     domain = base64.b64encode(
                         (host[:-1] + ':443').encode('utf-8')).decode('utf-8').replace('=', '')
         else:
             eurl = get_embedurl(host, videoId)
 
-            oRequest = RequestHandler(eurl)
-            oRequest.addHeaderEntry('User-Agent', UA)
-            oRequest.addHeaderEntry('Referer', host)
-            oRequest.addHeaderEntry('watchsb', 'streamsb')
-            sHtmlContent = oRequest.request()
+            request = RequestHandler(eurl)
+            request.addHeaderEntry('User-Agent', UA)
+            request.addHeaderEntry('Referer', host)
+            request.addHeaderEntry('watchsb', 'streamsb')
+            html_content = request.request()
 
             # fh = open('c:\\test.txt', "w")
-            # fh.write(sHtmlContent)
+            # fh.write(html_content)
             # fh.close
 
-            page = json.loads(sHtmlContent)
+            page = json.loads(html_content)
             data = page['stream_data']
             if 'file' in data:
                 api_call = data['file']

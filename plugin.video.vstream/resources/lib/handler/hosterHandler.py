@@ -7,14 +7,14 @@ from resources.lib.handler.requestHandler import RequestHandler
 
 class cHosterHandler:
 
-    def getUrl(self, oHoster):
-        sUrl = oHoster.getUrl()
-        VSlog("hosterhandler " + sUrl)
-        oRequest = RequestHandler(sUrl)
-        sContent = oRequest.request()
+    def getUrl(self, hoster):
+        url = hoster.getUrl()
+        VSlog("hosterhandler " + url)
+        request = RequestHandler(url)
+        content = request.request()
 
-        aMediaLink = Parser().parse(sContent, oHoster.getPattern())
-        if (aMediaLink[0]):
+        aMediaLink = Parser().parse(content, hoster.getPattern())
+        if aMediaLink[0]:
             return True, aMediaLink[1][0]
         return False, ''
 

@@ -12,35 +12,35 @@ class cHoster(iHoster):
     def __init__(self):
         iHoster.__init__(self, 'wstream', 'WStream')
 
-    def _getMediaLinkForGuest(self, autoPlay=False):
+    def _getMediaLinkForGuest(self, auto_play=False):
         api_call = False
 
         # VSlog(self._url)
 
-        oRequest = RequestHandler(self._url)
-        sHtmlContent = oRequest.request()
+        request = RequestHandler(self._url)
+        html_content = request.request()
 
-        oParser = Parser()
+        parser = Parser()
 
         # Dean Edwards Packer
-        sPattern = "(\\s*eval\\s*\\(\\s*function(?:.|\\s)+?)<\\/script>"
-        aResult = oParser.parse(sHtmlContent, sPattern)
+        pattern = "(\\s*eval\\s*\\(\\s*function(?:.|\\s)+?)<\\/script>"
+        results = parser.parse(html_content, pattern)
 
-        if aResult[0] is True:
-            sUnpacked = cPacker().unpack(aResult[1][0])
-            sHtmlContent = sUnpacked
+        if results[0] is True:
+            sUnpacked = cPacker().unpack(results[1][0])
+            html_content = sUnpacked
 
-        sPattern = '{file:"(.+?)",label:"(.+?)"}'
-        aResult = oParser.parse(sHtmlContent, sPattern)
-        # print(aResult)
+        pattern = '{file:"(.+?)",label:"(.+?)"}'
+        results = parser.parse(html_content, pattern)
+        # print(results)
 
-        if aResult[0] is True:
+        if results[0] is True:
             # initialisation des tableaux
             url = []
             qua = []
 
             # Remplissage des tableaux
-            for i in aResult[1]:
+            for i in results[1]:
                 url.append(str(i[0]))
                 qua.append(str(i[1]))
 

@@ -2,25 +2,27 @@
 # vStream https://github.com/Kodi-vStream/venom-xbmc-addons
 #
 from requests import post, Session, Request, RequestException, ConnectionError
-from resources.lib.comaddon import addon, dialog, VSlog, VSPath, isMatrix
+from resources.lib.comaddon import Addon, dialog, VSlog, VSPath, isMatrix
 from resources.lib.util import urlHostName
 
 import requests.packages.urllib3.util.connection as urllib3_cn
 import socket
+import string
+import random
 
 
 class RequestHandler:
     REQUEST_TYPE_GET = 0
     REQUEST_TYPE_POST = 1
 
-    def __init__(self, sUrl):
-        self.__sUrl = sUrl
+    def __init__(self, url):
+        self.__sUrl = url
         self.__sRealUrl = ''
         self.__cType = 0
-        self.__aParamaters = {}
-        self.__aParamatersLine = ''
-        self.__aHeaderEntries = {}
-        self.__Cookie = {}
+        self.__paramaters = {}
+        self.__paramaters_line = ''
+        self.__header_entries = {}
+        self.__cookie = {}
         self.removeBreakLines(True)
         self.removeNewLines(True)
         self.__setDefaultHeader()
@@ -35,10 +37,10 @@ class RequestHandler:
         self.verify = True
         self.json = {}
         self.forceIPV4 = False
-        self.oResponse = None
+        self.reponse = None
 
     def statusCode(self):
-        return self.oResponse.status_code
+        return self.reponse.status_code
 
     # Utile pour certains hebergeurs qui ne marche pas en ipv6.
     def disableIPV6(self):
@@ -78,40 +80,40 @@ class RequestHandler:
         self.__timeout = valeur
 
     # Ajouter un cookie dans le headers de la requete
-    def addCookieEntry(self, sHeaderKey, sHeaderValue):
-        aHeader = {sHeaderKey: sHeaderValue}
-        self.__Cookie.update(aHeader)
+    def addCookieEntry(self, header_key, header_value):
+        header = {header_key: header_value}
+        self.__cookie.update(header)
 
     # Ajouter des parametre JSON
-    def addJSONEntry(self, sHeaderKey, sHeaderValue):
-        aHeader = {sHeaderKey: sHeaderValue}
-        self.json.update(aHeader)
+    def addJSONEntry(self, header_key, header_value):
+        header = {header_key: header_value}
+        self.json.update(header)
 
     # Ajouter un elements dans le headers de la requete
-    def addHeaderEntry(self, sHeaderKey, sHeaderValue):
-        for sublist in list(self.__aHeaderEntries):
-            if sHeaderKey in sublist:
-                self.__aHeaderEntries.pop(sublist)
+    def addHeaderEntry(self, header_key, header_value):
+        for sublist in list(self.__header_entries):
+            if header_key in sublist:
+                self.__header_entries.pop(sublist)
 
-            if sHeaderKey == "Content-Length":
-                sHeaderValue = str(sHeaderValue)
+            if header_key == "Content-Length":
+                header_value = str(header_value)
 
-        aHeader = {sHeaderKey: sHeaderValue}
-        self.__aHeaderEntries.update(aHeader)
+        header = {header_key: header_value}
+        self.__header_entries.update(header)
 
     # Ajout un parametre dans la requete
-    def addParameters(self, sParameterKey, mParameterValue):
-        self.__aParamaters[sParameterKey] = mParameterValue
+    def addParameters(self, parameter_key, parameter_value):
+        self.__paramaters[parameter_key] = parameter_value
 
     # Ajoute une ligne de parametre
-    def addParametersLine(self, mParameterValue):
-        self.__aParamatersLine = mParameterValue
+    def addParametersLine(self, parameter_value):
+        self.__paramaters_line = parameter_value
 
-    # egg addMultipartFiled({'sess_id': sId, 'upload_type': 'url',
+    # egg addMultipartFiled({'sess_id': s_id, 'upload_type': 'url',
     # 'srv_tmp_url': sTmp})
     def addMultipartFiled(self, fields):
         mpartdata = MPencode(fields)
-        self.__aParamatersLine = mpartdata[1]
+        self.__paramaters_line = mpartdata[1]
         self.addHeaderEntry('Content-Type', mpartdata[0])
         self.addHeaderEntry('Content-Length', len(mpartdata[1]))
 
@@ -123,10 +125,10 @@ class RequestHandler:
     def getRealUrl(self):
         return self.__sRealUrl
 
-    def request(self, jsonDecode=False):
+    def request(self, json_decode=False):
         # Supprimee car deconne si url contient ' ' et '+' en meme temps
         # self.__sUrl = self.__sUrl.replace(' ', '+')
-        return self.__callRequest(jsonDecode)
+        return self.__callRequest(json_decode)
 
     # Recupere les cookies de la requete
     def GetCookies(self):
@@ -148,34 +150,28 @@ class RequestHandler:
         return ''
 
     def __setDefaultHeader(self):
-        self.addHeaderEntry(
-            'User-Agent',
-            'Mozilla/5.0 (Windows NT 6.1; WOW64; rv:50.0) Gecko/20100101 Firefox/50.0')
-        self.addHeaderEntry(
-            'Accept-Language',
-            'fr,fr-FR;q=0.8,en-US;q=0.5,en;q=0.3')
+        self.addHeaderEntry('User-Agent', 'Mozilla/5.0 (Windows NT 6.1; WOW64; rv:50.0) Gecko/20100101 Firefox/50.0')
+        self.addHeaderEntry('Accept-Language', 'fr,fr-FR;q=0.8,en-US;q=0.5,en;q=0.3')
         self.addHeaderEntry('Accept-Charset', 'ISO-8859-1,utf-8;q=0.7,*;q=0.7')
 
-    def __callRequest(self, jsonDecode=False):
+    def __callRequest(self, json_decode=False):
         if self.__enableDNS:
             self.save_getaddrinfo = socket.getaddrinfo
             socket.getaddrinfo = self.new_getaddrinfo
 
-        if self.__aParamatersLine:
-            sParameters = self.__aParamatersLine
+        if self.__paramaters_line:
+            parameters = self.__paramaters_line
         else:
-            sParameters = self.__aParamaters
+            parameters = self.__paramaters
 
-        if (self.__cType == RequestHandler.REQUEST_TYPE_GET):
-            if (len(sParameters) > 0):
-                if (self.__sUrl.find('?') == -1):
-                    self.__sUrl = self.__sUrl + '?' + str(sParameters)
-                    sParameters = ''
+        if self.__cType == RequestHandler.REQUEST_TYPE_GET:
+            if len(parameters) > 0:
+                if self.__sUrl.find('?') == -1:
+                    self.__sUrl = self.__sUrl + '?' + str(parameters)
+                    parameters = ''
                 else:
-                    self.__sUrl = self.__sUrl + '&' + str(sParameters)
-                    sParameters = ''
-
-        sContent = ''
+                    self.__sUrl = self.__sUrl + '&' + str(parameters)
+                    parameters = ''
 
         if self.BUG_SSL:
             self.verify = False
@@ -189,104 +185,89 @@ class RequestHandler:
             urllib3_cn.allowed_gai_family = self.allowed_gai_family
 
         try:
-            _request = Request(
-                method,
-                self.__sUrl,
-                headers=self.__aHeaderEntries)
+            _request = Request(method, self.__sUrl, headers=self.__header_entries)
             if method in ['POST']:
-                _request.data = sParameters
+                _request.data = parameters
 
-            if self.__Cookie:
-                _request.cookies = self.__Cookie
+            if self.__cookie:
+                _request.cookies = self.__cookie
 
             if self.json:
                 _request.json = self.json
 
             prepped = _request.prepare()
-            self.s.headers.update(self.__aHeaderEntries)
+            self.s.headers.update(self.__header_entries)
 
-            self.oResponse = self.s.send(
-                prepped,
-                timeout=self.__timeout,
-                allow_redirects=self.redirects,
-                verify=self.verify)
-            self.__sResponseHeader = self.oResponse.headers
-            self.__sRealUrl = self.oResponse.url
+            self.reponse = self.s.send(prepped, timeout=self.__timeout, allow_redirects=self.redirects,
+                                       verify=self.verify)
+            self.__sResponseHeader = self.reponse.headers
+            self.__sRealUrl = self.reponse.url
 
-            if jsonDecode:
-                sContent = self.oResponse.json()
+            if json_decode:
+                content = self.reponse.json()
             else:
-                sContent = self.oResponse.content
+                content = self.reponse.content
                 # Necessaire pour Python 3
-                if isMatrix() and 'youtube' not in self.oResponse.url:
+                if isMatrix() and 'youtube' not in self.reponse.url:
                     try:
-                        sContent = sContent.decode()
+                        content = content.decode()
                     except BaseException:
                         # Decodage minimum obligatoire.
                         try:
-                            sContent = sContent.decode('unicode-escape')
+                            content = content.decode('unicode-escape')
                         except BaseException:
                             pass
 
         except ConnectionError as e:
             # Retry with DNS only if addon is present
-            if 'getaddrinfo failed' in str(e) or 'Failed to establish a new connection' in str(
-                    e) and self.__enableDNS == False:
+            if 'getaddrinfo failed' in str(e) or\
+                    'Failed to establish a new connection' in str(e)and self.__enableDNS is False:
                 # Retry with DNS only if addon is present
                 import xbmcvfs
-                if xbmcvfs.exists(
-                        'special://home/addons/script.module.dnspython/'):
+                if xbmcvfs.exists('special://home/addons/script.module.dnspython/'):
                     self.__enableDNS = True
                     return self.__callRequest()
                 else:
-                    error_msg = '%s (%s)' % (addon().VSlang(
-                        30470), urlHostName(self.__sUrl))
+                    error_msg = '%s (%s)' % (Addon().VSlang(30470), urlHostName(self.__sUrl))
                     dialog().VSerror(error_msg)
-                    sContent = ''
+                    content = ''
             else:
-                sContent = ''
                 return False
 
         except RequestException as e:
-            if 'CERTIFICATE_VERIFY_FAILED' in str(e) and self.BUG_SSL == False:
+            if 'CERTIFICATE_VERIFY_FAILED' in str(e) and self.BUG_SSL is False:
                 self.BUG_SSL = True
                 return self.__callRequest()
-            elif 'getaddrinfo failed' in str(e) and self.__enableDNS == False:
+            elif 'getaddrinfo failed' in str(e) and self.__enableDNS is False:
                 # Retry with DNS only if addon is present
                 import xbmcvfs
-                if xbmcvfs.exists(
-                        'special://home/addons/script.module.dnspython/'):
+                if xbmcvfs.exists('special://home/addons/script.module.dnspython/'):
                     self.__enableDNS = True
                     return self.__callRequest()
                 else:
-                    error_msg = '%s (%s)' % (addon().VSlang(
-                        30470), urlHostName(self.__sUrl))
+                    error_msg = '%s (%s)' % (Addon().VSlang(30470), urlHostName(self.__sUrl))
             else:
-                error_msg = "%s (%s),%s" % (
-                    addon().VSlang(30205), e, self.__sUrl)
+                error_msg = "%s (%s),%s" % (Addon().VSlang(30205), e, self.__sUrl)
 
             dialog().VSerror(error_msg)
-            sContent = ''
+            content = ''
 
-        if self.oResponse is not None:
-            if self.oResponse.status_code in [503, 403]:
-                if "Forbidden" not in sContent:
+        if self.reponse is not None:
+            if self.reponse.status_code in [503, 403]:
+                if "Forbidden" not in content:
                     # Default
-                    CLOUDPROXY_ENDPOINT = 'http://' + addon().getSetting('ipaddress') + ':8191/v1'
+                    cloudproxy_endpoint = 'http://' + Addon().getSetting('ipaddress') + ':8191/v1'
 
                     json_response = False
                     try:
                         # On fait une requete.
-                        json_response = post(CLOUDPROXY_ENDPOINT, headers=self.__aHeaderEntries, json={
+                        json_response = post(cloudproxy_endpoint, headers=self.__header_entries, json={
                             'cmd': 'request.%s' % method.lower(),
                             'url': self.__sUrl
                         })
                     except BaseException:
-                        dialog().VSerror(
-                            "%s (%s)" %
-                            ("Page protegee par Cloudflare, essayez FlareSolverr",
-                             urlHostName(
-                                 self.__sUrl)))
+                        dialog().VSerror("%s (%s)" %("Page protegee par Cloudflare, essayez FlareSolverr",
+                                                     urlHostName(self.__sUrl)))
 
                     if json_response:
                         response = json_response.json()
@@ -294,31 +275,31 @@ class RequestHandler:
                             if self.__sUrl != response['solution']['url']:
                                 self.__sRealUrl = response['solution']['url']
 
-                            sContent = response['solution']['response']
+                            content = response['solution']['response']
 
-            if self.oResponse and not sContent:
+            if self.reponse and not content:
                 # Ignorer ces deux codes erreurs.
-                ignoreStatus = [200, 302]
-                if self.oResponse.status_code not in ignoreStatus:
+                ignore_status = [200, 302]
+                if self.reponse.status_code not in ignore_status:
                     dialog().VSerror(
                         "%s (%d),%s" %
-                        (addon().VSlang(30205),
-                         self.oResponse.status_code,
+                        (Addon().VSlang(30205),
+                         self.reponse.status_code,
                          self.__sUrl))
 
-        if sContent:
-            if (self.__bRemoveNewLines):
-                sContent = sContent.replace("\n", "")
-                sContent = sContent.replace("\r\t", "")
+        if content:
+            if self.__bRemoveNewLines:
+                content = content.replace("\n", "")
+                content = content.replace("\r\t", "")
 
-            if (self.__bRemoveBreakLines):
-                sContent = sContent.replace("&nbsp;", "")
+            if self.__bRemoveBreakLines:
+                content = content.replace("&nbsp;", "")
 
         if self.__enableDNS:
             socket.getaddrinfo = self.save_getaddrinfo
             self.__enableDNS = False
 
-        return sContent
+        return content
 
     def new_getaddrinfo(self, *args):
         try:
@@ -326,11 +307,9 @@ class RequestHandler:
             import dns.resolver
 
             if isMatrix():
-                path = VSPath(
-                    'special://home/addons/script.module.dnspython/lib/')
+                path = VSPath('special://home/addons/script.module.dnspython/lib/')
             else:
-                path = VSPath(
-                    'special://home/addons/script.module.dnspython/lib/').decode('utf-8')
+                path = VSPath('special://home/addons/script.module.dnspython/lib/').decode('utf-8')
 
             if path not in sys.path:
                 sys.path.append(path)
@@ -378,20 +357,21 @@ def MPencode(fields):
 
         for (key, value) in data:
             if not hasattr(value, 'read'):
-                itemstr = '--%s\r\nContent-Disposition: form-data; name="%s"\r\n\r\n%s\r\n' % (
-                    random_boundary, key, value)
-                form_data.append(itemstr)
+                item_str = '--%s\r\nContent-Disposition: form-data; name="%s"\r\n\r\n%s\r\n' % \
+                          (random_boundary, key, value)
+                form_data.append(item_str)
             elif hasattr(value, 'read'):
                 with value:
                     file_mimetype = mimetypes.guess_type(
                         value.name)[0] if mimetypes.guess_type(
                         value.name)[0] else 'application/octet-stream'
-                    itemstr = '--%s\r\nContent-Disposition: form-data; name="%s"; filename="%s"\r\nContent-Type: %s\r\n\r\n%s\r\n' % (
-                        random_boundary, key, value.name, file_mimetype, value.read())
-                form_data.append(itemstr)
+
+                    item_str = ('--%s\r\nContent-Disposition: form-data; name="%s"; ' % (random_boundary, key))
+                    item_str += ('filename="%s"\r\nContent-Type: %s\r\n\r\n' % (value.name, file_mimetype))
+                    item_str += ('%s\r\n' % value.read())
+                form_data.append(item_str)
             else:
-                raise Exception(
-                    value, 'Field is neither a file handle or any other decodable type.')
+                raise Exception(value, 'Field is neither a file handle or any other decodable type.')
     else:
         pass
 
@@ -401,9 +381,6 @@ def MPencode(fields):
 
 
 def __randy_boundary(length=10, reshuffle=False):
-    import string
-    import random
-
     if isMatrix():
         character_string = string.ascii_letters + string.digits
     else:

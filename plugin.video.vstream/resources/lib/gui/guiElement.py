@@ -3,7 +3,7 @@
 import re
 import xbmc
 
-from resources.lib.comaddon import addon, isMatrix, isNexus
+from resources.lib.comaddon import Addon, isMatrix, isNexus
 from resources.lib.db import Db
 from resources.lib.util import cUtil, QuoteSafe
 
@@ -20,7 +20,7 @@ class GuiElement:
 
     def __init__(self):
 
-        self.addons = addon()
+        self.addons = Addon()
 
         # self.__sRootArt = cConfig().getRootArt()
         self.__sFunctionName = ''
@@ -77,14 +77,14 @@ class GuiElement:
     # def getCount(self):
     #     return GuiElement.COUNT
 
-    def setType(self, sType):
-        self.__sType = sType
+    def setType(self, _type):
+        self.__sType = _type
 
     def getType(self):
         return self.__sType
 
-    def setCat(self, sCat):
-        self.__sCat = sCat
+    def setCat(self, cat):
+        self.__sCat = cat
 
     def getCat(self):
         return self.__sCat
@@ -162,26 +162,26 @@ class GuiElement:
     def getMeta(self):
         return self.__sMeta
 
-    def setMediaUrl(self, sMediaUrl):
-        self.__sMediaUrl = sMediaUrl
+    def setMediaUrl(self, media_url):
+        self.__sMediaUrl = media_url
 
     def getMediaUrl(self):
         return self.__sMediaUrl
 
-    def setSiteUrl(self, sSiteUrl):
-        self.__sSiteUrl = sSiteUrl
+    def setSiteUrl(self, site_url):
+        self.__sSiteUrl = site_url
 
     def getSiteUrl(self):
         return self.__sSiteUrl
 
-    def setSiteName(self, sSiteName):
-        self.__sSiteName = sSiteName
+    def setSiteName(self, site_name):
+        self.__sSiteName = site_name
 
     def getSiteName(self):
         return self.__sSiteName
 
-    def setFileName(self, sFileName):
-        self.__sFileName = cUtil().titleWatched(sFileName)
+    def setFileName(self, file_name):
+        self.__sFileName = cUtil().titleWatched(file_name)
 
     def getFileName(self):
         return self.__sFileName
@@ -311,30 +311,30 @@ class GuiElement:
                 pass
 
         # on reformate SXXEXX Titre [tag] (Annee)
-        sTitle2 = ''
+        title2 = ''
         if self.__Season:
-            sTitle2 = sTitle2 + 'S%02d' % int(self.__Season)
+            title2 = title2 + 'S%02d' % int(self.__Season)
         if self.__Episode:
-            sTitle2 = sTitle2 + 'E%02d' % int(self.__Episode)
+            title2 = title2 + 'E%02d' % int(self.__Episode)
 
         # Titre unique pour marquer VU (avec numéro de l'épisode pour les
         # séries)
         self.__sTitleWatched = cUtil().titleWatched(title).replace(' ', '')
-        if sTitle2:
+        if title2:
             self.addItemValues('tvshowtitle', cUtil().getSerieTitre(title))
-            self.__sTitleWatched += '_' + sTitle2
+            self.__sTitleWatched += '_' + title2
         self.addItemValues('originaltitle', self.__sTitleWatched)
 
-        if sTitle2:
-            sTitle2 = '[COLOR %s]%s[/COLOR] ' % (sDecoColor, sTitle2)
+        if title2:
+            title2 = '[COLOR %s]%s[/COLOR] ' % (sDecoColor, title2)
 
-        sTitle2 = sTitle2 + title
+        title2 = title2 + title
 
         if self.__Year:
-            sTitle2 = '%s [COLOR %s](%s)[/COLOR]' % (sTitle2,
+            title2 = '%s [COLOR %s](%s)[/COLOR]' % (title2,
                                                      sDecoColor, self.__Year)
 
-        return sTitle2
+        return title2
 
     def setTitle(self, title):
         # Nom en clair sans les langues, qualités, et autres décorations
@@ -371,25 +371,25 @@ class GuiElement:
     def getCleanTitle(self):
         return self.__sCleanTitle
 
-   # def setTitleWatched(self, sTitleWatched):
-       # self.__sTitleWatched = sTitleWatched
+   # def setTitleWatched(self, title_watched):
+       # self.__sTitleWatched = title_watched
 
     def getTitleWatched(self):
         return self.__sTitleWatched
 
-    def setDescription(self, sDescription):
+    def setDescription(self, description):
         # Py3
         if isMatrix():
             try:
-                if 'Ã' in sDescription or '\\xc' in sDescription:
+                if 'Ã' in description or '\\xc' in description:
                     self.__sDescription = str(
-                        sDescription.encode('latin-1'), 'utf-8')
+                        description.encode('latin-1'), 'utf-8')
                 else:
-                    self.__sDescription = sDescription
+                    self.__sDescription = description
             except BaseException:
-                self.__sDescription = sDescription
+                self.__sDescription = description
         else:
-            self.__sDescription = sDescription
+            self.__sDescription = description
 
     def getDescription(self):
         return self.__sDescription
@@ -419,20 +419,20 @@ class GuiElement:
     def setDirectTvFanart(self):
         self.__sFanart = self.__sFanart
 
-    def setDirFanart(self, sIcon):
+    def setDirFanart(self, icon):
         self.__sFanart = self.__sFanart
 
     def getFanart(self):
         return self.__sFanart
 
-    def setIcon(self, sIcon):
-        if not sIcon:
+    def setIcon(self, icon):
+        if not icon:
             self.__sIcon = ''
             return
         try:
-            self.__sIcon = unicode(sIcon, 'utf-8')
+            self.__sIcon = unicode(icon, 'utf-8')
         except BaseException:
-            self.__sIcon = sIcon
+            self.__sIcon = icon
         self.__sIcon = self.__sIcon.encode('utf-8')
         self.__sIcon = QuoteSafe(self.__sIcon)
 
@@ -517,8 +517,8 @@ class GuiElement:
         return
 
     def getMetadonne(self):
-        metaType = self.getMeta()
-        if metaType == 0:  # non media -> on sort, et on enleve le fanart
+        meta_type = self.getMeta()
+        if meta_type == 0:  # non media -> on sort, et on enleve le fanart
             self.addItemProperties('fanart_image', '')
             return
 
@@ -535,7 +535,7 @@ class GuiElement:
         title = title.replace('version longue', '')
 
         # Integrale de films, on nettoie le titre pour la recherche
-        if metaType == 3:
+        if meta_type == 3:
             title = title.replace('integrales', '')
             title = title.replace('integrale', '')
             title = title.replace('2 films', '')
@@ -558,12 +558,12 @@ class GuiElement:
             title = title.strip()
 
         # tvshow
-        if metaType in (2, 4, 5, 6):
+        if meta_type in (2, 4, 5, 6):
             tvshowtitle = self.getItemValue('tvshowtitle')
             if tvshowtitle:
                 title = tvshowtitle
 
-        sType = str(metaType).replace(
+        _type = str(meta_type).replace(
             '1',
             'movie').replace(
             '2',
@@ -583,8 +583,8 @@ class GuiElement:
 
         meta = {}
         try:
-            if sType:
-                args = (sType, title)
+            if _type:
+                args = (_type, title)
                 kwargs = {}
                 if self.__ImdbId:
                     kwargs['imdb_id'] = self.__ImdbId
@@ -742,19 +742,19 @@ class GuiElement:
                 # self.addItemValues('trailer', self.getDefaultTrailer())
 
         # Used only if there is data in db, overwrite getMetadonne()
-        sCat = str(self.getCat())
+        cat = str(self.getCat())
         try:
-            if sCat and int(sCat) in (
+            if cat and int(cat) in (
                     1, 2, 3, 4, 5, 8, 9):  # Vérifier seulement si de type média
                 if self.getWatched():
                     self.addItemValues('playcount', 1)
         except BaseException:
-            sCat = False
+            cat = False
 
-        self.addItemProperties('siteUrl', self.getSiteUrl())
-        self.addItemProperties('sCleanTitle', self.getFileName())
-        self.addItemProperties('sId', self.getSiteName())
-        self.addItemProperties('sFav', self.getFunction())
+        self.addItemProperties('site_url', self.getSiteUrl())
+        self.addItemProperties('clean_title', self.getFileName())
+        self.addItemProperties('s_id', self.getSiteName())
+        self.addItemProperties('fav', self.getFunction())
         self.addItemProperties('sMeta', str(self.getMeta()))
         if isNexus():
             self.addItemValues('resumetime', self.getResumeTime())
@@ -763,8 +763,8 @@ class GuiElement:
             self.addItemProperties('resumetime', self.getResumeTime())
             self.addItemProperties('totaltime', self.getTotalTime())
 
-        if sCat:
-            self.addItemProperties('sCat', sCat)
+        if cat:
+            self.addItemProperties('cat', cat)
             mediatypes = {
                 '1': 'movie',
                 '2': 'tvshow',
@@ -775,8 +775,8 @@ class GuiElement:
                 '7': 'season',
                 '8': 'episode',
                 '9': 'tvshow'}
-            if sCat in mediatypes.keys():
-                mediatype = mediatypes.get(sCat)
+            if cat in mediatypes.keys():
+                mediatype = mediatypes.get(cat)
                 # video, movie, tvshow, season, episode, musicvideo
                 self.addItemValues('mediatype', mediatype)
 

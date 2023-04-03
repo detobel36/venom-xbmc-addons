@@ -14,13 +14,13 @@ class cHoster(iHoster):
     def __init__(self):
         iHoster.__init__(self, 'megaup', 'Megaup')
 
-    def _getMediaLinkForGuest(self, autoPlay=False):
-        oRequestHandler = RequestHandler(self._url)
-        oRequestHandler.addHeaderEntry('User-Agent', UA)
-        sHtmlContent = oRequestHandler.request()
-        cookies = oRequestHandler.GetCookies() + ";"
+    def _getMediaLinkForGuest(self, auto_play=False):
+        request_handler = RequestHandler(self._url)
+        request_handler.addHeaderEntry('User-Agent', UA)
+        html_content = request_handler.request()
+        cookies = request_handler.GetCookies() + ";"
 
-        data = re.search('Mhoa_URL\\((.+?)\\);', sHtmlContent).group(1)
+        data = re.search('Mhoa_URL\\((.+?)\\);', html_content).group(1)
         data = re.findall("'(.+?)'", data)
 
         part1 = data[0]
@@ -38,28 +38,28 @@ class cHoster(iHoster):
 
         time.sleep(6)
 
-        oRequestHandler = RequestHandler(
+        request_handler = RequestHandler(
             "https://download.megaup.net/?idurl=" +
             cidken +
             "&idfilename=" +
             file +
             "&idfilesize=" +
             size)
-        oRequestHandler.addHeaderEntry('User-Agent', UA)
-        sHtmlContent = oRequestHandler.request()
+        request_handler.addHeaderEntry('User-Agent', UA)
+        html_content = request_handler.request()
 
         la = re.search(
             'window\\.location\\.replace\\("(.+?)"',
-            sHtmlContent).group(1)
+            html_content).group(1)
 
-        oRequestHandler = RequestHandler(la)
-        oRequestHandler.disableRedirect()
-        oRequestHandler.addHeaderEntry('User-Agent', UA)
-        oRequestHandler.addHeaderEntry(
+        request_handler = RequestHandler(la)
+        request_handler.disableRedirect()
+        request_handler.addHeaderEntry('User-Agent', UA)
+        request_handler.addHeaderEntry(
             "Referer", "https://download.megaup.net/")
-        oRequestHandler.addHeaderEntry("Cookie", cookies)
-        oRequestHandler.request()
-        api_call = oRequestHandler.getResponseHeader()['Location']
+        request_handler.addHeaderEntry("Cookie", cookies)
+        request_handler.request()
+        api_call = request_handler.getResponseHeader()['Location']
 
         if api_call:
             return True, api_call + "|User-Agent=" + UA

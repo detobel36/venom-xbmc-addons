@@ -2,14 +2,14 @@
 # vStream https://github.com/Kodi-vStream/venom-xbmc-addons
 
 from resources.lib.handler.requestHandler import RequestHandler
-from resources.lib.comaddon import addon, dialog, VSlog
+from resources.lib.comaddon import Addon, dialog, VSlog
 
 
 class cJDownloaderHandler:
-    ADDON = addon()
+    ADDON = Addon()
     DIALOG = dialog()
 
-    def sendToJDownloader(self, sUrl):
+    def sendToJDownloader(self, url):
         if self.__checkConfig() is False:
             VSlog('Settings ueberpruefen (XBMC)')
             return False
@@ -18,7 +18,7 @@ class cJDownloaderHandler:
             VSlog('Verbindung fehlgeschlagen (JD aus?)')
             return False
 
-        bDownload = self.__download(sUrl)
+        bDownload = self.__download(url)
         if bDownload is True:
             self.DIALOG.VSinfo('Link gesendet', 'JDownloader')
 
@@ -47,23 +47,23 @@ class cJDownloaderHandler:
         return False
 
     def __download(self, sFileUrl):
-        sHost = self.__getHost()
+        host = self.__getHost()
         sPort = self.__getPort()
         bAutomaticDownload = self.__getAutomaticStart()
         bLinkGrabber = self.__getLinkGrabber()
 
         sLinkForJd = self.__createJDUrl(
-            sFileUrl, sHost, sPort, bAutomaticDownload, bLinkGrabber)
+            sFileUrl, host, sPort, bAutomaticDownload, bLinkGrabber)
         VSlog("JD Link " + str(sLinkForJd))
 
-        oRequestHandler = RequestHandler(sLinkForJd)
-        oRequestHandler.request()
+        request_handler = RequestHandler(sLinkForJd)
+        request_handler.request()
         return True
 
     def __createJDUrl(
             self,
             sFileUrl,
-            sHost,
+            host,
             sPort,
             bAutomaticDownload,
             bLinkGrabber):
@@ -75,20 +75,20 @@ class cJDownloaderHandler:
         if bAutomaticDownload is True:
             sAutomaticStart = '1'
 
-        sUrl = 'http://' + str(sHost) + ':' + str(sPort) + '/action/add/links/grabber' + \
+        url = 'http://' + str(host) + ':' + str(sPort) + '/action/add/links/grabber' + \
             str(sGrabber) + '/start' + str(sAutomaticStart) + '/' + sFileUrl
-        return sUrl
+        return url
 
     def __checkConnection(self):
         VSlog("check JD Connection")
-        sHost = self.__getHost()
+        host = self.__getHost()
         sPort = self.__getPort()
 
-        sLinkForJd = 'http://' + str(sHost) + ':' + str(sPort)
+        sLinkForJd = 'http://' + str(host) + ':' + str(sPort)
 
         try:
-            oRequestHandler = RequestHandler(sLinkForJd)
-            oRequestHandler.request()
+            request_handler = RequestHandler(sLinkForJd)
+            request_handler.request()
             return True
         except Exception as e:
             return False

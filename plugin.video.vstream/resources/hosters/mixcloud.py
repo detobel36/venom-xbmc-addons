@@ -10,18 +10,18 @@ class cHoster(iHoster):
     def __init__(self):
         iHoster.__init__(self, 'mixcloud', 'Mixcloud')
 
-    def _getMediaLinkForGuest(self, autoPlay=False):
+    def _getMediaLinkForGuest(self, auto_play=False):
         api_call = False
 
-        oRequest = RequestHandler(self._url)
-        sHtmlContent = oRequest.request()
+        request = RequestHandler(self._url)
+        html_content = request.request()
 
-        oParser = Parser()
-        sPattern = 'https://audiocdn.+?mixcloud.com/previews/(.+?).mp3'
-        aResult = oParser.parse(sHtmlContent, sPattern)
-        if aResult[0] is True:
+        parser = Parser()
+        pattern = 'https://audiocdn.+?mixcloud.com/previews/(.+?).mp3'
+        results = parser.parse(html_content, pattern)
+        if results[0] is True:
             api_call = 'https://audio4.mixcloud.com/secure/hls/' + \
-                aResult[1][0] + '.m4a/index.m3u8'
+                results[1][0] + '.m4a/index.m3u8'
 
         if api_call:
             return True, api_call

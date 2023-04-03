@@ -38,8 +38,8 @@ def load():  # fonction chargee automatiquement par l'addon l'index de votre nav
 
     # apelle la function pour sortir un parametre
     output_parameter_handler = OutputParameterHandler()
-    # sortie du parametres siteUrl n'oubliez pas la Majuscule
-    output_parameter_handler.addParameter('siteUrl', 'siteUrl')
+    # sortie du parametres site_url n'oubliez pas la Majuscule
+    output_parameter_handler.addParameter('site_url', 'site_url')
     gui.addDir(
         SITE_IDENTIFIER,
         'showSearch',
@@ -48,10 +48,10 @@ def load():  # fonction chargee automatiquement par l'addon l'index de votre nav
         output_parameter_handler)
     # Ajoute lien dossier (identifant, function a attendre, nom, icon, parametre de sortie)
     # Puisque nous ne voulons pas atteindre une url on peut mettre ce qu'on
-    # veut dans le parametre siteUrl
+    # veut dans le parametre site_url
 
     output_parameter_handler = OutputParameterHandler()
-    output_parameter_handler.addParameter('siteUrl', ANIM_NEWS[0])
+    output_parameter_handler.addParameter('site_url', ANIM_NEWS[0])
     gui.addDir(
         SITE_IDENTIFIER,
         ANIM_NEWS[1],
@@ -61,7 +61,7 @@ def load():  # fonction chargee automatiquement par l'addon l'index de votre nav
     # ici la function showMovies a besoin d'une url ici le racourci MOVIE_NEWS
 
     output_parameter_handler = OutputParameterHandler()
-    output_parameter_handler.addParameter('siteUrl', ANIM_ANIMS[0])
+    output_parameter_handler.addParameter('site_url', ANIM_ANIMS[0])
     gui.addDir(
         SITE_IDENTIFIER,
         ANIM_ANIMS[1],
@@ -75,69 +75,69 @@ def load():  # fonction chargee automatiquement par l'addon l'index de votre nav
 def showSearch():  # function de recherche
     gui = Gui()
 
-    sSearchText = gui.showKeyBoard()  # apelle le clavier xbmx
-    if (sSearchText):
-        sUrl = URL_SEARCH[0] + sSearchText  # modifi l'url de recherche
+    search_text = gui.showKeyBoard()  # apelle le clavier xbmx
+    if (search_text):
+        url = URL_SEARCH[0] + search_text  # modifi l'url de recherche
         # apelle la function qui pouras lire la page de resultats
-        showMovies(sUrl)
+        showMovies(url)
         gui.setEndOfDirectory()
         return
 
 
-def showMovies(sSearch=''):
+def showMovies(search=''):
     gui = Gui()  # ouvre l'affichage
-    if sSearch:  # si une url et envoyer directement grace a la function showSearch
-        sUrl = sSearch
+    if search:  # si une url et envoyer directement grace a la function showSearch
+        url = search
     else:
         input_parameter_handler = InputParameterHandler()
-        sUrl = input_parameter_handler.getValue(
-            'siteUrl')  # recupere l'url sortie en parametre
+        url = input_parameter_handler.getValue(
+            'site_url')  # recupere l'url sortie en parametre
 
-    oRequestHandler = RequestHandler(sUrl)  # envoye une requete a l'url
-    sHtmlContent = oRequestHandler.request()  # requete aussi
+    request_handler = RequestHandler(url)  # envoye une requete a l'url
+    html_content = request_handler.request()  # requete aussi
 
-    sHtmlContent = sHtmlContent.replace(
+    html_content = html_content.replace(
         '<span class="likeThis">', '').replace(
         '</span>', '')
     # la function replace et pratique pour supprimer un code du resultat
 
-    sPattern = '<a href="([^"]+)" class="anm" title="([^"]+)">[^<]+<\\/a>.+?<img src="([^"]+)"'
+    pattern = '<a href="([^"]+)" class="anm" title="([^"]+)">[^<]+<\\/a>.+?<img src="([^"]+)"'
     # pour faire simple recherche ce bout de code dans le code source de l'url
     # - ([^<]+) je veut cette partie de code mais y a une suite
     # - .+? je ne veut pas cette partis et peux importe ceux qu'elle contient
     # - (.+?) je veut cette partis et c'est la fin
 
-    oParser = Parser()
-    aResult = oParser.parse(sHtmlContent, sPattern)
-    # le plus simple et de faire un print aResult
+    parser = Parser()
+    results = parser.parse(html_content, pattern)
+    # le plus simple et de faire un print results
     # dans le fichier log d'xbmc vous pourez voir un array de ce que recupere le script
-    # et modifier sPattern si besoin
+    # et modifier pattern si besoin
 
-    # xbmc.log(str(aResult)) #Commenter ou supprimer cette ligne une foix fini
+    # xbmc.log(str(results)) #Commenter ou supprimer cette ligne une foix fini
 
-    if aResult[0]:
-        total = len(aResult[1])
+    if results[0]:
+        total = len(results[1])
         # dialog barre de progression
         progress_ = Progress().VScreate(SITE_NAME)
 
-        for aEntry in aResult[1]:
+        for entry in results[1]:
             progress_.VSupdate(progress_, total)
             if progress_.iscanceled():
                 break
 
-            # L'array affiche vos info dans l'orde de sPattern en commencant a
+            # L'array affiche vos info dans l'orde de pattern en commencant a
             # 0
-            title = aEntry[1]
-            sUrl = aEntry[0]
-            Sthumb = aEntry[2]
+            title = entry[1]
+            url = entry[0]
+            Sthumb = entry[2]
 
             Sthumb = 'http:' + Sthumb
 
             output_parameter_handler = OutputParameterHandler()
             output_parameter_handler.addParameter(
-                'siteUrl', sUrl)  # sortie de l'url
+                'site_url', url)  # sortie de l'url
             output_parameter_handler.addParameter(
-                'sMovieTitle', title)  # sortie du titre
+                'movie_title', title)  # sortie du titre
             output_parameter_handler.addParameter(
                 'thumbnail', Sthumb)  # sortie du poster
 
@@ -155,11 +155,11 @@ def showMovies(sSearch=''):
 
         progress_.VSclose(progress_)
 
-        sNextPage = __checkForNextPage(
-            sHtmlContent)  # cherche la page suivante
-        if (sNextPage):
+        next_page = __checkForNextPage(
+            html_content)  # cherche la page suivante
+        if (next_page):
             output_parameter_handler = OutputParameterHandler()
-            output_parameter_handler.addParameter('siteUrl', sNextPage)
+            output_parameter_handler.addParameter('site_url', next_page)
             gui.addDir(
                 SITE_IDENTIFIER,
                 'showMovies',
@@ -169,41 +169,41 @@ def showMovies(sSearch=''):
             # Ajoute une entree pour le lien Next | pas de addMisc pas de
             # poster et de description inutile donc
 
-    if not sSearch:
+    if not search:
         gui.setEndOfDirectory()  # ferme l'affichage
 
 
-def showMovies2(sSearch=''):
+def showMovies2(search=''):
     gui = Gui()
-    if sSearch:
-        sUrl = sSearch
+    if search:
+        url = search
     else:
         input_parameter_handler = InputParameterHandler()
-        sUrl = input_parameter_handler.getValue('siteUrl')
+        url = input_parameter_handler.getValue('site_url')
 
-    oRequestHandler = RequestHandler(sUrl)
-    sHtmlContent = oRequestHandler.request()
-    sPattern = '<li><a href="([^<]+)" title="([^<]+)" rel="([^<]+)" class="anm_det_pop">([^<]+)</a></li>'
-    oParser = Parser()
-    aResult = oParser.parse(sHtmlContent, sPattern)
-    if aResult[0]:
-        total = len(aResult[1])
+    request_handler = RequestHandler(url)
+    html_content = request_handler.request()
+    pattern = '<li><a href="([^<]+)" title="([^<]+)" rel="([^<]+)" class="anm_det_pop">([^<]+)</a></li>'
+    parser = Parser()
+    results = parser.parse(html_content, pattern)
+    if results[0]:
+        total = len(results[1])
         progress_ = Progress().VScreate(SITE_NAME)
 
-        for aEntry in aResult[1]:
+        for entry in results[1]:
             progress_.VSupdate(progress_, total)
             if progress_.iscanceled():
                 break
 
             output_parameter_handler = OutputParameterHandler()
-            output_parameter_handler.addParameter('siteUrl', str(aEntry[0]))
+            output_parameter_handler.addParameter('site_url', str(entry[0]))
             output_parameter_handler.addParameter(
-                'sMovieTitle', str(aEntry[1]))
-            if 'type2=1' in sUrl:
+                'movie_title', str(entry[1]))
+            if 'type2=1' in url:
                 gui.addTV(
                     SITE_IDENTIFIER,
                     'seriesHosters',
-                    aEntry[1],
+                    entry[1],
                     'series.png',
                     '',
                     '',
@@ -212,7 +212,7 @@ def showMovies2(sSearch=''):
                 gui.addTV(
                     SITE_IDENTIFIER,
                     'seriesHosters',
-                    aEntry[1],
+                    entry[1],
                     'animes.png',
                     '',
                     '',
@@ -220,17 +220,17 @@ def showMovies2(sSearch=''):
 
         progress_.VSclose(progress_)
 
-    if not sSearch:
+    if not search:
         gui.setEndOfDirectory()
 
 
-def __checkForNextPage(sHtmlContent):  # cherche la page suivante
-    oParser = Parser()
-    sPattern = '<li><a href="([^<]+)">Suivant</a></li>'
-    aResult = oParser.parse(sHtmlContent, sPattern)
+def __checkForNextPage(html_content):  # cherche la page suivante
+    parser = Parser()
+    pattern = '<li><a href="([^<]+)">Suivant</a></li>'
+    results = parser.parse(html_content, pattern)
 
-    if aResult[0]:
-        return aResult[1][0]
+    if results[0]:
+        return results[1][0]
 
     return False
 
@@ -238,15 +238,15 @@ def __checkForNextPage(sHtmlContent):  # cherche la page suivante
 def showHosters():  # recherche et affiche les hotes
     gui = Gui()  # ouvre l'affichage
     input_parameter_handler = InputParameterHandler()  # apelle l'entree de paramettre
-    sUrl = input_parameter_handler.getValue('siteUrl')  # apelle siteUrl
-    sMovieTitle = input_parameter_handler.getValue(
-        'sMovieTitle')  # apelle le titre
+    url = input_parameter_handler.getValue('site_url')  # apelle site_url
+    movie_title = input_parameter_handler.getValue(
+        'movie_title')  # apelle le titre
     thumbnail = input_parameter_handler.getValue(
         'thumbnail')  # apelle le poster
 
-    oRequestHandler = RequestHandler(sUrl)  # requete sur l'url
-    sHtmlContent = oRequestHandler.request()  # requete sur l'url
-    sHtmlContent = sHtmlContent.replace(
+    request_handler = RequestHandler(url)  # requete sur l'url
+    html_content = request_handler.request()  # requete sur l'url
+    html_content = html_content.replace(
         '<iframe src="//www.facebook.com/',
         '').replace(
         '<iframe src=\'http://creative.rev2pub.com',
@@ -254,23 +254,23 @@ def showHosters():  # recherche et affiche les hotes
     # supprimer a l'aide de replace toute les entrer qui corresponde a votre
     # recherche mais ne doivent pas etre pris en compte
 
-    oParser = Parser()
-    sPattern = '<iframe.+?src="(.+?)"'
+    parser = Parser()
+    pattern = '<iframe.+?src="(.+?)"'
     # ici nous cherchont toute les sources iframe
-    aResult = oParser.parse(sHtmlContent, sPattern)
-    # penser a faire un print aResult pour verifier
+    results = parser.parse(html_content, pattern)
+    # penser a faire un print results pour verifier
 
     # si un lien ne s'affiche pas peux etre que l'hote n'est pas supporte par
     # l'addon
-    if aResult[0]:
-        for aEntry in aResult[1]:
+    if results[0]:
+        for entry in results[1]:
 
-            sHosterUrl = str(aEntry[0])
-            oHoster = HosterGui().checkHoster(sHosterUrl)
-            if (oHoster):
-                oHoster.setDisplayName(aEntry[1])
-                oHoster.setFileName(aEntry[1])
-                HosterGui().showHoster(gui, oHoster, sHosterUrl, thumbnail)
+            hoster_url = str(entry[0])
+            hoster = HosterGui().checkHoster(hoster_url)
+            if (hoster):
+                hoster.setDisplayName(entry[1])
+                hoster.setFileName(entry[1])
+                HosterGui().showHoster(gui, hoster, hoster_url, thumbnail)
 
     gui.setEndOfDirectory()  # fin
 
@@ -278,33 +278,33 @@ def showHosters():  # recherche et affiche les hotes
 def seriesListEpisodes():  # cherche les episode de series
     gui = Gui()
     input_parameter_handler = InputParameterHandler()
-    sUrl = input_parameter_handler.getValue('siteUrl')
-    sMovieTitle = input_parameter_handler.getValue('sMovieTitle')
+    url = input_parameter_handler.getValue('site_url')
+    movie_title = input_parameter_handler.getValue('movie_title')
     thumbnail = input_parameter_handler.getValue('thumbnail')
 
-    oRequestHandler = RequestHandler(sUrl)
-    sHtmlContent = oRequestHandler.request()
+    request_handler = RequestHandler(url)
+    html_content = request_handler.request()
 
-    # sPattern = '<option value="([0-9]+)">([^<]+)<\/option>'
-    sPattern = '<a class="lst" href="([^"]+)" title="([^"]+)"><b class="val">'
-    oParser = Parser()
-    aResult = oParser.parse(sHtmlContent, sPattern)
+    # pattern = '<option value="([0-9]+)">([^<]+)<\/option>'
+    pattern = '<a class="lst" href="([^"]+)" title="([^"]+)"><b class="val">'
+    parser = Parser()
+    results = parser.parse(html_content, pattern)
 
     # fh = open('c:\\test.txt', "w")
-    # fh.write(sHtmlContent)
+    # fh.write(html_content)
     # fh.close()
 
-    # VSlog(str(aResult))
+    # VSlog(str(results))
 
-    if aResult[0]:
-        for aEntry in aResult[1]:
+    if results[0]:
+        for entry in results[1]:
 
-            title = aEntry[1]
-            sUrl2 = aEntry[0]
+            title = entry[1]
+            url2 = entry[0]
 
             output_parameter_handler = OutputParameterHandler()
-            output_parameter_handler.addParameter('siteUrl', sUrl2)
-            output_parameter_handler.addParameter('sMovieTitle', title)
+            output_parameter_handler.addParameter('site_url', url2)
+            output_parameter_handler.addParameter('movie_title', title)
             gui.addTV(
                 SITE_IDENTIFIER,
                 'showHosters',

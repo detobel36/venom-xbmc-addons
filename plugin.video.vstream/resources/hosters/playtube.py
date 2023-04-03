@@ -17,36 +17,36 @@ class cHoster(iHoster):
     def __init__(self):
         iHoster.__init__(self, 'playtube', 'Playtube')
 
-    def _getMediaLinkForGuest(self, autoPlay=False):
-        oRequestHandler = RequestHandler(self._url)
-        sHtmlContent = oRequestHandler.request()
+    def _getMediaLinkForGuest(self, auto_play=False):
+        request_handler = RequestHandler(self._url)
+        html_content = request_handler.request()
 
         sPattern2 = '(\\s*eval\\s*\\(\\s*function(?:.|\\s)+?\\)\\)\\))'
-        aResult = re.findall(sPattern2, sHtmlContent)
+        results = re.findall(sPattern2, html_content)
         list_url = []
         list_qua = []
-        if aResult:
-            str2 = aResult[0]
+        if results:
+            str2 = results[0]
             if not str2.endswith(';'):
                 str2 = str2 + ';'
 
             strs = cPacker().unpack(str2)
-            oParser = Parser()
-            sPattern = '(https.+?.m3u8)'
-            aResult = re.findall(sPattern, strs)
-            if aResult:
-                urlhost = aResult[0]
-                oRequestHandler = RequestHandler(urlhost)
-                oRequestHandler.addHeaderEntry('User-Agent', UA)
-                oRequestHandler.addHeaderEntry('Referer', self._url)
-                sHtmlContent2 = oRequestHandler.request()
-                oParser = Parser()
-                sPattern = 'PROGRAM.*?BANDWIDTH.*?RESOLUTION=(\\d+x\\d+).*?(https.*?m3u8)'
-                aResult = oParser.parse(sHtmlContent2, sPattern)
-                if aResult[0] is True:
-                    for aEntry in aResult[1]:
-                        list_url.append(aEntry[1])
-                        list_qua.append(aEntry[0])
+            parser = Parser()
+            pattern = '(https.+?.m3u8)'
+            results = re.findall(pattern, strs)
+            if results:
+                urlhost = results[0]
+                request_handler = RequestHandler(urlhost)
+                request_handler.addHeaderEntry('User-Agent', UA)
+                request_handler.addHeaderEntry('Referer', self._url)
+                sHtmlContent2 = request_handler.request()
+                parser = Parser()
+                pattern = 'PROGRAM.*?BANDWIDTH.*?RESOLUTION=(\\d+x\\d+).*?(https.*?m3u8)'
+                results = parser.parse(sHtmlContent2, pattern)
+                if results[0] is True:
+                    for entry in results[1]:
+                        list_url.append(entry[1])
+                        list_qua.append(entry[0])
 
                     api_call = dialog().VSselectqual(list_qua, list_url)
 

@@ -11,35 +11,35 @@ class cHoster(iHoster):
         iHoster.__init__(self, 'turbovid', 'Turbovid.net')
 
     def __getIdFromUrl(self, url):
-        sPattern = "http://turbovid.net/([^<]+)"
-        oParser = Parser()
-        aResult = oParser.parse(url, sPattern)
-        if aResult[0] is True:
-            return aResult[1][0]
+        pattern = "http://turbovid.net/([^<]+)"
+        parser = Parser()
+        results = parser.parse(url, pattern)
+        if results[0] is True:
+            return results[1][0]
 
         return ''
 
-    def setUrl(self, sUrl):
-        if 'embed' not in sUrl:
-            self._url = str(self.__getIdFromUrl(sUrl))
+    def setUrl(self, url):
+        if 'embed' not in url:
+            self._url = str(self.__getIdFromUrl(url))
             self._url = 'http://turbovid.net/embed-' + str(self._url) + '.html'
         else:
-            self._url = sUrl
+            self._url = url
 
-    def _getMediaLinkForGuest(self, autoPlay=False):
-        oRequest = RequestHandler(self._url)
-        sHtmlContent = oRequest.request()
-        if not sHtmlContent:
+    def _getMediaLinkForGuest(self, auto_play=False):
+        request = RequestHandler(self._url)
+        html_content = request.request()
+        if not html_content:
             return False, False
 
-        sPattern = 'var/type/(.+?)/.+?/provider/mp4/([^<]+)/flash/'
+        pattern = 'var/type/(.+?)/.+?/provider/mp4/([^<]+)/flash/'
 
-        oParser = Parser()
-        sHtmlContent = sHtmlContent.replace('|', '/')
-        aResult = oParser.parse(sHtmlContent, sPattern)
-        if aResult[0] is True:
+        parser = Parser()
+        html_content = html_content.replace('|', '/')
+        results = parser.parse(html_content, pattern)
+        if results[0] is True:
             api_call = (
-                'http://178.33.122.207:%s/%s/v.mp4') % (aResult[1][0][0], aResult[1][0][1])
+                'http://178.33.122.207:%s/%s/v.mp4') % (results[1][0][0], results[1][0][1])
             return True, api_call
 
         return False, False

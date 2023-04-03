@@ -11,30 +11,30 @@ class cHoster(iHoster):
     def __init__(self):
         iHoster.__init__(self, 'directmoviedl', 'DirectMovieDl')
 
-    def _getMediaLinkForGuest(self, autoPlay=False):
+    def _getMediaLinkForGuest(self, auto_play=False):
         api_call = False
 
         if 'movie.directmoviedl' in self._url:
-            oRequest = RequestHandler(self._url)
-            sHtmlContent = oRequest.request()
-            oParser = Parser()
-            sPattern = '="([^"]+)" type="video/mp4'
-            aResult = oParser.parse(sHtmlContent, sPattern)
-            api_call = aResult[1][0]
+            request = RequestHandler(self._url)
+            html_content = request.request()
+            parser = Parser()
+            pattern = '="([^"]+)" type="video/mp4'
+            results = parser.parse(html_content, pattern)
+            api_call = results[1][0]
         else:
-            oRequest = RequestHandler(self._url)
-            sHtmlContent = oRequest.request()
-            oParser = Parser()
-            sPattern = 'src="(http.+?)"'
-            aResult = oParser.parse(sHtmlContent, sPattern)
+            request = RequestHandler(self._url)
+            html_content = request.request()
+            parser = Parser()
+            pattern = 'src="(http.+?)"'
+            results = parser.parse(html_content, pattern)
 
-            if aResult[0] is True:
-                for aEntry in aResult[1]:
-                    sHoster = aEntry
-                    oRequest = RequestHandler(sHoster)
-                    sHtmlContent1 = oRequest.request()
+            if results[0] is True:
+                for entry in results[1]:
+                    hoster = entry
+                    request = RequestHandler(hoster)
+                    sHtmlContent1 = request.request()
                     sPattern1 = '="([^"]+)" type="video/mp4'
-                    aResult1 = oParser.parse(sHtmlContent1, sPattern1)
+                    aResult1 = parser.parse(sHtmlContent1, sPattern1)
                     api_call = aResult1[1][0]
 
         if api_call:

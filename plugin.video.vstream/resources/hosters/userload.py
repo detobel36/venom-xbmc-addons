@@ -22,7 +22,7 @@ class cHoster(iHoster):
     def isDownloadable(self):
         return False
 
-    def _getMediaLinkForGuest(self, autoPlay=False):
+    def _getMediaLinkForGuest(self, auto_play=False):
         api_call = False
 
         keymorocco = ''
@@ -35,15 +35,15 @@ class cHoster(iHoster):
         # A voir quel encodage il faut pour Kodi 18.
         sHtmlContent1 = requests.get(urlapi).content.decode('utf-8')
 
-        oParser = Parser()
-        sPattern = '(ﾟωﾟ.+?\\(\'_\'\\);)'
-        aResult = oParser.parse(sHtmlContent1, sPattern)
+        parser = Parser()
+        pattern = '(ﾟωﾟ.+?\\(\'_\'\\);)'
+        results = parser.parse(sHtmlContent1, pattern)
 
-        if aResult[0] is True:
-            sdecode = AADecoder(aResult[1][0]).decode()
+        if results[0] is True:
+            sdecode = AADecoder(results[1][0]).decode()
 
-            sPattern = 'morocco=".([^\\W]+).+?"&mycountry=".([^\\W]+)'
-            aResult_2 = oParser.parse(sdecode, sPattern)
+            pattern = 'morocco=".([^\\W]+).+?"&mycountry=".([^\\W]+)'
+            aResult_2 = parser.parse(sdecode, pattern)
 
             if aResult_2[0] is True:
                 keymorocco = aResult_2[1][0][0]
@@ -52,26 +52,26 @@ class cHoster(iHoster):
         referer = self._url.split('|Referer=')[1]
         url = self._url.split('|Referer=')[:-1][0]
 
-        oRequestHandler = RequestHandler(url)
-        oRequestHandler.addHeaderEntry('Referer', referer)
-        sHtmlContent1 = oRequestHandler.request()
+        request_handler = RequestHandler(url)
+        request_handler.addHeaderEntry('Referer', referer)
+        sHtmlContent1 = request_handler.request()
 
         sPattern2 = '<script type="text/javascript">(\\s*eval\\s*\\(\\s*function(?:.|\\s)+?{}\\)\\))'
-        aResult = re.findall(sPattern2, sHtmlContent1)
+        results = re.findall(sPattern2, sHtmlContent1)
 
-        if aResult:
-            str2 = aResult[0]
+        if results:
+            str2 = results[0]
             if not str2.endswith(';'):
                 str2 = str2 + ';'
 
             strs = cPacker().unpack(str2)
 
-            oParser = Parser()
-            sPattern = 'var\\s(.+?)="([^"]*)'
-            aResult = oParser.parse(strs, sPattern)
+            parser = Parser()
+            pattern = 'var\\s(.+?)="([^"]*)'
+            results = parser.parse(strs, pattern)
 
-            if aResult[0] is True:
-                for r in aResult[1]:
+            if results[0] is True:
+                for r in results[1]:
                     if r[0] == keymorocco:
                         morocco = r[1]
                     if r[0] == keymycountry:
@@ -80,16 +80,16 @@ class cHoster(iHoster):
         if morocco and mycountry:
             url2 = 'https://userload.co/api/request/'
             pdata = 'morocco=' + morocco + '&mycountry=' + mycountry
-            oRequest = RequestHandler(url2)
-            oRequest.setRequestType(1)
-            oRequestHandler.addHeaderEntry('User-Agent', UA)
-            oRequest.addHeaderEntry(
+            request = RequestHandler(url2)
+            request.setRequestType(1)
+            request_handler.addHeaderEntry('User-Agent', UA)
+            request.addHeaderEntry(
                 'Content-Type',
                 'application/x-www-form-urlencoded')
-            oRequest.addHeaderEntry('Content-Length', len(str(pdata)))
-            oRequest.addHeaderEntry('Referer', url)
-            oRequest.addParametersLine(pdata)
-            api_call = oRequest.request()
+            request.addHeaderEntry('Content-Length', len(str(pdata)))
+            request.addHeaderEntry('Referer', url)
+            request.addParametersLine(pdata)
+            api_call = request.request()
 
             if 'mp4' in api_call and 'uloadcdn.com' in api_call:
                 return True, api_call.strip()

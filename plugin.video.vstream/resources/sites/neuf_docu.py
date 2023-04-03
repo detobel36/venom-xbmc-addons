@@ -37,7 +37,7 @@ def load():
     gui = Gui()
 
     output_parameter_handler = OutputParameterHandler()
-    output_parameter_handler.addParameter('siteUrl', 'http://venom/')
+    output_parameter_handler.addParameter('site_url', 'http://venom/')
     gui.addDir(
         SITE_IDENTIFIER,
         'showSearch',
@@ -45,7 +45,7 @@ def load():
         'search.png',
         output_parameter_handler)
 
-    output_parameter_handler.addParameter('siteUrl', DOC_NEWS[0])
+    output_parameter_handler.addParameter('site_url', DOC_NEWS[0])
     gui.addDir(
         SITE_IDENTIFIER,
         DOC_NEWS[1],
@@ -53,7 +53,7 @@ def load():
         'news.png',
         output_parameter_handler)
 
-    output_parameter_handler.addParameter('siteUrl', DOC_GENRES[0])
+    output_parameter_handler.addParameter('site_url', DOC_GENRES[0])
     gui.addDir(
         SITE_IDENTIFIER,
         DOC_GENRES[1],
@@ -66,10 +66,10 @@ def load():
 
 def showSearch():
     gui = Gui()
-    sSearchText = gui.showKeyBoard()
-    if sSearchText:
-        sUrl = URL_SEARCH[0] + sSearchText
-        showMovies(sUrl)
+    search_text = gui.showKeyBoard()
+    if search_text:
+        url = URL_SEARCH[0] + search_text
+        showMovies(url)
         gui.setEndOfDirectory()
         return
 
@@ -143,8 +143,8 @@ def showGenres():
                  'categorie/voyage-decouverte/'])
 
     output_parameter_handler = OutputParameterHandler()
-    for title, sUrl in liste:
-        output_parameter_handler.addParameter('siteUrl', sUrl)
+    for title, url in liste:
+        output_parameter_handler.addParameter('site_url', url)
         gui.addDir(
             SITE_IDENTIFIER,
             'showMovies',
@@ -155,177 +155,177 @@ def showGenres():
     gui.setEndOfDirectory()
 
 
-def showMovies(sSearch=''):
+def showMovies(search=''):
     gui = Gui()
-    oParser = Parser()
+    parser = Parser()
     input_parameter_handler = InputParameterHandler()
-    sUrl = input_parameter_handler.getValue('siteUrl')
-    if sSearch:
-        sUrl = sSearch.replace(' ', '+')
+    url = input_parameter_handler.getValue('site_url')
+    if search:
+        url = search.replace(' ', '+')
 
-    oRequestHandler = RequestHandler(sUrl)
-    sHtmlContent = oRequestHandler.request()
-    sPattern = 'class="attachment-medium.+?" data-src="([^"]+)".+?<a href="([^"<]+)"[^<>]+>([^<>]+)'
-    aResult = oParser.parse(sHtmlContent, sPattern)
+    request_handler = RequestHandler(url)
+    html_content = request_handler.request()
+    pattern = 'class="attachment-medium.+?" data-src="([^"]+)".+?<a href="([^"<]+)"[^<>]+>([^<>]+)'
+    results = parser.parse(html_content, pattern)
 
-    if not aResult[0]:
+    if not results[0]:
         gui.addText(SITE_IDENTIFIER)
 
-    if aResult[0]:
-        total = len(aResult[1])
+    if results[0]:
+        total = len(results[1])
         progress_ = Progress().VScreate(SITE_NAME)
         output_parameter_handler = OutputParameterHandler()
-        for aEntry in aResult[1]:
+        for entry in results[1]:
             progress_.VSupdate(progress_, total)
             if progress_.iscanceled():
                 break
 
-            sThumb = aEntry[0]
-            sUrl = aEntry[1]
-            title = aEntry[2]
+            thumb = entry[0]
+            url = entry[1]
+            title = entry[2]
 
-            output_parameter_handler.addParameter('siteUrl', sUrl)
-            output_parameter_handler.addParameter('sMovieTitle', title)
-            output_parameter_handler.addParameter('sThumb', sThumb)
+            output_parameter_handler.addParameter('site_url', url)
+            output_parameter_handler.addParameter('movie_title', title)
+            output_parameter_handler.addParameter('thumb', thumb)
 
             gui.addMisc(
                 SITE_IDENTIFIER,
                 'showHosters',
                 title,
                 'doc.png',
-                sThumb,
+                thumb,
                 '',
                 output_parameter_handler)
 
         progress_.VSclose(progress_)
 
-        sNextPage, sPaging = __checkForNextPage(sHtmlContent)
-        if sNextPage:
+        next_page, paging = __checkForNextPage(html_content)
+        if next_page:
             output_parameter_handler = OutputParameterHandler()
-            output_parameter_handler.addParameter('siteUrl', sNextPage)
+            output_parameter_handler.addParameter('site_url', next_page)
             gui.addNext(
                 SITE_IDENTIFIER,
                 'showMovies',
-                'Page ' + sPaging,
+                'Page ' + paging,
                 output_parameter_handler)
 
-    if not sSearch:
+    if not search:
         gui.setEndOfDirectory()
 
 
-def __checkForNextPage(sHtmlContent):
-    oParser = Parser()
-    sPattern = 'role=\'navigation\'.+?class=\'pages\'>Page.+?sur ([^<]+).+?rel="next" href="([^"]+)">»'
-    aResult = oParser.parse(sHtmlContent, sPattern)
-    if aResult[0]:
-        sNumberMax = aResult[1][0][0]
-        sNextPage = aResult[1][0][1]
-        VSlog(sNextPage)
-        sNumberNext = re.search('/page/([0-9]+)', sNextPage).group(1)
-        sPaging = sNumberNext + '/' + sNumberMax
-        return sNextPage, sPaging
+def __checkForNextPage(html_content):
+    parser = Parser()
+    pattern = 'role=\'navigation\'.+?class=\'pages\'>Page.+?sur ([^<]+).+?rel="next" href="([^"]+)">»'
+    results = parser.parse(html_content, pattern)
+    if results[0]:
+        number_max = results[1][0][0]
+        next_page = results[1][0][1]
+        VSlog(next_page)
+        number_next = re.search('/page/([0-9]+)', next_page).group(1)
+        paging = number_next + '/' + number_max
+        return next_page, paging
 
     return False, 'none'
 
 
 def showHosters():
     gui = Gui()
-    oParser = Parser()
+    parser = Parser()
     input_parameter_handler = InputParameterHandler()
-    sUrl = input_parameter_handler.getValue('siteUrl')
-    sMovieTitle = input_parameter_handler.getValue('sMovieTitle')
-    sThumb = input_parameter_handler.getValue('sThumb')
+    url = input_parameter_handler.getValue('site_url')
+    movie_title = input_parameter_handler.getValue('movie_title')
+    thumb = input_parameter_handler.getValue('thumb')
 
-    oRequestHandler = RequestHandler(sUrl)
-    sHtmlContent = oRequestHandler.request()
+    request_handler = RequestHandler(url)
+    html_content = request_handler.request()
 
-    sPattern = '<a href="([^"]+)" title=".+?".+?</a>'
-    aResult = oParser.parse(sHtmlContent, sPattern)
+    pattern = '<a href="([^"]+)" title=".+?".+?</a>'
+    results = parser.parse(html_content, pattern)
 
-    if aResult[0]:
-        for aEntry in aResult[1]:
+    if results[0]:
+        for entry in results[1]:
 
-            if "clictune" in aEntry:
-                oRequestHandler = RequestHandler(aEntry)
-                sHtmlContent = oRequestHandler.request()
+            if "clictune" in entry:
+                request_handler = RequestHandler(entry)
+                html_content = request_handler.request()
 
-                sPattern = 'txt = \'<b><a href="([^"]+)"'
-                aResult = oParser.parse(sHtmlContent, sPattern)[1][0]
-                aEntry = Unquote(re.search('url=(.+?)&', aResult).group(1))
+                pattern = 'txt = \'<b><a href="([^"]+)"'
+                results = parser.parse(html_content, pattern)[1][0]
+                entry = Unquote(re.search('url=(.+?)&', results).group(1))
 
-            if "ReviveLink" in aEntry:
-                url2 = 'http://' + (aEntry.split('/')
+            if "ReviveLink" in entry:
+                url2 = 'http://' + (entry.split('/')
                                     [2]).lower() + '/qcap/Qaptcha.jquery.php'
-                idUrl = aEntry.split('/')[3]
+                idUrl = entry.split('/')[3]
 
                 # Make random key
                 s = "azertyupqsdfghjkmwxcvbn23456789AZERTYUPQSDFGHJKMWXCVBN_-#@"
                 RandomKey = ''.join(random.choice(s) for i in range(32))
 
-                oRequestHandler = RequestHandler(url2)
-                oRequestHandler.setRequestType(1)
-                oRequestHandler.addHeaderEntry('Host', 'revivelink.com')
-                oRequestHandler.addHeaderEntry('User-Agent', UA)
-                oRequestHandler.addHeaderEntry(
+                request_handler = RequestHandler(url2)
+                request_handler.setRequestType(1)
+                request_handler.addHeaderEntry('Host', 'revivelink.com')
+                request_handler.addHeaderEntry('User-Agent', UA)
+                request_handler.addHeaderEntry(
                     'Accept', 'application/json, text/javascript, */*; q=0.01')
-                oRequestHandler.addHeaderEntry(
+                request_handler.addHeaderEntry(
                     'Accept-Language', 'fr,fr-FR;q=0.8,en-US;q=0.5,en;q=0.3')
-                oRequestHandler.addHeaderEntry('Referer', aEntry)
-                oRequestHandler.addHeaderEntry(
+                request_handler.addHeaderEntry('Referer', entry)
+                request_handler.addHeaderEntry(
                     'Content-Type', 'application/x-www-form-urlencoded; charset=UTF-8')
-                oRequestHandler.addHeaderEntry(
+                request_handler.addHeaderEntry(
                     'X-Requested-With', 'XMLHttpRequest')
-                oRequestHandler.addParameters('action', 'qaptcha')
-                oRequestHandler.addParameters('qaptcha_key', RandomKey)
+                request_handler.addParameters('action', 'qaptcha')
+                request_handler.addParameters('qaptcha_key', RandomKey)
 
-                sHtmlContent = oRequestHandler.request()
+                html_content = request_handler.request()
 
-                cookies = oRequestHandler.GetCookies()
+                cookies = request_handler.GetCookies()
                 GestionCookie().SaveCookie('revivelink.com', cookies)
-                # VSlog('result' + sHtmlContent)
+                # VSlog('result' + html_content)
 
-                if '"error":false' not in sHtmlContent:
+                if '"error":false' not in html_content:
                     VSlog('Captcha rate')
-                    VSlog(sHtmlContent)
+                    VSlog(html_content)
                     return
 
                 cookies = GestionCookie().Readcookie('revivelink.com')
-                oRequestHandler = RequestHandler(
+                request_handler = RequestHandler(
                     'http://revivelink.com/slinks.php?R=' + idUrl + '&' + RandomKey)
-                oRequestHandler.addHeaderEntry('Host', 'revivelink.com')
-                oRequestHandler.addHeaderEntry('Referer', aEntry)
-                oRequestHandler.addHeaderEntry(
+                request_handler.addHeaderEntry('Host', 'revivelink.com')
+                request_handler.addHeaderEntry('Referer', entry)
+                request_handler.addHeaderEntry(
                     'Accept', 'application/json, text/javascript, */*; q=0.01')
-                oRequestHandler.addHeaderEntry('User-Agent', UA)
-                oRequestHandler.addHeaderEntry(
+                request_handler.addHeaderEntry('User-Agent', UA)
+                request_handler.addHeaderEntry(
                     'Accept-Language', 'fr-FR,fr;q=0.8,en-US;q=0.6,en;q=0.4')
-                oRequestHandler.addHeaderEntry(
+                request_handler.addHeaderEntry(
                     'Content-Type', 'application/x-www-form-urlencoded; charset=UTF-8')
-                oRequestHandler.addHeaderEntry(
+                request_handler.addHeaderEntry(
                     'X-Requested-With', 'XMLHttpRequest')
-                oRequestHandler.addHeaderEntry('Cookie', cookies)
+                request_handler.addHeaderEntry('Cookie', cookies)
 
-                sHtmlContent = oRequestHandler.request()
+                html_content = request_handler.request()
 
                 result = re.findall(
                     '<td><a href="([^"]+)" title=\'([^<]+)\'>',
-                    sHtmlContent)
+                    html_content)
                 for url, title in result:
-                    sHosterUrl = url
-                    oHoster = HosterGui().checkHoster(sHosterUrl)
-                    if oHoster:
-                        oHoster.setDisplayName(title)
-                        oHoster.setFileName(title)
-                        HosterGui().showHoster(gui, oHoster, sHosterUrl, sThumb,
+                    hoster_url = url
+                    hoster = HosterGui().checkHoster(hoster_url)
+                    if hoster:
+                        hoster.setDisplayName(title)
+                        hoster.setFileName(title)
+                        HosterGui().showHoster(gui, hoster, hoster_url, thumb,
                                                input_parameter_handler=input_parameter_handler)
             else:
 
-                sHosterUrl = aEntry
-                oHoster = HosterGui().checkHoster(sHosterUrl)
-                if oHoster:
-                    oHoster.setDisplayName(sMovieTitle)
-                    oHoster.setFileName(sMovieTitle)
-                    HosterGui().showHoster(gui, oHoster, sHosterUrl, sThumb,
+                hoster_url = entry
+                hoster = HosterGui().checkHoster(hoster_url)
+                if hoster:
+                    hoster.setDisplayName(movie_title)
+                    hoster.setFileName(movie_title)
+                    HosterGui().showHoster(gui, hoster, hoster_url, thumb,
                                            input_parameter_handler=input_parameter_handler)
 
     gui.setEndOfDirectory()

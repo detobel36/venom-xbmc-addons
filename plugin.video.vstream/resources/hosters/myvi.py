@@ -13,19 +13,19 @@ class cHoster(iHoster):
     def __init__(self):
         iHoster.__init__(self, 'myvi', 'Myvi')
 
-    def _getMediaLinkForGuest(self, autoPlay=False):
+    def _getMediaLinkForGuest(self, auto_play=False):
         api_call = ''
-        oParser = Parser()
+        parser = Parser()
 
-        oRequest = RequestHandler(self._url)
-        sHtmlContent = oRequest.request().replace('\\u0026', '&')
-        cookies = oRequest.GetCookies()  # + ";"
+        request = RequestHandler(self._url)
+        html_content = request.request().replace('\\u0026', '&')
+        cookies = request.GetCookies()  # + ";"
 
-        sPattern = 'CreatePlayer.+?v=(.+?)&tp'
+        pattern = 'CreatePlayer.+?v=(.+?)&tp'
 
-        aResult = oParser.parse(sHtmlContent, sPattern)
-        if aResult[0] is True:
-            api_call = Unquote(aResult[1][0])
+        results = parser.parse(html_content, pattern)
+        if results[0] is True:
+            api_call = Unquote(results[1][0])
         if api_call:
             return True, api_call + '|User-Agent=' + UA + \
                 '&Referer=' + self._url + '&Cookie=' + cookies

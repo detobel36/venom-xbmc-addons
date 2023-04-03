@@ -2,7 +2,7 @@
 # https://github.com/Kodi-vStream/venom-xbmc-addons
 
 
-from resources.lib.comaddon import addon, SiteManager
+from resources.lib.comaddon import Addon, SiteManager
 from resources.lib.handler.requestHandler import RequestHandler
 import datetime
 import time
@@ -11,7 +11,7 @@ import time
 class cUpdate:
 
     def getUpdateSetting(self):
-        addons = addon()
+        addons = Addon()
 
         # Si pas d'ancienne date = premiere installation, on force une vieille
         # date
@@ -24,9 +24,9 @@ class cUpdate:
         time_service = self.__strptime(setting_time)
         time_sleep = datetime.timedelta(hours=72)
         if time_now - time_service > time_sleep:
-            sUrl = 'https://raw.githubusercontent.com/Kodi-vStream/venom-xbmc-addons/Beta/plugin.video.vstream/resources/sites.json'
-            oRequestHandler = RequestHandler(sUrl)
-            properties = oRequestHandler.request(jsonDecode=True)
+            url = 'https://raw.githubusercontent.com/Kodi-vStream/venom-xbmc-addons/Beta/plugin.video.vstream/resources/sites.json'
+            request_handler = RequestHandler(url)
+            properties = request_handler.request(json_decode=True)
             if properties == "":
                 return
 

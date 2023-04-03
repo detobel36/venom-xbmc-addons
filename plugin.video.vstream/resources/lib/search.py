@@ -8,7 +8,7 @@ import xbmc
 from resources.lib.gui.gui import Gui
 from resources.lib.handler.rechercheHandler import cRechercheHandler
 from resources.lib.handler.inputParameterHandler import InputParameterHandler
-from resources.lib.comaddon import Progress, VSlog, addon, window
+from resources.lib.comaddon import Progress, VSlog, Addon, window
 from resources.lib.util import Quote
 
 SITE_IDENTIFIER = 'Search'
@@ -20,7 +20,7 @@ class Search:
     MAX_NUMBER_CRITERIA = 5
 
     def __init__(self):
-        self.addons = addon()
+        self.addons = Addon()
         self.autoPlayVideo = False
         self.findAndPlay = False
         self.allVideoLink = {}
@@ -28,30 +28,30 @@ class Search:
     def load(self):
         Gui().setEndOfDirectory()
 
-    def searchGlobal(self, sSearchText='', sCat=''):
+    def searchGlobal(self, search_text='', cat=''):
         try:
-            if not sSearchText:
+            if not search_text:
                 input_parameter_handler = InputParameterHandler()
-                sSearchText = input_parameter_handler.getValue('searchtext')
-                sCat = input_parameter_handler.getValue('sCat')
+                search_text = input_parameter_handler.getValue('searchtext')
+                cat = input_parameter_handler.getValue('cat')
 
-            sSearchText = sSearchText.replace(':', ' ')
+            search_text = search_text.replace(':', ' ')
 
-            listPlugins = self._initSearch(sSearchText, sCat)
+            listPlugins = self._initSearch(search_text, cat)
 
             if len(listPlugins) == 0:
                 return True
 
             listThread = self._launchSearch(
                 listPlugins, self._pluginSearch, [
-                    Quote(sSearchText), True])
+                    Quote(search_text), True])
             self._finishSearch(listThread)
 
             gui = Gui()
             gui.addText(
                 'globalSearch',
                 self.addons.VSlang(30081) %
-                sSearchText,
+                search_text,
                 'search.png')
 
             count = 0
@@ -66,7 +66,7 @@ class Search:
                     gui.addText(
                         pluginId, '%s. [COLOR olive]%s[/COLOR]' %
                         (count, plugin['name']), 'sites/%s.png' %
-                        (pluginId))
+                                  pluginId)
                     for result in searchResults[pluginId]:
                         gui.addFolder(result['guiElement'], result['params'])
 
@@ -182,10 +182,10 @@ class Search:
                     or self._progressIsCancel())
 
     def _getAvailablePlugins(self, searchText, categorie):
-        oHandler = cRechercheHandler()
-        oHandler.setText(searchText)
-        oHandler.setCat(categorie)
-        return oHandler.getAvailablePlugins()
+        handler = cRechercheHandler()
+        handler.setText(searchText)
+        handler.setCat(categorie)
+        return handler.getAvailablePlugins()
 
     def _initSearch(self, searchText, searchCat):
         try:
@@ -206,17 +206,15 @@ class Search:
             self._progressForceClose()
             return []
 
-    def _launchSearch(self, listPlugins, targetFunction, argsList):
-        listThread = []
+    def _launchSearch(self, list_plugins, target_function, args_list):
+        list_thread = []
         window(10101).setProperty('search', 'true')
-        for plugin in listPlugins:
-            thread = threading.Thread(
-                target=targetFunction, args=tuple(
-                    [plugin] + argsList))
+        for plugin in list_plugins:
+            thread = threading.Thread(target=target_function, args=tuple([plugin] + args_list))
             thread.start()
-            listThread.append(thread)
+            list_thread.append(thread)
 
-        return listThread
+        return list_thread
 
     def _finishSearch(self, listThread):
         # On attend que les thread soient fini
@@ -267,7 +265,7 @@ class Search:
                     searchResult['params'].addParameter('playTest', 'false')
                     self.allVideoLink[numberOfCriteria].append(searchResult)
 
-                    # Si on doit autoPlay et qu'on a le maximum de critère
+                    # Si on doit auto_play et qu'on a le maximum de critère
                     if self.autoPlayVideo and numberOfCriteria == Search.MAX_NUMBER_CRITERIA:
                         # On signale qu'il faut lancer la vidéo
                         self.eventFindOneLink.set()
@@ -360,7 +358,7 @@ class Search:
         return {'title': searchTitle, 'cat': searchCat, 'year': searchYear}
 
     def _isYearCorrect(self, result, searchInfo):
-        resultYear = result['params'].getValue('sYear')
+        resultYear = result['params'].getValue('year')
         if resultYear:
             if resultYear != searchInfo['year']:
                 return 1
@@ -370,7 +368,7 @@ class Search:
         return 1
 
     def _isMovieTitleCorrect(self, result, searchInfo):
-        resultTitle = result['params'].getValue('sMovieTitle')
+        resultTitle = result['params'].getValue('movie_title')
         if resultTitle:
             if self._checkAllSearchWordInTitle(
                     searchInfo['title'], resultTitle):
@@ -385,7 +383,7 @@ class Search:
         return 0
 
     def _isLangCorrect(self, result, searchInfo):
-        resultLang = str(result['params'].getValue('sLang')).lower()
+        resultLang = str(result['params'].getValue('lang')).lower()
         # 0 = fr, vostfr ET 1 = fr ET 2 = all
         autoPlayLang = self.addons.getSetting('autoPlayLang')
 
@@ -461,19 +459,19 @@ class Search:
         resultParams = result['params']
         title = resultParams.getValue('title')
 
-        lang = resultParams.getValue('sLang')
+        lang = resultParams.getValue('lang')
         if lang:
             title += " (" + str(lang) + ")"
 
-        year = resultParams.getValue('sYear')
+        year = resultParams.getValue('year')
         if year:
             title += " " + str(year)
 
-        hoster = resultParams.getValue('sHosterIdentifier')
+        hoster = resultParams.getValue('hoster_identifier')
         if hoster:
             title += " - [COLOR skyblue]" + str(hoster) + "[/COLOR]"
 
-        quality = resultParams.getValue('sQual')
+        quality = resultParams.getValue('qual')
         if quality:
             title += " [" + str(quality).upper() + "]"
 
@@ -484,7 +482,7 @@ class Search:
         result['guiElement'].setTitle(title)
         searchGui.addFolder(result['guiElement'], result['params'], False)
 
-    def _pluginSearch(self, plugin, sSearchText, updateProcess=False):
+    def _pluginSearch(self, plugin, search_text, updateProcess=False):
         try:
             plugins = __import__(
                 'resources.sites.%s' %
@@ -492,9 +490,9 @@ class Search:
                 fromlist=[
                     plugin['identifier']])
             function = getattr(plugins, plugin['search'][1])
-            sUrl = plugin['search'][0] + str(sSearchText)
+            url = plugin['search'][0] + str(search_text)
 
-            function(sUrl)
+            function(url)
             if updateProcess:
                 self.listRemainingPlugins.remove(plugin['name'])
                 self._progressUpdate(
@@ -504,20 +502,20 @@ class Search:
         except Exception as e:
             VSlog(plugin['identifier'] + ': search failed (' + str(e) + ')')
 
-    def _executePluginForSearch(self, sSiteName, function, parameters):
-        VSlog("Execute " + str(sSiteName) + "." + str(function))
+    def _executePluginForSearch(self, site_name, function, parameters):
+        VSlog("Execute " + str(site_name) + "." + str(function))
 
         try:
             plugins = __import__(
                 'resources.sites.%s' %
-                sSiteName, fromlist=[sSiteName])
+                site_name, fromlist=[site_name])
             function = getattr(plugins, function)
             function(parameters)
             result = True
         except Exception as error:
             VSlog(
                 'could not load site: ' +
-                sSiteName +
+                site_name +
                 ' error: ' +
                 str(error))
             traceback.print_exc()

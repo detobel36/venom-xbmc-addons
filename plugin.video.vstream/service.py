@@ -7,7 +7,7 @@ import xbmcvfs
 import xbmc
 
 from datetime import datetime
-from resources.lib.comaddon import addon, VSlog, VSPath, isMatrix, SiteManager
+from resources.lib.comaddon import Addon, VSlog, VSPath, isMatrix, SiteManager
 from resources.lib.update import cUpdate
 
 
@@ -24,7 +24,7 @@ def service():
     cUpdate().getUpdateSetting()
 
     # gestion des enregistrements en cours
-    ADDON = addon()
+    ADDON = Addon()
     recordIsActivate = ADDON.getSetting('enregistrement_activer')
     if recordIsActivate == 'false':
         return
@@ -68,9 +68,9 @@ if __name__ == '__main__':
     service()
 
     if isMatrix():
-        sitesManager = SiteManager()
-        if sitesManager.isActive(
-                'toonanime') or sitesManager.isActive('kaydo_ws'):
+        sites_manager = SiteManager()
+        if sites_manager.isActive(
+                'toonanime') or sites_manager.isActive('kaydo_ws'):
             class ThreadedHTTPServer(ThreadingMixIn, HTTPServer):
                 """Handle requests in a separate thread."""
 

@@ -13,27 +13,27 @@ class cHoster(iHoster):
     def __init__(self):
         iHoster.__init__(self, 'streamlare', 'Streamlare')
 
-    def _getMediaLinkForGuest(self, autoPlay=False):
+    def _getMediaLinkForGuest(self, auto_play=False):
         api_call = False
 
-        oRequestHandler = RequestHandler(
+        request_handler = RequestHandler(
             "https://sltube.org/api/video/stream/get")
-        oRequestHandler.setRequestType(1)
-        oRequestHandler.addHeaderEntry('Referer', self._url)
-        oRequestHandler.addHeaderEntry('User-Agent', UA)
-        oRequestHandler.addParameters('id', self._url.split('/')[4])
-        sHtmlContent = oRequestHandler.request()
+        request_handler.setRequestType(1)
+        request_handler.addHeaderEntry('Referer', self._url)
+        request_handler.addHeaderEntry('User-Agent', UA)
+        request_handler.addParameters('id', self._url.split('/')[4])
+        html_content = request_handler.request()
 
-        oParser = Parser()
-        sPattern = 'label":"([^"]+).*?file":"([^"]+)'
-        aResult = oParser.parse(sHtmlContent, sPattern)
+        parser = Parser()
+        pattern = 'label":"([^"]+).*?file":"([^"]+)'
+        results = parser.parse(html_content, pattern)
 
-        if aResult[0] is True:
+        if results[0] is True:
             url = []
             qua = []
-            for aEntry in aResult[1]:
-                qua.append(aEntry[0])
-                url.append(aEntry[1])
+            for entry in results[1]:
+                qua.append(entry[0])
+                url.append(entry[1])
 
             api_call = dialog().VSselectqual(qua, url)
 

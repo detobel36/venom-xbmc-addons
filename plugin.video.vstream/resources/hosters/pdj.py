@@ -10,18 +10,18 @@ class cHoster(iHoster):
     def __init__(self):
         iHoster.__init__(self, 'pdj', 'Promo DJ')
 
-    def _getMediaLinkForGuest(self, autoPlay=False):
+    def _getMediaLinkForGuest(self, auto_play=False):
         api_call = False
 
-        oRequest = RequestHandler(self._url)
-        sHtmlContent = oRequest.request()
+        request = RequestHandler(self._url)
+        html_content = request.request()
 
-        oParser = Parser()
-        sPattern = '<span class="download">.+?href="(.+?)" ambatitle="Download podcast">'
-        aResult = oParser.parse(sHtmlContent, sPattern)
+        parser = Parser()
+        pattern = '<span class="download">.+?href="(.+?)" ambatitle="Download podcast">'
+        results = parser.parse(html_content, pattern)
 
-        if aResult[0]:
-            api_call = aResult[1][0]
+        if results[0]:
+            api_call = results[1][0]
 
         if api_call:
             return True, api_call

@@ -14,17 +14,17 @@ class cHoster(iHoster):
     def isDownloadable(self):
         return False
 
-    def _getMediaLinkForGuest(self, autoPlay=False):
+    def _getMediaLinkForGuest(self, auto_play=False):
         api_call = ''
-        oRequest = RequestHandler(self._url)
-        sHtmlContent = oRequest.request()
+        request = RequestHandler(self._url)
+        html_content = request.request()
 
-        oParser = Parser()
-        sPattern = 'file: *"([^"]+)",*'
+        parser = Parser()
+        pattern = 'file: *"([^"]+)",*'
 
-        aResult = oParser.parse(sHtmlContent, sPattern)
-        if aResult[0] is True:
-            api_call = aResult[1][0]
+        results = parser.parse(html_content, pattern)
+        if results[0] is True:
+            api_call = results[1][0]
 
         if api_call:
             return True, api_call

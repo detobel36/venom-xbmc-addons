@@ -17,28 +17,28 @@ class cHoster(iHoster):
         self._url = str(url)
         self._url = self._url.replace("/f/", "/e/")
 
-    def _getMediaLinkForGuest(self, autoPlay=False):
+    def _getMediaLinkForGuest(self, auto_play=False):
         api_call = ''
 
-        oParser = Parser()
+        parser = Parser()
 
-        oRequest = RequestHandler(self._url)
-        oRequest.addHeaderEntry('Cookie', 'hds2=1')
-        sHtmlContent = oRequest.request()
+        request = RequestHandler(self._url)
+        request.addHeaderEntry('Cookie', 'hds2=1')
+        html_content = request.request()
 
-        sPattern = '(\\s*eval\\s*\\(\\s*function(?:.|\\s)+?)<\\/script>'
-        aResult = oParser.parse(sHtmlContent, sPattern)
+        pattern = '(\\s*eval\\s*\\(\\s*function(?:.|\\s)+?)<\\/script>'
+        results = parser.parse(html_content, pattern)
 
-        if aResult[0] is True:
-            sHtmlContent = cPacker().unpack(aResult[1][0])
+        if results[0] is True:
+            html_content = cPacker().unpack(results[1][0])
 
-            sPattern = 'wurl="([^"]+)"'
-            aResult = oParser.parse(sHtmlContent, sPattern)
-            if aResult[0] is True:
-                api_call = aResult[1][0]
+            pattern = 'wurl="([^"]+)"'
+            results = parser.parse(html_content, pattern)
+            if results[0] is True:
+                api_call = results[1][0]
 
             if api_call.startswith('//'):
-                api_call = 'https:' + aResult[1][0]
+                api_call = 'https:' + results[1][0]
 
             if api_call:
                 return True, api_call

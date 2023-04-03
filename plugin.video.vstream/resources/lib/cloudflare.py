@@ -102,20 +102,20 @@ if False:
 
 # Light method
 # Ne marche que si meme user-agent
-    # req = urllib.request.Request(sUrl, None, headers)
+    # req = urllib.request.Request(url, None, headers)
     # try:
     # response = urllib.request.urlopen(req)
-    # sHtmlContent = response.read()
+    # html_content = response.read()
     # response.close()
     # except urllib.error.HTTPError as e:
     # if e.code == 503:
     # if CloudflareBypass().check(e.headers):
     # cookies = e.headers['Set-Cookie']
     # cookies = cookies.split(';')[0]
-    # sHtmlContent = CloudflareBypass().GetHtml(sUrl, e.read(), cookies)
+    # html_content = CloudflareBypass().GetHtml(url, e.read(), cookies)
 
 # Heavy method
-# sHtmlContent = CloudflareBypass().GetHtml(sUrl)
+# html_content = CloudflareBypass().GetHtml(url)
 
 # For memory
 # http://www.jsfuck.com/
@@ -145,10 +145,10 @@ class CloudflareBypass(object):
     def ParseCookies(self, data):
         list = {}
 
-        sPattern = '(?:^|[,;]) *([^;,]+?)=([^;,\\/]+)'
-        aResult = re.findall(sPattern, data)
-        if aResult:
-            for cook in aResult:
+        pattern = '(?:^|[,;]) *([^;,]+?)=([^;,\\/]+)'
+        results = re.findall(pattern, data)
+        if results:
+            for cook in results:
                 if 'deleted' in cook[1]:
                     continue
                 list[cook[0]] = cook[1]
@@ -284,13 +284,13 @@ class CloudflareBypass(object):
         MemCookie = r.cookies.get_dict()
 
         if r:
-            sContent = r.text.encode('utf-8')
+            content = r.text.encode('utf-8')
             self.RedirectionUrl = r.url
             self.Header = r.headers
             VSlog('Page ok')
         else:
             VSlog('Erreur, delete cookie')
-            sContent = ''
+            content = ''
             # self.RedirectionUrl = r.url
             # self.Header = r.headers
             MemCookie = {}
@@ -298,7 +298,7 @@ class CloudflareBypass(object):
             GestionCookie().DeleteCookie(self.host.replace('.', '_'))
 
         # fh = open('c:\\test.txt', 'w')
-        # fh.write(sContent)
+        # fh.write(content)
         # fh.close()
 
         # Memorisation des cookies
@@ -312,7 +312,7 @@ class CloudflareBypass(object):
             if Mode_Debug:
                 VSlog('Sauvegarde cookies: ' + str(c))
 
-        return sContent
+        return content
 
 
 def checklowerkey(key, dict):
@@ -330,9 +330,9 @@ def checkpart(s, end='+'):
         while True:
             c = s[pos]
 
-            if (c == '('):
+            if c == '(':
                 p = p + 1
-            if (c == ')'):
+            if c == ')':
                 p = p - 1
 
             pos = pos + 1
@@ -351,8 +351,8 @@ def CheckIfActive(data):
     return False
 
 
-def showInfo(title, sDescription, iSeconds=0):
-    if (iSeconds == 0):
-        iSeconds = 1000
+def showInfo(title, description, seconds=0):
+    if seconds == 0:
+        seconds = 1000
     else:
-        iSeconds = iSeconds * 1000
+        seconds = seconds * 1000

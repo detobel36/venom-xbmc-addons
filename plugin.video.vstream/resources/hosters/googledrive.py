@@ -21,27 +21,27 @@ class cHoster(iHoster):
     def __init__(self):
         iHoster.__init__(self, 'googledrive', 'GoogleDrive')
 
-    def __getIdFromUrl(self, sUrl):
-        sPattern = 'google.+?([a-zA-Z0-9-_]{20,40})'
-        oParser = Parser()
-        aResult = oParser.parse(sUrl, sPattern)
-        if aResult[0] is True:
-            return aResult[1][0]
+    def __getIdFromUrl(self, url):
+        pattern = 'google.+?([a-zA-Z0-9-_]{20,40})'
+        parser = Parser()
+        results = parser.parse(url, pattern)
+        if results[0] is True:
+            return results[1][0]
 
         return ''
 
-    def _getMediaLinkForGuest(self, autoPlay=False):
+    def _getMediaLinkForGuest(self, auto_play=False):
         url = []
         qua = []
         api_call = ''
 
         # reformatage du lien
-        sId = self.__getIdFromUrl(self._url)
-        sUrl = 'https://drive.google.com/file/d/' + sId + '/view'
+        s_id = self.__getIdFromUrl(self._url)
+        url = 'https://drive.google.com/file/d/' + s_id + '/view'
 
-        req = urllib2.Request(sUrl)
+        req = urllib2.Request(url)
         response = urllib2.urlopen(req)
-        sHtmlContent = response.read()
+        html_content = response.read()
 
         Headers = response.headers
         response.close()
@@ -54,23 +54,23 @@ class cHoster(iHoster):
             for cook in c2:
                 cookies = cookies + cook[0] + '=' + cook[1] + ';'
 
-        sPattern = '\\["fmt_stream_map","([^"]+)"]'
+        pattern = '\\["fmt_stream_map","([^"]+)"]'
 
-        oParser = Parser()
-        aResult = oParser.parse(sHtmlContent, sPattern)
-        if not aResult[0]:
-            if '"errorcode","150"]' in sHtmlContent:
+        parser = Parser()
+        results = parser.parse(html_content, pattern)
+        if not results[0]:
+            if '"errorcode","150"]' in html_content:
                 dialog().VSinfo("Nombre de lectures max dépassé")
             return False, False
 
-        sListUrl = aResult[1][0]
+        sListUrl = results[1][0]
 
         if sListUrl:
-            aResult2 = oParser.parse(
-                sHtmlContent, '([0-9]+)\\/([0-9]+x[0-9]+)\\/')
+            aResult2 = parser.parse(
+                html_content, '([0-9]+)\\/([0-9]+x[0-9]+)\\/')
 
         # liste les qualitee
-            r = oParser.parse(sListUrl, '([0-9]+)\\|([^,]+)')
+            r = parser.parse(sListUrl, '([0-9]+)\\|([^,]+)')
             for item in r[1]:
                 url.append(item[1].decode('unicode-escape'))
                 for i in aResult2[1]:

@@ -11,31 +11,31 @@ class cHoster(iHoster):
     def __init__(self):
         iHoster.__init__(self, 'watchvideo', 'WatchVideo')
 
-    def _getMediaLinkForGuest(self, autoPlay=False):
+    def _getMediaLinkForGuest(self, auto_play=False):
         api_call = False
 
-        oRequest = RequestHandler(self._url)
-        sHtmlContent = oRequest.request()
+        request = RequestHandler(self._url)
+        html_content = request.request()
 
-        oParser = Parser()
+        parser = Parser()
 
         # Dean Edwards Packer
-        sPattern = '(eval\\(function\\(p,a,c,k,e(?:.|\\s)+?\\))<\\/script>'
-        aResult = oParser.parse(sHtmlContent, sPattern)
+        pattern = '(eval\\(function\\(p,a,c,k,e(?:.|\\s)+?\\))<\\/script>'
+        results = parser.parse(html_content, pattern)
 
-        if aResult[0] is True:
-            sHtmlContent = cPacker().unpack(aResult[1][0])
+        if results[0] is True:
+            html_content = cPacker().unpack(results[1][0])
 
-            sPattern = '{file:"([^"]+)"\\,label:"([^"]+)"}'
-            aResult = oParser.parse(sHtmlContent, sPattern)
+            pattern = '{file:"([^"]+)"\\,label:"([^"]+)"}'
+            results = parser.parse(html_content, pattern)
 
-        if aResult[0] is True:
+        if results[0] is True:
             # initialisation des tableaux
             url = []
             qua = []
 
             # Remplissage des tableaux
-            for i in aResult[1]:
+            for i in results[1]:
                 url.append(str(i[0]))
                 qua.append(str(i[1]))
 

@@ -12,16 +12,16 @@ class cHoster(iHoster):
     def __init__(self):
         iHoster.__init__(self, 'cloudhost', 'Cloudhost')
 
-    def _getMediaLinkForGuest(self, autoPlay=False, api_call=None):
-        oRequest = RequestHandler(self._url)
-        sHtmlContent = oRequest.request()
+    def _getMediaLinkForGuest(self, auto_play=False, api_call=None):
+        request = RequestHandler(self._url)
+        html_content = request.request()
 
-        sPattern = '<source src="([^"]+)"'
-        oParser = Parser()
-        aResult = oParser.parse(sHtmlContent, sPattern)
+        pattern = '<source src="([^"]+)"'
+        parser = Parser()
+        results = parser.parse(html_content, pattern)
 
-        if aResult[0]:
-            api_call = aResult[1][0]
+        if results[0]:
+            api_call = results[1][0]
 
         if api_call:
             return True, api_call

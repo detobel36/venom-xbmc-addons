@@ -31,8 +31,8 @@ class cHoster(iHoster):
         # self.proxyURL = ''
         # self.useProxy = False
 
-    def __getPhpSessionId(self, aHeader):
-        sReponseCookie = aHeader.getheader("Set-Cookie")
+    def __getPhpSessionId(self, header):
+        sReponseCookie = header.getheader("Set-Cookie")
         aResponseCookies = sReponseCookie.split(";")
         return aResponseCookies[0]
 
@@ -225,8 +225,8 @@ class cHoster(iHoster):
         # HTTP_HEADER['Referer'] = url
         # data = self.getPage(playerUrl, {'header' : HTTP_HEADER})
 
-        oRequestHandler = RequestHandler(self._url)
-        data = oRequestHandler.request()
+        request_handler = RequestHandler(self._url)
+        data = request_handler.request()
         data = base64.b64decode(re.search('base64\\,([^"]+?)"', data).group(1))
 
         l01 = re.search("='([^']+?)'", data).group(1)
@@ -246,20 +246,20 @@ class cHoster(iHoster):
         for idx in range(len(data)):
             post_data[data[idx][0]] = data[idx][1]
 
-        oRequest = RequestHandler(playerUrl)
-        oRequest.setRequestType(RequestHandler.REQUEST_TYPE_POST)
-        oRequest.addHeaderEntry('Referer', playerUrl)
-        for aEntry in data:
-            oRequest.addParameters(aEntry[0], aEntry[1])
+        request = RequestHandler(playerUrl)
+        request.setRequestType(RequestHandler.REQUEST_TYPE_POST)
+        request.addHeaderEntry('Referer', playerUrl)
+        for entry in data:
+            request.addParameters(entry[0], entry[1])
 
-        data = oRequest.request()
-        aHeader = oRequest.getResponseHeader()
-        RealUrl = oRequest.getRealUrl()
-        # sReponseCookie = aHeader.getheader("Set-Cookie")
-        sPhpSessionId = self.__getPhpSessionId(aHeader)
+        data = request.request()
+        header = request.getResponseHeader()
+        RealUrl = request.getRealUrl()
+        # sReponseCookie = header.getheader("Set-Cookie")
+        php_session_id = self.__getPhpSessionId(header)
         # data = self.getPage(playerUrl, {'header' : HTTP_HEADER}, post_data)
         # CParsingHelper.writeToFile('/home/sulge/test.html', data)
-        print(aHeader)
+        print(header)
         print(data.read())
 
         def getUtf8Str(st):
@@ -298,22 +298,22 @@ class cHoster(iHoster):
             return file_url
         return False
 
-    def _getMediaLinkForGuest(self, autoPlay=False):
+    def _getMediaLinkForGuest(self, auto_play=False):
         # host = self.parseNETUTV(self._url)
-        oRequest = RequestHandler(
+        request = RequestHandler(
             'http://netu.tv/watch_video.php?v=S7DGB15KBN6N')
-        sHtmlContent = oRequest.request()
-        aHeader = oRequest.getResponseHeader()
-        sPhpSessionId = self.__getPhpSessionId(aHeader)
+        html_content = request.request()
+        header = request.getResponseHeader()
+        php_session_id = self.__getPhpSessionId(header)
 
-        sPattern = '<meta property="og:image" content="([^"]+)" />'
+        pattern = '<meta property="og:image" content="([^"]+)" />'
 
-        oParser = Parser()
-        aResult = oParser.parse(sHtmlContent, sPattern)
-        print(sHtmlContent)
+        parser = Parser()
+        results = parser.parse(html_content, pattern)
+        print(html_content)
 
-        if aResult[0] is True:
-            api_call = aResult[1][0]
+        if results[0] is True:
+            api_call = results[1][0]
             return True, api_call
 
         return False, False

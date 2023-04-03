@@ -11,66 +11,66 @@ class cHoster(iHoster):
     def __init__(self):
         iHoster.__init__(self, 'raptu', 'Rapidvideo')
 
-    def _getMediaLinkForGuest(self, autoPlay=False):
+    def _getMediaLinkForGuest(self, auto_play=False):
         api_call = False
 
-        sUrl = self._url
+        url = self._url
 
-        oParser = Parser()
-        oRequest = RequestHandler(sUrl)
-        sHtmlContent = oRequest.request()
+        parser = Parser()
+        request = RequestHandler(url)
+        html_content = request.request()
 
-        if 'rapidvideo' in sUrl:  # qual site film illimite
-            sPattern = '<a href="([^"]+&q=\\d+p)"'
-            aResult = oParser.parse(sHtmlContent, sPattern)
-            if aResult[0] is True:
+        if 'rapidvideo' in url:  # qual site film illimite
+            pattern = '<a href="([^"]+&q=\\d+p)"'
+            results = parser.parse(html_content, pattern)
+            if results[0] is True:
                 url = []
                 qua = []
-                for i in aResult[1]:
+                for i in results[1]:
                     url.append(str(i))
                     qua.append(str(i.rsplit('&q=', 1)[1]))
 
                 if len(url) == 1:
-                    sPattern = '<source src="([^"]+)" type="video/.+?"'
-                    aResult = oParser.parse(sHtmlContent, sPattern)
-                    if aResult[0] is True:
-                        api_call = aResult[1][0]
+                    pattern = '<source src="([^"]+)" type="video/.+?"'
+                    results = parser.parse(html_content, pattern)
+                    if results[0] is True:
+                        api_call = results[1][0]
 
                 elif len(url) > 1:
                     dialog2 = xbmcgui.Dialog()
                     ret = dialog2.select('Select Quality', qua)
                     if (ret > -1):
-                        oRequest = RequestHandler(url[ret])
-                        sHtmlContent = oRequest.request()
-                        sPattern = '<source src="([^"]+)" type="video/.+?"'
-                        aResult = oParser.parse(sHtmlContent, sPattern)
-                        if aResult[0] is True:
-                            api_call = aResult[1][0]
+                        request = RequestHandler(url[ret])
+                        html_content = request.request()
+                        pattern = '<source src="([^"]+)" type="video/.+?"'
+                        results = parser.parse(html_content, pattern)
+                        if results[0] is True:
+                            api_call = results[1][0]
 
             else:
-                oRequest = RequestHandler(sUrl)
-                sHtmlContent = oRequest.request()
-                sPattern = '<source src="([^"]+)" type="video/.+?" label="([^"]+)"'
-                aResult = oParser.parse(sHtmlContent, sPattern)
+                request = RequestHandler(url)
+                html_content = request.request()
+                pattern = '<source src="([^"]+)" type="video/.+?" label="([^"]+)"'
+                results = parser.parse(html_content, pattern)
 
                 url = []
                 qua = []
                 api_call = False
 
-                for aEntry in aResult[1]:
-                    url.append(aEntry[0])
-                    qua.append(aEntry[1])
+                for entry in results[1]:
+                    url.append(entry[0])
+                    qua.append(entry[1])
 
                 # Affichage du tableau
                 api_call = dialog().VSselectqual(qua, url)
 
         else:
-            sPattern = '{"file":"([^"]+)","label":"([^"]+)"'
-            aResult = oParser.parse(sHtmlContent, sPattern)
-            if aResult[0] is True:
+            pattern = '{"file":"([^"]+)","label":"([^"]+)"'
+            results = parser.parse(html_content, pattern)
+            if results[0] is True:
                 url = []
                 qua = []
-                for i in aResult[1]:
+                for i in results[1]:
                     url.append(str(i[0]))
                     qua.append(str(i[1]))
 

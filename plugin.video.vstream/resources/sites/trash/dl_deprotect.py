@@ -186,20 +186,20 @@ def DecryptDlProtect(url):
         reponse.close()
         return UrlRedirect
 
-    sHtmlContent = reponse.read()
+    html_content = reponse.read()
 
     # fh = open('c:\\test.txt', "w")
-    # fh.write(sHtmlContent)
+    # fh.write(html_content)
     # fh.close()
 
     # site out ?
-    if 'A technical problem occurred' in sHtmlContent:
+    if 'A technical problem occurred' in html_content:
         print 'Dl-protect HS'
         Gui().showInfo("Erreur", 'Site Dl-Protect HS', 5)
         return ''
 
     # lien HS ?
-    if 'the link you are looking for is not found' in sHtmlContent:
+    if 'the link you are looking for is not found' in html_content:
         print 'lien Dl-protect HS'
         Gui().showInfo("Erreur", 'Lien non disponible', 5)
         return ''
@@ -222,7 +222,7 @@ def DecryptDlProtect(url):
 
     # Quel captcha est utilise ?
     # Google re captcha ?
-    r = re.search('data-sitekey="([^"]+)', sHtmlContent)
+    r = re.search('data-sitekey="([^"]+)', html_content)
     if r:
         import cookielib
         import recaptcha
@@ -230,13 +230,13 @@ def DecryptDlProtect(url):
         recaptcha.performCaptcha(url, cookieJar)
         return ''
     # captcha classique
-    elif '<td align=center> Please enter the characters from the picture to see the links </td>' in sHtmlContent:
-        return ClassicCaptcha(sHtmlContent, cookies, url, headers)
+    elif '<td align=center> Please enter the characters from the picture to see the links </td>' in html_content:
+        return ClassicCaptcha(html_content, cookies, url, headers)
 
     # Pas de cpatcha, juste le boutton.
-    if 'Please click on continue to see' in sHtmlContent:
+    if 'Please click on continue to see' in html_content:
 
-        key = re.findall('input name="key" value="(.+?)"', sHtmlContent)
+        key = re.findall('input name="key" value="(.+?)"', html_content)
 
         # Ce parametre ne sert pas encore pour le moment
         mstime = int(round(time() * 1000))
@@ -262,20 +262,20 @@ def DecryptDlProtect(url):
             print e.read()
             print e.reason
 
-        sHtmlContent = reponse.read()
+        html_content = reponse.read()
 
         reponse.close()
 
-        return sHtmlContent
+        return html_content
 
     return ''
 
 
-def ClassicCaptcha(sHtmlContent, cookies, url, headers):
+def ClassicCaptcha(html_content, cookies, url, headers):
 
     s = re.findall(
         '<img id="captcha" alt="Security code" src="([^<>"]+?)"',
-        sHtmlContent)
+        html_content)
 
     if 'http://www.dl-protect.com' in s[0]:
         image = s[0]
@@ -286,7 +286,7 @@ def ClassicCaptcha(sHtmlContent, cookies, url, headers):
 
     captcha = get_response(image, cookies)
 
-    key = re.findall('name="key" value="(.+?)"', sHtmlContent)
+    key = re.findall('name="key" value="(.+?)"', html_content)
 
     # Ce parametre ne sert pas encore
     mstime = int(round(time() * 1000))
@@ -311,11 +311,11 @@ def ClassicCaptcha(sHtmlContent, cookies, url, headers):
         print e.read()
         print e.reason
 
-    sHtmlContent = reponse.read()
+    html_content = reponse.read()
     reponse.close()
 
-    if '<td align=center> Please enter the characters from the picture to see the links </td>' in sHtmlContent:
+    if '<td align=center> Please enter the characters from the picture to see the links </td>' in html_content:
         Gui().showInfo("Erreur", 'Mauvais Captcha', 5)
         return 'rate'
 
-    return sHtmlContent
+    return html_content

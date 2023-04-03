@@ -13,7 +13,7 @@ class cHoster(iHoster):
     def __init__(self):
         iHoster.__init__(self, 'alldebrid', 'Alldebrid', 'violet')
 
-    def _getMediaLinkForGuest(self, autoPlay=False):
+    def _getMediaLinkForGuest(self, auto_play=False):
         token_Alldebrid = cPremiumHandler(
             self.getPluginIdentifier()).getToken()
         if token_Alldebrid:
@@ -22,21 +22,21 @@ class cHoster(iHoster):
         else:
             return False, False
 
-        oRequest = RequestHandler(sUrl_Bypass)
-        sHtmlContent = json.loads(oRequest.request())
+        request = RequestHandler(sUrl_Bypass)
+        html_content = json.loads(request.request())
 
-        if 'error' in sHtmlContent:
-            if sHtmlContent['error']['code'] == 'LINK_HOST_NOT_SUPPORTED':
+        if 'error' in html_content:
+            if html_content['error']['code'] == 'LINK_HOST_NOT_SUPPORTED':
                 # si alldebrid ne prend pas en charge ce type de lien, on
                 # retourne le lien pour utiliser un autre hoster
                 return False, self._url
             else:
                 VSlog(
                     'Hoster Alldebrid - Error: ' +
-                    sHtmlContent["error"]['code'])
+                    html_content["error"]['code'])
                 return False, False
 
-        api_call = HostURL = sHtmlContent["data"]["link"]
+        api_call = HostURL = html_content["data"]["link"]
         try:
             mediaDisplay = HostURL.split('/')
             VSlog('Hoster Alldebrid - play : %s/ ... /%s' %

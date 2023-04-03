@@ -16,45 +16,45 @@ class cHoster(iHoster):
         iHoster.__init__(self, 'thevid', 'Thevid')
 
     def __getIdFromhtml(self, html):
-        sPattern = "var thief='([^']+)';"
-        oParser = Parser()
-        aResult = oParser.parse(html, sPattern)
-        if aResult[0] is True:
-            return aResult[1][0]
+        pattern = "var thief='([^']+)';"
+        parser = Parser()
+        results = parser.parse(html, pattern)
+        if results[0] is True:
+            return results[1][0]
 
         return ''
 
-    def _getMediaLinkForGuest(self, autoPlay=False):
-        oRequest = RequestHandler(self._url)
-        sHtmlContent = oRequest.request()
-        oParser = Parser()
+    def _getMediaLinkForGuest(self, auto_play=False):
+        request = RequestHandler(self._url)
+        html_content = request.request()
+        parser = Parser()
 
         api_call = ''
 
-        sId = self.__getIdFromhtml(sHtmlContent)
-        if sId == '':
+        s_id = self.__getIdFromhtml(html_content)
+        if s_id == '':
             return False, False
 
-        oRequest = RequestHandler('https://thevideo.cc/vsign/player/' + sId)
-        sHtmlContent2 = oRequest.request()
-        sPattern = "(\\s*eval\\s*\\(\\s*function(?:.|\\s)+?\\)\\))"
-        aResult = oParser.parse(sHtmlContent2, sPattern)
-        if aResult[0] is True:
-            sUnpacked = cPacker().unpack(aResult[1][0])
-            sPattern = 'vt=([^"]+)";'
-            aResult = oParser.parse(sUnpacked, sPattern)
-            if aResult[0] is True:
-                sVt = aResult[1][0]
+        request = RequestHandler('https://thevideo.cc/vsign/player/' + s_id)
+        sHtmlContent2 = request.request()
+        pattern = "(\\s*eval\\s*\\(\\s*function(?:.|\\s)+?\\)\\))"
+        results = parser.parse(sHtmlContent2, pattern)
+        if results[0] is True:
+            sUnpacked = cPacker().unpack(results[1][0])
+            pattern = 'vt=([^"]+)";'
+            results = parser.parse(sUnpacked, pattern)
+            if results[0] is True:
+                sVt = results[1][0]
 
-        sPattern = '"file":"([^"]+)","label":"([^"]+)"'
-        aResult = oParser.parse(sHtmlContent, sPattern)
-        if aResult[0] is True:
+        pattern = '"file":"([^"]+)","label":"([^"]+)"'
+        results = parser.parse(html_content, pattern)
+        if results[0] is True:
             # initialisation des tableaux
             url = []
             qua = []
 
             # Remplissage des tableaux
-            for i in aResult[1]:
+            for i in results[1]:
                 url.append(str(i[0]))
                 qua.append(str(i[1]))
 

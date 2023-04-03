@@ -4,7 +4,7 @@
 
 from resources.hosters.hoster import iHoster
 from resources.hosters.uptostream import cHoster as uptostreamHoster
-from resources.lib.comaddon import dialog, VSlog, addon
+from resources.lib.comaddon import dialog, VSlog, Addon
 from resources.lib.handler.premiumHandler import cPremiumHandler
 from resources.lib.handler.requestHandler import RequestHandler
 
@@ -13,7 +13,7 @@ class cHoster(iHoster):
 
     def __init__(self):
         iHoster.__init__(self, 'uptobox', 'Uptobox', 'violet')
-        self.oPremiumHandler = None
+        self.premium_handler = None
 
     def setUrl(self, url):
         self._url = str(url)
@@ -21,13 +21,13 @@ class cHoster(iHoster):
         self._url = self._url.replace('http:', 'https:')
         self._url = self._url.split('?aff_id')[0]
 
-    def checkUrl(self, sUrl):
+    def checkUrl(self, url):
         return True
 
-    def getMediaLink(self, autoPlay=False):
-        self.oPremiumHandler = cPremiumHandler(self.getPluginIdentifier())
-        if self.oPremiumHandler.isPremiumModeAvailable():
-            ADDON = addon()
+    def getMediaLink(self, auto_play=False):
+        self.premium_handler = cPremiumHandler(self.getPluginIdentifier())
+        if self.premium_handler.isPremiumModeAvailable():
+            ADDON = Addon()
 
             try:
                 mDefault = int(ADDON.getSetting("hoster_uptobox_mode_default"))
@@ -46,36 +46,36 @@ class cHoster(iHoster):
 
             # mode stream
             if ret == 0:
-                return self._getMediaLinkForGuest(autoPlay)
+                return self._getMediaLinkForGuest(auto_play)
             # mode DL
             if ret == 1:
-                return self._getMediaLinkByPremiumUser(autoPlay)
+                return self._getMediaLinkByPremiumUser(auto_play)
 
             return False
 
         else:
             VSlog('UPTOBOX - no premium')
-            return self._getMediaLinkForGuest(autoPlay)
+            return self._getMediaLinkForGuest(auto_play)
 
-    def _getMediaLinkForGuest(self, autoPlay=False):
+    def _getMediaLinkForGuest(self, auto_play=False):
         self._url = self._url.replace('uptobox.com/', 'uptostream.com/')
 
         # On redirige vers le hoster uptostream
-        oHoster = uptostreamHoster()
-        oHoster.setUrl(self._url)
-        return oHoster.getMediaLink()
+        hoster = uptostreamHoster()
+        hoster.setUrl(self._url)
+        return hoster.getMediaLink()
 
-    def _getMediaLinkByPremiumUser(self, autoPlay=False):
-        token = self.oPremiumHandler.getToken()
+    def _getMediaLinkByPremiumUser(self, auto_play=False):
+        token = self.premium_handler.getToken()
         if not token:
-            return self._getMediaLinkForGuest(autoPlay)
+            return self._getMediaLinkForGuest(auto_play)
 
         fileCode = self._url.split('/')[-1].split('?')[0]
         url1 = "https://uptobox.com/api/link?token=%s&file_code=%s" % (
             token, fileCode)
         try:
-            oRequestHandler = RequestHandler(url1)
-            dict_liens = oRequestHandler.request(jsonDecode=True)
+            request_handler = RequestHandler(url1)
+            dict_liens = request_handler.request(json_decode=True)
             statusCode = dict_liens["statusCode"]
             if statusCode == 0:  # success
                 return True, dict_liens["data"]["dlLink"]

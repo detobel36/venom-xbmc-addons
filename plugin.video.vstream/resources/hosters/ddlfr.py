@@ -15,20 +15,20 @@ class cHoster(iHoster):
     def __init__(self):
         iHoster.__init__(self, 'ddlfr', 'ddlfr')
 
-    def _getMediaLinkForGuest(self, autoPlay=False):
+    def _getMediaLinkForGuest(self, auto_play=False):
         api_call = ''
 
-        oRequest = RequestHandler(self._url)
-        oRequest.addHeaderEntry('Referer', self._url)
-        sHtmlContent = oRequest.request()
-        # VSlog(sHtmlContent)
-        oParser = Parser()
-        sPattern = 'JuicyCodes\\.Run\\("(.+?)"\\);'
-        aResult = oParser.parse(sHtmlContent, sPattern)
-        # VSlog(aResult)
-        if aResult[0] is True:
+        request = RequestHandler(self._url)
+        request.addHeaderEntry('Referer', self._url)
+        html_content = request.request()
+        # VSlog(html_content)
+        parser = Parser()
+        pattern = 'JuicyCodes\\.Run\\("(.+?)"\\);'
+        results = parser.parse(html_content, pattern)
+        # VSlog(results)
+        if results[0] is True:
 
-            media = aResult[1][0].replace('+', '')
+            media = results[1][0].replace('+', '')
             media = base64.b64decode(media)
 
             # cPacker decode
@@ -36,16 +36,16 @@ class cHoster(iHoster):
             # VSlog(media)
             if media:
 
-                sPattern = '{"file":"(.+?)","label":"(.+?)"'
-                aResult = oParser.parse(media, sPattern)
-                # VSlog(aResult)
+                pattern = '{"file":"(.+?)","label":"(.+?)"'
+                results = parser.parse(media, pattern)
+                # VSlog(results)
 
                 # initialisation des tableaux
-                if aResult[0] is True:
+                if results[0] is True:
                     url = []
                     qua = []
                 # Remplissage des tableaux
-                    for i in aResult[1]:
+                    for i in results[1]:
                         url.append(str(i[0] + '|Referer=' + self._url))
                         qua.append(str(i[1]))
                 # Si une seule url

@@ -12,18 +12,18 @@ class cHoster(iHoster):
     def __init__(self):
         iHoster.__init__(self, 'dustreaming', 'Dustreaming')
 
-    def _getMediaLinkForGuest(self, autoPlay=False):
+    def _getMediaLinkForGuest(self, auto_play=False):
         api_call = ''
 
         url = self._url.replace('/v/', '/api/source/')
-        oRequest = RequestHandler(url)
-        oRequest.setRequestType(RequestHandler.REQUEST_TYPE_POST)
-        oRequest.addHeaderEntry('Referer', self._url)
-        oRequest.addParameters('r', '')
-        oRequest.addParameters('d', 'dustreaming.fr')
-        sHtmlContent = oRequest.request()
+        request = RequestHandler(url)
+        request.setRequestType(RequestHandler.REQUEST_TYPE_POST)
+        request.addHeaderEntry('Referer', self._url)
+        request.addParameters('r', '')
+        request.addParameters('d', 'dustreaming.fr')
+        html_content = request.request()
 
-        page = json.loads(sHtmlContent)
+        page = json.loads(html_content)
         if page:
             url = []
             qua = []

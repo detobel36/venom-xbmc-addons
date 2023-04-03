@@ -43,7 +43,7 @@ def load():
     gui = Gui()
 
     output_parameter_handler = OutputParameterHandler()
-    output_parameter_handler.addParameter('siteUrl', URL_MAIN)
+    output_parameter_handler.addParameter('site_url', URL_MAIN)
     gui.addDir(
         SITE_IDENTIFIER,
         'showDailyList',
@@ -52,7 +52,7 @@ def load():
         output_parameter_handler)
 
     output_parameter_handler = OutputParameterHandler()
-    output_parameter_handler.addParameter('siteUrl', IPTV_WORLD)
+    output_parameter_handler.addParameter('site_url', IPTV_WORLD)
     gui.addDir(
         SITE_IDENTIFIER,
         'showDailyList',
@@ -61,7 +61,7 @@ def load():
         output_parameter_handler)
 
     output_parameter_handler = OutputParameterHandler()
-    output_parameter_handler.addParameter('siteUrl', IPTV_FRANCE)
+    output_parameter_handler.addParameter('site_url', IPTV_FRANCE)
     gui.addDir(
         SITE_IDENTIFIER,
         'showDailyList',
@@ -70,7 +70,7 @@ def load():
         output_parameter_handler)
 
     output_parameter_handler = OutputParameterHandler()
-    output_parameter_handler.addParameter('siteUrl', IPTV_AFRIQUE)
+    output_parameter_handler.addParameter('site_url', IPTV_AFRIQUE)
     gui.addDir(
         SITE_IDENTIFIER,
         'showDailyList',
@@ -79,7 +79,7 @@ def load():
         output_parameter_handler)
 
     output_parameter_handler = OutputParameterHandler()
-    output_parameter_handler.addParameter('siteUrl', IPTV_ALLEMAGNE)
+    output_parameter_handler.addParameter('site_url', IPTV_ALLEMAGNE)
     gui.addDir(
         SITE_IDENTIFIER,
         'showDailyList',
@@ -88,7 +88,7 @@ def load():
         output_parameter_handler)
 
     output_parameter_handler = OutputParameterHandler()
-    output_parameter_handler.addParameter('siteUrl', IPTV_ANGLETERRE)
+    output_parameter_handler.addParameter('site_url', IPTV_ANGLETERRE)
     gui.addDir(
         SITE_IDENTIFIER,
         'showDailyList',
@@ -97,7 +97,7 @@ def load():
         output_parameter_handler)
 
     output_parameter_handler = OutputParameterHandler()
-    output_parameter_handler.addParameter('siteUrl', IPTV_ARABIC)
+    output_parameter_handler.addParameter('site_url', IPTV_ARABIC)
     gui.addDir(
         SITE_IDENTIFIER,
         'showDailyList',
@@ -106,11 +106,11 @@ def load():
         output_parameter_handler)
 
     # output_parameter_handler = OutputParameterHandler()
-    # output_parameter_handler.addParameter('siteUrl', IPTV_AUTRICHE)
+    # output_parameter_handler.addParameter('site_url', IPTV_AUTRICHE)
     # gui.addDir(SITE_IDENTIFIER, 'showDailyList', 'listes Autriche', 'tv.png', output_parameter_handler)
 
     output_parameter_handler = OutputParameterHandler()
-    output_parameter_handler.addParameter('siteUrl', IPTV_BELGIQUE)
+    output_parameter_handler.addParameter('site_url', IPTV_BELGIQUE)
     gui.addDir(
         SITE_IDENTIFIER,
         'showDailyList',
@@ -119,7 +119,7 @@ def load():
         output_parameter_handler)
 
     output_parameter_handler = OutputParameterHandler()
-    output_parameter_handler.addParameter('siteUrl', IPTV_BRESIL)
+    output_parameter_handler.addParameter('site_url', IPTV_BRESIL)
     gui.addDir(
         SITE_IDENTIFIER,
         'showDailyList',
@@ -128,7 +128,7 @@ def load():
         output_parameter_handler)
 
     output_parameter_handler = OutputParameterHandler()
-    output_parameter_handler.addParameter('siteUrl', IPTV_CANADA)
+    output_parameter_handler.addParameter('site_url', IPTV_CANADA)
     gui.addDir(
         SITE_IDENTIFIER,
         'showDailyList',
@@ -137,7 +137,7 @@ def load():
         output_parameter_handler)
 
     output_parameter_handler = OutputParameterHandler()
-    output_parameter_handler.addParameter('siteUrl', IPTV_CHINE)
+    output_parameter_handler.addParameter('site_url', IPTV_CHINE)
     gui.addDir(
         SITE_IDENTIFIER,
         'showDailyList',
@@ -146,7 +146,7 @@ def load():
         output_parameter_handler)
 
     output_parameter_handler = OutputParameterHandler()
-    output_parameter_handler.addParameter('siteUrl', IPTV_ESPAGNE)
+    output_parameter_handler.addParameter('site_url', IPTV_ESPAGNE)
     gui.addDir(
         SITE_IDENTIFIER,
         'showDailyList',
@@ -155,7 +155,7 @@ def load():
         output_parameter_handler)
 
     output_parameter_handler = OutputParameterHandler()
-    output_parameter_handler.addParameter('siteUrl', IPTV_HOLLANDE)
+    output_parameter_handler.addParameter('site_url', IPTV_HOLLANDE)
     gui.addDir(
         SITE_IDENTIFIER,
         'showDailyList',
@@ -164,7 +164,7 @@ def load():
         output_parameter_handler)
 
     output_parameter_handler = OutputParameterHandler()
-    output_parameter_handler.addParameter('siteUrl', IPTV_ITALIE)
+    output_parameter_handler.addParameter('site_url', IPTV_ITALIE)
     gui.addDir(
         SITE_IDENTIFIER,
         'showDailyList',
@@ -173,7 +173,7 @@ def load():
         output_parameter_handler)
 
     output_parameter_handler = OutputParameterHandler()
-    output_parameter_handler.addParameter('siteUrl', IPTV_PORTUGAL)
+    output_parameter_handler.addParameter('site_url', IPTV_PORTUGAL)
     gui.addDir(
         SITE_IDENTIFIER,
         'showDailyList',
@@ -182,7 +182,7 @@ def load():
         output_parameter_handler)
 
     output_parameter_handler = OutputParameterHandler()
-    output_parameter_handler.addParameter('siteUrl', IPTV_SUISSE)
+    output_parameter_handler.addParameter('site_url', IPTV_SUISSE)
     gui.addDir(
         SITE_IDENTIFIER,
         'showDailyList',
@@ -191,7 +191,7 @@ def load():
         output_parameter_handler)
 
     output_parameter_handler = OutputParameterHandler()
-    output_parameter_handler.addParameter('siteUrl', IPTV_SUISSE)
+    output_parameter_handler.addParameter('site_url', IPTV_SUISSE)
     gui.addDir(
         SITE_IDENTIFIER,
         'showDailyList',
@@ -200,7 +200,7 @@ def load():
         output_parameter_handler)
 
     output_parameter_handler = OutputParameterHandler()
-    output_parameter_handler.addParameter('siteUrl', IPTV_TURK)
+    output_parameter_handler.addParameter('site_url', IPTV_TURK)
     gui.addDir(
         SITE_IDENTIFIER,
         'showDailyList',
@@ -209,7 +209,7 @@ def load():
         output_parameter_handler)
 
     output_parameter_handler = OutputParameterHandler()
-    output_parameter_handler.addParameter('siteUrl', IPTV_USA)
+    output_parameter_handler.addParameter('site_url', IPTV_USA)
     gui.addDir(
         SITE_IDENTIFIER,
         'showDailyList',
@@ -218,7 +218,7 @@ def load():
         output_parameter_handler)
 
     output_parameter_handler = OutputParameterHandler()
-    output_parameter_handler.addParameter('siteUrl', IPTV_SPORT)
+    output_parameter_handler.addParameter('site_url', IPTV_SPORT)
     gui.addDir(
         SITE_IDENTIFIER,
         'showDailyList',
@@ -227,7 +227,7 @@ def load():
         output_parameter_handler)
 
     output_parameter_handler = OutputParameterHandler()
-    output_parameter_handler.addParameter('siteUrl', IPTV_VOD)
+    output_parameter_handler.addParameter('site_url', IPTV_VOD)
     gui.addDir(
         SITE_IDENTIFIER,
         'showDailyList',
@@ -241,28 +241,28 @@ def load():
 def showDailyList():
     gui = Gui()
     input_parameter_handler = InputParameterHandler()
-    sUrl = input_parameter_handler.getValue('siteUrl')
+    url = input_parameter_handler.getValue('site_url')
 
-    oParser = Parser()
-    sHtmlContent = getHtml(sUrl)
-    sPattern = '<h2 class="entry-title"><a href="(.+?)" rel="bookmark">(.+?)</a>'
-    aResult = oParser.parse(sHtmlContent, sPattern)
+    parser = Parser()
+    html_content = getHtml(url)
+    pattern = '<h2 class="entry-title"><a href="(.+?)" rel="bookmark">(.+?)</a>'
+    results = parser.parse(html_content, pattern)
 
-    if aResult[0]:
-        total = len(aResult[1])
+    if results[0]:
+        total = len(results[1])
         progress_ = Progress().VScreate(SITE_NAME)
 
-        for aEntry in aResult[1]:
+        for entry in results[1]:
             progress_.VSupdate(progress_, total)
             if progress_.iscanceled():
                 break
 
-            sUrl2 = aEntry[0]
-            title = aEntry[1]
+            url2 = entry[0]
+            title = entry[1]
 
             output_parameter_handler = OutputParameterHandler()
-            output_parameter_handler.addParameter('siteUrl', sUrl2)
-            output_parameter_handler.addParameter('sMovieTitle', title)
+            output_parameter_handler.addParameter('site_url', url2)
+            output_parameter_handler.addParameter('movie_title', title)
 
             gui.addDir(
                 SITE_IDENTIFIER,
@@ -273,11 +273,11 @@ def showDailyList():
 
         progress_.VSclose(progress_)
 
-        sNextPage = __checkForNextPage(sHtmlContent)
-        if (sNextPage):
+        next_page = __checkForNextPage(html_content)
+        if (next_page):
             output_parameter_handler = OutputParameterHandler()
-            output_parameter_handler.addParameter('siteUrl', sNextPage)
-            sNumPage = re.search('pages/([0-9]+)', sNextPage).group(1)
+            output_parameter_handler.addParameter('site_url', next_page)
+            sNumPage = re.search('pages/([0-9]+)', next_page).group(1)
             gui.addNext(
                 SITE_IDENTIFIER,
                 'showDailyList',
@@ -287,13 +287,13 @@ def showDailyList():
     gui.setEndOfDirectory()
 
 
-def __checkForNextPage(sHtmlContent):
-    oParser = Parser()
-    sPattern = 'class="next page-numbers" href="(.+?)"'
-    aResult = oParser.parse(sHtmlContent, sPattern)
+def __checkForNextPage(html_content):
+    parser = Parser()
+    pattern = 'class="next page-numbers" href="(.+?)"'
+    results = parser.parse(html_content, pattern)
 
-    if aResult[0]:
-        return aResult[1][0]
+    if results[0]:
+        return results[1][0]
 
     return False
 
@@ -302,26 +302,26 @@ def showAllPlaylist():  # On recupere les differentes playlist si il y en a
     gui = Gui()
 
     input_parameter_handler = InputParameterHandler()
-    sUrl = input_parameter_handler.getValue('siteUrl')
-    title = input_parameter_handler.getValue('sMovieTitle')
+    url = input_parameter_handler.getValue('site_url')
+    title = input_parameter_handler.getValue('movie_title')
 
-    oParser = Parser()
-    sHtmlContent = getHtml(sUrl)
-    sPattern = '<a class="more-link" title="(.+?)".+?href="(.+?)"'
-    aResult = oParser.parse(sHtmlContent, sPattern)
+    parser = Parser()
+    html_content = getHtml(url)
+    pattern = '<a class="more-link" title="(.+?)".+?href="(.+?)"'
+    results = parser.parse(html_content, pattern)
 
-    if aResult[0]:
+    if results[0]:
         sTitleTest = ''
-        total = len(aResult[1])
+        total = len(results[1])
         progress_ = Progress().VScreate(SITE_NAME)
 
-        for aEntry in aResult[1]:
+        for entry in results[1]:
             progress_.VSupdate(progress_, total)
             if progress_.iscanceled():
                 break
 
-            title = aEntry[0]
-            sUrl2 = aEntry[1]
+            title = entry[0]
+            url2 = entry[1]
 
             if (title == sTitleTest):
                 continue
@@ -329,8 +329,8 @@ def showAllPlaylist():  # On recupere les differentes playlist si il y en a
                 sTitleTest = title
 
             output_parameter_handler = OutputParameterHandler()
-            output_parameter_handler.addParameter('siteUrl', sUrl2)
-            output_parameter_handler.addParameter('sMovieTitle', title)
+            output_parameter_handler.addParameter('site_url', url2)
+            output_parameter_handler.addParameter('movie_title', title)
 
             gui.addDir(
                 SITE_IDENTIFIER,
@@ -347,13 +347,13 @@ def showAllPlaylist():  # On recupere les differentes playlist si il y en a
 def showAllPlaylist2():  # On recupere les differentes playlist si il y en a
     gui = Gui()
     input_parameter_handler = InputParameterHandler()
-    sUrl = input_parameter_handler.getValue('siteUrl')
-    title = input_parameter_handler.getValue('sMovieTitle')
+    url = input_parameter_handler.getValue('site_url')
+    title = input_parameter_handler.getValue('movie_title')
 
-    sHtmlContent = getHtml(sUrl)
-    sUrl2 = getDownloadLink(sHtmlContent)
+    html_content = getHtml(url)
+    url2 = getDownloadLink(html_content)
 
-    for url in sUrl2:
+    for url in url2:
 
         if 'download' in url:
             VSlog('Redirect')
@@ -363,7 +363,7 @@ def showAllPlaylist2():  # On recupere les differentes playlist si il y en a
             gui.addText(SITE_IDENTIFIER, 'rien')
 
         output_parameter_handler = OutputParameterHandler()
-        output_parameter_handler.addParameter('siteUrl', sUrl)
+        output_parameter_handler.addParameter('site_url', url)
 
         gui.addDir(
             SITE_IDENTIFIER,

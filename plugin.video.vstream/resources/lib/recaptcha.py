@@ -45,31 +45,22 @@ class cInputWindow(xbmcgui.WindowDialog):
         self.img = xbmcgui.ControlImage(250, 110, 780, 499, self.cptloc)
         xbmc.sleep(500)
 
-        bg_image = os.path.join(
-            __addon__.getAddonInfo('path'),
-            'resources/art/') + 'background.png'
-        check_image = os.path.join(
-            __addon__.getAddonInfo('path'),
-            'resources/art/') + 'trans_checked.png'
+        bg_image = os.path.join(__addon__.getAddonInfo('path'), 'resources/art/') + 'background.png'
+        check_image = os.path.join(__addon__.getAddonInfo('path'), 'resources/art/') + 'trans_checked.png'
 
         self.ctrlBackground = xbmcgui.ControlImage(0, 0, 1280, 720, bg_image)
         self.cancelled = False
         self.addControl(self.ctrlBackground)
 
-        self.strActionInfo = xbmcgui.ControlLabel(
-            250,
-            20,
-            724,
-            400,
+        self.strActionInfo = xbmcgui.ControlLabel(250, 20, 724, 400,
             'Veuillez sélectionnez les images correspondants au thème.\nIl devrait y en avoir 3 ou 4 à sélectionner.',
-            'font40',
-            '0xFFFF00FF')
+            'font40', '0xFFFF00FF')
         self.addControl(self.strActionInfo)
 
         self.msg = kwargs.get('msg')
         self.roundnum = kwargs.get('roundnum')
-        self.strActionInfo = xbmcgui.ControlLabel(
-            250, 70, 700, 300, 'Le thème est: ' + self.msg, 'font13', '0xFFFF00FF')
+        self.strActionInfo = xbmcgui.ControlLabel(250, 70, 700, 300, 'Le thème est: ' + self.msg, 'font13',
+                                                  '0xFFFF00FF')
         self.addControl(self.strActionInfo)
 
         self.addControl(self.img)
@@ -79,14 +70,7 @@ class cInputWindow(xbmcgui.WindowDialog):
         self.chkstate = [False] * 9
 
         if 1 == 2:
-            self.chk[0] = xbmcgui.ControlCheckMark(
-                250,
-                110,
-                260,
-                166,
-                '1',
-                font='font14',
-                focusTexture=check_image,
+            self.chk[0] = xbmcgui.ControlCheckMark(250, 110, 260, 166, '1', font='font14', focusTexture=check_image,
                 checkWidth=260,
                 checkHeight=166)
             self.chk[1] = xbmcgui.ControlCheckMark(
@@ -174,45 +158,28 @@ class cInputWindow(xbmcgui.WindowDialog):
 
         else:
             self.chk[0] = xbmcgui.ControlImage(250, 110, 260, 166, check_image)
-            self.chk[1] = xbmcgui.ControlImage(
-                250 + 260, 110, 260, 166, check_image)
-            self.chk[2] = xbmcgui.ControlImage(
-                250 + 520, 110, 260, 166, check_image)
+            self.chk[1] = xbmcgui.ControlImage(250 + 260, 110, 260, 166, check_image)
+            self.chk[2] = xbmcgui.ControlImage(250 + 520, 110, 260, 166, check_image)
 
-            self.chk[3] = xbmcgui.ControlImage(
-                250, 110 + 166, 260, 166, check_image)
-            self.chk[4] = xbmcgui.ControlImage(
-                250 + 260, 110 + 166, 260, 166, check_image)
-            self.chk[5] = xbmcgui.ControlImage(
-                250 + 520, 110 + 166, 260, 166, check_image)
+            self.chk[3] = xbmcgui.ControlImage(250, 110 + 166, 260, 166, check_image)
+            self.chk[4] = xbmcgui.ControlImage(250 + 260, 110 + 166, 260, 166, check_image)
+            self.chk[5] = xbmcgui.ControlImage(250 + 520, 110 + 166, 260, 166, check_image)
 
-            self.chk[6] = xbmcgui.ControlImage(
-                250, 110 + 332, 260, 166, check_image)
-            self.chk[7] = xbmcgui.ControlImage(
-                250 + 260, 110 + 332, 260, 166, check_image)
-            self.chk[8] = xbmcgui.ControlImage(
-                250 + 520, 110 + 332, 260, 166, check_image)
+            self.chk[6] = xbmcgui.ControlImage(250, 110 + 332, 260, 166, check_image)
+            self.chk[7] = xbmcgui.ControlImage(250 + 260, 110 + 332, 260, 166, check_image)
+            self.chk[8] = xbmcgui.ControlImage(250 + 520, 110 + 332, 260, 166, check_image)
 
-            self.chkbutton[0] = xbmcgui.ControlButton(
-                250, 110, 260, 166, '1', font='font1')
-            self.chkbutton[1] = xbmcgui.ControlButton(
-                250 + 260, 110, 260, 166, '2', font='font1')
-            self.chkbutton[2] = xbmcgui.ControlButton(
-                250 + 520, 110, 260, 166, '3', font='font1')
+            self.chkbutton[0] = xbmcgui.ControlButton(250, 110, 260, 166, '1', font='font1')
+            self.chkbutton[1] = xbmcgui.ControlButton(250 + 260, 110, 260, 166, '2', font='font1')
+            self.chkbutton[2] = xbmcgui.ControlButton(250 + 520, 110, 260, 166, '3', font='font1')
 
-            self.chkbutton[3] = xbmcgui.ControlButton(
-                250, 110 + 166, 260, 166, '4', font='font1')
-            self.chkbutton[4] = xbmcgui.ControlButton(
-                250 + 260, 110 + 166, 260, 166, '5', font='font1')
-            self.chkbutton[5] = xbmcgui.ControlButton(
-                250 + 520, 110 + 166, 260, 166, '6', font='font1')
+            self.chkbutton[3] = xbmcgui.ControlButton(250, 110 + 166, 260, 166, '4', font='font1')
+            self.chkbutton[4] = xbmcgui.ControlButton(250 + 260, 110 + 166, 260, 166, '5', font='font1')
+            self.chkbutton[5] = xbmcgui.ControlButton(250 + 520, 110 + 166, 260, 166, '6', font='font1')
 
-            self.chkbutton[6] = xbmcgui.ControlButton(
-                250, 110 + 332, 260, 166, '7', font='font1')
-            self.chkbutton[7] = xbmcgui.ControlButton(
-                250 + 260, 110 + 332, 260, 166, '8', font='font1')
-            self.chkbutton[8] = xbmcgui.ControlButton(
-                250 + 520, 110 + 332, 260, 166, '9', font='font1')
+            self.chkbutton[6] = xbmcgui.ControlButton(250, 110 + 332, 260, 166, '7', font='font1')
+            self.chkbutton[7] = xbmcgui.ControlButton(250 + 260, 110 + 332, 260, 166, '8', font='font1')
+            self.chkbutton[8] = xbmcgui.ControlButton(250 + 520, 110 + 332, 260, 166, '9', font='font1')
 
         for obj in self.chk:
             self.addControl(obj)
@@ -220,10 +187,8 @@ class cInputWindow(xbmcgui.WindowDialog):
         for obj in self.chkbutton:
             self.addControl(obj)
 
-        self.cancelbutton = xbmcgui.ControlButton(
-            250 + 260 - 70, 620, 140, 50, 'Cancel', alignment=2)
-        self.okbutton = xbmcgui.ControlButton(
-            250 + 520 - 50, 620, 100, 50, 'OK', alignment=2)
+        self.cancelbutton = xbmcgui.ControlButton(250 + 260 - 70, 620, 140, 50, 'Cancel', alignment=2)
+        self.okbutton = xbmcgui.ControlButton(250 + 520 - 50, 620, 100, 50, 'OK', alignment=2)
         self.addControl(self.okbutton)
         self.addControl(self.cancelbutton)
 
@@ -326,28 +291,19 @@ class cInputWindow(xbmcgui.WindowDialog):
 
 def ResolveCaptcha(key, urlOuo):
     urlBase = 'https://www.google.com/recaptcha/api/fallback?k=' + key
-    oRequestHandler = RequestHandler(urlBase)
-    oRequestHandler.addHeaderEntry('User-Agent', UA)
-    oRequestHandler.addHeaderEntry(
-        'Accept', 'text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8')
-    oRequestHandler.addHeaderEntry(
-        'Accept-Language',
-        'fr,fr-FR;q=0.8,en-US;q=0.5,en;q=0.3')
-    oRequestHandler.addHeaderEntry('Accept-Encoding', 'gzip, deflate')
-    oRequestHandler.addHeaderEntry('Referer', urlOuo)
-    body = oRequestHandler.request()
+    request_handler = RequestHandler(urlBase)
+    request_handler.addHeaderEntry('User-Agent', UA)
+    request_handler.addHeaderEntry('Accept', 'text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8')
+    request_handler.addHeaderEntry('Accept-Language', 'fr,fr-FR;q=0.8,en-US;q=0.5,en;q=0.3')
+    request_handler.addHeaderEntry('Accept-Encoding', 'gzip, deflate')
+    request_handler.addHeaderEntry('Referer', urlOuo)
+    body = request_handler.request()
 
-    captchaScrap = re.findall(
-        'value="8"><img class="fbc-imageselect-payload" src="(.+?)"',
-        str(body))
+    captchaScrap = re.findall('value="8"><img class="fbc-imageselect-payload" src="(.+?)"', str(body))
 
-    text = re.search(
-        '<div class="rc-imageselect.+?">.+?<strong>(.+?)</strong>',
-        str(body)).group(1)
+    text = re.search('<div class="rc-imageselect.+?">.+?<strong>(.+?)</strong>', str(body)).group(1)
 
-    c = re.search(
-        'method="POST"><input type="hidden" name="c" value="(.+?)"',
-        str(body)).group(1)
+    c = re.search('method="POST"><input type="hidden" name="c" value="(.+?)"', str(body)).group(1)
     k = re.search('k=(.+?)" alt=', str(body)).group(1)
     params = {"c": c, "k": k}
     query_string = urlEncode(params)
@@ -356,8 +312,8 @@ def ResolveCaptcha(key, urlOuo):
 
     filePath = 'special://home/userdata/addon_data/plugin.video.vstream/Captcha.raw'
 
-    oRequestHandler = RequestHandler(url)
-    htmlcontent = oRequestHandler.request()
+    request_handler = RequestHandler(url)
+    htmlcontent = request_handler.request()
 
     downloaded_image = xbmcvfs.File(filePath, 'wb')
     downloaded_image.write(htmlcontent)
@@ -381,54 +337,34 @@ def ResolveCaptcha(key, urlOuo):
 
     params = 'c=' + c + responseFinal
 
-    oRequestHandler = RequestHandler(urlBase)
-    oRequestHandler.setRequestType(1)
-    oRequestHandler.addHeaderEntry('User-Agent', UA)
-    oRequestHandler.addHeaderEntry(
-        'Accept', 'text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8')
-    oRequestHandler.addHeaderEntry(
-        'Accept-Language',
-        'fr,fr-FR;q=0.8,en-US;q=0.5,en;q=0.3')
-    oRequestHandler.addHeaderEntry('Accept-Encoding', 'gzip, deflate')
-    oRequestHandler.addHeaderEntry('Referer', url)
-    oRequestHandler.addHeaderEntry(
-        'Content-Type',
-        'application/x-www-form-urlencoded')
-    oRequestHandler.addHeaderEntry('Content-Length', str(len(params)))
-    oRequestHandler.addParametersLine(params)
+    request_handler = RequestHandler(urlBase)
+    request_handler.setRequestType(1)
+    request_handler.addHeaderEntry('User-Agent', UA)
+    request_handler.addHeaderEntry('Accept', 'text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8')
+    request_handler.addHeaderEntry('Accept-Language', 'fr,fr-FR;q=0.8,en-US;q=0.5,en;q=0.3')
+    request_handler.addHeaderEntry('Accept-Encoding', 'gzip, deflate')
+    request_handler.addHeaderEntry('Referer', url)
+    request_handler.addHeaderEntry('Content-Type', 'application/x-www-form-urlencoded')
+    request_handler.addHeaderEntry('Content-Length', str(len(params)))
+    request_handler.addParametersLine(params)
 
-    sHtmlContent = oRequestHandler.request()
+    html_content = request_handler.request()
 
-    token = re.search(
-        '<textarea dir="ltr" readonly>(.+?)<',
-        sHtmlContent).group(1)
+    token = re.search('<textarea dir="ltr" readonly>(.+?)<', html_content).group(1)
     if not token:
         dialogs = dialog()
         dialogs.VSinfo("Captcha non valide")
     return token
 
 
-def getUrl(
-        url,
-        cookieJar=None,
-        post=None,
-        timeout=20,
-        headers=None,
-        noredir=False):
+def getUrl(url, cookie_jar=None, post=None, timeout=20, headers=None, noredir=False):
 
-    cookie_handler = urllib2.HTTPCookieProcessor(cookieJar)
+    cookie_handler = urllib2.HTTPCookieProcessor(cookie_jar)
 
     if noredir:
-        opener = urllib2.build_opener(
-            Noredirection,
-            cookie_handler,
-            urllib2.HTTPBasicAuthHandler(),
-            urllib2.HTTPHandler())
+        opener = urllib2.build_opener(Noredirection, cookie_handler, urllib2.HTTPBasicAuthHandler(), urllib2.HTTPHandler())
     else:
-        opener = urllib2.build_opener(
-            cookie_handler,
-            urllib2.HTTPBasicAuthHandler(),
-            urllib2.HTTPHandler())
+        opener = urllib2.build_opener(cookie_handler, urllib2.HTTPBasicAuthHandler(), urllib2.HTTPHandler())
     # opener = urllib2.install_opener(opener)
     req = urllib2.Request(url)
 
@@ -436,9 +372,8 @@ def getUrl(
         for h, hv in headers:
             req.add_header(h, hv)
     else:
-        req.add_header(
-            'User-Agent',
-            'Mozilla/5.0 (Windows NT 6.1; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/33.0.1750.154 Safari/537.36')
+        req.add_header('User-Agent', 'Mozilla/5.0 (Windows NT 6.1; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) '
+                                     'Chrome/33.0.1750.154 Safari/537.36')
         req.add_header('Accept-Language', __sLang__)
 
     VSlog('post : ' + str(post))
@@ -502,35 +437,24 @@ class UnCaptchaReCaptcha:
         post_data = None
         token = ''
         iteration = 0
-        reCaptchaUrl = 'http://www.google.com/recaptcha/api/fallback?k=%s' % key
+        re_captcha_url = 'http://www.google.com/recaptcha/api/fallback?k=%s' % key
 
         while iteration < 20:
 
             millis_captcha_loading = int(round(time.time() * 1000))
 
             # ,'cookiefile':self.COOKIE_FILE, 'use_cookie': True, 'load_cookie': True, 'save_cookie': True
-            data = getUrl(
-                reCaptchaUrl,
-                headers=headers,
-                post=post_data,
-                cookieJar=gcookieJar)
-            VSlog(reCaptchaUrl)
-            imgUrl = re.search(
-                r'"(/recaptcha/api2/payload[^"]+?)"',
-                data).group(1)
-
-            VSlog(imgUrl)
+            data = getUrl(re_captcha_url, headers=headers, post=post_data, cookie_jar=gcookieJar)
+            VSlog(re_captcha_url)
+            img_url = re.search(r'"(/recaptcha/api2/payload[^"]+?)"', data).group(1)
+            VSlog(img_url)
             iteration += 1
-            message = self.ExtReg(
-                r'<label[^>]+class="fbc-imageselect-message-text"[^>]*>(.*?)</label>', data)
+            message = self.ExtReg(r'<label[^>]+class="fbc-imageselect-message-text"[^>]*>(.*?)</label>', data)
 
             if '' == message:
-                message = self.ExtReg(
-                    r'<div[^>]+class="fbc-imageselect-message-error">(.*?)</div>', data)
+                message = self.ExtReg(r'<div[^>]+class="fbc-imageselect-message-error">(.*?)</div>', data)
             if '' == message:
-                token = re.search(
-                    r'"this\.select\(\)">(.*?)</textarea>',
-                    data).group(1)
+                token = re.search(r'"this\.select\(\)">(.*?)</textarea>', data).group(1)
                 if '' != token:
                     VSlog('>>>>>>>> Captcha token[%s]' % token)
                 else:
@@ -538,70 +462,56 @@ class UnCaptchaReCaptcha:
                 break
 
             cval = re.search(r'name="c"\s+value="([^"]+)', data).group(1)
-            imgUrl = 'https://www.google.com%s' % (
-                imgUrl.replace('&amp;', '&'))
-            accepLabel = re.search(
-                r'type="submit"\s+value="([^"]+)',
-                data).group(1)
-
-            filePath = 'c://c.jpeg'
-            import random
-            n = random.randint(1, 1000)
-            filePath = 'c://c' + str(n) + '.jpeg'
+            img_url = 'https://www.google.com%s' % (img_url.replace('&amp;', '&'))
+            accept_label = re.search(r'type="submit"\s+value="([^"]+)', data).group(1)
+            file_path = 'c://c' + str(random.randint(1, 1000)) + '.jpeg'
 
             VSlog(">>>>>>>> Captcha message[%s]" % message)
-            VSlog(">>>>>>>> Captcha accep label[%s]" % accepLabel)
-            VSlog(
-                ">>>>>>>> Captcha imgUrl[%s] filePath[%s]" %
-                (imgUrl, filePath))
+            VSlog(">>>>>>>> Captcha accep label[%s]" % accept_label)
+            VSlog(">>>>>>>> Captcha img_url[%s] file_path[%s]" % (img_url, file_path))
 
             # params = {'maintype': 'image', 'subtypes':['jpeg'], 'check_first_bytes':['\xFF\xD8', '\xFF\xD9']}
-            # ret = self.cm.saveWebFile(filePath, imgUrl, params)
-            # retArg = self.sessionEx.waitForFinishOpen(UnCaptchaReCaptchaWidget, imgFilePath=filePath, message=message, title="reCAPTCHA v2", additionalParams={'accep_label':accepLabel})
+            # ret = self.cm.saveWebFile(file_path, img_url, params)
+            # ret_arg = self.sessionEx.waitForFinishOpen(UnCaptchaReCaptchaWidget, imgFilePath=file_path,
+            #   message=message, title="reCAPTCHA v2", additionalParams={'accept_label':accept_label})
 
-            ret = ''
-            ret = getUrl(imgUrl, headers=headers, cookieJar=gcookieJar)
-            downloaded_image = file(filePath, 'wb')
+            ret = getUrl(img_url, headers=headers, cookie_jar=gcookieJar)
+            downloaded_image = file(file_path, 'wb')
             downloaded_image.write(ret)
             downloaded_image.close()
 
-            oSolver = cInputWindow(
-                captcha=filePath,
-                msg=message,
-                roundnum=iteration)
-            retArg = oSolver.get()
-            VSlog('>>>>>>>> Captcha response [%s]' % retArg)
+            ret_arg = cInputWindow(captcha=file_path, msg=message, roundnum=iteration).get()
+            VSlog('>>>>>>>> Captcha response [%s]' % ret_arg)
 
-            responses = base64.b64encode('{"response":[%s]}' % retArg)
+            responses = base64.b64encode('{"response":[%s]}' % ret_arg)
             # VSlog(responses)
             responses = responses.replace('=', '.')
 
-            if retArg is not None and len(retArg) and retArg[0]:
-                post_data = urlEncode(
-                    {'c': cval, 'response': responses}, doseq=True)
+            if ret_arg is not None and len(ret_arg) and ret_arg[0]:
+                post_data = urlEncode({'c': cval, 'response': responses}, doseq=True)
             else:
                 break
 
-            if False:
-                timeToSolve = int(round(time.time() * 1000)
-                                  ) - millis_captcha_loading
-                # timeToSolve + int(float("0." + str(random.randint(1, 99999999))) * 500)
-                timeToSolveMore = timeToSolve
-
-                postdata = urlEncode({'c': cval,
-                                      'response': responses,
-                                      'v': vers,
-                                      't': timeToSolve,
-                                      'bg': botguardstring,
-                                      'ct': timeToSolveMore})
-                html = getUrl(
-                    'https://www.google.com/recaptcha/api2/userverify?k=' +
-                    key,
-                    post=postdata,
-                    headers=headers)
-                # fh = open('c:\\test.txt', 'w')
-                # fh.write(html)
-                # fh.close()
+            # if False:
+            #     timeToSolve = int(round(time.time() * 1000)
+            #                       ) - millis_captcha_loading
+            #     # timeToSolve + int(float("0." + str(random.randint(1, 99999999))) * 500)
+            #     timeToSolveMore = timeToSolve
+            #
+            #     postdata = urlEncode({'c': cval,
+            #                           'response': responses,
+            #                           'v': vers,
+            #                           't': timeToSolve,
+            #                           'bg': botguardstring,
+            #                           'ct': timeToSolveMore})
+            #     html = getUrl(
+            #         'https://www.google.com/recaptcha/api2/userverify?k=' +
+            #         key,
+            #         post=postdata,
+            #         headers=headers)
+            #     # fh = open('c:\\test.txt', 'w')
+            #     # fh.write(html)
+            #     # fh.close()
 
         return token
 
@@ -615,30 +525,20 @@ def getg():
         pass
 
 
-def performCaptcha(
-        sitename,
-        cj,
-        returnpage=True,
-        captcharegex='data-sitekey="(.*?)"',
-        lang="fr",
-        headers=None):
-    gcookieJar = getg()
-    sitepage = getUrl(sitename, cookieJar=cj, headers=headers)
+def performCaptcha(sitename, cj, returnpage=True, captcharegex='data-sitekey="(.*?)"', lang="fr", headers=None):
+    gcookie_jar = getg()
+    sitepage = getUrl(sitename, cookie_jar=cj, headers=headers)
     sitekey = re.findall(captcharegex, sitepage)
     token = ""
     if len(sitekey) >= 1:
-        # getUrl('https://www.google.com/', cookieJar=gcookieJar)
+        # getUrl('https://www.google.com/', cookieJar=gcookie_jar)
         c = UnCaptchaReCaptcha()
-        token = c.processCaptcha(sitekey[0], lang, gcookieJar)
+        token = c.processCaptcha(sitekey[0], lang, gcookie_jar)
         if returnpage:
-            # gcookieJar.save('./gsite.jwl');
-            headers = [
-                ("User-Agent",
-                 "Mozilla/5.0 (Windows NT 6.1; WOW64; rv:37.0) Gecko/20100101 Firefox/37.0"),
-                ("Referer",
-                 sitename)]
-            sitepage = getUrl(sitename, cookieJar=cj, post=urlEncode(
-                {"g-recaptcha-response": token}), headers=headers)
+            # gcookie_jar.save('./gsite.jwl');
+            headers = [("User-Agent", "Mozilla/5.0 (Windows NT 6.1; WOW64; rv:37.0) Gecko/20100101 Firefox/37.0"),
+                       ("Referer", sitename)]
+            sitepage = getUrl(sitename, cookie_jar=cj, post=urlEncode({"g-recaptcha-response": token}), headers=headers)
 
     if returnpage:
         # fh = open('c:\\reussi.txt', 'w')

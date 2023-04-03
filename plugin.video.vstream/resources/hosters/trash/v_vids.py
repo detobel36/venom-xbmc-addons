@@ -10,17 +10,17 @@ class cHoster(iHoster):
     def __init__(self):
         iHoster.__init__(self, 'v_vids', 'V-Vids')
 
-    def _getMediaLinkForGuest(self, autoPlay=False):
-        oRequest = RequestHandler(self._url)
-        sHtmlContent = oRequest.request()
+    def _getMediaLinkForGuest(self, auto_play=False):
+        request = RequestHandler(self._url)
+        html_content = request.request()
 
-        sPattern = "file: '(.+?)'"
+        pattern = "file: '(.+?)'"
 
-        oParser = Parser()
-        aResult = oParser.parse(sHtmlContent, sPattern)
+        parser = Parser()
+        results = parser.parse(html_content, pattern)
 
-        if aResult[0] is True:
-            return True, aResult[1][0]
+        if results[0] is True:
+            return True, results[1][0]
         else:
             return False, False
 

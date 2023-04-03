@@ -8,8 +8,9 @@ from resources.lib.gui.gui import Gui
 from resources.lib.handler.pluginHandler import PluginHandler
 from resources.lib.handler.inputParameterHandler import InputParameterHandler
 from resources.lib.handler.outputParameterHandler import OutputParameterHandler
-from resources.lib.comaddon import Progress, VSlog, addon, SiteManager
+from resources.lib.comaddon import Progress, VSlog, Addon, SiteManager
 from resources.lib.search import Search
+import traceback
 # http://kodi.wiki/view/InfoLabels
 # http://kodi.wiki/view/List_of_boolean_conditions
 
@@ -42,9 +43,7 @@ if DEBUG:
                 stdoutToServer=True,
                 stderrToServer=True)
         except ImportError:
-            sys.stderr.write(
-                "Error: " +
-                "You must add org.python.pydev.debug.pysrc to your PYTHONPATH.")
+            sys.stderr.write("Error: " + "You must add org.python.pydev.debug.pysrc to your PYTHONPATH.")
 
 
 class main:
@@ -55,9 +54,8 @@ class main:
     def parseUrl(self):
         # Exclue les appels par des plugins qu'on ne sait pas gérer, par
         # exemple :  plugin://plugin.video.vstream/extrafanart
-        oPluginHandler = PluginHandler()
-        pluginPath = oPluginHandler.getPluginPath()
-        if pluginPath == 'plugin://plugin.video.vstream/extrafanart/':
+        plugin_handler = PluginHandler()
+        if plugin_handler.getPluginPath() == 'plugin://plugin.video.vstream/extrafanart/':
             return
 
         input_parameter_handler = InputParameterHandler()
@@ -91,111 +89,93 @@ class main:
 
         if not input_parameter_handler.exist('site'):
             # charge home
-            plugins = __import__(
-                'resources.lib.home',
-                fromlist=['home']).Home()
+            plugins = __import__('resources.lib.home', fromlist=['home']).Home()
             function = getattr(plugins, 'load')
             function()
             return
 
         if input_parameter_handler.exist('site'):
-            sSiteName = input_parameter_handler.getValue('site')
-            VSlog('load site ' + sSiteName + ' and call function ' + function)
+            site_name = input_parameter_handler.getValue('site')
+            VSlog('load site ' + site_name + ' and call function ' + function)
 
-            if isHosterGui(sSiteName, function):
+            if isHosterGui(site_name, function):
                 return
 
-            if isGui(sSiteName, function):
+            if isGui(site_name, function):
                 return
 
-            if isFav(sSiteName, function):
+            if isFav(site_name, function):
                 return
 
-            if isViewing(sSiteName, function):
+            if isViewing(site_name, function):
                 return
 
-            if isLibrary(sSiteName, function):
+            if isLibrary(site_name, function):
                 return
 
-            if isDl(sSiteName, function):
+            if isDl(site_name, function):
                 return
 
-            if isHome(sSiteName, function):
+            if isHome(site_name, function):
                 return
 
-            if isSearch(sSiteName, function):
+            if isSearch(site_name, function):
                 return
 
-            if isTrakt(sSiteName, function):
+            if isTrakt(site_name, function):
                 return
 
-            if sSiteName == 'globalRun':
+            if site_name == 'globalRun':
                 __import__('resources.lib.runscript', fromlist=['runscript'])
                 # function = getattr(plugins, function)
                 # function()
                 return
 
-            if sSiteName == 'globalSources':
+            if site_name == 'globalSources':
                 gui = Gui()
-                aPlugins = oPluginHandler.getAvailablePlugins(
-                    force=(function == 'globalSources'))
+                list_plugins = plugin_handler.getAvailablePlugins(force=(function == 'globalSources'))
 
-                sitesManager = SiteManager()
+                sites_manager = SiteManager()
 
-                if len(aPlugins) == 0:
-                    addons = addon()
+                if len(list_plugins) == 0:
+                    addons = Addon()
                     addons.openSettings()
                     gui.updateDirectory()
                 else:
-                    for aPlugin in aPlugins:
+                    for plugin in list_plugins:
 
-                        sitename = aPlugin[0]
-                        if not sitesManager.isActive(aPlugin[1]):
-                            sitename = '[COLOR red][OFF] ' + \
-                                sitename + '[/COLOR]'
+                        sitename = plugin[0]
+                        if not sites_manager.isActive(plugin[1]):
+                            sitename = '[COLOR red][OFF] ' + sitename + '[/COLOR]'
 
                         output_parameter_handler = OutputParameterHandler()
-                        output_parameter_handler.addParameter(
-                            'siteUrl', 'http://venom')
-                        icon = 'sites/%s.png' % (aPlugin[1])
-                        gui.addDir(
-                            aPlugin[1],
-                            'load',
-                            sitename,
-                            icon,
-                            output_parameter_handler)
+                        output_parameter_handler.addParameter('site_url', 'http://venom')
+                        icon = 'sites/%s.png' % (plugin[1])
+                        gui.addDir(plugin[1], 'load', sitename, icon, output_parameter_handler)
 
                 gui.setEndOfDirectory()
                 return
 
-            if sSiteName == 'globalParametre':
-                addons = addon()
-                addons.openSettings()
+            if site_name == 'globalParametre':
+                Addon().openSettings()
                 return
-            # if isAboutGui(sSiteName, function) == True:
+            # if isAboutGui(site_name, function) == True:
                 # return
 
             # charge sites
             try:
-                plugins = __import__(
-                    'resources.sites.%s' %
-                    sSiteName, fromlist=[sSiteName])
+                plugins = __import__('resources.sites.%s' % site_name, fromlist=[site_name])
                 function = getattr(plugins, function)
                 function()
             except Exception as e:
                 Progress().VSclose()  # Referme le dialogue en cas d'exception, sinon blocage de Kodi
-                VSlog(
-                    'could not load site: ' +
-                    sSiteName +
-                    ' error: ' +
-                    str(e))
-                import traceback
+                VSlog('could not load site: ' + site_name +' error: ' + str(e))
                 traceback.print_exc()
                 return
 
 
 def setSetting(plugin_id, value):
-    addons = addon()
+    addons = Addon()
     setting = addons.getSetting(plugin_id)
 
     # modifier si différent
@@ -214,105 +194,93 @@ def setSetting(plugin_id, value):
 # &id4=hoster_uploaded_username&value4=MyName
 # &id5=hoster_uploaded_password&value5=MyPass)
 def setSettings(input_parameter_handler):
-    addons = addon()
+    addons = Addon()
 
     for i in range(1, 100):
         plugin_id = input_parameter_handler.getValue('id' + str(i))
         if plugin_id:
-            value = input_parameter_handler.getValue('value' + str(i))
-            value = value.replace('\n', '')
-            oldSetting = addons.getSetting(plugin_id)
+            value = input_parameter_handler.getValue('value' + str(i)).replace('\n', '')
             # modifier si différent
-            if oldSetting != value:
+            if addons.getSetting(plugin_id) != value:
                 addons.setSetting(plugin_id, value)
 
     return True
 
 
-def isHosterGui(sSiteName, function):
-    if sSiteName == 'HosterGui':
-        plugins = __import__(
-            'resources.lib.gui.hoster',
-            fromlist=['cHosterGui']).cHosterGui()
+def isHosterGui(site_name, function):
+    if site_name == 'HosterGui':
+        plugins = __import__('resources.lib.gui.hoster', fromlist=['cHosterGui']).cHosterGui()
         function = getattr(plugins, function)
         function()
         return True
     return False
 
 
-def isGui(sSiteName, function):
-    if sSiteName == 'Gui':
+def isGui(site_name, function):
+    if site_name == 'Gui':
         gui = Gui()
         exec("gui." + function + "()")
         return True
     return False
 
 
-def isFav(sSiteName, function):
-    if sSiteName == 'cFav':
-        plugins = __import__(
-            'resources.lib.bookmark',
-            fromlist=['cFav']).cFav()
+def isFav(site_name, function):
+    if site_name == 'cFav':
+        plugins = __import__('resources.lib.bookmark', fromlist=['cFav']).cFav()
         function = getattr(plugins, function)
         function()
         return True
     return False
 
 
-def isViewing(sSiteName, function):
-    if sSiteName == 'cViewing':
-        plugins = __import__(
-            'resources.lib.viewing',
-            fromlist=['cViewing']).cViewing()
+def isViewing(site_name, function):
+    if site_name == 'cViewing':
+        plugins = __import__('resources.lib.viewing', fromlist=['cViewing']).cViewing()
         function = getattr(plugins, function)
         function()
         return True
     return False
 
 
-def isLibrary(sSiteName, function):
-    if sSiteName == 'Library':
-        plugins = __import__(
-            'resources.lib.library',
-            fromlist=['Library']).Library()
+def isLibrary(site_name, function):
+    if site_name == 'Library':
+        plugins = __import__('resources.lib.library', fromlist=['Library']).Library()
         function = getattr(plugins, function)
         function()
         return True
     return False
 
 
-def isDl(sSiteName, function):
-    if sSiteName == 'cDownload':
-        plugins = __import__(
-            'resources.lib.download',
-            fromlist=['cDownload']).cDownload()
+def isDl(site_name, function):
+    if site_name == 'cDownload':
+        plugins = __import__('resources.lib.download', fromlist=['cDownload']).cDownload()
         function = getattr(plugins, function)
         function()
         return True
     return False
 
 
-def isHome(sSiteName, function):
-    if sSiteName == 'Home':
-        oHome = Home()
-        exec("oHome." + function + "()")
+def isHome(site_name, function):
+    if site_name == 'Home':
+        home = Home()
+        exec("home." + function + "()")
         return True
     return False
 
 
-def isSearch(sSiteName, function):
-    if sSiteName == 'Search' or sSiteName == 'globalSearch':
-        oSearch = Search()
-        if sSiteName == 'globalSearch':
-            exec("oSearch.searchGlobal()")
+def isSearch(site_name, function):
+    if site_name == 'Search' or site_name == 'globalSearch':
+        search = Search()
+        if site_name == 'globalSearch':
+            exec("search.searchGlobal()")
         else:
-            exec("oSearch." + function + "()")
+            exec("search." + function + "()")
         return True
     return False
 
 
-def isTrakt(sSiteName, function):
-    if sSiteName == 'cTrakt':
+def isTrakt(site_name, function):
+    if site_name == 'cTrakt':
         plugins = __import__(
             'resources.lib.trakt',
             fromlist=['cTrakt']).cTrakt()

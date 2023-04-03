@@ -14,22 +14,22 @@ class cHoster(iHoster):
     def __init__(self):
         iHoster.__init__(self, 'freshstream', 'Freshstream')
 
-    def _getMediaLinkForGuest(self, autoPlay=False):
+    def _getMediaLinkForGuest(self, auto_play=False):
         api_call = False
 
-        oRequest = RequestHandler(self._url)
-        sHtmlContent = oRequest.request()
+        request = RequestHandler(self._url)
+        html_content = request.request()
 
-        oParser = Parser()
-        sPattern = "var vsuri = \'(.+?)\'"
-        aResult = oParser.parse(sHtmlContent, sPattern)
+        parser = Parser()
+        pattern = "var vsuri = \'(.+?)\'"
+        results = parser.parse(html_content, pattern)
 
-        if (aResult[0]):
-            oRequest = RequestHandler(aResult[1][0])
-            sHtmlContent1 = oRequest.request()
+        if (results[0]):
+            request = RequestHandler(results[1][0])
+            sHtmlContent1 = request.request()
 
             sPattern1 = '"([^"]+)":"([^"]+)"'
-            aResult1 = oParser.parse(sHtmlContent1, sPattern1)
+            aResult1 = parser.parse(sHtmlContent1, sPattern1)
 
         if (aResult1[0]):
 
@@ -37,9 +37,9 @@ class cHoster(iHoster):
             qua = []
             api_call = False
 
-            for aEntry in aResult1[1]:
-                url.append(aEntry[1])
-                qua.append(aEntry[0])
+            for entry in aResult1[1]:
+                url.append(entry[1])
+                qua.append(entry[0])
 
             api_call = dialog().VSselectqual(qua, url)
 

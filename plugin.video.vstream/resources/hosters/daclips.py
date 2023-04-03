@@ -14,31 +14,31 @@ class cHoster(iHoster):
         iHoster.__init__(self, 'daclips', 'Daclips')
 
     def __getIdFromUrl(self):
-        sPattern = 'http://daclips.in/embed-([^<]+)-'
-        oParser = Parser()
-        aResult = oParser.parse(self._url, sPattern)
-        if aResult[0] is True:
-            return aResult[1][0]
+        pattern = 'http://daclips.in/embed-([^<]+)-'
+        parser = Parser()
+        results = parser.parse(self._url, pattern)
+        if results[0] is True:
+            return results[1][0]
         return ''
 
-    def _getMediaLinkForGuest(self, autoPlay=False, api_call=None):
-        oParser = Parser()
+    def _getMediaLinkForGuest(self, auto_play=False, api_call=None):
+        parser = Parser()
 
-        sId = self.__getIdFromUrl()
+        s_id = self.__getIdFromUrl()
 
-        url = 'http://daclips.in/' + sId
-        oRequest = RequestHandler(url)
-        sHtmlContent = oRequest.request()
-        sPattern = '<input type="hidden" name="([^"]+)" value="([^"]+)"'
-        aResult = oParser.parse(sHtmlContent, sPattern)
+        url = 'http://daclips.in/' + s_id
+        request = RequestHandler(url)
+        html_content = request.request()
+        pattern = '<input type="hidden" name="([^"]+)" value="([^"]+)"'
+        results = parser.parse(html_content, pattern)
 
-        if aResult[0]:
-            oRequest.setRequestType(RequestHandler.REQUEST_TYPE_POST)
-            for aEntry in aResult[1]:
-                oRequest.addParameters(aEntry[0], aEntry[1])
-            oRequest.addParameters('referer', url)
-            sHtmlContent = oRequest.request()
-            r2 = re.search('file: "([^"]+)",', sHtmlContent)
+        if results[0]:
+            request.setRequestType(RequestHandler.REQUEST_TYPE_POST)
+            for entry in results[1]:
+                request.addParameters(entry[0], entry[1])
+            request.addParameters('referer', url)
+            html_content = request.request()
+            r2 = re.search('file: "([^"]+)",', html_content)
             if r2:
                 api_call = r2.group(1)
 

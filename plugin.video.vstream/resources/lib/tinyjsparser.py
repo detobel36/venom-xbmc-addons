@@ -1269,8 +1269,8 @@ class JsParser(object):
 
             # --var method, HACK
             if JScode[0:2] == '--' or JScode[0:2] == '++':
-                m = re.search(
-                    '^(\\({0,1}\\w[\\w\\.]*\\){0,1} *(?:\\[[^\\]]+\\])* *)(' + REG_OP + '|\\[|$)', JScode[2:], re.UNICODE)
+                m = re.search('^(\\({0,1}\\w[\\w\\.]*\\){0,1} *(?:\\[[^\\]]+\\])* *)(' +
+                              REG_OP + '|\\[|$)', JScode[2:], re.UNICODE)
                 if m:
                     l = len(m.group(1))
                     JScode = m.group(1) + JScode[0:2] + JScode[(l + 2):]
@@ -1511,8 +1511,7 @@ class JsParser(object):
 
     def IsVar(self, var, variable, index=None):
         try:
-            variable = variable.split('[')[0]
-            variable = variable.split('.')[0]
+            variable = variable.split('[')[0].split('.')[0]
             for j in var:
                 if j[0] == variable:
                     if index is None:
@@ -1526,9 +1525,7 @@ class JsParser(object):
 
     # Need to use metaclass here
     def IsFunc(self, vars, name):
-        bExist = False
-        bExist = self.IsVar(vars, name)
-        if not bExist:
+        if not self.IsVar(vars, name):
             return False
 
         f = self.GetVar(vars, name)
@@ -1558,10 +1555,7 @@ class JsParser(object):
                 index = name.split('.')[1]
                 name = name.split('.')[0]
         # Variable is an array ?
-        m = re.search(
-            r'^\({0,1}([\w]+)\){0,1}\[(.+?)\]$',
-            name,
-            re.DOTALL | re.UNICODE)
+        m = re.search(r'^\({0,1}([\w]+)\){0,1}\[(.+?)\]$', name, re.DOTALL | re.UNICODE)
         if m:
             name = m.group(1)
             index = m.group(2)
@@ -1580,9 +1574,9 @@ class JsParser(object):
                         value = []
                     # normal way
                     else:
-                        valueT = MySplit(value, ',')
+                        value_t = MySplit(value, ',')
                         v = []
-                        for k in valueT:
+                        for k in value_t:
                             v2 = self.evalJS(k, vars, allow_recursion)
                             v.append(v2)
                         value = v
@@ -1592,9 +1586,9 @@ class JsParser(object):
                 # Values is an array {}
                 elif value.startswith('{') and value.endswith('}'):
                     value = value[1:-1]
-                    valueT = MySplit(value, ',', True)
+                    value_t = MySplit(value, ',', True)
                     v = {}
-                    for k in valueT:
+                    for k in value_t:
                         l = k.split(':')
                         # WARNING : no eval here in JS
                         v2g = RemoveGuil(l[0])

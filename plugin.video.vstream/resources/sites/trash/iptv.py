@@ -22,7 +22,7 @@ def load():
     gui = Gui()
 
     output_parameter_handler = OutputParameterHandler()
-    output_parameter_handler.addParameter('siteUrl', FREE_M3U)
+    output_parameter_handler.addParameter('site_url', FREE_M3U)
     gui.addDir(
         SITE_IDENTIFIER,
         'showDailyList',
@@ -30,7 +30,7 @@ def load():
         'tv.png',
         output_parameter_handler)
 
-    output_parameter_handler.addParameter('siteUrl', URL_MAIN)
+    output_parameter_handler.addParameter('site_url', URL_MAIN)
     gui.addDir(
         SITE_IDENTIFIER,
         'showPays',
@@ -44,30 +44,30 @@ def load():
 def showPays():
     gui = Gui()
     input_parameter_handler = InputParameterHandler()
-    sUrl = input_parameter_handler.getValue('siteUrl')
+    url = input_parameter_handler.getValue('site_url')
 
-    oParser = Parser()
-    sHtmlContent = getHtml(sUrl)
-    sPattern = '<li class="cat-item cat-item-.+?"><a href="([^"]+)"(?:>([^<]+)</a>|([^<]+)includes)'
-    aResult = oParser.parse(sHtmlContent, sPattern)
+    parser = Parser()
+    html_content = getHtml(url)
+    pattern = '<li class="cat-item cat-item-.+?"><a href="([^"]+)"(?:>([^<]+)</a>|([^<]+)includes)'
+    results = parser.parse(html_content, pattern)
 
-    if aResult[0]:
-        total = len(aResult[1])
+    if results[0]:
+        total = len(results[1])
         progress_ = Progress().VScreate(SITE_NAME)
         output_parameter_handler = OutputParameterHandler()
-        for aEntry in aResult[1]:
+        for entry in results[1]:
             progress_.VSupdate(progress_, total)
             if progress_.iscanceled():
                 break
 
-            if str(aEntry[1]) != '':
-                title = aEntry[1]
+            if str(entry[1]) != '':
+                title = entry[1]
             else:
-                title = aEntry[2].replace('"', '')
-            sUrl2 = aEntry[0].replace(' title=', '')
+                title = entry[2].replace('"', '')
+            url2 = entry[0].replace(' title=', '')
 
-            output_parameter_handler.addParameter('siteUrl', sUrl2)
-            output_parameter_handler.addParameter('sMovieTitle', title)
+            output_parameter_handler.addParameter('site_url', url2)
+            output_parameter_handler.addParameter('movie_title', title)
 
             gui.addDir(
                 SITE_IDENTIFIER,
@@ -84,30 +84,30 @@ def showPays():
 def showDailyList():
     gui = Gui()
     input_parameter_handler = InputParameterHandler()
-    sUrl = input_parameter_handler.getValue('siteUrl')
+    url = input_parameter_handler.getValue('site_url')
 
-    oParser = Parser()
-    sHtmlContent = getHtml(sUrl)
-    sPattern = '<div class="news-thumb col-md-6">\\s*<a href=([^"]+) title="([^"]+)".+?\\s*<img src=.+?uploads/.+?/.+?/([^"]+)\\..+?'
-    aResult = oParser.parse(sHtmlContent, sPattern)
+    parser = Parser()
+    html_content = getHtml(url)
+    pattern = '<div class="news-thumb col-md-6">\\s*<a href=([^"]+) title="([^"]+)".+?\\s*<img src=.+?uploads/.+?/.+?/([^"]+)\\..+?'
+    results = parser.parse(html_content, pattern)
 
-    if aResult[0]:
-        total = len(aResult[1])
+    if results[0]:
+        total = len(results[1])
         progress_ = Progress().VScreate(SITE_NAME)
 
         output_parameter_handler = OutputParameterHandler()
-        for aEntry in aResult[1]:
+        for entry in results[1]:
             progress_.VSupdate(progress_, total)
             if progress_.iscanceled():
                 break
 
-            title = aEntry[1]
-            sUrl2 = aEntry[0]
-            if 'extinf' in sUrl:
-                flag = aEntry[2]
+            title = entry[1]
+            url2 = entry[0]
+            if 'extinf' in url:
+                flag = entry[2]
 
-            output_parameter_handler.addParameter('siteUrl', sUrl2)
-            output_parameter_handler.addParameter('sMovieTitle', title)
+            output_parameter_handler.addParameter('site_url', url2)
+            output_parameter_handler.addParameter('movie_title', title)
 
             if str(flag) == 'm3u-playlist-720x405':
                 gui.addDir(
@@ -126,11 +126,11 @@ def showDailyList():
 
         progress_.VSclose(progress_)
 
-        sNextPage = __checkForNextPage(sHtmlContent)
-        if (sNextPage):
+        next_page = __checkForNextPage(html_content)
+        if (next_page):
             output_parameter_handler = OutputParameterHandler()
-            output_parameter_handler.addParameter('siteUrl', sNextPage)
-            sNumPage = re.search('/page/([0-9]+)', sNextPage).group(1)
+            output_parameter_handler.addParameter('site_url', next_page)
+            sNumPage = re.search('/page/([0-9]+)', next_page).group(1)
             gui.addNext(
                 SITE_IDENTIFIER,
                 'showDailyList',
@@ -140,12 +140,12 @@ def showDailyList():
     gui.setEndOfDirectory()
 
 
-def __checkForNextPage(sHtmlContent):
-    oParser = Parser()
-    sPattern = '<a class="next page-numbers" href=([^>]+)>Next</a>'
-    aResult = oParser.parse(sHtmlContent, sPattern)
-    if aResult[0]:
-        return aResult[1][0]
+def __checkForNextPage(html_content):
+    parser = Parser()
+    pattern = '<a class="next page-numbers" href=([^>]+)>Next</a>'
+    results = parser.parse(html_content, pattern)
+    if results[0]:
+        return results[1][0]
 
     return False
 
@@ -154,24 +154,24 @@ def showDailyIptvList():
     gui = Gui()
 
     input_parameter_handler = InputParameterHandler()
-    sUrl = input_parameter_handler.getValue('siteUrl')
+    url = input_parameter_handler.getValue('site_url')
 
-    sHtmlContent = getHtml(sUrl)
-    clearHtml = re.search('null>([\\s*\\S*]+)</pre>', sHtmlContent).group(1)
+    html_content = getHtml(url)
+    clearHtml = re.search('null>([\\s*\\S*]+)</pre>', html_content).group(1)
     line = re.compile('http(.+?)\n').findall(clearHtml)
 
-    for sUrl2 in line:
-        if '/cdn-cgi/l/email-protection' in str(sUrl2):
-            sUrl2 = 'http' + \
-                decodeEmail(sUrl2).replace('<', '').replace('&amp;', '&')
+    for url2 in line:
+        if '/cdn-cgi/l/email-protection' in str(url2):
+            url2 = 'http' + \
+                decodeEmail(url2).replace('<', '').replace('&amp;', '&')
         else:
-            sUrl2 = 'http' + sUrl2.replace('&amp;', '&')
+            url2 = 'http' + url2.replace('&amp;', '&')
 
-        title = 'Lien: ' + sUrl2.replace('&amp;', '&')
+        title = 'Lien: ' + url2.replace('&amp;', '&')
 
         output_parameter_handler = OutputParameterHandler()
-        output_parameter_handler.addParameter('siteUrl', sUrl2)
-        output_parameter_handler.addParameter('sMovieTitle', title)
+        output_parameter_handler.addParameter('site_url', url2)
+        output_parameter_handler.addParameter('movie_title', title)
 
         gui.addDir(
             SITE_IDENTIFIER,

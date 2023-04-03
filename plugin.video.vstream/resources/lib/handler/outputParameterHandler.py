@@ -20,7 +20,7 @@ class OutputParameterHandler:
         return 'params=0'
 
     def getValue(self, sParamName):
-        if (self.exist(sParamName)):
+        if self.exist(sParamName):
             sParamValue = self.__aParams[sParamName]
             return Unquote(sParamValue)
 

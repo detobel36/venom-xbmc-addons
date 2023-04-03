@@ -19,22 +19,22 @@ class cHoster(iHoster):
     def __init__(self):
         iHoster.__init__(self, 'exashare', 'Exashare')
 
-    def _getMediaLinkForGuest(self, autoPlay=False):
+    def _getMediaLinkForGuest(self, auto_play=False):
         api_call = False
 
-        oRequest = RequestHandler(self._url)
-        sHtmlContent = oRequest.request()
-        oParser = Parser()
+        request = RequestHandler(self._url)
+        html_content = request.request()
+        parser = Parser()
 
         # methode1
         # lien indirect
-        if 'You have requested the file:' in sHtmlContent:
+        if 'You have requested the file:' in html_content:
             POST_Url = re.findall(
                 'form method="POST" action=\'([^<>"]*)\'',
-                sHtmlContent)[0]
+                html_content)[0]
             POST_Selected = re.findall(
                 'form method="POST" action=(.*)</Form>',
-                sHtmlContent,
+                html_content,
                 re.DOTALL)[0]
             POST_Data = {}
             POST_Data['op'] = re.findall(
@@ -70,43 +70,43 @@ class cHoster(iHoster):
             xbmc.sleep(10 * 1000)
 
             response = urllib2.urlopen(req)
-            sHtmlContent = response.read()
+            html_content = response.read()
             response.close()
 
             # fh = open('c:\\test.txt', "w")
-            # fh.write(sHtmlContent)
+            # fh.write(html_content)
             # fh.close()
 
-        sPattern = 'file: "([^"]+)"'
-        aResult = oParser.parse(sHtmlContent, sPattern)
-        if aResult[0] is True:
-            api_call = aResult[1][0]
+        pattern = 'file: "([^"]+)"'
+        results = parser.parse(html_content, pattern)
+        if results[0] is True:
+            api_call = results[1][0]
 
         # methode2
-        sPattern = '<iframe[^<>]+?src="(.+?)"[^<>]+?><\\/iframe>'
-        aResult = oParser.parse(sHtmlContent, sPattern)
-        if aResult[0] is True:
-            url = aResult[1][0]
-            oRequest = RequestHandler(url)
-            oRequest.addHeaderEntry('Referer', url)
-            # oRequest.addHeaderEntry('Host','dowed.info')
-            sHtmlContent = oRequest.request()
+        pattern = '<iframe[^<>]+?src="(.+?)"[^<>]+?><\\/iframe>'
+        results = parser.parse(html_content, pattern)
+        if results[0] is True:
+            url = results[1][0]
+            request = RequestHandler(url)
+            request.addHeaderEntry('Referer', url)
+            # request.addHeaderEntry('Host','dowed.info')
+            html_content = request.request()
 
-            sPattern = 'file: *"([^"]+)"'
-            aResult = oParser.parse(sHtmlContent, sPattern)
-            if aResult[0] is True:
-                api_call = aResult[1][0]
+            pattern = 'file: *"([^"]+)"'
+            results = parser.parse(html_content, pattern)
+            if results[0] is True:
+                api_call = results[1][0]
 
             # methode2-3
-            sPattern = '<iframe.+?src="([^"]+)".+?<\\/iframe>'
-            aResult = oParser.parse(sHtmlContent, sPattern)
-            if aResult[0] is True:
-                vurl = aResult[1][0]
-                oRequest = RequestHandler(vurl)
-                sHtmlContent = oRequest.request()
-                sPattern = 'file: *"([^"]+)"'
-                aResult = oParser.parse(sHtmlContent, sPattern)
-                api_call = aResult[1][0]
+            pattern = '<iframe.+?src="([^"]+)".+?<\\/iframe>'
+            results = parser.parse(html_content, pattern)
+            if results[0] is True:
+                vurl = results[1][0]
+                request = RequestHandler(vurl)
+                html_content = request.request()
+                pattern = 'file: *"([^"]+)"'
+                results = parser.parse(html_content, pattern)
+                api_call = results[1][0]
 
         if api_call:
             return True, api_call

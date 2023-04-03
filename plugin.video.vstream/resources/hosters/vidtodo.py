@@ -30,42 +30,42 @@ class cHoster(iHoster):
             self._url = self._url + '.html'
 
     def extractSmil(self, smil):
-        oRequest = RequestHandler(smil)
-        oRequest.addParameters('referer', self._url)
-        sHtmlContent = oRequest.request()
-        Base = re.search('<meta base="(.+?)"', sHtmlContent)
-        Src = re.search('<video src="(.+?)"', sHtmlContent)
+        request = RequestHandler(smil)
+        request.addParameters('referer', self._url)
+        html_content = request.request()
+        Base = re.search('<meta base="(.+?)"', html_content)
+        Src = re.search('<video src="(.+?)"', html_content)
         return Base.group(1) + Src.group(1)
 
-    def _getMediaLinkForGuest(self, autoPlay=False):
+    def _getMediaLinkForGuest(self, auto_play=False):
         api_call = ''
 
-        oParser = Parser()
-        oRequest = RequestHandler(self._url)
-        oRequest.addHeaderEntry('Referer', self._url)
-        oRequest.addParameters('User-Agent', UA)
-        sHtmlContent = oRequest.request()
+        parser = Parser()
+        request = RequestHandler(self._url)
+        request.addHeaderEntry('Referer', self._url)
+        request.addParameters('User-Agent', UA)
+        html_content = request.request()
 
-        sPattern = 'sources:* \\[(?:{file:)*"([^"]+)"'
-        aResult = oParser.parse(sHtmlContent, sPattern)
-        if aResult[0] is True:
-            api_call = aResult[1][0]
+        pattern = 'sources:* \\[(?:{file:)*"([^"]+)"'
+        results = parser.parse(html_content, pattern)
+        if results[0] is True:
+            api_call = results[1][0]
 
         else:
-            sPattern = '(eval\\(function\\(p,a,c,k,e(?:.|\\s)+?\\))<\\/script>'
-            aResult = oParser.parse(sHtmlContent, sPattern)
-            if aResult[0] is True:
-                sHtmlContent = cPacker().unpack(aResult[1][0])
+            pattern = '(eval\\(function\\(p,a,c,k,e(?:.|\\s)+?\\))<\\/script>'
+            results = parser.parse(html_content, pattern)
+            if results[0] is True:
+                html_content = cPacker().unpack(results[1][0])
 
-                sPattern = '{file: *"([^"]+smil)"}'
-                aResult = oParser.parse(sHtmlContent, sPattern)
-                if aResult[0] is True:
-                    api_call = self.extractSmil(aResult[1][0])
+                pattern = '{file: *"([^"]+smil)"}'
+                results = parser.parse(html_content, pattern)
+                if results[0] is True:
+                    api_call = self.extractSmil(results[1][0])
                 else:
-                    sPattern = 'src:"([^"]+.mp4)"'
-                    aResult = oParser.parse(sHtmlContent, sPattern)
-                    if aResult[0] is True:
-                        api_call = aResult[1][0]  # .decode('rot13')
+                    pattern = 'src:"([^"]+.mp4)"'
+                    results = parser.parse(html_content, pattern)
+                    if results[0] is True:
+                        api_call = results[1][0]  # .decode('rot13')
 
         if api_call:
             return True, api_call

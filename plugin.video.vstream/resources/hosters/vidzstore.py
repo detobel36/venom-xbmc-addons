@@ -12,18 +12,18 @@ class cHoster(iHoster):
         iHoster.__init__(self, 'vidzstore', 'VidzStore')
 
     # Extraction du lien et decodage si besoin
-    def _getMediaLinkForGuest(self, autoPlay=False):
+    def _getMediaLinkForGuest(self, auto_play=False):
         api_call = False
 
-        oRequest = RequestHandler(self._url)
-        sHtmlContent = oRequest.request()
+        request = RequestHandler(self._url)
+        html_content = request.request()
 
-        oParser = Parser()
-        sPattern = 'file: "([^"]+)\"'
-        aResult = oParser.parse(sHtmlContent, sPattern)
+        parser = Parser()
+        pattern = 'file: "([^"]+)\"'
+        results = parser.parse(html_content, pattern)
 
-        if aResult[0]:
-            api_call = aResult[1][0]
+        if results[0]:
+            api_call = results[1][0]
 
         if api_call:
             return True, api_call

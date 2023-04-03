@@ -18,7 +18,7 @@ class cHoster(iHoster):
     def __init__(self):
         iHoster.__init__(self, 'abcvideo', 'Abcvideo')
 
-    def _getMediaLinkForGuest(self, autoPlay=False):
+    def _getMediaLinkForGuest(self, auto_play=False):
         api_call = ''
         key = "6LcOeuUUAAAAANS5Gb3oKwWkBjOdMXxqbj_2cPCy"
         co = "aHR0cHM6Ly9hYmN2aWRlby5jYzo0NDM."
@@ -49,21 +49,21 @@ class cHoster(iHoster):
             req = s.get(url2, headers=headers2)
             response = str(req.content)
 
-            sPattern = '"(https.+?)"'
-            aResult = re.findall(sPattern, response)
-            if aResult:
-                api_call = aResult[0]  # fichier master valide pour la lecture
+            pattern = '"(https.+?)"'
+            results = re.findall(pattern, response)
+            if results:
+                api_call = results[0]  # fichier master valide pour la lecture
                 req = s.get(api_call, headers=headers2)
                 response = str(req.content)
                 list_url = []
                 list_q = []
-                oParser = Parser()
-                sPattern = 'PROGRAM.*?BANDWIDTH.*?RESOLUTION=(\\d+x\\d+).*?(https.*?m3u8)'
-                aResult = oParser.parse(response, sPattern)
-                if aResult[0] is True:
-                    for aEntry in aResult[1]:
-                        list_url.append(aEntry[1])
-                        list_q.append(aEntry[0])
+                parser = Parser()
+                pattern = 'PROGRAM.*?BANDWIDTH.*?RESOLUTION=(\\d+x\\d+).*?(https.*?m3u8)'
+                results = parser.parse(response, pattern)
+                if results[0] is True:
+                    for entry in results[1]:
+                        list_url.append(entry[1])
+                        list_q.append(entry[0])
                     if list_url:
                         api_call = dialog().VSselectqual(list_q, list_url)
 

@@ -19,56 +19,56 @@ class cHoster(iHoster):
         self._url = str(url)
         self._url = self._url.replace('/e/', '/api/fetch/')
 
-    def _getMediaLinkForGuest(self, autoPlay=False):
+    def _getMediaLinkForGuest(self, auto_play=False):
         api_call = False
 
-        oRequest = RequestHandler(self._url)
-        sHtmlContent = oRequest.request()
+        request = RequestHandler(self._url)
+        html_content = request.request()
 
-        oParser = Parser()
+        parser = Parser()
         # type 1
 
-        sPattern = '{"src":"([^"]+)","type":"video/mp4"}'
-        aResult = oParser.parse(sHtmlContent, sPattern)
-        if aResult[0] is True:
-            api_call = aResult[1][0]
+        pattern = '{"src":"([^"]+)","type":"video/mp4"}'
+        results = parser.parse(html_content, pattern)
+        if results[0] is True:
+            api_call = results[1][0]
 
         # type 2
 
         # sPattern1 = 'src: *"(.+?.mp4)",'
-        # aResult1 = oParser.parse(sHtmlContent, sPattern1)
+        # aResult1 = parser.parse(html_content, sPattern1)
         # if (aResult1[0] == True):
             # return True, aResult1[1][0]
 
         # #type ?
         # sPattern1 = '<input type="hidden" id="file_name" value="([^"]+)">'
-        # aResult1 = oParser.parse(sHtmlContent, sPattern1)
+        # aResult1 = parser.parse(html_content, sPattern1)
         # if (aResult1[0] == True):
             # FN = aResult1[1][0]
 
-        # sPattern = '<input type="hidden" id="srv_id" value="([^"]+)">'
-        # aResult = oParser.parse(sHtmlContent, sPattern)
-        # if aResult[0] is True:
-            # SRV = aResult[1][0]
+        # pattern = '<input type="hidden" id="srv_id" value="([^"]+)">'
+        # results = parser.parse(html_content, pattern)
+        # if results[0] is True:
+            # SRV = results[1][0]
 
             # pdata = 'file_name=' + FN + '.mp4&srv=' + SRV
 
-            # oRequest = RequestHandler('https://jetload.net/api/download')
-            # oRequest.setRequestType(1)
-            # #oRequest.addHeaderEntry('User-Agent', UA)
-            # oRequest.addHeaderEntry('Referer', self._url)
-            # oRequest.addHeaderEntry('Accept', 'application/json, text/plain, */*')
-            # oRequest.addHeaderEntry('Accept-Language', 'fr,fr-FR;q=0.8,en-US;q=0.5,en;q=0.3')
-            # oRequest.addParametersLine(pdata)
+            # request = RequestHandler('https://jetload.net/api/download')
+            # request.setRequestType(1)
+            # #request.addHeaderEntry('User-Agent', UA)
+            # request.addHeaderEntry('Referer', self._url)
+            # request.addHeaderEntry('Accept', 'application/json, text/plain, */*')
+            # request.addHeaderEntry('Accept-Language', 'fr,fr-FR;q=0.8,en-US;q=0.5,en;q=0.3')
+            # request.addParametersLine(pdata)
 
-            # api_call = oRequest.request()
+            # api_call = request.request()
 
         # #type ?
         # else:
-            # sPattern = '<input type="hidden" id="srv" value="([^"]+)">'
-            # aResult = oParser.parse(sHtmlContent, sPattern)
+            # pattern = '<input type="hidden" id="srv" value="([^"]+)">'
+            # results = parser.parse(html_content, pattern)
             # if (aResult1[0] == True):
-            # Host = aResult[1][0]
+            # Host = results[1][0]
             # api_call = Host + '/v2/schema/' + FN + '/master.m3u8'
 
         if api_call:

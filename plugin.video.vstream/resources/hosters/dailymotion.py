@@ -21,38 +21,38 @@ class cHoster(iHoster):
                 self._url = "https://www.dailymotion.com/player/metadata/video/" + \
                     self._url.split('/')[4]
 
-    def _getMediaLinkForGuest(self, autoPlay=False):
+    def _getMediaLinkForGuest(self, auto_play=False):
         api_call = False
         url = []
         qua = []
 
-        oRequest = RequestHandler(self._url)
-        sHtmlContent = oRequest.request()
+        request = RequestHandler(self._url)
+        html_content = request.request()
 
-        oParser = Parser()
+        parser = Parser()
 
-        sPattern = '{"type":"application.+?mpegURL","url":"([^"]+)"}'
-        aResult = oParser.parse(sHtmlContent, sPattern)
+        pattern = '{"type":"application.+?mpegURL","url":"([^"]+)"}'
+        results = parser.parse(html_content, pattern)
 
-        if aResult[0] is True:
-            oRequest = RequestHandler(aResult[1][0])
-            oRequest.addHeaderEntry(
+        if results[0] is True:
+            request = RequestHandler(results[1][0])
+            request.addHeaderEntry(
                 'User-Agent',
                 'Mozilla/5.0 (Windows NT 6.1; WOW64; rv:70.0) ' +
                 'Gecko/20100101 Firefox/70.0')
-            oRequest.addHeaderEntry(
+            request.addHeaderEntry(
                 'Accept-Language',
                 'fr,fr-FR;q=0.8,en-US;q=0.5,en;q=0.3')
-            sHtmlContent = oRequest.request()
+            html_content = request.request()
 
-            sPattern = 'NAME="([^"]+)"(,PROGRESSIVE-URI="([^"]+)"|http(.+?)\\#)'
-            aResult = oParser.parse(sHtmlContent, sPattern)
-            if aResult[0] is True:
-                for aEntry in reversed(aResult[1]):
-                    quality = aEntry[0].replace('@60', '')
+            pattern = 'NAME="([^"]+)"(,PROGRESSIVE-URI="([^"]+)"|http(.+?)\\#)'
+            results = parser.parse(html_content, pattern)
+            if results[0] is True:
+                for entry in reversed(results[1]):
+                    quality = entry[0].replace('@60', '')
                     if quality not in qua:
                         qua.append(quality)
-                        link = aEntry[2] if aEntry[2] else 'http' + aEntry[3]
+                        link = entry[2] if entry[2] else 'http' + entry[3]
                         url.append(link)
 
             api_call = dialog().VSselectqual(qua, url)

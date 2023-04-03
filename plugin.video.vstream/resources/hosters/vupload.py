@@ -10,28 +10,28 @@ class cHoster(iHoster):
     def __init__(self):
         iHoster.__init__(self, 'vupload', 'Vupload')
 
-    def _getMediaLinkForGuest(self, autoPlay=False):
+    def _getMediaLinkForGuest(self, auto_play=False):
         api_call = False
 
-        oRequest = RequestHandler(self._url)
-        sHtmlContent = oRequest.request()
+        request = RequestHandler(self._url)
+        html_content = request.request()
 
         # fh = open('c:\\test.txt', "w")
-        # fh.write(sHtmlContent)
+        # fh.write(html_content)
         # fh.close
 
-        sPattern = '(eval\\(function\\(p,a,c,k,e(?:.|\\s)+?\\))<\\/script>'
+        pattern = '(eval\\(function\\(p,a,c,k,e(?:.|\\s)+?\\))<\\/script>'
 
-        oParser = Parser()
-        aResult = oParser.parse(sHtmlContent, sPattern)
+        parser = Parser()
+        results = parser.parse(html_content, pattern)
 
-        if aResult[0] is True:
-            sHtmlContent = cPacker().unpack(aResult[1][0])
+        if results[0] is True:
+            html_content = cPacker().unpack(results[1][0])
 
-        sPattern = '{src:\\s*"([^"]+)"'
-        aResult = oParser.parse(sHtmlContent, sPattern)
-        if aResult[0]:
-            api_call = aResult[1][0]
+        pattern = '{src:\\s*"([^"]+)"'
+        results = parser.parse(html_content, pattern)
+        if results[0]:
+            api_call = results[1][0]
 
         if api_call:
             return True, api_call

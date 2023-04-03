@@ -10,19 +10,19 @@ class cHoster(iHoster):
     def __init__(self):
         iHoster.__init__(self, 'archive', 'Archive')
 
-    def _getMediaLinkForGuest(self, autoPlay=False):
+    def _getMediaLinkForGuest(self, auto_play=False):
         api_call = ''
 
-        oParser = Parser()
-        oRequest = RequestHandler(self._url)
-        sHtmlContent = oRequest.request()
+        parser = Parser()
+        request = RequestHandler(self._url)
+        html_content = request.request()
 
-        sPattern = '<source src="([^"]+.mp4)"'
-        aResult = oParser.parse(sHtmlContent, sPattern)
-        if aResult[0] is True:
-            api_call = aResult[1][0]
+        pattern = '<source src="([^"]+.mp4)"'
+        results = parser.parse(html_content, pattern)
+        if results[0] is True:
+            api_call = results[1][0]
             if api_call.startswith('/'):
-                api_call = 'https://archive.org' + aResult[1][0]
+                api_call = 'https://archive.org' + results[1][0]
 
         if api_call:
             return True, api_call

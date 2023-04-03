@@ -24,28 +24,28 @@ class cHoster(iHoster):
 
     def __getIdFromUrl(self, url):
         # au cas ou test \/play\/embed\/(\w+)(?:\?|\\?)
-        sPattern = "\\/play\\/embed\\/(\\w+)"
-        oParser = Parser()
-        aResult = oParser.parse(url, sPattern)
-        if aResult[0] is True:
-            return aResult[1][0]
+        pattern = "\\/play\\/embed\\/(\\w+)"
+        parser = Parser()
+        results = parser.parse(url, pattern)
+        if results[0] is True:
+            return results[1][0]
 
         return ''
 
     def __getRestFromUrl(self, url):
-        # sPattern = "\?([\w]=[\w-]+)"
-        sPattern = "\\?([^ ]+)"
-        oParser = Parser()
-        aResult = oParser.parse(url, sPattern)
-        if aResult[0] is True:
-            return aResult[1][0]
+        # pattern = "\?([\w]=[\w-]+)"
+        pattern = "\\?([^ ]+)"
+        parser = Parser()
+        results = parser.parse(url, pattern)
+        if results[0] is True:
+            return results[1][0]
 
         return ''
 
-    def _getMediaLinkForGuest(self, autoPlay=False):
+    def _getMediaLinkForGuest(self, auto_play=False):
         stream_url = False
 
-        oParser = Parser()
+        parser = Parser()
 
         sID = self.__getIdFromUrl(self._url)
         sRestUrl = self.__getRestFromUrl(self._url)
@@ -54,34 +54,34 @@ class cHoster(iHoster):
             '/?format=json&no_404=true&referer=' + QuotePlus(self._url)
         api = api + '&' + sRestUrl
 
-        oRequest = RequestHandler(api)
-        sHtmlContent = oRequest.request()
+        request = RequestHandler(api)
+        html_content = request.request()
 
-        sPattern = '"m3u8": *"([^"]+)"'
-        aResult = oParser.parse(sHtmlContent, sPattern)
+        pattern = '"m3u8": *"([^"]+)"'
+        results = parser.parse(html_content, pattern)
 
-        if not aResult:
-            sPattern = '"default": *"([^"]+)"'
-            aResult = oParser.parse(sHtmlContent, sPattern)
+        if not results:
+            pattern = '"default": *"([^"]+)"'
+            results = parser.parse(html_content, pattern)
 
-        if aResult[0] is True:
-            url2 = aResult[1][0]
+        if results[0] is True:
+            url2 = results[1][0]
         else:
             return False, False
 
-        oRequest = RequestHandler(url2)
-        sHtmlContent = oRequest.request()
+        request = RequestHandler(url2)
+        html_content = request.request()
 
-        sPattern = '(http.+?\\?i=)([0-9x_]+)'
-        aResult = oParser.parse(sHtmlContent, sPattern)
+        pattern = '(http.+?\\?i=)([0-9x_]+)'
+        results = parser.parse(html_content, pattern)
 
-        if aResult[0] is True:
+        if results[0] is True:
             url = []
             qua = []
 
-            for aEntry in aResult[1]:
-                url.append(aEntry[0] + aEntry[1])
-                qua.append(aEntry[1])
+            for entry in results[1]:
+                url.append(entry[0] + entry[1])
+                qua.append(entry[1])
 
             # tableau
             stream_url = dialog().VSselectqual(qua, url)

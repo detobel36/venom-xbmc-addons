@@ -17,30 +17,30 @@ class cHoster(iHoster):
     def __init__(self):
         iHoster.__init__(self, 'vimple', 'Vimple')
 
-    def _getMediaLinkForGuest(self, autoPlay=False):
+    def _getMediaLinkForGuest(self, auto_play=False):
         headers = {
             'User-Agent': 'Mozilla/5.0 (Windows NT 6.1; WOW64; rv:47.0) Gecko/20100101 Firefox/47.0'}
         req = urllib2.Request(self._url, None, headers)
         response = urllib2.urlopen(req)
-        sHtmlContent = response.read()
+        html_content = response.read()
         head = response.headers
         response.close()
 
-        oParser = Parser()
+        parser = Parser()
 
         cookies = ''
         if 'Set-Cookie' in head:
-            sPattern = '(?:^|,) *([^;,]+?)=([^;,\\/]+?);'
-            aResult = oParser.parse(str(head['Set-Cookie']), sPattern)
-            if aResult[0] is True:
-                for cook in aResult[1]:
+            pattern = '(?:^|,) *([^;,]+?)=([^;,\\/]+?);'
+            results = parser.parse(str(head['Set-Cookie']), pattern)
+            if results[0] is True:
+                for cook in results[1]:
                     cookies = cookies + cook[0] + '=' + cook[1] + ';'
         # Get link
-        sPattern = '"video":\\[{"default":true,"url":"([^"]+?)"}]'
-        aResult = oParser.parse(sHtmlContent, sPattern)
+        pattern = '"video":\\[{"default":true,"url":"([^"]+?)"}]'
+        results = parser.parse(html_content, pattern)
 
-        if aResult[0] is True:
-            url = aResult[1][0]
+        if results[0] is True:
+            url = results[1][0]
             url = url.replace('\\/', '/')
 
             api_call = url + '|Cookie=' + cookies

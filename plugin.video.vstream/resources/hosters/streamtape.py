@@ -11,19 +11,19 @@ class cHoster(iHoster):
     def __init__(self):
         iHoster.__init__(self, 'streamtape', 'Streamtape')
 
-    def _getMediaLinkForGuest(self, autoPlay=False):
+    def _getMediaLinkForGuest(self, auto_play=False):
         api_call = ''
-        oParser = Parser()
+        parser = Parser()
 
-        oRequest = RequestHandler(self._url)
-        sHtmlContent = oRequest.request()
+        request = RequestHandler(self._url)
+        html_content = request.request()
 
         sPattern1 = 'ById\\(\'ideoo.+?=\\s*["\']([^"\']+)[\'"].+?["\']([^"\']+)\'\\)'
 
-        aResult = oParser.parse(sHtmlContent, sPattern1)
+        results = parser.parse(html_content, sPattern1)
 
-        if aResult[0] is True:
-            url = aResult[1][0][1]
+        if results[0] is True:
+            url = results[1][0][1]
             api_call = 'https://streamtape.com/get_video' + \
                 url[url.find('?'):] + "&stream=1"
 

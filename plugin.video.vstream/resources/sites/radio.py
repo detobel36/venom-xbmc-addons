@@ -6,7 +6,7 @@ import string
 import xbmc
 import xbmcvfs
 
-from resources.lib.comaddon import addon
+from resources.lib.comaddon import Addon
 from resources.lib.gui.gui import Gui
 from resources.lib.gui.guiElement import GuiElement
 from resources.lib.handler.inputParameterHandler import InputParameterHandler
@@ -42,10 +42,10 @@ class track:
 
 def load():
     gui = Gui()
-    addons = addon()
+    addons = Addon()
 
     output_parameter_handler = OutputParameterHandler()
-    output_parameter_handler.addParameter('siteUrl', 'http://')
+    output_parameter_handler.addParameter('site_url', 'http://')
     gui.addDir(
         SITE_IDENTIFIER,
         'showWeb',
@@ -53,7 +53,7 @@ def load():
         'music.png',
         output_parameter_handler)
 
-    output_parameter_handler.addParameter('siteUrl', 'http://')
+    output_parameter_handler.addParameter('site_url', 'http://')
     gui.addDir(
         SITE_IDENTIFIER,
         'showGenres',
@@ -62,7 +62,7 @@ def load():
         'genres.png',
         output_parameter_handler)
 
-    output_parameter_handler.addParameter('siteUrl', 'http://')
+    output_parameter_handler.addParameter('site_url', 'http://')
     gui.addDir(
         SITE_IDENTIFIER,
         'showAZ',
@@ -99,7 +99,7 @@ def showGenres():
 
     output_parameter_handler = OutputParameterHandler()
     for title, sIdent in liste:
-        output_parameter_handler.addParameter('siteUrl', '')
+        output_parameter_handler.addParameter('site_url', '')
         output_parameter_handler.addParameter('ident', sIdent)
         gui.addDir(
             SITE_IDENTIFIER,
@@ -114,24 +114,24 @@ def showGenres():
 def parseWebM3U():  # Traite les m3u
     playlist = []
     # song = track(None, None, None, None)
-    sFile = 'special://home/addons/plugin.video.vstream/resources/extra/radio.xspf'
+    file = 'special://home/addons/plugin.video.vstream/resources/extra/radio.xspf'
 
-    if not xbmcvfs.exists(sFile):
+    if not xbmcvfs.exists(file):
         return
 
-    f = xbmcvfs.File(sFile, 'rb')
-    sHtmlContent = f.read()
+    f = xbmcvfs.File(file, 'rb')
+    html_content = f.read()
     f.close()
 
     line = re.compile(
         '<location>([^<]+).+?title>([^<]+).+?image>([^<]+).+?identifier>([^<]+)',
-        re.MULTILINE | re.IGNORECASE | re.DOTALL).findall(sHtmlContent)
+        re.MULTILINE | re.IGNORECASE | re.DOTALL).findall(html_content)
 
     if line:
         # total = len(line)
 
         for result in line:
-            # sUrl2 = result[0].replace('\r', '')
+            # url2 = result[0].replace('\r', '')
             song = track(result[0], result[1], result[2], result[3])
             playlist.append(song)
 
@@ -160,32 +160,32 @@ def showWeb():  # Code qui s'occupe de liens TV du Web
 
     if not playlist:
         output_parameter_handler = OutputParameterHandler()
-        output_parameter_handler.addParameter('siteUrl', 'http://')
+        output_parameter_handler.addParameter('site_url', 'http://')
         gui.addText(SITE_IDENTIFIER, '[COLOR red]Aucun résultat[/COLOR] ')
     else:
         output_parameter_handler = OutputParameterHandler()
         for track in playlist:
-            sThumb = track.image
-            if not sThumb:
-                sThumb = 'music.png'
+            thumb = track.image
+            if not thumb:
+                thumb = 'music.png'
 
-            output_parameter_handler.addParameter('siteUrl', track.location)
-            output_parameter_handler.addParameter('sMovieTitle', track.title)
-            output_parameter_handler.addParameter('thumbnail', sThumb)
+            output_parameter_handler.addParameter('site_url', track.location)
+            output_parameter_handler.addParameter('movie_title', track.title)
+            output_parameter_handler.addParameter('thumbnail', thumb)
 
-            oGuiElement = GuiElement()
-            oGuiElement.setSiteName(SITE_IDENTIFIER)
-            oGuiElement.setFunction('play__')
-            oGuiElement.setTitle(track.title)
-            oGuiElement.setFileName(track.title)
-            oGuiElement.setIcon('music.png')
-            oGuiElement.setMeta(0)
-            oGuiElement.setThumbnail(sThumb)
-            oGuiElement.setDirectTvFanart()
-            oGuiElement.setCat(6)
+            gui_element = GuiElement()
+            gui_element.setSiteName(SITE_IDENTIFIER)
+            gui_element.setFunction('play__')
+            gui_element.setTitle(track.title)
+            gui_element.setFileName(track.title)
+            gui_element.setIcon('music.png')
+            gui_element.setMeta(0)
+            gui_element.setThumbnail(thumb)
+            gui_element.setDirectTvFanart()
+            gui_element.setCat(6)
 
-            gui.createContexMenuBookmark(oGuiElement, output_parameter_handler)
-            gui.addFolder(oGuiElement, output_parameter_handler)
+            gui.createContexMenuBookmark(gui_element, output_parameter_handler)
+            gui.addFolder(gui_element, output_parameter_handler)
 
     gui.setEndOfDirectory()
 
@@ -194,11 +194,11 @@ def showAZ():
 
     gui = Gui()
     input_parameter_handler = InputParameterHandler()
-    sUrl = input_parameter_handler.getValue('siteUrl')
+    url = input_parameter_handler.getValue('site_url')
 
     output_parameter_handler = OutputParameterHandler()
     for i in string.digits:
-        output_parameter_handler.addParameter('siteUrl', sUrl)
+        output_parameter_handler.addParameter('site_url', url)
         output_parameter_handler.addParameter('AZ', i)
         gui.addDir(
             SITE_IDENTIFIER,
@@ -209,7 +209,7 @@ def showAZ():
 
     output_parameter_handler = OutputParameterHandler()
     for i in string.ascii_uppercase:
-        output_parameter_handler.addParameter('siteUrl', sUrl)
+        output_parameter_handler.addParameter('site_url', url)
         output_parameter_handler.addParameter('AZ', i)
         gui.addDir(
             SITE_IDENTIFIER,
@@ -223,32 +223,32 @@ def showAZ():
 
 def play__():  # Lancer les liens
     input_parameter_handler = InputParameterHandler()
-    sUrl = input_parameter_handler.getValue('siteUrl').replace('P_L_U_S', '+')
-    title = input_parameter_handler.getValue('sMovieTitle')
+    url = input_parameter_handler.getValue('site_url').replace('P_L_U_S', '+')
+    title = input_parameter_handler.getValue('movie_title')
     thumbnail = input_parameter_handler.getValue('thumbnail')
 
     # Special url with tag
-    if '[' in sUrl and ']' in sUrl:
-        sUrl = GetRealUrl(sUrl)
+    if '[' in url and ']' in url:
+        url = GetRealUrl(url)
 
-    if 'f4mTester' in sUrl:
-        xbmc.executebuiltin('XBMC.RunPlugin(' + sUrl + ')')
+    if 'f4mTester' in url:
+        xbmc.executebuiltin('XBMC.RunPlugin(' + url + ')')
         return
     else:
-        oGuiElement = GuiElement()
-        oGuiElement.setSiteName(SITE_IDENTIFIER)
-        oGuiElement.setTitle(title)
-        sUrl = sUrl.replace(' ', '%20')
-        oGuiElement.setMediaUrl(sUrl)
-        oGuiElement.setThumbnail(thumbnail)
+        gui_element = GuiElement()
+        gui_element.setSiteName(SITE_IDENTIFIER)
+        gui_element.setTitle(title)
+        url = url.replace(' ', '%20')
+        gui_element.setMediaUrl(url)
+        gui_element.setThumbnail(thumbnail)
 
-        oPlayer = Player()
-        oPlayer.clearPlayList()
-        oPlayer.addItemToPlaylist(oGuiElement)
+        player = Player()
+        player.clearPlayList()
+        player.addItemToPlaylist(gui_element)
         # tout répéter
         xbmc.executebuiltin('xbmc.playercontrol(RepeatAll)')
 
-        oPlayer.startPlayer()
+        player.startPlayer()
         return
 
 
@@ -257,7 +257,7 @@ def GetRealUrl(chain):  # Récupère les liens des regex
     UA2 = UA
     url = chain
     regex = ''
-    sHtmlContent = ''
+    html_content = ''
 
     r = re.search('\\[[REGEX]+\\](.+?)(?:(?:\\[[A-Z]+\\])|$)', chain)
     if r:
@@ -275,20 +275,20 @@ def GetRealUrl(chain):  # Récupère les liens des regex
     r = re.search('\\[[POSTFORM]+\\](.+?)(?:(?:\\[[A-Z]+\\])|$)', chain)
     if r:
         param = r.group(1)
-        oRequestHandler = RequestHandler(url)
-        oRequestHandler.setRequestType(1)
-        oRequestHandler.addHeaderEntry('Accept-Encoding', 'identity')
-        oRequestHandler.addParametersLine(param)
-        sHtmlContent = oRequestHandler.request()
+        request_handler = RequestHandler(url)
+        request_handler.setRequestType(1)
+        request_handler.addHeaderEntry('Accept-Encoding', 'identity')
+        request_handler.addParametersLine(param)
+        html_content = request_handler.request()
 
     else:
         if url:
-            oRequestHandler = RequestHandler(url)
-            sHtmlContent = oRequestHandler.request()
+            request_handler = RequestHandler(url)
+            html_content = request_handler.request()
 
     if regex:
-        oParser = Parser()
-        aResult2 = oParser.parse(sHtmlContent, regex)
+        parser = Parser()
+        aResult2 = parser.parse(html_content, regex)
         if aResult2:
             url = aResult2[1][0]
 

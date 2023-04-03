@@ -67,7 +67,7 @@ def load():
     gui = Gui()
 
     output_parameter_handler = OutputParameterHandler()
-    output_parameter_handler.addParameter('siteUrl', MOVIE_WORLD[0])
+    output_parameter_handler.addParameter('site_url', MOVIE_WORLD[0])
     gui.addDir(
         SITE_IDENTIFIER,
         MOVIE_WORLD[1],
@@ -75,7 +75,7 @@ def load():
         'films.png',
         output_parameter_handler)
 
-    output_parameter_handler.addParameter('siteUrl', MOVIE_TOP250[0])
+    output_parameter_handler.addParameter('site_url', MOVIE_TOP250[0])
     gui.addDir(
         SITE_IDENTIFIER,
         MOVIE_TOP250[1],
@@ -83,7 +83,7 @@ def load():
         'films.png',
         output_parameter_handler)
 
-    output_parameter_handler.addParameter('siteUrl', MOVIE_ANNEES[0])
+    output_parameter_handler.addParameter('site_url', MOVIE_ANNEES[0])
     gui.addDir(
         SITE_IDENTIFIER,
         MOVIE_ANNEES[1],
@@ -103,7 +103,7 @@ def showMovieYears():
     output_parameter_handler = OutputParameterHandler()
     for i in reversed(xrange(1903, int(now.year) + 1)):
         output_parameter_handler.addParameter(
-            'siteUrl',
+            'site_url',
             URL_MAIN +
             'search/title?year=' +
             str(i) +
@@ -120,45 +120,45 @@ def showMovieYears():
     gui.setEndOfDirectory()
 
 
-def showMovies(sSearch=''):
+def showMovies(search=''):
     gui = Gui()
-    oParser = Parser()
+    parser = Parser()
     # bGlobal_Search = False
 
     input_parameter_handler = InputParameterHandler()
-    if sSearch:
-        sUrl = sSearch
+    if search:
+        url = search
     else:
-        sUrl = input_parameter_handler.getValue('siteUrl')
-    # if URL_SEARCH[0] in sSearch:
+        url = input_parameter_handler.getValue('site_url')
+    # if URL_SEARCH[0] in search:
         # bGlobal_Search = True
 
-    oRequestHandler = RequestHandler(sUrl)
-    oRequestHandler.addHeaderEntry(
+    request_handler = RequestHandler(url)
+    request_handler.addHeaderEntry(
         'Accept-Language',
         'fr,fr-FR;q=0.8,en-US;q=0.5,en;q=0.3')
-    sHtmlContent = oRequestHandler.request()
+    html_content = request_handler.request()
 
-    sPattern = 'img alt="([^"]+).+?loadlate="([^"]+).+?primary">([^<]+).+?unbold">([^<]+).+?(?:|rated this(.+?)\\s.+?)muted">([^<]+)'
-    aResult = oParser.parse(sHtmlContent, sPattern)
+    pattern = 'img alt="([^"]+).+?loadlate="([^"]+).+?primary">([^<]+).+?unbold">([^<]+).+?(?:|rated this(.+?)\\s.+?)muted">([^<]+)'
+    results = parser.parse(html_content, pattern)
 
-    if aResult[0]:
-        total = len(aResult[1])
+    if results[0]:
+        total = len(results[1])
         progress_ = Progress().VScreate(SITE_NAME)
         output_parameter_handler = OutputParameterHandler()
-        for aEntry in aResult[1]:
+        for entry in results[1]:
             progress_.VSupdate(progress_, total)
             if progress_.iscanceled():
                 break
 
-            # title = unicode(aEntry[0], 'utf-8')  # converti en unicode
+            # title = unicode(entry[0], 'utf-8')  # converti en unicode
             # title = unicodedata.normalize('NFD', title).encode('ascii', 'ignore')  # vire accent
-            # title = unescape(str(aEntry[1]))
+            # title = unescape(str(entry[1]))
             # title = title.encode( "utf-8")
 
             title = (
-                '%s %s [COLOR fuchsia]%s[/COLOR]') % (aEntry[2], aEntry[0], aEntry[4])
-            sThumb = aEntry[1].replace(
+                '%s %s [COLOR fuchsia]%s[/COLOR]') % (entry[2], entry[0], entry[4])
+            thumb = entry[1].replace(
                 'UX67',
                 'UX328').replace(
                 'UY98',
@@ -167,60 +167,60 @@ def showMovies(sSearch=''):
                 '0').replace(
                 '98',
                 '0')
-            sYear = re.search('([0-9]{4})', aEntry[3]).group(1)
-            desc = aEntry[5]
+            year = re.search('([0-9]{4})', entry[3]).group(1)
+            desc = entry[5]
 
-            output_parameter_handler.addParameter('siteUrl', 'none')
+            output_parameter_handler.addParameter('site_url', 'none')
             output_parameter_handler.addParameter(
-                'sMovieTitle', str(aEntry[0]))
-            output_parameter_handler.addParameter('sYear', sYear)
+                'movie_title', str(entry[0]))
+            output_parameter_handler.addParameter('year', year)
             output_parameter_handler.addParameter(
-                'searchtext', showTitle(str(aEntry[0]), str('none')))
+                'searchtext', showTitle(str(entry[0]), str('none')))
             gui.addMovie('globalSearch', 'showSearch', title, '',
-                         sThumb, desc, output_parameter_handler)
+                         thumb, desc, output_parameter_handler)
 
         progress_.VSclose(progress_)
 
-        sNextPage = __checkForNextPage(sHtmlContent)
-        if sNextPage:
+        next_page = __checkForNextPage(html_content)
+        if next_page:
             output_parameter_handler = OutputParameterHandler()
-            output_parameter_handler.addParameter('siteUrl', sNextPage)
+            output_parameter_handler.addParameter('site_url', next_page)
             gui.addNext(
                 SITE_IDENTIFIER,
                 'showMovies',
                 'Suivant',
                 output_parameter_handler)
 
-    if not sSearch:
+    if not search:
         gui.setEndOfDirectory('500')
 
 
-def __checkForNextPage(sHtmlContent):
-    oParser = Parser()
-    sPattern = 'href="([^"]+?)"class="lister-page-next'
-    aResult = oParser.parse(sHtmlContent, sPattern)
+def __checkForNextPage(html_content):
+    parser = Parser()
+    pattern = 'href="([^"]+?)"class="lister-page-next'
+    results = parser.parse(html_content, pattern)
 
-    if aResult[0]:
-        sUrl = ('%s/%s') % (URL_MAIN, aResult[1][0])
-        return sUrl
+    if results[0]:
+        url = ('%s/%s') % (URL_MAIN, results[1][0])
+        return url
 
     return False
 
 
-def showTitle(sMovieTitle, sUrl):
+def showTitle(movie_title, url):
 
     sExtraTitle = ''
     # si c'est une série
-    if sUrl != 'none':
-        sExtraTitle = sUrl.split('|')[1]
-        sMovieTitle = sUrl.split('|')[0]
+    if url != 'none':
+        sExtraTitle = url.split('|')[1]
+        movie_title = url.split('|')[0]
 
-    sMovieTitle = cUtil().CleanName(sMovieTitle)
+    movie_title = cUtil().CleanName(movie_title)
 
     # modif ici
     if sExtraTitle:
-        sMovieTitle = sMovieTitle + sExtraTitle
+        movie_title = movie_title + sExtraTitle
     else:
-        sMovieTitle = sMovieTitle
+        movie_title = movie_title
 
-    return sMovieTitle
+    return movie_title

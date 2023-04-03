@@ -6,19 +6,19 @@ from resources.lib.gui.guiElement import GuiElement
 from resources.lib.gui.contextElement import ContextElement
 from resources.lib.handler.inputParameterHandler import InputParameterHandler
 from resources.lib.handler.outputParameterHandler import OutputParameterHandler
-from resources.lib.comaddon import dialog, addon, VSlog, window
+from resources.lib.comaddon import dialog, Addon, VSlog, window
 
 
 class HosterGui:
     SITE_NAME = 'HosterGui'
-    ADDON = addon()
+    ADDON = Addon()
 
     # step 1 - bGetRedirectUrl in ein extra optionsObject verpacken
     def showHoster(
             self,
             gui,
-            oHoster,
-            sMediaUrl,
+            hoster,
+            media_url,
             thumbnail,
             bGetRedirectUrl=False,
             input_parameter_handler=False):
@@ -27,91 +27,91 @@ class HosterGui:
             input_parameter_handler = InputParameterHandler()
 
         # Gestion NextUp
-        siteUrl = input_parameter_handler.getValue('siteUrl')
+        site_url = input_parameter_handler.getValue('site_url')
         site = input_parameter_handler.getValue('site')
-        saisonUrl = input_parameter_handler.getValue('saisonUrl')
+        saison_url = input_parameter_handler.getValue('saison_url')
         nextSaisonFunc = input_parameter_handler.getValue('nextSaisonFunc')
-        movieUrl = input_parameter_handler.getValue('movieUrl')
+        movie_url = input_parameter_handler.getValue('movie_url')
         movieFunc = input_parameter_handler.getValue('movieFunc')
-        sLang = input_parameter_handler.getValue('sLang')
-        sRes = input_parameter_handler.getValue('sRes')
-        sTmdbId = input_parameter_handler.getValue('sTmdbId')
-        sFav = input_parameter_handler.getValue('sFav')
-        if not sFav:
-            sFav = input_parameter_handler.getValue('function')
+        lang = input_parameter_handler.getValue('lang')
+        resolution = input_parameter_handler.getValue('resolution')
+        tmdb_id = input_parameter_handler.getValue('tmdb_id')
+        fav = input_parameter_handler.getValue('fav')
+        if not fav:
+            fav = input_parameter_handler.getValue('function')
         searchSiteId = input_parameter_handler.getValue('searchSiteId')
         if searchSiteId:
             output_parameter_handler.addParameter('searchSiteId', searchSiteId)
         output_parameter_handler.addParameter(
             'searchSiteName', input_parameter_handler.getValue('searchSiteName'))
         output_parameter_handler.addParameter(
-            'sQual', input_parameter_handler.getValue('sQual'))
+            'qual', input_parameter_handler.getValue('qual'))
 
-        oGuiElement = GuiElement()
-        oGuiElement.setSiteName(self.SITE_NAME)
-        oGuiElement.setFunction('play')
-        oGuiElement.setTitle(oHoster.getDisplayName())
+        gui_element = GuiElement()
+        gui_element.setSiteName(self.SITE_NAME)
+        gui_element.setFunction('play')
+        gui_element.setTitle(hoster.getDisplayName())
 
         # Catégorie de lecture
-        if input_parameter_handler.exist('sCat'):
-            sCat = input_parameter_handler.getValue('sCat')
-            if sCat == '4':  # Si on vient de passer par un menu "Saison" ...
-                sCat = '8'   # ...  On est maintenant au niveau "Episode"
+        if input_parameter_handler.exist('cat'):
+            cat = input_parameter_handler.getValue('cat')
+            if cat == '4':  # Si on vient de passer par un menu "Saison" ...
+                cat = '8'   # ...  On est maintenant au niveau "Episode"
         else:
-            sCat = '5'     # Divers
-        oGuiElement.setCat(sCat)
-        output_parameter_handler.addParameter('sCat', sCat)
+            cat = '5'     # Divers
+        gui_element.setCat(cat)
+        output_parameter_handler.addParameter('cat', cat)
 
-        if (input_parameter_handler.exist('sMeta')):
+        if input_parameter_handler.exist('sMeta'):
             sMeta = input_parameter_handler.getValue('sMeta')
-            oGuiElement.setMeta(int(sMeta))
+            gui_element.setMeta(int(sMeta))
 
-        oGuiElement.setFileName(oHoster.getFileName())
-        oGuiElement.getInfoLabel()
-        oGuiElement.setIcon('host.png')
+        gui_element.setFileName(hoster.getFileName())
+        gui_element.getInfoLabel()
+        gui_element.setIcon('host.png')
         if thumbnail:
-            oGuiElement.setThumbnail(thumbnail)
-            oGuiElement.setPoster(thumbnail)
+            gui_element.setThumbnail(thumbnail)
+            gui_element.setPoster(thumbnail)
 
-        title = oGuiElement.getCleanTitle()
+        title = gui_element.getCleanTitle()
 
-        output_parameter_handler.addParameter('sMediaUrl', sMediaUrl)
+        output_parameter_handler.addParameter('media_url', media_url)
         output_parameter_handler.addParameter(
-            'sHosterIdentifier', oHoster.getPluginIdentifier())
+            'hoster_identifier', hoster.getPluginIdentifier())
         output_parameter_handler.addParameter(
             'bGetRedirectUrl', bGetRedirectUrl)
         output_parameter_handler.addParameter(
-            'sFileName', oHoster.getFileName())
+            'file_name', hoster.getFileName())
         output_parameter_handler.addParameter(
-            'sTitleWatched', oGuiElement.getTitleWatched())
+            'title_watched', gui_element.getTitleWatched())
         output_parameter_handler.addParameter('title', title)
-        output_parameter_handler.addParameter('sLang', sLang)
-        output_parameter_handler.addParameter('sRes', sRes)
-        output_parameter_handler.addParameter('sId', 'HosterGui')
-        output_parameter_handler.addParameter('siteUrl', siteUrl)
-        output_parameter_handler.addParameter('sTmdbId', sTmdbId)
+        output_parameter_handler.addParameter('lang', lang)
+        output_parameter_handler.addParameter('resolution', resolution)
+        output_parameter_handler.addParameter('s_id', 'HosterGui')
+        output_parameter_handler.addParameter('site_url', site_url)
+        output_parameter_handler.addParameter('tmdb_id', tmdb_id)
 
         # gestion NextUp
         output_parameter_handler.addParameter(
             'sourceName', site)    # source d'origine
         output_parameter_handler.addParameter(
-            'sourceFav', sFav)    # source d'origine
+            'sourceFav', fav)    # source d'origine
         output_parameter_handler.addParameter('nextSaisonFunc', nextSaisonFunc)
-        output_parameter_handler.addParameter('saisonUrl', saisonUrl)
+        output_parameter_handler.addParameter('saison_url', saison_url)
 
         # gestion Lecture en cours
-        output_parameter_handler.addParameter('movieUrl', movieUrl)
+        output_parameter_handler.addParameter('movie_url', movie_url)
         output_parameter_handler.addParameter('movieFunc', movieFunc)
 
         # Download menu
-        if oHoster.isDownloadable():
+        if hoster.isDownloadable():
             oContext = ContextElement()
             oContext.setFile('cDownload')
             oContext.setSiteName('cDownload')
             oContext.setFunction('AddtoDownloadList')
             oContext.setTitle(self.ADDON.VSlang(30202))
             oContext.setOutputParameterHandler(output_parameter_handler)
-            oGuiElement.addContextItem(oContext)
+            gui_element.addContextItem(oContext)
 
             # Beta context download and view menu
             oContext = ContextElement()
@@ -120,7 +120,7 @@ class HosterGui:
             oContext.setFunction('AddtoDownloadListandview')
             oContext.setTitle(self.ADDON.VSlang(30326))
             oContext.setOutputParameterHandler(output_parameter_handler)
-            oGuiElement.addContextItem(oContext)
+            gui_element.addContextItem(oContext)
 
         # Liste de lecture
         oContext = ContextElement()
@@ -129,11 +129,11 @@ class HosterGui:
         oContext.setFunction('addToPlaylist')
         oContext.setTitle(self.ADDON.VSlang(30201))
         oContext.setOutputParameterHandler(output_parameter_handler)
-        oGuiElement.addContextItem(oContext)
+        gui_element.addContextItem(oContext)
 
         # Dossier Media
         gui.createSimpleMenu(
-            oGuiElement,
+            gui_element,
             output_parameter_handler,
             'Library',
             'Library',
@@ -143,12 +143,12 @@ class HosterGui:
         # Upload menu uptobox
         if InputParameterHandler().getValue('site') != 'siteuptobox' and self.ADDON.getSetting(
                 'hoster_uptobox_premium') == 'true':
-            host = oHoster.getPluginIdentifier()
+            host = hoster.getPluginIdentifier()
             accept = ['uptobox', 'uptostream', '1fichier', 'uploaded', 'uplea']
             for i in accept:
                 if host == i:
                     gui.createSimpleMenu(
-                        oGuiElement,
+                        gui_element,
                         output_parameter_handler,
                         'siteuptobox',
                         'siteuptobox',
@@ -159,32 +159,32 @@ class HosterGui:
         # onefichier
         if InputParameterHandler().getValue('site') != 'siteonefichier' and self.ADDON.getSetting(
                 'hoster_onefichier_premium') == 'true':
-            host = oHoster.getPluginIdentifier()
+            host = hoster.getPluginIdentifier()
             accept = '1fichier'  # les autres ne fonctionnent pas
             if host == accept:
                 gui.createSimpleMenu(
-                    oGuiElement,
+                    gui_element,
                     output_parameter_handler,
                     'siteonefichier',
                     'siteonefichier',
                     'upToMyAccount',
                     '1fichier')
 
-        gui.addFolder(oGuiElement, output_parameter_handler, False)
+        gui.addFolder(gui_element, output_parameter_handler, False)
 
-    def checkHoster(self, sHosterUrl, debrid=True):
+    def checkHoster(self, hoster_url, debrid=True):
         # securite
-        if not sHosterUrl:
+        if not hoster_url:
             return False
 
         # Petit nettoyage
-        sHosterUrl = sHosterUrl.split('|')[0]
-        sHosterUrl = sHosterUrl.split('?')[0]
-        sHosterUrl = sHosterUrl.lower()
+        hoster_url = hoster_url.split('|')[0]
+        hoster_url = hoster_url.split('?')[0]
+        hoster_url = hoster_url.lower()
 
         # lien direct ?
         if any(
-            sHosterUrl.endswith(x) for x in [
+            hoster_url.endswith(x) for x in [
                 '.mp4',
                 '.avi',
                 '.flv',
@@ -196,9 +196,9 @@ class HosterGui:
 
         # Recuperation du host
         try:
-            sHostName = sHosterUrl.split('/')[2]
+            sHostName = hoster_url.split('/')[2]
         except BaseException:
-            sHostName = sHosterUrl
+            sHostName = hoster_url
 
         if debrid:
             # L'user a activé alldebrid ?
@@ -211,7 +211,7 @@ class HosterGui:
 
             # L'user a activé debrid_link ?
             if self.ADDON.getSetting('hoster_debridlink_premium') == 'true':
-                if "debrid.link" not in sHosterUrl:
+                if "debrid.link" not in hoster_url:
                     return self.getHoster('debrid_link')
                 else:
                     return self.getHoster("lien_direct")
@@ -329,16 +329,16 @@ class HosterGui:
                 'vkontakte' in sHostName) or ('vkcom' in sHostName):
             return self.getHoster('vk')
 
-        if ('playvidto' in sHostName):
+        if 'playvidto' in sHostName:
             return self.getHoster('vidto')
 
-        if ('hd-stream' in sHostName):
+        if 'hd-stream' in sHostName:
             return self.getHoster('hd_stream')
 
-        if ('vcstream' in sHostName):
+        if 'vcstream' in sHostName:
             return self.getHoster('vidcloud')
 
-        if ('livestream' in sHostName):
+        if 'livestream' in sHostName:
             return self.getHoster('lien_direct')
 
         # vidtodo et clone
@@ -354,7 +354,7 @@ class HosterGui:
 
         if ('dailymotion' in sHostName) or ('dai.ly' in sHostName):
             try:
-                if 'stream' in sHosterUrl:
+                if 'stream' in hoster_url:
                     return self.getHoster('lien_direct')
             except BaseException:
                 pass
@@ -366,7 +366,7 @@ class HosterGui:
         if ('mystream' in sHostName) or ('mstream' in sHostName):
             return self.getHoster('mystream')
 
-        if ('streamingentiercom/videophp' in sHosterUrl) or ('speedvideo' in sHostName):
+        if ('streamingentiercom/videophp' in hoster_url) or ('speedvideo' in sHostName):
             return self.getHoster('speedvideo')
 
         if ('googlevideo' in sHostName) or ('picasaweb' in sHostName) or (
@@ -376,10 +376,10 @@ class HosterGui:
         if ('ok.ru' in sHostName) or ('odnoklassniki' in sHostName):
             return self.getHoster('ok_ru')
 
-        if ('iframe-secured' in sHostName):
+        if 'iframe-secured' in sHostName:
             return self.getHoster('iframe_secured')
 
-        if ('iframe-secure' in sHostName):
+        if 'iframe-secure' in sHostName:
             return self.getHoster('iframe_secure')
 
         if ('thevideo' in sHostName) or (
@@ -402,11 +402,11 @@ class HosterGui:
         if ('clipwatching' in sHostName) or ('highstream' in sHostName):
             return self.getHoster('clipwatching')
 
-        if ('voe' in sHostName):
+        if 'voe' in sHostName:
             return self.getHoster('voe')
 
         if ('goo.gl' in sHostName) or ('bit.ly' in sHostName) or (
-                'streamcrypt' in sHostName) or ('opsktp' in sHosterUrl):
+                'streamcrypt' in sHostName) or ('opsktp' in hoster_url):
             return self.getHoster('allow_redirects')
 
         # frenchvid et clone
@@ -431,15 +431,15 @@ class HosterGui:
             return self.getHoster('directmoviedl')
 
         # Lien telechargeable a convertir en stream
-        if ('1fichier' in sHostName):
+        if '1fichier' in sHostName:
             return self.getHoster('1fichier')
 
         if ('uploaded' in sHostName) or ('ul.to' in sHostName):
-            if ('/file/forbidden' in sHosterUrl):
+            if '/file/forbidden' in hoster_url:
                 return False
             return self.getHoster('uploaded')
 
-        if ('myfiles.alldebrid.com' in sHostName):
+        if 'myfiles.alldebrid.com' in sHostName:
             return self.getHoster('lien_direct')
 
         return False
@@ -452,80 +452,80 @@ class HosterGui:
         klass = getattr(mod, 'cHoster')
         return klass()
 
-    def play(self, input_parameter_handler=False, autoPlay=False):
+    def play(self, input_parameter_handler=False, auto_play=False):
         gui = Gui()
         oDialog = dialog()
 
         if not input_parameter_handler:
             input_parameter_handler = InputParameterHandler()
 
-        sHosterIdentifier = input_parameter_handler.getValue(
-            'sHosterIdentifier')
-        sMediaUrl = input_parameter_handler.getValue('sMediaUrl')
+        hoster_identifier = input_parameter_handler.getValue(
+            'hoster_identifier')
+        media_url = input_parameter_handler.getValue('media_url')
         bGetRedirectUrl = input_parameter_handler.getValue('bGetRedirectUrl')
-        sFileName = input_parameter_handler.getValue('sFileName')
+        file_name = input_parameter_handler.getValue('file_name')
         title = input_parameter_handler.getValue('title')
-        siteUrl = input_parameter_handler.getValue('siteUrl')
-        sCat = input_parameter_handler.getValue('sCat')
+        site_url = input_parameter_handler.getValue('site_url')
+        cat = input_parameter_handler.getValue('cat')
         sMeta = input_parameter_handler.getValue('sMeta')
 
         if not title:
-            title = sFileName
+            title = file_name
 
         if bGetRedirectUrl == 'True':
-            sMediaUrl = self.__getRedirectUrl(sMediaUrl)
+            media_url = self.__getRedirectUrl(media_url)
 
         try:
-            mediaDisplay = sMediaUrl.split('/')
+            mediaDisplay = media_url.split('/')
             VSlog('Hoster %s - play : %s/ ... /%s' %
-                  (sHosterIdentifier, '/'.join(mediaDisplay[0:3]), mediaDisplay[-1]))
+                  (hoster_identifier, '/'.join(mediaDisplay[0:3]), mediaDisplay[-1]))
         except BaseException:
-            VSlog('Hoster %s - play : ' % (sHosterIdentifier, sMediaUrl))
+            VSlog('Hoster %s - play : ' % (hoster_identifier, media_url))
 
-        oHoster = self.getHoster(sHosterIdentifier)
-        oHoster.setFileName(sFileName)
+        hoster = self.getHoster(hoster_identifier)
+        hoster.setFileName(file_name)
 
-        sHosterName = oHoster.getDisplayName()
-        if not autoPlay:
+        sHosterName = hoster.getDisplayName()
+        if not auto_play:
             oDialog.VSinfo(sHosterName, 'Resolve')
 
         try:
-            oHoster.setUrl(sMediaUrl)
-            aLink = oHoster.getMediaLink(autoPlay)
+            hoster.setUrl(media_url)
+            aLink = hoster.getMediaLink(auto_play)
 
             if aLink and (
                     aLink[0] or aLink[1]):  # Le hoster ne sait pas résoudre mais a retourné une autre url
                 if not aLink[0]:  # Voir exemple avec allDebrid qui : return False, URL
-                    oHoster = self.checkHoster(aLink[1], debrid=False)
-                    if oHoster:
-                        oHoster.setFileName(sFileName)
-                        sHosterName = oHoster.getDisplayName()
-                        if not autoPlay:
+                    hoster = self.checkHoster(aLink[1], debrid=False)
+                    if hoster:
+                        hoster.setFileName(file_name)
+                        sHosterName = hoster.getDisplayName()
+                        if not auto_play:
                             oDialog.VSinfo(sHosterName, 'Resolve')
-                        oHoster.setUrl(aLink[1])
-                        aLink = oHoster.getMediaLink(autoPlay)
+                        hoster.setUrl(aLink[1])
+                        aLink = hoster.getMediaLink(auto_play)
 
                 if aLink[0]:
-                    oGuiElement = GuiElement()
-                    oGuiElement.setSiteName(self.SITE_NAME)
-                    oGuiElement.setSiteUrl(siteUrl)
-                    oGuiElement.setMediaUrl(aLink[1])
-                    oGuiElement.setFileName(sFileName)
-                    oGuiElement.setTitle(title)
-                    oGuiElement.setCat(sCat)
-                    oGuiElement.setMeta(int(sMeta))
-                    oGuiElement.getInfoLabel()
+                    gui_element = GuiElement()
+                    gui_element.setSiteName(self.SITE_NAME)
+                    gui_element.setSiteUrl(site_url)
+                    gui_element.setMediaUrl(aLink[1])
+                    gui_element.setFileName(file_name)
+                    gui_element.setTitle(title)
+                    gui_element.setCat(cat)
+                    gui_element.setMeta(int(sMeta))
+                    gui_element.getInfoLabel()
 
                     from resources.lib.player import Player
-                    oPlayer = Player(input_parameter_handler)
+                    player = Player(input_parameter_handler)
 
                     # sous titres ?
                     if len(aLink) > 2:
-                        oPlayer.AddSubtitles(aLink[2])
+                        player.AddSubtitles(aLink[2])
 
-                    return oPlayer.run(oGuiElement, aLink[1])
+                    return player.run(gui_element, aLink[1])
 
-            if not autoPlay:
+            if not auto_play:
                 oDialog.VSerror(self.ADDON.VSlang(30020))
             return False
 
@@ -535,45 +535,45 @@ class HosterGui:
             traceback.print_exc()
             return False
 
-        if not autoPlay:
+        if not auto_play:
             gui.setEndOfDirectory()
         return False
 
     def addToPlaylist(self):
         gui = Gui()
         input_parameter_handler = InputParameterHandler()
-        sHosterIdentifier = input_parameter_handler.getValue(
-            'sHosterIdentifier')
-        sMediaUrl = input_parameter_handler.getValue('sMediaUrl')
+        hoster_identifier = input_parameter_handler.getValue(
+            'hoster_identifier')
+        media_url = input_parameter_handler.getValue('media_url')
         bGetRedirectUrl = input_parameter_handler.getValue('bGetRedirectUrl')
-        sFileName = input_parameter_handler.getValue('sFileName')
+        file_name = input_parameter_handler.getValue('file_name')
 
         if bGetRedirectUrl == 'True':
-            sMediaUrl = self.__getRedirectUrl(sMediaUrl)
+            media_url = self.__getRedirectUrl(media_url)
 
-        VSlog('Hoster - playlist ' + sMediaUrl)
-        oHoster = self.getHoster(sHosterIdentifier)
-        oHoster.setFileName(sFileName)
+        VSlog('Hoster - playlist ' + media_url)
+        hoster = self.getHoster(hoster_identifier)
+        hoster.setFileName(file_name)
 
-        oHoster.setUrl(sMediaUrl)
-        aLink = oHoster.getMediaLink()
+        hoster.setUrl(media_url)
+        aLink = hoster.getMediaLink()
 
         if aLink[0]:
-            oGuiElement = GuiElement()
-            oGuiElement.setSiteName(self.SITE_NAME)
-            oGuiElement.setMediaUrl(aLink[1])
-            oGuiElement.setTitle(oHoster.getFileName())
+            gui_element = GuiElement()
+            gui_element.setSiteName(self.SITE_NAME)
+            gui_element.setMediaUrl(aLink[1])
+            gui_element.setTitle(hoster.getFileName())
 
             from resources.lib.player import Player
-            oPlayer = Player()
-            oPlayer.addItemToPlaylist(oGuiElement)
-            dialog().VSinfo(str(oHoster.getFileName()), 'Liste de lecture')
+            player = Player()
+            player.addItemToPlaylist(gui_element)
+            dialog().VSinfo(str(hoster.getFileName()), 'Liste de lecture')
             return
 
         gui.setEndOfDirectory()
 
-    def __getRedirectUrl(self, sUrl):
+    def __getRedirectUrl(self, url):
         from resources.lib.handler.requestHandler import RequestHandler
-        oRequest = RequestHandler(sUrl)
-        oRequest.request()
-        return oRequest.getRealUrl()
+        request = RequestHandler(url)
+        request.request()
+        return request.getRealUrl()

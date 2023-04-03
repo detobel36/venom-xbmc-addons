@@ -17,7 +17,7 @@ except ImportError:  # Python 3
     import urllib.request as urllib2
 
 from resources.lib.handler.requestHandler import RequestHandler
-from resources.lib.comaddon import addon, dialog, VSlog, window, VSPath, SiteManager
+from resources.lib.comaddon import Addon, dialog, VSlog, window, VSPath, SiteManager
 # from resources.lib.util import urlEncode
 
 try:
@@ -35,41 +35,39 @@ SITE_NAME = 'runscript'
 class cClear:
 
     DIALOG = dialog()
-    ADDON = addon()
+    ADDON = Addon()
 
     def __init__(self):
         self.main(sys.argv[1])
 
     def main(self, env):
-
-        if (env == 'urlresolver'):
-            addon('script.module.urlresolver').openSettings()
+        if env == 'urlresolver':
+            Addon('script.module.urlresolver').openSettings()
             return
 
-        elif (env == 'metahandler'):
-            addon('script.module.metahandler').openSettings()
+        elif env == 'metahandler':
+            Addon('script.module.metahandler').openSettings()
             return
 
-        elif (env == 'changelog_old'):
-            sUrl = 'https://raw.githubusercontent.com/Kodi-vStream/venom-xbmc-addons/master/plugin.video.vstream/changelog.txt'
+        elif env == 'changelog_old':
+            url = 'https://raw.githubusercontent.com/Kodi-vStream/venom-xbmc-addons/master/plugin.video.vstream/' + \
+                  'changelog.txt'
             try:
-                oRequest = urllib2.Request(sUrl)
-                oResponse = urllib2.urlopen(oRequest)
+                request = urllib2.Request(url)
+                reponse = urllib2.urlopen(request)
 
                 # En python 3 on doit décoder la reponse
                 if xbmc.getInfoLabel('system.buildversion')[0:2] >= '19':
-                    sContent = oResponse.read().decode('utf-8')
+                    content = reponse.read().decode('utf-8')
                 else:
-                    sContent = oResponse.read()
+                    content = reponse.read()
 
-                self.TextBoxes('vStream Changelog', sContent)
+                self.TextBoxes('vStream Changelog', content)
             except BaseException:
-                self.DIALOG.VSerror(
-                    "%s, %s" %
-                    (self.ADDON.VSlang(30205), sUrl))
+                self.DIALOG.VSerror("%s, %s" % (self.ADDON.VSlang(30205), url))
             return
 
-        elif (env == 'changelog'):
+        elif env == 'changelog':
 
             class XMLDialog(xbmcgui.WindowXMLDialog):
 
@@ -78,24 +76,23 @@ class cClear:
                     pass
 
                 def onInit(self):
-
                     self.container = self.getControl(6)
                     self.button = self.getControl(5)
                     self.getControl(3).setVisible(False)
                     self.getControl(1).setLabel('ChangeLog')
                     self.button.setLabel('OK')
 
-                    sUrl = 'https://api.github.com/repos/Kodi-vStream/venom-xbmc-addons/commits'
-                    oRequest = urllib2.Request(sUrl)
-                    oResponse = urllib2.urlopen(oRequest)
+                    url = 'https://api.github.com/repos/Kodi-vStream/venom-xbmc-addons/commits'
+                    request = urllib2.Request(url)
+                    reponse = urllib2.urlopen(request)
 
                     # En python 3 on doit décoder la reponse
                     if xbmc.getInfoLabel('system.buildversion')[0:2] >= '19':
-                        sContent = oResponse.read().decode('utf-8')
+                        content = reponse.read().decode('utf-8')
                     else:
-                        sContent = oResponse.read()
+                        content = reponse.read()
 
-                    result = json.loads(sContent)
+                    result = json.loads(content)
                     listitems = []
 
                     for item in result:
@@ -131,36 +128,37 @@ class cClear:
             del wd
             return
 
-        elif (env == 'soutient'):
-            sUrl = 'https://raw.githubusercontent.com/Kodi-vStream/venom-xbmc-addons/master/plugin.video.vstream/soutient.txt'
+        elif env == 'soutient':
+            url = 'https://raw.githubusercontent.com/Kodi-vStream/venom-xbmc-addons/master/plugin.video.vstream/' + \
+                  'soutient.txt'
             try:
-                oRequest = urllib2.Request(sUrl)
-                oResponse = urllib2.urlopen(oRequest)
+                request = urllib2.Request(url)
+                reponse = urllib2.urlopen(request)
 
                 # En python 3 on doit décoder la reponse
                 if xbmc.getInfoLabel('system.buildversion')[0:2] >= '19':
-                    sContent = oResponse.read().decode('utf-8')
+                    content = reponse.read().decode('utf-8')
                 else:
-                    sContent = oResponse.read()
+                    content = reponse.read()
 
-                self.TextBoxes('vStream Soutient', sContent)
+                self.TextBoxes('vStream Soutient', content)
             except BaseException:
                 self.DIALOG.VSerror(
                     "%s, %s" %
-                    (self.ADDON.VSlang(30205), sUrl))
+                    (self.ADDON.VSlang(30205), url))
             return
 
-        elif (env == 'addon'):  # Vider le cache des métadonnées
+        elif env == 'addon':  # Vider le cache des métadonnées
             if self.DIALOG.VSyesno(self.ADDON.VSlang(30456)):
-                cached_Cache = "special://home/userdata/addon_data/plugin.video.vstream/video_cache.db"
+                cached_cache = "special://home/userdata/addon_data/plugin.video.vstream/video_cache.db"
                 # important seul xbmcvfs peux lire le special
                 try:
-                    cached_Cache = VSPath(cached_Cache).decode("utf-8")
+                    cached_cache = VSPath(cached_cache).decode("utf-8")
                 except AttributeError:
-                    cached_Cache = VSPath(cached_Cache)
+                    cached_cache = VSPath(cached_cache)
 
                 try:
-                    db = sqlite.connect(cached_Cache)
+                    db = sqlite.connect(cached_cache)
                     dbcur = db.cursor()
                     dbcur.execute('DELETE FROM movie')
                     dbcur.execute('DELETE FROM tvshow')
@@ -174,7 +172,7 @@ class cClear:
                     self.DIALOG.VSerror(self.ADDON.VSlang(30091))
             return
 
-        elif (env == 'clean'):
+        elif env == 'clean':
             liste = [
                 'Historiques des recherches',
                 'Marque-Pages',
@@ -183,12 +181,12 @@ class cClear:
                 'Marqués vues',
                 'Téléchargements']
             ret = self.DIALOG.VSselect(liste, self.ADDON.VSlang(30110))
-            cached_DB = "special://home/userdata/addon_data/plugin.video.vstream/vstream.db"
+            cached_db = "special://home/userdata/addon_data/plugin.video.vstream/vstream.db"
             # important seul xbmcvfs peux lire le special
             try:
-                cached_DB = VSPath(cached_DB).decode("utf-8")
+                cached_db = VSPath(cached_db).decode("utf-8")
             except AttributeError:
-                cached_DB = VSPath(cached_DB)
+                cached_db = VSPath(cached_db)
 
             sql_drop = ""
 
@@ -208,7 +206,7 @@ class cClear:
                     sql_drop = 'DELETE FROM download'
 
                 try:
-                    db = sqlite.connect(cached_DB)
+                    db = sqlite.connect(cached_db)
                     dbcur = db.cursor()
                     dbcur.execute(sql_drop)
                     db.commit()
@@ -220,7 +218,7 @@ class cClear:
                     VSlog("Exception runscript sql_drop: {0}".format(err))
             return
 
-        elif (env == 'xbmc'):
+        elif env == 'xbmc':
             if self.DIALOG.VSyesno(self.ADDON.VSlang(30456)):
                 path = "special://temp/"
                 try:
@@ -230,7 +228,7 @@ class cClear:
                     self.DIALOG.VSerror(self.ADDON.VSlang(30093))
             return
 
-        elif (env == 'fi'):
+        elif env == 'fi':
             if self.DIALOG.VSyesno(self.ADDON.VSlang(30456)):
                 path = "special://temp/archive_cache/"
                 try:
@@ -241,35 +239,34 @@ class cClear:
             return
 
         # activer toutes les sources
-        elif (env == 'enableSources'):
+        elif env == 'enableSources':
             if self.DIALOG.VSyesno(self.ADDON.VSlang(30456)):
-                sitesManager = SiteManager()
-                sitesManager.enableAll()
-                sitesManager.save()
+                sites_manager = SiteManager()
+                sites_manager.enableAll()
+                sites_manager.save()
                 self.DIALOG.VSinfo(self.ADDON.VSlang(30014))
 
             return
 
         # désactiver toutes les sources
-        elif (env == 'disableSources'):
+        elif env == 'disableSources':
             if self.DIALOG.VSyesno(self.ADDON.VSlang(30456)):
-                sitesManager = SiteManager()
-                sitesManager.disableAll()
-                sitesManager.save()
+                sites_manager = SiteManager()
+                sites_manager.disableAll()
+                sites_manager.save()
                 self.DIALOG.VSinfo(self.ADDON.VSlang(30014))
 
             return
 
         # aciver/désactiver les sources
-        elif (env == 'search'):
-
+        elif env == 'search':
             from resources.lib.handler.pluginHandler import PluginHandler
             valid = '[COLOR green][x][/COLOR]'
 
             class XMLDialog(xbmcgui.WindowXMLDialog):
 
-                ADDON = addon()
-                sitesManager = SiteManager()
+                ADDON = Addon()
+                sites_manager = SiteManager()
 
                 def __init__(self, *args, **kwargs):
                     xbmcgui.WindowXMLDialog.__init__(self)
@@ -283,26 +280,26 @@ class cClear:
                     self.getControl(1).setLabel(self.ADDON.VSlang(30094))
                     self.button.setLabel('OK')
                     listitems = []
-                    oPluginHandler = PluginHandler()
-                    aPlugins = oPluginHandler.getAllPlugins()
+                    plugin_handler = PluginHandler()
+                    list_plugins = plugin_handler.getAllPlugins()
 
                     # self.data = json.load(open(self.path))
 
-                    for aPlugin in aPlugins:
+                    for plugin in list_plugins:
                         # teste si deja dans le dsip
-                        sPluginName = aPlugin[1]
-                        isActive = self.sitesManager.isActive(sPluginName)
+                        sPluginName = plugin[1]
+                        isActive = self.sites_manager.isActive(sPluginName)
                         icon = "special://home/addons/plugin.video.vstream/resources/art/sites/%s.png" % sPluginName
-                        stitle = self.sitesManager.getProperty(
-                            sPluginName, self.sitesManager.LABEL)
+                        stitle = self.sites_manager.getProperty(
+                            sPluginName, self.sites_manager.LABEL)
 
                         if isActive:
-                            stitle = ('%s %s') % (stitle, valid)
+                            stitle = '%s %s' % (stitle, valid)
                         listitem = xbmcgui.ListItem(
-                            label=stitle, label2=aPlugin[2])
+                            label=stitle, label2=plugin[2])
                         listitem.setArt({'icon': icon, 'thumb': icon})
-                        listitem.setProperty('Addon.Summary', aPlugin[2])
-                        listitem.setProperty('sitename', aPlugin[1])
+                        listitem.setProperty('Addon.Summary', plugin[2])
+                        listitem.setProperty('sitename', plugin[1])
                         if isActive:
                             listitem.select(True)
 
@@ -312,7 +309,7 @@ class cClear:
 
                 def onClick(self, controlId):
                     if controlId == 5:       # OK
-                        self.sitesManager.save()
+                        self.sites_manager.save()
                         self.close()
                         return
                     elif controlId == 99:
@@ -332,14 +329,14 @@ class cClear:
                             item.setLabel(label)
                             item.select(False)
                             sPluginSettingsName = item.getProperty('sitename')
-                            self.sitesManager.setActive(
+                            self.sites_manager.setActive(
                                 sPluginSettingsName, False)
                         else:
-                            label = ('%s %s') % (item.getLabel(), valid)
+                            label = '%s %s' % (item.getLabel(), valid)
                             item.setLabel(label)
                             item.select(True)
                             sPluginSettingsName = item.getProperty('sitename')
-                            self.sitesManager.setActive(
+                            self.sites_manager.setActive(
                                 sPluginSettingsName, True)
                         return
 
@@ -352,26 +349,26 @@ class cClear:
             del wd
             return
 
-        elif (env == 'thumb'):
+        elif env == 'thumb':
 
             if self.DIALOG.VSyesno(self.ADDON.VSlang(30098)):
 
                 text = False
                 path = "special://userdata/Thumbnails/"
-                path_DB = "special://userdata/Database"
+                path_db = "special://userdata/Database"
                 try:
                     xbmcvfs.rmdir(path, True)
                     text = 'Clear Thumbnail Folder, Successful[CR]'
                 except BaseException:
                     text = 'Clear Thumbnail Folder, Error[CR]'
 
-                folder, items = xbmcvfs.listdir(path_DB)
+                folder, items = xbmcvfs.listdir(path_db)
                 items.sort()
                 for sItemName in items:
                     if "extures" in sItemName:
-                        cached_Cache = "/".join([path_DB, sItemName])
+                        cached_cache = "/".join([path_db, sItemName])
                         try:
-                            xbmcvfs.delete(cached_Cache)
+                            xbmcvfs.delete(cached_cache)
                             text += 'Clear Thumbnail DB, Successful[CR]'
                         except BaseException:
                             text += 'Clear Thumbnail DB, Error[CR]'
@@ -381,29 +378,27 @@ class cClear:
                     self.DIALOG.VSok(text)
             return
 
-        elif (env == 'sauv'):
+        elif env == 'sauv':
             select = self.DIALOG.VSselect(['Import', 'Export'])
-            DB = "special://home/userdata/addon_data/plugin.video.vstream/vstream.db"
+            db = "special://home/userdata/addon_data/plugin.video.vstream/vstream.db"
             if select >= 0:
                 try:
                     if select == 0:
                         # sélection d'un fichier
                         new = self.DIALOG.VSbrowse(1, 'vStream', "files")
                         if new:
-                            xbmcvfs.delete(DB)
-                            xbmcvfs.copy(new, DB)
+                            xbmcvfs.delete(db)
+                            xbmcvfs.copy(new, db)
                             self.DIALOG.VSinfo(self.ADDON.VSlang(30099))
                     elif select == 1:
                         # sélection d'un répertoire
                         new = self.DIALOG.VSbrowse(3, 'vStream', "files")
                         if new:
-                            xbmcvfs.copy(DB, new + 'vstream.db')
+                            xbmcvfs.copy(db, new + 'vstream.db')
                             self.DIALOG.VSinfo(self.ADDON.VSlang(30099))
                 except BaseException:
                     self.DIALOG.VSerror(self.ADDON.VSlang(30100))
-
                 return
-
         else:
             return
 

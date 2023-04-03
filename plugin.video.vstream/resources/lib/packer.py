@@ -23,7 +23,7 @@ import re
 from resources.lib.util import Unquote
 
 
-class cPacker():
+class cPacker:
     def detect(self, source):
         """Detects whether `source` is P.A.C.K.E.R. coded."""
         return source.replace(' ', '').startswith('eval(function(p,a,c,k,e,')
@@ -57,7 +57,7 @@ class cPacker():
     def _cleanstr(self, str):
         str = str.strip()
         if str.find("function") == 0:
-            pattern = (r"=\"([^\"]+).*}\s*\((\d+)\)")
+            pattern = r"=\"([^\"]+).*}\s*\((\d+)\)"
             args = re.search(pattern, str, re.DOTALL)
             if args:
                 a = args.groups()
@@ -102,7 +102,7 @@ class cPacker():
             except ValueError:
                 raise UnpackingError('Corrupted p.a.c.k.e.r. data.')
 
-        juicer = (r"}\('(.*)', *(\d+), *(\d+), *'(.*)'\.split\('(.*?)'\)")
+        juicer = r"}\('(.*)', *(\d+), *(\d+), *'(.*)'\.split\('(.*?)'\)"
 #        juicer = (r"}\(\\'(.*)', *(\d+), *(\d+), *\\'(.*)'\.split\(\\'(.*?)\\'\)")
         args = re.search(juicer, source, re.DOTALL)
         if args:

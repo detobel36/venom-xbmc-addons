@@ -26,10 +26,10 @@ class cHoster(iHoster):
             self._url = self._url.rsplit(
                 '/', 1)[0] + '/embed-' + self._url.rsplit('/', 1)[1]
 
-    def _getMediaLinkForGuest(self, autoPlay=False):
+    def _getMediaLinkForGuest(self, auto_play=False):
         api_call = ''
-        oParser = Parser()
-        sUrl = self._url
+        parser = Parser()
+        url = self._url
 
         sPattern1 = '<iframe id="iframe" src="([^"]+)"'
         sPattern2 = '<input type="hidden" id="link" value="([^"]+)'
@@ -39,52 +39,52 @@ class cHoster(iHoster):
         # Max 3 fois
         for i in range(0, 3):
 
-            oRequest = RequestHandler(sUrl)
-            oRequest.addHeaderEntry('User-Agent', UA)
-            oRequest.addHeaderEntry('Referer', referer)
-            sHtmlContent = oRequest.request()
-            sHtmlContent = sHtmlContent.replace('\n', '')
+            request = RequestHandler(url)
+            request.addHeaderEntry('User-Agent', UA)
+            request.addHeaderEntry('Referer', referer)
+            html_content = request.request()
+            html_content = html_content.replace('\n', '')
 
-            referer = sUrl
+            referer = url
 
             # ok c'est fini, on a la bonne page
-            if 'ﾟωﾟﾉ' in sHtmlContent:
+            if 'ﾟωﾟﾉ' in html_content:
                 break
 
-            aResult = oParser.parse(sHtmlContent, sPattern1)
+            results = parser.parse(html_content, sPattern1)
 
-            if aResult[0] is True:
-                sUrl = aResult[1][0]
+            if results[0] is True:
+                url = results[1][0]
             else:
-                aResult = oParser.parse(sHtmlContent, sPattern2)
-                if aResult[0] is True:
-                    sUrl = aResult[1][0]
+                results = parser.parse(html_content, sPattern2)
+                if results[0] is True:
+                    url = results[1][0]
 
-        aResult = re.search(
+        results = re.search(
             'id="code".+?value="(.+?)"',
-            sHtmlContent,
+            html_content,
             re.DOTALL)
 
-        if aResult:
+        if results:
 
-            sFunc = base64.b64decode(aResult.group(1))
+            sFunc = base64.b64decode(results.group(1))
 
-            aResult = re.search(
+            results = re.search(
                 '(ﾟωﾟ.+?\\(\'_\'\\);)',
-                sHtmlContent,
+                html_content,
                 re.DOTALL | re.UNICODE)
-            if aResult:
-                sHtmlContent = AADecoder(aResult.group(1)).decode()
-                if sHtmlContent:
-                    aResult = re.search(
-                        "func.innerHTML.+?\\('(.+?)',", sHtmlContent, re.DOTALL)
-                    if aResult:
-                        chars = aResult.group(1)
+            if results:
+                html_content = AADecoder(results.group(1)).decode()
+                if html_content:
+                    results = re.search(
+                        "func.innerHTML.+?\\('(.+?)',", html_content, re.DOTALL)
+                    if results:
+                        chars = results.group(1)
                         final = sDecode(chars, sFunc)
-                        sPattern = "source\\.setAttribute\\('src', '([^']+)'\\)"
-                        aResult = oParser.parse(final, sPattern)
-                        if aResult[0] is True:
-                            api_call = aResult[1][0]
+                        pattern = "source\\.setAttribute\\('src', '([^']+)'\\)"
+                        results = parser.parse(final, pattern)
+                        if results[0] is True:
+                            api_call = results[1][0]
 
         if api_call:
             return True, api_call

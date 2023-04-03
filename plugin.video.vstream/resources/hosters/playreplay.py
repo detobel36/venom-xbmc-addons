@@ -20,20 +20,20 @@ class cHoster(iHoster):
     def __init__(self):
         iHoster.__init__(self, 'playreplay', 'PlayReplay')
 
-    def __getIdFromUrl(self, sUrl):
-        sPattern = 'http:..playreplay.net\\/framevideo\\/(.+?)\\?'
-        aResult = re.findall(sPattern, sUrl)
-        if aResult:
-            return aResult[0]
+    def __getIdFromUrl(self, url):
+        pattern = 'http:..playreplay.net\\/framevideo\\/(.+?)\\?'
+        results = re.findall(pattern, url)
+        if results:
+            return results[0]
 
         return ''
 
-    def _getMediaLinkForGuest(self, autoPlay=False):
+    def _getMediaLinkForGuest(self, auto_play=False):
         vUrl = False
-        sId = self.__getIdFromUrl(self._url)
+        s_id = self.__getIdFromUrl(self._url)
 
-        query_args = {'r': '["tVL0gjqo5",["preview/flv_image",{"uid":"' + \
-            sId + '"}],' + '["preview/flv_link",{"uid":"' + sId + '"}]]'}
+        query_args = {'r': '["tVL0gjqo5",["preview/flv_image",{"uid":"' +
+                      s_id + '"}],' + '["preview/flv_link",{"uid":"' + s_id + '"}]]'}
 
         data = urlEncode(query_args)
         headers = {'User-Agent': 'Mozilla 5.10'}
@@ -48,9 +48,9 @@ class cHoster(iHoster):
 
         html = reponse.read()
 
-        sHtmlContent = html.replace('\\', '')
+        html_content = html.replace('\\', '')
 
-        link = re.findall('"link":"(.+?)"', sHtmlContent)
+        link = re.findall('"link":"(.+?)"', html_content)
         if link:
             vUrl = link[0]
 

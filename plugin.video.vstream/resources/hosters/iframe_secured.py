@@ -27,52 +27,52 @@ class cHoster(iHoster):
         self._url = self._url.replace('//iframe-secured.com/embed/', '')
         self._url = 'http://iframe-secured.com/embed/iframe.php?u=%s' % self._url
 
-    def _getMediaLinkForGuest(self, autoPlay=False):
-        oParser = Parser()
-        oRequest = RequestHandler(self._url)
-        oRequest.addHeaderEntry('User-Agent', UA)
-        oRequest.addHeaderEntry(
+    def _getMediaLinkForGuest(self, auto_play=False):
+        parser = Parser()
+        request = RequestHandler(self._url)
+        request.addHeaderEntry('User-Agent', UA)
+        request.addHeaderEntry(
             'Referer', self._url.replace(
                 'iframe.php?u=', ''))
-        sHtmlContent = oRequest.request()
+        html_content = request.request()
 
-        sPattern = '<input  id=".+?name="([^"]+)" type="hidden" value="([^"]+)"/><input  id="challenge" ' + \
+        pattern = '<input  id=".+?name="([^"]+)" type="hidden" value="([^"]+)"/><input  id="challenge" ' + \
             'name="([^"]+)" type="hidden" value="([^"]+)"/>'
 
-        aResult = oParser.parse(sHtmlContent, sPattern)
-        if aResult[0] is True:
-            postdata = aResult[1][0][0] + '=' + aResult[1][0][1] + \
-                '&' + aResult[1][0][2] + '=' + aResult[1][0][3]
+        results = parser.parse(html_content, pattern)
+        if results[0] is True:
+            postdata = results[1][0][0] + '=' + results[1][0][1] + \
+                '&' + results[1][0][2] + '=' + results[1][0][3]
 
-            oRequest = RequestHandler(self._url)
-            oRequest.setRequestType(1)
-            oRequest.addHeaderEntry('User-Agent', UA)
-            oRequest.addHeaderEntry('Referer', self._url)
-            oRequest.addParametersLine(postdata)
+            request = RequestHandler(self._url)
+            request.setRequestType(1)
+            request.addHeaderEntry('User-Agent', UA)
+            request.addHeaderEntry('Referer', self._url)
+            request.addParametersLine(postdata)
 
-            sHtmlContent = oRequest.request()
+            html_content = request.request()
 
-            sPattern = "(\\s*eval\\s*\\(\\s*function(?:.|\\s)+?)<\\/script>"
-            aResult = re.findall(sPattern, sHtmlContent)
+            pattern = "(\\s*eval\\s*\\(\\s*function(?:.|\\s)+?)<\\/script>"
+            results = re.findall(pattern, html_content)
 
-            if aResult:
-                sUnpacked = cPacker().unpack(aResult[0])
-                sHtmlContent = sUnpacked
-                if sHtmlContent:
-                    sPattern = "replace\\(.*'(.+?)'"
-                    aResult = oParser.parse(sHtmlContent, sPattern)
+            if results:
+                sUnpacked = cPacker().unpack(results[0])
+                html_content = sUnpacked
+                if html_content:
+                    pattern = "replace\\(.*'(.+?)'"
+                    results = parser.parse(html_content, pattern)
 
-                    if aResult[0] is True:
-                        sHosterUrl = aResult[1][0]
+                    if results[0] is True:
+                        hoster_url = results[1][0]
 
-                        if not sHosterUrl.startswith('http'):
-                            sHosterUrl = 'http:%s' % sHosterUrl
+                        if not hoster_url.startswith('http'):
+                            hoster_url = 'http:%s' % hoster_url
 
-                        sHosterUrl = sHosterUrl.replace('\\', '')
+                        hoster_url = hoster_url.replace('\\', '')
 
-                        oHoster = HosterGui().checkHoster(sHosterUrl)
-                        oHoster.setUrl(sHosterUrl)
-                        api_call = oHoster.getMediaLink(autoPlay)
+                        hoster = HosterGui().checkHoster(hoster_url)
+                        hoster.setUrl(hoster_url)
+                        api_call = hoster.getMediaLink(auto_play)
 
                         if api_call[0] is True:
                             return True, api_call[1]

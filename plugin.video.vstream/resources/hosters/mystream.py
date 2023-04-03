@@ -18,19 +18,19 @@ class cHoster(iHoster):
             'https://mystream.to/watch/',
             'https://embed.mystream.to/')
 
-    def _getMediaLinkForGuest(self, autoPlay=False):
-        oRequest = RequestHandler(self._url)
-        oRequest.addHeaderEntry('User-Agent', UA)
-        oRequest.addHeaderEntry(
+    def _getMediaLinkForGuest(self, auto_play=False):
+        request = RequestHandler(self._url)
+        request.addHeaderEntry('User-Agent', UA)
+        request.addHeaderEntry(
             'Accept', 'text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8')
-        sHtmlContent = oRequest.request()
+        html_content = request.request()
 
         api_call = False
 
-        sPattern = '(\\$=.+?;)\\s*<'
-        aResult = re.search(sPattern, sHtmlContent, re.DOTALL)
-        if aResult:
-            decoded = temp_decode(aResult.group(1))
+        pattern = '(\\$=.+?;)\\s*<'
+        results = re.search(pattern, html_content, re.DOTALL)
+        if results:
+            decoded = temp_decode(results.group(1))
             if decoded:
                 r = re.search(
                     "setAttribute\\(\'src\', *\'([^']+)\'\\)",

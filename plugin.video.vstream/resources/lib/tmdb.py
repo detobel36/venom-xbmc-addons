@@ -9,8 +9,9 @@ import json
 import unicodedata
 import threading
 
-from resources.lib.comaddon import addon, dialog, VSlog, VSPath, isMatrix, xbmc
+from resources.lib.comaddon import Addon, dialog, VSlog, VSPath, isMatrix, xbmc
 from resources.lib.util import QuotePlus
+from urllib import request
 
 try:
     from sqlite3 import dbapi2 as sqlite
@@ -70,17 +71,15 @@ class TMDb:
 
     def __init__(self, api_key='', debug=False):
 
-        self.ADDON = addon()
+        self.ADDON = Addon()
 
         self.api_key = self.ADDON.getSetting('api_tmdb')
         self.debug = debug
         self.lang = self.ADDON.getSetting('tmdb_lang')
         if not self.lang:
             self.lang = 'fr'
-        self.poster = 'https://image.tmdb.org/t/p/%s' % self.ADDON.getSetting(
-            'poster_tmdb')
-        self.fanart = 'https://image.tmdb.org/t/p/%s' % self.ADDON.getSetting(
-            'backdrop_tmdb')
+        self.poster = 'https://image.tmdb.org/t/p/%s' % self.ADDON.getSetting('poster_tmdb')
+        self.fanart = 'https://image.tmdb.org/t/p/%s' % self.ADDON.getSetting('backdrop_tmdb')
 
         try:
             if not xbmcvfs.exists(self.CACHE):
@@ -105,13 +104,13 @@ class TMDb:
             VSlog('Error: Unable to connect to %s' % self.REALCACHE)
             pass
 
-    def __createdb(self, dropTable=''):
+    def __createdb(self, drop_table=''):
         try:
             # Permets de detruire une table pour la recreer de zero.
-            if dropTable != '':
-                self.dbcur.execute("DROP TABLE " + dropTable)
+            if drop_table != '':
+                self.dbcur.execute("DROP TABLE " + drop_table)
         except BaseException:
-            VSlog('Error: Unable to drop table %s' % dropTable)
+            VSlog('Error: Unable to drop table %s' % drop_table)
             pass
 
         sql_create = "CREATE TABLE IF NOT EXISTS movie ("\
@@ -243,52 +242,40 @@ class TMDb:
         result = self._call('authentication/token/new', '')
         total = len(result)
 
-        if (total > 0):
+        if total > 0:
             url = 'https://www.themoviedb.org/authenticate/'
             if not xbmc.getCondVisibility('system.platform.android'):
                 # Si possible on ouvre la page automatiquement dans un
                 # navigateur internet.
                 import webbrowser
                 webbrowser.open(url + result['request_token'])
-                sText = (self.ADDON.VSlang(30421)) % (
+                text = (self.ADDON.VSlang(30421)) % (
                     url, result['request_token'])
                 DIALOG = dialog()
-                if not DIALOG.VSyesno(sText):
+                if not DIALOG.VSyesno(text):
                     return False
             else:
                 import pyqrcode
                 from resources.lib.librecaptcha.gui import cInputWindowYesNo
                 qr = pyqrcode.create(url + result['request_token'])
-                qr.png(
-                    VSPath('special://home/userdata/addon_data/plugin.video.vstream/qrcode.png'),
-                    scale=5)
+                qr.png(VSPath('special://home/userdata/addon_data/plugin.video.vstream/qrcode.png'), scale=5)
                 oSolver = cInputWindowYesNo(
                     captcha='special://home/userdata/addon_data/plugin.video.vstream/qrcode.png',
                     msg="Scanner le QRCode pour acceder au lien d'autorisation",
                     roundnum=1)
-                retArg = oSolver.get()
+                ret_arg = oSolver.get()
                 DIALOG = dialog()
-                if retArg == "N":
+                if ret_arg == "N":
                     return False
 
-            result = self._call(
-                'authentication/session/new',
-                'request_token=' +
-                result['request_token'])
+            result = self._call('authentication/session/new', 'request_token=' + result['request_token'])
 
             if 'success' in result and result['success']:
-                self.ADDON.setSetting(
-                    'tmdb_session', str(
-                        result['session_id']))
+                self.ADDON.setSetting('tmdb_session', str(result['session_id']))
                 DIALOG.VSinfo(self.ADDON.VSlang(30000))
-                return
             else:
                 DIALOG.VSerror('Erreur' + self.ADDON.VSlang(30000))
-                return
-
             # xbmc.executebuiltin('Container.Refresh')
-            return
-        return
 
     # cherche dans les films ou serie l'id par le nom, return ID ou FALSE
     def get_idbyname(self, name, year='', mediaType='movie', page=1):
@@ -304,13 +291,7 @@ class TMDb:
         else:
             term = QuotePlus(name)
 
-        meta = self._call(
-            'search/' +
-            str(mediaType),
-            'query=' +
-            term +
-            '&page=' +
-            str(page))
+        meta = self._call('search/' + str(mediaType), 'query=' + term + '&page=' + str(page))
 
         # si pas de résultat avec l'année, on teste sans l'année
         if 'total_results' in meta:
@@ -326,7 +307,6 @@ class TMDb:
 
     # Search for movies by title.
     def search_movie_name(self, name, year='', page=1):
-
         name = re.sub(" +", " ", name)  # nettoyage du titre
 
         if year:
@@ -334,12 +314,7 @@ class TMDb:
         else:
             term = QuotePlus(name)
 
-        meta = self._call(
-            'search/movie',
-            'query=' +
-            term +
-            '&page=' +
-            str(page))
+        meta = self._call('search/movie', 'query=' + term + '&page=' + str(page))
 
         if 'errors' not in meta and 'status_code' not in meta:
 
@@ -360,8 +335,7 @@ class TMDb:
                     # le nom
                     for searchMovie in meta['results']:
                         if searchMovie['genre_ids'] and 99 not in searchMovie['genre_ids']:
-                            if self._clean_title(
-                                    searchMovie['title']) == self._clean_title(name):
+                            if self._clean_title(searchMovie['title']) == self._clean_title(name):
                                 movie = searchMovie
                                 break
                     # sinon, hors documentaire et année proche
@@ -412,18 +386,17 @@ class TMDb:
                 else:
                     # premiere boucle, recherche la correspondance parfaite sur
                     # le nom
-                    for searchCollec in meta['results']:
-                        cleanTitleTMDB = self._clean_title(
-                            searchCollec['name'])
-                        cleanTitleSearch = self._clean_title(name)
-                        if cleanTitleTMDB == cleanTitleSearch:
-                            collection = searchCollec
+                    for search_collec in meta['results']:
+                        clean_title_tmdb = self._clean_title(search_collec['name'])
+                        clean_title_search = self._clean_title(name)
+                        if clean_title_tmdb == clean_title_search:
+                            collection = search_collec
                             break
                     # sinon, le premier qui n'est pas du genre animation
                     if not collection:
-                        for searchCollec in meta['results']:
-                            if 'animation' not in searchCollec['name']:
-                                collection = searchCollec
+                        for search_collec in meta['results']:
+                            if 'animation' not in search_collec['name']:
+                                collection = search_collec
                                 break
 
                     # Rien d'interessant, on prend le premier
@@ -470,8 +443,7 @@ class TMDb:
                     for searchMovie in meta['results']:
                         if genre == '' or genre in searchMovie['genre_ids']:
                             movieName = searchMovie['name']
-                            if self._clean_title(
-                                    movieName) == self._clean_title(name):
+                            if self._clean_title(movieName) == self._clean_title(name):
                                 movie = searchMovie
                                 break
                     # sinon, hors documentaire et année proche
@@ -525,20 +497,15 @@ class TMDb:
         return meta
 
     # Get the basic movie information for a specific movie id.
-    def search_movie_id(
-            self,
-            movie_id,
-            append_to_response='append_to_response=trailers,credits,release_dates'):
+    def search_movie_id(self, movie_id, append_to_response='append_to_response=trailers,credits,release_dates'):
         result = self._call('movie/' + str(movie_id), append_to_response)
         result['tmdb_id'] = movie_id
         # obj(**self._call('movie/' + str(movie_id), append_to_response))
         return result
 
     # Get the primary information about a TV series by id.
-    def search_tvshow_id(
-            self,
-            show_id,
-            append_to_response='append_to_response=external_ids,videos,credits,release_dates'):
+    def search_tvshow_id(self, show_id,
+                         append_to_response='append_to_response=external_ids,videos,credits,release_dates'):
         result = self._call('tv/' + str(show_id), append_to_response)
         result['tmdb_id'] = show_id
         return result
@@ -552,13 +519,7 @@ class TMDb:
     # Get the primary information about a episode.
     def search_episode_id(self, show_id, season, episode):
         if season:
-            result = self._call(
-                'tv/' +
-                str(show_id) +
-                '/season/' +
-                str(season) +
-                '/episode/' +
-                str(episode))
+            result = self._call('tv/' + str(show_id) + '/season/' + str(season) + '/episode/' + str(episode))
             result['tmdb_id'] = show_id
             return result
         else:
@@ -606,7 +567,6 @@ class TMDb:
             "duration": 0,
             'plot': ''.join([meta.get(key, "") for key in ['s_overview', 'overview', 'biography'] if meta.get(key) is not None]),
             'mpaa': meta.get('mpaa', ""),
-            'premiered': meta.get('s_premiered', "") if meta.get('s_premiered') else meta.get('release_date', "") if meta.get('release_date') else meta.get('first_air_date', "") if meta.get('first_air_date') else meta.get('air_date', ""),
             'year': meta.get('s_year', 0) if meta.get('s_year') else meta.get('year', 0),
             'trailer': '',
             'tagline': meta.get('name') if media_type == "episode" else meta.get('tagline'),
@@ -617,13 +577,32 @@ class TMDb:
             'crew': '',
             'director': meta.get('s_director', "") if meta.get('s_director') else meta.get('director', ""),
             'writer': meta.get('s_writer', "") if meta.get('s_writer') else meta.get('writer', ""),
-            'poster_path': ''.join([meta.get(key, "") for key in ['poster_path', 'still_path', 'file_path', 'profile_path'] if meta.get(key) is not None]),
-            'backdrop_path': ''.join([meta.get(key, "") for key in ['backdrop_path', 'still_path', 'file_path', 'profile_path'] if meta.get(key) is not None]),
             'episode': meta.get('episode_number', 0),
             'season': meta.get('season_number', 0) if meta.get('season_number') else meta.get('seasons', []),
             'nbseasons': meta.get('number_of_seasons', ""),
             'guest_stars': str(meta.get('guest_stars', [])),
         }
+
+        if meta.get('s_premiered'):
+            meta['premiered'] = meta.get('s_premiered', "")
+        elif meta.get('release_date'):
+            meta['premiered'] = meta.get('release_date', "")
+        elif meta.get('first_air_date'):
+            meta['premiered'] = meta.get('first_air_date', "")
+        else:
+            meta['premiered'] = meta.get('air_date', "")
+
+        list_backdrop_path = []
+        for key in ['backdrop_path', 'still_path', 'file_path', 'profile_path']:
+            if meta.get(key) is not None:
+                list_backdrop_path.append(meta.get(key, ""))
+        meta['backdrop_path'] = ''.join(list_backdrop_path)
+
+        list_poster_path = []
+        for key in ['poster_path', 'still_path', 'file_path', 'profile_path']:
+            if meta.get(key) is not None:
+                list_poster_path.append(meta.get(key, ""))
+        meta['poster_path'] = ''.join(list_poster_path)
 
         if 'episode_run_time' in meta and len(meta['episode_run_time']):
             duration = meta.get('episode_run_time', 0)[0]
@@ -733,8 +712,7 @@ class TMDb:
                         cast_item = None
                     elif i.get('character'):
                         if 'role' in cast_item:
-                            cast_item['role'] = u'{} / {}'.format(
-                                cast_item['role'], i['character'])
+                            cast_item['role'] = u'{} / {}'.format(cast_item['role'], i['character'])
                         else:
                             cast_item = None
                 if not cast_item:
@@ -797,34 +775,20 @@ class TMDb:
     def _clean_title(self, title):
         # vire accent
         try:
-            bMatrix = isMatrix()
-            if not bMatrix:
+            isMatrix = isMatrix()
+            if not isMatrix:
                 title = unicode(title, 'utf-8')
-            title = unicodedata.normalize(
-                'NFD', title).encode(
-                'ascii', 'ignore').decode('unicode_escape')
-            if not bMatrix:
+            title = unicodedata.normalize('NFD', title).encode('ascii', 'ignore').decode('unicode_escape')
+            if not isMatrix:
                 title = title.encode('utf-8')  # on repasse en utf-8
         except Exception as e:
             pass
 
         # Vire tous les caracteres non alphabetiques
-        title = re.sub(
-            '[^%s]' %
-            (string.ascii_lowercase +
-             string.digits),
-            '',
-            title.lower())
+        title = re.sub('[^%s]' % (string.ascii_lowercase + string.digits), '', title.lower())
         return title
 
-    def _cache_search(
-            self,
-            media_type,
-            name,
-            tmdb_id='',
-            year='',
-            season='',
-            episode=''):
+    def _cache_search(self, media_type, name, tmdb_id='', year='', season='', episode=''):
         if media_type == 'movie':
             sql_select = 'SELECT * FROM movie'
             if tmdb_id:
@@ -970,8 +934,7 @@ class TMDb:
                                  meta['backdrop_path']))
         except Exception as e:
             VSlog(str(e))
-            if 'no such column' in str(e) or 'no column named' in str(
-                    e) or "no such table" in str(e):
+            if 'no such column' in str(e) or 'no column named' in str(e) or "no such table" in str(e):
                 self.__createdb('movie')
                 VSlog('Table recreated')
 
@@ -1017,29 +980,11 @@ class TMDb:
             sql = 'INSERT or IGNORE INTO tvshow (imdb_id, tmdb_id, title, year, cast, crew, writer, director, rating, votes, duration, ' \
                   'plot, mpaa, premiered, genre, studio, status, poster_path, trailer, backdrop_path, nbseasons) ' \
                   'VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)'
-            self._sqlExecute(
-                sql,
-                (meta['imdb_id'],
-                 meta['tmdb_id'],
-                    name,
-                    year,
-                    meta['cast'],
-                    meta['crew'],
-                    meta['writer'],
-                    meta['director'],
-                    meta['rating'],
-                    meta['votes'],
-                    meta['duration'],
-                    meta['plot'],
-                    meta['mpaa'],
-                    meta['premiered'],
-                    meta['genre'],
-                    meta['studio'],
-                    meta['status'],
-                    meta['poster_path'],
-                    meta['trailer'],
-                    meta['backdrop_path'],
-                    meta['nbseasons']))
+            self._sqlExecute(sql, (meta['imdb_id'], meta['tmdb_id'], name, year, meta['cast'], meta['crew'],
+                                   meta['writer'], meta['director'], meta['rating'], meta['votes'], meta['duration'],
+                                   meta['plot'], meta['mpaa'], meta['premiered'], meta['genre'], meta['studio'],
+                                   meta['status'], meta['poster_path'], meta['trailer'], meta['backdrop_path'],
+                                   meta['nbseasons']))
         except Exception as e:
             VSlog(str(e))
             if 'no such column' in str(e) or 'no column named' in str(e):
@@ -1047,29 +992,11 @@ class TMDb:
                 VSlog('Table recreated')
 
                 # Deuxieme tentative
-                self._sqlExecute(
-                    sql,
-                    (meta['imdb_id'],
-                     meta['tmdb_id'],
-                        name,
-                        year,
-                        meta['cast'],
-                        meta['crew'],
-                        meta['writer'],
-                        meta['director'],
-                        meta['rating'],
-                        meta['votes'],
-                        meta['duration'],
-                        meta['plot'],
-                        meta['mpaa'],
-                        meta['premiered'],
-                        meta['genre'],
-                        meta['studio'],
-                        meta['status'],
-                        meta['poster_path'],
-                        meta['trailer'],
-                        meta['backdrop_path'],
-                        meta['nbseasons']))
+                self._sqlExecute(sql, (meta['imdb_id'], meta['tmdb_id'], name, year, meta['cast'], meta['crew'],
+                                       meta['writer'], meta['director'], meta['rating'], meta['votes'],
+                                       meta['duration'], meta['plot'], meta['mpaa'], meta['premiered'], meta['genre'],
+                                       meta['studio'], meta['status'], meta['poster_path'], meta['trailer'],
+                                       meta['backdrop_path'], meta['nbseasons']))
             else:
                 VSlog('SQL ERROR INSERT into table tvshow')
             pass
@@ -1083,13 +1010,13 @@ class TMDb:
         else:
             premiered = 0
 
-        s_year = 0
+        year = 0
         if 'year' in meta and meta['year']:
-            s_year = meta['year']
+            year = meta['year']
         else:
             try:
                 if premiered:
-                    s_year = int(premiered[:4])
+                    year = int(premiered[:4])
             except BaseException:
                 pass
 
@@ -1111,17 +1038,8 @@ class TMDb:
         try:
             sql = 'INSERT or IGNORE INTO season (tmdb_id, season, year, premiered, poster_path, plot, episode) VALUES '\
                   '(?, ?, ?, ?, ?, ?, ?)'
-            self._sqlExecute(
-                sql,
-                (meta['tmdb_id'],
-                 season,
-                 s_year,
-                 premiered,
-                 fanart,
-                 plot,
-                 meta.get(
-                    'episode_count',
-                    0)))
+            self._sqlExecute(sql, (meta['tmdb_id'], season, year, premiered, fanart, plot,
+                                   meta.get('episode_count', 0)))
         except Exception as e:
             VSlog(str(e))
             if 'no such column' in str(e) or 'no column named' in str(e):
@@ -1130,17 +1048,8 @@ class TMDb:
 
                 # Deuxieme tentative
                 try:
-                    self._sqlExecute(
-                        sql,
-                        (meta['tmdb_id'],
-                         season,
-                         s_year,
-                         premiered,
-                         fanart,
-                         plot,
-                         meta.get(
-                            'episode_count',
-                            0)))
+                    self._sqlExecute(sql, (meta['tmdb_id'], season, year, premiered, fanart, plot,
+                                           meta.get('episode_count', 0)))
                 except Exception as e:
                     VSlog(str(e))
             else:
@@ -1151,28 +1060,12 @@ class TMDb:
     def _cache_save_episode(self, meta, name, season, episode):
         try:
             title = name + '_S' + season + 'E' + episode
-            sql = 'INSERT or IGNORE INTO episode (tmdb_id, originaltitle, season, episode, year, title, premiered, poster_path, plot, rating, votes, director, writer, guest_stars, tagline) VALUES ' \
+            sql = 'INSERT or IGNORE INTO episode (tmdb_id, originaltitle, season, episode, year, title, ' \
+                  'premiered, poster_path, plot, rating, votes, director, writer, guest_stars, tagline) VALUES ' \
                   '(?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)'
-            self._sqlExecute(
-                sql,
-                (meta['tmdb_id'],
-                 title,
-                 season,
-                 episode,
-                 meta['year'],
-                    title,
-                    meta['premiered'],
-                    meta['poster_path'],
-                    meta['plot'],
-                    meta['rating'],
-                    meta['votes'],
-                    meta['director'],
-                    meta['writer'],
-                    ''.join(
-                    meta.get(
-                        'guest_stars',
-                        "")),
-                    meta["tagline"]))
+            self._sqlExecute(sql, (meta['tmdb_id'], title, season, episode, meta['year'], title, meta['premiered'],
+                                   meta['poster_path'], meta['plot'], meta['rating'], meta['votes'], meta['director'],
+                                   meta['writer'], ''.join(meta.get('guest_stars', "")), meta["tagline"]))
         except Exception as e:
             VSlog(str(e))
             if 'no such column' in str(e) or 'no column named' in str(e):
@@ -1180,26 +1073,10 @@ class TMDb:
                 VSlog('Table recreated')
 
                 # Deuxieme tentative
-                self._sqlExecute(
-                    sql,
-                    (meta['tmdb_id'],
-                     title,
-                     season,
-                     episode,
-                     meta['year'],
-                        title,
-                        meta['premiered'],
-                        meta['poster_path'],
-                        meta['plot'],
-                        meta['rating'],
-                        meta['votes'],
-                        meta['director'],
-                        meta['writer'],
-                        ''.join(
-                        meta.get(
-                            'guest_stars',
-                            "")),
-                        meta["tagline"]))
+                self._sqlExecute(sql, (meta['tmdb_id'], title, season, episode, meta['year'], title, meta['premiered'],
+                                       meta['poster_path'], meta['plot'], meta['rating'], meta['votes'],
+                                       meta['director'], meta['writer'], ''.join(meta.get('guest_stars', "")),
+                                       meta["tagline"]))
             else:
                 VSlog('SQL ERROR INSERT into table episode')
 
@@ -1208,44 +1085,22 @@ class TMDb:
         try:
             sql = 'INSERT or IGNORE INTO saga (tmdb_id, title, plot, genre, poster_path, backdrop_path) VALUES ' \
                   '(?, ?, ?, ?, ?, ?)'
-            self._sqlExecute(
-                sql,
-                (meta['tmdb_id'],
-                 name,
-                 meta['plot'],
-                    meta['genre'],
-                    meta['poster_path'],
-                    meta["backdrop_path"]))
+            self._sqlExecute(sql, (meta['tmdb_id'], name, meta['plot'], meta['genre'], meta['poster_path'],
+                                   meta["backdrop_path"]))
         except Exception as e:
             VSlog(str(e))
-            if 'no such column' in str(e) or 'no column named' in str(
-                    e) or "no such table" in str(e):
+            if 'no such column' in str(e) or 'no column named' in str(e) or "no such table" in str(e):
                 self.__createdb('saga')
                 VSlog('Table recreated')
 
                 # Deuxieme tentative
-                self._sqlExecute(
-                    sql,
-                    (meta['tmdb_id'],
-                     name,
-                     meta['plot'],
-                        meta['genre'],
-                        meta['poster_path'],
-                        meta["backdrop_path"]))
+                self._sqlExecute(sql, (meta['tmdb_id'], name, meta['plot'], meta['genre'], meta['poster_path'],
+                                       meta["backdrop_path"]))
             else:
                 VSlog('SQL ERROR INSERT into table saga')
             pass
 
-    def get_meta(
-            self,
-            media_type,
-            name,
-            imdb_id='',
-            tmdb_id='',
-            year='',
-            season='',
-            episode='',
-            update=False):
+    def get_meta(self, media_type, name, imdb_id='', tmdb_id='', year='', season='', episode='', update=False):
         """
         Main method to get meta data for movie or tvshow. Will lookup by name/year
         if no IMDB ID supplied.
@@ -1267,7 +1122,7 @@ class TMDb:
 
         name = re.sub(" +", " ", name)  # nettoyage du titre
         name = name.replace('VF', '').replace('VOSTFR', '')
-        cleanTitle = None
+        clean_title = None
 
         # VSlog('Attempting to retrieve meta data for %s: %s %s %s %s' % (media_type, name, year, imdb_id, tmdb_id))
 
@@ -1277,14 +1132,12 @@ class TMDb:
             # données
             if not tmdb_id:
                 if media_type in ("season", "tvshow", "anime", "episode"):
-                    name = re.sub(
-                        '(?i)( s(?:aison +)*([0-9]+(?:\\-[0-9\\?]+)*))(?:([^"]+)|)', '', name)
+                    name = re.sub('(?i)( s(?:aison +)*([0-9]+(?:\\-[0-9\\?]+)*))(?:([^"]+)|)', '', name)
 
-            cleanTitle = self._clean_title(name)
-            if not cleanTitle:
+            clean_title = self._clean_title(name)
+            if not clean_title:
                 return {}
-            meta = self._cache_search(
-                media_type, cleanTitle, tmdb_id, year, season, episode)
+            meta = self._cache_search(media_type, clean_title, tmdb_id, year, season, episode)
 
             if meta:
                 return meta
@@ -1307,20 +1160,14 @@ class TMDb:
             else:  # on retrouve l'id en cherchant la série qui peut être en cache
                 meta = self.get_meta('tvshow', name, year=year)
                 if 'tmdb_id' in meta and meta['tmdb_id']:
-                    return self.get_meta(
-                        'season',
-                        name,
-                        tmdb_id=meta['tmdb_id'],
-                        year=year,
-                        season=season)
+                    return self.get_meta('season', name, tmdb_id=meta['tmdb_id'], year=year, season=season)
         elif media_type == 'episode':
             if tmdb_id:
                 meta = self.search_episode_id(tmdb_id, season, episode)
             else:  # on retrouve l'id en cherchant la série qui peut être en cache
                 meta = self.get_meta('tvshow', name, year=year)
                 if 'tmdb_id' in meta and meta['tmdb_id']:
-                    meta = self.search_episode_id(
-                        meta['tmdb_id'], season, episode)
+                    meta = self.search_episode_id(meta['tmdb_id'], season, episode)
         elif media_type == 'anime':
             if tmdb_id:
                 meta = self.search_tvshow_id(tmdb_id)
@@ -1344,16 +1191,10 @@ class TMDb:
         if meta and 'tmdb_id' in meta:
             meta = self._format(meta, name, media_type)
             # sauvegarde dans un cache
-            if not cleanTitle:
-                cleanTitle = self._clean_title(name)
+            if not clean_title:
+                clean_title = self._clean_title(name)
 
-            self._cache_save(
-                meta,
-                cleanTitle,
-                media_type,
-                season,
-                episode,
-                year)
+            self._cache_save(meta, clean_title, media_type, season, episode, year)
         elif meta:   # initialise un meta vide
             meta = self._format(meta, name)
         else:
@@ -1389,11 +1230,9 @@ class TMDb:
         #                   "value": 8.5
         #                  }
 
-        from urllib import request
         session_id = self.ADDON.getSetting('tmdb_session')
 
-        urlapi = self.URL + url + '?api_key=' + \
-            self.ADDON.getSetting('api_tmdb') + '&session_id=' + session_id
+        urlapi = self.URL + url + '?api_key=' + self.ADDON.getSetting('api_tmdb') + '&session_id=' + session_id
 
         req = request.Request(urlapi, method="POST")
         req.add_header('Content-Type', 'application/json')
@@ -1407,13 +1246,12 @@ class TMDb:
 
     def _call(self, action, append_to_response=''):
         from resources.lib.handler.requestHandler import RequestHandler
-        url = '%s%s?language=%s&api_key=%s' % (
-            self.URL, action, self.lang, self.api_key)
+        url = '%s%s?language=%s&api_key=%s' % (self.URL, action, self.lang, self.api_key)
         if append_to_response:
             url += '&%s' % append_to_response
 
-        oRequestHandler = RequestHandler(url)
-        data = oRequestHandler.request(jsonDecode=True)
+        request_handler = RequestHandler(url)
+        data = request_handler.request(json_decode=True)
 
         return data
 

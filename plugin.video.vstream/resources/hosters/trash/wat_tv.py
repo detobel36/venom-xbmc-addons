@@ -20,12 +20,12 @@ class cHoster(iHoster):
     def __init__(self):
         iHoster.__init__(self, 'wat_tv', 'Wat')
 
-    def __getIdFromUrl(self, sUrl):
-        sPattern = 'http:\\/\\/www\\.wat\\.tv\\/embedframe\\/[0-9a-zA-Z]{13}([0-9a-zA-Z]{7})'
-        oParser = Parser()
-        aResult = oParser.parse(sUrl, sPattern)
-        if aResult[0] is True:
-            return aResult[1][0]
+    def __getIdFromUrl(self, url):
+        pattern = 'http:\\/\\/www\\.wat\\.tv\\/embedframe\\/[0-9a-zA-Z]{13}([0-9a-zA-Z]{7})'
+        parser = Parser()
+        results = parser.parse(url, pattern)
+        if results[0] is True:
+            return results[1][0]
 
         return ''
 
@@ -43,8 +43,8 @@ class cHoster(iHoster):
                 base36 = alphabet[i] + base36
             return base36 or alphabet[0]
 
-        # oRequest = RequestHandler('http://www.wat.tv/servertime2')
-        # stime = oRequest.request()
+        # request = RequestHandler('http://www.wat.tv/servertime2')
+        # stime = request.request()
         # stime = base36encode(int(stime))
 
         stime = base36encode(int(time.time()))
@@ -57,7 +57,7 @@ class cHoster(iHoster):
         token = md5.new(key + sLoc + timesec).hexdigest() + '/' + timesec
         return token
 
-    def _getMediaLinkForGuest(self, autoPlay=False):
+    def _getMediaLinkForGuest(self, auto_play=False):
         api_call = False
         UA = 'Mozilla/5.0 (Windows NT 6.1; WOW64; rv:43.0) Gecko/20100101 Firefox/43.0'
 
@@ -65,18 +65,18 @@ class cHoster(iHoster):
         sLocation = '/web/' + sID
 
         # sUrl1 = 'http://www.wat.tv/interface/contentv3/' + sID
-        # oRequest = RequestHandler(sUrl1)
-        # Json1 = oRequest.request()
+        # request = RequestHandler(sUrl1)
+        # Json1 = request.request()
 
         sToken = self.makeToken(sLocation)
 
-        sUrl2 = 'http://www.wat.tv/get' + sLocation + '?token=' + sToken + \
+        url2 = 'http://www.wat.tv/get' + sLocation + '?token=' + sToken + \
             '&context=swf2&getURL=1&version=WIN%2010,3,181,14'
-        # print sUrl2
+        # print url2
 
-        oRequest = RequestHandler(sUrl2)
-        oRequest.addHeaderEntry('User-Agent', UA)
-        url3 = oRequest.request()
+        request = RequestHandler(url2)
+        request.addHeaderEntry('User-Agent', UA)
+        url3 = request.request()
 
         api_call = url3 + '&start=0|User-Agent=' + UA
 

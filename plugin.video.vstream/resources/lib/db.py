@@ -5,7 +5,7 @@ import json
 import xbmcvfs
 import xbmc
 
-from resources.lib.comaddon import dialog, addon, VSlog, VSPath, isMatrix, VSProfil
+from resources.lib.comaddon import dialog, Addon, VSlog, VSPath, isMatrix, VSProfil
 from resources.lib.handler.inputParameterHandler import InputParameterHandler
 from resources.lib.util import QuotePlus, Unquote
 
@@ -213,7 +213,7 @@ class Db(object):
         try:
             self.dbcur.execute(sql_delete)
             self.db.commit()
-            dialog().VSinfo(addon().VSlang(30041))
+            dialog().VSinfo(Addon().VSlang(30041))
             gui.updateDirectory()
             return False, False
         except Exception as e:
@@ -374,9 +374,9 @@ class Db(object):
         siteurl = QuotePlus(meta['siteurl'])
 
         try:
-            sIcon = meta['icon'].decode('UTF-8')
+            icon = meta['icon'].decode('UTF-8')
         except BaseException:
-            sIcon = meta['icon']
+            icon = meta['icon']
 
         try:
             ex = 'INSERT INTO favorite (title, siteurl, site, fav, cat, icon, fanart) VALUES (?, ?, ?, ?, ?, ?, ?)'
@@ -387,16 +387,16 @@ class Db(object):
                  meta['site'],
                     meta['fav'],
                     meta['cat'],
-                    sIcon,
+                    icon,
                     meta['fanart']))
 
             self.db.commit()
 
-            dialog().VSinfo(addon().VSlang(30042), meta['title'], 4)
+            dialog().VSinfo(Addon().VSlang(30042), meta['title'], 4)
             VSlog('SQL INSERT favorite Successfully - ' + meta['title'])
         except Exception as e:
             if 'UNIQUE constraint failed' in str(e):
-                dialog().VSinfo(addon().VSlang(30043), meta['title'])
+                dialog().VSinfo(Addon().VSlang(30043), meta['title'])
             VSlog('SQL ERROR INSERT : %s' % e)
             pass
 
@@ -413,34 +413,34 @@ class Db(object):
             VSlog('SQL ERROR EXECUTE')
             return None
 
-    def del_bookmark(self, sSiteUrl='', sMovieTitle='', sCat='', sAll=False):
+    def del_bookmark(self, site_url='', movie_title='', cat='', for_all=False):
 
         sql_delete = None
 
         # Tous supprimer
-        if sAll:
+        if for_all:
             sql_delete = 'DELETE FROM favorite;'
 
         # Supprimer un bookmark selon son titre
-        elif sMovieTitle:
-            siteUrl = QuotePlus(sSiteUrl)
-            title = self.str_conv(sMovieTitle)
+        elif movie_title:
+            site_url = QuotePlus(site_url)
+            title = self.str_conv(movie_title)
             title = title.replace("'", r"''")
             sql_delete = "DELETE FROM favorite WHERE siteurl = '%s' AND title = '%s'" % (
-                siteUrl, title)
+                site_url, title)
 
         # Supprimer un bookmark selon son url
-        elif sSiteUrl:
-            siteUrl = QuotePlus(sSiteUrl)
-            sql_delete = "DELETE FROM favorite WHERE siteurl = '%s'" % siteUrl
+        elif site_url:
+            site_url = QuotePlus(site_url)
+            sql_delete = "DELETE FROM favorite WHERE siteurl = '%s'" % site_url
 
         # Supprimer toute une catégorie
-        elif sCat:
+        elif cat:
             catList = ('1', '7')    # films, saga
-            if sCat not in catList:
+            if cat not in catList:
                 catList = ('2', '3', '4', '8')
-                if sCat not in catList:
-                    catList = ('0', sCat)
+                if cat not in catList:
+                    catList = ('0', cat)
             sql_delete = "DELETE FROM favorite WHERE cat in %s" % str(catList)
 
         if sql_delete:
@@ -450,11 +450,11 @@ class Db(object):
                 self.db.commit()
                 update = self.db.total_changes
 
-                if not update and sSiteUrl and sMovieTitle:
+                if not update and site_url and movie_title:
                     # si pas trouvé, on essaie sans le titre, seulement l'URL
-                    return self.del_bookmark(sSiteUrl)
+                    return self.del_bookmark(site_url)
 
-                dialog().VSinfo(addon().VSlang(30044))
+                dialog().VSinfo(Addon().VSlang(30044))
                 Gui().updateDirectory()
                 return True
             except Exception as e:
@@ -477,7 +477,7 @@ class Db(object):
         siteurl = QuotePlus(meta['siteurl'])
         cat = meta['cat']
         saison = meta['season'] if 'season' in meta else ''
-        sTmdbId = meta['sTmdbId'] if 'sTmdbId' in meta else ''
+        tmdb_id = meta['tmdb_id'] if 'tmdb_id' in meta else ''
 
         ex = "DELETE FROM viewing WHERE title_id = '%s' and cat = '%s'" % (
             titleWatched, cat)
@@ -488,10 +488,11 @@ class Db(object):
             pass
 
         try:
-            ex = 'INSERT INTO viewing (tmdb_id, title_id, title, siteurl, site, fav, cat, season) VALUES (?, ?, ?, ?, ?, ?, ?, ?)'
+            ex = 'INSERT INTO viewing (tmdb_id, title_id, title, siteurl, site, fav, cat, season) ' \
+                 'VALUES (?, ?, ?, ?, ?, ?, ?, ?)'
             self.dbcur.execute(
                 ex,
-                (sTmdbId,
+                (tmdb_id,
                  titleWatched,
                  title,
                  siteurl,
@@ -511,7 +512,7 @@ class Db(object):
                 # Deuxieme tentative
                 self.dbcur.execute(
                     ex,
-                    (meta['sTmdbId'],
+                    (meta['tmdb_id'],
                      titleWatched,
                      title,
                      siteurl,
@@ -538,14 +539,14 @@ class Db(object):
             return None
 
     def del_viewing(self, meta):
-        sTitleWatched = meta['titleWatched'] if 'titleWatched' in meta else None
+        title_watched = meta['titleWatched'] if 'titleWatched' in meta else None
 
-        if not sTitleWatched:       # delete a category or all
+        if not title_watched:       # delete a category or all
             sql_delete = "DELETE FROM viewing"
             if 'cat' in meta:
                 sql_delete += " where cat = '%s'" % meta['cat']
         else:
-            sql_delete = "DELETE FROM viewing WHERE title_id = '%s'" % sTitleWatched
+            sql_delete = "DELETE FROM viewing WHERE title_id = '%s'" % title_watched
             if 'cat' in meta:
                 sql_delete += " and cat = '%s'" % meta['cat']
 
@@ -556,7 +557,7 @@ class Db(object):
             update = self.db.total_changes
 
             # si pas trouvé, on essaie sans la cat, juste le titre
-            if not update and sTitleWatched and 'cat' in meta:
+            if not update and title_watched and 'cat' in meta:
                 del meta['cat']
                 return self.del_viewing(meta)
 
@@ -574,13 +575,14 @@ class Db(object):
 
         title = self.str_conv(meta['title'])
         url = QuotePlus(meta['url'])
-        sIcon = QuotePlus(meta['icon'])
+        icon = QuotePlus(meta['icon'])
         sPath = meta['path']
-        ex = 'INSERT INTO download (title, url, path, cat, icon, size, totalsize, status) VALUES (?, ?, ?, ?, ?, ?, ?, ?)'
+        ex = 'INSERT INTO download (title, url, path, cat, icon, size, totalsize, status) ' \
+             'VALUES (?, ?, ?, ?, ?, ?, ?, ?)'
 
         try:
             self.dbcur.execute(
-                ex, (title, url, sPath, meta['cat'], sIcon, '', '', 0))
+                ex, (title, url, sPath, meta['cat'], icon, '', '', 0))
             self.db.commit()
             VSlog('SQL INSERT download Successfully')
         except Exception as e:

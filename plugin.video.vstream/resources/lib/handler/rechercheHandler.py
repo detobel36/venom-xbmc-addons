@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 # vStream https://github.com/Kodi-vStream/venom-xbmc-addons
-from resources.lib.comaddon import addon, VSlog, SiteManager
+from resources.lib.comaddon import Addon, VSlog, SiteManager
 from resources.lib.db import Db
 
 import sys
@@ -28,19 +28,19 @@ class cRechercheHandler:
         except BaseException:
             return ''
 
-    def setText(self, sText):
-        if not sText:
+    def setText(self, text):
+        if not text:
             return False
-        self.__sText = sText
+        self.__sText = text
         return self.__sText
 
     def getText(self):
         return self.__sText
 
-    def setCat(self, sCat):
-        if not sCat:
+    def setCat(self, cat):
+        if not cat:
             return False
-        self.__sCat = str(sCat)
+        self.__sCat = str(cat)
         return self.__sCat
 
     def getCat(self):
@@ -65,60 +65,60 @@ class cRechercheHandler:
             sFilePath = "/".join([sFolder, sItemName])
             sFilePath = sFilePath.replace('\\', '/')
 
-            if (xbmcvfs.exists(sFilePath)):
-                if (sFilePath.lower().endswith('py')):
+            if xbmcvfs.exists(sFilePath):
+                if sFilePath.lower().endswith('py'):
                     sItemName = sItemName.replace('.py', '')
                     aNameList.append(sItemName)
         return aNameList
 
-    def importPlugin(self, sName, sCat):
+    def importPlugin(self, sName, cat):
         pluginData = {}
 
-        if sCat == '1':
-            sSearch = 'URL_SEARCH_MOVIES'
-        elif sCat == '2':
-            sSearch = 'URL_SEARCH_SERIES'
-        elif sCat == '3':
-            sSearch = 'URL_SEARCH_ANIMS'
-        elif sCat == '4':
-            sSearch = 'URL_SEARCH_SERIES'
-        elif sCat == '5':
-            sSearch = 'URL_SEARCH_MISC'
-        elif sCat == '6':
-            sSearch = 'URL_SEARCH_REPLAY'
-        elif sCat == '7':
-            sSearch = 'URL_SEARCH_MOVIES'
-        elif sCat == '8':
-            sSearch = 'URL_SEARCH_SERIES'
-        elif sCat == '9':
-            sSearch = 'URL_SEARCH_DRAMAS'
+        if cat == '1':
+            search = 'URL_SEARCH_MOVIES'
+        elif cat == '2':
+            search = 'URL_SEARCH_SERIES'
+        elif cat == '3':
+            search = 'URL_SEARCH_ANIMS'
+        elif cat == '4':
+            search = 'URL_SEARCH_SERIES'
+        elif cat == '5':
+            search = 'URL_SEARCH_MISC'
+        elif cat == '6':
+            search = 'URL_SEARCH_REPLAY'
+        elif cat == '7':
+            search = 'URL_SEARCH_MOVIES'
+        elif cat == '8':
+            search = 'URL_SEARCH_SERIES'
+        elif cat == '9':
+            search = 'URL_SEARCH_DRAMAS'
         else:
-            sSearch = 'URL_SEARCH'
+            search = 'URL_SEARCH'
 
         try:
             plugin = __import__('resources.sites.%s' % sName, fromlist=[sName])
             pluginData['identifier'] = plugin.SITE_IDENTIFIER
             pluginData['name'] = plugin.SITE_NAME
-            pluginData['search'] = getattr(plugin, sSearch)
+            pluginData['search'] = getattr(plugin, search)
             return pluginData
         except Exception as e:
-            if ("has no attribute '%s'" % sSearch) not in str(e):
+            if ("has no attribute '%s'" % search) not in str(e):
                 VSlog(str(e))
             return False
 
     def getAvailablePlugins(self):
-        sText = self.getText()
-        if not sText:
+        text = self.getText()
+        if not text:
             return False
-        sCat = self.getCat()
-        if not sCat:
+        cat = self.getCat()
+        if not cat:
             return False
 
         # historique
-        addons = addon()
+        addons = Addon()
         try:
-            if (addons.getSetting("history-view") == 'true'):
-                meta = {'title': sText, 'disp': sCat}
+            if addons.getSetting("history-view") == 'true':
+                meta = {'title': text, 'disp': cat}
                 with Db() as db:
                     db.insert_history(meta)
         except Exception as e:
@@ -129,18 +129,18 @@ class cRechercheHandler:
         sFolder = sFolder.replace('\\', '/')
         VSlog("Sites Folder: " + sFolder)
 
-        sitesManager = SiteManager()
+        sites_manager = SiteManager()
 
-        aPlugins = []
+        list_plugins = []
         aFileNames = self.__getFileNamesFromFolder(sFolder)
-        for sFileName in aFileNames:
-            if sitesManager.isEnable(sFileName):
-                if sitesManager.isActive(sFileName):
-                    aPlugin = self.importPlugin(sFileName, sCat)
-                    if aPlugin:
-                        aPlugins.append(aPlugin)
+        for file_name in aFileNames:
+            if sites_manager.isEnable(file_name):
+                if sites_manager.isActive(file_name):
+                    plugin = self.importPlugin(file_name, cat)
+                    if plugin:
+                        list_plugins.append(plugin)
 
-        return aPlugins
+        return list_plugins
 
     def __createAvailablePluginsItem(
             self,

@@ -12,11 +12,11 @@ class cHoster(iHoster):
         iHoster.__init__(self, 'youwatch', 'Youwatch')
 
     def __getIdFromUrl(self, url):
-        sPattern = "http://youwatch.org/([^<]+)"
-        oParser = Parser()
-        aResult = oParser.parse(url, sPattern)
-        if aResult[0] is True:
-            return aResult[1][0]
+        pattern = "http://youwatch.org/([^<]+)"
+        parser = Parser()
+        results = parser.parse(url, pattern)
+        if results[0] is True:
+            return results[1][0]
 
         return ''
 
@@ -29,24 +29,24 @@ class cHoster(iHoster):
         else:
             self._url = url
 
-    def _getMediaLinkForGuest(self, autoPlay=False):
-        oRequest = RequestHandler(self._url)
-        sHtmlContent = oRequest.request()
+    def _getMediaLinkForGuest(self, auto_play=False):
+        request = RequestHandler(self._url)
+        html_content = request.request()
 
-        oParser = Parser()
+        parser = Parser()
 
-        sPattern = '<iframe[^<>]+?src="(.+?)" [^<>]+?> *<\\/iframe>'
-        aResult = oParser.parse(sHtmlContent, sPattern)
-        if aResult[0] is True:
+        pattern = '<iframe[^<>]+?src="(.+?)" [^<>]+?> *<\\/iframe>'
+        results = parser.parse(html_content, pattern)
+        if results[0] is True:
             UA = 'Mozilla/5.0 (Windows NT 6.1; WOW64; rv:50.0) Gecko/20100101 Firefox/50.0'
-            oRequestHandler = RequestHandler(aResult[1][0])
-            oRequestHandler.addHeaderEntry('User-Agent', UA)
-            oRequestHandler.addHeaderEntry('Referer', aResult[1][0])
-            sHtmlContent = oRequestHandler.request()
+            request_handler = RequestHandler(results[1][0])
+            request_handler.addHeaderEntry('User-Agent', UA)
+            request_handler.addHeaderEntry('Referer', results[1][0])
+            html_content = request_handler.request()
 
-        sPattern = '\\[{file:"(.+?)",label:"(.+?)"}\\]'
-        aResult = oParser.parse(sHtmlContent, sPattern)
-        if aResult[0] is True:
-            return True, aResult[1][0][0] + '|Referer=' + self._url
+        pattern = '\\[{file:"(.+?)",label:"(.+?)"}\\]'
+        results = parser.parse(html_content, pattern)
+        if results[0] is True:
+            return True, results[1][0][0] + '|Referer=' + self._url
 
         return False, False

@@ -4,7 +4,7 @@ import json
 
 from resources.lib.handler.requestHandler import RequestHandler
 from resources.hosters.hoster import iHoster
-from resources.lib.comaddon import addon, dialog
+from resources.lib.comaddon import Addon, dialog
 
 URL_HOST = "https://debrid-link.fr"
 
@@ -14,31 +14,31 @@ class cHoster(iHoster):
     def __init__(self):
         iHoster.__init__(self, 'debrid_link', 'Debrid Link', 'violet')
 
-    def _getMediaLinkForGuest(self, autoPlay=False):
-        token_debrid_link = "Bearer " + addon().getSetting('hoster_debridlink_token')
+    def _getMediaLinkForGuest(self, auto_play=False):
+        token_debrid_link = "Bearer " + Addon().getSetting('hoster_debridlink_token')
 
-        oRequestHandler = RequestHandler(URL_HOST + '/api/downloader/add')
-        oRequestHandler.setRequestType(1)
-        oRequestHandler.addHeaderEntry('Accept', 'application/json')
-        oRequestHandler.addHeaderEntry('Authorization', token_debrid_link)
-        oRequestHandler.addHeaderEntry(
+        request_handler = RequestHandler(URL_HOST + '/api/downloader/add')
+        request_handler.setRequestType(1)
+        request_handler.addHeaderEntry('Accept', 'application/json')
+        request_handler.addHeaderEntry('Authorization', token_debrid_link)
+        request_handler.addHeaderEntry(
             'Content-Type', "application/x-www-form-urlencoded")
-        oRequestHandler.addParameters("link", self._url)
-        text = json.loads(oRequestHandler.request())
+        request_handler.addParameters("link", self._url)
+        text = json.loads(request_handler.request())
 
         if text["result"] == "KO":
             if text["ERR"] == 'badToken':
                 new_token = renewToken()
 
-                oRequestHandler = RequestHandler(
+                request_handler = RequestHandler(
                     URL_HOST + '/api/downloader/add')
-                oRequestHandler.setRequestType(1)
-                oRequestHandler.addHeaderEntry('Accept', 'application/json')
-                oRequestHandler.addHeaderEntry('Authorization', new_token)
-                oRequestHandler.addHeaderEntry(
+                request_handler.setRequestType(1)
+                request_handler.addHeaderEntry('Accept', 'application/json')
+                request_handler.addHeaderEntry('Authorization', new_token)
+                request_handler.addHeaderEntry(
                     'Content-Type', "application/x-www-form-urlencoded")
-                oRequestHandler.addParameters("link", self._url)
-                text = json.loads(oRequestHandler.request())
+                request_handler.addParameters("link", self._url)
+                text = json.loads(request_handler.request())
 
         api_call = text["value"]["downloadLink"]
 
@@ -49,46 +49,46 @@ class cHoster(iHoster):
 
 
 def renewToken():
-    refreshTok = addon().getSetting('hoster_debridlink_tokenrefresh')
+    refreshTok = Addon().getSetting('hoster_debridlink_tokenrefresh')
     if refreshTok == "":
-        oRequestHandler = RequestHandler(URL_HOST + "/api/oauth/device/code")
-        oRequestHandler.setRequestType(1)
-        oRequestHandler.addHeaderEntry(
+        request_handler = RequestHandler(URL_HOST + "/api/oauth/device/code")
+        request_handler.setRequestType(1)
+        request_handler.addHeaderEntry(
             'Content-Type', 'application/x-www-form-urlencoded')
-        oRequestHandler.addParameters(
-            'client_id', addon().getSetting('hoster_debridlink_ID'))
-        r = json.loads(oRequestHandler.request())
+        request_handler.addParameters(
+            'client_id', Addon().getSetting('hoster_debridlink_ID'))
+        r = json.loads(request_handler.request())
 
         dialog().VSok('Allez sur la page : https://debrid-link.fr/device\n' +
                       'et rentrer le code ' + r["user_code"] + ' pour autorisez la connection')
 
-        oRequestHandler = RequestHandler(URL_HOST + "/api/oauth/token")
-        oRequestHandler.setRequestType(1)
-        oRequestHandler.addHeaderEntry(
+        request_handler = RequestHandler(URL_HOST + "/api/oauth/token")
+        request_handler.setRequestType(1)
+        request_handler.addHeaderEntry(
             'Content-Type', 'application/x-www-form-urlencoded')
-        oRequestHandler.addParameters(
-            'client_id', addon().getSetting('hoster_debridlink_ID'))
-        oRequestHandler.addParameters("code", r["device_code"])
-        oRequestHandler.addParameters(
+        request_handler.addParameters(
+            'client_id', Addon().getSetting('hoster_debridlink_ID'))
+        request_handler.addParameters("code", r["device_code"])
+        request_handler.addParameters(
             "grant_type", "http://oauth.net/grant_type/device/1.0")
-        r = json.loads(oRequestHandler.request())
+        r = json.loads(request_handler.request())
 
-        addon().setSetting(
+        Addon().setSetting(
             'hoster_debridlink_tokenrefresh',
             r["refresh_token"])
-        addon().setSetting('hoster_debridlink_token', r["access_token"])
+        Addon().setSetting('hoster_debridlink_token', r["access_token"])
         return r["access_token"]
 
     else:
-        oRequestHandler = RequestHandler(URL_HOST + "/api/oauth/token")
-        oRequestHandler.setRequestType(1)
-        oRequestHandler.addHeaderEntry(
+        request_handler = RequestHandler(URL_HOST + "/api/oauth/token")
+        request_handler.setRequestType(1)
+        request_handler.addHeaderEntry(
             'Content-Type', 'application/x-www-form-urlencoded')
-        oRequestHandler.addParameters(
-            'client_id', addon().getSetting('hoster_debridlink_ID'))
-        oRequestHandler.addParameters("refresh_token", refreshTok)
-        oRequestHandler.addParameters("grant_type", "refresh_token")
-        r = json.loads(oRequestHandler.request())
+        request_handler.addParameters(
+            'client_id', Addon().getSetting('hoster_debridlink_ID'))
+        request_handler.addParameters("refresh_token", refreshTok)
+        request_handler.addParameters("grant_type", "refresh_token")
+        r = json.loads(request_handler.request())
 
-        addon().setSetting('hoster_debridlink_token', r["access_token"])
+        Addon().setSetting('hoster_debridlink_token', r["access_token"])
         return r["access_token"]

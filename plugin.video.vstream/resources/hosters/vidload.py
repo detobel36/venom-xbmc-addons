@@ -8,23 +8,23 @@ class cHoster(iHoster):
     def __init__(self):
         iHoster.__init__(self, 'vidload', 'VidLoad')
 
-    def _getMediaLinkForGuest(self, autoPlay=False):
-        oRequest = RequestHandler(self._url)
-        sHtmlContent = oRequest.request()
+    def _getMediaLinkForGuest(self, auto_play=False):
+        request = RequestHandler(self._url)
+        html_content = request.request()
 
-        sPattern = 'var token="([^"]+)".+?var crsf="([^"]+)"'
-        oParser = Parser()
-        aResult = oParser.parse(sHtmlContent, sPattern)
-        if aResult[0] is True:
-            aEntry = aResult[1][0]
+        pattern = 'var token="([^"]+)".+?var crsf="([^"]+)"'
+        parser = Parser()
+        results = parser.parse(html_content, pattern)
+        if results[0] is True:
+            entry = results[1][0]
 
-            oRequest = RequestHandler('https://www.vidload.net/vid/')
-            oRequest.addParameters('gone', aEntry[0])
-            oRequest.addParameters('oujda', aEntry[1])
-            oRequest.addParameters('referer', self._url)
-            oRequest.setRequestType(RequestHandler.REQUEST_TYPE_POST)
+            request = RequestHandler('https://www.vidload.net/vid/')
+            request.addParameters('gone', entry[0])
+            request.addParameters('oujda', entry[1])
+            request.addParameters('referer', self._url)
+            request.setRequestType(RequestHandler.REQUEST_TYPE_POST)
 
-            resolvedUrl = oRequest.request()
+            resolvedUrl = request.request()
             if resolvedUrl:
                 resolvedUrl = resolvedUrl.replace('\r\n', '')
                 return True, resolvedUrl

@@ -29,7 +29,7 @@ def load():
     gui = Gui()
 
     output_parameter_handler = OutputParameterHandler()
-    output_parameter_handler.addParameter('siteUrl', NETS_NEWS[0])
+    output_parameter_handler.addParameter('site_url', NETS_NEWS[0])
     gui.addDir(
         SITE_IDENTIFIER,
         NETS_NEWS[1],
@@ -40,37 +40,37 @@ def load():
     gui.setEndOfDirectory()
 
 
-def showMovies(sSearch=''):
+def showMovies(search=''):
     gui = Gui()
 
-    if sSearch:
-        sUrl = sSearch
+    if search:
+        url = search
     else:
         input_parameter_handler = InputParameterHandler()
-        sUrl = input_parameter_handler.getValue('siteUrl')
+        url = input_parameter_handler.getValue('site_url')
 
-    oRequestHandler = RequestHandler(sUrl)
-    sHtmlContent = oRequestHandler.request()
+    request_handler = RequestHandler(url)
+    html_content = request_handler.request()
 
-    sPattern = '<a href="([^"]+)" class="tweet.+?" title=".+?\\-([^"]+)".+?background-image:url((.+?))">'
+    pattern = '<a href="([^"]+)" class="tweet.+?" title=".+?\\-([^"]+)".+?background-image:url((.+?))">'
 
-    oParser = Parser()
-    aResult = oParser.parse(sHtmlContent, sPattern)
+    parser = Parser()
+    results = parser.parse(html_content, pattern)
 
-    if not aResult[0]:
+    if not results[0]:
         gui.addText(SITE_IDENTIFIER)
 
-    if aResult[0]:
-        total = len(aResult[1])
+    if results[0]:
+        total = len(results[1])
         dialog = util.createDialog(SITE_NAME)
 
-        for aEntry in aResult[1]:
+        for entry in results[1]:
             util.updateDialog(dialog, total)
 
-            sUrl = 'https://twitter.com' + str(aEntry[0])
+            url = 'https://twitter.com' + str(entry[0])
 
             thumbnail = str(
-                aEntry[2]).replace(
+                entry[2]).replace(
                 "'",
                 '').replace(
                 '(',
@@ -78,14 +78,14 @@ def showMovies(sSearch=''):
                 ')',
                 '')
 
-            title = (' %s ') % (str(aEntry[1]))
+            title = (' %s ') % (str(entry[1]))
 
             # recup id last tweet pour NextPage
-            sNext = str(aEntry[0]).replace('/malaisetele/status/', '')
+            sNext = str(entry[0]).replace('/malaisetele/status/', '')
 
             output_parameter_handler = OutputParameterHandler()
-            output_parameter_handler.addParameter('siteUrl', sUrl)
-            output_parameter_handler.addParameter('sMovieTitle', title)
+            output_parameter_handler.addParameter('site_url', url)
+            output_parameter_handler.addParameter('movie_title', title)
             output_parameter_handler.addParameter('thumbnail', thumbnail)
 
             gui.addMovie(
@@ -99,66 +99,66 @@ def showMovies(sSearch=''):
 
         util.finishDialog(dialog)
 
-        sNextPage = __checkForNextPage(sNext)
-        if (sNextPage):
+        next_page = __checkForNextPage(sNext)
+        if (next_page):
             output_parameter_handler = OutputParameterHandler()
-            output_parameter_handler.addParameter('siteUrl', sNextPage)
+            output_parameter_handler.addParameter('site_url', next_page)
             gui.addNext(
                 SITE_IDENTIFIER,
                 'showMovies',
                 '[COLOR teal]Next >>>[/COLOR]',
                 output_parameter_handler)
 
-    if not sSearch:
+    if not search:
         gui.setEndOfDirectory()
 
 
 def __checkForNextPage(url):
 
-    sUrl = 'https://twitter.com/malaisetele/media?include_available_features=1&include_entities=1&lang=fr&max_position=' + \
+    url = 'https://twitter.com/malaisetele/media?include_available_features=1&include_entities=1&lang=fr&max_position=' + \
         url + '&reset_error_state=false'
-    return sUrl
+    return url
 
 
 def showLinks():
     gui = Gui()
 
     input_parameter_handler = InputParameterHandler()
-    sUrl = input_parameter_handler.getValue('siteUrl')
-    sMovieTitle = input_parameter_handler.getValue('sMovieTitle')
+    url = input_parameter_handler.getValue('site_url')
+    movie_title = input_parameter_handler.getValue('movie_title')
     thumbnail = input_parameter_handler.getValue('thumbnail')
 
     # recup lien mp4 video twitter via twdown.net
-    sUrl2 = 'http://twdown.net/download.php'
+    url2 = 'http://twdown.net/download.php'
 
-    oRequestHandler = RequestHandler(sUrl2)
-    oRequestHandler.setRequestType(RequestHandler.REQUEST_TYPE_POST)
-    oRequestHandler.addParameters('URL', sUrl)
-    oRequestHandler.addParameters('submit', 'Download')
-    oRequestHandler.addParameters('submit', '')
-    sHtmlContent = oRequestHandler.request()
+    request_handler = RequestHandler(url2)
+    request_handler.setRequestType(RequestHandler.REQUEST_TYPE_POST)
+    request_handler.addParameters('URL', url)
+    request_handler.addParameters('submit', 'Download')
+    request_handler.addParameters('submit', '')
+    html_content = request_handler.request()
 
     # recup du lien mp4
-    sPattern = '<td>[0-9]+P</td>.+?<a download href="([^"]+)"'
+    pattern = '<td>[0-9]+P</td>.+?<a download href="([^"]+)"'
 
-    oParser = Parser()
-    aResult = oParser.parse(sHtmlContent, sPattern)
+    parser = Parser()
+    results = parser.parse(html_content, pattern)
 
-    if aResult[0]:
+    if results[0]:
 
-        sUrl = str(aResult[1][0])
+        url = str(results[1][0])
 
         # on lance video directement
-        oGuiElement = GuiElement()
-        oGuiElement.setSiteName(SITE_IDENTIFIER)
-        oGuiElement.setTitle(sMovieTitle)
-        oGuiElement.setMediaUrl(sUrl)
-        oGuiElement.setThumbnail(thumbnail)
+        gui_element = GuiElement()
+        gui_element.setSiteName(SITE_IDENTIFIER)
+        gui_element.setTitle(movie_title)
+        gui_element.setMediaUrl(url)
+        gui_element.setThumbnail(thumbnail)
 
-        oPlayer = Player()
-        oPlayer.clearPlayList()
-        oPlayer.addItemToPlaylist(oGuiElement)
-        oPlayer.startPlayer()
+        player = Player()
+        player.clearPlayList()
+        player.addItemToPlaylist(gui_element)
+        player.startPlayer()
         return
 
     else:

@@ -12,33 +12,33 @@ class cHoster(iHoster):
     def __init__(self):
         iHoster.__init__(self, 'estream', 'Estream')
 
-    def _getMediaLinkForGuest(self, autoPlay=False):
+    def _getMediaLinkForGuest(self, auto_play=False):
         api_call = False
 
-        oRequest = RequestHandler(self._url)
-        sHtmlContent = oRequest.request()
+        request = RequestHandler(self._url)
+        html_content = request.request()
 
         # type1
-        oParser = Parser()
-        sPattern = '<source *src="([^"]+)" *type=\'video/.+?\''
-        aResult = oParser.parse(sHtmlContent, sPattern)
-        if aResult[0] is True:
-            api_call = aResult[1][0]
+        parser = Parser()
+        pattern = '<source *src="([^"]+)" *type=\'video/.+?\''
+        results = parser.parse(html_content, pattern)
+        if results[0] is True:
+            api_call = results[1][0]
 
         # type2?
-        sPattern = '<script type=\'text/javascript\'>(.+?)</script>'
-        aResult = oParser.parse(sHtmlContent, sPattern)
-        if aResult[0] is True:
-            stri = cPacker().unpack(aResult[1][0])
-            sPattern = 'file:"([^"]+)",label:"([0-9]+)"}'
-            aResult = oParser.parse(stri, sPattern)
-            if aResult[0] is True:
+        pattern = '<script type=\'text/javascript\'>(.+?)</script>'
+        results = parser.parse(html_content, pattern)
+        if results[0] is True:
+            stri = cPacker().unpack(results[1][0])
+            pattern = 'file:"([^"]+)",label:"([0-9]+)"}'
+            results = parser.parse(stri, pattern)
+            if results[0] is True:
                 url = []
                 qua = []
 
-                for aEntry in aResult[1]:
-                    url.append(aEntry[0])
-                    qua.append(aEntry[1][:3] + '*' + aEntry[1][3:])
+                for entry in results[1]:
+                    url.append(entry[0])
+                    qua.append(entry[1][:3] + '*' + entry[1][3:])
 
                 api_call = dialog().VSselectqual(qua, url)
 

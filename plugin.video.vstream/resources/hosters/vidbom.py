@@ -12,26 +12,26 @@ class cHoster(iHoster):
     def __init__(self):
         iHoster.__init__(self, 'vidbom', 'Vidbom')
 
-    def _getMediaLinkForGuest(self, autoPlay=False):
+    def _getMediaLinkForGuest(self, auto_play=False):
         api_call = ''
-        oParser = Parser()
+        parser = Parser()
 
-        oRequest = RequestHandler(self._url)
-        sHtmlContent = oRequest.request()
+        request = RequestHandler(self._url)
+        html_content = request.request()
 
-        sPattern = 'sources: *\\[{file:"([^"]+)"'
-        aResult = oParser.parse(sHtmlContent, sPattern)
-        if aResult[0] is True:
-            api_call = aResult[1][0]
+        pattern = 'sources: *\\[{file:"([^"]+)"'
+        results = parser.parse(html_content, pattern)
+        if results[0] is True:
+            api_call = results[1][0]
         else:
-            sPattern = '(eval\\(function\\(p,a,c,k,e(?:.|\\s)+?\\)\\)\\))'
-            aResult = oParser.parse(sHtmlContent, sPattern)
-            if aResult[0] is True:
-                sHtmlContent = cPacker().unpack(aResult[1][0])
-                sPattern = '{file:"([^"]+.mp4)"'
-                aResult = oParser.parse(sHtmlContent, sPattern)
-                if aResult[0] is True:
-                    api_call = aResult[1][0]
+            pattern = '(eval\\(function\\(p,a,c,k,e(?:.|\\s)+?\\)\\)\\))'
+            results = parser.parse(html_content, pattern)
+            if results[0] is True:
+                html_content = cPacker().unpack(results[1][0])
+                pattern = '{file:"([^"]+.mp4)"'
+                results = parser.parse(html_content, pattern)
+                if results[0] is True:
+                    api_call = results[1][0]
 
         if api_call:
             return True, api_call

@@ -18,30 +18,30 @@ class cHoster(iHoster):
     def __init__(self):
         iHoster.__init__(self, 'soundcloud', 'Soundcloud')
 
-    def _getMediaLinkForGuest(self, autoPlay=False):
+    def _getMediaLinkForGuest(self, auto_play=False):
         url2 = ''
         VSlog(self._url)
 
-        oRequest = RequestHandler(self._url)
-        oRequest.addHeaderEntry('User-Agent', UA)
-        sHtmlContent = oRequest.request()
+        request = RequestHandler(self._url)
+        request.addHeaderEntry('User-Agent', UA)
+        html_content = request.request()
 
-        oParser = Parser()
+        parser = Parser()
 
         # Magic number
-        sPattern = 'soundcloud:\\/\\/sounds:([0-9]+)">'
-        aResult = oParser.parse(sHtmlContent, sPattern)
-        if aResult[0]:
-            n = aResult[1][0]
+        pattern = 'soundcloud:\\/\\/sounds:([0-9]+)">'
+        results = parser.parse(html_content, pattern)
+        if results[0]:
+            n = results[1][0]
         else:
             VSlog('err magic number')
             return False
 
         # First need client id
-        sPattern = '<script crossorigin src="([^"]+)"></script>'
-        aResult = oParser.parse(sHtmlContent, sPattern)
-        if aResult[0]:
-            for i in aResult[1]:
+        pattern = '<script crossorigin src="([^"]+)"></script>'
+        results = parser.parse(html_content, pattern)
+        if results[0]:
+            for i in results[1]:
                 # Bon evidement la jai pris "48-" mais ca change surement
                 if '48-' in i:
                     url2 = i
@@ -54,45 +54,45 @@ class cHoster(iHoster):
             VSlog('err url2')
             return False
 
-        oRequest = RequestHandler(url2)
-        oRequest.addHeaderEntry('User-Agent', UA)
-        sHtmlContent = oRequest.request()
+        request = RequestHandler(url2)
+        request.addHeaderEntry('User-Agent', UA)
+        html_content = request.request()
 
-        sPattern = 'client_id:"([^"]+)"'
-        aResult = oParser.parse(sHtmlContent, sPattern)
-        if aResult[0]:
-            sId = aResult[1][0]
+        pattern = 'client_id:"([^"]+)"'
+        results = parser.parse(html_content, pattern)
+        if results[0]:
+            s_id = results[1][0]
         else:
             VSlog('err id2')
             return False
 
         # Need track
-        TrackUrl = 'https://api-v2.soundcloud.com/tracks?ids=' + n + '&client_id=' + sId
+        TrackUrl = 'https://api-v2.soundcloud.com/tracks?ids=' + n + '&client_id=' + s_id
         VSlog('TrackUrl : ' + TrackUrl)
-        oRequest = RequestHandler(TrackUrl)
-        oRequest.addHeaderEntry('User-Agent', UA)
-        sHtmlContent = oRequest.request()
-        sPattern = 'soundcloud:tracks:([^"]+\\/)stream'
-        aResult = oParser.parse(sHtmlContent, sPattern)
-        if aResult[0]:
-            sTrack = aResult[1][0]
+        request = RequestHandler(TrackUrl)
+        request.addHeaderEntry('User-Agent', UA)
+        html_content = request.request()
+        pattern = 'soundcloud:tracks:([^"]+\\/)stream'
+        results = parser.parse(html_content, pattern)
+        if results[0]:
+            sTrack = results[1][0]
         else:
             VSlog('err tracks')
             return False
 
         jsonurl = 'https://api-v2.soundcloud.com/media/soundcloud:tracks:' + \
-            sTrack + 'stream/hls?client_id=' + sId
+            sTrack + 'stream/hls?client_id=' + s_id
         VSlog('jsonurl : ' + jsonurl)
 
-        oRequest = RequestHandler(jsonurl)
-        oRequest.addHeaderEntry('User-Agent', UA)
-        sHtmlContent = oRequest.request()
+        request = RequestHandler(jsonurl)
+        request.addHeaderEntry('User-Agent', UA)
+        html_content = request.request()
 
         # fh = open('c:\\test.txt', 'w')
-        # fh.write(sHtmlContent)
+        # fh.write(html_content)
         # fh.close()
 
-        json_string = json.loads(sHtmlContent)
+        json_string = json.loads(html_content)
         api_call = json_string['url']
 
         if api_call:

@@ -22,83 +22,83 @@ class cHoster(iHoster):
     def __getIdFromUrl(self, url):
         # http://kzu0y3.1fichier.com/
         # https://1fichier.com/?s6gdceia9y
-        sId = url.replace('https://', '')
-        sId = sId.replace('http://', '')
-        sId = sId.replace('1fichier.com/?', '')
-        sId = sId.replace('.1fichier.com', '')
-        sId = sId.replace('/', '')
+        s_id = url.replace('https://', '')
+        s_id = s_id.replace('http://', '')
+        s_id = s_id.replace('1fichier.com/?', '')
+        s_id = s_id.replace('.1fichier.com', '')
+        s_id = s_id.replace('/', '')
 
-        return sId
+        return s_id
 
-    def getMediaLink(self, autoPlay=False):
-        self.oPremiumHandler = cPremiumHandler(self.getPluginIdentifier())
-        print(self.oPremiumHandler.isPremiumModeAvailable())
+    def getMediaLink(self, auto_play=False):
+        self.premium_handler = cPremiumHandler(self.getPluginIdentifier())
+        print(self.premium_handler.isPremiumModeAvailable())
 
         if ('site=cDownload&function' not in sys.argv[2]) and not (
-                self.oPremiumHandler.isPremiumModeAvailable()):
-            if not autoPlay:
+                self.premium_handler.isPremiumModeAvailable()):
+            if not auto_play:
                 oDialog = dialog().VSok("Pas de streaming sans premium.\n" +
                                         "Pour voir le film passer par l'option 'Télécharger et Lire' du menu contextuel.")
             return False, False
 
-        if self.oPremiumHandler.isPremiumModeAvailable():
+        if self.premium_handler.isPremiumModeAvailable():
             return self._getMediaLinkByPremiumUser()
         else:
-            return self._getMediaLinkForGuest(autoPlay)
+            return self._getMediaLinkForGuest(auto_play)
 
-    def _getMediaLinkForGuest(self, autoPlay=False):
+    def _getMediaLinkForGuest(self, auto_play=False):
         api_call = False
         url = 'https://1fichier.com/?' + self.__getIdFromUrl(self._url)
 
         adcode = random.uniform(000.000000000, 999.999999999)
 
-        oRequestHandler = RequestHandler(url)
-        oRequestHandler.setRequestType(1)
-        oRequestHandler.addHeaderEntry('Host', url.split('/')[2])
-        oRequestHandler.addHeaderEntry('Referer', url)
-        oRequestHandler.addHeaderEntry(
+        request_handler = RequestHandler(url)
+        request_handler.setRequestType(1)
+        request_handler.addHeaderEntry('Host', url.split('/')[2])
+        request_handler.addHeaderEntry('Referer', url)
+        request_handler.addHeaderEntry(
             'Accept', 'text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8')
-        oRequestHandler.addHeaderEntry('User-Agent', UA)
-        oRequestHandler.addHeaderEntry(
+        request_handler.addHeaderEntry('User-Agent', UA)
+        request_handler.addHeaderEntry(
             'Accept-Language',
             'fr,fr-FR;q=0.8,en-US;q=0.5,en;q=0.3')
-        oRequestHandler.addHeaderEntry(
+        request_handler.addHeaderEntry(
             'Content-Type', 'application/x-www-form-urlencoded')
 
-        oRequestHandler.addParameters('dl_no_ssl', 'on')
-        oRequestHandler.addParameters('adz', adcode)
-        sHtmlContent = oRequestHandler.request()
+        request_handler.addParameters('dl_no_ssl', 'on')
+        request_handler.addParameters('adz', adcode)
+        html_content = request_handler.request()
 
         # fh = open('c:\\test.txt', "w")
-        # fh.write(sHtmlContent)
+        # fh.write(html_content)
         # fh.close
 
-        api_call = self.getMedialinkDL(sHtmlContent)
+        api_call = self.getMedialinkDL(html_content)
 
         if api_call:
             return True, api_call
 
         return False, False
 
-    def getMedialinkDL(self, sHtmlContent):
+    def getMedialinkDL(self, html_content):
 
-        oParser = Parser()
+        parser = Parser()
         api_call = False
 
-        sPattern = 'Vous devez attendre encore [0-9]+ minutes'
-        aResult = oParser.parse(sHtmlContent, sPattern)
-        if aResult[0] is True:
-            dialog().VSinfo('Erreur - Limitation %s' % aResult[1][0])
+        pattern = 'Vous devez attendre encore [0-9]+ minutes'
+        results = parser.parse(html_content, pattern)
+        if results[0] is True:
+            dialog().VSinfo('Erreur - Limitation %s' % results[1][0])
             return False
 
-        sPattern = '<a href="([^<>"]+?)"  style="float:none;margin:auto;font-weight:bold;padding: 10px;margin: ' + \
+        pattern = '<a href="([^<>"]+?)"  style="float:none;margin:auto;font-weight:bold;padding: 10px;margin: ' + \
                    '10px;font-size:\\+1\\.6em;border:2px solid red" class="ok btn-general btn-orange">'
-        aResult = oParser.parse(sHtmlContent, sPattern)
+        results = parser.parse(html_content, pattern)
 
-        if aResult[0] is True:
+        if results[0] is True:
             # xbmc.sleep(1*1000)
-            # VSlog(  aResult[1][0] )
-            api_call = aResult[1][0] + '|User-Agent=' + \
+            # VSlog(  results[1][0] )
+            api_call = results[1][0] + '|User-Agent=' + \
                 UA  # + '&Referer=' + self._url
             return api_call
 
@@ -107,7 +107,7 @@ class cHoster(iHoster):
     def _getMediaLinkByPremiumUser(self):
         api_call = False
 
-        if not self.oPremiumHandler.Authentificate():
+        if not self.premium_handler.Authentificate():
             return False, False
 
         url = 'https://1fichier.com/?' + self.__getIdFromUrl(self._url)
@@ -119,17 +119,17 @@ class cHoster(iHoster):
         d'obtenir le lien direct
         '''
 
-        sHtmlContent = self.oPremiumHandler.GetHtml('%s&e=1' % url)
-        if sHtmlContent:
+        html_content = self.premium_handler.GetHtml('%s&e=1' % url)
+        if html_content:
             # L'option est désactivée : la réponse sera de type "text/plain; charset=utf-8", exemple :
             # https://serveur-2b.1fichier.com/lelienactif;Film.de.Jacquie.et.Michel.a.la.montagne.mkv;1234567890;0
-            m = re.search('^(.*);.*;.*;.*$', sHtmlContent)
+            m = re.search('^(.*);.*;.*;.*$', html_content)
             if m:
                 url = m.group(1)
             # L'option est activée : pour récupérer le lien direct il faut
             # POSTer le formulaire demandant le download
             else:
-                cookie = self.oPremiumHandler.AddCookies().replace('Cookie=', '', 1)
+                cookie = self.premium_handler.AddCookies().replace('Cookie=', '', 1)
                 data = {
                     'submit': 'download'
                 }
@@ -164,15 +164,15 @@ class cHoster(iHoster):
         # postdata = urlEncode(Mode)
 
         # Pas de page html mais lien direct
-        # sHtmlContent = self.oPremiumHandler.GetHtml(url, postdata)
+        # html_content = self.premium_handler.GetHtml(url, postdata)
         # fh = open('c:\\test.txt', "w")
-        # fh.write(sHtmlContent)
+        # fh.write(html_content)
         # fh.close()
 
         # mode inline
         # url = url + '&inline'
 
-        api_call = url + '|' + self.oPremiumHandler.AddCookies()
+        api_call = url + '|' + self.premium_handler.AddCookies()
 
         VSlog(api_call)
 

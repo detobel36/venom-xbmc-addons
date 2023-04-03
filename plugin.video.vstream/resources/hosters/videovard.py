@@ -31,27 +31,27 @@ class cHoster(iHoster):
 
         url1 = "https://" + host + "/api/make/hash/" + videoId
 
-        oRequest = RequestHandler(url1)
-        oRequest.addHeaderEntry('User-Agent', UA)
-        oRequest.addHeaderEntry('Referer', "https://" + host)
-        sHtmlContent = oRequest.request()
+        request = RequestHandler(url1)
+        request.addHeaderEntry('User-Agent', UA)
+        request.addHeaderEntry('Referer', "https://" + host)
+        html_content = request.request()
 
-        page = json.loads(sHtmlContent)
+        page = json.loads(html_content)
         hash = page['hash']
 
         url2 = "https://" + host + "/api/player/setup"
 
-        oRequest = RequestHandler(url2)
-        oRequest.setRequestType(1)
-        oRequest.addHeaderEntry('User-Agent', UA)
-        oRequest.addHeaderEntry('Referer', "https://" + host)
-        oRequest.addHeaderEntry('Origin', host)
-        oRequest.addParameters("cmd", 'get_stream')
-        oRequest.addParameters("file_code", videoId)
-        oRequest.addParameters("hash", hash)
-        sHtmlContent = oRequest.request()
+        request = RequestHandler(url2)
+        request.setRequestType(1)
+        request.addHeaderEntry('User-Agent', UA)
+        request.addHeaderEntry('Referer', "https://" + host)
+        request.addHeaderEntry('Origin', host)
+        request.addParameters("cmd", 'get_stream')
+        request.addParameters("file_code", videoId)
+        request.addParameters("hash", hash)
+        html_content = request.request()
 
-        page = json.loads(sHtmlContent)
+        page = json.loads(html_content)
         src = page['src']
         seed = page['seed']
 

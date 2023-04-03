@@ -23,24 +23,24 @@ class cHoster(iHoster):
     def isDownloadable(self):
         return False
 
-    def _getMediaLinkForGuest(self, autoPlay=False):
+    def _getMediaLinkForGuest(self, auto_play=False):
         myContext = ssl._create_unverified_context()
 
         req = urllib2.Request(self._url)
         handle = urllib2.urlopen(req, context=myContext)
-        sHtmlContent = handle.read()
+        html_content = handle.read()
         handle.close()
 
-        oParser = Parser()
-        sPattern = "var mp4v = '(.+?)'"
-        aResult = oParser.parse(sHtmlContent, sPattern)
-        if aResult[0] is True:
-            return True, aResult[1][0]
+        parser = Parser()
+        pattern = "var mp4v = '(.+?)'"
+        results = parser.parse(html_content, pattern)
+        if results[0] is True:
+            return True, results[1][0]
         else:
             # streamgk
-            sPattern = '<a id="downloadb" class="btn btn-default.+?href="([^"]+)"'
-            aResult = oParser.parse(sHtmlContent, sPattern)
-            if aResult[0] is True:
-                return True, aResult[1][0]
+            pattern = '<a id="downloadb" class="btn btn-default.+?href="([^"]+)"'
+            results = parser.parse(html_content, pattern)
+            if results[0] is True:
+                return True, results[1][0]
 
         return False, False

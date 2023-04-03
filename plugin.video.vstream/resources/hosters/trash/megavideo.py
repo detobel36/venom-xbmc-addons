@@ -23,92 +23,92 @@ class cHoster(iHoster):
 
     def __modifyUrl(self, url):
         if (url.startswith('http://www.megavideo.com/v/')):
-            oRequestHandler = RequestHandler(url)
-            oRequestHandler.request()
-            sRealUrl = oRequestHandler.getRealUrl()
+            request_handler = RequestHandler(url)
+            request_handler.request()
+            sRealUrl = request_handler.getRealUrl()
             self._url = sRealUrl
             return self.__getIdFromUrl()
 
         return url
 
-    def getMediaLink(self, autoPlay=False):
-        oPremiumHandler = cPremiumHandler(self.getPluginIdentifier())
-        if (oPremiumHandler.isPremiumModeAvailable()):
-            sUsername = oPremiumHandler.getUsername()
-            sPassword = oPremiumHandler.getPassword()
-            return self._getMediaLinkByPremiumUser(sUsername, sPassword)
+    def getMediaLink(self, auto_play=False):
+        premium_handler = cPremiumHandler(self.getPluginIdentifier())
+        if (premium_handler.isPremiumModeAvailable()):
+            username = premium_handler.getUsername()
+            password = premium_handler.getPassword()
+            return self._getMediaLinkByPremiumUser(username, password)
 
-        return self._getMediaLinkForGuest(autoPlay)
+        return self._getMediaLinkForGuest(auto_play)
 
     def __getIdFromUrl(self):
-        sPattern = "v=([^&]+)"
-        oParser = Parser()
-        aResult = oParser.parse(self._url, sPattern)
-        if aResult[0] is True:
-            return aResult[1][0]
+        pattern = "v=([^&]+)"
+        parser = Parser()
+        results = parser.parse(self._url, pattern)
+        if results[0] is True:
+            return results[1][0]
 
         return ''
 
-    def _getMediaLinkForGuest(self, autoPlay=False):
-        sId = self.__getIdFromUrl()
+    def _getMediaLinkForGuest(self, auto_play=False):
+        s_id = self.__getIdFromUrl()
 
-        self._url = 'http://www.megavideo.com/xml/videolink.php?v=' + str(sId)
+        self._url = 'http://www.megavideo.com/xml/videolink.php?v=' + str(s_id)
 
-        oRequest = RequestHandler(self.getUrl())
-        oRequest.addHeaderEntry('Referer', 'http://www.megavideo.com/')
-        sContent = oRequest.request()
+        request = RequestHandler(self.getUrl())
+        request.addHeaderEntry('Referer', 'http://www.megavideo.com/')
+        content = request.request()
 
-        aResult = Parser().parse(sContent, self.getPattern())
+        results = Parser().parse(content, self.getPattern())
 
-        if aResult[0] is False:
-            s = re.compile(' s="(.+?)"').findall(sContent)
-            k1 = re.compile(' k1="(.+?)"').findall(sContent)
-            k2 = re.compile(' k2="(.+?)"').findall(sContent)
-            un = re.compile(' un="(.+?)"').findall(sContent)
+        if results[0] is False:
+            s = re.compile(' s="(.+?)"').findall(content)
+            k1 = re.compile(' k1="(.+?)"').findall(content)
+            k2 = re.compile(' k2="(.+?)"').findall(content)
+            un = re.compile(' un="(.+?)"').findall(content)
 
-            sUrl = "http://www" + s[0] + ".megavideo.com/files/" + \
+            url = "http://www" + s[0] + ".megavideo.com/files/" + \
                 self.__decrypt(un[0], k1[0], k2[0]) + "/?.flv"
 
-            aResult = []
-            aResult.append(True)
-            aResult.append(sUrl)
-            return aResult
+            results = []
+            results.append(True)
+            results.append(url)
+            return results
 
-        aResult = []
-        aResult.append(False)
-        aResult.append('')
-        return aResult
+        results = []
+        results.append(False)
+        results.append('')
+        return results
 
-    def _getMediaLinkByPremiumUser(self, sUsername, sPassword):
-        oRequestHandler = RequestHandler(
+    def _getMediaLinkByPremiumUser(self, username, password):
+        request_handler = RequestHandler(
             'http://www.megavideo.com/?s=account')
-        oRequestHandler.setRequestType(RequestHandler.REQUEST_TYPE_POST)
-        oRequestHandler.addParameters('login', '1')
-        oRequestHandler.addParameters('username', sUsername)
-        oRequestHandler.addParameters('password', sPassword)
-        oRequestHandler.request()
+        request_handler.setRequestType(RequestHandler.REQUEST_TYPE_POST)
+        request_handler.addParameters('login', '1')
+        request_handler.addParameters('username', username)
+        request_handler.addParameters('password', password)
+        request_handler.request()
 
-        aHeader = oRequestHandler.getResponseHeader()
-        sReponseCookie = aHeader.getheader("Set-Cookie")
+        header = request_handler.getResponseHeader()
+        sReponseCookie = header.getheader("Set-Cookie")
 
         self._url = self.__getIdFromUrl()
 
-        sPattern = 'user=([^;]+);'
-        oParser = Parser()
-        aResult = oParser.parse(sReponseCookie, sPattern)
-        if aResult[0] is True:
-            sUserId = aResult[1][0]
-            sUrl = 'http://www.megavideo.com/xml/player_login.php?u=' + \
+        pattern = 'user=([^;]+);'
+        parser = Parser()
+        results = parser.parse(sReponseCookie, pattern)
+        if results[0] is True:
+            sUserId = results[1][0]
+            url = 'http://www.megavideo.com/xml/player_login.php?u=' + \
                 str(sUserId) + '&v=' + str(self._url)
-            oRequestHandler = RequestHandler(sUrl)
-            sXmlContent = oRequestHandler.request()
+            request_handler = RequestHandler(url)
+            sXmlContent = request_handler.request()
 
-            sPattern = 'downloadurl="([^"]+)"'
-            oParser = Parser()
-            aResult = oParser.parse(sXmlContent, sPattern)
+            pattern = 'downloadurl="([^"]+)"'
+            parser = Parser()
+            results = parser.parse(sXmlContent, pattern)
 
-            if aResult[0] is True:
-                sMediaLink = cUtil().urlDecode(str(aResult[1][0]))
+            if results[0] is True:
+                sMediaLink = cUtil().urlDecode(str(results[1][0]))
                 return True, sMediaLink
 
         return False, ''

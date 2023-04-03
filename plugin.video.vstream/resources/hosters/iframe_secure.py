@@ -19,33 +19,33 @@ class cHoster(iHoster):
         self._url = self._url.replace('//iframe-secure.com/embed/', '')
         self._url = 'http://www.iframe-secure.com/embed/iframe.php?u=%s' % self._url
 
-    def _getMediaLinkForGuest(self, autoPlay=False):
-        oRequest = RequestHandler(self._url)
-        sHtmlContent = oRequest.request()
+    def _getMediaLinkForGuest(self, auto_play=False):
+        request = RequestHandler(self._url)
+        html_content = request.request()
 
-        sPattern = "(\\s*eval\\s*\\(\\s*function(?:.|\\s)+?)<\\/script>"
-        aResult = re.findall(sPattern, sHtmlContent)
+        pattern = "(\\s*eval\\s*\\(\\s*function(?:.|\\s)+?)<\\/script>"
+        results = re.findall(pattern, html_content)
 
-        if aResult:
-            sUnpacked = cPacker().unpack(aResult[0])
-            sHtmlContent = sUnpacked
+        if results:
+            sUnpacked = cPacker().unpack(results[0])
+            html_content = sUnpacked
 
-            if sHtmlContent:
+            if html_content:
 
-                oParser = Parser()
-                sPattern = "replace\\(.*'(.+?)'"
-                aResult = oParser.parse(sHtmlContent, sPattern)
+                parser = Parser()
+                pattern = "replace\\(.*'(.+?)'"
+                results = parser.parse(html_content, pattern)
 
-                if aResult[0] is True:
-                    sHosterUrl = aResult[1][0]
+                if results[0] is True:
+                    hoster_url = results[1][0]
 
-                    if not sHosterUrl.startswith('http'):
-                        sHosterUrl = 'http:%s' % sHosterUrl
+                    if not hoster_url.startswith('http'):
+                        hoster_url = 'http:%s' % hoster_url
 
-                    sHosterUrl = sHosterUrl.replace('\\', '')
-                    oHoster = HosterGui().checkHoster(sHosterUrl)
-                    oHoster.setUrl(sHosterUrl)
-                    api_call = oHoster.getMediaLink(autoPlay)
+                    hoster_url = hoster_url.replace('\\', '')
+                    hoster = HosterGui().checkHoster(hoster_url)
+                    hoster.setUrl(hoster_url)
+                    api_call = hoster.getMediaLink(auto_play)
 
                     if api_call[0] is True:
                         return True, api_call[1]

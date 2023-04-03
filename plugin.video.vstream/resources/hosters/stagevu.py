@@ -11,17 +11,17 @@ class cHoster(iHoster):
     def __init__(self):
         iHoster.__init__(self, 'stagevu', 'Stagevu')
 
-    def _getMediaLinkForGuest(self, autoPlay=False):
-        oRequest = RequestHandler(self._url)
-        sHtmlContent = oRequest.request()
+    def _getMediaLinkForGuest(self, auto_play=False):
+        request = RequestHandler(self._url)
+        html_content = request.request()
 
-        sPattern = '<embed type=".+?" src="([^"]+)"'
+        pattern = '<embed type=".+?" src="([^"]+)"'
 
-        oParser = Parser()
-        aResult = oParser.parse(sHtmlContent, sPattern)
+        parser = Parser()
+        results = parser.parse(html_content, pattern)
 
-        if aResult[0] is True:
-            api_call = aResult[1][0]
+        if results[0] is True:
+            api_call = results[1][0]
             return True, api_call
 
         return False, False

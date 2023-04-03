@@ -9,29 +9,29 @@ class cHoster(iHoster):
     def __init__(self):
         iHoster.__init__(self, 'dankfile', 'DankFile.com')
 
-    def _getMediaLinkForGuest(self, autoPlay=False):
-        oRequest = RequestHandler(self._url)
-        sHtmlContent = oRequest.request()
+    def _getMediaLinkForGuest(self, auto_play=False):
+        request = RequestHandler(self._url)
+        html_content = request.request()
 
-        return self.__getUrlFromJavascriptCode(sHtmlContent)
+        return self.__getUrlFromJavascriptCode(html_content)
 
-    def __getUrlFromJavascriptCode(self, sHtmlContent):
-        sPattern = "<script type='text/javascript'>eval.*?return p}\\((.*?)</script>"
-        oParser = Parser()
-        aResult = oParser.parse(sHtmlContent, sPattern)
+    def __getUrlFromJavascriptCode(self, html_content):
+        pattern = "<script type='text/javascript'>eval.*?return p}\\((.*?)</script>"
+        parser = Parser()
+        results = parser.parse(html_content, pattern)
 
-        if aResult[0] is True:
-            sJavascript = aResult[1][0]
+        if results[0] is True:
+            sJavascript = results[1][0]
 
             sUnpacked = cJsUnpacker().unpackByString(sJavascript)
-            sPattern = ".addVariable\\('file','([^']+)'"
-            oParser = Parser()
-            aResultLink = oParser.parse(sUnpacked, sPattern)
+            pattern = ".addVariable\\('file','([^']+)'"
+            parser = Parser()
+            aResultLink = parser.parse(sUnpacked, pattern)
 
             if aResultLink[0] is True:
-                aResult = []
-                aResult.append(True)
-                aResult.append(aResultLink[1][0])
-                return aResult
+                results = []
+                results.append(True)
+                results.append(aResultLink[1][0])
+                return results
 
         return False, ''

@@ -13,62 +13,62 @@ UA = 'Mozilla/5.0 (Windows NT 6.1; Win64; x64; rv:68.0) Gecko/20100101 Firefox/6
 
 
 def getheader(url, c):
-    oRequestHandler = RequestHandler(url)
-    oRequestHandler.disableRedirect()
-    oRequestHandler.addHeaderEntry('User-Agent', UA)
-    oRequestHandler.addHeaderEntry('Cookie', c)
-    sHtmlContent = oRequestHandler.request()
-    return oRequestHandler.getResponseHeader()['Location']
+    request_handler = RequestHandler(url)
+    request_handler.disableRedirect()
+    request_handler.addHeaderEntry('User-Agent', UA)
+    request_handler.addHeaderEntry('Cookie', c)
+    html_content = request_handler.request()
+    return request_handler.getResponseHeader()['Location']
 
 
 class cHoster(iHoster):
     def __init__(self):
         iHoster.__init__(self, 'streamz', 'Streamz')
 
-    def _getMediaLinkForGuest(self, autoPlay=False):
+    def _getMediaLinkForGuest(self, auto_play=False):
         api_call = False
 
-        oParser = Parser()
+        parser = Parser()
 
-        oRequest = RequestHandler(self._url)
-        oRequest.addHeaderEntry('User-Agent', UA)
-        sHtmlContent = oRequest.request()
+        request = RequestHandler(self._url)
+        request.addHeaderEntry('User-Agent', UA)
+        html_content = request.request()
 
-        urlDownload = oRequest.getRealUrl()
+        urlDownload = request.getRealUrl()
         host = 'https://' + urlDownload.split('/')[2]
 
-        cookie = oRequest.GetCookies()
+        cookie = request.GetCookies()
 
         # By-pass fake video
         # Get url
         urlJS = host + '/js/count.js'
-        oRequest = RequestHandler(urlJS)
-        oRequest.addHeaderEntry('User-Agent', UA)
-        JScode = oRequest.request()
+        request = RequestHandler(urlJS)
+        request.addHeaderEntry('User-Agent', UA)
+        JScode = request.request()
 
         JScode = JScode.replace(' ', '')
 
         r = "if\\(\\$\\.adblock!=null\\){\\$\\.get\\('([^']+)',{([^}]+)}"
-        aResult = oParser.parse(JScode, r)
+        results = parser.parse(JScode, r)
 
-        if not aResult[0]:
+        if not results[0]:
             return False, False
 
-        data = aResult[1][0][1].split(':')
-        Fakeurl = aResult[1][0][0] + '?' + \
+        data = results[1][0][1].split(':')
+        Fakeurl = results[1][0][0] + '?' + \
             data[0] + '=' + data[1].replace("'", "")
 
         # Request URL
-        oRequest = RequestHandler(Fakeurl)
-        oRequest.addHeaderEntry('User-Agent', UA)
+        request = RequestHandler(Fakeurl)
+        request.addHeaderEntry('User-Agent', UA)
         try:
-            tmp = oRequest.request()
+            tmp = request.request()
         except BaseException:
             pass
-        sPattern = '(\\s*eval\\s*\\(\\s*function(?:.|\\s)+?)<\\/script>'
-        aResult = oParser.parse(sHtmlContent, sPattern)
-        if aResult[0]:
-            for i in aResult[1]:
+        pattern = '(\\s*eval\\s*\\(\\s*function(?:.|\\s)+?)<\\/script>'
+        results = parser.parse(html_content, pattern)
+        if results[0]:
+            for i in results[1]:
                 decoded = cPacker().unpack(i)
 
                 if "videojs" in decoded:

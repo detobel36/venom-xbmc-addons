@@ -11,13 +11,13 @@ class cHoster(iHoster):
     def __init__(self):
         iHoster.__init__(self, 'kvid', 'Kvid')
 
-    def _getMediaLinkForGuest(self, autoPlay=False):
+    def _getMediaLinkForGuest(self, auto_play=False):
         api_call = False
 
-        oRequest = RequestHandler(self._url)
-        sHtmlContent = oRequest.request()
+        request = RequestHandler(self._url)
+        html_content = request.request()
 
-        r2 = re.search('file: *"([^"]+)",', sHtmlContent)
+        r2 = re.search('file: *"([^"]+)",', html_content)
         if r2:
             api_call = r2.group(1)
 

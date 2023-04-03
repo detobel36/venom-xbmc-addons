@@ -19,7 +19,7 @@ class cHoster(iHoster):
     def __init__(self):
         iHoster.__init__(self, 'mailru', 'MailRu')
 
-    def _getMediaLinkForGuest(self, autoPlay=False):
+    def _getMediaLinkForGuest(self, auto_play=False):
         api_call = False
 
         UA = 'Mozilla/5.0 (Windows NT 6.1; WOW64; rv:50.0) Gecko/20100101 Firefox/50.0'
@@ -28,14 +28,14 @@ class cHoster(iHoster):
 
         req1 = urllib2.Request(self._url, None, headers)
         resp1 = urllib2.urlopen(req1)
-        sHtmlContent = resp1.read()
+        html_content = resp1.read()
         resp1.close()
 
-        sPattern = '{"metadataUrl":"([^"]+)",'
-        oParser = Parser()
-        aResult = oParser.parse(sHtmlContent, sPattern)
+        pattern = '{"metadataUrl":"([^"]+)",'
+        parser = Parser()
+        results = parser.parse(html_content, pattern)
 
-        vurl = 'http://my.mail.ru/' + aResult[1][0]
+        vurl = 'http://my.mail.ru/' + results[1][0]
 
         req = urllib2.Request(vurl, None, headers)
 
@@ -52,22 +52,22 @@ class cHoster(iHoster):
         # get cookie
         cookies = ''
         if 'Set-Cookie' in head:
-            oParser = Parser()
-            sPattern = '(?:^|,) *([^;,]+?)=([^;,\\/]+?);'
-            aResult = oParser.parse(str(head['Set-Cookie']), sPattern)
-            # print(aResult)
-            if aResult[0] is True:
-                for cook in aResult[1]:
+            parser = Parser()
+            pattern = '(?:^|,) *([^;,]+?)=([^;,\\/]+?);'
+            results = parser.parse(str(head['Set-Cookie']), pattern)
+            # print(results)
+            if results[0] is True:
+                for cook in results[1]:
                     cookies = cookies + cook[0] + '=' + cook[1] + ';'
 
-        sPattern = '{"url":"([^"]+)",.+?"key":"(\\d+p)"}'
-        aResult = oParser.parse(data, sPattern)
-        if aResult[0] is True:
+        pattern = '{"url":"([^"]+)",.+?"key":"(\\d+p)"}'
+        results = parser.parse(data, pattern)
+        if results[0] is True:
             # initialisation des tableaux
             url = []
             qua = []
             # Remplissage des tableaux
-            for i in aResult[1]:
+            for i in results[1]:
                 url.append(str(i[0]))
                 qua.append(str(i[1]))
 

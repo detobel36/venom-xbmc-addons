@@ -10,17 +10,17 @@ class cHoster(iHoster):
     def __init__(self):
         iHoster.__init__(self, 'megadrive', 'Megadrive')
 
-    def _getMediaLinkForGuest(self, autoPlay=False):
+    def _getMediaLinkForGuest(self, auto_play=False):
         api_call = False
 
-        oRequest = RequestHandler(self._url)
-        sHtmlContent = oRequest.request()
-        oParser = Parser()
-        sPattern = "<source.+?src='([^']+)'"
-        aResult = oParser.parse(sHtmlContent, sPattern)
-        if aResult[0] is True:
+        request = RequestHandler(self._url)
+        html_content = request.request()
+        parser = Parser()
+        pattern = "<source.+?src='([^']+)'"
+        results = parser.parse(html_content, pattern)
+        if results[0] is True:
             # pas de choix qualité trouvé pour le moment
-            api_call = aResult[1][0]
+            api_call = results[1][0]
 
         if api_call:
             return True, api_call

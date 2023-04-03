@@ -212,14 +212,14 @@ class JSUnfuck(object):
             n['[' + key + ']'] = '[' + str(i) + ']'
 
         for i in range(0, 10):
-            key = '(+(+!+[]+[%d]))' % (i)
+            key = '(+(+!+[]+[%d]))' % i
             n[key] = str(i + 10)
-            key = '[+!+[]+[%s]]' % (i)
+            key = '[+!+[]+[%s]]' % i
             n[key] = '[' + str(i + 10) + ']'
 
         for tens in range(2, 10):
             for ones in range(0, 10):
-                key = '!+[]+' * (tens) + '[%d]' % (ones)
+                key = '!+[]+' * tens + '[%d]' % ones
                 n['(' + key + ')'] = str(tens * 10 + ones)
                 n['[' + key + ']'] = '[' + str(tens * 10 + ones) + ']'
 

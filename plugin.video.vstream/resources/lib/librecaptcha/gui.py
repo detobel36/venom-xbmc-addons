@@ -41,8 +41,8 @@ class cInputWindow(xbmcgui.WindowDialog):
         self.chkstate = [False] * self.DimTabTotal
 
         c = 0
-        cx = int((780) / DimTab[0])  # 260
-        cy = int((499) / DimTab[1])  # 166
+        cx = int(780 / DimTab[0])  # 260
+        cy = int(499 / DimTab[1])  # 166
 
         ox = 250  # 250
         oy = 110  # 110

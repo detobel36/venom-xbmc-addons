@@ -19,18 +19,18 @@ class cHoster(iHoster):
 
     def __init__(self):
         iHoster.__init__(self, 'uptostream', 'UpToStream')
-        self.oPremiumHandler = None
+        self.premium_handler = None
 
     def setUrl(self, url):
         self._url = str(url)
 
-    def checkSubtitle(self, sHtmlContent):
-        if sHtmlContent:
+    def checkSubtitle(self, html_content):
+        if html_content:
             Files = []
             lab = []
-            for aEntry in sHtmlContent:
-                if aEntry["label"] == "French":
-                    url = aEntry["src"]
+            for entry in html_content:
+                if entry["label"] == "French":
+                    url = entry["src"]
                     if not url.startswith('http'):
                         url = 'http:' + url
                     Files.append(url)
@@ -39,14 +39,14 @@ class cHoster(iHoster):
             return Files
         return False
 
-    def _getMediaLinkForGuest(self, autoPlay=False):
+    def _getMediaLinkForGuest(self, auto_play=False):
         pass
 
-    def getMediaLink(self, autoPlay=False):
-        self.oPremiumHandler = cPremiumHandler('uptobox')
-        premium = self.oPremiumHandler.isPremiumModeAvailable()
+    def getMediaLink(self, auto_play=False):
+        self.premium_handler = cPremiumHandler('uptobox')
+        premium = self.premium_handler.isPremiumModeAvailable()
         if not premium:
-            if not autoPlay:
+            if not auto_play:
                 dialog().VSok('Ce hoster necessite un compte, meme gratuit.')
             return False, False
 
@@ -55,7 +55,7 @@ class cHoster(iHoster):
         filecode = self._url.split('/')[-1].split('?')[0]
 
         # Uptostream avec un compte uptobox, pas besoin du QRcode
-        token = self.oPremiumHandler.getToken()
+        token = self.premium_handler.getToken()
         if token:
             r = requests.get(
                 'https://uptobox.com/api/user/me?token=' +
@@ -65,8 +65,8 @@ class cHoster(iHoster):
             url1 = "https://uptobox.com/api/streaming?token=%s&file_code=%s" % (
                 token, filecode)
             try:
-                oRequestHandler = RequestHandler(url1)
-                dict_liens = oRequestHandler.request(jsonDecode=True)
+                request_handler = RequestHandler(url1)
+                dict_liens = request_handler.request(json_decode=True)
                 status = dict_liens["statusCode"]
                 if status == 0:
                     js_result = dict_liens["data"]
@@ -128,17 +128,17 @@ class cHoster(iHoster):
             # .replace(".m3u8", ".mpd")
             api_call = js_result['streamLinks']['src']
         else:
-            sPattern = "'(.+?)': {(.+?)}"
+            pattern = "'(.+?)': {(.+?)}"
 
-            oParser = Parser()
-            aResult = oParser.parse(js_result["streamLinks"], sPattern)
+            parser = Parser()
+            results = parser.parse(js_result["streamLinks"], pattern)
 
             url = []
             qua = []
 
-            for aEntry in aResult[1]:
-                QUAL = aEntry[0]
-                d = re.findall("'u*(.+?)': u*'(.+?)'", aEntry[1])
+            for entry in results[1]:
+                QUAL = entry[0]
+                d = re.findall("'u*(.+?)': u*'(.+?)'", entry[1])
                 for aEntry1 in d:
                     url.append(aEntry1[1])
                     qua.append(QUAL + ' (' + aEntry1[0] + ')')

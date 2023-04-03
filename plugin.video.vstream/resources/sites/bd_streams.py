@@ -24,30 +24,30 @@ TV_TV = ('/', 'load')
 
 def load():
     gui = Gui()
-    sUrl = URL_MAIN
+    url = URL_MAIN
 
-    oParser = Parser()
-    oRequestHandler = RequestHandler(sUrl)
-    sHtmlContent = oRequestHandler.request()
-    sPattern = "<li class='archivedate'><a href='(.+?)'>"
-    aResult = oParser.parse(sHtmlContent, sPattern)
+    parser = Parser()
+    request_handler = RequestHandler(url)
+    html_content = request_handler.request()
+    pattern = "<li class='archivedate'><a href='(.+?)'>"
+    results = parser.parse(html_content, pattern)
 
-    if aResult[0]:
-        sUrl = aResult[1][0]
-        sPattern = "<h3 class='post-title entry-title'><a href='(.+?)'>(.+?)</a>"
-        oRequestHandler = RequestHandler(sUrl)
-        sHtmlContent = oRequestHandler.request()
-        aResult = oParser.parse(sHtmlContent, sPattern)
+    if results[0]:
+        url = results[1][0]
+        pattern = "<h3 class='post-title entry-title'><a href='(.+?)'>(.+?)</a>"
+        request_handler = RequestHandler(url)
+        html_content = request_handler.request()
+        results = parser.parse(html_content, pattern)
 
-        if not aResult[0]:
+        if not results[0]:
             gui.addText(SITE_IDENTIFIER)
         else:
             output_parameter_handler = OutputParameterHandler()
-            for aEntry in aResult[1]:
-                sUrl = aEntry[0]
-                title = aEntry[1]
-                output_parameter_handler.addParameter('siteUrl', sUrl)
-                output_parameter_handler.addParameter('sMovieTitle', title)
+            for entry in results[1]:
+                url = entry[0]
+                title = entry[1]
+                output_parameter_handler.addParameter('site_url', url)
+                output_parameter_handler.addParameter('movie_title', title)
                 output_parameter_handler.addParameter('desc', title)
                 gui.addDir(
                     SITE_IDENTIFIER,
@@ -62,7 +62,7 @@ def load():
 def showGenres():
     gui = Gui()
     output_parameter_handler = OutputParameterHandler()
-    output_parameter_handler.addParameter('siteUrl', SPORT_GENRES[0])
+    output_parameter_handler.addParameter('site_url', SPORT_GENRES[0])
     gui.addDir(
         SITE_IDENTIFIER,
         'load',
@@ -74,23 +74,23 @@ def showGenres():
 
 def showLink():
     gui = Gui()
-    oParser = Parser()
+    parser = Parser()
 
     input_parameter_handler = InputParameterHandler()
-    sUrl = input_parameter_handler.getValue('siteUrl')
-    sMovieTitle = input_parameter_handler.getValue('sMovieTitle')
+    url = input_parameter_handler.getValue('site_url')
+    movie_title = input_parameter_handler.getValue('movie_title')
 
-    sPattern = 'player = new Clappr\\.Player.+?source: "([^"]+)'
-    oRequestHandler = RequestHandler(sUrl)
-    sHtmlContent = oRequestHandler.request()
-    aResult = oParser.parse(sHtmlContent, sPattern)
+    pattern = 'player = new Clappr\\.Player.+?source: "([^"]+)'
+    request_handler = RequestHandler(url)
+    html_content = request_handler.request()
+    results = parser.parse(html_content, pattern)
 
-    if aResult[0]:
-        sHosterUrl = aResult[1][0].strip()
-        oHoster = HosterGui().checkHoster(sHosterUrl)
-        if oHoster:
-            oHoster.setDisplayName(sMovieTitle)
-            oHoster.setFileName(sMovieTitle)
-            HosterGui().showHoster(gui, oHoster, sHosterUrl, '')
+    if results[0]:
+        hoster_url = results[1][0].strip()
+        hoster = HosterGui().checkHoster(hoster_url)
+        if hoster:
+            hoster.setDisplayName(movie_title)
+            hoster.setFileName(movie_title)
+            HosterGui().showHoster(gui, hoster, hoster_url, '')
 
     gui.setEndOfDirectory()

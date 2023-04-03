@@ -17,33 +17,33 @@ class cHoster(iHoster):
     def __init__(self):
         iHoster.__init__(self, 'rapidvideo', 'RapidVideo')
 
-    def _getMediaLinkForGuest(self, autoPlay=False):
+    def _getMediaLinkForGuest(self, auto_play=False):
         # VSlog(self._url)
         api_call = False
 
-        oRequest = RequestHandler(self._url)
-        # oRequest.addHeaderEntry('User-Agent','Mozilla/5.0 (Windows NT 6.1; WOW64; rv:49.0) ' + \
+        request = RequestHandler(self._url)
+        # request.addHeaderEntry('User-Agent','Mozilla/5.0 (Windows NT 6.1; WOW64; rv:49.0) ' + \
         #   'Gecko/20100101 Firefox/49.0')
-        # oRequest.addHeaderEntry('Upgrade-Insecure-Requests','1')
-        # oRequest.addHeaderEntry('Accept','text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8')
-        # oRequest.addHeaderEntry('Accept-Encoding','gzip, deflate, br')
-        sHtmlContent = oRequest.request()
+        # request.addHeaderEntry('Upgrade-Insecure-Requests','1')
+        # request.addHeaderEntry('Accept','text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8')
+        # request.addHeaderEntry('Accept-Encoding','gzip, deflate, br')
+        html_content = request.request()
 
         # fh = open('c:\\test.txt', "w")
-        # fh.write(sHtmlContent)
+        # fh.write(html_content)
         # fh.close()
 
-        oParser = Parser()
-        sPattern = '"file":"([^"]+)","label":"([0-9]+)p"'
-        aResult = oParser.parse(sHtmlContent, sPattern)
+        parser = Parser()
+        pattern = '"file":"([^"]+)","label":"([0-9]+)p"'
+        results = parser.parse(html_content, pattern)
 
-        if (aResult[0]):
+        if (results[0]):
             url = []
             qua = []
 
-            for aEntry in aResult[1]:
-                url.append(aEntry[0])
-                qua.append(aEntry[1])
+            for entry in results[1]:
+                url.append(entry[0])
+                qua.append(entry[1])
 
             # tableau
             api_call = dialog().VSselectqual(qua, url)

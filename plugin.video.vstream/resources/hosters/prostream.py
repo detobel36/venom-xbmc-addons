@@ -11,22 +11,22 @@ class cHoster(iHoster):
     def __init__(self):
         iHoster.__init__(self, 'prostream', 'Prostream')
 
-    def _getMediaLinkForGuest(self, autoPlay=False):
+    def _getMediaLinkForGuest(self, auto_play=False):
         api_call = ''
 
-        oParser = Parser()
-        oRequest = RequestHandler(self._url)
-        sHtmlContent = oRequest.request()
+        parser = Parser()
+        request = RequestHandler(self._url)
+        html_content = request.request()
 
-        sPattern = '<script type=\'text/javascript\'>(.+?)<\\/script>'
-        aResult = oParser.parse(sHtmlContent, sPattern)
+        pattern = '<script type=\'text/javascript\'>(.+?)<\\/script>'
+        results = parser.parse(html_content, pattern)
 
-        if aResult[0] is True:
-            html = cPacker().unpack(aResult[1][0])
-            sPattern = 'sources:\\["([^"]+)"\\]'
-            aResult = oParser.parse(html, sPattern)
-            if aResult[0] is True:
-                api_call = aResult[1][0]
+        if results[0] is True:
+            html = cPacker().unpack(results[1][0])
+            pattern = 'sources:\\["([^"]+)"\\]'
+            results = parser.parse(html, pattern)
+            if results[0] is True:
+                api_call = results[1][0]
 
         if api_call:
             return True, api_call

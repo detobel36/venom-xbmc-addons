@@ -51,9 +51,9 @@ def RandomReferer():
 
 
 def DecryptMangacity(chain):
-    oParser = Parser()
-    sPattern = '(.+?),\\[(.+?)\\],\\[(.+?)\\]\\)'
-    aResult2 = oParser.parse(chain, sPattern)
+    parser = Parser()
+    pattern = '(.+?),\\[(.+?)\\],\\[(.+?)\\]\\)'
+    aResult2 = parser.parse(chain, pattern)
     d = ''
 
     if aResult2[0] is True:
@@ -73,10 +73,10 @@ def DecryptMangacity(chain):
 
 
 def FullUnescape(code):
-    sPattern = '<script type="text/javascript">document\\.write\\(unescape\\(".+?"\\)\\);</script>'
-    aResult = re.findall(sPattern, code)
-    if aResult:
-        return Unquote(aResult[0])
+    pattern = '<script type="text/javascript">document\\.write\\(unescape\\(".+?"\\)\\);</script>'
+    results = re.findall(pattern, code)
+    if results:
+        return Unquote(results[0])
     return code
 
 
@@ -87,15 +87,15 @@ def ICDecode(html):
 
     import math
 
-    sPattern = 'language=javascript>c="([^"]+)";eval\\(unescape\\("([^"]+)"\\)\\);x\\("([^"]+)"\\);'
-    aResult = re.findall(sPattern, html)
+    pattern = 'language=javascript>c="([^"]+)";eval\\(unescape\\("([^"]+)"\\)\\);x\\("([^"]+)"\\);'
+    results = re.findall(pattern, html)
 
-    if not aResult:
+    if not results:
         return html
 
-    c = aResult[0][0]
-    # a = aResult[0][1]
-    x = aResult[0][2]
+    c = results[0][0]
+    # a = results[0][1]
+    x = results[0][2]
 
     # premier decodage
     d = ''
@@ -108,11 +108,11 @@ def ICDecode(html):
         i = i + 1
 
     # Recuperation du tableau
-    aResult = re.findall('t=Array\\(([0-9,]+)\\);', Unquote(d))
-    if not aResult:
+    results = re.findall('t=Array\\(([0-9,]+)\\);', Unquote(d))
+    if not results:
         return ''
 
-    t = aResult[0].split(',')
+    t = results[0].split(',')
     l = len(x)
     b = 1024
     i = p = s = w = 0
@@ -152,7 +152,7 @@ def load():
     gui = Gui()
 
     output_parameter_handler = OutputParameterHandler()
-    output_parameter_handler.addParameter('siteUrl', URL_SEARCH_MOVIES[0])
+    output_parameter_handler.addParameter('site_url', URL_SEARCH_MOVIES[0])
     gui.addDir(
         SITE_IDENTIFIER,
         'showSearch',
@@ -160,7 +160,7 @@ def load():
         'search.png',
         output_parameter_handler)
 
-    output_parameter_handler.addParameter('siteUrl', URL_SEARCH_SERIES[0])
+    output_parameter_handler.addParameter('site_url', URL_SEARCH_SERIES[0])
     gui.addDir(
         SITE_IDENTIFIER,
         'showSearch',
@@ -168,7 +168,7 @@ def load():
         'search.png',
         output_parameter_handler)
 
-    output_parameter_handler.addParameter('siteUrl', URL_SEARCH_ANIMS[0])
+    output_parameter_handler.addParameter('site_url', URL_SEARCH_ANIMS[0])
     gui.addDir(
         SITE_IDENTIFIER,
         'showSearch',
@@ -176,7 +176,7 @@ def load():
         'search.png',
         output_parameter_handler)
 
-    output_parameter_handler.addParameter('siteUrl', MOVIE_MOVIE[0])
+    output_parameter_handler.addParameter('site_url', MOVIE_MOVIE[0])
     gui.addDir(
         SITE_IDENTIFIER,
         MOVIE_MOVIE[1],
@@ -184,7 +184,7 @@ def load():
         'az.png',
         output_parameter_handler)
 
-    output_parameter_handler.addParameter('siteUrl', MOVIE_GENRES[0])
+    output_parameter_handler.addParameter('site_url', MOVIE_GENRES[0])
     gui.addDir(
         SITE_IDENTIFIER,
         MOVIE_GENRES[1],
@@ -192,7 +192,7 @@ def load():
         'genres.png',
         output_parameter_handler)
 
-    output_parameter_handler.addParameter('siteUrl', SERIE_SERIES[0])
+    output_parameter_handler.addParameter('site_url', SERIE_SERIES[0])
     gui.addDir(
         SITE_IDENTIFIER,
         SERIE_SERIES[1],
@@ -200,7 +200,7 @@ def load():
         'az.png',
         output_parameter_handler)
 
-    output_parameter_handler.addParameter('siteUrl', ANIM_NEWS[0])
+    output_parameter_handler.addParameter('site_url', ANIM_NEWS[0])
     gui.addDir(
         SITE_IDENTIFIER,
         ANIM_NEWS[1],
@@ -208,7 +208,7 @@ def load():
         'news.png',
         output_parameter_handler)
 
-    output_parameter_handler.addParameter('siteUrl', ANIM_ANIMS[0])
+    output_parameter_handler.addParameter('site_url', ANIM_ANIMS[0])
     gui.addDir(
         SITE_IDENTIFIER,
         ANIM_ANIMS[1],
@@ -216,7 +216,7 @@ def load():
         'az.png',
         output_parameter_handler)
 
-    output_parameter_handler.addParameter('siteUrl', ANIM_GENRES[0])
+    output_parameter_handler.addParameter('site_url', ANIM_GENRES[0])
     gui.addDir(
         SITE_IDENTIFIER,
         ANIM_GENRES[1],
@@ -224,7 +224,7 @@ def load():
         'genres.png',
         output_parameter_handler)
 
-    output_parameter_handler.addParameter('siteUrl', ANIM_VFS[0])
+    output_parameter_handler.addParameter('site_url', ANIM_VFS[0])
     gui.addDir(
         SITE_IDENTIFIER,
         ANIM_VFS[1],
@@ -232,7 +232,7 @@ def load():
         'vf.png',
         output_parameter_handler)
 
-    output_parameter_handler.addParameter('siteUrl', ANIM_VOSTFRS[0])
+    output_parameter_handler.addParameter('site_url', ANIM_VOSTFRS[0])
     gui.addDir(
         SITE_IDENTIFIER,
         ANIM_VOSTFRS[1],
@@ -240,7 +240,7 @@ def load():
         'vostfr.png',
         output_parameter_handler)
 
-    output_parameter_handler.addParameter('siteUrl', ANIM_DRAMA[0])
+    output_parameter_handler.addParameter('site_url', ANIM_DRAMA[0])
     gui.addDir(
         SITE_IDENTIFIER,
         ANIM_DRAMA[1],
@@ -254,11 +254,11 @@ def load():
 def showSearch():
     gui = Gui()
     input_parameter_handler = InputParameterHandler()
-    sUrl = input_parameter_handler.getValue('siteUrl')
+    url = input_parameter_handler.getValue('site_url')
 
-    sSearchText = gui.showKeyBoard()
-    if sSearchText:
-        showMovies(sUrl + sSearchText)
+    search_text = gui.showKeyBoard()
+    if search_text:
+        showMovies(url + search_text)
         gui.setEndOfDirectory()
         return
 
@@ -284,8 +284,8 @@ def showGenresMovies():
     liste.append(['Thriller', 'categorie_thriller_page1.html'])
 
     output_parameter_handler = OutputParameterHandler()
-    for title, sUrl in liste:
-        output_parameter_handler.addParameter('siteUrl', URL_MAIN + sUrl)
+    for title, url in liste:
+        output_parameter_handler.addParameter('site_url', URL_MAIN + url)
         gui.addDir(
             SITE_IDENTIFIER,
             'showMovies',
@@ -301,40 +301,40 @@ def showGenres():
     gui = Gui()
 
     input_parameter_handler = InputParameterHandler()
-    sUrl = input_parameter_handler.getValue('siteUrl')
+    url = input_parameter_handler.getValue('site_url')
 
-    oRequestHandler = RequestHandler(sUrl)
-    oRequestHandler.addHeaderEntry('User-Agent', UA)
-    sHtmlContent = oRequestHandler.request()
+    request_handler = RequestHandler(url)
+    request_handler.addHeaderEntry('User-Agent', UA)
+    html_content = request_handler.request()
 
-    if 'HTML/JavaScript Encoder' in sHtmlContent:
-        sHtmlContent = ICDecode(sHtmlContent)
+    if 'HTML/JavaScript Encoder' in html_content:
+        html_content = ICDecode(html_content)
 
-    if sHtmlContent.startswith('<script type="text/javascript">'):
-        sHtmlContent = FullUnescape(sHtmlContent)
+    if html_content.startswith('<script type="text/javascript">'):
+        html_content = FullUnescape(html_content)
 
-    sPattern = '<center><a href="(.+?)" onmouseover="this.style.color.+?>(.+?)</a>'
+    pattern = '<center><a href="(.+?)" onmouseover="this.style.color.+?>(.+?)</a>'
 
-    oParser = Parser()
-    aResult = oParser.parse(sHtmlContent, sPattern)
+    parser = Parser()
+    results = parser.parse(html_content, pattern)
 
     genres = []
-    if aResult[0]:
-        for aEntry in aResult[1]:
-            title = aEntry[1]
+    if results[0]:
+        for entry in results[1]:
+            title = entry[1]
             title = str(cUtil().unescape(title))
             # on filtre les genres
             if 'Ecchi' in title:
                 continue
-            sUrl = URL_MAIN + aEntry[0]
-            genres.append((title, sUrl))
+            url = URL_MAIN + entry[0]
+            genres.append((title, url))
 
         # Trie des genres par ordre alphabétique
         genres = sorted(genres, key=lambda genre: genre[0])
 
         output_parameter_handler = OutputParameterHandler()
-        for title, sUrl in genres:
-            output_parameter_handler.addParameter('siteUrl', sUrl)
+        for title, url in genres:
+            output_parameter_handler.addParameter('site_url', url)
             gui.addDir(
                 SITE_IDENTIFIER,
                 'showMovies',
@@ -347,31 +347,31 @@ def showGenres():
 
 def showAlpha2():
     input_parameter_handler = InputParameterHandler()
-    sUrl = input_parameter_handler.getValue('siteUrl')
+    url = input_parameter_handler.getValue('site_url')
 
-    sUrl2 = URL_MAIN + 'animes.php?liste=' + RandomKey
+    url2 = URL_MAIN + 'animes.php?liste=' + RandomKey
 
-    sType = 'VF'
-    if 'vostfr' in sUrl:
-        sType = 'VOSTFR'
+    _type = 'VF'
+    if 'vostfr' in url:
+        _type = 'VOSTFR'
 
-    oRequestHandler = RequestHandler(sUrl2)
-    oRequestHandler.addHeaderEntry('User-Agent', UA)
-    oRequestHandler.addHeaderEntry('Referer', URL_MAIN)
-    sHtmlContent = oRequestHandler.request()
+    request_handler = RequestHandler(url2)
+    request_handler.addHeaderEntry('User-Agent', UA)
+    request_handler.addHeaderEntry('Referer', URL_MAIN)
+    html_content = request_handler.request()
 
-    if 'HTML/JavaScript Encoder' in sHtmlContent:
-        sHtmlContent = ICDecode(sHtmlContent)
+    if 'HTML/JavaScript Encoder' in html_content:
+        html_content = ICDecode(html_content)
 
-    if sHtmlContent.startswith('<script type="text/javascript">'):
-        sHtmlContent = FullUnescape(sHtmlContent)
+    if html_content.startswith('<script type="text/javascript">'):
+        html_content = FullUnescape(html_content)
 
-    oParser = Parser()
-    sPattern = '<a href=.(listing_(?:vf|vostfr)\\.php\\?affichage=[^<>"]+?). class=.button black pastel light. alt="Voir la liste des animes en ' + sType + '"'
-    aResult = oParser.parse(sHtmlContent, sPattern)
+    parser = Parser()
+    pattern = '<a href=.(listing_(?:vf|vostfr)\\.php\\?affichage=[^<>"]+?). class=.button black pastel light. alt="Voir la liste des animes en ' + _type + '"'
+    results = parser.parse(html_content, pattern)
 
-    if aResult[0]:
-        showAlpha(URL_MAIN + aResult[1][0])
+    if results[0]:
+        showAlpha(URL_MAIN + results[1][0])
 
 
 def showAlpha(url=None):
@@ -379,33 +379,33 @@ def showAlpha(url=None):
 
     input_parameter_handler = InputParameterHandler()
     if url is None:
-        sUrl = input_parameter_handler.getValue('siteUrl')
+        url = input_parameter_handler.getValue('site_url')
     else:
-        sUrl = url
+        url = url
 
-    oRequestHandler = RequestHandler(sUrl)
-    oRequestHandler.addHeaderEntry('User-Agent', UA)
-    oRequestHandler.addHeaderEntry('Referer', URL_MAIN)
-    sHtmlContent = oRequestHandler.request()
+    request_handler = RequestHandler(url)
+    request_handler.addHeaderEntry('User-Agent', UA)
+    request_handler.addHeaderEntry('Referer', URL_MAIN)
+    html_content = request_handler.request()
 
-    if 'HTML/JavaScript Encoder' in sHtmlContent:
-        sHtmlContent = ICDecode(sHtmlContent)
+    if 'HTML/JavaScript Encoder' in html_content:
+        html_content = ICDecode(html_content)
 
-    if sHtmlContent.startswith('<script type="text/javascript">'):
-        sHtmlContent = FullUnescape(sHtmlContent)
+    if html_content.startswith('<script type="text/javascript">'):
+        html_content = FullUnescape(html_content)
 
-    sPattern = "<a href=.([^<>]+?). class=.button (?:red )*light.><headline6>(?:<font color=.black.>)*([A-Z#])(?:</font>)*</headline6></a>"
+    pattern = "<a href=.([^<>]+?). class=.button (?:red )*light.><headline6>(?:<font color=.black.>)*([A-Z#])(?:</font>)*</headline6></a>"
 
-    oParser = Parser()
-    aResult = oParser.parse(sHtmlContent, sPattern)
+    parser = Parser()
+    results = parser.parse(html_content, pattern)
 
-    if aResult[0]:
+    if results[0]:
         output_parameter_handler = OutputParameterHandler()
-        for aEntry in aResult[1]:
-            sUrl = URL_MAIN + aEntry[0]
-            sLetter = aEntry[1]
+        for entry in results[1]:
+            url = URL_MAIN + entry[0]
+            sLetter = entry[1]
 
-            output_parameter_handler.addParameter('siteUrl', sUrl)
+            output_parameter_handler.addParameter('site_url', url)
             gui.addDir(
                 SITE_IDENTIFIER,
                 'showMovies',
@@ -418,97 +418,97 @@ def showAlpha(url=None):
     gui.setEndOfDirectory()
 
 
-def showMovies(sSearch=''):
+def showMovies(search=''):
     gui = Gui()
-    oParser = Parser()
+    parser = Parser()
 
-    if sSearch:
-        oUtil = cUtil()
-        typeSearch, sSearch = sSearch.split('=')
-        sSearch = Unquote(sSearch)
-        sSearch = oUtil.CleanName(sSearch)
+    if search:
+        util = cUtil()
+        typeSearch, search = search.split('=')
+        search = Unquote(search)
+        search = util.CleanName(search)
 
-        sSearchText = sSearch.replace(URL_SEARCH_MOVIES[0], '')
-        sSearchText = sSearchText.replace(URL_SEARCH_ANIMS[0], '')
-        sSearchText = sSearchText.replace(URL_SEARCH_SERIES[0], '')
+        search_text = search.replace(URL_SEARCH_MOVIES[0], '')
+        search_text = search_text.replace(URL_SEARCH_ANIMS[0], '')
+        search_text = search_text.replace(URL_SEARCH_SERIES[0], '')
 
         # remplace espace par + et passe en majuscule
-        sSearch = QuotePlus(sSearch).upper()
+        search = QuotePlus(search).upper()
 
-        sUrl = URL_SEARCH[0] + sSearch + '.html'
+        url = URL_SEARCH[0] + search + '.html'
 
-        oRequestHandler = RequestHandler(sUrl)
-        oRequestHandler.addHeaderEntry('User-Agent', UA)
-        oRequestHandler.addHeaderEntry('Referer', URL_MAIN)
-        sHtmlContent = oRequestHandler.request()
-        sHtmlContent = cutSearch(sHtmlContent, typeSearch)
+        request_handler = RequestHandler(url)
+        request_handler.addHeaderEntry('User-Agent', UA)
+        request_handler.addHeaderEntry('Referer', URL_MAIN)
+        html_content = request_handler.request()
+        html_content = cutSearch(html_content, typeSearch)
 
     else:
         input_parameter_handler = InputParameterHandler()
-        sUrl = input_parameter_handler.getValue('siteUrl')
+        url = input_parameter_handler.getValue('site_url')
 
-        oRequestHandler = RequestHandler(sUrl)
-        oRequestHandler.addHeaderEntry('User-Agent', UA)
-        oRequestHandler.addHeaderEntry('Referer', RandomReferer())
-        sHtmlContent = oRequestHandler.request()
-        # sHtmlContent = DecryptMangacity(sHtmlContent)
+        request_handler = RequestHandler(url)
+        request_handler.addHeaderEntry('User-Agent', UA)
+        request_handler.addHeaderEntry('Referer', RandomReferer())
+        html_content = request_handler.request()
+        # html_content = DecryptMangacity(html_content)
 
-    if 'HTML/JavaScript Encoder' in sHtmlContent:
-        sHtmlContent = ICDecode(sHtmlContent)
+    if 'HTML/JavaScript Encoder' in html_content:
+        html_content = ICDecode(html_content)
 
-    if sHtmlContent.startswith('<script type="text/javascript">'):
-        sHtmlContent = FullUnescape(sHtmlContent)
+    if html_content.startswith('<script type="text/javascript">'):
+        html_content = FullUnescape(html_content)
 
-    if sSearch or 'categorie.php' in sUrl or 'categorie_' in sUrl or 'listing3.php?' in sUrl or 'drama.php' in sUrl:
-        sPattern = '<center><div style="background: url\\(\'([^\'].+?)\'\\); background-size.+?alt="(.+?)" title.+?<a href=["\']*(.+?)[\'"]* class=.button'
+    if search or 'categorie.php' in url or 'categorie_' in url or 'listing3.php?' in url or 'drama.php' in url:
+        pattern = '<center><div style="background: url\\(\'([^\'].+?)\'\\); background-size.+?alt="(.+?)" title.+?<a href=["\']*(.+?)[\'"]* class=.button'
     else:
-        sPattern = '<center><div style="background: url\\(\'([^\'].+?)\'\\); background-size.+?<a href="([^"]+)".+?alt="(.+?)"'
+        pattern = '<center><div style="background: url\\(\'([^\'].+?)\'\\); background-size.+?<a href="([^"]+)".+?alt="(.+?)"'
 
-    sHtmlContent = re.sub(
+    html_content = re.sub(
         '<a\\s*href=\"categorie.php\\?watch=\"\\s*class="genre\\s*\"',
         '',
-        sHtmlContent,
+        html_content,
         re.DOTALL)
 
-    aResult = oParser.parse(sHtmlContent, sPattern)
+    results = parser.parse(html_content, pattern)
 
-    if not aResult[0]:
+    if not results[0]:
         gui.addText(SITE_IDENTIFIER)
 
-    if aResult[0]:
+    if results[0]:
         isPython3 = isMatrix()
 
         output_parameter_handler = OutputParameterHandler()
-        for aEntry in aResult[1]:
-            sThumb = aEntry[0]
-            if not sThumb.startswith('http'):
-                sThumb = URL_MAIN + sThumb
+        for entry in results[1]:
+            thumb = entry[0]
+            if not thumb.startswith('http'):
+                thumb = URL_MAIN + thumb
 
-            if sSearch or 'categorie.php' in sUrl or 'categorie_' in sUrl or 'listing3.php?' in sUrl or 'drama.php' in sUrl:
-                title = aEntry[1]
-                sUrl2 = aEntry[2]
+            if search or 'categorie.php' in url or 'categorie_' in url or 'listing3.php?' in url or 'drama.php' in url:
+                title = entry[1]
+                url2 = entry[2]
             else:
-                title = str(aEntry[2])
-                sUrl2 = aEntry[1]
+                title = str(entry[2])
+                url2 = entry[1]
 
-            if not sUrl2.startswith('http'):
-                sUrl2 = URL_MAIN + sUrl2
+            if not url2.startswith('http'):
+                url2 = URL_MAIN + url2
 
             # affichage de la langue
-            sLang = ''
+            lang = ''
             if 'VF' in title:
-                sLang = 'VF'
-                title = title.replace(sLang, '')
+                lang = 'VF'
+                title = title.replace(lang, '')
             elif 'VOSTFR' in title:
-                sLang = 'VOSTFR'
-                title = title.replace(sLang, '')
+                lang = 'VOSTFR'
+                title = title.replace(lang, '')
 
             title = title.replace('()', '').strip()
 
             # affichage de la qualité -> NON, qualité fausse
-            # sQual = ''
+            # qual = ''
             # if 'DVDRIP' in title:
-            # sQual = 'DVDRIP'
+            # qual = 'DVDRIP'
 
             # Nettoyer le titre
             title = title.replace(' DVDRIP', '').replace('Visionnez ', '')
@@ -521,71 +521,71 @@ def showMovies(sSearch=''):
                 title = title.replace(' -', '')
 
             if not isPython3:
-                title = oUtil.CleanName(title)
+                title = util.CleanName(title)
 
             # Filtre de recherche
-            if sSearch:
-                if not oUtil.CheckOccurence(sSearchText, title):
+            if search:
+                if not util.CheckOccurence(search_text, title):
                     continue
 
-            sDisplayTitle = title
+            display_title = title
 
-            output_parameter_handler.addParameter('siteUrl', sUrl2)
-            output_parameter_handler.addParameter('sMovieTitle', title)
-            output_parameter_handler.addParameter('sThumb', sThumb)
-            output_parameter_handler.addParameter('sLang', sLang)
+            output_parameter_handler.addParameter('site_url', url2)
+            output_parameter_handler.addParameter('movie_title', title)
+            output_parameter_handler.addParameter('thumb', thumb)
+            output_parameter_handler.addParameter('lang', lang)
 
-            if 'drama.php' in sUrl:
+            if 'drama.php' in url:
                 gui.addTV(
                     SITE_IDENTIFIER,
                     'showSaison',
-                    sDisplayTitle,
+                    display_title,
                     'animes.png',
-                    sThumb,
+                    thumb,
                     '',
                     output_parameter_handler)
-            elif (sSearch and typeSearch == 'tvshow') or '?serie=' in sUrl2:
+            elif (search and typeSearch == 'tvshow') or '?serie=' in url2:
                 gui.addTV(
                     SITE_IDENTIFIER,
                     'showSaison',
-                    sDisplayTitle,
+                    display_title,
                     'series.png',
-                    sThumb,
+                    thumb,
                     '',
                     output_parameter_handler)
-            elif '?manga=' in sUrl2:
+            elif '?manga=' in url2:
                 gui.addAnime(
                     SITE_IDENTIFIER,
                     'showSaison',
-                    sDisplayTitle,
+                    display_title,
                     'animes.png',
-                    sThumb,
+                    thumb,
                     '',
                     output_parameter_handler)
-            elif '?film=' in sUrl2:
+            elif '?film=' in url2:
                 gui.addMovie(
                     SITE_IDENTIFIER,
                     'showMovies',
-                    sDisplayTitle,
+                    display_title,
                     'films.png',
-                    sThumb,
+                    thumb,
                     '',
                     output_parameter_handler)
             else:
                 gui.addMovie(
                     SITE_IDENTIFIER,
                     'showHosters',
-                    sDisplayTitle,
+                    display_title,
                     'films.png',
-                    sThumb,
+                    thumb,
                     '',
                     output_parameter_handler)
 
-    if not sSearch:  # une seule page par recherche
-        sNextPage = __checkForNextPage(sHtmlContent)
-        if sNextPage:
+    if not search:  # une seule page par recherche
+        next_page = __checkForNextPage(html_content)
+        if next_page:
             output_parameter_handler = OutputParameterHandler()
-            output_parameter_handler.addParameter('siteUrl', sNextPage)
+            output_parameter_handler.addParameter('site_url', next_page)
             gui.addNext(
                 SITE_IDENTIFIER,
                 'showMovies',
@@ -595,66 +595,66 @@ def showMovies(sSearch=''):
         gui.setEndOfDirectory()
 
 
-def __checkForNextPage(sHtmlContent):
-    oParser = Parser()
+def __checkForNextPage(html_content):
+    parser = Parser()
 
-    sPattern = 'class=.button red light. title=.Voir la page.+?<a href=.(.+?)(?:\'|") class=.button light.'
-    aResult = oParser.parse(sHtmlContent, sPattern)
+    pattern = 'class=.button red light. title=.Voir la page.+?<a href=.(.+?)(?:\'|") class=.button light.'
+    results = parser.parse(html_content, pattern)
 
-    if not aResult[0]:
-        sPattern = "<.table><center><center><a href='(.+?)' class='button light' title='Voir la page 1'>"
-        aResult = oParser.parse(sHtmlContent, sPattern)
+    if not results[0]:
+        pattern = "<.table><center><center><a href='(.+?)' class='button light' title='Voir la page 1'>"
+        results = parser.parse(html_content, pattern)
 
-    if aResult[0]:
-        return URL_MAIN + aResult[1][0]
+    if results[0]:
+        return URL_MAIN + results[1][0]
 
     return False
 
 
 def showSaison():
     gui = Gui()
-    oParser = Parser()
+    parser = Parser()
     input_parameter_handler = InputParameterHandler()
-    sUrl = input_parameter_handler.getValue('siteUrl')
-    sMovieTitle = input_parameter_handler.getValue('sMovieTitle')
-    sThumb = input_parameter_handler.getValue('sThumb')
+    url = input_parameter_handler.getValue('site_url')
+    movie_title = input_parameter_handler.getValue('movie_title')
+    thumb = input_parameter_handler.getValue('thumb')
 
-    oRequestHandler = RequestHandler(sUrl)
-    oRequestHandler.addHeaderEntry('User-Agent', UA)
-    oRequestHandler.addHeaderEntry('Referer', RandomReferer())
-    sHtmlContent = oRequestHandler.request()
+    request_handler = RequestHandler(url)
+    request_handler.addHeaderEntry('User-Agent', UA)
+    request_handler.addHeaderEntry('Referer', RandomReferer())
+    html_content = request_handler.request()
 
     try:
-        desc = oParser.parse(
-            sHtmlContent,
+        desc = parser.parse(
+            html_content,
             '</headline15>.+?<font style=.+?>([^"]+)</font')[1][0]
     except BaseException:
         desc = ""
 
-    if 'HTML/JavaScript Encoder' in sHtmlContent:
-        sHtmlContent = ICDecode(sHtmlContent)
+    if 'HTML/JavaScript Encoder' in html_content:
+        html_content = ICDecode(html_content)
 
     # </a>|href="*([^"]+)"* title="([^"]+)"[^>]+style="*text-decoration:none;"'
-    sPattern = '<headline11>(.+?)</headline11>'
-    aResult = oParser.parse(sHtmlContent, sPattern)
+    pattern = '<headline11>(.+?)</headline11>'
+    results = parser.parse(html_content, pattern)
 
-    if aResult[0]:
+    if results[0]:
         isPython3 = isMatrix()
 
         output_parameter_handler = OutputParameterHandler()
-        for aEntry in aResult[1]:
-            sSeason = aEntry.replace('00', '0')
-            siteUrl = sUrl + '&season=' + sSeason
-            sDisplayTitle = sMovieTitle + ' ' + sSeason
-            output_parameter_handler.addParameter('siteUrl', siteUrl)
-            output_parameter_handler.addParameter('sMovieTitle', sDisplayTitle)
-            output_parameter_handler.addParameter('sThumb', sThumb)
+        for entry in results[1]:
+            season = entry.replace('00', '0')
+            site_url = url + '&season=' + season
+            display_title = movie_title + ' ' + season
+            output_parameter_handler.addParameter('site_url', site_url)
+            output_parameter_handler.addParameter('movie_title', display_title)
+            output_parameter_handler.addParameter('thumb', thumb)
             gui.addSeason(
                 SITE_IDENTIFIER,
                 'showEpisode',
-                sDisplayTitle,
+                display_title,
                 '',
-                sThumb,
+                thumb,
                 desc,
                 output_parameter_handler)
 
@@ -663,46 +663,46 @@ def showSaison():
 
 def showEpisode():
     gui = Gui()
-    oParser = Parser()
+    parser = Parser()
     input_parameter_handler = InputParameterHandler()
-    sMovieTitle = input_parameter_handler.getValue('sMovieTitle')
-    sUrl, sSearchSeason = input_parameter_handler.getValue(
-        'siteUrl').split('&season=')
-    sThumb = input_parameter_handler.getValue('sThumb')
+    movie_title = input_parameter_handler.getValue('movie_title')
+    url, sSearchSeason = input_parameter_handler.getValue(
+        'site_url').split('&season=')
+    thumb = input_parameter_handler.getValue('thumb')
 
-    oRequestHandler = RequestHandler(sUrl)
-    oRequestHandler.addHeaderEntry('User-Agent', UA)
-    oRequestHandler.addHeaderEntry('Referer', RandomReferer())
-    sHtmlContent = oRequestHandler.request()
+    request_handler = RequestHandler(url)
+    request_handler.addHeaderEntry('User-Agent', UA)
+    request_handler.addHeaderEntry('Referer', RandomReferer())
+    html_content = request_handler.request()
 
     try:
-        desc = oParser.parse(
-            sHtmlContent,
+        desc = parser.parse(
+            html_content,
             '</headline15>.+?<font style=.+?>([^"]+)</font')[1][0]
     except BaseException:
         desc = ""
 
-    if 'HTML/JavaScript Encoder' in sHtmlContent:
-        sHtmlContent = ICDecode(sHtmlContent)
+    if 'HTML/JavaScript Encoder' in html_content:
+        html_content = ICDecode(html_content)
 
-    sPattern = '<headline11>(.+?)</headline11></a>|href="*([^"]+)"* title="([^"]+)"[^>]+style="*text-decoration:none;"'
-    aResult = oParser.parse(sHtmlContent, sPattern)
+    pattern = '<headline11>(.+?)</headline11></a>|href="*([^"]+)"* title="([^"]+)"[^>]+style="*text-decoration:none;"'
+    results = parser.parse(html_content, pattern)
 
-    if aResult[0]:
-        sSeason = ''
+    if results[0]:
+        season = ''
         isPython3 = isMatrix()
 
         output_parameter_handler = OutputParameterHandler()
-        for aEntry in aResult[1]:
-            if aEntry[0]:
-                sSeason = aEntry[0].replace('00', '0')
+        for entry in results[1]:
+            if entry[0]:
+                season = entry[0].replace('00', '0')
                 continue
 
-            if sSeason != sSearchSeason:
+            if season != sSearchSeason:
                 continue
 
             if not isPython3:
-                title = unicode(aEntry[2], 'iso-8859-1')
+                title = unicode(entry[2], 'iso-8859-1')
                 title = unicodedata.normalize(
                     'NFD', title).encode(
                     'ascii', 'ignore')
@@ -714,36 +714,36 @@ def showEpisode():
                     ' VOSTFR',
                     '')
             else:
-                title = aEntry[2]
+                title = entry[2]
 
             title = cUtil().unescape(title)
-            sLang = ''
+            lang = ''
             if 'VF' in title:
-                sLang = 'VF'
-                title = title.replace(sLang, '')
+                lang = 'VF'
+                title = title.replace(lang, '')
             elif 'VOSTFR' in title:
-                sLang = 'VOSTFR'
-                title = title.replace(sLang, '')
+                lang = 'VOSTFR'
+                title = title.replace(lang, '')
 
-            sUrl2 = cUtil().unescape(aEntry[1])
-            if not sUrl2.startswith('http'):
-                sUrl2 = URL_MAIN + sUrl2
+            url2 = cUtil().unescape(entry[1])
+            if not url2.startswith('http'):
+                url2 = URL_MAIN + url2
 
             idx = title.find('Episode')
             if idx > 0:
-                title = title.replace(sSeason, '')
-                title = '%s %s %s' % (title[:idx], sSeason, title[idx:])
+                title = title.replace(season, '')
+                title = '%s %s %s' % (title[:idx], season, title[idx:])
 
-            output_parameter_handler.addParameter('siteUrl', sUrl2)
-            output_parameter_handler.addParameter('sMovieTitle', title)
-            output_parameter_handler.addParameter('sThumb', sThumb)
-            output_parameter_handler.addParameter('sLang', sLang)
+            output_parameter_handler.addParameter('site_url', url2)
+            output_parameter_handler.addParameter('movie_title', title)
+            output_parameter_handler.addParameter('thumb', thumb)
+            output_parameter_handler.addParameter('lang', lang)
             gui.addEpisode(
                 SITE_IDENTIFIER,
                 'showHosters',
                 title,
                 '',
-                sThumb,
+                thumb,
                 desc,
                 output_parameter_handler)
 
@@ -757,30 +757,30 @@ def extractLink(html):
 
     final = ''
 
-    oParser = Parser()
+    parser = Parser()
 
-    sPattern = '(?i)src=(?:\'|")(.+?)(?:\'|")'
-    aResult = re.findall(sPattern, html, re.DOTALL)
+    pattern = '(?i)src=(?:\'|")(.+?)(?:\'|")'
+    results = re.findall(pattern, html, re.DOTALL)
 
-    if aResult:
-        for a in aResult:
+    if results:
+        for a in results:
             if ('adnetworkperformance' in a) or ('jquery' in a):
                 continue
             if fake1 not in a and fake2 not in a:
                 final = a
                 break
 
-    sPattern = 'encodeURI\\("(.+?)"\\)'
-    aResult = re.findall(sPattern, html)
-    if aResult:
-        if fake1 not in aResult[0] and fake2 not in aResult[0]:
-            final = aResult[0]
+    pattern = 'encodeURI\\("(.+?)"\\)'
+    results = re.findall(pattern, html)
+    if results:
+        if fake1 not in results[0] and fake2 not in results[0]:
+            final = results[0]
 
-    sPattern = "'file': '(.+?)',"
-    aResult = oParser.parse(html, sPattern)
-    if aResult[0]:
-        if fake1 not in aResult[1][0] and fake2 not in aResult[1][0]:
-            final = aResult[1][0]
+    pattern = "'file': '(.+?)',"
+    results = parser.parse(html, pattern)
+    if results[0]:
+        if fake1 not in results[1][0] and fake2 not in results[1][0]:
+            final = results[1][0]
 
     # nouveau codage
     if ';&#' in final:
@@ -794,233 +794,233 @@ def extractLink(html):
 
 def showHosters(input_parameter_handler=False):
     gui = Gui()
-    oParser = Parser()
+    parser = Parser()
     if not input_parameter_handler:
         input_parameter_handler = InputParameterHandler()
-    sUrl = input_parameter_handler.getValue('siteUrl')
-    sMovieTitle = input_parameter_handler.getValue('sMovieTitle')
-    sThumb = input_parameter_handler.getValue('sThumb')
+    url = input_parameter_handler.getValue('site_url')
+    movie_title = input_parameter_handler.getValue('movie_title')
+    thumb = input_parameter_handler.getValue('thumb')
 
-    oRequestHandler = RequestHandler(sUrl)
-    oRequestHandler.addHeaderEntry('User-Agent', UA)
-    oRequestHandler.addHeaderEntry('Referer', RandomReferer())
-    sHtmlContent = oRequestHandler.request()
+    request_handler = RequestHandler(url)
+    request_handler.addHeaderEntry('User-Agent', UA)
+    request_handler.addHeaderEntry('Referer', RandomReferer())
+    html_content = request_handler.request()
 
-    if 'HTML/JavaScript Encoder' in sHtmlContent:
-        sHtmlContent = ICDecode(sHtmlContent)
+    if 'HTML/JavaScript Encoder' in html_content:
+        html_content = ICDecode(html_content)
 
-    sHtmlContent = sHtmlContent.replace(
+    html_content = html_content.replace(
         '<iframe src="http://www.promoliens.net', '')
-    sHtmlContent = sHtmlContent.replace("<iframe src='cache_vote.php", '')
+    html_content = html_content.replace("<iframe src='cache_vote.php", '')
 
-    sPattern = '<iframe.+?src=\'([^<>"]+?)\''
-    aResult = oParser.parse(sHtmlContent, sPattern)
+    pattern = '<iframe.+?src=\'([^<>"]+?)\''
+    results = parser.parse(html_content, pattern)
 
-    sText = 'Animés dispo gratuitement et légalement sur :'
-    if 'animedigitalnetwork.fr' in str(aResult[1]):
+    text = 'Animés dispo gratuitement et légalement sur :'
+    if 'animedigitalnetwork.fr' in str(results[1]):
         gui.addText(
             SITE_IDENTIFIER,
             "[COLOR red]" +
-            sText +
+            text +
             "[/COLOR][COLOR coral] anime digital network[/COLOR]")
-    elif 'crunchyroll.com' in str(aResult[1]):
+    elif 'crunchyroll.com' in str(results[1]):
         gui.addText(
             SITE_IDENTIFIER,
             "[COLOR red]" +
-            sText +
+            text +
             "[/COLOR][COLOR coral] crunchyroll[/COLOR]")
-    elif 'wakanim.tv' in str(aResult[1]):
+    elif 'wakanim.tv' in str(results[1]):
         gui.addText(
             SITE_IDENTIFIER,
             "[COLOR red]" +
-            sText +
+            text +
             "[/COLOR][COLOR coral] wakanim[/COLOR]")
     else:
         list_url = []
 
         # 1 er methode
-        sPattern = '<div class="box"><iframe.+?src=[\'|"](.+?)[\'|"]'
-        aResult = oParser.parse(sHtmlContent, sPattern)
+        pattern = '<div class="box"><iframe.+?src=[\'|"](.+?)[\'|"]'
+        results = parser.parse(html_content, pattern)
 
-        if aResult[0]:
-            for aEntry in aResult[1]:
-                if re.match(".+?&#[0-9]+;", aEntry):  # directe mais codé html
-                    sHosterUrl = cUtil().unescape(aEntry)
+        if results[0]:
+            for entry in results[1]:
+                if re.match(".+?&#[0-9]+;", entry):  # directe mais codé html
+                    hoster_url = cUtil().unescape(entry)
 
                 else:  # directe en clair
-                    sHosterUrl = str(aEntry)
+                    hoster_url = str(entry)
 
                 # Ces liens sont toujours des liens
-                if (not sHosterUrl.startswith('http')) and (
-                        len(sHosterUrl) > 2):
-                    sHosterUrl = URL_MAIN + sHosterUrl
+                if (not hoster_url.startswith('http')) and (
+                        len(hoster_url) > 2):
+                    hoster_url = URL_MAIN + hoster_url
 
-                list_url.append(sHosterUrl)
+                list_url.append(hoster_url)
 
         # 2 eme methode
-        sPattern = '<script>eval\\(unescape\\((.+?)\\); eval\\(unescape\\((.+?)\\);</script>'
-        aResult = oParser.parse(sHtmlContent, sPattern)
-        if aResult[0]:
-            for aEntry in aResult[1]:
+        pattern = '<script>eval\\(unescape\\((.+?)\\); eval\\(unescape\\((.+?)\\);</script>'
+        results = parser.parse(html_content, pattern)
+        if results[0]:
+            for entry in results[1]:
                 # si url cryptee mangacity algo
-                sHosterUrl = DecryptMangacity(aEntry[1])
-                sHosterUrl = sHosterUrl.replace('\\', '')
-                list_url.append(sHosterUrl)
+                hoster_url = DecryptMangacity(entry[1])
+                hoster_url = hoster_url.replace('\\', '')
+                list_url.append(hoster_url)
 
         # 3 eme methode
-        sPattern = 'document\\.write\\(unescape\\("(%3c%.+?)"\\)\\);'
-        aResult = oParser.parse(sHtmlContent, sPattern)
-        if aResult[0]:
-            for aEntry in aResult[1]:
-                tmp = Unquote(aEntry)
+        pattern = 'document\\.write\\(unescape\\("(%3c%.+?)"\\)\\);'
+        results = parser.parse(html_content, pattern)
+        if results[0]:
+            for entry in results[1]:
+                tmp = Unquote(entry)
 
                 sPattern2 = 'src=["\']([^"\']+)["\']'
-                aResult = re.findall(sPattern2, tmp)
-                if aResult:
-                    list_url.append(aResult[0])
+                results = re.findall(sPattern2, tmp)
+                if results:
+                    list_url.append(results[0])
 
         if len(list_url) > 0:
-            for aEntry in list_url:
+            for entry in list_url:
 
-                sHosterUrl = aEntry
+                hoster_url = entry
 
                 # Dans le cas ou l'adresse n'est pas directe,on cherche a
                 # l'extraire
-                if not sHosterUrl[:4] == 'http':
-                    sHosterUrl = extractLink(sHosterUrl)
+                if not hoster_url[:4] == 'http':
+                    hoster_url = extractLink(hoster_url)
 
                 # Si aucun lien on arrete ici
-                if not sHosterUrl:
+                if not hoster_url:
                     continue
 
                 # si openload code
-                if 'openload2.php' in sHosterUrl:
+                if 'openload2.php' in hoster_url:
                     # on telecharge la page
 
-                    oRequestHandler = RequestHandler(sHosterUrl)
-                    oRequestHandler.addHeaderEntry('User-Agent', UA)
-                    sHtmlContent = oRequestHandler.request()
+                    request_handler = RequestHandler(hoster_url)
+                    request_handler.addHeaderEntry('User-Agent', UA)
+                    html_content = request_handler.request()
                     # Et on remplace le code
-                    sHtmlContent = ICDecode(sHtmlContent)
-                    sHosterUrl = extractLink(sHtmlContent)
+                    html_content = ICDecode(html_content)
+                    hoster_url = extractLink(html_content)
 
                 # Passe par lien .asx ??
-                sPattern = '(https*:\\/\\/www.ianime[^\\/\\]+\\/[0-9a-zA-Z_-]+\\.asx)'
-                aResult = oParser.parse(sHosterUrl, sPattern)
-                if aResult[0]:
+                pattern = '(https*:\\/\\/www.ianime[^\\/\\]+\\/[0-9a-zA-Z_-]+\\.asx)'
+                results = parser.parse(hoster_url, pattern)
+                if results[0]:
                     # on telecharge la page
-                    oRequestHandler = RequestHandler(sHosterUrl)
-                    oRequestHandler.addHeaderEntry('Referer', sUrl)
-                    oRequestHandler.addHeaderEntry('User-Agent', UA)
-                    sHtmlContent = oRequestHandler.request()
+                    request_handler = RequestHandler(hoster_url)
+                    request_handler.addHeaderEntry('Referer', url)
+                    request_handler.addHeaderEntry('User-Agent', UA)
+                    html_content = request_handler.request()
 
                     # Si c'est une redirection, on passe juste le vrai lien
-                    if 'ianime' not in oRequestHandler.getRealUrl().split(
+                    if 'ianime' not in request_handler.getRealUrl().split(
                             '/')[2]:
-                        sHosterUrl = oRequestHandler.getRealUrl()
+                        hoster_url = request_handler.getRealUrl()
                     else:
                         # Sinon on remplace le code
-                        html = ICDecode(sHtmlContent)
-                        sHosterUrl = extractLink(html)
+                        html = ICDecode(html_content)
+                        hoster_url = extractLink(html)
 
                 # Passe par lien .vxm ??
-                # sPattern = 'http:\/\/www.ianime[^\/\\]+\/([0-9a-zA-Z_-]+)\.vxm'
-                # aResult = oParser.parse(sHosterUrl, sPattern)
-                # if aResult[0] :
-                # sHosterUrl = 'http://embed.nowvideo.sx/embed.php?v=' + aResult[1][0]
+                # pattern = 'http:\/\/www.ianime[^\/\\]+\/([0-9a-zA-Z_-]+)\.vxm'
+                # results = parser.parse(hoster_url, pattern)
+                # if results[0] :
+                # hoster_url = 'http://embed.nowvideo.sx/embed.php?v=' + results[1][0]
 
                 # redirection tinyurl
-                if 'tinyurl' in sHosterUrl:
-                    sHosterUrl = getTinyUrl(sHosterUrl)
+                if 'tinyurl' in hoster_url:
+                    hoster_url = getTinyUrl(hoster_url)
 
                 # test pr liens raccourcis
-                if 'http://goo.gl' in sHosterUrl:
+                if 'http://goo.gl' in hoster_url:
                     try:
-                        oRequestHandler = RequestHandler(sHosterUrl)
-                        oRequestHandler.addHeaderEntry(
+                        request_handler = RequestHandler(hoster_url)
+                        request_handler.addHeaderEntry(
                             'User-Agent', "Mozilla 5.10")
-                        oRequestHandler.addHeaderEntry('Host', "goo.gl")
-                        oRequestHandler.addHeaderEntry(
+                        request_handler.addHeaderEntry('Host', "goo.gl")
+                        request_handler.addHeaderEntry(
                             'Connection', 'keep-alive')
-                        sHtmlContent = oRequestHandler.request()
-                        sHosterUrl = oRequestHandler.getRealUrl()
+                        html_content = request_handler.request()
+                        hoster_url = request_handler.getRealUrl()
 
                     except BaseException:
                         pass
 
                 # Potection visio.php
-                if '/visio.php?' in sHosterUrl:
-                    oRequestHandler = RequestHandler(sHosterUrl)
-                    oRequestHandler.addHeaderEntry('Referer', sUrl)
-                    oRequestHandler.addHeaderEntry('User-Agent', UA)
-                    sHtmlContent = oRequestHandler.request()
+                if '/visio.php?' in hoster_url:
+                    request_handler = RequestHandler(hoster_url)
+                    request_handler.addHeaderEntry('Referer', url)
+                    request_handler.addHeaderEntry('User-Agent', UA)
+                    html_content = request_handler.request()
 
-                    sHtmlContent = ICDecode(sHtmlContent)
+                    html_content = ICDecode(html_content)
 
-                    sPattern = 'src=[\'"]([^\'"]+)[\'"]'
-                    aResult = oParser.parse(sHtmlContent, sPattern)
-                    if aResult[0]:
-                        sHosterUrl = aResult[1][0]
+                    pattern = 'src=[\'"]([^\'"]+)[\'"]'
+                    results = parser.parse(html_content, pattern)
+                    if results[0]:
+                        hoster_url = results[1][0]
 
                 # Derniere en date
-                sPattern = "(https*:\\/\\/www.ianime[^\\/\\]+\\/[^']+)"
-                aResult = oParser.parse(sHosterUrl, sPattern)
-                if aResult[0]:
-                    oRequestHandler = RequestHandler(sHosterUrl)
-                    oRequestHandler.addHeaderEntry('Referer', sUrl)
-                    oRequestHandler.addHeaderEntry('User-Agent', UA)
+                pattern = "(https*:\\/\\/www.ianime[^\\/\\]+\\/[^']+)"
+                results = parser.parse(hoster_url, pattern)
+                if results[0]:
+                    request_handler = RequestHandler(hoster_url)
+                    request_handler.addHeaderEntry('Referer', url)
+                    request_handler.addHeaderEntry('User-Agent', UA)
 
-                    sHtmlContent = oRequestHandler.request()
-                    sHtmlContent = ICDecode(sHtmlContent)
-                    sHosterUrl2 = extractLink(sHtmlContent)
+                    html_content = request_handler.request()
+                    html_content = ICDecode(html_content)
+                    sHosterUrl2 = extractLink(html_content)
 
                     if 'intern_player.png' in sHosterUrl2 or 'intern_player2.png' in sHosterUrl2:
                         xx = str(random.randint(300, 350))  # 347
                         yy = str(random.randint(200, 255))  # 216
 
                         # Remove old hoster
-                        sHosterUrl = sHosterUrl.replace(
-                            GetHost(sHosterUrl), "")
+                        hoster_url = hoster_url.replace(
+                            GetHost(hoster_url), "")
                         # Add new one
-                        sHosterUrl = GetHost(sHosterUrl2) + sHosterUrl
+                        hoster_url = GetHost(sHosterUrl2) + hoster_url
 
-                        oRequestHandler = RequestHandler(sHosterUrl)
-                        oRequestHandler.setRequestType(
+                        request_handler = RequestHandler(hoster_url)
+                        request_handler.setRequestType(
                             RequestHandler.REQUEST_TYPE_POST)
                         # Add params
-                        oRequestHandler.addParameters('submit.x', xx)
-                        oRequestHandler.addParameters('submit.y', yy)
+                        request_handler.addParameters('submit.x', xx)
+                        request_handler.addParameters('submit.y', yy)
 
                         # look for hidden params
                         p1 = re.search(
-                            r'name="valeur" value="([^"]+)"', sHtmlContent)
+                            r'name="valeur" value="([^"]+)"', html_content)
                         if p1:
-                            oRequestHandler.addParameters(
+                            request_handler.addParameters(
                                 'valeur', p1.group(1))
 
                         # Set headers
-                        oRequestHandler.addHeaderEntry('Referer', sUrl)
-                        oRequestHandler.addHeaderEntry('User-Agent', UA)
-                        sHtmlContent = oRequestHandler.request()
+                        request_handler.addHeaderEntry('Referer', url)
+                        request_handler.addHeaderEntry('User-Agent', UA)
+                        html_content = request_handler.request()
 
-                        sHosterUrl2 = extractLink(sHtmlContent)
+                        sHosterUrl2 = extractLink(html_content)
 
-                    sHosterUrl = sHosterUrl2
+                    hoster_url = sHosterUrl2
 
-                if 'tinyurl' in sHosterUrl:
-                    sHosterUrl = getTinyUrl(sHosterUrl)
+                if 'tinyurl' in hoster_url:
+                    hoster_url = getTinyUrl(hoster_url)
 
-                if '///' in sHosterUrl:
-                    sHosterUrl = 'https://' + \
-                        '/'.join(sHosterUrl.split('/')[5:])
+                if '///' in hoster_url:
+                    hoster_url = 'https://' + \
+                        '/'.join(hoster_url.split('/')[5:])
 
-                VSlog(sHosterUrl)
+                VSlog(hoster_url)
 
-                oHoster = HosterGui().checkHoster(sHosterUrl)
-                if oHoster:
-                    oHoster.setDisplayName(sMovieTitle)
-                    oHoster.setFileName(sMovieTitle)
-                    HosterGui().showHoster(gui, oHoster, sHosterUrl, sThumb,
+                hoster = HosterGui().checkHoster(hoster_url)
+                if hoster:
+                    hoster.setDisplayName(movie_title)
+                    hoster.setFileName(movie_title)
+                    HosterGui().showHoster(gui, hoster, hoster_url, thumb,
                                            input_parameter_handler=input_parameter_handler)
 
     gui.setEndOfDirectory()
@@ -1061,13 +1061,13 @@ def getTinyUrl(url):
 
     # On va chercher le vrai lien
     else:
-        oRequestHandler = RequestHandler(url)
-        oRequestHandler.disableRedirect()
-        oRequestHandler.addHeaderEntry('User-Agent', UA)
-        oRequestHandler.addHeaderEntry('Referer', URL_MAIN)
-        sHtmlContent = oRequestHandler.request()
+        request_handler = RequestHandler(url)
+        request_handler.disableRedirect()
+        request_handler.addHeaderEntry('User-Agent', UA)
+        request_handler.addHeaderEntry('Referer', URL_MAIN)
+        html_content = request_handler.request()
 
-        UrlRedirect = oRequestHandler.getRealUrl()
+        UrlRedirect = request_handler.getRealUrl()
 
         if not (UrlRedirect == url):
             url = UrlRedirect
@@ -1076,14 +1076,14 @@ def getTinyUrl(url):
     return url
 
 
-def cutSearch(sHtmlContent, typeSearch):
+def cutSearch(html_content, typeSearch):
     types = {'movies': 'Films et Animations',
              'tvshow': 'Séries et Drama',
              'anime': 'Animes et Mangas'}
-    sPattern = types.get(typeSearch) + \
+    pattern = types.get(typeSearch) + \
         '<.+?alt="separateur"(.+?)alt="separateur"'
 
-    aResult = Parser().parse(sHtmlContent, sPattern)
-    if aResult[0]:
-        return aResult[1][0]
+    results = Parser().parse(html_content, pattern)
+    if results[0]:
+        return results[1][0]
     return ''

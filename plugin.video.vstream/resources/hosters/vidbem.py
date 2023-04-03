@@ -19,32 +19,32 @@ class cHoster(iHoster):
     def isDownloadable(self):
         return False
 
-    def _getMediaLinkForGuest(self, autoPlay=False):
+    def _getMediaLinkForGuest(self, auto_play=False):
         api_call = False
 
-        oRequest = RequestHandler(self._url)
-        oRequest.addHeaderEntry('User-Agent', UA)
-        oRequest.addHeaderEntry('Referer', self._url)
-        oRequest.addHeaderEntry(
+        request = RequestHandler(self._url)
+        request.addHeaderEntry('User-Agent', UA)
+        request.addHeaderEntry('Referer', self._url)
+        request.addHeaderEntry(
             'Accept', 'text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8')
 
-        oRequest = RequestHandler(self._url)
-        sHtmlContent = oRequest.request()
+        request = RequestHandler(self._url)
+        html_content = request.request()
 
         list_url = []
         list_q = []
-        oParser = Parser()
+        parser = Parser()
 
-        sPattern = '(?:[>;]\\s*)(ﾟωﾟ.+?\\(\'_\'\\);)'
-        aResult = oParser.parse(sHtmlContent, sPattern)
+        pattern = '(?:[>;]\\s*)(ﾟωﾟ.+?\\(\'_\'\\);)'
+        results = parser.parse(html_content, pattern)
 
-        if aResult[0] is True:  # 1 seul à vérifier ici ?
-            sdec = AADecoder(aResult[1][0]).decode()
-            sPattern = 'file:"([^"]+).+?label:"([^"]+)'
-            aResult = oParser.parse(sdec, sPattern)
+        if results[0] is True:  # 1 seul à vérifier ici ?
+            sdec = AADecoder(results[1][0]).decode()
+            pattern = 'file:"([^"]+).+?label:"([^"]+)'
+            results = parser.parse(sdec, pattern)
 
-            if aResult[0] is True:
-                for aentry in aResult[1]:  # ou là
+            if results[0] is True:
+                for aentry in results[1]:  # ou là
                     list_url.append(aentry[0])
                     list_q.append(aentry[1])
 

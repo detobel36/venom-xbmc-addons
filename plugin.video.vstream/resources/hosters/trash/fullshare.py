@@ -12,24 +12,24 @@ class cHoster(iHoster):
     def __init__(self):
         iHoster.__init__(self, 'fullshare', 'FullShare.net')
 
-    def _getMediaLinkForGuest(self, autoPlay=False):
-        oRequest = RequestHandler(self._url)
-        sHtmlContent = oRequest.request()
+    def _getMediaLinkForGuest(self, auto_play=False):
+        request = RequestHandler(self._url)
+        html_content = request.request()
 
-        aHeader = oRequest.getResponseHeader()
-        sPhpSessionId = self.__getPhpSessionId(aHeader)
+        header = request.getResponseHeader()
+        php_session_id = self.__getPhpSessionId(header)
 
-        sPattern = 'var time_wait = ([^;]+);'
-        oParser = Parser()
-        aResult = oParser.parse(sHtmlContent, sPattern)
-        if aResult[0] is True:
-            sSecondsForWait = int(aResult[1][0]) + 2
+        pattern = 'var time_wait = ([^;]+);'
+        parser = Parser()
+        results = parser.parse(html_content, pattern)
+        if results[0] is True:
+            sSecondsForWait = int(results[1][0]) + 2
 
-            sPattern = '<input type="hidden" name="code" value="([^"]+)"'
-            oParser = Parser()
-            aResult = oParser.parse(sHtmlContent, sPattern)
-            if aResult[0] is True:
-                sCode = aResult[1][0]
+            pattern = '<input type="hidden" name="code" value="([^"]+)"'
+            parser = Parser()
+            results = parser.parse(html_content, pattern)
+            if results[0] is True:
+                sCode = results[1][0]
 
                 gui = Gui()
                 gui.showNofication(sSecondsForWait, 3)
@@ -47,27 +47,27 @@ class cHoster(iHoster):
                     str(rndY) + '.' + str(rndX) + '.' + str(ts1) + '.' + str(ts2) + '.' + str(ts3) + '; '
                 sCookieValue = sCookieValue + '__utmz=' + str(rndY) + '.' + str(ts4) + \
                     '.1.1.utmcsr=(direct)|utmccn=(direct)|utmcmd=(none); '
-                sCookieValue = sCookieValue + sPhpSessionId + '; '
+                sCookieValue = sCookieValue + php_session_id + '; '
                 sCookieValue = sCookieValue + '__utmc=' + str(rndY) + "; "
                 sCookieValue = sCookieValue + '__utmb=' + \
                     str(rndY) + '.7.10.' + str(ts5) + "; ADBLOCK=1"
 
-                oRequest = RequestHandler(self._url)
-                oRequest.setRequestType(RequestHandler.REQUEST_TYPE_POST)
-                oRequest.addHeaderEntry('Cookie', sCookieValue)
-                oRequest.addParameters('code', sCode)
-                sHtmlContent = oRequest.request()
+                request = RequestHandler(self._url)
+                request.setRequestType(RequestHandler.REQUEST_TYPE_POST)
+                request.addHeaderEntry('Cookie', sCookieValue)
+                request.addParameters('code', sCode)
+                html_content = request.request()
 
-                sPattern = '<param name="src" value="([^"]+)"'
-                oParser = Parser()
-                aResult = oParser.parse(sHtmlContent, sPattern)
+                pattern = '<param name="src" value="([^"]+)"'
+                parser = Parser()
+                results = parser.parse(html_content, pattern)
 
-                if aResult[0] is True:
-                    return True, aResult[1][0]
+                if results[0] is True:
+                    return True, results[1][0]
 
-        return False, aResult
+        return False, results
 
-    def __getPhpSessionId(self, aHeader):
-        sReponseCookie = aHeader.getheader("Set-Cookie")
+    def __getPhpSessionId(self, header):
+        sReponseCookie = header.getheader("Set-Cookie")
         aResponseCookies = sReponseCookie.split(";")
         return aResponseCookies[0]

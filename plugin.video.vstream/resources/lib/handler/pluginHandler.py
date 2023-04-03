@@ -5,7 +5,7 @@ import sys
 import xbmcvfs
 import json
 
-from resources.lib.comaddon import addon, VSlog, VSPath, SiteManager
+from resources.lib.comaddon import Addon, VSlog, VSPath, SiteManager
 
 
 class PluginHandler:
@@ -37,8 +37,8 @@ class PluginHandler:
             # xbox hack
             sFilePath = sFilePath.replace('\\', '/')
 
-            if (xbmcvfs.exists(sFilePath)):
-                if (sFilePath.lower().endswith('py')):
+            if xbmcvfs.exists(sFilePath):
+                if sFilePath.lower().endswith('py'):
                     sItemName = sItemName.replace('.py', '')
                     aNameList.append(sItemName)
         return aNameList
@@ -46,13 +46,13 @@ class PluginHandler:
     def __importPlugin(self, sName, label=""):
         try:
             exec("from resources.sites import " + sName, globals())
-            exec("sSiteName = " + sName + ".SITE_NAME", globals())
+            exec("site_name = " + sName + ".SITE_NAME", globals())
             if label:
-                exec("sSearch = " + sName + "." + label, globals())
-                return sSearch[0], sSearch[1], sSiteName
+                exec("search = " + sName + "." + label, globals())
+                return search[0], search[1], site_name
             else:
                 exec("sSiteDesc = " + sName + ".SITE_DESC", globals())
-                return sSiteName, sSiteDesc
+                return site_name, sSiteDesc
         except Exception as e:
             VSlog("Cannot import plugin " + str(sName))
             VSlog("Detail de l\'erreur " + str(e))
@@ -60,77 +60,77 @@ class PluginHandler:
 
     def getAvailablePlugins(self, label="", force=False):
 
-        addons = addon()
-        sitesManager = SiteManager()
+        addons = Addon()
+        sites_manager = SiteManager()
 
         sFolder = "special://home/addons/plugin.video.vstream/resources/sites"
         sFolder = sFolder.replace('\\', '/')
 
         aFileNames = self.__getFileNamesFromFolder(sFolder)
 
-        aPlugins = []
-        for sFileName in aFileNames:
-            if not sitesManager.isEnable(
-                    sFileName):    # Site désactivé par la team
+        list_plugins = []
+        for file_name in aFileNames:
+            if not sites_manager.isEnable(
+                    file_name):    # Site désactivé par la team
                 continue
-            if force or sitesManager.isActive(sFileName):
+            if force or sites_manager.isActive(file_name):
                 # wir versuchen das plugin zu importieren
                 if label:
-                    aPlugin = self.__importPlugin(sFileName, label)
+                    plugin = self.__importPlugin(file_name, label)
                 else:
-                    aPlugin = self.__importPlugin(sFileName)
+                    plugin = self.__importPlugin(file_name)
 
-                if (aPlugin[0]):
-                    sSiteDesc = aPlugin[1]
+                if plugin[0]:
+                    sSiteDesc = plugin[1]
                     if label:
-                        sSiteUrl = aPlugin[0]
-                        sSiteName = aPlugin[2]
+                        site_url = plugin[0]
+                        site_name = plugin[2]
                         item = self.__createAvailablePluginsItem(
-                            sSiteUrl, sSiteName, sFileName, sSiteDesc)
+                            site_url, site_name, file_name, sSiteDesc)
                     else:
-                        sSiteName = aPlugin[0]
+                        site_name = plugin[0]
                         item = self.__createAvailablePluginsItem(
-                            "", sSiteName, sFileName, sSiteDesc)
+                            "", site_name, file_name, sSiteDesc)
 
-                    aPlugins.append(item)
+                    list_plugins.append(item)
 
-        return aPlugins
+        return list_plugins
 
     def getAllPlugins(self):
-        sitesManager = SiteManager()
+        sites_manager = SiteManager()
         sFolder = "special://home/addons/plugin.video.vstream/resources/sites"
         sFolder = sFolder.replace('\\', '/')
 
         aFileNames = self.__getFileNamesFromFolder(sFolder)
 
-        aPlugins = []
-        for sFileName in aFileNames:
-            if not sitesManager.isEnable(
-                    sFileName):    # Site désactivé par la team
+        list_plugins = []
+        for file_name in aFileNames:
+            if not sites_manager.isEnable(
+                    file_name):    # Site désactivé par la team
                 continue
             # wir versuchen das plugin zu importieren
-            aPlugin = self.__importPlugin(sFileName)
-            if (aPlugin[0]):
-                sSiteName = aPlugin[0]
-                sSiteDesc = aPlugin[1]
+            plugin = self.__importPlugin(file_name)
+            if plugin[0]:
+                site_name = plugin[0]
+                sSiteDesc = plugin[1]
 
                 # settings nicht gefunden, also schalten wir es trotzdem
                 # sichtbar
-                aPlugins.append(
+                list_plugins.append(
                     self.__createAvailablePluginsItem(
-                        "", sSiteName, sFileName, sSiteDesc))
+                        "", site_name, file_name, sSiteDesc))
 
-        return aPlugins
+        return list_plugins
 
     def __createAvailablePluginsItem(
             self,
-            sSiteUrl,
+            site_url,
             sPluginName,
             sPluginIdentifier,
             sPluginDesc):
         aPluginEntry = []
-        if sSiteUrl:
-            aPluginEntry.append(sSiteUrl)
+        if site_url:
+            aPluginEntry.append(site_url)
         aPluginEntry.append(sPluginName)
         aPluginEntry.append(sPluginIdentifier)
         aPluginEntry.append(sPluginDesc)

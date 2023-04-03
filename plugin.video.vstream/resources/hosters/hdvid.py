@@ -13,27 +13,27 @@ class cHoster(iHoster):
     def __init__(self):
         iHoster.__init__(self, 'hdvid', 'HdVid')
 
-    def _getMediaLinkForGuest(self, autoPlay=False):
-        oRequest = RequestHandler(self._url)
-        sHtmlContent = oRequest.request()
-        oParser = Parser()
+    def _getMediaLinkForGuest(self, auto_play=False):
+        request = RequestHandler(self._url)
+        html_content = request.request()
+        parser = Parser()
 
         api_call = False
 
-        sPattern = '(eval\\(function\\(p,a,c,k,e(?:.|\\s)+?\\)\\)\\s*)<\\/script>'
-        aResult = oParser.parse(sHtmlContent, sPattern)
-        if aResult[0] is True:
-            sHtmlContent = cPacker().unpack(aResult[1][0])
-            sPattern = 'file:"([^"]+)",label:"[0-9]+"}'
-            aResult = oParser.parse(sHtmlContent, sPattern)
-            if aResult[0] is True:
-                api_call = aResult[1][0]
+        pattern = '(eval\\(function\\(p,a,c,k,e(?:.|\\s)+?\\)\\)\\s*)<\\/script>'
+        results = parser.parse(html_content, pattern)
+        if results[0] is True:
+            html_content = cPacker().unpack(results[1][0])
+            pattern = 'file:"([^"]+)",label:"[0-9]+"}'
+            results = parser.parse(html_content, pattern)
+            if results[0] is True:
+                api_call = results[1][0]
 
         else:
-            sPattern = 'file:"([^"]+)",label:"[0-9]+"}'
-            aResult = oParser.parse(sHtmlContent, sPattern)
-            if aResult[0] is True:
-                api_call = aResult[1][0] + '|User-Agent=' + \
+            pattern = 'file:"([^"]+)",label:"[0-9]+"}'
+            results = parser.parse(html_content, pattern)
+            if results[0] is True:
+                api_call = results[1][0] + '|User-Agent=' + \
                     UA  # + '&Referer=' + self._url
 
         if api_call:

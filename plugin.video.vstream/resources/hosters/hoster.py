@@ -37,11 +37,11 @@ class iHoster:
     def getUrl(self):
         return self._url
 
-    def getMediaLink(self, autoPlay=False):
-        return self._getMediaLinkForGuest(autoPlay)
+    def getMediaLink(self, auto_play=False):
+        return self._getMediaLinkForGuest(auto_play)
 
-    def _getMediaLinkForGuest(self, autoPlay=False):
+    def _getMediaLinkForGuest(self, auto_play=False):
         raise NotImplementedError()
 
-    def _getMediaLinkByPremiumUser(self, autoPlay=False):
+    def _getMediaLinkByPremiumUser(self, auto_play=False):
         pass

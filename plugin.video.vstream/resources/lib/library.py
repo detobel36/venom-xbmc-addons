@@ -9,7 +9,7 @@ import xbmcplugin
 import xbmcvfs
 import xbmc
 
-from resources.lib.comaddon import addon, dialog, VSPath
+from resources.lib.comaddon import Addon, dialog, VSPath
 from resources.lib.gui.gui import Gui
 from resources.lib.handler.inputParameterHandler import InputParameterHandler
 from resources.lib.handler.outputParameterHandler import OutputParameterHandler
@@ -22,7 +22,7 @@ SITE_NAME = 'Library'
 
 
 class Library:
-    ADDON = addon()
+    ADDON = Addon()
 
     def __init__(self):
         self.__sMovieFolder = self.ADDON.getSetting('Library_folder_Movies')
@@ -44,30 +44,30 @@ class Library:
 
     def setLibrary(self):
         input_parameter_handler = InputParameterHandler()
-        sHosterIdentifier = input_parameter_handler.getValue(
-            'sHosterIdentifier')
-        sFileName = input_parameter_handler.getValue('sFileName')
-        sMediaUrl = input_parameter_handler.getValue('sMediaUrl')
+        hoster_identifier = input_parameter_handler.getValue(
+            'hoster_identifier')
+        file_name = input_parameter_handler.getValue('file_name')
+        media_url = input_parameter_handler.getValue('media_url')
 
         ret = dialog().VSselect(['Film', 'Série'],
                                 'Sélectionner une catégorie')
         if ret == 0:
-            sCat = '1'
+            cat = '1'
         elif ret == -1:
             return
         else:
-            sCat = '2'
+            cat = '2'
 
-        sMediaUrl = QuotePlus(sMediaUrl)
-        # sFileName = QuotePlus(sFileName)
+        media_url = QuotePlus(media_url)
+        # file_name = QuotePlus(file_name)
 
-        sLink = 'plugin://plugin.video.vstream/?function=play&site=HosterGui&sFileName='
-        sLink += sFileName + '&sMediaUrl=' + sMediaUrl + \
-            '&sHosterIdentifier=' + sHosterIdentifier
+        sLink = 'plugin://plugin.video.vstream/?function=play&site=HosterGui&file_name='
+        sLink += file_name + '&media_url=' + media_url + \
+            '&hoster_identifier=' + hoster_identifier
 
-        title = sFileName
+        title = file_name
 
-        if sCat == '1':  # film
+        if cat == '1':  # film
             # title = cUtil().CleanName(title)
             title = self.showKeyBoard(title, 'Nom du fichier')
 
@@ -81,7 +81,7 @@ class Library:
             except BaseException:
                 dialog().VSinfo('Rajout impossible')
 
-        elif sCat == '2':  # serie
+        elif cat == '2':  # serie
             # title = cUtil().CleanName(title)
             sFTitle = self.showKeyBoard(
                 title, 'Saison : Recommandé NomDeSerie/Saison01')
@@ -115,7 +115,7 @@ class Library:
         output_parameter_handler = OutputParameterHandler()
 
         folder = self.ADDON.getSetting('Library_folder_Movies')
-        output_parameter_handler.addParameter('siteUrl', folder)
+        output_parameter_handler.addParameter('site_url', folder)
         gui.addDir(
             SITE_IDENTIFIER,
             'openLibrary',
@@ -124,7 +124,7 @@ class Library:
             output_parameter_handler)
 
         folder = self.ADDON.getSetting('Library_folder_TVs')
-        output_parameter_handler.addParameter('siteUrl', folder)
+        output_parameter_handler.addParameter('site_url', folder)
         gui.addDir(
             SITE_IDENTIFIER,
             'openLibrary',
@@ -141,7 +141,7 @@ class Library:
         if not folder:
             folder = 'special://userdata/addon_data/plugin.video.vstream/Enregistrement"/>'
         output_parameter_handler = OutputParameterHandler()
-        output_parameter_handler.addParameter('siteUrl', folder)
+        output_parameter_handler.addParameter('site_url', folder)
         gui.addDir(
             SITE_IDENTIFIER,
             'openLibrary',
@@ -154,9 +154,9 @@ class Library:
     def openLibrary(self):
         gui = Gui()
         input_parameter_handler = InputParameterHandler()
-        sFile = input_parameter_handler.getValue('siteUrl')
+        file = input_parameter_handler.getValue('site_url')
 
-        listDir = xbmcvfs.listdir(sFile)
+        listDir = xbmcvfs.listdir(file)
 
         if listDir[0]:
             data = listDir[0]
@@ -166,21 +166,21 @@ class Library:
         addon_handle = None
         for i in data:
             # Suppression du special: pour plus tard
-            path = VSPath(sFile + '/' + i)
+            path = VSPath(file + '/' + i)
             title = os.path.basename(path)  # Titre du fichier .strm
 
             if '.strm' in i:
-                sHosterUrl = sFile + '/' + i
+                hoster_url = file + '/' + i
                 addon_handle = int(sys.argv[1])
                 xbmcplugin.setContent(addon_handle, 'video')
                 li = xbmcgui.ListItem(title)
                 xbmcplugin.addDirectoryItem(
-                    handle=addon_handle, url=sHosterUrl, listitem=li)
+                    handle=addon_handle, url=hoster_url, listitem=li)
 
             else:
                 output_parameter_handler = OutputParameterHandler()
                 output_parameter_handler.addParameter(
-                    'siteUrl', sFile + '/' + i)
+                    'site_url', file + '/' + i)
                 gui.addDir(
                     SITE_IDENTIFIER,
                     'openLibrary',
@@ -195,9 +195,9 @@ class Library:
 
     def Delfile(self):
         input_parameter_handler = InputParameterHandler()
-        sFile = input_parameter_handler.getValue('sFile')
+        file = input_parameter_handler.getValue('file')
 
-        xbmcvfs.delete(sFile)
+        xbmcvfs.delete(file)
 
         runClean = self.DIALOG.VSyesno(
             'Voulez vous mettre à jour la librairie maintenant (non conseillé)',
@@ -217,8 +217,8 @@ class Library:
         keyboard.setHeading(Heading)  # optional
         keyboard.doModal()
         if keyboard.isConfirmed():
-            sSearchText = keyboard.getText()
-            if (len(sSearchText)) > 0:
-                return sSearchText
+            search_text = keyboard.getText()
+            if (len(search_text)) > 0:
+                return search_text
 
         return False

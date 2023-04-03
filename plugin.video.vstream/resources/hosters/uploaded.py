@@ -11,29 +11,29 @@ class cHoster(iHoster):
     def __init__(self):
         iHoster.__init__(self, 'uploaded', 'Uploaded', 'violet')
 
-    def getMediaLink(self, autoPlay=False):
-        self.oPremiumHandler = cPremiumHandler(self.getPluginIdentifier())
-        print(self.oPremiumHandler.isPremiumModeAvailable())
+    def getMediaLink(self, auto_play=False):
+        self.premium_handler = cPremiumHandler(self.getPluginIdentifier())
+        print(self.premium_handler.isPremiumModeAvailable())
 
-        if (not self.oPremiumHandler.isPremiumModeAvailable()):
-            if not autoPlay:
+        if (not self.premium_handler.isPremiumModeAvailable()):
+            if not auto_play:
                 oDialog = dialog().VSok('ATTENTION, Pas de streaming sans premium.')
             return False, False
 
-        return self._getMediaLinkByPremiumUser(autoPlay)
+        return self._getMediaLinkByPremiumUser(auto_play)
 
-    def _getMediaLinkForGuest(self, autoPlay=False):
+    def _getMediaLinkForGuest(self, auto_play=False):
         pass
 
-    def _getMediaLinkByPremiumUser(self, autoPlay=False):
+    def _getMediaLinkByPremiumUser(self, auto_play=False):
         api_call = False
 
-        if not self.oPremiumHandler.Authentificate():
+        if not self.premium_handler.Authentificate():
             return False, False
 
         url = self._url
 
-        api_call = url + '|' + self.oPremiumHandler.AddCookies()
+        api_call = url + '|' + self.premium_handler.AddCookies()
 
         # print(api_call)
 

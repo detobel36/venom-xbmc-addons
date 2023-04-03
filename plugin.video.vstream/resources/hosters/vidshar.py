@@ -13,18 +13,18 @@ class cHoster(iHoster):
     def __init__(self):
         iHoster.__init__(self, 'vidshar', 'Vidshar')
 
-    def _getMediaLinkForGuest(self, autoPlay=False):
+    def _getMediaLinkForGuest(self, auto_play=False):
         api_call = ''
-        oParser = Parser()
+        parser = Parser()
 
-        oRequest = RequestHandler(self._url)
-        sHtmlContent = oRequest.request()
+        request = RequestHandler(self._url)
+        html_content = request.request()
 
         sPattern1 = 'sources.+?src.+?"(.+?)"'
 
-        aResult = oParser.parse(sHtmlContent, sPattern1)
-        if aResult[0] is True:
-            api_call = aResult[1][0]
+        results = parser.parse(html_content, sPattern1)
+        if results[0] is True:
+            api_call = results[1][0]
 
         if api_call:
             return True, api_call + '|User-Agent=' + UA + '&Referer=' + self._url

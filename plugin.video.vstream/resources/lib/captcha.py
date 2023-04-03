@@ -79,8 +79,8 @@ def Captcha_Get_Reponse(img, cookie):
                     # Focus clavier
                     self.setFocus(self.getControl(21))
 
-                def onClick(self, controlId):
-                    if controlId == 20:
+                def onClick(self, control_id):
+                    if control_id == 20:
                         # button Valider
                         solution = self.getControl(5000).getLabel()
                         xbmcgui.Window(10101).setProperty(
@@ -88,12 +88,12 @@ def Captcha_Get_Reponse(img, cookie):
                         self.close()
                         return
 
-                    elif controlId == 30:
+                    elif control_id == 30:
                         # button fermer
                         self.close()
                         return
 
-                    elif controlId == 21:
+                    elif control_id == 21:
                         # button clavier
                         self.getControl(2).setVisible(True)
                         kb = xbmc.Keyboard(

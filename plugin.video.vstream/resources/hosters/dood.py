@@ -37,52 +37,52 @@ class cHoster(iHoster):
         self._url = str(url).replace(
             '/d/', '/e/').replace('doodstream.com', 'dood.la')
 
-    def _getMediaLinkForGuest(self, autoPlay=False):
+    def _getMediaLinkForGuest(self, auto_play=False):
         api_call = False
 
         headers = {'User-Agent': UA}
 
         req = urllib.Request(self._url, None, headers)
         with urllib.urlopen(req) as response:
-            sHtmlContent = response.read()
+            html_content = response.read()
             urlDownload = response.geturl()
 
         try:
-            sHtmlContent = sHtmlContent.decode('utf8')
+            html_content = html_content.decode('utf8')
         except BaseException:
             pass
 
-        oParser = Parser()
+        parser = Parser()
 
         possible = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789"
         fin_url = ''.join(random.choice(possible) for _ in range(10))
 
-        sPattern = 'return a\\+"(\\?token=[^"]+)"'
-        aResult = oParser.parse(sHtmlContent, sPattern)
+        pattern = 'return a\\+"(\\?token=[^"]+)"'
+        results = parser.parse(html_content, pattern)
 
-        if not aResult[0]:
+        if not results[0]:
             return False, False
 
-        d = aResult[1][0]
+        d = results[1][0]
 
         fin_url = fin_url + d + str(int(1000 * time.time()))
 
-        sPattern = "\\$\\.get\\('(\\/pass_md5[^']+)"
-        aResult = oParser.parse(sHtmlContent, sPattern)
-        url2 = 'https://' + urlDownload.split('/')[2] + aResult[1][0]
+        pattern = "\\$\\.get\\('(\\/pass_md5[^']+)"
+        results = parser.parse(html_content, pattern)
+        url2 = 'https://' + urlDownload.split('/')[2] + results[1][0]
 
         headers.update({'Referer': urlDownload})
 
         req = urllib.Request(url2, None, headers)
         with urllib.urlopen(req) as response:
-            sHtmlContent = response.read()
+            html_content = response.read()
 
         try:
-            sHtmlContent = sHtmlContent.decode('utf8')
+            html_content = html_content.decode('utf8')
         except BaseException:
             pass
 
-        api_call = sHtmlContent + fin_url
+        api_call = html_content + fin_url
 
         if api_call:
             api_call = api_call + '|Referer=' + urlDownload

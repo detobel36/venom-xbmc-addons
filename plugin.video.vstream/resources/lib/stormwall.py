@@ -128,16 +128,16 @@ class Stormwall(object):
         return htmlcontent
 
     def htmlrequest(self, url, cookies, data):
-        oRequestHandler = RequestHandler(url)
-        oRequestHandler.disableSSL()
-        oRequestHandler.addHeaderEntry('User-Agent', UA)
-        oRequestHandler.addHeaderEntry('Accept-Encoding', 'gzip, deflate')
+        request_handler = RequestHandler(url)
+        request_handler.disableSSL()
+        request_handler.addHeaderEntry('User-Agent', UA)
+        request_handler.addHeaderEntry('Accept-Encoding', 'gzip, deflate')
         try:
             if cookies:
-                oRequestHandler.addCookieEntry(
+                request_handler.addCookieEntry(
                     cookies.split('=')[0], cookies.split('=')[1])
         except BaseException:
             pass
-        oRequestHandler.addHeaderEntry('Referer', url)
-        sHtmlContent = oRequestHandler.request()
-        return sHtmlContent
+        request_handler.addHeaderEntry('Referer', url)
+        html_content = request_handler.request()
+        return html_content

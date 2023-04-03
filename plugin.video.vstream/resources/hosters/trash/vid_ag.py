@@ -21,25 +21,25 @@ class cHoster(iHoster):
         else:
             return False
 
-    def _getMediaLinkForGuest(self, autoPlay=False):
+    def _getMediaLinkForGuest(self, auto_play=False):
         web_url = self.getUrl(self._url)
-        oRequest = RequestHandler(web_url)
-        sHtmlContent = oRequest.request()
+        request = RequestHandler(web_url)
+        html_content = request.request()
 
-        oParser = Parser()
+        parser = Parser()
 
         # Dean Edwards Packer
-        sPattern = "(\\s*eval\\s*\\(\\s*function(?:.|\\s)+?)<\\/script>"
-        aResult = oParser.parse(sHtmlContent, sPattern)
+        pattern = "(\\s*eval\\s*\\(\\s*function(?:.|\\s)+?)<\\/script>"
+        results = parser.parse(html_content, pattern)
 
-        if aResult[0] is True:
-            sUnpacked = cPacker().unpack(aResult[1][0])
-            sHtmlContent = sUnpacked
+        if results[0] is True:
+            sUnpacked = cPacker().unpack(results[1][0])
+            html_content = sUnpacked
 
-        sPattern = 'file\\s*:\\s*"([^"]+)'
-        aResult = oParser.parse(sHtmlContent, sPattern)
-        if aResult[0] is True:
-            api_call = aResult[1][0]
+        pattern = 'file\\s*:\\s*"([^"]+)'
+        results = parser.parse(html_content, pattern)
+        if results[0] is True:
+            api_call = results[1][0]
             return True, api_call
         else:
             return False, False

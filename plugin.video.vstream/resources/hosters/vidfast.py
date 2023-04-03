@@ -12,17 +12,17 @@ class cHoster(iHoster):
     def __init__(self):
         iHoster.__init__(self, 'vidfast', 'Vidfast')
 
-    def _getMediaLinkForGuest(self, autoPlay=False):
+    def _getMediaLinkForGuest(self, auto_play=False):
         api_call = ''
 
-        oParser = Parser()
-        oRequest = RequestHandler(self._url)
-        sHtmlContent = oRequest.request()
+        parser = Parser()
+        request = RequestHandler(self._url)
+        html_content = request.request()
 
-        sPattern = '{file:"([^"]+)"}'
-        aResult = oParser.parse(sHtmlContent, sPattern)
-        if aResult[0] is True:
-            api_call = aResult[1][0].replace(
+        pattern = '{file:"([^"]+)"}'
+        results = parser.parse(html_content, pattern)
+        if results[0] is True:
+            api_call = results[1][0].replace(
                 ',', '').replace(
                 'master.m3u8', 'index-v1-a1.m3u8')
 

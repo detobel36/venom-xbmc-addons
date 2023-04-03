@@ -14,14 +14,14 @@ class cHoster(iHoster):
     def _getMediaLinkForGuest(self):
         api_call = ''
 
-        oParser = Parser()
-        oRequest = RequestHandler(self._url)
-        sHtmlContent = oRequest.request()
+        parser = Parser()
+        request = RequestHandler(self._url)
+        html_content = request.request()
 
-        sPattern = '<source src="([^"]+)"'
-        aResult = oParser.parse(sHtmlContent, sPattern)
-        if aResult[0] is True:
-            api_call = aResult[1][0]
+        pattern = '<source src="([^"]+)"'
+        results = parser.parse(html_content, pattern)
+        if results[0] is True:
+            api_call = results[1][0]
 
         if api_call:
             # + '|User-Agent=' + UA + '&Referer=' + self._url + '&Origin=https://vidfast.co'

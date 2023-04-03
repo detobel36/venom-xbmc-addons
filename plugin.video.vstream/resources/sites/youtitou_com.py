@@ -38,7 +38,7 @@ def load():
     gui = Gui()
 
     output_parameter_handler = OutputParameterHandler()
-    output_parameter_handler.addParameter('siteUrl', AGE_2A4ANS[0])
+    output_parameter_handler.addParameter('site_url', AGE_2A4ANS[0])
     gui.addDir(
         SITE_IDENTIFIER,
         AGE_2A4ANS[1],
@@ -46,7 +46,7 @@ def load():
         'enfants.png',
         output_parameter_handler)
 
-    output_parameter_handler.addParameter('siteUrl', VIDEO_EDU2_4[0])
+    output_parameter_handler.addParameter('site_url', VIDEO_EDU2_4[0])
     gui.addDir(
         SITE_IDENTIFIER,
         VIDEO_EDU2_4[1],
@@ -54,19 +54,19 @@ def load():
         'enfants.png',
         output_parameter_handler)
 
-    # output_parameter_handler.addParameter('siteUrl', AGE_4A6ANS[0])
+    # output_parameter_handler.addParameter('site_url', AGE_4A6ANS[0])
     # gui.addDir(SITE_IDENTIFIER, AGE_4A6ANS[1], 'Dessins animés 4 à 6 ans', 'enfants.png', output_parameter_handler)
     #
-    # output_parameter_handler.addParameter('siteUrl', VIDEO_EDU4_6[0])
+    # output_parameter_handler.addParameter('site_url', VIDEO_EDU4_6[0])
     # gui.addDir(SITE_IDENTIFIER, VIDEO_EDU4_6[1], 'Vidéos éducative 4 à 6 ans', 'enfants.png', output_parameter_handler)
     #
-    # output_parameter_handler.addParameter('siteUrl', AGE_6A8ANS[0])
+    # output_parameter_handler.addParameter('site_url', AGE_6A8ANS[0])
     # gui.addDir(SITE_IDENTIFIER, AGE_6A8ANS[1], 'Dessins animés 6 à 8 ans', 'enfants.png', output_parameter_handler)
     #
-    # output_parameter_handler.addParameter('siteUrl', VIDEO_EDU6_8[0])
+    # output_parameter_handler.addParameter('site_url', VIDEO_EDU6_8[0])
     # gui.addDir(SITE_IDENTIFIER, VIDEO_EDU6_8[1], 'Vidéos éducative 6 à 8 ans', 'enfants.png', output_parameter_handler)
 
-    output_parameter_handler.addParameter('siteUrl', COMPIL[0])
+    output_parameter_handler.addParameter('site_url', COMPIL[0])
     gui.addDir(
         SITE_IDENTIFIER,
         COMPIL[1],
@@ -79,31 +79,31 @@ def load():
 
 def showMovies():
     gui = Gui()
-    oParser = Parser()
+    parser = Parser()
 
     input_parameter_handler = InputParameterHandler()
-    sUrl = input_parameter_handler.getValue('siteUrl')
+    url = input_parameter_handler.getValue('site_url')
 
-    oRequestHandler = RequestHandler(sUrl)
-    sHtml = oRequestHandler.request()
-    sPattern = 'style="background-image: url\\((.+?)\\);".+?href="([^"]+)"'
-    aResult = oParser.parse(sHtml, sPattern)
+    request_handler = RequestHandler(url)
+    sHtml = request_handler.request()
+    pattern = 'style="background-image: url\\((.+?)\\);".+?href="([^"]+)"'
+    results = parser.parse(sHtml, pattern)
 
-    if aResult[0]:
+    if results[0]:
         output_parameter_handler = OutputParameterHandler()
-        for aEntry in aResult[1]:
-            sThumb = aEntry[0]
-            sUrl = aEntry[1]
-            title = (sUrl.split('/')[-1]).replace('-', ' ')
+        for entry in results[1]:
+            thumb = entry[0]
+            url = entry[1]
+            title = (url.split('/')[-1]).replace('-', ' ')
 
-            output_parameter_handler.addParameter('siteUrl', sUrl)
-            output_parameter_handler.addParameter('sThumb', sThumb)
+            output_parameter_handler.addParameter('site_url', url)
+            output_parameter_handler.addParameter('thumb', thumb)
             gui.addMisc(
                 SITE_IDENTIFIER,
                 'showEpisode',
                 title,
                 'enfants.png',
-                sThumb,
+                thumb,
                 title,
                 output_parameter_handler)
 
@@ -113,33 +113,33 @@ def showMovies():
 def showEpisode():
     gui = Gui()
     oHosterGui = HosterGui()
-    oParser = Parser()
+    parser = Parser()
     input_parameter_handler = InputParameterHandler()
-    sUrl = input_parameter_handler.getValue('siteUrl')
+    url = input_parameter_handler.getValue('site_url')
 
-    oRequestHandler = RequestHandler(sUrl)
-    sHtml = oRequestHandler.request()
-    sPattern = '<h5 class=.+?>([^<]+)<.+?data-settings=".+?url":"(.+?)(&|")'
-    aResult = oParser.parse(sHtml, sPattern)
+    request_handler = RequestHandler(url)
+    sHtml = request_handler.request()
+    pattern = '<h5 class=.+?>([^<]+)<.+?data-settings=".+?url":"(.+?)(&|")'
+    results = parser.parse(sHtml, pattern)
 
-    if aResult[0]:
+    if results[0]:
         output_parameter_handler = OutputParameterHandler()
-        for aEntry in aResult[1]:
+        for entry in results[1]:
 
-            title = aEntry[0]
-            sUrl = aEntry[1]
-            videoId = sUrl.split('=')[-1]
-            sThumb = 'https://i.ytimg.com/vi/%s/mqdefault.jpg' % videoId
+            title = entry[0]
+            url = entry[1]
+            videoId = url.split('=')[-1]
+            thumb = 'https://i.ytimg.com/vi/%s/mqdefault.jpg' % videoId
 
-            oHoster = oHosterGui.checkHoster(sUrl)
-            if oHoster:
-                oHoster.setDisplayName(title)
-                oHoster.setFileName(title)
+            hoster = oHosterGui.checkHoster(url)
+            if hoster:
+                hoster.setDisplayName(title)
+                hoster.setFileName(title)
                 oHosterGui.showHoster(
                     gui,
-                    oHoster,
-                    sUrl,
-                    sThumb,
+                    hoster,
+                    url,
+                    thumb,
                     input_parameter_handler=input_parameter_handler)
 
     gui.setEndOfDirectory()

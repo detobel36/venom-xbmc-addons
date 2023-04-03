@@ -2,7 +2,7 @@
 # vStream https://github.com/Kodi-vStream/venom-xbmc-addons
 from resources.lib.handler.requestHandler import RequestHandler
 
-from resources.lib.comaddon import addon, dialog, VSlog
+from resources.lib.comaddon import Addon, dialog, VSlog
 from resources.lib.config import GestionCookie
 from resources.lib.parser import Parser
 
@@ -10,11 +10,11 @@ UA = 'Mozilla/5.0 (Windows NT 6.1; WOW64; rv:56.0) Gecko/20100101 Firefox/56.0'
 
 
 class cPremiumHandler:
-    ADDON = addon()
+    ADDON = Addon()
     DIALOG = dialog()
 
-    def __init__(self, sHosterIdentifier):
-        self.__sHosterIdentifier = sHosterIdentifier.lower()
+    def __init__(self, hoster_identifier):
+        self.__sHosterIdentifier = hoster_identifier.lower()
         self.__sDisplayName = 'Premium mode'
         self.isLogin = False
         self.__LoginTry = False
@@ -28,7 +28,7 @@ class cPremiumHandler:
         self.__Ispremium = False
         bIsPremium = self.ADDON.getSetting(
             'hoster_' + str(self.__sHosterIdentifier) + '_premium')
-        if (bIsPremium == 'true'):
+        if bIsPremium == 'true':
             VSlog("Utilise compte premium pour hoster " +
                   str(self.__sHosterIdentifier))
             self.__Ispremium = True
@@ -40,14 +40,14 @@ class cPremiumHandler:
         return self.__Ispremium
 
     def getUsername(self):
-        sUsername = self.ADDON.getSetting(
+        username = self.ADDON.getSetting(
             'hoster_' + str(self.__sHosterIdentifier) + '_username')
-        return sUsername
+        return username
 
     def getPassword(self):
-        sPassword = self.ADDON.getSetting(
+        password = self.ADDON.getSetting(
             'hoster_' + str(self.__sHosterIdentifier) + '_password')
-        return sPassword
+        return password
 
     def AddCookies(self):
         cookies = GestionCookie().Readcookie(self.__sHosterIdentifier)
@@ -105,23 +105,23 @@ class cPremiumHandler:
         else:
             return False
 
-        oRequestHandler = RequestHandler(url)
-        oRequestHandler.setRequestType(1)
+        request_handler = RequestHandler(url)
+        request_handler.setRequestType(1)
 
         if 'uptobox' in self.__sHosterIdentifier:
-            oRequestHandler.disableRedirect()
+            request_handler.disableRedirect()
 
-            oRequestHandler.addHeaderEntry('User-Agent', UA)
-            oRequestHandler.addHeaderEntry(
+            request_handler.addHeaderEntry('User-Agent', UA)
+            request_handler.addHeaderEntry(
                 'Content-Type', "application/x-www-form-urlencoded")
-            oRequestHandler.addHeaderEntry(
+            request_handler.addHeaderEntry(
                 'Content-Length', str(len(post_data)))
 
         for data in post_data:
-            oRequestHandler.addParameters(data, post_data[data])
+            request_handler.addParameters(data, post_data[data])
 
-        sHtmlContent = oRequestHandler.request()
-        head = oRequestHandler.getResponseHeader()
+        html_content = request_handler.request()
+        head = request_handler.getResponseHeader()
 
         if 'uptobox' in self.__sHosterIdentifier:
             if 'Set-Cookie' in head and 'xfss' in head['Set-Cookie']:
@@ -132,7 +132,7 @@ class cPremiumHandler:
                     self.__sDisplayName)
                 return False
         elif 'onefichier' in self.__sHosterIdentifier:
-            if 'You are logged in. This page will redirect you.' in sHtmlContent:
+            if 'You are logged in. This page will redirect you.' in html_content:
                 self.isLogin = True
             else:
                 self.DIALOG.VSinfo(
@@ -140,7 +140,7 @@ class cPremiumHandler:
                     self.__sDisplayName)
                 return False
         elif 'uploaded' in self.__sHosterIdentifier:
-            if sHtmlContent == '':
+            if html_content == '':
                 self.isLogin = True
             else:
                 self.DIALOG.VSinfo(
@@ -153,12 +153,12 @@ class cPremiumHandler:
         # get cookie
         cookies = ''
         if 'Set-Cookie' in head:
-            oParser = Parser()
-            sPattern = '(?:^|,) *([^;,]+?)=([^;,\\/]+?);'
-            aResult = oParser.parse(str(head['Set-Cookie']), sPattern)
-            # print(aResult)
-            if (aResult[0]):
-                for cook in aResult[1]:
+            parser = Parser()
+            pattern = '(?:^|,) *([^;,]+?)=([^;,\\/]+?);'
+            results = parser.parse(str(head['Set-Cookie']), pattern)
+            # print(results)
+            if results[0]:
+                for cook in results[1]:
                     if 'deleted' in cook[1]:
                         continue
                     cookies = cookies + cook[0] + '=' + cook[1] + ';'
@@ -172,16 +172,16 @@ class cPremiumHandler:
         return True
 
     def GetHtmlwithcookies(self, url, data, cookies):
-        oRequestHandler = RequestHandler(url)
-        oRequestHandler.addHeaderEntry('User-Agent', UA)
+        request_handler = RequestHandler(url)
+        request_handler.addHeaderEntry('User-Agent', UA)
         if not (data is None):
-            oRequestHandler.addParametersLine(data)
-            oRequestHandler.addHeaderEntry('Referer', url)
+            request_handler.addParametersLine(data)
+            request_handler.addHeaderEntry('Referer', url)
 
-        oRequestHandler.addHeaderEntry('Cookie', cookies)
+        request_handler.addHeaderEntry('Cookie', cookies)
 
-        sHtmlContent = oRequestHandler.request()
-        return sHtmlContent
+        html_content = request_handler.request()
+        return html_content
 
     def GetHtml(self, url, data=None):
         cookies = GestionCookie().Readcookie(self.__sHosterIdentifier)
@@ -192,21 +192,21 @@ class cPremiumHandler:
                 return ''
             cookies = GestionCookie().Readcookie(self.__sHosterIdentifier)
 
-        sHtmlContent = self.GetHtmlwithcookies(url, data, cookies)
+        html_content = self.GetHtmlwithcookies(url, data, cookies)
 
         # Les cookies ne sont plus valables, mais on teste QUE si la personne
         # n'a pas essaye de s'authentifier
         if not self.Checklogged(
-                sHtmlContent) and not self.__LoginTry and self.__Ispremium:
+                html_content) and not self.__LoginTry and self.__Ispremium:
             VSlog('Cookies non valables')
             self.Authentificate()
             if self.isLogin:
                 cookies = GestionCookie().Readcookie(self.__sHosterIdentifier)
-                sHtmlContent = self.GetHtmlwithcookies(url, data, cookies)
+                html_content = self.GetHtmlwithcookies(url, data, cookies)
             else:
                 return ''
 
-        return sHtmlContent
+        return html_content
 
     def setToken(self, sToken):
         self.ADDON.setSetting('hoster_' +
@@ -242,11 +242,11 @@ class cPremiumHandler:
 
             # on retrouve le token et on le sauvegarde
             if self.isLogin:
-                sHtmlContent = self.GetHtml('https://uptobox.com/my_account')
-                sPattern = 'data-clipboard-text="(.+?)" data-tippy-content="Token'
-                aResult = Parser().parse(sHtmlContent, sPattern, 1)
-                if aResult[0]:
-                    sToken = aResult[1][0]
+                html_content = self.GetHtml('https://uptobox.com/my_account')
+                pattern = 'data-clipboard-text="(.+?)" data-tippy-content="Token'
+                results = Parser().parse(html_content, pattern, 1)
+                if results[0]:
+                    sToken = results[1][0]
                     self.ADDON.setSetting(
                         'hoster_' + str(self.__sHosterIdentifier) + '_token', sToken)
                     return sToken

@@ -37,22 +37,22 @@ class cBseries:
 
     def getToken(self):
 
-        sUrl = 'https://api.betaseries.com/members/auth'
-        oRequestHandler = RequestHandler(sUrl)
-        oRequestHandler.setRequestType(RequestHandler.REQUEST_TYPE_POST)
-        oRequestHandler.addHeaderEntry('X-BetaSeries-Key', API_KEY)
-        oRequestHandler.addHeaderEntry('X-BetaSeries-Version', API_VERS)
+        url = 'https://api.betaseries.com/members/auth'
+        request_handler = RequestHandler(url)
+        request_handler.setRequestType(RequestHandler.REQUEST_TYPE_POST)
+        request_handler.addHeaderEntry('X-BetaSeries-Key', API_KEY)
+        request_handler.addHeaderEntry('X-BetaSeries-Version', API_VERS)
 
-        oRequestHandler.addParameters(
+        request_handler.addParameters(
             'login', cConfig().getSetting('bs_login'))
 
         passw = md5.new(cConfig().getSetting('bs_pass')).hexdigest()
-        oRequestHandler.addParameters('password', passw)
+        request_handler.addParameters('password', passw)
 
-        sHtmlContent = oRequestHandler.request()
-        result = json.loads(sHtmlContent)
+        html_content = request_handler.request()
+        result = json.loads(html_content)
 
-        total = len(sHtmlContent)
+        total = len(html_content)
 
         if (total > 0):
             # self.__Token  = result['token']
@@ -64,12 +64,12 @@ class cBseries:
     def delFavourites(self):
 
         input_parameter_handler = InputParameterHandler()
-        siteUrl = input_parameter_handler.getValue('siteUrl')
-        sMovieTitle = input_parameter_handler.getValue('sMovieTitle')
+        site_url = input_parameter_handler.getValue('site_url')
+        movie_title = input_parameter_handler.getValue('movie_title')
 
         meta = {}
         meta['title'] = xbmc.getInfoLabel('ListItem.title')
-        meta['siteurl'] = siteUrl
+        meta['siteurl'] = site_url
         try:
             Db().del_favorite(meta)
         except BaseException:
@@ -85,26 +85,26 @@ class cBseries:
         if cConfig().getSetting("bstoken") == '':
             self.getToken()
         else:
-            oRequestHandler = RequestHandler(
+            request_handler = RequestHandler(
                 'https://api.betaseries.com/members/infos')
-            oRequestHandler.addHeaderEntry('X-BetaSeries-Key', API_KEY)
-            oRequestHandler.addHeaderEntry('X-BetaSeries-Version', API_VERS)
-            oRequestHandler.addHeaderEntry(
+            request_handler.addHeaderEntry('X-BetaSeries-Key', API_KEY)
+            request_handler.addHeaderEntry('X-BetaSeries-Version', API_VERS)
+            request_handler.addHeaderEntry(
                 'Authorization', cConfig().getSetting("bstoken"))
             # n'affiche pas les infos des films
-            oRequestHandler.addParameters('summary', 'false')
+            request_handler.addParameters('summary', 'false')
 
-            sHtmlContent = oRequestHandler.request()
-            result = json.loads(sHtmlContent)
+            html_content = request_handler.request()
+            result = json.loads(html_content)
 
             # xbmc.log(str(result))
 
-            total = len(sHtmlContent)
+            total = len(html_content)
 
             if (total > 0):
 
                 output_parameter_handler = OutputParameterHandler()
-                output_parameter_handler.addParameter('siteUrl', 'https://')
+                output_parameter_handler.addParameter('site_url', 'https://')
                 gui.addText(
                     SITE_IDENTIFIER,
                     '[COLOR khaki]Bonjour, ' +
@@ -113,11 +113,11 @@ class cBseries:
                     output_parameter_handler)
 
                 # for i in result['shows']:
-                # sId, title = i['id'], i['name']
+                # s_id, title = i['id'], i['name']
                 if (result['member']['stats']['shows'] > 0):
                     output_parameter_handler = OutputParameterHandler()
                     output_parameter_handler.addParameter(
-                        'siteUrl', 'https://api.betaseries.com/members/infos')
+                        'site_url', 'https://api.betaseries.com/members/infos')
                     output_parameter_handler.addParameter('param', 'shows')
                     gui.addDir(SITE_IDENTIFIER, 'getBseries', 'Series (' +
                                str(result['member']['stats']['shows']) +
@@ -126,7 +126,7 @@ class cBseries:
                 if (result['member']['stats']['movies'] > 0):
                     output_parameter_handler = OutputParameterHandler()
                     output_parameter_handler.addParameter(
-                        'siteUrl', 'https://api.betaseries.com/members/infos')
+                        'site_url', 'https://api.betaseries.com/members/infos')
                     output_parameter_handler.addParameter('param', 'movies')
                     gui.addDir(SITE_IDENTIFIER, 'getBseries', 'Films (' +
                                str(result['member']['stats']['movies']) +
@@ -134,7 +134,7 @@ class cBseries:
 
         output_parameter_handler = OutputParameterHandler()
         output_parameter_handler.addParameter(
-            'siteUrl', 'https://api.betaseries.com/movies/member')
+            'site_url', 'https://api.betaseries.com/movies/member')
         gui.addDir(
             SITE_IDENTIFIER,
             'getBseries',
@@ -144,7 +144,7 @@ class cBseries:
 
         output_parameter_handler = OutputParameterHandler()
         output_parameter_handler.addParameter(
-            'siteUrl', 'https://api.betaseries.com/shows/member')
+            'site_url', 'https://api.betaseries.com/shows/member')
         gui.addDir(
             SITE_IDENTIFIER,
             'getBseries',
@@ -154,7 +154,7 @@ class cBseries:
 
         output_parameter_handler = OutputParameterHandler()
         output_parameter_handler.addParameter(
-            'siteUrl', 'https://api.betaseries.com/timeline/member')
+            'site_url', 'https://api.betaseries.com/timeline/member')
         gui.addDir(
             SITE_IDENTIFIER,
             'getBseries',
@@ -163,7 +163,7 @@ class cBseries:
             output_parameter_handler)
 
         output_parameter_handler = OutputParameterHandler()
-        output_parameter_handler.addParameter('siteUrl', 'http://')
+        output_parameter_handler.addParameter('site_url', 'http://')
         output_parameter_handler.addParameter('userID', result['member']['id'])
         gui.addDir(
             SITE_IDENTIFIER,
@@ -174,7 +174,7 @@ class cBseries:
 
         output_parameter_handler = OutputParameterHandler()
         output_parameter_handler.addParameter(
-            'siteUrl', 'https://api.betaseries.com/members/destroy')
+            'site_url', 'https://api.betaseries.com/members/destroy')
         gui.addDir(
             SITE_IDENTIFIER,
             'getBsout',
@@ -195,20 +195,20 @@ class cBseries:
         userID = input_parameter_handler.getValue('userID')
 
         # timeline
-        oRequestHandler = RequestHandler(
+        request_handler = RequestHandler(
             'https://api.betaseries.com/timeline/member')
-        oRequestHandler.addHeaderEntry('X-BetaSeries-Key', API_KEY)
-        oRequestHandler.addHeaderEntry('X-BetaSeries-Version', API_VERS)
-        oRequestHandler.addHeaderEntry(
+        request_handler.addHeaderEntry('X-BetaSeries-Key', API_KEY)
+        request_handler.addHeaderEntry('X-BetaSeries-Version', API_VERS)
+        request_handler.addHeaderEntry(
             'Authorization', cConfig().getSetting("bstoken"))
-        oRequestHandler.addParameters('id', userID)
+        request_handler.addParameters('id', userID)
 
-        sHtmlContent = oRequestHandler.request()
-        result = json.loads(sHtmlContent)
+        html_content = request_handler.request()
+        result = json.loads(html_content)
 
         # xbmc.log(str(result))
 
-        total = len(sHtmlContent)
+        total = len(html_content)
         if (total > 0):
             for i in result['events']:
                 sHtml = unicodedata.normalize(
@@ -225,7 +225,7 @@ class cBseries:
 
                 title = ('%s - %s') % (date, titre)
                 output_parameter_handler = OutputParameterHandler()
-                output_parameter_handler.addParameter('siteUrl', 'http://')
+                output_parameter_handler.addParameter('site_url', 'http://')
                 gui.addText(SITE_IDENTIFIER, title, output_parameter_handler)
 
         gui.setEndOfDirectory()
@@ -233,22 +233,22 @@ class cBseries:
     def getBsout(self):
 
         input_parameter_handler = InputParameterHandler()
-        sUrl = input_parameter_handler.getValue('siteUrl')
+        url = input_parameter_handler.getValue('site_url')
 
         gui = Gui()
 
-        oRequestHandler = RequestHandler(sUrl)
-        oRequestHandler.addHeaderEntry('X-BetaSeries-Key', API_KEY)
-        oRequestHandler.addHeaderEntry('X-BetaSeries-Version', API_VERS)
-        oRequestHandler.addHeaderEntry(
+        request_handler = RequestHandler(url)
+        request_handler.addHeaderEntry('X-BetaSeries-Key', API_KEY)
+        request_handler.addHeaderEntry('X-BetaSeries-Version', API_VERS)
+        request_handler.addHeaderEntry(
             'Authorization', cConfig().getSetting("bstoken"))
         # api buguer normalement ça affiche que les films et series
-        oRequestHandler.addParameters('token', cConfig().getSetting("bstoken"))
+        request_handler.addParameters('token', cConfig().getSetting("bstoken"))
 
-        oRequestHandler.setRequestType(RequestHandler.REQUEST_TYPE_POST)
-        sHtmlContent = oRequestHandler.request()
-        result = json.loads(sHtmlContent)
-        total = len(sHtmlContent)
+        request_handler.setRequestType(RequestHandler.REQUEST_TYPE_POST)
+        html_content = request_handler.request()
+        result = json.loads(html_content)
+        total = len(html_content)
         if (total > 0):
             cConfig().setSetting('bstoken', '')
             gui.showNofication('Vous avez ?t? d?connect? avec succ?s')
@@ -259,36 +259,36 @@ class cBseries:
     def getBseries(self):
 
         input_parameter_handler = InputParameterHandler()
-        sUrl = input_parameter_handler.getValue('siteUrl')
+        url = input_parameter_handler.getValue('site_url')
         sParam = input_parameter_handler.getValue('param')
 
         gui = Gui()
 
-        oRequestHandler = RequestHandler(sUrl)
-        oRequestHandler.addHeaderEntry('X-BetaSeries-Key', API_KEY)
-        oRequestHandler.addHeaderEntry('X-BetaSeries-Version', API_VERS)
-        oRequestHandler.addHeaderEntry(
+        request_handler = RequestHandler(url)
+        request_handler.addHeaderEntry('X-BetaSeries-Key', API_KEY)
+        request_handler.addHeaderEntry('X-BetaSeries-Version', API_VERS)
+        request_handler.addHeaderEntry(
             'Authorization', cConfig().getSetting("bstoken"))
         # api buguer normalement ça affiche que les films et series
-        # oRequestHandler.addParameters('only', 'true')
+        # request_handler.addParameters('only', 'true')
 
-        sHtmlContent = oRequestHandler.request()
-        result = json.loads(sHtmlContent)
+        html_content = request_handler.request()
+        result = json.loads(html_content)
 
         xbmc.log(str(result))
 
-        total = len(sHtmlContent)
+        total = len(html_content)
 
         if (total > 0):
             for i in result['member'][sParam]:
                 if sParam == 'shows':
-                    sId, sImdb_id, title, desc, sSeasons, sEpisodes, sThumb, sRemaining, sLast = i['id'], i['imdb_id'], i['title'], i[
+                    s_id, sImdb_id, title, desc, sSeasons, sEpisodes, thumb, sRemaining, sLast = i['id'], i['imdb_id'], i['title'], i[
                         'description'], i['seasons'], i['episodes'], i['images']['show'], i['user']['remaining'], i['user']['last']
 
                     title = ('%s - Saisons (%s) / Episodes (%s/%s) / Dernier %s') % (
                         title.encode("utf-8"), sSeasons, sRemaining, sEpisodes, sLast)
                 else:
-                    sId, sImdb_id, title, desc, sYear, sThumb, sStatus = i['id'], i['imdb_id'], i[
+                    s_id, sImdb_id, title, desc, year, thumb, sStatus = i['id'], i['imdb_id'], i[
                         'title'], i['synopsis'], i['production_year'], i['poster'], str(i['user']['status'])
 
                     sStatus = sStatus.replace(
@@ -300,27 +300,27 @@ class cBseries:
                         'Ne pas voir')
 
                     title = (
-                        '%s - (%s) / %s') % (title.encode("utf-8"), int(sYear), sStatus)
+                        '%s - (%s) / %s') % (title.encode("utf-8"), int(year), sStatus)
 
                 output_parameter_handler = OutputParameterHandler()
-                output_parameter_handler.addParameter('siteUrl', 'http://')
+                output_parameter_handler.addParameter('site_url', 'http://')
 
-                oGuiElement = GuiElement()
+                gui_element = GuiElement()
 
-                oGuiElement.setSiteName(SITE_IDENTIFIER)
-                oGuiElement.setFunction('load')
-                oGuiElement.setTitle(title)
-                oGuiElement.setIcon("mark.png")
-                oGuiElement.setMeta(0)
-                oGuiElement.setThumbnail(sThumb)
-                oGuiElement.setTmdbId(sImdb_id)
-                oGuiElement.setDescription(desc)
-                # oGuiElement.setFanart(fanart)
+                gui_element.setSiteName(SITE_IDENTIFIER)
+                gui_element.setFunction('load')
+                gui_element.setTitle(title)
+                gui_element.setIcon("mark.png")
+                gui_element.setMeta(0)
+                gui_element.setThumbnail(thumb)
+                gui_element.setTmdbId(sImdb_id)
+                gui_element.setDescription(desc)
+                # gui_element.setFanart(fanart)
 
-                # gui.createContexMenuDelFav(oGuiElement, output_parameter_handler)
+                # gui.createContexMenuDelFav(gui_element, output_parameter_handler)
 
-                # gui.addHost(oGuiElement, output_parameter_handler)
-                gui.addFolder(oGuiElement, output_parameter_handler)
+                # gui.addHost(gui_element, output_parameter_handler)
+                gui.addFolder(gui_element, output_parameter_handler)
                 # gui.addDir(SITE_IDENTIFIER, 'showMovies', title, 'next.png', output_parameter_handler)
 
             gui.setEndOfDirectory()
@@ -330,7 +330,7 @@ class cBseries:
         gui = Gui()
 
         input_parameter_handler = InputParameterHandler()
-        sUrl = input_parameter_handler.getValue('siteUrl')
+        url = input_parameter_handler.getValue('site_url')
 
         # aParams = input_parameter_handler.getAllParameter()
 
@@ -338,19 +338,19 @@ class cBseries:
         if (input_parameter_handler.exist('page')):
             iPage = input_parameter_handler.getValue('page')
 
-        oRequestHandler = RequestHandler(sUrl)
-        oRequestHandler.addHeaderEntry('X-BetaSeries-Key', API_KEY)
-        oRequestHandler.addHeaderEntry('X-BetaSeries-Version', API_VERS)
-        oRequestHandler.addHeaderEntry(
+        request_handler = RequestHandler(url)
+        request_handler.addHeaderEntry('X-BetaSeries-Key', API_KEY)
+        request_handler.addHeaderEntry('X-BetaSeries-Version', API_VERS)
+        request_handler.addHeaderEntry(
             'Authorization', cConfig().getSetting("bstoken"))
-        # oRequestHandler.addParameters('start', iPage)
+        # request_handler.addParameters('start', iPage)
 
-        sHtmlContent = oRequestHandler.request()
-        result = json.loads(sHtmlContent)
+        html_content = request_handler.request()
+        result = json.loads(html_content)
 
         xbmc.log(str(result))
 
-        total = len(sHtmlContent)
+        total = len(html_content)
 
         try:
             row = Db().get_favorite()
@@ -369,36 +369,36 @@ class cBseries:
                     thumbnail = 'False'
 
                 output_parameter_handler = OutputParameterHandler()
-                output_parameter_handler.addParameter('siteUrl', siteurl)
-                output_parameter_handler.addParameter('sMovieTitle', title)
+                output_parameter_handler.addParameter('site_url', siteurl)
+                output_parameter_handler.addParameter('movie_title', title)
                 output_parameter_handler.addParameter('thumbnail', thumbnail)
 
                 if (function == 'play'):
-                    oHoster = HosterGui().checkHoster(siteurl)
+                    hoster = HosterGui().checkHoster(siteurl)
                     output_parameter_handler.addParameter(
-                        'sHosterIdentifier', oHoster.getPluginIdentifier())
+                        'hoster_identifier', hoster.getPluginIdentifier())
                     output_parameter_handler.addParameter(
-                        'sFileName', oHoster.getFileName())
-                    output_parameter_handler.addParameter('sMediaUrl', siteurl)
+                        'file_name', hoster.getFileName())
+                    output_parameter_handler.addParameter('media_url', siteurl)
 
-                if (cat == sCat):
-                    oGuiElement = GuiElement()
+                if (cat == cat):
+                    gui_element = GuiElement()
 
-                    oGuiElement.setSiteName(site)
-                    oGuiElement.setFunction(function)
-                    oGuiElement.setTitle(title)
-                    oGuiElement.setIcon("mark.png")
-                    oGuiElement.setMeta(0)
-                    oGuiElement.setThumbnail(thumbnail)
-                    oGuiElement.setFanart(fanart)
+                    gui_element.setSiteName(site)
+                    gui_element.setFunction(function)
+                    gui_element.setTitle(title)
+                    gui_element.setIcon("mark.png")
+                    gui_element.setMeta(0)
+                    gui_element.setThumbnail(thumbnail)
+                    gui_element.setFanart(fanart)
 
                     gui.createContexMenuDelFav(
-                        oGuiElement, output_parameter_handler)
+                        gui_element, output_parameter_handler)
 
                     if (function == 'play'):
-                        gui.addHost(oGuiElement, output_parameter_handler)
+                        gui.addHost(gui_element, output_parameter_handler)
                     else:
-                        gui.addFolder(oGuiElement, output_parameter_handler)
+                        gui.addFolder(gui_element, output_parameter_handler)
 
                     # gui.addFav(site, function, title, "mark.png", thumbnail, fanart, output_parameter_handler)
 
@@ -411,15 +411,15 @@ class cBseries:
         input_parameter_handler = InputParameterHandler()
         # xbmc.log(str(input_parameter_handler.getAllParameter()))
 
-        if int(input_parameter_handler.getValue('sCat')) < 1:
+        if int(input_parameter_handler.getValue('cat')) < 1:
             cConfig().showInfo('Error', 'Mise en Favoris non possible pour ce lien')
             return
 
         meta = {}
-        meta['siteurl'] = input_parameter_handler.getValue('siteUrl')
-        meta['site'] = input_parameter_handler.getValue('sId')
-        meta['fav'] = input_parameter_handler.getValue('sFav')
-        meta['cat'] = input_parameter_handler.getValue('sCat')
+        meta['siteurl'] = input_parameter_handler.getValue('site_url')
+        meta['site'] = input_parameter_handler.getValue('s_id')
+        meta['fav'] = input_parameter_handler.getValue('fav')
+        meta['cat'] = input_parameter_handler.getValue('cat')
 
         meta['title'] = xbmc.getInfoLabel('ListItem.title')
         meta['icon'] = xbmc.getInfoLabel('ListItem.Art(thumb)')

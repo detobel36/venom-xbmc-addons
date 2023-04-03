@@ -56,17 +56,17 @@ class cUtil:
         p = re.compile(r'<.*?>')
         return p.sub(sReplace, sValue)
 
-    def formatTime(self, iSeconds):
-        iSeconds = int(iSeconds)
-        iMinutes = int(iSeconds / 60)
-        iSeconds = iSeconds - (iMinutes * 60)
-        if iSeconds < 10:
-            iSeconds = '0' + str(iSeconds)
+    def formatTime(self, seconds):
+        seconds = int(seconds)
+        minutes = int(seconds / 60)
+        seconds = seconds - (minutes * 60)
+        if seconds < 10:
+            seconds = '0' + str(seconds)
 
-        if iMinutes < 10:
-            iMinutes = '0' + str(iMinutes)
+        if minutes < 10:
+            minutes = '0' + str(minutes)
 
-        return str(iMinutes) + ':' + str(iSeconds)
+        return str(minutes) + ':' + str(seconds)
 
     def unescape(self, text):
 
@@ -239,29 +239,29 @@ class cUtil:
 """
 
 
-def Unquote(sUrl):
-    return urllib.unquote(sUrl)
+def Unquote(url):
+    return urllib.unquote(url)
 
 
-def Quote(sUrl):
-    return urllib.quote(sUrl)
+def Quote(url):
+    return urllib.quote(url)
 
 
-def UnquotePlus(sUrl):
-    return urllib.unquote_plus(sUrl)
+def UnquotePlus(url):
+    return urllib.unquote_plus(url)
 
 
-def QuotePlus(sUrl):
-    return urllib.quote_plus(sUrl)
+def QuotePlus(url):
+    return urllib.quote_plus(url)
 
 
-def QuoteSafe(sUrl):
-    return urllib.quote(sUrl, safe=':/')
+def QuoteSafe(url):
+    return urllib.quote(url, safe=':/')
 
 
-def urlEncode(sUrl):
-    return urllib.urlencode(sUrl)
+def urlEncode(url):
+    return urllib.urlencode(url)
 
 
-def urlHostName(sUrl):  # retourne le hostname d'une Url
-    return urllib.urlparse(sUrl).hostname
+def urlHostName(url):  # retourne le hostname d'une Url
+    return urllib.urlparse(url).hostname

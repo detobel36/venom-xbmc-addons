@@ -11,21 +11,21 @@ class cHoster(iHoster):
     def __init__(self):
         iHoster.__init__(self, 'sharehoster', 'ShareHoster.com')
 
-    def _getMediaLinkForGuest(self, autoPlay=False):
+    def _getMediaLinkForGuest(self, auto_play=False):
         aSplit = self._url.split('/')
-        sId = aSplit[-1]
+        s_id = aSplit[-1]
 
-        sUrl = 'http://www.sharehoster.com/flowplayer/config.php?movie=' + sId
+        url = 'http://www.sharehoster.com/flowplayer/config.php?movie=' + s_id
 
-        oRequest = RequestHandler(sUrl)
-        sHtmlContent = oRequest.request()
+        request = RequestHandler(url)
+        html_content = request.request()
 
-        sPattern = "playlist': \\[.*?},.*?'url': '(.*?)'"
-        oParser = Parser()
-        aResult = oParser.parse(sHtmlContent, sPattern)
+        pattern = "playlist': \\[.*?},.*?'url': '(.*?)'"
+        parser = Parser()
+        results = parser.parse(html_content, pattern)
 
-        if aResult[0] is True:
-            sFileName = aResult[1][0]
-            return True, sFileName
+        if results[0] is True:
+            file_name = results[1][0]
+            return True, file_name
 
         return False, ''

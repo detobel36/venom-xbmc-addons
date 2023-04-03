@@ -30,7 +30,7 @@ class cHoster(iHoster):
     def setUrl(self, url):
         self._url = str(url)
         self._url = self._url.replace('openload.io', 'openload.co')
-        self._url = QuoteSafe(sUrl)
+        self._url = QuoteSafe(url)
         if self._url[-4:-3] == '.':
             self._url = self._url.replace(self._url.split('/')[-1], '')
 
@@ -39,15 +39,15 @@ class cHoster(iHoster):
         host = parts[0] + '//' + parts[1].split('/', 1)[0]
         return host
 
-    def _getMediaLinkForGuest(self, autoPlay=False):
-        oParser = Parser()
+    def _getMediaLinkForGuest(self, auto_play=False):
+        parser = Parser()
 
         # recuperation de la page
         # xbmc.log('url teste : ' + self._url)
-        oRequest = RequestHandler(self._url)
-        oRequest.addHeaderEntry('referer', self._url)
-        oRequest.addHeaderEntry('User-Agent', UA)
-        sHtmlContent1 = oRequest.request()
+        request = RequestHandler(self._url)
+        request.addHeaderEntry('referer', self._url)
+        request.addHeaderEntry('User-Agent', UA)
+        sHtmlContent1 = request.request()
 
         # fh = open('c:\\test.txt', "w")
         # fh.write(sHtmlContent1)
@@ -55,14 +55,14 @@ class cHoster(iHoster):
 
         # Recuperation url cachee
         TabUrl = []
-        # sPattern = '<span style="".+?id="([^"]+)">([^<]+)<\/span>'
-        sPattern = '<p id="([^"]+)" *style=\"\">([^<]+)<\\/p>'
-        aResult = re.findall(sPattern, sHtmlContent1)
-        if not aResult:
-            sPattern = '<p style="" *id="([^"]+)" *>([^<]+)<\\/p>'
-            aResult = re.findall(sPattern, sHtmlContent1)
-        if (aResult):
-            TabUrl = aResult
+        # pattern = '<span style="".+?id="([^"]+)">([^<]+)<\/span>'
+        pattern = '<p id="([^"]+)" *style=\"\">([^<]+)<\\/p>'
+        results = re.findall(pattern, sHtmlContent1)
+        if not results:
+            pattern = '<p style="" *id="([^"]+)" *>([^<]+)<\\/p>'
+            results = re.findall(pattern, sHtmlContent1)
+        if (results):
+            TabUrl = results
         else:
             VSlog('OPL er 1')
             return False, False
@@ -70,11 +70,11 @@ class cHoster(iHoster):
         # xbmc.log("Nbre d'url : " + str(len(TabUrl)))
 
         # on essait de situer le code
-        sPattern = '<script src="\\/assets\\/js\\/video-js\\/video\\.js.+?.js"(.+)*'
+        pattern = '<script src="\\/assets\\/js\\/video-js\\/video\\.js.+?.js"(.+)*'
 
-        aResult = re.findall(sPattern, sHtmlContent1, re.DOTALL)
-        if (aResult):
-            sHtmlContent3 = aResult[0]
+        results = re.findall(pattern, sHtmlContent1, re.DOTALL)
+        if (results):
+            sHtmlContent3 = results[0]
         else:
             VSlog('OPL er 2')
             return False, False
@@ -96,10 +96,10 @@ class cHoster(iHoster):
         # fh.close()
 
         id_final = ''
-        sPattern = 'var srclink.*?\\/stream\\/.*?(#[^\'"]+).*?mime=true'
-        aResult = re.findall(sPattern, code)
-        if (aResult):
-            id_final = aResult[0]
+        pattern = 'var srclink.*?\\/stream\\/.*?(#[^\'"]+).*?mime=true'
+        results = re.findall(pattern, code)
+        if (results):
+            id_final = results[0]
         else:
             VSlog('OPL er 9')
             return False, False
@@ -210,10 +210,10 @@ def parseInt(sin):
 
 def CheckCpacker(strToPack):
 
-    sPattern = '(\\s*eval\\s*\\(\\s*function(?:.|\\s)+?{}\\)\\))'
-    aResult = re.findall(sPattern, strToPack)
-    if (aResult):
-        str2 = aResult[0]
+    pattern = '(\\s*eval\\s*\\(\\s*function(?:.|\\s)+?{}\\)\\))'
+    results = re.findall(pattern, strToPack)
+    if (results):
+        str2 = results[0]
         if not str2.endswith(';'):
             str2 = str2 + ';'
         try:
@@ -227,25 +227,25 @@ def CheckCpacker(strToPack):
 
 def CheckJJDecoder(strDecoder):
 
-    sPattern = '([a-z]=.+?\\(\\)\\)\\(\\);)'
-    aResult = re.findall(sPattern, strDecoder)
-    if (aResult):
+    pattern = '([a-z]=.+?\\(\\)\\)\\(\\);)'
+    results = re.findall(pattern, strDecoder)
+    if (results):
         print('JJ encryption')
-        return JJDecoder(aResult[0]).decode()
+        return JJDecoder(results[0]).decode()
 
     return strDecoder
 
 
 def CheckAADecoder(strToDecode):
-    aResult = re.search(
+    results = re.search(
         '([>;]\\s*)(ﾟωﾟ.+?\\(\'_\'\\);)',
         strToDecode,
         re.DOTALL | re.UNICODE)
-    if (aResult):
+    if (results):
         print('AA encryption')
-        tmp = aResult.group(1) + AADecoder(aResult.group(2)).decode()
-        return strToDecode[:aResult.start()] + tmp + \
-            strToDecode[aResult.end():]
+        tmp = results.group(1) + AADecoder(results.group(2)).decode()
+        return strToDecode[:results.start()] + tmp + \
+            strToDecode[results.end():]
 
     return strToDecode
 

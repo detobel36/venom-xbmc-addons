@@ -11,30 +11,30 @@ class cHoster(iHoster):
     def __init__(self):
         iHoster.__init__(self, 'vidcloud', 'VidCloud')
 
-    def __getIdFromUrl(self, sUrl):
+    def __getIdFromUrl(self, url):
         # https://vcstream.to/embed/5bcf5b4c39aff/The.Spy.Who.Dumped.Me.mp4
-        sPattern = 'vcstream.to/embed/([^<]+)/'
-        oParser = Parser()
-        aResult = oParser.parse(sUrl, sPattern)
-        if aResult[0]:
-            return aResult[1][0]
+        pattern = 'vcstream.to/embed/([^<]+)/'
+        parser = Parser()
+        results = parser.parse(url, pattern)
+        if results[0]:
+            return results[1][0]
         return ''
 
-    def _getMediaLinkForGuest(self, autoPlay=False):
+    def _getMediaLinkForGuest(self, auto_play=False):
         api_call = False
 
-        sId = self.__getIdFromUrl(self._url)
-        url = 'https://vcstream.to/player?fid=%s&page=embed' % sId
+        s_id = self.__getIdFromUrl(self._url)
+        url = 'https://vcstream.to/player?fid=%s&page=embed' % s_id
 
-        sPattern = 'file.+?\\"([^<]+)\\"\\}'
-        oRequest = RequestHandler(url)
-        sHtmlContent = oRequest.request()
+        pattern = 'file.+?\\"([^<]+)\\"\\}'
+        request = RequestHandler(url)
+        html_content = request.request()
 
-        oParser = Parser()
-        aResult = oParser.parse(sHtmlContent, sPattern)
+        parser = Parser()
+        results = parser.parse(html_content, pattern)
 
-        if aResult[0]:
-            api_call = aResult[1][0].replace('\\\\', '').replace(':\\"', '')
+        if results[0]:
+            api_call = results[1][0].replace('\\\\', '').replace(':\\"', '')
 
         if api_call:
             return True, api_call

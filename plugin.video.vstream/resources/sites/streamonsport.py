@@ -48,13 +48,13 @@ def GetUrlMain():
     if URL_MAIN != '':
         return URL_MAIN
 
-    oRequestHandler = RequestHandler(
+    request_handler = RequestHandler(
         SiteManager().getUrlMain(SITE_IDENTIFIER))
-    sHtmlContent = oRequestHandler.request()
+    html_content = request_handler.request()
 
-    sPattern = '<a href="(.+?)"'
-    oParser = Parser()
-    URL_MAIN = oParser.parse(sHtmlContent, sPattern)[1][0]
+    pattern = '<a href="(.+?)"'
+    parser = Parser()
+    URL_MAIN = parser.parse(html_content, pattern)[1][0]
     return URL_MAIN
 
 
@@ -63,7 +63,7 @@ def load():
 
     output_parameter_handler = OutputParameterHandler()
 
-    output_parameter_handler.addParameter('siteUrl', SPORT_LIVE[0])
+    output_parameter_handler.addParameter('site_url', SPORT_LIVE[0])
     gui.addDir(
         SITE_IDENTIFIER,
         SPORT_LIVE[1],
@@ -71,10 +71,10 @@ def load():
         'replay.png',
         output_parameter_handler)
 
-    # output_parameter_handler.addParameter('siteUrl', SPORT_GENRES[0])
+    # output_parameter_handler.addParameter('site_url', SPORT_GENRES[0])
     # gui.addDir(SITE_IDENTIFIER, SPORT_GENRES[1], 'Sports (Genres)', 'genres.png', output_parameter_handler)
     #
-    output_parameter_handler.addParameter('siteUrl', SPORT_TV[0])
+    output_parameter_handler.addParameter('site_url', SPORT_TV[0])
     gui.addDir(
         SITE_IDENTIFIER,
         SPORT_TV[1],
@@ -82,7 +82,7 @@ def load():
         'sport.png',
         output_parameter_handler)
 
-    # output_parameter_handler.addParameter('siteUrl', CHAINE_CINE[0])
+    # output_parameter_handler.addParameter('site_url', CHAINE_CINE[0])
     # gui.addDir(SITE_IDENTIFIER, CHAINE_CINE[1], 'Chaines TV Ciné', 'tv.png', output_parameter_handler)
 
     gui.setEndOfDirectory()
@@ -98,9 +98,9 @@ def showGenres():
 
     output_parameter_handler = OutputParameterHandler()
     for title, url in genres:
-        sUrl = urlMain + url + genreURL
-        output_parameter_handler.addParameter('siteUrl', sUrl)
-        output_parameter_handler.addParameter('sMovieTitle', title)
+        url = urlMain + url + genreURL
+        output_parameter_handler.addParameter('site_url', url)
+        output_parameter_handler.addParameter('movie_title', title)
         gui.addMisc(
             SITE_IDENTIFIER,
             'showMovies',
@@ -113,47 +113,47 @@ def showGenres():
     gui.setEndOfDirectory()
 
 
-def showMovies(sSearch=''):
+def showMovies(search=''):
     gui = Gui()
     input_parameter_handler = InputParameterHandler()
-    sUrl = input_parameter_handler.getValue('siteUrl')
+    url = input_parameter_handler.getValue('site_url')
     urlMain = GetUrlMain()
-    if 'http' not in sUrl:
-        sUrl = urlMain + sUrl
+    if 'http' not in url:
+        url = urlMain + url
 
-    oRequestHandler = RequestHandler(sUrl)
-    sHtmlContent = oRequestHandler.request()
+    request_handler = RequestHandler(url)
+    html_content = request_handler.request()
 
     # THUMB ref title desc1 desc2
-    sPattern = '<img class=".+?src="([^"]+)".+?href="([^"]+).+?<span>([^<]+)<.+?data-time="(?:([^<]+)|)".+?>([^<]+)'
+    pattern = '<img class=".+?src="([^"]+)".+?href="([^"]+).+?<span>([^<]+)<.+?data-time="(?:([^<]+)|)".+?>([^<]+)'
 
-    oParser = Parser()
-    aResult = oParser.parse(sHtmlContent, sPattern)
+    parser = Parser()
+    results = parser.parse(html_content, pattern)
 
-    if not aResult[0]:
+    if not results[0]:
         gui.addText(SITE_IDENTIFIER)
     else:
-        # total = len(aResult[1])
+        # total = len(results[1])
         output_parameter_handler = OutputParameterHandler()
-        for aEntry in aResult[1]:
-            sThumb = aEntry[0]
-            sUrl2 = aEntry[1]
-            title = aEntry[2].replace(
+        for entry in results[1]:
+            thumb = entry[0]
+            url2 = entry[1]
+            title = entry[2].replace(
                 ' streaming gratuit',
                 '').replace(
                 ' foot',
                 '').replace(
                 '🆚',
                 '/')
-            sDate = aEntry[3]
-            sDesc1 = aEntry[4]
+            sDate = entry[3]
+            sDesc1 = entry[4]
 
             # bChaine = False
-            # if sUrl != CHAINE_CINE[0] and sUrl != SPORT_TV[0]:
-            if sUrl != SPORT_TV[0]:
-                sDisplayTitle = title
+            # if url != CHAINE_CINE[0] and url != SPORT_TV[0]:
+            if url != SPORT_TV[0]:
+                display_title = title
                 if sDesc1 and 'chaîne' not in sDesc1 and 'chaine' not in sDesc1:
-                    sDisplayTitle += ' (' + sDesc1.replace(' · ', '') + ')'
+                    display_title += ' (' + sDesc1.replace(' · ', '') + ')'
                 if sDate:
                     try:
                         d = datetime(
@@ -161,73 +161,73 @@ def showMovies(sSearch=''):
                         sDate = d.strftime("%d/%m/%y %H:%M")
                     except Exception:
                         pass
-                    sDisplayTitle = sDate + ' - ' + sDisplayTitle
+                    display_title = sDate + ' - ' + display_title
             else:
                 # bChaine = True
                 title = title.upper()
-                sDisplayTitle = title
+                display_title = title
 
-            if 'http' not in sUrl2:
-                sUrl2 = urlMain[:-1] + sUrl2
+            if 'http' not in url2:
+                url2 = urlMain[:-1] + url2
 
-            if 'http' not in sThumb:
-                sThumb = urlMain[:-1] + sThumb
+            if 'http' not in thumb:
+                thumb = urlMain[:-1] + thumb
 
-            output_parameter_handler.addParameter('siteUrl', sUrl2)
-            output_parameter_handler.addParameter('sMovieTitle', title)
-            output_parameter_handler.addParameter('desc', sDisplayTitle)
-            output_parameter_handler.addParameter('sThumb', sThumb)
+            output_parameter_handler.addParameter('site_url', url2)
+            output_parameter_handler.addParameter('movie_title', title)
+            output_parameter_handler.addParameter('desc', display_title)
+            output_parameter_handler.addParameter('thumb', thumb)
 
             gui.addLink(
                 SITE_IDENTIFIER,
                 'showLive',
-                sDisplayTitle,
-                sThumb,
-                sDisplayTitle,
+                display_title,
+                thumb,
+                display_title,
                 output_parameter_handler)
 
-    if not sSearch:
+    if not search:
         gui.setEndOfDirectory()
 
 
 def showLive():
     gui = Gui()
     input_parameter_handler = InputParameterHandler()
-    sUrl = input_parameter_handler.getValue('siteUrl')
-    sThumb = input_parameter_handler.getValue('sThumb')
+    url = input_parameter_handler.getValue('site_url')
+    thumb = input_parameter_handler.getValue('thumb')
     desc = input_parameter_handler.getValue('desc')
-    sMovieTitle = input_parameter_handler.getValue('sMovieTitle')
+    movie_title = input_parameter_handler.getValue('movie_title')
 
-    oRequestHandler = RequestHandler(sUrl)
-    sHtmlContent = oRequestHandler.request()
-    oParser = Parser()
+    request_handler = RequestHandler(url)
+    html_content = request_handler.request()
+    parser = Parser()
 
     # liens visibles
-    sPattern = r"btn btn-(success|warning) *btn-sm.+?src='([^\']*).+?img src=\".+?lang\/([^\"]*)\.gif.+?this\.src='.+?lang\/([^\']*)\.gif"
-    aResult = oParser.parse(sHtmlContent, sPattern)
+    pattern = r"btn btn-(success|warning) *btn-sm.+?src='([^\']*).+?img src=\".+?lang\/([^\"]*)\.gif.+?this\.src='.+?lang\/([^\']*)\.gif"
+    results = parser.parse(html_content, pattern)
 
     i = 0
-    if aResult[0]:
+    if results[0]:
         output_parameter_handler = OutputParameterHandler()
-        if aResult[1]:
-            for aEntry in aResult[1]:
+        if results[1]:
+            for entry in results[1]:
                 i += 1
-                sUrl2 = aEntry[1]
-                sLang1 = aEntry[2].upper()
-                sLang2 = aEntry[3].upper()
-                sDisplayTitle = '%s - Lien %d (%s)' % (sMovieTitle, i, sLang1 if len(
+                url2 = entry[1]
+                sLang1 = entry[2].upper()
+                sLang2 = entry[3].upper()
+                display_title = '%s - Lien %d (%s)' % (movie_title, i, sLang1 if len(
                     sLang1) == 2 else sLang2 if len(sLang2) == 2 else '')
 
-                output_parameter_handler.addParameter('siteUrl', sUrl2)
+                output_parameter_handler.addParameter('site_url', url2)
                 output_parameter_handler.addParameter(
-                    'sMovieTitle', sMovieTitle)
-                output_parameter_handler.addParameter('sThumb', sThumb)
-                output_parameter_handler.addParameter('siterefer', sUrl)
+                    'movie_title', movie_title)
+                output_parameter_handler.addParameter('thumb', thumb)
+                output_parameter_handler.addParameter('siterefer', url)
                 gui.addLink(
                     SITE_IDENTIFIER,
                     'showLink',
-                    sDisplayTitle,
-                    sThumb,
+                    display_title,
+                    thumb,
                     desc,
                     output_parameter_handler,
                     input_parameter_handler)
@@ -235,44 +235,44 @@ def showLive():
 
 << << << < HEAD
 # # 1 seul liens tv telerium
-# sPattern = 'iframe id="video" src.+?id=([^"]+)'
-# aResult = oParser.parse(sHtmlContent, sPattern)
-# if aResult[0] is True:
-#     sUrl2 = GetUrlMain() + 'go/' + aResult[1][0]
-#     sDisplayTitle = sMovieTitle
+# pattern = 'iframe id="video" src.+?id=([^"]+)'
+# results = parser.parse(html_content, pattern)
+# if results[0] is True:
+#     url2 = GetUrlMain() + 'go/' + results[1][0]
+#     display_title = movie_title
 #     output_parameter_handler = OutputParameterHandler()
-#     output_parameter_handler.addParameter('siteUrl', sUrl2)
-#     output_parameter_handler.addParameter('sMovieTitle', sMovieTitle)
-#     output_parameter_handler.addParameter('sThumb', sThumb)
-#     output_parameter_handler.addParameter('siterefer', sUrl)
-#     gui.addLink(SITE_IDENTIFIER, 'showLink', sDisplayTitle, sThumb, desc, output_parameter_handler)
+#     output_parameter_handler.addParameter('site_url', url2)
+#     output_parameter_handler.addParameter('movie_title', movie_title)
+#     output_parameter_handler.addParameter('thumb', thumb)
+#     output_parameter_handler.addParameter('siterefer', url)
+#     gui.addLink(SITE_IDENTIFIER, 'showLink', display_title, thumb, desc, output_parameter_handler)
 == == == =
 # 1 seul liens tv telerium
-sPattern = 'iframe id="video".src.+?id=([^"]+)'
+pattern = 'iframe id="video".src.+?id=([^"]+)'
 
-aResult = oParser.parse(sHtmlContent, sPattern)
-if aResult[0] is True:
-    url2 = aResult[1][0]
-    oRequestHandler = RequestHandler(url2)
-    sHtmlContent = oRequestHandler.request()
+results = parser.parse(html_content, pattern)
+if results[0] is True:
+    url2 = results[1][0]
+    request_handler = RequestHandler(url2)
+    html_content = request_handler.request()
 
-    sPattern = '<iframe.+?src="([^"]+)"'
-    aResult = oParser.parse(sHtmlContent, sPattern)
-    if aResult[0] is True:
+    pattern = '<iframe.+?src="([^"]+)"'
+    results = parser.parse(html_content, pattern)
+    if results[0] is True:
 
-        sUrl2 = aResult[1][0]  # https://telerium.tv/embed/35001.html
-        sDisplayTitle = sMovieTitle
+        url2 = results[1][0]  # https://telerium.tv/embed/35001.html
+        display_title = movie_title
 
         output_parameter_handler = OutputParameterHandler()
-        output_parameter_handler.addParameter('siteUrl', sUrl2)
-        output_parameter_handler.addParameter('sMovieTitle', sMovieTitle)
-        output_parameter_handler.addParameter('sThumb', sThumb)
-        output_parameter_handler.addParameter('siterefer', sUrl)
+        output_parameter_handler.addParameter('site_url', url2)
+        output_parameter_handler.addParameter('movie_title', movie_title)
+        output_parameter_handler.addParameter('thumb', thumb)
+        output_parameter_handler.addParameter('siterefer', url)
         gui.addLink(
             SITE_IDENTIFIER,
             'showlink',
-            sDisplayTitle,
-            sThumb,
+            display_title,
+            thumb,
             desc,
             output_parameter_handler,
             input_parameter_handler)
@@ -285,122 +285,122 @@ def showLink():
     gui = Gui()
 
     input_parameter_handler = InputParameterHandler()
-    sUrl = input_parameter_handler.getValue('siteUrl')
-    sThumb = input_parameter_handler.getValue('sThumb')
-    sMovieTitle = input_parameter_handler.getValue('sMovieTitle')
+    url = input_parameter_handler.getValue('site_url')
+    thumb = input_parameter_handler.getValue('thumb')
+    movie_title = input_parameter_handler.getValue('movie_title')
     siterefer = input_parameter_handler.getValue('siterefer')
-    sHosterUrl = ''
+    hoster_url = ''
 
-    if 'yahoo' in sUrl:  # redirection
+    if 'yahoo' in url:  # redirection
         urlMain = GetUrlMain()
-        sUrl = urlMain + sUrl
+        url = urlMain + url
 
-    if 'allfoot' in sUrl or 'streamonsport' in sUrl:
-        oRequestHandler = RequestHandler(sUrl)
-        oRequestHandler.addHeaderEntry('User-Agent', UA)
-        # oRequestHandler.addHeaderEntry('Referer', siterefer) # a verifier
-        sHtmlContent = oRequestHandler.request()
+    if 'allfoot' in url or 'streamonsport' in url:
+        request_handler = RequestHandler(url)
+        request_handler.addHeaderEntry('User-Agent', UA)
+        # request_handler.addHeaderEntry('Referer', siterefer) # a verifier
+        html_content = request_handler.request()
 
-        siterefer = sUrl
-        oParser = Parser()
-        if "pkcast123.me" in sHtmlContent:
-            sPattern = 'fid="([^"]+)"'
-            aResult = oParser.parse(sHtmlContent, sPattern)
-            sUrl = "https://www.pkcast123.me/footy.php?player=desktop&live=" + \
-                aResult[1][0] + "&vw=649&vh=460"
+        siterefer = url
+        parser = Parser()
+        if "pkcast123.me" in html_content:
+            pattern = 'fid="([^"]+)"'
+            results = parser.parse(html_content, pattern)
+            url = "https://www.pkcast123.me/footy.php?player=desktop&live=" + \
+                results[1][0] + "&vw=649&vh=460"
         else:
-            sPattern = '<iframe.+?src="([^"]+)'
-            aResult = oParser.parse(sHtmlContent, sPattern)
-            if aResult[0]:
-                sUrl = aResult[1][0]
+            pattern = '<iframe.+?src="([^"]+)'
+            results = parser.parse(html_content, pattern)
+            if results[0]:
+                url = results[1][0]
 
     shosterurl = ''
-    if 'hola.php' in sUrl:
+    if 'hola.php' in url:
         urlMain = GetUrlMain()
-        sUrl = urlMain + sUrl
+        url = urlMain + url
 
-    if 'pkcast123' in sUrl:
-        bvalid, shosterurl = Hoster_Pkcast(sUrl, siterefer)
+    if 'pkcast123' in url:
+        bvalid, shosterurl = Hoster_Pkcast(url, siterefer)
         if bvalid:
-            sHosterUrl = shosterurl
+            hoster_url = shosterurl
 
-    if "leet365.cc" in sUrl or 'casadelfutbol' in sUrl:
-        bvalid, shosterurl = Hoster_Leet365(sUrl, siterefer)
+    if "leet365.cc" in url or 'casadelfutbol' in url:
+        bvalid, shosterurl = Hoster_Leet365(url, siterefer)
         if bvalid:
-            sHosterUrl = shosterurl
+            hoster_url = shosterurl
 
-    if 'telerium' in sUrl:
-        bvalid, shosterurl = Hoster_Telerium(sUrl, siterefer)
+    if 'telerium' in url:
+        bvalid, shosterurl = Hoster_Telerium(url, siterefer)
         if bvalid:
-            sHosterUrl = shosterurl
+            hoster_url = shosterurl
 
-    if 'andrhino' in sUrl:
-        bvalid, shosterurl = Hoster_Andrhino(sUrl, siterefer)
+    if 'andrhino' in url:
+        bvalid, shosterurl = Hoster_Andrhino(url, siterefer)
         if bvalid:
-            sHosterUrl = shosterurl
+            hoster_url = shosterurl
 
-    if 'wigistream' in sUrl or 'cloudstream' in sUrl:
-        bvalid, shosterurl = Hoster_Wigistream(sUrl, siterefer)
+    if 'wigistream' in url or 'cloudstream' in url:
+        bvalid, shosterurl = Hoster_Wigistream(url, siterefer)
         if bvalid:
-            sHosterUrl = shosterurl
+            hoster_url = shosterurl
 
     # a verifier
-    if 'laylow' in sUrl:
-        bvalid, shosterurl = Hoster_Laylow(sUrl, siterefer)
+    if 'laylow' in url:
+        bvalid, shosterurl = Hoster_Laylow(url, siterefer)
         if bvalid:
-            sHosterUrl = shosterurl
+            hoster_url = shosterurl
 
-    if not sHosterUrl:
-        bvalid, shosterurl = getHosterIframe(sUrl, siterefer)
+    if not hoster_url:
+        bvalid, shosterurl = getHosterIframe(url, siterefer)
         if bvalid:
-            sHosterUrl = shosterurl
+            hoster_url = shosterurl
 
-    if sHosterUrl:
-        sHosterUrl = sHosterUrl.strip()
-        oHoster = HosterGui().checkHoster(sHosterUrl)
-        if oHoster:
-            oHoster.setDisplayName(sMovieTitle)
-            oHoster.setFileName(sMovieTitle)
-            HosterGui().showHoster(gui, oHoster, sHosterUrl, sThumb,
+    if hoster_url:
+        hoster_url = hoster_url.strip()
+        hoster = HosterGui().checkHoster(hoster_url)
+        if hoster:
+            hoster.setDisplayName(movie_title)
+            hoster.setFileName(movie_title)
+            HosterGui().showHoster(gui, hoster, hoster_url, thumb,
                                    input_parameter_handler=input_parameter_handler)
 
     gui.setEndOfDirectory()
 
 
 def Hoster_Pkcast(url, referer):
-    oRequestHandler = RequestHandler(url)
-    oRequestHandler.addHeaderEntry('User-Agent', UA)
-    oRequestHandler.addHeaderEntry(
+    request_handler = RequestHandler(url)
+    request_handler.addHeaderEntry('User-Agent', UA)
+    request_handler.addHeaderEntry(
         'Referer', '{uri.scheme}://{uri.netloc}/'.format(uri=urlparse(referer)))
-    sHtmlContent = oRequestHandler.request()
+    html_content = request_handler.request()
 
-    oParser = Parser()
-    sPattern = r'play\(\).+?return\((.+?)\.join'
-    aResult = oParser.parse(sHtmlContent, sPattern)
+    parser = Parser()
+    pattern = r'play\(\).+?return\((.+?)\.join'
+    results = parser.parse(html_content, pattern)
 
-    if aResult:
+    if results:
         return True, ''.join(
             ast.literal_eval(
-                aResult[1][0])) + '|User-Agent=' + UA + '&Referer=' + Quote(url)
+                results[1][0])) + '|User-Agent=' + UA + '&Referer=' + Quote(url)
 
     return False, False
 
 
 def Hoster_Telerium(url, referer):
-    oRequestHandler = RequestHandler(url)
-    oRequestHandler.addHeaderEntry('User-Agent', UA)
-    oRequestHandler.addHeaderEntry('Referer', referer)
-    sHtmlContent = oRequestHandler.request()
+    request_handler = RequestHandler(url)
+    request_handler.addHeaderEntry('User-Agent', UA)
+    request_handler.addHeaderEntry('Referer', referer)
+    html_content = request_handler.request()
 
-    urlrederict = oRequestHandler.getRealUrl()
+    urlrederict = request_handler.getRealUrl()
     # ex https://telerium.club
     urlmain = 'https://' + urlrederict.split('/')[2]
 
-    sPattern = r'var\s+cid[^\'"]+[\'"]{1}([0-9]+)'
-    aResult = re.findall(sPattern, sHtmlContent)
+    pattern = r'var\s+cid[^\'"]+[\'"]{1}([0-9]+)'
+    results = re.findall(pattern, html_content)
 
-    if aResult:
-        str2 = aResult[0]
+    if results:
+        str2 = results[0]
         datetoken = int(getTimer()) * 1000
 
         jsonUrl = urlmain + '/streams/' + str2 + '/' + str(datetoken) + '.json'
@@ -413,103 +413,103 @@ def Hoster_Telerium(url, referer):
         except Exception:
             pass
 
-        sHosterUrl = 'https:' + m3url + realtoken
-        sHosterUrl += '|User-Agent=' + UA + \
+        hoster_url = 'https:' + m3url + realtoken
+        hoster_url += '|User-Agent=' + UA + \
             '&Referer=' + Quote(urlrederict)  # + '&Sec-F'
 
-        return True, sHosterUrl
+        return True, hoster_url
 
     return False, False
 
 
 def Hoster_Leet365(url, referer):
-    oParser = Parser()
-    oRequestHandler = RequestHandler(url)
-    oRequestHandler.addHeaderEntry('User-Agent', UA)
-    oRequestHandler.addHeaderEntry('Referer', referer)
-    sHtmlContent = oRequestHandler.request()
+    parser = Parser()
+    request_handler = RequestHandler(url)
+    request_handler.addHeaderEntry('User-Agent', UA)
+    request_handler.addHeaderEntry('Referer', referer)
+    html_content = request_handler.request()
 
-    sPattern = '<iframe.+?src="([^"]+)'
-    aResult = oParser.parse(sHtmlContent, sPattern)
-    if aResult[0]:
-        hostUrl = aResult[1][0]
+    pattern = '<iframe.+?src="([^"]+)'
+    results = parser.parse(html_content, pattern)
+    if results[0]:
+        hostUrl = results[1][0]
         if 'dailymotion' in hostUrl:
             return True, hostUrl
         return Hoster_Wigistream(hostUrl, url)
 
-    sPattern = r'<script>fid="(.+?)".+?src="\/\/fclecteur\.com\/footy\.js">'
-    aResult = oParser.parse(sHtmlContent, sPattern)
-    if aResult[0]:
+    pattern = r'<script>fid="(.+?)".+?src="\/\/fclecteur\.com\/footy\.js">'
+    results = parser.parse(html_content, pattern)
+    if results[0]:
         referer = url
-        url = 'https://fclecteur.com/footy.php?player=desktop&live=%s' % aResult[1][0]
+        url = 'https://fclecteur.com/footy.php?player=desktop&live=%s' % results[1][0]
         return Hoster_Laylow(url, referer)
 
     return False, False
 
 
 def Hoster_Andrhino(url, referer):
-    oRequestHandler = RequestHandler(url)
-    oRequestHandler.addHeaderEntry('User-Agent', UA)
-    oRequestHandler.addHeaderEntry('Referer', referer)
-    sHtmlContent = oRequestHandler.request()
+    request_handler = RequestHandler(url)
+    request_handler.addHeaderEntry('User-Agent', UA)
+    request_handler.addHeaderEntry('Referer', referer)
+    html_content = request_handler.request()
 
-    sPattern = r"atob\('([^']+)"
-    aResult = re.findall(sPattern, sHtmlContent)
+    pattern = r"atob\('([^']+)"
+    results = re.findall(pattern, html_content)
 
-    if aResult:
-        url2 = base64.b64decode(aResult[0])
+    if results:
+        url2 = base64.b64decode(results[0])
         return True, url2.strip() + '|User-Agent=' + UA + '&Referer=' + Quote(url)
 
     # fichier vu mais ne sait plus dans quel cas
-    sPattern = r"source:\s'(https.+?m3u8)"
-    aResult = re.findall(sPattern, sHtmlContent)
+    pattern = r"source:\s'(https.+?m3u8)"
+    results = re.findall(pattern, html_content)
 
-    if aResult:
-        return True, aResult[0] + '|User-Agent=' + \
+    if results:
+        return True, results[0] + '|User-Agent=' + \
             UA + '&Referer=' + Quote(url)
 
     return False, False
 
 
 def Hoster_Wigistream(url, referer):
-    oRequestHandler = RequestHandler(url)
-    oRequestHandler.addHeaderEntry('User-Agent', UA)
-    oRequestHandler.addHeaderEntry('Referer', referer)
-    sHtmlContent = oRequestHandler.request()
+    request_handler = RequestHandler(url)
+    request_handler.addHeaderEntry('User-Agent', UA)
+    request_handler.addHeaderEntry('Referer', referer)
+    html_content = request_handler.request()
 
-    sPattern = r'(\s*eval\s*\(\s*function(?:.|\s)+?{}\)\))'
-    aResult = re.findall(sPattern, sHtmlContent)
+    pattern = r'(\s*eval\s*\(\s*function(?:.|\s)+?{}\)\))'
+    results = re.findall(pattern, html_content)
 
-    if aResult:
-        sstr = aResult[0]
+    if results:
+        sstr = results[0]
         if not sstr.endswith(';'):
             sstr = sstr + ';'
         sUnpack = cPacker().unpack(sstr)
-        sPattern = 'src="(.+?)"'
-        aResult = re.findall(sPattern, sUnpack)
-        if aResult:
-            return True, aResult[0] + '|User-Agent=' + \
+        pattern = 'src="(.+?)"'
+        results = re.findall(pattern, sUnpack)
+        if results:
+            return True, results[0] + '|User-Agent=' + \
                 UA + '&Referer=' + Quote(url)
 
-    sPattern = '<iframe.+?src="([^"]+)'  # iframe imbriqué
-    aResult = re.findall(sPattern, sHtmlContent)
-    if aResult:
-        return Hoster_Wigistream(aResult[0], url)
+    pattern = '<iframe.+?src="([^"]+)'  # iframe imbriqué
+    results = re.findall(pattern, html_content)
+    if results:
+        return Hoster_Wigistream(results[0], url)
 
     return False, False
 
 
 def Hoster_Laylow(url, referer):
-    oRequestHandler = RequestHandler(url)
-    oRequestHandler.addHeaderEntry('User-Agent', UA)
-    oRequestHandler.addHeaderEntry('Referer', referer)
-    sHtmlContent = oRequestHandler.request()
+    request_handler = RequestHandler(url)
+    request_handler.addHeaderEntry('User-Agent', UA)
+    request_handler.addHeaderEntry('Referer', referer)
+    html_content = request_handler.request()
 
-    sPattern = "source:.+?'(https.+?m3u8)"
-    aResult = re.findall(sPattern, sHtmlContent)
+    pattern = "source:.+?'(https.+?m3u8)"
+    results = re.findall(pattern, html_content)
 
-    if aResult:
-        return True, aResult[0] + '|User-Agent=' + \
+    if results:
+        return True, results[0] + '|User-Agent=' + \
             UA + '&Referer=' + Quote(url)
 
     return Hoster_Pkcast(url, referer)
@@ -518,32 +518,32 @@ def Hoster_Laylow(url, referer):
 def getRealTokenJson(link, referer):
 
     realResp = ''
-    oRequestHandler = RequestHandler(link)
-    oRequestHandler.addHeaderEntry('User-Agent', UA)
-    oRequestHandler.addHeaderEntry(
+    request_handler = RequestHandler(link)
+    request_handler.addHeaderEntry('User-Agent', UA)
+    request_handler.addHeaderEntry(
         'Accept-Language',
         'pl,en-US;q=0.7,en;q=0.3')
-    oRequestHandler.addHeaderEntry('X-Requested-With', 'XMLHttpRequest')
-    oRequestHandler.addHeaderEntry('Referer', referer)
-    oRequestHandler.addCookieEntry('elVolumen', '100')
-    oRequestHandler.addCookieEntry('__ga', '100')
+    request_handler.addHeaderEntry('X-Requested-With', 'XMLHttpRequest')
+    request_handler.addHeaderEntry('Referer', referer)
+    request_handler.addCookieEntry('elVolumen', '100')
+    request_handler.addCookieEntry('__ga', '100')
 
     try:
-        realResp = oRequestHandler.request()
+        realResp = request_handler.request()
     except Exception:
         pass
 
     if not realResp:
-        oRequestHandler = RequestHandler(link)
-        oRequestHandler.addHeaderEntry('User-Agent', UA)
-        oRequestHandler.addHeaderEntry('Accept', 'application/json')
-        oRequestHandler.addHeaderEntry(
+        request_handler = RequestHandler(link)
+        request_handler.addHeaderEntry('User-Agent', UA)
+        request_handler.addHeaderEntry('Accept', 'application/json')
+        request_handler.addHeaderEntry(
             'Accept-Language', 'pl,en-US;q=0.7,en;q=0.3')
-        oRequestHandler.addHeaderEntry('X-Requested-With', 'XMLHttpRequest')
-        oRequestHandler.addHeaderEntry('Referer', referer)
-        oRequestHandler.addCookieEntry('elVolumen', '100')
-        oRequestHandler.addCookieEntry('__ga', '100')
-        realResp = oRequestHandler.request()
+        request_handler.addHeaderEntry('X-Requested-With', 'XMLHttpRequest')
+        request_handler.addHeaderEntry('Referer', referer)
+        request_handler.addCookieEntry('elVolumen', '100')
+        request_handler.addCookieEntry('__ga', '100')
+        realResp = request_handler.request()
 
     return json.loads(realResp)
 
@@ -561,25 +561,25 @@ def getHosterIframe(url, referer):
     if not url.startswith('http'):
         url = GetUrlMain() + url
 
-    oRequestHandler = RequestHandler(url)
-    oRequestHandler.addHeaderEntry('Referer', referer)
-    sHtmlContent = str(oRequestHandler.request())
-    if not sHtmlContent:
+    request_handler = RequestHandler(url)
+    request_handler.addHeaderEntry('Referer', referer)
+    html_content = str(request_handler.request())
+    if not html_content:
         return False, False
 
-    sPattern = '(\\s*eval\\s*\\(\\s*function(?:.|\\s)+?{}\\)\\))'
-    aResult = re.findall(sPattern, sHtmlContent)
-    if aResult:
-        sstr = aResult[0]
+    pattern = '(\\s*eval\\s*\\(\\s*function(?:.|\\s)+?{}\\)\\))'
+    results = re.findall(pattern, html_content)
+    if results:
+        sstr = results[0]
         if not sstr.endswith(';'):
             sstr = sstr + ';'
-        sHtmlContent = cPacker().unpack(sstr)
+        html_content = cPacker().unpack(sstr)
 
-    sPattern = '.atob\\("(.+?)"'
-    aResult = re.findall(sPattern, sHtmlContent)
-    if aResult:
+    pattern = '.atob\\("(.+?)"'
+    results = re.findall(pattern, html_content)
+    if results:
         import base64
-        code = aResult[0]
+        code = results[0]
         try:
             if isMatrix():
                 code = base64.b64decode(code).decode('ascii')
@@ -589,11 +589,11 @@ def getHosterIframe(url, referer):
         except Exception as e:
             pass
 
-    sPattern = '<iframe.+?src=["\']([^"\']+)["\']'
-    aResult = re.findall(sPattern, sHtmlContent)
-    if aResult:
+    pattern = '<iframe.+?src=["\']([^"\']+)["\']'
+    results = re.findall(pattern, html_content)
+    if results:
         referer = url
-        for url in aResult:
+        for url in results:
             if url.startswith("./"):
                 url = url[1:]
             if not url.startswith("http"):
@@ -605,16 +605,16 @@ def getHosterIframe(url, referer):
             if b:
                 return True, url
 
-    sPattern = ';var.+?src=["\']([^"\']+)["\']'
-    aResult = re.findall(sPattern, sHtmlContent)
-    if aResult:
-        url = aResult[0]
+    pattern = ';var.+?src=["\']([^"\']+)["\']'
+    results = re.findall(pattern, html_content)
+    if results:
+        url = results[0]
         if '.m3u8' in url:
             return True, url  # + '|User-Agent=' + UA + '&Referer=' + referer
 
-    sPattern = '[^/]source.+?["\'](https.+?)["\']'
-    aResult = re.findall(sPattern, sHtmlContent)
-    if aResult:
-        return True, aResult[0] + '|referer=' + url
+    pattern = '[^/]source.+?["\'](https.+?)["\']'
+    results = re.findall(pattern, html_content)
+    if results:
+        return True, results[0] + '|referer=' + url
 
     return False, False

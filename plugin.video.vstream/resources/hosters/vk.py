@@ -11,26 +11,26 @@ class cHoster(iHoster):
     def __init__(self):
         iHoster.__init__(self, 'vk', 'Vk')
 
-    def _getMediaLinkForGuest(self, autoPlay=False):
+    def _getMediaLinkForGuest(self, auto_play=False):
         url = []
         qua = []
 
-        oRequest = RequestHandler(self._url)
-        sHtmlContent = oRequest.request()
+        request = RequestHandler(self._url)
+        html_content = request.request()
 
-        sPattern = '"url.+?":"(.+?)\\.(\\d+).mp4'
+        pattern = '"url.+?":"(.+?)\\.(\\d+).mp4'
 
-        oParser = Parser()
-        aResult = oParser.parse(sHtmlContent, sPattern)
-        if aResult[0] is True:
+        parser = Parser()
+        results = parser.parse(html_content, pattern)
+        if results[0] is True:
 
-            for aEntry in aResult[1]:
-                url.append(aEntry[0])
-                qua.append(str(aEntry[1]))
+            for entry in results[1]:
+                url.append(entry[0])
+                qua.append(str(entry[1]))
 
             dialog2 = xbmcgui.Dialog()
             ret = dialog2.select('Select Quality', qua)
-            # sUrl = url[ret] + '.' + qua[ret] + '.mp4'
+            # url = url[ret] + '.' + qua[ret] + '.mp4'
             api_call = ('%s.%s.mp4') % (url[ret], qua[ret])
 
             if api_call:

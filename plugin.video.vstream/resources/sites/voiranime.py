@@ -39,7 +39,7 @@ def load():
     gui = Gui()
 
     output_parameter_handler = OutputParameterHandler()
-    output_parameter_handler.addParameter('siteUrl', URL_SEARCH_VOSTFR[0])
+    output_parameter_handler.addParameter('site_url', URL_SEARCH_VOSTFR[0])
     gui.addDir(
         SITE_IDENTIFIER,
         'showSearch',
@@ -47,7 +47,7 @@ def load():
         'search.png',
         output_parameter_handler)
 
-    output_parameter_handler.addParameter('siteUrl', URL_SEARCH_VF[0])
+    output_parameter_handler.addParameter('site_url', URL_SEARCH_VF[0])
     gui.addDir(
         SITE_IDENTIFIER,
         'showSearch',
@@ -55,7 +55,7 @@ def load():
         'search.png',
         output_parameter_handler)
 
-    output_parameter_handler.addParameter('siteUrl', ANIM_NEWS[0])
+    output_parameter_handler.addParameter('site_url', ANIM_NEWS[0])
     gui.addDir(
         SITE_IDENTIFIER,
         ANIM_NEWS[1],
@@ -63,7 +63,7 @@ def load():
         'news.png',
         output_parameter_handler)
 
-    output_parameter_handler.addParameter('siteUrl', ANIM_VOSTFRS[0])
+    output_parameter_handler.addParameter('site_url', ANIM_VOSTFRS[0])
     gui.addDir(
         SITE_IDENTIFIER,
         ANIM_VOSTFRS[1],
@@ -71,7 +71,7 @@ def load():
         'vostfr.png',
         output_parameter_handler)
 
-    output_parameter_handler.addParameter('siteUrl', ANIM_VFS[0])
+    output_parameter_handler.addParameter('site_url', ANIM_VFS[0])
     gui.addDir(
         SITE_IDENTIFIER,
         ANIM_VFS[1],
@@ -79,7 +79,7 @@ def load():
         'vf.png',
         output_parameter_handler)
 
-    output_parameter_handler.addParameter('siteUrl', ANIM_GENRES[0])
+    output_parameter_handler.addParameter('site_url', ANIM_GENRES[0])
     gui.addDir(
         SITE_IDENTIFIER,
         ANIM_GENRES[1],
@@ -87,7 +87,7 @@ def load():
         'genres.png',
         output_parameter_handler)
 
-    output_parameter_handler.addParameter('siteUrl', ANIM_ALPHA[0])
+    output_parameter_handler.addParameter('site_url', ANIM_ALPHA[0])
     gui.addDir(
         SITE_IDENTIFIER,
         ANIM_ALPHA[1],
@@ -100,12 +100,12 @@ def load():
 
 def showSearch():
     gui = Gui()
-    sSearchText = gui.showKeyBoard()
-    if sSearchText:
+    search_text = gui.showKeyBoard()
+    if search_text:
         input_parameter_handler = InputParameterHandler()
-        sUrl = input_parameter_handler.getValue('siteUrl')
-        sUrl = sUrl + Quote(sSearchText)
-        showAnimes(sUrl)
+        url = input_parameter_handler.getValue('site_url')
+        url = url + Quote(search_text)
+        showAnimes(url)
         gui.setEndOfDirectory()
         return
 
@@ -113,7 +113,7 @@ def showSearch():
 def showAlpha():
     gui = Gui()
     input_parameter_handler = InputParameterHandler()
-    sUrl = input_parameter_handler.getValue('siteUrl')
+    url = input_parameter_handler.getValue('site_url')
 
     progress_ = Progress().VScreate(SITE_NAME)
 
@@ -124,15 +124,15 @@ def showAlpha():
         if i == -1:
             title = 'ALL'
             output_parameter_handler.addParameter(
-                'siteUrl', sUrl.replace('?start=', ''))
+                'site_url', url.replace('?start=', ''))
         elif i == 0:
             title = '#'
-            output_parameter_handler.addParameter('siteUrl', sUrl + 'non-char')
+            output_parameter_handler.addParameter('site_url', url + 'non-char')
         else:
             title = chr(64 + i)
-            output_parameter_handler.addParameter('siteUrl', sUrl + title)
+            output_parameter_handler.addParameter('site_url', url + title)
 
-        output_parameter_handler.addParameter('sMovieTitle', title)
+        output_parameter_handler.addParameter('movie_title', title)
         gui.addDir(
             SITE_IDENTIFIER,
             'showAnimes',
@@ -150,32 +150,32 @@ def showAlpha():
 def showGenres():
     gui = Gui()
     input_parameter_handler = InputParameterHandler()
-    sUrl = input_parameter_handler.getValue('siteUrl')
+    url = input_parameter_handler.getValue('site_url')
 
     liste = []
-    liste.append(['Action', sUrl + 'action/'])
-    liste.append(['Aventure', sUrl + 'adventure/'])
-    liste.append(['Chinois', sUrl + 'chinese/'])
-    liste.append(['Comédie', sUrl + 'comdey/'])
-    liste.append(['Drama', sUrl + 'drama/'])
-    liste.append(['Ecchi', sUrl + 'ecchi/'])
-    liste.append(['Fantastique', sUrl + 'fantasy/'])
-    liste.append(['Horreur', sUrl + 'horror/'])
-    liste.append(['Mahou Shoujo', sUrl + 'mahou-shoujo/'])
-    liste.append(['Mécha', sUrl + 'mecha/'])
-    liste.append(['Musique', sUrl + 'music/'])
-    liste.append(['Mystère', sUrl + 'mystery'])
-    liste.append(['Psychologie', sUrl + 'psychological/'])
-    liste.append(['Romance', sUrl + 'romance/'])
-    liste.append(['Sci-Fi', sUrl + 'sci-fi/'])
-    liste.append(['Trance de vie', sUrl + 'slice-of-life/'])
-    liste.append(['Sports', sUrl + 'sports/'])
-    liste.append(['Surnaturel', sUrl + 'supernatural/'])
-    liste.append(['Thriller', sUrl + 'thriller/'])
+    liste.append(['Action', url + 'action/'])
+    liste.append(['Aventure', url + 'adventure/'])
+    liste.append(['Chinois', url + 'chinese/'])
+    liste.append(['Comédie', url + 'comdey/'])
+    liste.append(['Drama', url + 'drama/'])
+    liste.append(['Ecchi', url + 'ecchi/'])
+    liste.append(['Fantastique', url + 'fantasy/'])
+    liste.append(['Horreur', url + 'horror/'])
+    liste.append(['Mahou Shoujo', url + 'mahou-shoujo/'])
+    liste.append(['Mécha', url + 'mecha/'])
+    liste.append(['Musique', url + 'music/'])
+    liste.append(['Mystère', url + 'mystery'])
+    liste.append(['Psychologie', url + 'psychological/'])
+    liste.append(['Romance', url + 'romance/'])
+    liste.append(['Sci-Fi', url + 'sci-fi/'])
+    liste.append(['Trance de vie', url + 'slice-of-life/'])
+    liste.append(['Sports', url + 'sports/'])
+    liste.append(['Surnaturel', url + 'supernatural/'])
+    liste.append(['Thriller', url + 'thriller/'])
 
     output_parameter_handler = OutputParameterHandler()
-    for title, sUrl in liste:
-        output_parameter_handler.addParameter('siteUrl', sUrl)
+    for title, url in liste:
+        output_parameter_handler.addParameter('site_url', url)
         gui.addDir(
             SITE_IDENTIFIER,
             'showAnimes',
@@ -186,94 +186,94 @@ def showGenres():
     gui.setEndOfDirectory()
 
 
-def showAnimes(sSearch=''):
+def showAnimes(search=''):
     gui = Gui()
-    oParser = Parser()
+    parser = Parser()
 
-    if sSearch:
-        sUrl = sSearch
+    if search:
+        url = search
 
-        sTypeSearch = oParser.parseSingleResult(sUrl, '\\?type=(.+?)&')
+        sTypeSearch = parser.parseSingleResult(url, '\\?type=(.+?)&')
         if sTypeSearch[0]:
             sTypeSearch = sTypeSearch[1]
         else:
             sTypeSearch = False
 
-        oRequest = RequestHandler(sUrl)
-        oRequest.addHeaderEntry('Referer', URL_MAIN)
-        oRequest.addHeaderEntry(
+        request = RequestHandler(url)
+        request.addHeaderEntry('Referer', URL_MAIN)
+        request.addHeaderEntry(
             'Accept', 'text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8')
-        oRequest.addHeaderEntry(
+        request.addHeaderEntry(
             'Accept-Language',
             'fr,fr-FR;q=0.8,en-US;q=0.5,en;q=0.3')
-        oRequest.addHeaderEntry(
+        request.addHeaderEntry(
             'Content-Type',
             'application/x-www-form-urlencoded')
-        sHtmlContent = oRequest.request()
-        sPattern = '<a href="([^"]+)" title="([^"]+)".+?src="([^"]+)".+?Type.+?content.+?>([^<]+)'
+        html_content = request.request()
+        pattern = '<a href="([^"]+)" title="([^"]+)".+?src="([^"]+)".+?Type.+?content.+?>([^<]+)'
 
     else:
         input_parameter_handler = InputParameterHandler()
-        sUrl = input_parameter_handler.getValue('siteUrl')
-        oRequestHandler = RequestHandler(sUrl)
-        sHtmlContent = oRequestHandler.request()
-        sPattern = '<div class="page-item-detail video">.+?a href="([^"]+)" title="([^"]+)".+?src="([^"]+)"'
+        url = input_parameter_handler.getValue('site_url')
+        request_handler = RequestHandler(url)
+        html_content = request_handler.request()
+        pattern = '<div class="page-item-detail video">.+?a href="([^"]+)" title="([^"]+)".+?src="([^"]+)"'
 
-    aResult = oParser.parse(sHtmlContent, sPattern)
+    results = parser.parse(html_content, pattern)
 
-    if not aResult[0]:
+    if not results[0]:
         gui.addText(SITE_IDENTIFIER)
 
-    if aResult[0]:
-        total = len(aResult[1])
+    if results[0]:
+        total = len(results[1])
         progress_ = Progress().VScreate(SITE_NAME)
         output_parameter_handler = OutputParameterHandler()
-        for aEntry in aResult[1]:
+        for entry in results[1]:
             progress_.VSupdate(progress_, total)
             if progress_.iscanceled():
                 break
 
-            sUrl = aEntry[0]
-            if 'http' not in sUrl:
-                sUrl = URL_MAIN[:-1] + sUrl
+            url = entry[0]
+            if 'http' not in url:
+                url = URL_MAIN[:-1] + url
 
-            title = aEntry[1].replace('film ', '').replace(' streaming', '')
-            sThumb = aEntry[2]
-            if 'http' not in sThumb:
-                sThumb = URL_MAIN + sThumb
+            title = entry[1].replace('film ', '').replace(' streaming', '')
+            thumb = entry[2]
+            if 'http' not in thumb:
+                thumb = URL_MAIN + thumb
 
             if 'VOSTFR' in title:
                 title = title.replace('VOSTFR', '')
-                sLang = 'VOSTFR'
+                lang = 'VOSTFR'
             elif 'VF' in title:
                 title = title.replace('VF', '')
-                sLang = 'VF'
+                lang = 'VF'
             else:
-                sLang = 'VOSTFR'
+                lang = 'VOSTFR'
 
-            sDisplayTitle = '%s (%s)' % (title, sLang)
+            display_title = '%s (%s)' % (title, lang)
 
-            output_parameter_handler.addParameter('siteUrl', sUrl)
-            output_parameter_handler.addParameter('sMovieTitle', title)
-            output_parameter_handler.addParameter('sThumb', sThumb)
+            output_parameter_handler.addParameter('site_url', url)
+            output_parameter_handler.addParameter('movie_title', title)
+            output_parameter_handler.addParameter('thumb', thumb)
 
             gui.addAnime(
                 SITE_IDENTIFIER,
                 'showEpisodes',
-                sDisplayTitle,
-                sThumb,
-                sThumb,
+                display_title,
+                thumb,
+                thumb,
                 '',
                 output_parameter_handler)
 
         progress_.VSclose(progress_)
 
-    if not sSearch:
-        sNextPage = __checkForNextPage(sHtmlContent)
-        if sNextPage:
+    if not search:
+        next_page = __checkForNextPage(html_content)
+        if next_page:
             output_parameter_handler = OutputParameterHandler()
-            output_parameter_handler.addParameter('siteUrl', sNextPage)
-            number = re.findall('([0-9]+)', sNextPage)[-1]
+            output_parameter_handler.addParameter('site_url', next_page)
+            number = re.findall('([0-9]+)', next_page)[-1]
             gui.addNext(
                 SITE_IDENTIFIER,
                 'showAnimes',
@@ -283,12 +283,12 @@ def showAnimes(sSearch=''):
         gui.setEndOfDirectory()
 
 
-def __checkForNextPage(sHtmlContent):
-    sPattern = '<a class="nextpostslink".+?href="([^"]+)"'
-    oParser = Parser()
-    aResult = oParser.parse(sHtmlContent, sPattern)
-    if aResult[0]:
-        return aResult[1][0]
+def __checkForNextPage(html_content):
+    pattern = '<a class="nextpostslink".+?href="([^"]+)"'
+    parser = Parser()
+    results = parser.parse(html_content, pattern)
+    if results[0]:
+        return results[1][0]
 
     return False
 
@@ -297,78 +297,78 @@ def showEpisodes():
     gui = Gui()
 
     input_parameter_handler = InputParameterHandler()
-    sUrl = input_parameter_handler.getValue('siteUrl')
-    sThumb = input_parameter_handler.getValue('sThumb')
+    url = input_parameter_handler.getValue('site_url')
+    thumb = input_parameter_handler.getValue('thumb')
 
-    oRequestHandler = RequestHandler(sUrl)
-    sHtmlContent = oRequestHandler.request()
+    request_handler = RequestHandler(url)
+    html_content = request_handler.request()
 
-    oParser = Parser()
+    parser = Parser()
     # recup description
-    sPattern = '<div class="summary__content ">.+?<p>([^<]+)'
-    aResult = oParser.parse(sHtmlContent, sPattern)
+    pattern = '<div class="summary__content ">.+?<p>([^<]+)'
+    results = parser.parse(html_content, pattern)
 
-    desc = ('[I][COLOR grey]%s[/COLOR][/I] %s') % ('Synopsis :', aResult[0])
+    desc = ('[I][COLOR grey]%s[/COLOR][/I] %s') % ('Synopsis :', results[0])
 
     # Recup lien + titre
-    sPattern = '<li class="wp-manga-chapter.+?="([^"]+)".+?([^<]+)'
-    aResult = oParser.parse(sHtmlContent, sPattern)
+    pattern = '<li class="wp-manga-chapter.+?="([^"]+)".+?([^<]+)'
+    results = parser.parse(html_content, pattern)
 
-    if not aResult[0]:
+    if not results[0]:
         gui.addText(SITE_IDENTIFIER)
 
-    if aResult[0]:
+    if results[0]:
         output_parameter_handler = OutputParameterHandler()
 
         # Dernier épisode
-        sUrlEpisode = aResult[1][0][0]
-        title = aResult[1][0][1]
+        sUrlEpisode = results[1][0][0]
+        title = results[1][0][1]
 
-        output_parameter_handler.addParameter('siteUrl', sUrlEpisode)
-        output_parameter_handler.addParameter('sMovieTitle', title)
+        output_parameter_handler.addParameter('site_url', sUrlEpisode)
+        output_parameter_handler.addParameter('movie_title', title)
         output_parameter_handler.addParameter('desc', desc)
-        output_parameter_handler.addParameter('sThumb', sThumb)
+        output_parameter_handler.addParameter('thumb', thumb)
         gui.addEpisode(
             SITE_IDENTIFIER,
             'showLinks',
             '===] Dernier épisode [===',
             '',
-            sThumb,
+            thumb,
             desc,
             output_parameter_handler)
 
         # Premier épisode
-        sUrlEpisode = aResult[1][-1][0]
-        title = aResult[1][-1][1]
+        sUrlEpisode = results[1][-1][0]
+        title = results[1][-1][1]
 
-        output_parameter_handler.addParameter('siteUrl', sUrlEpisode)
-        output_parameter_handler.addParameter('sMovieTitle', title)
+        output_parameter_handler.addParameter('site_url', sUrlEpisode)
+        output_parameter_handler.addParameter('movie_title', title)
         output_parameter_handler.addParameter('desc', desc)
-        output_parameter_handler.addParameter('sThumb', sThumb)
+        output_parameter_handler.addParameter('thumb', thumb)
         gui.addEpisode(
             SITE_IDENTIFIER,
             'showLinks',
             '===] Premier épisode [===',
             '',
-            sThumb,
+            thumb,
             desc,
             output_parameter_handler)
 
         # Liste des épisodes
-        for aEntry in aResult[1]:
-            sUrlEpisode = aEntry[0]
-            title = aEntry[1]
+        for entry in results[1]:
+            sUrlEpisode = entry[0]
+            title = entry[1]
 
-            output_parameter_handler.addParameter('siteUrl', sUrlEpisode)
-            output_parameter_handler.addParameter('sMovieTitle', title)
+            output_parameter_handler.addParameter('site_url', sUrlEpisode)
+            output_parameter_handler.addParameter('movie_title', title)
             output_parameter_handler.addParameter('desc', desc)
-            output_parameter_handler.addParameter('sThumb', sThumb)
+            output_parameter_handler.addParameter('thumb', thumb)
             gui.addEpisode(
                 SITE_IDENTIFIER,
                 'showLinks',
                 title,
                 '',
-                sThumb,
+                thumb,
                 desc,
                 output_parameter_handler)
 
@@ -378,51 +378,51 @@ def showEpisodes():
 def showLinks():
     gui = Gui()
     input_parameter_handler = InputParameterHandler()
-    sUrl = input_parameter_handler.getValue('siteUrl')
-    sMovieTitle = input_parameter_handler.getValue('sMovieTitle')
-    sThumb = input_parameter_handler.getValue('sThumb')
+    url = input_parameter_handler.getValue('site_url')
+    movie_title = input_parameter_handler.getValue('movie_title')
+    thumb = input_parameter_handler.getValue('thumb')
 
-    oRequestHandler = RequestHandler(sUrl)
-    sHtmlContent = oRequestHandler.request()
+    request_handler = RequestHandler(url)
+    html_content = request_handler.request()
 
     # Les elements post.
     data = re.search(
         'data-action="bookmark" data-post="([^"]+)" data-chapter="([^"]+)"',
-        sHtmlContent)
+        html_content)
     post = data.group(1)
     chapter = data.group(2)
 
     # On extrait une partie de la page pour eviter les doublons.
     sData = re.search(
         '<select class="selectpicker host-select">(.+?)</select> </label>',
-        sHtmlContent,
+        html_content,
         re.MULTILINE | re.DOTALL).group(1)
 
-    oParser = Parser()
-    sPattern = '<option data-redirect=.+?value="([^"]+)">LECTEUR.+?</option>'
+    parser = Parser()
+    pattern = '<option data-redirect=.+?value="([^"]+)">LECTEUR.+?</option>'
 
-    aResult = oParser.parse(sData, sPattern)
+    results = parser.parse(sData, pattern)
 
-    if aResult[0]:
+    if results[0]:
         output_parameter_handler = OutputParameterHandler()
-        for aEntry in aResult[1]:
+        for entry in results[1]:
 
-            title = sMovieTitle + aEntry
+            title = movie_title + entry
 
-            output_parameter_handler.addParameter('siteUrl', sUrl)
-            output_parameter_handler.addParameter('sMovieTitle', title)
+            output_parameter_handler.addParameter('site_url', url)
+            output_parameter_handler.addParameter('movie_title', title)
             output_parameter_handler.addParameter('desc', 'salut')
-            output_parameter_handler.addParameter('sThumb', sThumb)
+            output_parameter_handler.addParameter('thumb', thumb)
             output_parameter_handler.addParameter('sPost', post)
             output_parameter_handler.addParameter('sChapter', chapter)
-            output_parameter_handler.addParameter('sType', aEntry)
+            output_parameter_handler.addParameter('_type', entry)
 
             gui.addEpisode(
                 SITE_IDENTIFIER,
                 'RecapchaBypass',
                 title,
                 '',
-                sThumb,
+                thumb,
                 '',
                 output_parameter_handler)
 
@@ -432,18 +432,18 @@ def showLinks():
 def RecapchaBypass():
     gui = Gui()
     input_parameter_handler = InputParameterHandler()
-    sUrl = input_parameter_handler.getValue('siteUrl')
-    sMovieTitle = input_parameter_handler.getValue('sMovieTitle')
-    sThumb = input_parameter_handler.getValue('sThumb')
+    url = input_parameter_handler.getValue('site_url')
+    movie_title = input_parameter_handler.getValue('movie_title')
+    thumb = input_parameter_handler.getValue('thumb')
     post = input_parameter_handler.getValue('sPost')
     chapter = input_parameter_handler.getValue('sChapter')
-    types = input_parameter_handler.getValue('sType')
+    types = input_parameter_handler.getValue('_type')
 
     # La lib qui gere recaptcha
     from resources.lib import librecaptcha
     test = librecaptcha.get_token(
         api_key="6Ld2q9gUAAAAAP9vNl23kYuST72fYsu494_B2qaZ",
-        site_url=sUrl,
+        site_url=url,
         user_agent=UA,
         gui=False,
         debug=False)
@@ -455,21 +455,21 @@ def RecapchaBypass():
 
     else:
         # N'affiche pas directement le liens car sinon Kodi crash.
-        sDisplayTitle = "Recaptcha passé avec succès, cliquez pour afficher les liens"
+        display_title = "Recaptcha passé avec succès, cliquez pour afficher les liens"
         output_parameter_handler = OutputParameterHandler()
-        output_parameter_handler.addParameter('siteUrl', sUrl)
-        output_parameter_handler.addParameter('sMovieTitle', sMovieTitle)
-        output_parameter_handler.addParameter('sThumb', sThumb)
+        output_parameter_handler.addParameter('site_url', url)
+        output_parameter_handler.addParameter('movie_title', movie_title)
+        output_parameter_handler.addParameter('thumb', thumb)
         output_parameter_handler.addParameter('Token', test)
         output_parameter_handler.addParameter('sPost', post)
         output_parameter_handler.addParameter('sChapter', chapter)
-        output_parameter_handler.addParameter('sType', types)
+        output_parameter_handler.addParameter('_type', types)
         gui.addEpisode(
             SITE_IDENTIFIER,
             'getHost',
-            sDisplayTitle,
+            display_title,
             '',
-            sThumb,
+            thumb,
             '',
             output_parameter_handler)
 
@@ -479,49 +479,49 @@ def RecapchaBypass():
 def getHost():
     gui = Gui()
     input_parameter_handler = InputParameterHandler()
-    sUrl = input_parameter_handler.getValue('siteUrl')
-    sMovieTitle = input_parameter_handler.getValue('sMovieTitle')
-    sThumb = input_parameter_handler.getValue('sThumb')
+    url = input_parameter_handler.getValue('site_url')
+    movie_title = input_parameter_handler.getValue('movie_title')
+    thumb = input_parameter_handler.getValue('thumb')
     test = input_parameter_handler.getValue('Token')
     post = input_parameter_handler.getValue('sPost')
     chapter = input_parameter_handler.getValue('sChapter')
-    types = input_parameter_handler.getValue('sType')
+    types = input_parameter_handler.getValue('_type')
 
     # On valide le token du coté du site
     data = 'action=get_video_chapter_content&grecaptcha=' + test + '&manga=' + \
         post + '&chapter=' + chapter + '&host=' + types.replace(' ', '+')
-    oRequestHandler = RequestHandler(
+    request_handler = RequestHandler(
         "https://voiranime.com/wp-admin/admin-ajax.php")
-    oRequestHandler.setRequestType(1)
-    oRequestHandler.addHeaderEntry('User-Agent', UA)
-    oRequestHandler.addHeaderEntry(
+    request_handler.setRequestType(1)
+    request_handler.addHeaderEntry('User-Agent', UA)
+    request_handler.addHeaderEntry(
         'Accept',
         'text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,*/*;q=0.8')
-    oRequestHandler.addHeaderEntry(
+    request_handler.addHeaderEntry(
         'Accept-Language',
         'fr,fr-FR;q=0.8,en-US;q=0.5,en;q=0.3')
-    oRequestHandler.addHeaderEntry('Accept-Encoding', 'gzip')
-    oRequestHandler.addHeaderEntry('Referer', sUrl)
-    oRequestHandler.addHeaderEntry(
+    request_handler.addHeaderEntry('Accept-Encoding', 'gzip')
+    request_handler.addHeaderEntry('Referer', url)
+    request_handler.addHeaderEntry(
         'Content-Type',
         'application/x-www-form-urlencoded')
-    oRequestHandler.addHeaderEntry('Content-Length', len(str(data)))
-    oRequestHandler.addParametersLine(data)
-    sHtmlContent = oRequestHandler.request()
+    request_handler.addHeaderEntry('Content-Length', len(str(data)))
+    request_handler.addParametersLine(data)
+    html_content = request_handler.request()
 
-    sPattern = '<iframe src="([^"]+)"'
+    pattern = '<iframe src="([^"]+)"'
 
-    oParser = Parser()
-    aResult = oParser.parse(sHtmlContent, sPattern)
+    parser = Parser()
+    results = parser.parse(html_content, pattern)
 
-    if aResult[0]:
+    if results[0]:
 
-        for aEntry in aResult[1]:
-            sHosterUrl = aEntry.replace('\\', '').replace('\\/', '/')
-            oHoster = HosterGui().checkHoster(sHosterUrl)
-            if oHoster:
-                oHoster.setDisplayName(sMovieTitle)
-                oHoster.setFileName(sMovieTitle)
-                HosterGui().showHoster(gui, oHoster, sHosterUrl, sThumb,
+        for entry in results[1]:
+            hoster_url = entry.replace('\\', '').replace('\\/', '/')
+            hoster = HosterGui().checkHoster(hoster_url)
+            if hoster:
+                hoster.setDisplayName(movie_title)
+                hoster.setFileName(movie_title)
+                HosterGui().showHoster(gui, hoster, hoster_url, thumb,
                                        input_parameter_handler=input_parameter_handler)
     gui.setEndOfDirectory()

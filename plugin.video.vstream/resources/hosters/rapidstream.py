@@ -11,17 +11,17 @@ class cHoster(iHoster):
     def __init__(self):
         iHoster.__init__(self, 'rapidstream', 'Rapidstream')
 
-    def _getMediaLinkForGuest(self, autoPlay=False):
+    def _getMediaLinkForGuest(self, auto_play=False):
         api_call = ''
-        oParser = Parser()
+        parser = Parser()
 
-        oRequest = RequestHandler(self._url)
-        sHtmlContent = oRequest.request()
-        sPattern = '"(http[^"]+(?:.m3u8|.mp4))"'
+        request = RequestHandler(self._url)
+        html_content = request.request()
+        pattern = '"(http[^"]+(?:.m3u8|.mp4))"'
 
-        aResult = oParser.parse(sHtmlContent, sPattern)
-        if aResult[0] is True:
-            api_call = aResult[1][1]
+        results = parser.parse(html_content, pattern)
+        if results[0] is True:
+            api_call = results[1][1]
 
         if api_call:
             return True, api_call

@@ -28,43 +28,43 @@ class cHoster(iHoster):
             'http://hqq.tv/player/embed_player.php?vid=')
 
     def __getIdFromUrl(self):
-        sPattern = 'https*:\\/\\/hqq\\.(?:tv|player|watch)\\/player\\/embed_player\\.php\\?vid=([0-9A-Za-z]+)'
-        oParser = Parser()
-        aResult = oParser.parse(self._url, sPattern)
+        pattern = 'https*:\\/\\/hqq\\.(?:tv|player|watch)\\/player\\/embed_player\\.php\\?vid=([0-9A-Za-z]+)'
+        parser = Parser()
+        results = parser.parse(self._url, pattern)
 
-        if aResult[0] is True:
-            return aResult[1][0]
+        if results[0] is True:
+            return results[1][0]
         return ''
 
     def isDownloadable(self):
         return False
 
-    def _getMediaLinkForGuest(self, autoPlay=False):
+    def _getMediaLinkForGuest(self, auto_play=False):
         ids = self.__getIdFromUrl()
 
         hqqUrl = 'http://hqq.tv/player/embed_player.php?vid=' + ids + '&autoplay=no'
 
-        oRequestHandler = RequestHandler(hqqUrl)
-        oRequestHandler.addHeaderEntry('User-Agent', UA)
-        html = oRequestHandler.request()
+        request_handler = RequestHandler(hqqUrl)
+        request_handler.addHeaderEntry('User-Agent', UA)
+        html = request_handler.request()
 
         vid = re.search("videokeyorig *= *\'(.+?)\'", html, re.DOTALL).group(1)
 
         url = "time=1&ver=0&secure=0&adb=0%2F&v={}&token=&gt=&embed_from=0&wasmcheck=1".format(
             vid)
 
-        oRequestHandler = RequestHandler(
+        request_handler = RequestHandler(
             'https://hqq.tv/player/get_md5.php?' + url)
-        oRequestHandler.addHeaderEntry('User-Agent', UA)
-        oRequestHandler.addHeaderEntry('Accept', '*/*')
-        oRequestHandler.addHeaderEntry(
+        request_handler.addHeaderEntry('User-Agent', UA)
+        request_handler.addHeaderEntry('Accept', '*/*')
+        request_handler.addHeaderEntry(
             'Accept-Language',
             'fr,fr-FR;q=0.8,en-US;q=0.5,en;q=0.3')
-        oRequestHandler.addHeaderEntry('x-requested-with', 'XMLHttpRequest')
-        oRequestHandler.addHeaderEntry('Referer', hqqUrl)
+        request_handler.addHeaderEntry('x-requested-with', 'XMLHttpRequest')
+        request_handler.addHeaderEntry('Referer', hqqUrl)
 
-        oRequestHandler.request()
-        api_call = oRequestHandler.getRealUrl()
+        request_handler.request()
+        api_call = request_handler.getRealUrl()
 
         if api_call:
             return True, api_call + '.mp4.m3u8' + '|User-Agent=' + UA

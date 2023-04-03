@@ -16,7 +16,7 @@ class cHoster(iHoster):
         url = 'http://filetrip.net/embed?' + str(url)
         return url
 
-    def _getMediaLinkForGuest(self, autoPlay=False):
+    def _getMediaLinkForGuest(self, auto_play=False):
         # lien deja decode
         if self._url[-4] == '.':
             return True, self._url
@@ -24,14 +24,14 @@ class cHoster(iHoster):
         # Sinon on decode
         self._url = self.reformat(self._url)
 
-        oRequest = RequestHandler(self._url)
-        sHtmlContent = oRequest.request()
+        request = RequestHandler(self._url)
+        html_content = request.request()
 
-        sPattern = "file': '(.+?)',"
-        oParser = Parser()
-        aResult = oParser.parse(sHtmlContent, sPattern)
+        pattern = "file': '(.+?)',"
+        parser = Parser()
+        results = parser.parse(html_content, pattern)
 
-        if aResult[0] is True:
-            return True, aResult[1][0]
+        if results[0] is True:
+            return True, results[1][0]
 
         return False, False

@@ -10,18 +10,18 @@ class cHoster(iHoster):
     def __init__(self):
         iHoster.__init__(self, 'axavid', 'Axavid')
 
-    def _getMediaLinkForGuest(self, autoPlay=False):
-        oRequest = RequestHandler(self._url)
-        sHtmlContent = oRequest.request()
+    def _getMediaLinkForGuest(self, auto_play=False):
+        request = RequestHandler(self._url)
+        html_content = request.request()
 
-        sPattern = 'file: "([^"]+)"'
+        pattern = 'file: "([^"]+)"'
 
-        oParser = Parser()
-        sHtmlContent = sHtmlContent.replace('|', '/')
-        aResult = oParser.parse(sHtmlContent, sPattern)
+        parser = Parser()
+        html_content = html_content.replace('|', '/')
+        results = parser.parse(html_content, pattern)
 
-        if aResult[0] is True:
-            api_call = aResult[1][0]
+        if results[0] is True:
+            api_call = results[1][0]
             return True, api_call
 
         return False, False

@@ -22,29 +22,29 @@ class cHoster(iHoster):
         self._url = self._url.replace('.html', '')
         self._url = 'https://vidzi.tv/' + str(self._url) + '.html'
 
-    def _getMediaLinkForGuest(self, autoPlay=False):
+    def _getMediaLinkForGuest(self, auto_play=False):
         api_call = ''
 
-        oRequest = RequestHandler(self._url)
-        sHtmlContent = oRequest.request()
-        oParser = Parser()
+        request = RequestHandler(self._url)
+        html_content = request.request()
+        parser = Parser()
 
         # lien direct
-        sPattern = ',{file: *"([^"]+)"}\\]'
-        aResult = oParser.parse(sHtmlContent, sPattern)
-        if aResult[0] is True:
-            api_call = aResult[1][0]
+        pattern = ',{file: *"([^"]+)"}\\]'
+        results = parser.parse(html_content, pattern)
+        if results[0] is True:
+            api_call = results[1][0]
 
         # 2 test Dean Edwards Packer
         else:
-            sPattern = "<script type='text/javascript'>(\\s*eval\\s*\\(\\s*function(?:.|\\s)+?)<\\/script>"
-            aResult = oParser.parse(sHtmlContent, sPattern)
-            if aResult[0] is True:
-                sUnpacked = cPacker().unpack(aResult[1][0])
-                sPattern = 'file:"([^"]+\\.mp4)'
-                aResult = oParser.parse(sUnpacked, sPattern)
-                if aResult[0] is True:
-                    api_call = aResult[1][0]
+            pattern = "<script type='text/javascript'>(\\s*eval\\s*\\(\\s*function(?:.|\\s)+?)<\\/script>"
+            results = parser.parse(html_content, pattern)
+            if results[0] is True:
+                sUnpacked = cPacker().unpack(results[1][0])
+                pattern = 'file:"([^"]+\\.mp4)'
+                results = parser.parse(sUnpacked, pattern)
+                if results[0] is True:
+                    api_call = results[1][0]
 
         if api_call:
             return True, api_call

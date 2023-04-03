@@ -12,22 +12,22 @@ class cHoster(iHoster):
     def __init__(self):
         iHoster.__init__(self, 'vidia', 'Vidia')
 
-    def _getMediaLinkForGuest(self, autoPlay=False):
+    def _getMediaLinkForGuest(self, auto_play=False):
         api_call = False
 
-        oRequest = RequestHandler(self._url)
-        sHtmlContent = oRequest.request()
-        sPattern = "(\\s*eval\\s*\\(\\s*function(?:.|\\s)+?)<\\/script>"
-        oParser = Parser()
-        aResult = oParser.parse(sHtmlContent, sPattern)
+        request = RequestHandler(self._url)
+        html_content = request.request()
+        pattern = "(\\s*eval\\s*\\(\\s*function(?:.|\\s)+?)<\\/script>"
+        parser = Parser()
+        results = parser.parse(html_content, pattern)
 
-        if aResult[0] is True:
-            sHtmlContent = cPacker().unpack(aResult[1][0])
-            sPattern = '{file:"([^"]+)"}'
-            aResult = oParser.parse(sHtmlContent, sPattern)
+        if results[0] is True:
+            html_content = cPacker().unpack(results[1][0])
+            pattern = '{file:"([^"]+)"}'
+            results = parser.parse(html_content, pattern)
 
-        if aResult[0] is True:
-            api_call = aResult[1][0].replace(
+        if results[0] is True:
+            api_call = results[1][0].replace(
                 ',', '').replace(
                 'master.m3u8', 'index-v1-a1.m3u8')
 

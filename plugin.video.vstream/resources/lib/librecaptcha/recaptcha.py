@@ -462,7 +462,7 @@ class ReCaptcha(object):
         uvresp = load_rc_json(r.text)
         rresp = get_rresp(uvresp)
         uvresp_token = uvresp[1]
-        return (uvresp_token, rresp)
+        return uvresp_token, rresp
 
     def get_first_rresp(self):
         r = self.post("reload", data={"reason": "fi", "c": self.first_token})

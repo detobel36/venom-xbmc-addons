@@ -30,33 +30,33 @@ class cHoster(iHoster):
     def __init__(self):
         iHoster.__init__(self, 'pstream', 'Pstream')
 
-    def _getMediaLinkForGuest(self, autoPlay=False):
+    def _getMediaLinkForGuest(self, auto_play=False):
         api_call = ''
 
-        oRequest = RequestHandler(self._url)
-        oRequest.addHeaderEntry('User-Agent', UA)
-        oRequest.addHeaderEntry(
+        request = RequestHandler(self._url)
+        request.addHeaderEntry('User-Agent', UA)
+        request.addHeaderEntry(
             'Accept', 'text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8')
-        oRequest.addHeaderEntry(
+        request.addHeaderEntry(
             'Accept-Language',
             'fr,fr-FR;q=0.8,en-US;q=0.5,en;q=0.3')
-        sHtmlContent = oRequest.request()
+        html_content = request.request()
 
-        oParser = Parser()
-        sPattern = '<script src="(.+?)"'
-        aResult = oParser.parse(sHtmlContent, sPattern)[1][1]
+        parser = Parser()
+        pattern = '<script src="(.+?)"'
+        results = parser.parse(html_content, pattern)[1][1]
 
-        oRequest = RequestHandler(aResult)
-        oRequest.addHeaderEntry('User-Agent', UA)
-        oRequest.addHeaderEntry(
+        request = RequestHandler(results)
+        request.addHeaderEntry('User-Agent', UA)
+        request.addHeaderEntry(
             'Accept', 'text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8')
-        oRequest.addHeaderEntry(
+        request.addHeaderEntry(
             'Accept-Language',
             'fr,fr-FR;q=0.8,en-US;q=0.5,en;q=0.3')
-        sHtmlContent = oRequest.request()
+        html_content = request.request()
 
-        sPattern = 'atob.+?\\}\\("(.+?)"'
-        code = oParser.parse(sHtmlContent, sPattern)
+        pattern = 'atob.+?\\}\\("(.+?)"'
+        code = parser.parse(html_content, pattern)
 
         for i in code[1]:
             try:

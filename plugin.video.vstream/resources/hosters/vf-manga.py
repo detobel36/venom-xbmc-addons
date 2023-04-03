@@ -17,37 +17,37 @@ class cHoster(iHoster):
     def _getMediaLinkForGuest(self):
         api_call = False
 
-        oRequest = RequestHandler(self._url)
-        sHtmlContent = oRequest.request()
+        request = RequestHandler(self._url)
+        html_content = request.request()
 
-        oParser = Parser()
-        sPattern = 'unescape\\("(.+?)"'
-        aResult = oParser.parse(sHtmlContent, sPattern)
+        parser = Parser()
+        pattern = 'unescape\\("(.+?)"'
+        results = parser.parse(html_content, pattern)
 
-        if (aResult[0]):
-            s = aResult[1][0].replace('%', '')
+        if (results[0]):
+            s = results[1][0].replace('%', '')
             chain = codecs.decode(s, "hex")
 
-            sPattern = '<script type="text\\/javascript">(eval\\(function\\(p,a,c,k,e,d.+?)<\\/script>'
-            aResult = oParser.parse(chain, sPattern)
-            if not aResult[0]:
+            pattern = '<script type="text\\/javascript">(eval\\(function\\(p,a,c,k,e,d.+?)<\\/script>'
+            results = parser.parse(chain, pattern)
+            if not results[0]:
                 return False, False
 
-            sHtmlContent = cPacker().unpack(aResult[1][0])
+            html_content = cPacker().unpack(results[1][0])
 
-            sPattern = '<iframe src=.+?"([^"]+)'
-            aResult = oParser.parse(sHtmlContent, sPattern)
+            pattern = '<iframe src=.+?"([^"]+)'
+            results = parser.parse(html_content, pattern)
 
-            if aResult[0]:
-                api_call = aResult[1][0].replace('\\', '')
+            if results[0]:
+                api_call = results[1][0].replace('\\', '')
 
                 if not api_call.startswith('http'):
                     api_call = 'https://vf-manga.cc/player/' + api_call
 
-                oRequest = RequestHandler(api_call)
-                oRequest.addHeaderEntry('Referer', self._url)
-                sHtmlContent = oRequest.request()
-                api_call = oRequest.getRealUrl()
+                request = RequestHandler(api_call)
+                request.addHeaderEntry('Referer', self._url)
+                html_content = request.request()
+                api_call = request.getRealUrl()
 
         if api_call:
             return False, api_call  # redirection

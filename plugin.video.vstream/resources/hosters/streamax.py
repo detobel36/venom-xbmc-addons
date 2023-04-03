@@ -13,39 +13,39 @@ class cHoster(iHoster):
     def __init__(self):
         iHoster.__init__(self, 'streamax', 'Streamax')
 
-    def __getIdFromUrl(self, sUrl):
-        sPattern = 'id=([a-zA-Z0-9]+)'
-        oParser = Parser()
-        aResult = oParser.parse(sUrl, sPattern)
+    def __getIdFromUrl(self, url):
+        pattern = 'id=([a-zA-Z0-9]+)'
+        parser = Parser()
+        results = parser.parse(url, pattern)
 
-        if aResult[0] is True:
-            return aResult[1][0]
+        if results[0] is True:
+            return results[1][0]
         return ''
 
-    def _getMediaLinkForGuest(self, autoPlay=False):
-        oParser = Parser()
+    def _getMediaLinkForGuest(self, auto_play=False):
+        parser = Parser()
 
         urlId = self.__getIdFromUrl(self._url)
 
-        sUrl = 'https://streamax.club/hls/' + urlId + '/' + urlId + '.playlist.m3u8'
+        url = 'https://streamax.club/hls/' + urlId + '/' + urlId + '.playlist.m3u8'
 
         url = []
         qua = []
 
-        oRequest = RequestHandler(sUrl)
-        oRequest.addHeaderEntry('User-Agent', UA)
-        oRequest.addHeaderEntry(
+        request = RequestHandler(url)
+        request.addHeaderEntry('User-Agent', UA)
+        request.addHeaderEntry(
             'Referer',
             'https://streamax.club/public/dist/index.html?id=' +
             urlId)
-        sHtmlContent = oRequest.request()
+        html_content = request.request()
 
-        sPattern = 'RESOLUTION=(\\d+x\\d+)(.+?.m3u8)'
-        aResult = oParser.parse(sHtmlContent, sPattern)
-        if aResult[0] is True:
-            for aEntry in aResult[1]:
-                url.append('https://streamax.club' + aEntry[1])
-                qua.append(aEntry[0])
+        pattern = 'RESOLUTION=(\\d+x\\d+)(.+?.m3u8)'
+        results = parser.parse(html_content, pattern)
+        if results[0] is True:
+            for entry in results[1]:
+                url.append('https://streamax.club' + entry[1])
+                qua.append(entry[0])
 
             if url:
                 api_call = dialog().VSselectqual(qua, url)

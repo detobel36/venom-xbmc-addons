@@ -121,15 +121,9 @@ class SucurieBypass(object):
         return False
 
     def SetHeader(self):
-        head = []
-        head.append(('User-Agent', UA))
-        head.append(('Host', self.host))
-        head.append(
-            ('Accept', 'text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8'))
-        head.append(('Referer', self.url))
-        head.append(('Content-Type', 'text/html; charset=utf-8'))
-        head.append(('Accept-Encodinge', 'identity'))
-        return head
+        return [('User-Agent', UA), ('Host', self.host),
+                ('Accept', 'text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8'), ('Referer', self.url),
+                ('Content-Type', 'text/html; charset=utf-8'), ('Accept-Encodinge', 'identity')]
 
     def GetHtml(self, url, data=None):
         self.hostComplet = re.sub(r'(https*:\/\/[^/]+)(\/*.*)', '\\1', url)
@@ -138,20 +132,20 @@ class SucurieBypass(object):
 
         # on cherche des precedents cookies
         cookies = self.Readcookie(self.host.replace('.', '_'))
-        htmlcontent, url2 = self.htmlrequest(url, cookies, data)
+        html_content, url2 = self.htmlrequest(url, cookies, data)
 
-        if not self.CheckIfActive(htmlcontent):
+        if not self.CheckIfActive(html_content):
             # ok pas de protection
             # Pas de redirection ?
             if url2 == url:
-                return htmlcontent
+                return html_content
             else:
-                htmlcontent, dummy = self.htmlrequest(
+                html_content, dummy = self.htmlrequest(
                     url2, cookies, data, False)
-                return htmlcontent
+                return html_content
 
         # on cherche le nouveau cookie
-        cookies = self.DecryptCookie(htmlcontent)
+        cookies = self.DecryptCookie(html_content)
         if not cookies:
             VSlog('Erreur decodage sucuri')
             return ''
@@ -162,9 +156,9 @@ class SucurieBypass(object):
         self.SaveCookie(self.host.replace('.', '_'), cookies)
 
         # et on recommence
-        htmlcontent, dummy = self.htmlrequest(url, cookies, data)
+        html_content, dummy = self.htmlrequest(url, cookies, data)
 
-        return htmlcontent
+        return html_content
 
     def htmlrequest(self, url, cookies, data, Block_redirection=True):
 

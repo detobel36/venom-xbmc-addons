@@ -35,7 +35,7 @@ def load():
     gui = Gui()
 
     output_parameter_handler = OutputParameterHandler()
-    output_parameter_handler.addParameter('siteUrl', URL_SEARCH[0])
+    output_parameter_handler.addParameter('site_url', URL_SEARCH[0])
     gui.addDir(
         SITE_IDENTIFIER,
         'showSearch',
@@ -43,7 +43,7 @@ def load():
         'search.png',
         output_parameter_handler)
 
-    output_parameter_handler.addParameter('siteUrl', MOVIE_AFL[0])
+    output_parameter_handler.addParameter('site_url', MOVIE_AFL[0])
     gui.addDir(
         SITE_IDENTIFIER,
         MOVIE_AFL[1],
@@ -51,7 +51,7 @@ def load():
         'sport.png',
         output_parameter_handler)
 
-    output_parameter_handler.addParameter('siteUrl', MOVIE_MOTOR[0])
+    output_parameter_handler.addParameter('site_url', MOVIE_MOTOR[0])
     gui.addDir(
         SITE_IDENTIFIER,
         MOVIE_MOTOR[1],
@@ -59,7 +59,7 @@ def load():
         'sport.png',
         output_parameter_handler)
 
-    output_parameter_handler.addParameter('siteUrl', MOVIE_NBA[0])
+    output_parameter_handler.addParameter('site_url', MOVIE_NBA[0])
     gui.addDir(
         SITE_IDENTIFIER,
         MOVIE_NBA[1],
@@ -67,7 +67,7 @@ def load():
         'sport.png',
         output_parameter_handler)
 
-    output_parameter_handler.addParameter('siteUrl', MOVIE_NFL[0])
+    output_parameter_handler.addParameter('site_url', MOVIE_NFL[0])
     gui.addDir(
         SITE_IDENTIFIER,
         MOVIE_NFL[1],
@@ -75,7 +75,7 @@ def load():
         'sport.png',
         output_parameter_handler)
 
-    output_parameter_handler.addParameter('siteUrl', MOVIE_NHL[0])
+    output_parameter_handler.addParameter('site_url', MOVIE_NHL[0])
     gui.addDir(
         SITE_IDENTIFIER,
         MOVIE_NHL[1],
@@ -83,7 +83,7 @@ def load():
         'sport.png',
         output_parameter_handler)
 
-    output_parameter_handler.addParameter('siteUrl', MOVIE_MLB[0])
+    output_parameter_handler.addParameter('site_url', MOVIE_MLB[0])
     gui.addDir(
         SITE_IDENTIFIER,
         MOVIE_MLB[1],
@@ -91,7 +91,7 @@ def load():
         'sport.png',
         output_parameter_handler)
 
-    output_parameter_handler.addParameter('siteUrl', MOVIE_RUGBY[0])
+    output_parameter_handler.addParameter('site_url', MOVIE_RUGBY[0])
     gui.addDir(
         SITE_IDENTIFIER,
         MOVIE_RUGBY[1],
@@ -99,7 +99,7 @@ def load():
         'sport.png',
         output_parameter_handler)
 
-    output_parameter_handler.addParameter('siteUrl', MOVIE_MMA[0])
+    output_parameter_handler.addParameter('site_url', MOVIE_MMA[0])
     gui.addDir(
         SITE_IDENTIFIER,
         MOVIE_MMA[1],
@@ -112,57 +112,57 @@ def load():
 
 def showSearch():
     gui = Gui()
-    sSearchText = gui.showKeyBoard()
-    if sSearchText:
-        sUrl = URL_SEARCH[0] + sSearchText.replace(' ', '+')
-        showMovies(sUrl)
+    search_text = gui.showKeyBoard()
+    if search_text:
+        url = URL_SEARCH[0] + search_text.replace(' ', '+')
+        showMovies(url)
         gui.setEndOfDirectory()
         return
 
 
-def showMovies(sSearch=''):
+def showMovies(search=''):
     gui = Gui()
 
-    if sSearch:
-        sUrl = sSearch
-        sPattern = '(?:<div class="td_module_16 td_module_wrap td-animation-stack">|<div class="td-module-container td-category-pos-image">.+?<div class="td-module-thumb">).+?href="([^"]+).+?title="([^"]+).+?.+?(?:src="([^"]+)|url.+?([^\']+))'
+    if search:
+        url = search
+        pattern = '(?:<div class="td_module_16 td_module_wrap td-animation-stack">|<div class="td-module-container td-category-pos-image">.+?<div class="td-module-thumb">).+?href="([^"]+).+?title="([^"]+).+?.+?(?:src="([^"]+)|url.+?([^\']+))'
     else:
         input_parameter_handler = InputParameterHandler()
-        sUrl = input_parameter_handler.getValue('siteUrl')
-        sPattern = '(?:<div class="td_module_mx7 td_module_wrap td-animation-stack">|<div class="td-module-container td-category-pos-image">.+?<div class="td-module-thumb">).+?href="([^"]+).+?title="([^"]+).+?.+?(?:src="([^"]+)|url.+?([^\']+))'
+        url = input_parameter_handler.getValue('site_url')
+        pattern = '(?:<div class="td_module_mx7 td_module_wrap td-animation-stack">|<div class="td-module-container td-category-pos-image">.+?<div class="td-module-thumb">).+?href="([^"]+).+?title="([^"]+).+?.+?(?:src="([^"]+)|url.+?([^\']+))'
 
-    oRequestHandler = RequestHandler(sUrl)
-    sHtmlContent = oRequestHandler.request()
+    request_handler = RequestHandler(url)
+    html_content = request_handler.request()
 
-    oParser = Parser()
-    aResult = oParser.parse(sHtmlContent, sPattern)
+    parser = Parser()
+    results = parser.parse(html_content, pattern)
 
-    if not aResult[0]:
+    if not results[0]:
         gui.addText(SITE_IDENTIFIER)
 
-    if aResult[0]:
-        total = len(aResult[1])
+    if results[0]:
+        total = len(results[1])
         progress_ = Progress().VScreate(SITE_NAME)
         output_parameter_handler = OutputParameterHandler()
-        for aEntry in aResult[1]:
+        for entry in results[1]:
             progress_.VSupdate(progress_, total)
             if progress_.iscanceled():
                 break
 
-            sUrl = aEntry[0]
-            sThumb = aEntry[2]
-            title = aEntry[1]
-            sDisplayTitle = title
+            url = entry[0]
+            thumb = entry[2]
+            title = entry[1]
+            display_title = title
 
-            output_parameter_handler.addParameter('siteUrl', sUrl)
-            output_parameter_handler.addParameter('sMovieTitle', title)
-            output_parameter_handler.addParameter('sThumb', sThumb)
+            output_parameter_handler.addParameter('site_url', url)
+            output_parameter_handler.addParameter('movie_title', title)
+            output_parameter_handler.addParameter('thumb', thumb)
             gui.addMovie(
                 SITE_IDENTIFIER,
                 'showLink',
-                sDisplayTitle,
+                display_title,
                 '',
-                sThumb,
+                thumb,
                 '',
                 output_parameter_handler)
         progress_.VSclose(progress_)
@@ -174,56 +174,56 @@ def showLink():
     gui = Gui()
 
     input_parameter_handler = InputParameterHandler()
-    sUrl = input_parameter_handler.getValue('siteUrl')
-    sThumb = input_parameter_handler.getValue('sThumb')
-    sMovieTitle = input_parameter_handler.getValue('sMovieTitle')
+    url = input_parameter_handler.getValue('site_url')
+    thumb = input_parameter_handler.getValue('thumb')
+    movie_title = input_parameter_handler.getValue('movie_title')
 
-    oRequestHandler = RequestHandler(sUrl)
-    sHtmlContent = oRequestHandler.request()
-    oParser = Parser()
-    sStart = '<div class="td-post-content tagdiv-type">'
-    sEnd = '<div class="td-post-source-tags">'
-    sHtmlContent = oParser.abParse(sHtmlContent, sStart, sEnd)
-    sPattern = 'Part (\\d).+?<iframe.+?src="([^"]+)"'
+    request_handler = RequestHandler(url)
+    html_content = request_handler.request()
+    parser = Parser()
+    start = '<div class="td-post-content tagdiv-type">'
+    end = '<div class="td-post-source-tags">'
+    html_content = parser.abParse(html_content, start, end)
+    pattern = 'Part (\\d).+?<iframe.+?src="([^"]+)"'
 
-    aResult = oParser.parse(sHtmlContent, sPattern)
+    results = parser.parse(html_content, pattern)
 
-    if not aResult[0]:
-        sPattern = '<iframe.+?src="([^"]+)"'
-        aResult = oParser.parse(sHtmlContent, sPattern)
-        if aResult[0]:
-            for aEntry in aResult[1]:
+    if not results[0]:
+        pattern = '<iframe.+?src="([^"]+)"'
+        results = parser.parse(html_content, pattern)
+        if results[0]:
+            for entry in results[1]:
 
-                sHosterUrl = aEntry
-                if sHosterUrl.startswith('//'):
-                    sHosterUrl = 'https:' + sHosterUrl
+                hoster_url = entry
+                if hoster_url.startswith('//'):
+                    hoster_url = 'https:' + hoster_url
 
-                oHoster = HosterGui().checkHoster(sHosterUrl)
-                if oHoster:
-                    oHoster.setDisplayName(sMovieTitle)
-                    oHoster.setFileName(sMovieTitle)
-                    HosterGui().showHoster(gui, oHoster, sHosterUrl, sThumb)
+                hoster = HosterGui().checkHoster(hoster_url)
+                if hoster:
+                    hoster.setDisplayName(movie_title)
+                    hoster.setFileName(movie_title)
+                    HosterGui().showHoster(gui, hoster, hoster_url, thumb)
 
     else:
-        if not aResult[0]:
+        if not results[0]:
             gui.addText(SITE_IDENTIFIER)
-        if aResult[0]:
-            total = len(aResult[1])
+        if results[0]:
+            total = len(results[1])
             progress_ = Progress().VScreate(SITE_NAME)
-            for aEntry in aResult[1]:
+            for entry in results[1]:
                 progress_.VSupdate(progress_, total)
                 if progress_.iscanceled():
                     break
 
-                sPartie = aEntry[0]
-                sHosterUrl = aEntry[1]
-                if sHosterUrl.startswith('//'):
-                    sHosterUrl = 'https:' + sHosterUrl
-                oHoster = HosterGui().checkHoster(sHosterUrl)
-                if oHoster:
-                    oHoster.setDisplayName(sMovieTitle + ' Partie' + sPartie)
-                    oHoster.setFileName(sMovieTitle)
-                    HosterGui().showHoster(gui, oHoster, sHosterUrl, sThumb)
+                sPartie = entry[0]
+                hoster_url = entry[1]
+                if hoster_url.startswith('//'):
+                    hoster_url = 'https:' + hoster_url
+                hoster = HosterGui().checkHoster(hoster_url)
+                if hoster:
+                    hoster.setDisplayName(movie_title + ' Partie' + sPartie)
+                    hoster.setFileName(movie_title)
+                    HosterGui().showHoster(gui, hoster, hoster_url, thumb)
 
             progress_.VSclose(progress_)
 

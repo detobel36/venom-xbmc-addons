@@ -15,13 +15,13 @@ class cHoster(iHoster):
     def __init__(self):
         iHoster.__init__(self, 'frenchvid', 'Frenchvid')
 
-    def _getMediaLinkForGuest(self, autoPlay=False):
+    def _getMediaLinkForGuest(self, auto_play=False):
         # Get Redirection
         if 'fembed' in self._url:
-            oRequest = RequestHandler(self._url)
-            oRequest.addHeaderEntry('User-Agent', UA)
-            oRequest.request()
-            self._url = oRequest.getRealUrl()
+            request = RequestHandler(self._url)
+            request.addHeaderEntry('User-Agent', UA)
+            request.request()
+            self._url = request.getRealUrl()
 
         if 'french-vid' in self._url:
             baseUrl = 'https://www.fembed.com/api/source/'
@@ -33,25 +33,25 @@ class cHoster(iHoster):
             baseUrl = 'https://' + self._url.split('/')[2] + '/api/source/'
 
         if 'fem.tohds' in self._url:
-            oRequestHandler = RequestHandler(self._url)
-            sHtmlContent = oRequestHandler.request()
+            request_handler = RequestHandler(self._url)
+            html_content = request_handler.request()
 
-            sPattern = '<iframe src="([^"]+)"'
-            oParser = Parser()
-            aResult = oParser.parse(sHtmlContent, sPattern)
+            pattern = '<iframe src="([^"]+)"'
+            parser = Parser()
+            results = parser.parse(html_content, pattern)
 
-            url = baseUrl + aResult[1][0].rsplit('/', 1)[1]
+            url = baseUrl + results[1][0].rsplit('/', 1)[1]
             postdata = 'r=""' + '&d=' + self._url.split('/')[2]
         else:
             url = baseUrl + self._url.rsplit('/', 1)[1]
             postdata = "r=''" + "&d=" + self._url.split('/')[2]
 
-        oRequest = RequestHandler(url)
-        oRequest.setRequestType(1)
-        oRequest.addHeaderEntry('User-Agent', UA)
-        oRequest.addHeaderEntry('Referer', self._url)
-        oRequest.addParametersLine(postdata)
-        page = oRequest.request(jsonDecode=True)
+        request = RequestHandler(url)
+        request.setRequestType(1)
+        request.addHeaderEntry('User-Agent', UA)
+        request.addHeaderEntry('Referer', self._url)
+        request.addParametersLine(postdata)
+        page = request.request(json_decode=True)
         if page:
             url = []
             qua = []
@@ -61,21 +61,21 @@ class cHoster(iHoster):
 
             api_call = dialog().VSselectqual(qua, url)
 
-            oRequest = RequestHandler(api_call)
-            oRequest.addHeaderEntry('Host', 'fvs.io')
-            oRequest.addHeaderEntry('User-Agent', UA)
-            oRequest.request()
-            api_call = oRequest.getRealUrl()
+            request = RequestHandler(api_call)
+            request.addHeaderEntry('Host', 'fvs.io')
+            request.addHeaderEntry('User-Agent', UA)
+            request.request()
+            api_call = request.getRealUrl()
 
             if api_call:
                 return True, api_call + '|User-Agent=' + UA
 
-        oRequestHandler = RequestHandler(self._url)
-        sHtmlContent = oRequestHandler.request()
-        sPattern = 'var video_source = "([^"]+)"'
-        oParser = Parser()
-        aResult = oParser.parse(sHtmlContent, sPattern)
-        if aResult:
-            return True, aResult[1][0] + '|User-Agent=' + UA
+        request_handler = RequestHandler(self._url)
+        html_content = request_handler.request()
+        pattern = 'var video_source = "([^"]+)"'
+        parser = Parser()
+        results = parser.parse(html_content, pattern)
+        if results:
+            return True, results[1][0] + '|User-Agent=' + UA
 
         return False, False

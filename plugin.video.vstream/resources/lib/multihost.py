@@ -13,9 +13,9 @@ class cMultiup:
         self.list = []
 
     def GetUrls(self, url):
-        sHtmlContent = GetHtml(url)
-        sPattern = '<form action="(.+?)" method="post"'
-        result = re.findall(sPattern, sHtmlContent)
+        html_content = GetHtml(url)
+        pattern = '<form action="(.+?)" method="post"'
+        result = re.findall(pattern, html_content)
         url = 'https://multiup.org' + ''.join(result[0])
 
         NewUrl = url.replace('http://www.multiup.org/fr/download',
@@ -23,10 +23,10 @@ class cMultiup:
                                                                          'http://www.multiup.eu/fr/mirror') .replace('http://www.multiup.org/download',
                                                                                                                      'http://www.multiup.eu/fr/mirror')
 
-        sHtmlContent = GetHtml(NewUrl)
+        html_content = GetHtml(NewUrl)
 
-        sPattern = 'nameHost="([^"]+)".+?link="([^"]+)".+?class="([^"]+)"'
-        r = re.findall(sPattern, sHtmlContent, re.DOTALL)
+        pattern = 'nameHost="([^"]+)".+?link="([^"]+)".+?class="([^"]+)"'
+        r = re.findall(pattern, html_content, re.DOTALL)
 
         if not r:
             return False
@@ -52,10 +52,10 @@ class cJheberg:
 
         idFile = url.rsplit('/', 1)[-1]
         NewUrl = 'https://api.jheberg.net/file/' + idFile
-        sHtmlContent = GetHtml(NewUrl)
+        html_content = GetHtml(NewUrl)
 
-        sPattern = '"hosterId":([^"]+),"hosterName":"([^"]+)",".+?status":"([^"]+)"'
-        r = re.findall(sPattern, sHtmlContent, re.DOTALL)
+        pattern = '"hosterId":([^"]+),"hosterName":"([^"]+)",".+?status":"([^"]+)"'
+        r = re.findall(pattern, html_content, re.DOTALL)
         if not r:
             return False
 
@@ -76,30 +76,30 @@ class cJheberg:
 def GetHtml(url, postdata=None):
 
     if 'download.jheberg.net/redirect' in url:
-        oRequest = RequestHandler(url)
-        sHtmlContent = oRequest.request()
-        url = oRequest.getRealUrl()
+        request = RequestHandler(url)
+        html_content = request.request()
+        url = request.getRealUrl()
         return url
     else:
-        sHtmlContent = ''
-        oRequest = RequestHandler(url)
-        oRequest.setRequestType(1)
-        oRequest.addHeaderEntry('User-Agent', UA)
+        html_content = ''
+        request = RequestHandler(url)
+        request.setRequestType(1)
+        request.addHeaderEntry('User-Agent', UA)
 
         if postdata is not None:
-            oRequest.addHeaderEntry('X-Requested-With', 'XMLHttpRequest')
-            oRequest.addHeaderEntry(
+            request.addHeaderEntry('X-Requested-With', 'XMLHttpRequest')
+            request.addHeaderEntry(
                 'Content-Type',
                 'application/x-www-form-urlencoded; charset=UTF-8')
-            oRequest.addHeaderEntry(
+            request.addHeaderEntry(
                 'Referer', 'https://download.jheberg.net/redirect/xxxxxx/yyyyyy/')
 
         elif 'download.jheberg.net' in url:
-            oRequest.addHeaderEntry('Host', 'download.jheberg.net')
-            oRequest.addHeaderEntry('Referer', url)
+            request.addHeaderEntry('Host', 'download.jheberg.net')
+            request.addHeaderEntry('Referer', url)
 
-        oRequest.addParametersLine(postdata)
+        request.addParametersLine(postdata)
 
-        sHtmlContent = oRequest.request()
+        html_content = request.request()
 
-        return sHtmlContent
+        return html_content

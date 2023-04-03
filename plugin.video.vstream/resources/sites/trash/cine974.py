@@ -24,7 +24,7 @@ def load():
     gui = Gui()
 
     output_parameter_handler = OutputParameterHandler()
-    output_parameter_handler.addParameter('siteUrl', MOVIE_NEWS[0])
+    output_parameter_handler.addParameter('site_url', MOVIE_NEWS[0])
     gui.addDir(
         SITE_IDENTIFIER,
         MOVIE_NEWS[1],
@@ -39,39 +39,39 @@ def showMovies():
     gui = Gui()
 
     input_parameter_handler = InputParameterHandler()
-    sUrl = input_parameter_handler.getValue('siteUrl')
-    oRequestHandler = RequestHandler(sUrl)
-    sHtmlContent = oRequestHandler.request()
+    url = input_parameter_handler.getValue('site_url')
+    request_handler = RequestHandler(url)
+    html_content = request_handler.request()
 
-    oParser = Parser()
-    sPattern = 'src="([^"]+)" alt="([^"]+)" class="sc.+?synop">([^<]*).+?href="([^"]+)">Regarder'
-    aResult = oParser.parse(sHtmlContent, sPattern)
+    parser = Parser()
+    pattern = 'src="([^"]+)" alt="([^"]+)" class="sc.+?synop">([^<]*).+?href="([^"]+)">Regarder'
+    results = parser.parse(html_content, pattern)
 
-    if not aResult[0]:
+    if not results[0]:
         gui.addText(SITE_IDENTIFIER)
         gui.setEndOfDirectory()
         return
 
-    total = len(aResult[1])
+    total = len(results[1])
     progress_ = Progress().VScreate(SITE_NAME)
     output_parameter_handler = OutputParameterHandler()
-    for aEntry in aResult[1]:
+    for entry in results[1]:
         progress_.VSupdate(progress_, total)
         if progress_.iscanceled():
             break
 
-        sThumb = aEntry[0]
-        if sThumb.startswith('/'):
-            sThumb = URL_MAIN[:-1] + sThumb
-        title = aEntry[1]
-        desc = aEntry[2]
-        sUrl2 = aEntry[3]
-        if sUrl2.startswith('/'):
-            sUrl2 = URL_MAIN[:-1] + sUrl2
+        thumb = entry[0]
+        if thumb.startswith('/'):
+            thumb = URL_MAIN[:-1] + thumb
+        title = entry[1]
+        desc = entry[2]
+        url2 = entry[3]
+        if url2.startswith('/'):
+            url2 = URL_MAIN[:-1] + url2
 
-        output_parameter_handler.addParameter('siteUrl', sUrl2)
-        output_parameter_handler.addParameter('sMovieTitle', title)
-        output_parameter_handler.addParameter('sThumb', sThumb)
+        output_parameter_handler.addParameter('site_url', url2)
+        output_parameter_handler.addParameter('movie_title', title)
+        output_parameter_handler.addParameter('thumb', thumb)
         output_parameter_handler.addParameter('desc', desc)
 
         gui.addMovie(
@@ -79,35 +79,35 @@ def showMovies():
             'showHosters',
             title,
             '',
-            sThumb,
+            thumb,
             desc,
             output_parameter_handler)
 
     progress_.VSclose(progress_)
 
-    sNextPage, sPaging = __checkForNextPage(sHtmlContent)
-    if sNextPage:
+    next_page, paging = __checkForNextPage(html_content)
+    if next_page:
         output_parameter_handler = OutputParameterHandler()
-        output_parameter_handler.addParameter('siteUrl', sNextPage)
+        output_parameter_handler.addParameter('site_url', next_page)
         gui.addNext(
             SITE_IDENTIFIER,
             'showMovies',
-            'Page ' + sPaging,
+            'Page ' + paging,
             output_parameter_handler)
 
     gui.setEndOfDirectory()
 
 
-def __checkForNextPage(sHtmlContent):
-    sPattern = '>(\\d+)</a></li><li><a href="([^"]+)"><i class="fa fa-angle-right'
-    oParser = Parser()
-    aResult = oParser.parse(sHtmlContent, sPattern)
-    if aResult[0]:
-        sNumberMax = aResult[1][0][0]
-        sNextPage = URL_MAIN[:-1] + aResult[1][0][1]
-        sNumberNext = re.search('p=([0-9]+)', aResult[1][0][1]).group(1)
-        sPaging = sNumberNext + '/' + sNumberMax
-        return sNextPage, sPaging
+def __checkForNextPage(html_content):
+    pattern = '>(\\d+)</a></li><li><a href="([^"]+)"><i class="fa fa-angle-right'
+    parser = Parser()
+    results = parser.parse(html_content, pattern)
+    if results[0]:
+        number_max = results[1][0][0]
+        next_page = URL_MAIN[:-1] + results[1][0][1]
+        number_next = re.search('p=([0-9]+)', results[1][0][1]).group(1)
+        paging = number_next + '/' + number_max
+        return next_page, paging
 
     return False, 'none'
 
@@ -116,28 +116,28 @@ def showHosters():
     gui = Gui()
 
     input_parameter_handler = InputParameterHandler()
-    sUrl = input_parameter_handler.getValue('siteUrl')
-    sMovieTitle = input_parameter_handler.getValue('sMovieTitle')
-    sThumb = input_parameter_handler.getValue('sThumb')
+    url = input_parameter_handler.getValue('site_url')
+    movie_title = input_parameter_handler.getValue('movie_title')
+    thumb = input_parameter_handler.getValue('thumb')
 
-    oRequestHandler = RequestHandler(sUrl)
-    sHtmlContent = oRequestHandler.request()
-    sPattern = '<iframe width="100%" height="400" src="([^"]+)"'
-    oParser = Parser()
-    aResult = oParser.parse(sHtmlContent, sPattern)
+    request_handler = RequestHandler(url)
+    html_content = request_handler.request()
+    pattern = '<iframe width="100%" height="400" src="([^"]+)"'
+    parser = Parser()
+    results = parser.parse(html_content, pattern)
 
-    if aResult[0]:
-        for aEntry in aResult[1]:
+    if results[0]:
+        for entry in results[1]:
 
-            link = re.sub('.+?embed/', '', aEntry)
+            link = re.sub('.+?embed/', '', entry)
             link = link.replace('?rel=0', '')
-            sHosterUrl = 'https://www.youtube.com/watch?v=' + link
+            hoster_url = 'https://www.youtube.com/watch?v=' + link
 
-            oHoster = HosterGui().checkHoster(sHosterUrl)
-            if oHoster:
-                oHoster.setDisplayName(sMovieTitle)
-                oHoster.setFileName(sMovieTitle)
-                HosterGui().showHoster(gui, oHoster, sHosterUrl, sThumb,
+            hoster = HosterGui().checkHoster(hoster_url)
+            if hoster:
+                hoster.setDisplayName(movie_title)
+                hoster.setFileName(movie_title)
+                HosterGui().showHoster(gui, hoster, hoster_url, thumb,
                                        input_parameter_handler=input_parameter_handler)
 
     gui.setEndOfDirectory()

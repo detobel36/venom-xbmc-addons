@@ -12,32 +12,32 @@ class cHoster(iHoster):
     def __init__(self):
         iHoster.__init__(self, 'vimeo', 'Vimeo')
 
-    def __getIdFromUrl(self, sUrl):
-        sPattern = 'vimeo\\.com\\/(?:video\\/)?([0-9]+)'
-        oParser = Parser()
-        aResult = oParser.parse(sUrl, sPattern)
-        if aResult[0] is True:
-            return aResult[1][0]
+    def __getIdFromUrl(self, url):
+        pattern = 'vimeo\\.com\\/(?:video\\/)?([0-9]+)'
+        parser = Parser()
+        results = parser.parse(url, pattern)
+        if results[0] is True:
+            return results[1][0]
 
         return ''
 
-    def _getMediaLinkForGuest(self, autoPlay=False):
-        sId = self.__getIdFromUrl(self._url)
-        web_url = 'https://player.vimeo.com/video/' + sId
+    def _getMediaLinkForGuest(self, auto_play=False):
+        s_id = self.__getIdFromUrl(self._url)
+        web_url = 'https://player.vimeo.com/video/' + s_id
 
-        oRequest = RequestHandler(web_url)
-        sHtmlContent = oRequest.request()
-        sPattern = ',"url":"(.+?)",.+?"quality":"(.+?)",'
-        oParser = Parser()
-        aResult = oParser.parse(sHtmlContent, sPattern)
+        request = RequestHandler(web_url)
+        html_content = request.request()
+        pattern = ',"url":"(.+?)",.+?"quality":"(.+?)",'
+        parser = Parser()
+        results = parser.parse(html_content, pattern)
 
-        if aResult[0] is True:
+        if results[0] is True:
             # initialisation des tableaux
             url = []
             qua = []
 
             # Remplissage des tableaux
-            for i in aResult[1]:
+            for i in results[1]:
                 url.append(str(i[0]))
                 qua.append(str(i[1]))
 

@@ -14,25 +14,25 @@ class cHoster(iHoster):
     def __init__(self):
         iHoster.__init__(self, 'beeload', 'Beeload')
 
-    def _getMediaLinkForGuest(self, autoPlay=False):
-        oRequest = RequestHandler(self._url)
-        sHtmlContent = oRequest.request()
+    def _getMediaLinkForGuest(self, auto_play=False):
+        request = RequestHandler(self._url)
+        html_content = request.request()
 
         api_call = ''
 
-        oParser = Parser()
+        parser = Parser()
 
-        sPattern = "(\\s*eval\\s*\\(\\s*function(?:.|\\s)+?)<\\/script>"
-        aResult = re.findall(sPattern, sHtmlContent)
+        pattern = "(\\s*eval\\s*\\(\\s*function(?:.|\\s)+?)<\\/script>"
+        results = re.findall(pattern, html_content)
 
-        if (aResult):
-            sUnpacked = cPacker().unpack(aResult[0])
-            sHtmlContent = sUnpacked
+        if (results):
+            sUnpacked = cPacker().unpack(results[0])
+            html_content = sUnpacked
 
-            sPattern = "'([^<>']+?\\.mp4)"
-            aResult = oParser.parse(sHtmlContent, sPattern)
-            if aResult[0] is True:
-                api_call = aResult[1][0]
+            pattern = "'([^<>']+?\\.mp4)"
+            results = parser.parse(html_content, pattern)
+            if results[0] is True:
+                api_call = results[1][0]
 
         if api_call:
             return True, api_call

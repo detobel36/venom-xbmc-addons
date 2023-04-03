@@ -27,16 +27,16 @@ class cHoster(iHoster):
     def __init__(self):
         iHoster.__init__(self, 'vidup', 'VidUp')
 
-    def __getIdFromUrl(self, sUrl):
-        sPattern = 'https*:\\/\\/vidup.+?\\/(?:embed-)?(?:embed/)?([0-9a-zA-Z]+)'
-        oParser = Parser()
-        aResult = oParser.parse(sUrl, sPattern)
-        if aResult[0] is True:
-            return aResult[1][0]
+    def __getIdFromUrl(self, url):
+        pattern = 'https*:\\/\\/vidup.+?\\/(?:embed-)?(?:embed/)?([0-9a-zA-Z]+)'
+        parser = Parser()
+        results = parser.parse(url, pattern)
+        if results[0] is True:
+            return results[1][0]
 
         return ''
 
-    def _getMediaLinkForGuest(self, autoPlay=False):
+    def _getMediaLinkForGuest(self, auto_play=False):
         api_call = False
 
         request_headers = {"User-Agent": UA}
@@ -53,17 +53,17 @@ class cHoster(iHoster):
         req = urllib2.Request(Json_url, headers=request_headers)
         gcontext = ssl.SSLContext(ssl.PROTOCOL_TLSv1)
         response = urllib2.urlopen(req, data={}, context=gcontext)
-        sHtmlContent = response.read()
-        aResult = json.loads(sHtmlContent)
+        html_content = response.read()
+        results = json.loads(html_content)
 
         response.close()
 
-        if aResult:
+        if results:
             url = []
             qua = []
 
-            for i in aResult['qualities']:
-                url.append(aResult['qualities'][i])
+            for i in results['qualities']:
+                url.append(results['qualities'][i])
                 qua.append(str(i))
 
             api_call = dialog().VSselectqual(qua, url)

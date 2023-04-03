@@ -13,8 +13,8 @@ class ContextElement:
     def getFunction(self):
         return self.__sFunctionName
 
-    def setFile(self, sFile):
-        self.__sFile = sFile
+    def setFile(self, file):
+        self.__sFile = file
 
     def getFile(self):
         return self.__sFile
@@ -25,8 +25,8 @@ class ContextElement:
     def getTitle(self):
         return self.__sTitle
 
-    def setSiteName(self, sSiteName):
-        self.__sSiteName = sSiteName
+    def setSiteName(self, site_name):
+        self.__sSiteName = site_name
 
     def getSiteName(self):
         return self.__sSiteName

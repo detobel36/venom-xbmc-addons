@@ -12,23 +12,23 @@ class cHoster(iHoster):
         iHoster.__init__(self, 'onevideo', 'Onevideo')
 
     def __getIdFromUrl(self):
-        sPattern = "id=([^<]+)"
-        oParser = Parser()
-        aResult = oParser.parse(self._url, sPattern)
-        if aResult[0] is True:
-            return aResult[1][0]
+        pattern = "id=([^<]+)"
+        parser = Parser()
+        results = parser.parse(self._url, pattern)
+        if results[0] is True:
+            return results[1][0]
 
         return ''
 
     def __getKey(self):
-        oRequestHandler = RequestHandler(self._url)
-        sHtmlContent = oRequestHandler.request()
-        sPattern = 'key: "(.+?)";'
-        oParser = Parser()
-        aResult = oParser.parse(sHtmlContent, sPattern)
-        if aResult[0] is True:
-            aResult = aResult[1][0].replace('.', '%2E')
-            return aResult
+        request_handler = RequestHandler(self._url)
+        html_content = request_handler.request()
+        pattern = 'key: "(.+?)";'
+        parser = Parser()
+        results = parser.parse(html_content, pattern)
+        if results[0] is True:
+            results = results[1][0].replace('.', '%2E')
+            return results
         return ''
 
     def setUrl(self, url):
@@ -37,20 +37,20 @@ class cHoster(iHoster):
         self._url = self._url.replace('embed.php?id=', '')
         self._url = 'http://www.onevideo.to/embed.php?id=' + str(self._url)
 
-    def _getMediaLinkForGuest(self, autoPlay=False):
+    def _getMediaLinkForGuest(self, auto_play=False):
         # api_call = ('http://www.nowvideo.sx/api/player.api.php?key=%s&file=%s') %
         #    (self.__getKey(), self.__getIdFromUrl())
         api_call = ('http://www.onevideo.to/api/player.api.php?user=undefined&codes=1&file=%s' +
                     '&pass=undefined&key=%s') % (self.__getIdFromUrl(), self.__getKey())
 
-        oRequest = RequestHandler(api_call)
-        sHtmlContent = oRequest.request()
+        request = RequestHandler(api_call)
+        html_content = request.request()
 
-        sPattern = 'url=(.+?)&title'
-        oParser = Parser()
-        aResult = oParser.parse(sHtmlContent, sPattern)
-        if aResult[0] is True:
-            stream_url = Unquote(aResult[1][0])
+        pattern = 'url=(.+?)&title'
+        parser = Parser()
+        results = parser.parse(html_content, pattern)
+        if results[0] is True:
+            stream_url = Unquote(results[1][0])
             return True, stream_url
         else:
             return False, False

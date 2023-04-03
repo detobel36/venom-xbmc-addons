@@ -18,27 +18,27 @@ class cHoster(iHoster):
         url = url.replace('embed-dlox.me/', 'embed-')
         self._url = str(url)
 
-    def _getMediaLinkForGuest(self, autoPlay=False):
-        oParser = Parser()
-        oRequest = RequestHandler(self._url)
-        oRequest.addHeaderEntry(
+    def _getMediaLinkForGuest(self, auto_play=False):
+        parser = Parser()
+        request = RequestHandler(self._url)
+        request.addHeaderEntry(
             'Referer', "https://vidlox.me/8m8p7kane4r1.html")
-        sHtmlContent = oRequest.request()
+        html_content = request.request()
 
         # accelère le traitement
-        sHtmlContent = oParser.abParse(sHtmlContent, 'var player', 'vvplay')
+        html_content = parser.abParse(html_content, 'var player', 'vvplay')
 
-        sPattern = '([^"]+\\.mp4)'
-        oParser = Parser()
-        aResult = oParser.parse(sHtmlContent, sPattern)
-        if aResult[0] is True:
+        pattern = '([^"]+\\.mp4)'
+        parser = Parser()
+        results = parser.parse(html_content, pattern)
+        if results[0] is True:
             # initialisation des tableaux
             url = []
             qua = ["HD", "SD"]  # sd en 2eme pos generalement quand sd
             api_call = ''
 
             # Remplissage des tableaux
-            for i in aResult[1]:
+            for i in results[1]:
                 url.append(str(i))
 
             # dialogue qualité

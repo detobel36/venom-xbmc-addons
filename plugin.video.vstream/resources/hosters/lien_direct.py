@@ -17,7 +17,7 @@ class cHoster(iHoster):
         # un lien direct n'est pas forcement urlEncoded
         self._url = str(url).replace('+', '%20')
 
-    def _getMediaLinkForGuest(self, autoPlay=False):
+    def _getMediaLinkForGuest(self, auto_play=False):
         api_call = self._url
 
         if ('hds.' in api_call) or ('bidzen' in api_call):
@@ -45,16 +45,16 @@ class cHoster(iHoster):
 
         # Special pour toonanime.
         if 'toonanime' in api_call:
-            oRequest = RequestHandler(api_call)
-            oRequest.addHeaderEntry('Referer', 'https://lb.toonanime.xyz/')
-            sHtmlContent = oRequest.request()
+            request = RequestHandler(api_call)
+            request.addHeaderEntry('Referer', 'https://lb.toonanime.xyz/')
+            html_content = request.request()
 
-            aResult = re.findall(',RESOLUTION=(.+?)\n(.+?).m3u8', sHtmlContent)
+            results = re.findall(',RESOLUTION=(.+?)\n(.+?).m3u8', html_content)
             # initialisation des tableaux
             url = []
             qua = []
             # Remplissage des tableaux
-            for i in aResult:
+            for i in results:
                 url.append(str(i[1]) + '.m3u8')
                 qua.append(str(i[0]))
 

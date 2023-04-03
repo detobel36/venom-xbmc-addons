@@ -15,7 +15,7 @@ class cHoster(iHoster):
     def __init__(self):
         iHoster.__init__(self, 'evoload', 'Evoload')
 
-    def _getMediaLinkForGuest(self, autoPlay=False):
+    def _getMediaLinkForGuest(self, auto_play=False):
         api_call = ''
         sUrlSecurePlayer = "https://evoload.io/SecurePlayer"
 
@@ -54,10 +54,10 @@ class cHoster(iHoster):
         req = s.post(sUrlSecurePlayer, data=post, headers=headers2)
         response = str(req.content)
 
-        sPattern = 'stream.+?src.+?"(https.+?)"'
-        aResult = re.findall(sPattern, response)
-        if aResult:
-            api_call = aResult[0]
+        pattern = 'stream.+?src.+?"(https.+?)"'
+        results = re.findall(pattern, response)
+        if results:
+            api_call = results[0]
 
         if api_call:
             return True, api_call + '|User-Agent=' + UA

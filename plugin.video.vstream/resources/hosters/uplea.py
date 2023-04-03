@@ -19,15 +19,15 @@ class cHoster(iHoster):
     def __init__(self):
         iHoster.__init__(self, 'uplea', 'Uplea', 'violet')
 
-    def getMediaLink(self, autoPlay=False):
+    def getMediaLink(self, auto_play=False):
         if 'site=cDownload&function' not in sys.argv[2]:
-            if not autoPlay:
+            if not auto_play:
                 oDialog = dialog().VSok("ATTENTION, Pas de streaming sans premium\n" +
                                         "Pour voir le film passer par l'option 'Télécharger et Lire' du menu contextuel.")
             return False, False
-        return self._getMediaLinkForGuest(autoPlay)
+        return self._getMediaLinkForGuest(auto_play)
 
-    def _getMediaLinkForGuest(self, autoPlay=False):
+    def _getMediaLinkForGuest(self, auto_play=False):
         # http:///dl/12345XXYEEEEREERERE
 
         UA = 'Mozilla/5.0 (Windows NT 6.1; WOW64; rv:39.0) Gecko/20100101 Firefox/39.0'
@@ -41,27 +41,27 @@ class cHoster(iHoster):
 
         req = urllib2.Request(self._url, None, headers)
         response = urllib2.urlopen(req)
-        sHtmlContent = response.read()
+        html_content = response.read()
         head = response.headers
         response.close()
 
-        oParser = Parser()
+        parser = Parser()
 
         # get step
         urlstep = ''
-        sPattern = '<a href="(\\/step\\/[^<>"]+)">'
-        aResult = oParser.parse(sHtmlContent, sPattern)
-        if aResult[0] is True:
-            urlstep = aResult[1][0]
+        pattern = '<a href="(\\/step\\/[^<>"]+)">'
+        results = parser.parse(html_content, pattern)
+        if results[0] is True:
+            urlstep = results[1][0]
 
         # get cookie
         cookies = ''
         if 'Set-Cookie' in head:
             cookies = head['Set-Cookie']
-            sPattern = '(__cfduid=[0-9a-z]+;).+?(PHPSESSID=[0-9a-z]+)'
-            aResult = oParser.parse(str(cookies), sPattern)
-            if aResult[0] is True:
-                cookies = str(aResult[1][0][0]) + str(aResult[1][0][1])
+            pattern = '(__cfduid=[0-9a-z]+;).+?(PHPSESSID=[0-9a-z]+)'
+            results = parser.parse(str(cookies), pattern)
+            if results[0] is True:
+                cookies = str(results[1][0][0]) + str(results[1][0][1])
 
         url = 'http://uplea.com' + urlstep
 
@@ -70,31 +70,31 @@ class cHoster(iHoster):
 
         req = urllib2.Request(url, None, headers)
         response = urllib2.urlopen(req)
-        sHtmlContent = response.read()
+        html_content = response.read()
         head = response.headers
         response.close()
 
         # fh = open('c:\\test.txt', "w")
-        # fh.write(sHtmlContent)
+        # fh.write(html_content)
         # fh.close()
 
         # waiting time
         waitingtime = 20
-        sPattern = "ulCounter\\({'timer':([0-9]+)}\\);"
-        aResult = oParser.parse(sHtmlContent, sPattern)
-        if aResult[0] is True:
-            waitingtime = int(aResult[1][0]) + 2
+        pattern = "ulCounter\\({'timer':([0-9]+)}\\);"
+        results = parser.parse(html_content, pattern)
+        if results[0] is True:
+            waitingtime = int(results[1][0]) + 2
 
-        sPattern = '<a class="button-download" href="([^<>"]+?)">'
-        aResult = oParser.parse(sHtmlContent, sPattern)
+        pattern = '<a class="button-download" href="([^<>"]+?)">'
+        results = parser.parse(html_content, pattern)
 
-        if aResult[0] is True:
+        if results[0] is True:
             dialog.VSinfo('Waiting time', self._displayName, waitingtime)
             xbmc.sleep(waitingtime * 1000)
 
-            # print(aResult[1][0])
+            # print(results[1][0])
 
-            return True, aResult[1][0] + '|User-Agent=' + \
+            return True, results[1][0] + '|User-Agent=' + \
                 UA  # + '&Referer=' + self._url
 
         return False, False

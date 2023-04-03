@@ -13,7 +13,7 @@ class cHoster(iHoster):
     def __init__(self):
         iHoster.__init__(self, 'aparat', 'Aparat')
 
-    def _getMediaLinkForGuest(self, autoPlay=False):
+    def _getMediaLinkForGuest(self, auto_play=False):
         VideoType = 2  # dl mp4 lien existant non utilisé ici
         VideoType = 1  # m3u8
 
@@ -21,28 +21,28 @@ class cHoster(iHoster):
         list_url = []
 
         if VideoType == 1:
-            oRequestHandler = RequestHandler(self._url)
-            sHtmlContent = oRequestHandler.request()
+            request_handler = RequestHandler(self._url)
+            html_content = request_handler.request()
 
-            oParser = Parser()
-            sPattern = 'src:\\s+"([^"]+)'
-            aResult = oParser.parse(sHtmlContent, sPattern)
+            parser = Parser()
+            pattern = 'src:\\s+"([^"]+)'
+            results = parser.parse(html_content, pattern)
 
-            if aResult[0] is True:
-                url2 = aResult[1][0]
-                oRequestHandler = RequestHandler(url2)
-                sHtmlContent2 = oRequestHandler.request()
+            if results[0] is True:
+                url2 = results[1][0]
+                request_handler = RequestHandler(url2)
+                sHtmlContent2 = request_handler.request()
 
                 # prend tous les formats (peu créer problèmes CODECS avc1)
-                # sPattern = 'RESOLUTION=(\w+).+?(https.+?m3u8)'
+                # pattern = 'RESOLUTION=(\w+).+?(https.+?m3u8)'
 
                 # limite les formats
-                sPattern = 'PROGRAM-ID.+?RESOLUTION=(\\w+).+?(https.+?m3u8)'
-                aResult = oParser.parse(sHtmlContent2, sPattern)
-                for aEntry in aResult[1]:
-                    list_q.append(aEntry[0])
+                pattern = 'PROGRAM-ID.+?RESOLUTION=(\\w+).+?(https.+?m3u8)'
+                results = parser.parse(sHtmlContent2, pattern)
+                for entry in results[1]:
+                    list_q.append(entry[0])
                     # parfois lien de meme qualité avec url différentes
-                    list_url.append(aEntry[1])
+                    list_url.append(entry[1])
 
             if list_url:
                 api_call = dialog().VSselectqual(list_q, list_url)
@@ -50,29 +50,29 @@ class cHoster(iHoster):
                     return True, api_call
 
         if VideoType == 2:
-            oRequestHandler = RequestHandler(self._url)
-            sHtmlContent = oRequestHandler.request()
+            request_handler = RequestHandler(self._url)
+            html_content = request_handler.request()
 
-            oParser = Parser()
-            sPattern = 'file_code=(\\w+)&hash=([^&]+)'
-            aResult = oParser.parse(sHtmlContent, sPattern)
+            parser = Parser()
+            pattern = 'file_code=(\\w+)&hash=([^&]+)'
+            results = parser.parse(html_content, pattern)
 
-            if aResult[0] is True:
-                resultId = aResult[1][0][0]
-                resultHash = aResult[1][0][1]
+            if results[0] is True:
+                resultId = results[1][0][0]
+                resultHash = results[1][0][1]
                 url = 'https://aparat.cam/dl?op=download_orig&id=' + resultId + \
                       '&mode=0&hash=' + resultHash  # + '&embed=1&adb=0'
                 data = 'op=download_orig&id=' + resultId + '&mode=n&hash=' + resultHash
-                oRequestHandler = RequestHandler(url)
-                oRequestHandler.setRequestType(1)
-                oRequestHandler.addHeaderEntry('Referer', url)
-                oRequestHandler.addParametersLine(data)
-                sHtmlContent = oRequestHandler.request()
+                request_handler = RequestHandler(url)
+                request_handler.setRequestType(1)
+                request_handler.addHeaderEntry('Referer', url)
+                request_handler.addParametersLine(data)
+                html_content = request_handler.request()
 
-                sPattern = 'href="([^"]+.mp4)'
-                aResult = oParser.parse(sHtmlContent, sPattern)
-                if aResult[0] is True:
-                    api_call = aResult[1][0]
+                pattern = 'href="([^"]+.mp4)'
+                results = parser.parse(html_content, pattern)
+                if results[0] is True:
+                    api_call = results[1][0]
                     if api_call:
                         return True, api_call
 

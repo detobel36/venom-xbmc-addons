@@ -17,20 +17,20 @@ class cHoster(iHoster):
     def isDownloadable(self):
         return False
 
-    def _getMediaLinkForGuest(self, autoPlay=False):
+    def _getMediaLinkForGuest(self, auto_play=False):
         api_call = False
         urlmain = 'https://video.sibnet.ru'
-        oRequestHandler = RequestHandler(self._url)
-        oRequestHandler.addHeaderEntry('User-Agent', UA)
-        oRequestHandler.addHeaderEntry('Referer', urlmain + '/')
-        sHtmlContent = oRequestHandler.request()
+        request_handler = RequestHandler(self._url)
+        request_handler.addHeaderEntry('User-Agent', UA)
+        request_handler.addHeaderEntry('Referer', urlmain + '/')
+        html_content = request_handler.request()
 
-        oParser = Parser()
-        sPattern = 'src:.+?"([^"]+)'
-        aResult = oParser.parse(sHtmlContent, sPattern)
+        parser = Parser()
+        pattern = 'src:.+?"([^"]+)'
+        results = parser.parse(html_content, pattern)
 
-        if aResult[0] is True:
-            api_call = urlmain + aResult[1][0] + '|Referer=' + self._url
+        if results[0] is True:
+            api_call = urlmain + results[1][0] + '|Referer=' + self._url
 
         if api_call:
             return True, api_call

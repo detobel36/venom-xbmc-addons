@@ -1448,8 +1448,8 @@ class JsParser(object):
 
             # --var method, HACK
             if JScode[0:2] == '--' or JScode[0:2] == '++':
-                m = re.search(
-                    '^(\\({0,1}\\w[\\w\\.]*\\){0,1} *(?:\\[[^\\]]+\\])* *)(' + REG_OP + '|\\[|$)', JScode[2:], re.UNICODE)
+                m = re.search('^(\\({0,1}\\w[\\w\\.]*\\){0,1} *(?:\\[[^\\]]+\\])* *)(' +
+                              REG_OP + '|\\[|$)', JScode[2:], re.UNICODE)
                 if m:
                     l = len(m.group(1))
                     JScode = m.group(1) + JScode[0:2] + JScode[(l + 2):]
@@ -1785,10 +1785,7 @@ class JsParser(object):
 
     # Need to use metaclass here
     def IsFunc(self, vars, name):
-        bExist = False
-        bExist = self.IsVar(vars, name)
-
-        if not bExist:
+        if not self.IsVar(vars, name):
             return False
         global gg
 

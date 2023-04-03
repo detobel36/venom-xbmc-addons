@@ -13,28 +13,28 @@ class cHoster(iHoster):
     def setUrl(self, url):
         self._url = str(url)
 
-        sPattern = 'http://(?:www.|embed.|)azerfile.(?:com)/(?:video/|embed\\-|)?([0-9a-z]+)'
+        pattern = 'http://(?:www.|embed.|)azerfile.(?:com)/(?:video/|embed\\-|)?([0-9a-z]+)'
 
-        oParser = Parser()
-        aResult = oParser.parse(self._url, sPattern)
-        self._url = 'http://azerfile.com/' + str(aResult[1][0])
+        parser = Parser()
+        results = parser.parse(self._url, pattern)
+        self._url = 'http://azerfile.com/' + str(results[1][0])
 
-    def _getMediaLinkForGuest(self, autoPlay=False):
-        oRequest = RequestHandler(self._url)
-        sHtmlContent = oRequest.request()
+    def _getMediaLinkForGuest(self, auto_play=False):
+        request = RequestHandler(self._url)
+        html_content = request.request()
 
-        sPattern = 'file=([^<]+)&image'
+        pattern = 'file=([^<]+)&image'
 
-        oParser = Parser()
-        aResult = oParser.parse(sHtmlContent, sPattern)
+        parser = Parser()
+        results = parser.parse(html_content, pattern)
 
-        if aResult[0] is True:
-            file = aResult[1][0]
+        if results[0] is True:
+            file = results[1][0]
 
             liste = file.split('/')
 
             # api_call = ('http://azerfile.com:%s/d/%s/video.mp4') % (liste[-1], liste[-2])
-            api_call = aResult[1][0]
+            api_call = results[1][0]
             return True, api_call
 
         return False, False

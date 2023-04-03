@@ -24,9 +24,9 @@ class cHoster(iHoster):
         iHoster.__init__(self, 'googlevideo', 'GoogleVideo')
 
     def get_host_and_id(self, url):
-        sPattern = 'http[s]*:\\/\\/(.*?(?:\\.googlevideo|picasaweb\\.google)\\.com)' + \
+        pattern = 'http[s]*:\\/\\/(.*?(?:\\.googlevideo|picasaweb\\.google)\\.com)' + \
             '\\/(.*?(?:videoplayback\\?|\\?authkey|#|\\/).+)'
-        r = re.search(sPattern, url)
+        r = re.search(pattern, url)
         if r:
             return r.groups()
         else:
@@ -35,7 +35,7 @@ class cHoster(iHoster):
     def getFormatedUrl(self, host, media_id):
         return 'https://%s/%s' % (host, media_id)
 
-    def _getMediaLinkForGuest(self, autoPlay=False):
+    def _getMediaLinkForGuest(self, auto_play=False):
         r = self.get_host_and_id(self._url)
 
         # si lien deja decode

@@ -13,35 +13,35 @@ class cHoster(iHoster):
     def __init__(self):
         iHoster.__init__(self, 'easyvid', 'EasyVid')
 
-    def _getMediaLinkForGuest(self, autoPlay=False):
-        oRequest = RequestHandler(self._url)
-        sHtmlContent = oRequest.request()
-        if 'File was deleted' in sHtmlContent:
+    def _getMediaLinkForGuest(self, auto_play=False):
+        request = RequestHandler(self._url)
+        html_content = request.request()
+        if 'File was deleted' in html_content:
             return False, False
 
         api_call = ''
 
-        oParser = Parser()
-        sPattern = '{file: *"([^"]+(?<!smil))"'
-        aResult = oParser.parse(sHtmlContent, sPattern)
-        if aResult[0] is True:
-            api_call = aResult[1][0]
+        parser = Parser()
+        pattern = '{file: *"([^"]+(?<!smil))"'
+        results = parser.parse(html_content, pattern)
+        if results[0] is True:
+            api_call = results[1][0]
 
         else:
-            sPattern = "(\\s*eval\\s*\\(\\s*function(?:.|\\s)+?)<\\/script>"
-            aResult = re.findall(sPattern, sHtmlContent)
-            if (aResult):
-                sUnpacked = cPacker().unpack(aResult[0])
-                sHtmlContent = sUnpacked
+            pattern = "(\\s*eval\\s*\\(\\s*function(?:.|\\s)+?)<\\/script>"
+            results = re.findall(pattern, html_content)
+            if (results):
+                sUnpacked = cPacker().unpack(results[0])
+                html_content = sUnpacked
 
-                sPattern = '{file:"(.+?)",label:"(.+?)"}'
-                aResult = oParser.parse(sHtmlContent, sPattern)
-                if aResult[0] is True:
+                pattern = '{file:"(.+?)",label:"(.+?)"}'
+                results = parser.parse(html_content, pattern)
+                if results[0] is True:
                     # initialisation des tableaux
                     url = []
                     qua = []
                     # Remplissage des tableaux
-                    for i in aResult[1]:
+                    for i in results[1]:
                         url.append(str(i[0]))
                         qua.append(str(i[1]))
                     # Si une seule url

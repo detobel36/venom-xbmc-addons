@@ -19,7 +19,7 @@ class cHoster(iHoster):
     def __init__(self):
         iHoster.__init__(self, 'videomega', 'VideoMega')
 
-    def _getMediaLinkForGuest(self, autoPlay=False):
+    def _getMediaLinkForGuest(self, auto_play=False):
         UA = 'Mozilla/5.0 (Windows NT 6.1; WOW64; rv:38.0) Gecko/20100101 Firefox/38.0'
         headers = {'Host': 'videomega.tv',
                    'User-Agent': UA,
@@ -39,14 +39,14 @@ class cHoster(iHoster):
             print(e.read())
             print(e.reason)
 
-        sHtmlContent = reponse.read()
+        html_content = reponse.read()
 
         api_call = False
 
         # si on passe pr le hash code
         if 'validatehash.php?hashkey=' in self._url:
-            if 'ref=' in sHtmlContent:
-                a = re.compile('.*?ref="(.+?)".*').findall(sHtmlContent)[0]
+            if 'ref=' in html_content:
+                a = re.compile('.*?ref="(.+?)".*').findall(html_content)[0]
                 url = 'http://videomega.tv/cdn.php?ref=' + a
 
                 request = urllib2.Request(url, None, headers)
@@ -57,46 +57,46 @@ class cHoster(iHoster):
                     print(e.read())
                     print(e.reason)
 
-                sHtmlContent = reponse.read()
+                html_content = reponse.read()
 
-        oParser = Parser()
+        parser = Parser()
 
         # Premier test, lien code unescape
-        sPattern = 'unescape.+?"(.+?)"'
-        aResult = oParser.parse(sHtmlContent, sPattern)
+        pattern = 'unescape.+?"(.+?)"'
+        results = parser.parse(html_content, pattern)
 
-        if aResult[0] is True:
-            decoder = cUtil().urlDecode(aResult[1][0])
+        if results[0] is True:
+            decoder = cUtil().urlDecode(results[1][0])
 
-            sPattern = 'file: "(.+?)"'
-            aResult = oParser.parse(decoder, sPattern)
+            pattern = 'file: "(.+?)"'
+            results = parser.parse(decoder, pattern)
 
-            if aResult[0] is True:
+            if results[0] is True:
                 print('code unescape')
-                api_call = aResult[1][0]
+                api_call = results[1][0]
 
         # Dexieme test Dean Edwards Packer
         if not api_call:
-            sPattern = "(\\s*eval\\s*\\(\\s*function(?:.|\\s)+?)<\\/script>"
-            aResult = oParser.parse(sHtmlContent, sPattern)
-            if aResult[0] is True:
+            pattern = "(\\s*eval\\s*\\(\\s*function(?:.|\\s)+?)<\\/script>"
+            results = parser.parse(html_content, pattern)
+            if results[0] is True:
                 print('code Dean Edwards Packer')
-                sUnpacked = cPacker().unpack(aResult[1][0])
+                sUnpacked = cPacker().unpack(results[1][0])
 
-                sPattern = '\\("src", *"([^\\)"<>]+?)"\\)'
-                aResult = oParser.parse(sUnpacked, sPattern)
+                pattern = '\\("src", *"([^\\)"<>]+?)"\\)'
+                results = parser.parse(sUnpacked, pattern)
 
-                if aResult[0] is True:
-                    api_call = aResult[1][0]
+                if results[0] is True:
+                    api_call = results[1][0]
 
         # Troisieme test, lien non code
         if not api_call:
-            sPattern = '<source src="([^"]+)" type="video[^"]*"\\/>'
-            aResult = oParser.parse(sHtmlContent, sPattern)
+            pattern = '<source src="([^"]+)" type="video[^"]*"\\/>'
+            results = parser.parse(html_content, pattern)
 
-            if aResult[0] is True:
+            if results[0] is True:
                 print('non code')
-                api_call = aResult[1][0]
+                api_call = results[1][0]
 
         # print('url : ' + api_call)
 

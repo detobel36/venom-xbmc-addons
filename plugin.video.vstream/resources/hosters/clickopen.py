@@ -15,23 +15,23 @@ class cHoster(iHoster):
     def __init__(self):
         iHoster.__init__(self, 'clickopen', 'ClickOpen')
 
-    def _getMediaLinkForGuest(self, autoPlay=False):
+    def _getMediaLinkForGuest(self, auto_play=False):
         url = 'https://clickopen.win/api/source/' + self._url.rsplit('/', 1)[1]
 
         postdata = 'r=&d=clickopen.win'
 
-        oRequest = RequestHandler(url)
-        oRequest.setRequestType(1)
-        oRequest.addHeaderEntry('User-Agent', UA)
-        # oRequest.addHeaderEntry('Accept', '*/*')
-        # oRequest.addHeaderEntry('Accept-Encoding','gzip, deflate, br')
-        # oRequest.addHeaderEntry('Accept-Language','fr,fr-FR;q=0.8,en-US;q=0.5,en;q=0.3')
-        # oRequest.addHeaderEntry('Content-Type', 'application/x-www-form-urlencoded; charset=UTF-8')
-        oRequest.addHeaderEntry('Referer', self._url)
-        oRequest.addParametersLine(postdata)
-        sHtmlContent = oRequest.request()
+        request = RequestHandler(url)
+        request.setRequestType(1)
+        request.addHeaderEntry('User-Agent', UA)
+        # request.addHeaderEntry('Accept', '*/*')
+        # request.addHeaderEntry('Accept-Encoding','gzip, deflate, br')
+        # request.addHeaderEntry('Accept-Language','fr,fr-FR;q=0.8,en-US;q=0.5,en;q=0.3')
+        # request.addHeaderEntry('Content-Type', 'application/x-www-form-urlencoded; charset=UTF-8')
+        request.addHeaderEntry('Referer', self._url)
+        request.addParametersLine(postdata)
+        html_content = request.request()
 
-        page = json.loads(sHtmlContent)
+        page = json.loads(html_content)
         if page:
             url = []
             qua = []

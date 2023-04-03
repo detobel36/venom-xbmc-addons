@@ -10,18 +10,18 @@ class cHoster(iHoster):
     def __init__(self):
         iHoster.__init__(self, 'vidwatch', 'VidWatch')
 
-    def _getMediaLinkForGuest(self, autoPlay=False):
+    def _getMediaLinkForGuest(self, auto_play=False):
         api_call = ''
 
-        oRequest = RequestHandler(self._url)
-        sHtmlContent = oRequest.request()
+        request = RequestHandler(self._url)
+        html_content = request.request()
 
-        oParser = Parser()
-        sPattern = 'file:"([^"]+.mp4)",label:"([0-9]+)"}'
-        aResult = oParser.parse(sHtmlContent, sPattern)
+        parser = Parser()
+        pattern = 'file:"([^"]+.mp4)",label:"([0-9]+)"}'
+        results = parser.parse(html_content, pattern)
 
-        if aResult[0] is True:
-            api_call = aResult[1][0][0]
+        if results[0] is True:
+            api_call = results[1][0][0]
 
         if api_call:
             return True, api_call

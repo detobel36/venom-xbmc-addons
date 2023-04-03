@@ -13,29 +13,29 @@ class cHoster(iHoster):
         iHoster.__init__(self, 'wholecloud', 'Wholecloud')
 
     def __getIdFromUrl(self):
-        sPattern = 'v=([^<]+)'
-        oParser = Parser()
-        aResult = oParser.parse(self._url, sPattern)
-        if aResult[0] is True:
-            return aResult[1][0]
+        pattern = 'v=([^<]+)'
+        parser = Parser()
+        results = parser.parse(self._url, pattern)
+        if results[0] is True:
+            return results[1][0]
 
         return ''
 
-    def _getMediaLinkForGuest(self, autoPlay=False):
+    def _getMediaLinkForGuest(self, auto_play=False):
         api_call = False
 
-        sId = self.__getIdFromUrl()
+        s_id = self.__getIdFromUrl()
 
-        oRequest = RequestHandler(self._url)
-        sHtmlContent = oRequest.request()
+        request = RequestHandler(self._url)
+        html_content = request.request()
 
-        r = re.search('var fkzd="([^"]+)"', sHtmlContent)
+        r = re.search('var fkzd="([^"]+)"', html_content)
         if r:
             url = 'http://www.wholecloud.net/api/player.api.php?key=' + \
-                r.group(1) + '&file=' + sId
-            oRequest = RequestHandler(url)
-            sHtmlContent = oRequest.request()
-            r2 = re.search('^url=([^&]+)&', sHtmlContent)
+                r.group(1) + '&file=' + s_id
+            request = RequestHandler(url)
+            html_content = request.request()
+            r2 = re.search('^url=([^&]+)&', html_content)
             if r2:
                 api_call = r2.group(1)
 

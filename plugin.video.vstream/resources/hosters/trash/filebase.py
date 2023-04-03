@@ -10,44 +10,44 @@ class cHoster(iHoster):
     def __init__(self):
         iHoster.__init__(self, 'filebase', 'FileBase.to')
 
-    def _getMediaLinkForGuest(self, autoPlay=False):
-        oRequest = RequestHandler(self._url)
-        sHtmlContent = oRequest.request()
+    def _getMediaLinkForGuest(self, auto_play=False):
+        request = RequestHandler(self._url)
+        html_content = request.request()
 
-        sPattern = '<form action="#" method="post">.*?id="uid" value="([^"]+)" />'
-        oParser = Parser()
-        aResult = oParser.parse(sHtmlContent, sPattern)
+        pattern = '<form action="#" method="post">.*?id="uid" value="([^"]+)" />'
+        parser = Parser()
+        results = parser.parse(html_content, pattern)
 
-        if aResult[0] is True:
-            sUid = aResult[1][0]
+        if results[0] is True:
+            sUid = results[1][0]
 
-            oRequest = RequestHandler(self._url)
-            oRequest.setRequestType(RequestHandler.REQUEST_TYPE_POST)
-            oRequest.addParameters('dl_free12', 'DivX Stream')
-            oRequest.addParameters('uid', sUid)
-            sHtmlContent = oRequest.request()
+            request = RequestHandler(self._url)
+            request.setRequestType(RequestHandler.REQUEST_TYPE_POST)
+            request.addParameters('dl_free12', 'DivX Stream')
+            request.addParameters('uid', sUid)
+            html_content = request.request()
 
-            sPattern = '<input type="hidden" id="uid" name="uid" value="([^"]+)" />'
-            oParser = Parser()
-            aResult = oParser.parse(sHtmlContent, sPattern)
+            pattern = '<input type="hidden" id="uid" name="uid" value="([^"]+)" />'
+            parser = Parser()
+            results = parser.parse(html_content, pattern)
 
-            if aResult[0] is True:
-                sUid = aResult[1][0]
+            if results[0] is True:
+                sUid = results[1][0]
 
-                oRequest = RequestHandler(self._url)
-                oRequest.setRequestType(RequestHandler.REQUEST_TYPE_POST)
-                oRequest.addParameters('captcha', 'ok')
-                oRequest.addParameters('filetype', 'divx')
-                oRequest.addParameters('submit', 'Download')
-                oRequest.addParameters('uid', sUid)
-                sHtmlContent = oRequest.request()
+                request = RequestHandler(self._url)
+                request.setRequestType(RequestHandler.REQUEST_TYPE_POST)
+                request.addParameters('captcha', 'ok')
+                request.addParameters('filetype', 'divx')
+                request.addParameters('submit', 'Download')
+                request.addParameters('uid', sUid)
+                html_content = request.request()
 
-                sPattern = '<param value="([^"]+)" name="src" />'
-                oParser = Parser()
-                aResult = oParser.parse(sHtmlContent, sPattern)
+                pattern = '<param value="([^"]+)" name="src" />'
+                parser = Parser()
+                results = parser.parse(html_content, pattern)
 
-                if aResult[0] is True:
-                    sMediaFile = aResult[1][0]
+                if results[0] is True:
+                    sMediaFile = results[1][0]
                     return True, sMediaFile
 
-        return False, aResult
+        return False, results

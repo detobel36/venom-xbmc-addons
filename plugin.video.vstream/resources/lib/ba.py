@@ -24,7 +24,7 @@ class ShowBA:
         self.trailerUrl = ''  # fournie par les metadata
         self.search = ''
         self.year = ''
-        self.metaType = 'movie'
+        self.meta_type = 'movie'
         self.key = 'AIzaSyC5grY-gOPMpUM_tn0sfTKV3pKUtf9---M'
 
     def SetSearch(self, search):
@@ -34,89 +34,70 @@ class ShowBA:
         if year:
             self.year = year
 
-    def SetTrailerUrl(self, trailerUrl):
-        if trailerUrl:
+    def SetTrailerUrl(self, trailer_url):
+        if trailer_url:
             try:
-                trailer_id = trailerUrl.split('=')[1]
+                trailer_id = trailer_url.split('=')[1]
                 self.trailerUrl = 'http://www.youtube.com/watch?v=' + trailer_id
             except BaseException:
                 pass
 
-    def SetMetaType(self, metaType):
-        self.metaType = str(metaType).replace(
-            '1',
-            'movie').replace(
-            '2',
-            'tvshow').replace(
-            '3',
-            'movie') .replace(
-                '4',
-                'tvshow').replace(
-                    '5',
-                    'tvshow').replace(
-                        '6',
-            'tvshow')
+    def SetMetaType(self, meta_type):
+        self.meta_type = str(meta_type).replace('1', 'movie').replace('2', 'tvshow').replace('3', 'movie') .replace(
+                '4', 'tvshow').replace('5', 'tvshow').replace('6', 'tvshow')
 
     def SearchBA(self, window=False):
-
-        sSearchTitle = self.search + ' - Bande Annonce VF'
+        search_title = self.search + ' - Bande Annonce VF'
         if self.year:
-            sSearchTitle += ' (%s)' % self.year
+            search_title += ' (%s)' % self.year
 
         # Le lien sur la BA est déjà connu
-        urlTrailer = self.trailerUrl
+        url_trailer = self.trailerUrl
 
         # Sinon recherche de la BA officielle dans TMDB
-        if not urlTrailer:
+        if not url_trailer:
             from resources.lib.tmdb import TMDb
-            meta = TMDb().get_meta(self.metaType, self.search, year=self.year)
+            meta = TMDb().get_meta(self.meta_type, self.search, year=self.year)
             if 'trailer' in meta and meta['trailer']:
                 self.SetTrailerUrl(meta['trailer'])
-                urlTrailer = self.trailerUrl
+                url_trailer = self.trailerUrl
 
         # Sinon recherche dans youtube
-        if not urlTrailer:
+        if not url_trailer:
             headers = {'User-Agent': UA}
-
             url = 'https://www.youtube.com/results'
-
-            sHtmlContent = requests.get(
-                url, params={
-                    'search_query': sSearchTitle}, cookies={
-                    'CONSENT': GestionCookie().Readcookie("youtube")}, headers=headers).text
+            html_content = requests.get(url,
+                                        params={'search_query': search_title},
+                                        cookies={'CONSENT': GestionCookie().Readcookie("youtube")},
+                                        headers=headers).text
 
             try:
-                result = re.search(
-                    '"contents":\\[{"videoRenderer":{"videoId":"([^"]+)',
-                    str(sHtmlContent)).group(1)
+                result = re.search('"contents":\\[{"videoRenderer":{"videoId":"([^"]+)', str(html_content)).group(1)
             except BaseException:
-                result = re.search(
-                    '"contents":\\[{"videoRenderer":{"videoId":"([^"]+)',
-                    sHtmlContent.encode('utf-8')).group(1)
+                result = re.search('"contents":\\[{"videoRenderer":{"videoId":"([^"]+)',
+                                   html_content.encode('utf-8')).group(1)
 
             if result:
                 # Premiere video trouvée
-                urlTrailer = 'https://www.youtube.com/watch?v=' + result
+                url_trailer = 'https://www.youtube.com/watch?v=' + result
 
         # BA trouvée
-        if urlTrailer:
+        if url_trailer:
             hote = cHoster()
-            hote.setUrl(urlTrailer)
+            hote.setUrl(url_trailer)
             # hote.setResolution('720p') Pas utilisé
             api_call = hote.getMediaLink()[1]
 
             if not api_call:
                 return
 
-            oGuiElement = GuiElement()
-            oGuiElement.setSiteName(SITE_IDENTIFIER)
-            oGuiElement.setTitle(sSearchTitle)
-            oGuiElement.setMediaUrl(api_call)
-            oGuiElement.setThumbnail(oGuiElement.getIcon())
+            gui_element = GuiElement()
+            gui_element.setSiteName(SITE_IDENTIFIER)
+            gui_element.setTitle(search_title)
+            gui_element.setMediaUrl(api_call)
+            gui_element.setThumbnail(gui_element.getIcon())
 
-            oPlayer = Player()
-            oPlayer.clearPlayList()
-            oPlayer.addItemToPlaylist(oGuiElement)
-            oPlayer.startPlayer(window)
-
-        return
+            player = Player()
+            player.clearPlayList()
+            player.addItemToPlaylist(gui_element)
+            player.startPlayer(window)

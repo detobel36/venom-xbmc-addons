@@ -24,18 +24,18 @@ class cHoster(iHoster):
     def __init__(self):
         iHoster.__init__(self, 'videott', 'VideoTT')
 
-    def __getIdFromUrl(self, sUrl):
-        sPattern = 'http:..(?:www.)*video.tt\\/e(?:mbed)*\\/([^<]+)'
-        aResult = re.findall(sPattern, sUrl)
-        if (aResult):
-            return aResult[0]
+    def __getIdFromUrl(self, url):
+        pattern = 'http:..(?:www.)*video.tt\\/e(?:mbed)*\\/([^<]+)'
+        results = re.findall(pattern, url)
+        if (results):
+            return results[0]
 
         return ''
 
-    def _getMediaLinkForGuest(self, autoPlay=False):
-        sId = self.__getIdFromUrl(self._url)
+    def _getMediaLinkForGuest(self, auto_play=False):
+        s_id = self.__getIdFromUrl(self._url)
 
-        json_url = 'http://www.video.tt/player_control/settings.php?v=%s' % sId
+        json_url = 'http://www.video.tt/player_control/settings.php?v=%s' % s_id
 
         vUrl = False
 

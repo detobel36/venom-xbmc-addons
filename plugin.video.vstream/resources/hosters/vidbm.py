@@ -29,14 +29,14 @@ class cHoster(iHoster):
         self._url = self._url.replace('.html?auto=1', '')
         self._url = self._url.replace('.html', '')
 
-    def _getMediaLinkForGuest(self, autoPlay=False):
-        oRequest = RequestHandler(self._url)
-        sHtmlContent = oRequest.request()
+    def _getMediaLinkForGuest(self, auto_play=False):
+        request = RequestHandler(self._url)
+        html_content = request.request()
 
-        oParser = Parser()
-        sPattern = 'sources: *\\[{file:"([^"]+)"'
-        aResult = oParser.parse(sHtmlContent, sPattern)
-        api_call = aResult[1][0] + '|User-Agent=' + UA
+        parser = Parser()
+        pattern = 'sources: *\\[{file:"([^"]+)"'
+        results = parser.parse(html_content, pattern)
+        api_call = results[1][0] + '|User-Agent=' + UA
 
         if api_call:
             return True, api_call

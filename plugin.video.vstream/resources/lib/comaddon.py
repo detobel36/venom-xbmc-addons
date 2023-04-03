@@ -15,7 +15,7 @@ from resources.lib.comaddon import addon, dialog, VSlog
 """
 from resources.lib.comaddon import addon
 
-addons = addon() en haut de page.
+addons = Addon() en haut de page.
 
 utiliser une fonction comaddon ou xbmcaddon
 https://codedocs.xyz/xbmc/xbmc/class_x_b_m_c_addon_1_1xbmcaddon_1_1_addon.html
@@ -26,25 +26,26 @@ addons.openSettings()
 
 utiliser la fonction avec un autre addon
 
-addons2 = addon('plugin.video.youtube')
+addons2 = Addon('plugin.video.youtube')
 addons2.openSettings()
 """
 
 """
 Ne pas utiliser :
-class addon(xbmcaddon.Addon):
+class Addon(xbmcaddon.Addon):
 
 L'utilisation de subclass peut provoquer des fuites de mémoire, signalé par ce message :
 
-the python script "\\plugin.video.vstream\\default.py" has left several classes in memory that we couldn't clean up. The classes include: class XBMCAddon::xbmcaddon::Addon
+the python script "\\plugin.video.vstream\\default.py" has left several classes in memory that we couldn't clean up.
+The classes include: class XBMCAddon::xbmcaddon::Addon
 
 # https://stackoverflow.com/questions/26588266/xbmc-addon-memory-leak
 """
 ADDONVS = xbmcaddon.Addon('plugin.video.vstream')  # singleton
 
 
-# class addon(xbmcaddon.Addon):
-class addon:
+# class Addon(xbmcaddon.Addon):
+class Addon:
     def __init__(self, addonId=None):
         self.addonId = addonId
 
@@ -111,18 +112,18 @@ class dialog:
         if len(list_url) == 1:
             return list_url[0]
 
-        ret = self.DIALOG.select(addon().VSlang(30448), list_qual)
+        ret = self.DIALOG.select(Addon().VSlang(30448), list_qual)
         if ret > -1:
             return list_url[ret]
         return ''
 
     def VSinfo(self, desc, title='vStream', iseconds=0, sound=False):
-        if (iseconds == 0):
+        if iseconds == 0:
             iseconds = 1000
         else:
             iseconds = iseconds * 1000
 
-        if (addon().getSetting('Block_Noti_sound') == 'true'):
+        if Addon().getSetting('Block_Noti_sound') == 'true':
             sound = True
 
         return self.DIALOG.notification(
@@ -288,7 +289,7 @@ class Progress:
 
         if self.PROGRESS is None:
             if not title:
-                title = addon().VSlang(30140)
+                title = Addon().VSlang(30140)
 
             if large:
                 self.PROGRESS = xbmcgui.DialogProgress()
@@ -308,7 +309,7 @@ class Progress:
             return
 
         if not text:
-            text = addon().VSlang(30140)
+            text = Addon().VSlang(30140)
 
         self.COUNT += 1
         iPercent = int(float(self.COUNT * 100) / total)
@@ -363,23 +364,22 @@ class listitem(xbmcgui.ListItem):
         pass
 
     # Permet l'ajout d'un menu après la création d'un item
-    def addMenu(self, sFile, function, title,
-                output_parameter_handler=False):
-        sPluginPath = 'plugin://plugin.video.vstream/'  # PluginHandler().getPluginPath()
-        nbContextMenu = self.getProperty('nbcontextmenu')
-        nbContextMenu = int(nbContextMenu) if nbContextMenu else 0
+    def addMenu(self, file, function, title, output_parameter_handler=None):
+        plugin_path = 'plugin://plugin.video.vstream/'  # PluginHandler().getPluginPath()
+        nb_context_menu = self.getProperty('nbcontextmenu')
+        nb_context_menu = int(nb_context_menu) if nb_context_menu else 0
 
-        sUrl = '%s?site=%s&function=%s' % (sPluginPath, sFile, function)
-        if output_parameter_handler:
-            sUrl += '&%s' % output_parameter_handler.getParameterAsUri()
+        url = '%s?site=%s&function=%s' % (plugin_path, file, function)
+        if output_parameter_handler is not None:
+            url += '&%s' % output_parameter_handler.getParameterAsUri()
 
-        property = 'contextmenulabel(%d)' % nbContextMenu
+        property = 'contextmenulabel(%d)' % nb_context_menu
         self.setProperty(property, title)
 
-        property = 'contextmenuaction(%d)' % nbContextMenu
-        self.setProperty(property, 'RunPlugin(%s)' % sUrl)
+        property = 'contextmenuaction(%d)' % nb_context_menu
+        self.setProperty(property, 'RunPlugin(%s)' % url)
 
-        self.setProperty('nbcontextmenu', str(nbContextMenu + 1))
+        self.setProperty('nbcontextmenu', str(nb_context_menu + 1))
 
 
 """
@@ -392,13 +392,12 @@ VSlog('testtttttttttttt')
 def VSlog(e, level=xbmc.LOGDEBUG):
     try:
         # rapelle l'ID de l'addon pour être appelé hors addon
-        if (ADDONVS.getSetting('debug') == 'true'):
+        if ADDONVS.getSetting('debug') == 'true':
             if xbmc.getInfoLabel('system.buildversion')[0:2] >= '19':
                 level = xbmc.LOGINFO
             else:
                 level = xbmc.LOGNOTICE
         xbmc.log('\t[PLUGIN] vStream: ' + str(e), level)
-
     except BaseException:
         pass
 
@@ -451,11 +450,11 @@ def isNexus():
 
 
 # Transforme les "special" en chemin normal.
-def VSPath(pathSpecial):
+def VSPath(path_special):
     if isMatrix():
-        path = xbmcvfs.translatePath(pathSpecial)
+        path = xbmcvfs.translatePath(path_special)
     else:
-        path = xbmc.translatePath(pathSpecial)
+        path = xbmc.translatePath(path_special)
     return path
 
 
@@ -474,8 +473,7 @@ def VSProfil():
     req = json.dumps(request)
     response = xbmc.executeJSONRPC(req)
     # On recupere le nom.
-    name = json.loads(response)['result']['label']
-    return name
+    return json.loads(response)['result']['label']
 
 
 # Gestion des sources : activer/désactiver, libellé, url, ...
@@ -489,20 +487,15 @@ class SiteManager:
     def __init__(self):
 
         # Propriétés par défaut
-        self.defaultPath = VSPath(
-            'special://home/addons/plugin.video.vstream/resources/sites.json')
+        self.defaultPath = VSPath('special://home/addons/plugin.video.vstream/resources/sites.json')
         self.defaultData = None
 
         # Propriétés selon le profil
         name = VSProfil()
         if name == 'Master user':   # Le cas par defaut
-            path = VSPath(
-                'special://home/userdata/addon_data/plugin.video.vstream/sites.json')
+            path = VSPath('special://home/userdata/addon_data/plugin.video.vstream/sites.json')
         else:
-            path = VSPath(
-                'special://home/userdata/profiles/' +
-                name +
-                '/addon_data/plugin.video.vstream/sites.json')
+            path = VSPath('special://home/userdata/profiles/' + name + '/addon_data/plugin.video.vstream/sites.json')
 
         # Résolution du chemin
         try:
@@ -551,64 +544,66 @@ class SiteManager:
             return False
         return defaultProps.get(propName)
 
-    def getProperty(self, sourceName, propName):
-        sourceData = self._getDataSource(sourceName)
-        if sourceData:
-            if propName in sourceData:
-                return sourceData.get(propName)
+    def getProperty(self, source_name, prop_name):
+        source_data = self._getDataSource(source_name)
+        if source_data:
+            if prop_name in source_data:
+                return source_data.get(prop_name)
 
             # Propriété inconnue, on récupérere la valeur par défaut ...
-            defaultProps = self._getDefaultProp(sourceName)
-            if propName not in defaultProps:
+            default_props = self._getDefaultProp(source_name)
+            if prop_name not in default_props:
                 return False
 
             # ... et on l'enregistre
-            value = defaultProps.get(propName)
-            self.setProperty(sourceName, propName, value)
+            value = default_props.get(prop_name)
+            self.setProperty(source_name, prop_name, value)
             self.save()
             return value
 
-    def setProperty(self, sourceName, propName, value):
-        sourceData = self._getDataSource(sourceName)
-        if sourceData:
-            sourceData[propName] = str(value)
+    def setProperty(self, source_name, prop_name, value):
+        source_data = self._getDataSource(source_name)
+        if source_data:
+            source_data[prop_name] = str(value)
 
     def setDefaultProps(self, props):
         self.defaultData = props
         self._saveDefault()
 
     # Lire les settings d'une source
-    def _getDataSource(self, sourceName):
+    def _getDataSource(self, source_name):
 
         # userSettings
-        sourceData = self.data[self.SITES].get(sourceName)
+        source_data = self.data[self.SITES].get(source_name)
 
         # pas de user Settings, on recherche dans les default Settings
-        if not sourceData:
-            sourceData = self._getDefaultProp(sourceName)
+        if not source_data:
+            source_data = self._getDefaultProp(source_name)
 
             # Sauvegarder dans les user Settings
-            if sourceData:
-                self.data[self.SITES][sourceName] = sourceData
+            if source_data:
+                self.data[self.SITES][source_name] = source_data
 
-        return sourceData
+        return source_data
 
     # Récupérer les propriétés par défaut d'une source
-    def _getDefaultProp(self, sourceName):
+    def _getDefaultProp(self, source_name):
 
         # Chargement des properties par défaut
         if not self.defaultData:
             self.defaultData = json.load(open(self.defaultPath))
 
         # Retrouver la prop par défaut
-        sourceData = self.defaultData[self.SITES].get(
-            sourceName) if self.defaultData and self.SITES in self.defaultData else None
+        if self.defaultData and self.SITES in self.defaultData:
+            source_data = self.defaultData[self.SITES].get(source_name)
+        else:
+            source_data = None
 
         # pas de valeurs par défaut, on en crée à la volée
-        if not sourceData:
+        if not source_data:
             return {}
 
-        return sourceData
+        return source_data
 
     # Sauvegarder les propriétés modifiées
     def save(self):
@@ -628,8 +623,7 @@ class addonManager:
 
     # Vérifie la présence d'un addon
     def isAddonExists(self, addon_id):
-        return not xbmc.getCondVisibility(
-            'System.HasAddon(%s)' % addon_id) == 0
+        return not xbmc.getCondVisibility('System.HasAddon(%s)' % addon_id) == 0
 
     # Active/desactive un addon
     def enableAddon(self, addon_id, enable='True'):

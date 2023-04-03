@@ -29,7 +29,7 @@ def load():
     gui = Gui()
 
     output_parameter_handler = OutputParameterHandler()
-    output_parameter_handler.addParameter('siteUrl', AGE_3ANS[0])
+    output_parameter_handler.addParameter('site_url', AGE_3ANS[0])
     gui.addDir(
         SITE_IDENTIFIER,
         AGE_3ANS[1],
@@ -37,7 +37,7 @@ def load():
         'enfants.png',
         output_parameter_handler)
 
-    output_parameter_handler.addParameter('siteUrl', AGE_5ANS[0])
+    output_parameter_handler.addParameter('site_url', AGE_5ANS[0])
     gui.addDir(
         SITE_IDENTIFIER,
         AGE_5ANS[1],
@@ -45,7 +45,7 @@ def load():
         'enfants.png',
         output_parameter_handler)
 
-    output_parameter_handler.addParameter('siteUrl', AGE_7ANS[0])
+    output_parameter_handler.addParameter('site_url', AGE_7ANS[0])
     gui.addDir(
         SITE_IDENTIFIER,
         AGE_7ANS[1],
@@ -53,7 +53,7 @@ def load():
         'enfants.png',
         output_parameter_handler)
 
-    output_parameter_handler.addParameter('siteUrl', AGE_9ANS[0])
+    output_parameter_handler.addParameter('site_url', AGE_9ANS[0])
     gui.addDir(
         SITE_IDENTIFIER,
         AGE_9ANS[1],
@@ -61,7 +61,7 @@ def load():
         'enfants.png',
         output_parameter_handler)
 
-    output_parameter_handler.addParameter('siteUrl', AGE_11ANSETPLUS[0])
+    output_parameter_handler.addParameter('site_url', AGE_11ANSETPLUS[0])
     gui.addDir(
         SITE_IDENTIFIER,
         AGE_11ANSETPLUS[1],
@@ -69,7 +69,7 @@ def load():
         'enfants.png',
         output_parameter_handler)
 
-    output_parameter_handler.addParameter('siteUrl', ALL_ALL[0])
+    output_parameter_handler.addParameter('site_url', ALL_ALL[0])
     gui.addDir(
         SITE_IDENTIFIER,
         ALL_ALL[1],
@@ -77,7 +77,7 @@ def load():
         'enfants.png',
         output_parameter_handler)
 
-    # output_parameter_handler.addParameter('siteUrl', BY_THEMES[0])
+    # output_parameter_handler.addParameter('site_url', BY_THEMES[0])
     # gui.addDir(SITE_IDENTIFIER, BY_THEMES[1], 'Films pour Enfants (Thèmes)', 'genres.png', output_parameter_handler)
 
     gui.setEndOfDirectory()
@@ -85,25 +85,25 @@ def load():
 
 def showThemes():
     gui = Gui()
-    oParser = Parser()
-    oRequestHandler = RequestHandler('siteUrl')
-    sHtmlContent = oRequestHandler.request()
+    parser = Parser()
+    request_handler = RequestHandler('site_url')
+    html_content = request_handler.request()
 
-    sHtmlContent = oParser.abParse(
-        sHtmlContent,
+    html_content = parser.abParse(
+        html_content,
         '<lien1>Portail pour les familles</lien1><br>',
         '<lien1><i class=icon-circle>')
 
-    sPattern = '<a href=([^>]+)><lien3><i class=icon-circle></i>([^<]+)</lien3></a><br>'
-    aResult = oParser.parse(sHtmlContent, sPattern)
+    pattern = '<a href=([^>]+)><lien3><i class=icon-circle></i>([^<]+)</lien3></a><br>'
+    results = parser.parse(html_content, pattern)
 
-    if aResult[0]:
+    if results[0]:
         output_parameter_handler = OutputParameterHandler()
-        for aEntry in aResult[1]:
-            sUrl = URL_MAIN + aEntry[0]
-            title = aEntry[1]
+        for entry in results[1]:
+            url = URL_MAIN + entry[0]
+            title = entry[1]
 
-            output_parameter_handler.addParameter('siteUrl', sUrl)
+            output_parameter_handler.addParameter('site_url', url)
             gui.addDir(
                 SITE_IDENTIFIER,
                 'showMovies',
@@ -116,40 +116,40 @@ def showThemes():
 
 def showMovies():
     gui = Gui()
-    oParser = Parser()
+    parser = Parser()
 
     input_parameter_handler = InputParameterHandler()
-    sUrl = input_parameter_handler.getValue('siteUrl')
+    url = input_parameter_handler.getValue('site_url')
 
-    oRequestHandler = RequestHandler(sUrl)
-    sHtmlContent = oRequestHandler.request()
-    sPattern = 'class=portfolio-image>.+?src="*([^ ]+\\.jpg).+?synopsis>([^<]+)<.+?href="(https[^"]+)".+?<h4>([^<]+)<'
-    aResult = oParser.parse(sHtmlContent, sPattern)
+    request_handler = RequestHandler(url)
+    html_content = request_handler.request()
+    pattern = 'class=portfolio-image>.+?src="*([^ ]+\\.jpg).+?synopsis>([^<]+)<.+?href="(https[^"]+)".+?<h4>([^<]+)<'
+    results = parser.parse(html_content, pattern)
 
-    if aResult[0]:
-        total = len(aResult[1])
+    if results[0]:
+        total = len(results[1])
         progress_ = Progress().VScreate(SITE_NAME)
 
         output_parameter_handler = OutputParameterHandler()
-        for aEntry in aResult[1]:
+        for entry in results[1]:
             progress_.VSupdate(progress_, total)
             if progress_.iscanceled():
                 break
 
-            sThumb = URL_MAIN + aEntry[0]
-            desc = aEntry[1]
-            sUrl = aEntry[2]
-            title = aEntry[3]
+            thumb = URL_MAIN + entry[0]
+            desc = entry[1]
+            url = entry[2]
+            title = entry[3]
 
-            output_parameter_handler.addParameter('siteUrl', sUrl)
-            output_parameter_handler.addParameter('sMovieTitle', title)
-            output_parameter_handler.addParameter('sThumb', sThumb)
+            output_parameter_handler.addParameter('site_url', url)
+            output_parameter_handler.addParameter('movie_title', title)
+            output_parameter_handler.addParameter('thumb', thumb)
             gui.addMisc(
                 SITE_IDENTIFIER,
                 'showHosters',
                 title,
                 'enfants.png',
-                sThumb,
+                thumb,
                 desc,
                 output_parameter_handler)
 
@@ -161,16 +161,16 @@ def showMovies():
 def showHosters():
     gui = Gui()
     input_parameter_handler = InputParameterHandler()
-    sUrl = input_parameter_handler.getValue('siteUrl')
-    sMovieTitle = input_parameter_handler.getValue('sMovieTitle')
-    sThumb = input_parameter_handler.getValue('sThumb')
+    url = input_parameter_handler.getValue('site_url')
+    movie_title = input_parameter_handler.getValue('movie_title')
+    thumb = input_parameter_handler.getValue('thumb')
 
-    sHosterUrl = sUrl
-    oHoster = HosterGui().checkHoster(sHosterUrl)
-    if oHoster:
-        oHoster.setDisplayName(sMovieTitle)
-        oHoster.setFileName(sMovieTitle)
-        HosterGui().showHoster(gui, oHoster, sHosterUrl, sThumb,
+    hoster_url = url
+    hoster = HosterGui().checkHoster(hoster_url)
+    if hoster:
+        hoster.setDisplayName(movie_title)
+        hoster.setFileName(movie_title)
+        HosterGui().showHoster(gui, hoster, hoster_url, thumb,
                                input_parameter_handler=input_parameter_handler)
 
     gui.setEndOfDirectory()

@@ -9,44 +9,44 @@ class cHoster(iHoster):
     def __init__(self):
         iHoster.__init__(self, 'vidbux', 'VidBux.com')
 
-    def _getMediaLinkForGuest(self, autoPlay=False):
-        oRequest = RequestHandler(self._url)
-        sHtmlContent = oRequest.request()
+    def _getMediaLinkForGuest(self, auto_play=False):
+        request = RequestHandler(self._url)
+        html_content = request.request()
 
-        sPattern = '<input name="([^"]+)".*?value=([^>]+)>'
-        oParser = Parser()
-        aResult = oParser.parse(sHtmlContent, sPattern)
+        pattern = '<input name="([^"]+)".*?value=([^>]+)>'
+        parser = Parser()
+        results = parser.parse(html_content, pattern)
 
-        if aResult[0] is True:
-            oRequest = RequestHandler(self._url)
-            oRequest.setRequestType(RequestHandler.REQUEST_TYPE_POST)
+        if results[0] is True:
+            request = RequestHandler(self._url)
+            request.setRequestType(RequestHandler.REQUEST_TYPE_POST)
 
-            for aEntry in aResult[1]:
-                oRequest.addParameters(
-                    str(aEntry[0]), str(aEntry[1]).replace('"', ''))
+            for entry in results[1]:
+                request.addParameters(
+                    str(entry[0]), str(entry[1]).replace('"', ''))
 
-            sHtmlContent = oRequest.request()
-            return self.__getUrlFromJavascriptCode(sHtmlContent)
+            html_content = request.request()
+            return self.__getUrlFromJavascriptCode(html_content)
 
-        return self.__getUrlFromJavascriptCode(sHtmlContent)
+        return self.__getUrlFromJavascriptCode(html_content)
 
-    def __getUrlFromJavascriptCode(self, sHtmlContent):
-        sPattern = "<script type='text/javascript'>eval.*?return p}\\((.*?)</script>"
-        oParser = Parser()
-        aResult = oParser.parse(sHtmlContent, sPattern)
+    def __getUrlFromJavascriptCode(self, html_content):
+        pattern = "<script type='text/javascript'>eval.*?return p}\\((.*?)</script>"
+        parser = Parser()
+        results = parser.parse(html_content, pattern)
 
-        if aResult[0] is True:
-            sJavascript = aResult[1][0]
+        if results[0] is True:
+            sJavascript = results[1][0]
 
             sUnpacked = cJsUnpacker().unpackByString(sJavascript)
-            sPattern = ".addVariable\\('file','([^']+)'"
-            oParser = Parser()
-            aResultLink = oParser.parse(sUnpacked, sPattern)
+            pattern = ".addVariable\\('file','([^']+)'"
+            parser = Parser()
+            aResultLink = parser.parse(sUnpacked, pattern)
 
             if aResultLink[0] is True:
-                aResult = []
-                aResult.append(True)
-                aResult.append(aResultLink[1][0])
-                return aResult
+                results = []
+                results.append(True)
+                results.append(aResultLink[1][0])
+                return results
 
         return False, ''

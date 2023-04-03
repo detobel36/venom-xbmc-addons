@@ -18,18 +18,18 @@ class cHoster(iHoster):
     def __init__(self):
         iHoster.__init__(self, 'plynow', 'Plynow')
 
-    def _getMediaLinkForGuest(self, autoPlay=False):
-        oParser = Parser()
+    def _getMediaLinkForGuest(self, auto_play=False):
+        parser = Parser()
 
-        oRequest = RequestHandler(self._url)
-        sHtmlContent = oRequest.request()
+        request = RequestHandler(self._url)
+        html_content = request.request()
 
         # On récupere l'array
-        sPattern = '<script>\\s*\\(function\\(\\).+?=(.+?)var player'
-        aResult = oParser.parse(sHtmlContent, sPattern)
-        if aResult:
-            for aEntry in aResult[1]:
-                uHv4sb = aEntry
+        pattern = '<script>\\s*\\(function\\(\\).+?=(.+?)var player'
+        results = parser.parse(html_content, pattern)
+        if results:
+            for entry in results[1]:
+                uHv4sb = entry
 
         # uHv4sb = re.search('<script>\s*\(function\(\).+?=(.+?);','f', re.DOTALL).group(1)
 
@@ -44,12 +44,12 @@ class cHoster(iHoster):
 
         # On inverse le resultat et l'assemble en un string.
         result = ''.join(x)[::-1]
-        sHosterUrl = re.findall('src="([^"]+)', result)
-        sHosterUrl = str(sHosterUrl).replace(
+        hoster_url = re.findall('src="([^"]+)', result)
+        hoster_url = str(hoster_url).replace(
             '[', '').replace(
             ']', '').replace(
             "'", '')
-        api_call = sHosterUrl
+        api_call = hoster_url
 
         if api_call:
             return True, api_call  # + '|User-Agent=' + UA + '&Referer=' + self._url

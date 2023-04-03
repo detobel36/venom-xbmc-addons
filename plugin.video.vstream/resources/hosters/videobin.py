@@ -11,21 +11,21 @@ class cHoster(iHoster):
     def __init__(self):
         iHoster.__init__(self, 'videobin', 'VideoBIN')
 
-    def _getMediaLinkForGuest(self, autoPlay=False):
-        oParser = Parser()
-        oRequest = RequestHandler(self._url)
-        sHtmlContent = oRequest.request()
+    def _getMediaLinkForGuest(self, auto_play=False):
+        parser = Parser()
+        request = RequestHandler(self._url)
+        html_content = request.request()
 
         # accelère le traitement
-        sHtmlContent = oParser.abParse(sHtmlContent, 'var player', 'vvplay')
+        html_content = parser.abParse(html_content, 'var player', 'vvplay')
         # Traitement pour les liens m3u8
-        sHtmlContent = sHtmlContent.replace(
+        html_content = html_content.replace(
             ',', '').replace(
             'master.m3u8', 'index-v1-a1.m3u8')
-        sPattern = '"(http[^"]+(?:.m3u8|.mp4))"'
-        aResult = oParser.parse(sHtmlContent, sPattern)
+        pattern = '"(http[^"]+(?:.m3u8|.mp4))"'
+        results = parser.parse(html_content, pattern)
 
-        if aResult[0] is True:
+        if results[0] is True:
             api_call = ''
 
             # initialisation des tableaux
@@ -34,7 +34,7 @@ class cHoster(iHoster):
             n = 1
 
             # Remplissage des tableaux
-            for i in aResult[1]:
+            for i in results[1]:
                 url.append(str(i))
                 qua.append('Lien ' + str(n))
                 n += 1

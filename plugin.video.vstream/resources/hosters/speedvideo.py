@@ -25,26 +25,26 @@ class cHoster(iHoster):
 
     def setUrl(self, url):
         self._url = str(url)
-        sPattern = 'https*:\\/\\/speedvideo.[a-z]{3}\\/(?:embed-)?([0-9a-zA-Z]+)'
-        oParser = Parser()
-        aResult = oParser.parse(url, sPattern)
-        if aResult[0] is True:
+        pattern = 'https*:\\/\\/speedvideo.[a-z]{3}\\/(?:embed-)?([0-9a-zA-Z]+)'
+        parser = Parser()
+        results = parser.parse(url, pattern)
+        if results[0] is True:
             self._url = 'https://speedvideo.net/embed-' + \
-                aResult[1][0] + '.html'
+                results[1][0] + '.html'
         else:
             VSlog('ID error')
 
-    def _getMediaLinkForGuest(self, autoPlay=False):
+    def _getMediaLinkForGuest(self, auto_play=False):
         api_call = False
 
-        oRequest = RequestHandler(self._url)
-        sHtmlContent = oRequest.request()
-        sPattern = 'var linkfile\\s*=\\s*"([^"]+)"'
+        request = RequestHandler(self._url)
+        html_content = request.request()
+        pattern = 'var linkfile\\s*=\\s*"([^"]+)"'
 
-        oParser = Parser()
-        aResult = oParser.parse(sHtmlContent, sPattern)
-        if aResult[0] is True:
-            sUrl = aResult[1][0]
+        parser = Parser()
+        results = parser.parse(html_content, pattern)
+        if results[0] is True:
+            url = results[1][0]
 
             class NoRedirection(urllib2.HTTPErrorProcessor):
                 def http_response(self, request, response):
@@ -55,7 +55,7 @@ class cHoster(iHoster):
             opener = urllib2.build_opener(NoRedirection)
             opener.addheaders = [('User-Agent', UA)]
             opener.addheaders = [('Referer', self._url)]
-            response = opener.open(sUrl)
+            response = opener.open(url)
             if response.code == 301 or response.code == 302:
                 api_call = response.headers['Location']
 

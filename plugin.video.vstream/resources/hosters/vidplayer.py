@@ -14,15 +14,15 @@ class cHoster(iHoster):
     def __init__(self):
         iHoster.__init__(self, 'vidplayer', 'Vidplayer')
 
-    def _getMediaLinkForGuest(self, autoPlay=False):
+    def _getMediaLinkForGuest(self, auto_play=False):
         req = self._url.replace('/v/', '/api/source/')
         pdata = 'r'
-        oRequestHandler = RequestHandler(req)
-        oRequestHandler.setRequestType(1)
+        request_handler = RequestHandler(req)
+        request_handler.setRequestType(1)
 
-        oRequestHandler.addParametersLine(pdata)
-        sHtmlContent = oRequestHandler.request()
-        jsonrsp = json.loads(sHtmlContent)
+        request_handler.addParametersLine(pdata)
+        html_content = request_handler.request()
+        jsonrsp = json.loads(html_content)
 
         list_url = []
         list_q = []

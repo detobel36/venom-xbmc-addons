@@ -10,16 +10,16 @@ class cHoster(iHoster):
     def __init__(self):
         iHoster.__init__(self, 'filepup', 'FilePup')
 
-    def _getMediaLinkForGuest(self, autoPlay=False):
-        oRequestHandler = RequestHandler(self._url)
-        # oRequestHandler.addParameters('login', '1')
-        sHtmlContent = oRequestHandler.request()
+    def _getMediaLinkForGuest(self, auto_play=False):
+        request_handler = RequestHandler(self._url)
+        # request_handler.addParameters('login', '1')
+        html_content = request_handler.request()
 
-        oParser = Parser()
-        sPattern = 'type: "video\\/mp4", *src: "([^<>"{}]+?)"'
-        aResult = oParser.parse(sHtmlContent, sPattern)
+        parser = Parser()
+        pattern = 'type: "video\\/mp4", *src: "([^<>"{}]+?)"'
+        results = parser.parse(html_content, pattern)
 
-        if aResult[0] is True:
-            return True, aResult[1][0]
+        if results[0] is True:
+            return True, results[1][0]
 
         return False, False

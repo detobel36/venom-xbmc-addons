@@ -15,35 +15,35 @@ class cHoster(iHoster):
     def __init__(self):
         iHoster.__init__(self, 'tune', 'Tune')
 
-    def __getIdFromUrl(self, sUrl):  # correction ancienne url >> embed depreciated
-        sPattern = '(?:play/|video/|embed\\?videoid=|vid=)([0-9]+)'
-        oParser = Parser()
-        aResult = oParser.parse(sUrl, sPattern)
-        if aResult[0] is True:
-            return aResult[1][0]
+    def __getIdFromUrl(self, url):  # correction ancienne url >> embed depreciated
+        pattern = '(?:play/|video/|embed\\?videoid=|vid=)([0-9]+)'
+        parser = Parser()
+        results = parser.parse(url, pattern)
+        if results[0] is True:
+            return results[1][0]
 
         return ''
 
-    def _getMediaLinkForGuest(self, autoPlay=False):
+    def _getMediaLinkForGuest(self, auto_play=False):
         api_call = ''
         url = []
         qua = []
-        sId = self.__getIdFromUrl(self._url)
+        s_id = self.__getIdFromUrl(self._url)
 
-        sUrl = 'https://api.tune.pk/v3/videos/' + sId
+        url = 'https://api.tune.pk/v3/videos/' + s_id
 
-        oRequest = RequestHandler(sUrl)
-        oRequest.addHeaderEntry('User-Agent', UA)
-        oRequest.addHeaderEntry('X-KEY', '777750fea4d3bd585bf47dc1873619fc')
-        oRequest.addHeaderEntry('X-REQ-APP', 'web')  # pour les mp4
-        oRequest.addHeaderEntry('Referer', self._url)  # au cas ou
-        sHtmlContent1 = oRequest.request()
+        request = RequestHandler(url)
+        request.addHeaderEntry('User-Agent', UA)
+        request.addHeaderEntry('X-KEY', '777750fea4d3bd585bf47dc1873619fc')
+        request.addHeaderEntry('X-REQ-APP', 'web')  # pour les mp4
+        request.addHeaderEntry('Referer', self._url)  # au cas ou
+        sHtmlContent1 = request.request()
 
         if sHtmlContent1:
             sHtmlContent1 = cUtil().removeHtmlTags(sHtmlContent1)
-            sHtmlContent = cUtil().unescape(sHtmlContent1)
+            html_content = cUtil().unescape(sHtmlContent1)
 
-            content = json.loads(sHtmlContent)
+            content = json.loads(html_content)
 
             content = content["data"]["videos"]["files"]
 

@@ -13,29 +13,29 @@ class cHoster(iHoster):
     def __init__(self):
         iHoster.__init__(self, 'hd_stream', 'HDStream')
 
-    def _getMediaLinkForGuest(self, autoPlay=False):
+    def _getMediaLinkForGuest(self, auto_play=False):
         api_call = False
 
-        oRequestHandler = RequestHandler(self._url)
-        sHtmlContent = oRequestHandler.request()
+        request_handler = RequestHandler(self._url)
+        html_content = request_handler.request()
 
-        oParser = Parser()
-        sPattern = '(\\s*eval\\s*\\(\\s*function(?:.|\\s)+?{}\\)\\))'
-        aResult = oParser.parse(sHtmlContent, sPattern)
+        parser = Parser()
+        pattern = '(\\s*eval\\s*\\(\\s*function(?:.|\\s)+?{}\\)\\))'
+        results = parser.parse(html_content, pattern)
 
-        if aResult[0] is True:
+        if results[0] is True:
 
-            sHtmlContent = cPacker().unpack(aResult[1][0])
-            sPattern = 'file":"([^"]+)".+?"label":"([^"]+)"'
-            aResult = oParser.parse(sHtmlContent, sPattern)
+            html_content = cPacker().unpack(results[1][0])
+            pattern = 'file":"([^"]+)".+?"label":"([^"]+)"'
+            results = parser.parse(html_content, pattern)
 
-            if aResult[0] is True:
+            if results[0] is True:
                 url = []
                 qua = []
 
-                for aEntry in aResult[1]:
-                    url.append(aEntry[0])
-                    qua.append(aEntry[1])
+                for entry in results[1]:
+                    url.append(entry[0])
+                    qua.append(entry[1])
 
                 api_call = dialog().VSselectqual(qua, url)
 

@@ -23,50 +23,50 @@ class cHoster(iHoster):
         if not self._url.endswith('.html'):
             self._url = self._url + '.html'
 
-    def _getMediaLinkForGuest(self, autoPlay=False, api_call=None):
-        oRequest = RequestHandler(self._url)
-        sHtmlContent = oRequest.request()
+    def _getMediaLinkForGuest(self, auto_play=False, api_call=None):
+        request = RequestHandler(self._url)
+        html_content = request.request()
 
-        if 'File was deleted' in sHtmlContent:
+        if 'File was deleted' in html_content:
             return False, False
 
-        oParser = Parser()
-        sPattern = '(eval\\(function\\(p,a,c,k,e(?:.|\\s)+?\\))<\\/script>'
-        aResult = oParser.parse(sHtmlContent, sPattern)
+        parser = Parser()
+        pattern = '(eval\\(function\\(p,a,c,k,e(?:.|\\s)+?\\))<\\/script>'
+        results = parser.parse(html_content, pattern)
 
-        if aResult[0] is True:
-            sHtmlContent2 = cPacker().unpack(aResult[1][0])
+        if results[0] is True:
+            sHtmlContent2 = cPacker().unpack(results[1][0])
 
-            sPattern = '{file:"([^"]+)",label:"([^"]+)"}'
-            aResult = oParser.parse(sHtmlContent2, sPattern)
-            if aResult[0]:
+            pattern = '{file:"([^"]+)",label:"([^"]+)"}'
+            results = parser.parse(sHtmlContent2, pattern)
+            if results[0]:
                 # initialisation des tableaux
                 url = []
                 qua = []
-                for i in aResult[1]:
+                for i in results[1]:
                     url.append(str(i[0]))
                     qua.append(str(i[1]))
 
                 api_call = dialog().VSselectqual(qua, url)
 
             if not api_call:
-                sPattern = 'src:"([^"]+)"'
-                aResult = oParser.parse(sHtmlContent2, sPattern)
-                if aResult[0]:
-                    api_call = aResult[1][0].replace(
+                pattern = 'src:"([^"]+)"'
+                results = parser.parse(sHtmlContent2, pattern)
+                if results[0]:
+                    api_call = results[1][0].replace(
                         ',', '').replace('.urlset', '')
 
         if not api_call:
-            sPattern = 'sources: *\\[{src: "([^"]+)", *type: "video/mp4"'
-            aResult = oParser.parse(sHtmlContent, sPattern)
-            if aResult[0]:
-                api_call = aResult[1][0]
+            pattern = 'sources: *\\[{src: "([^"]+)", *type: "video/mp4"'
+            results = parser.parse(html_content, pattern)
+            if results[0]:
+                api_call = results[1][0]
 
         if not api_call:
-            sPattern = 'source src="([^"]+)" type='
-            aResult = oParser.parse(sHtmlContent, sPattern)
-            if aResult[0]:
-                api_call = aResult[1][0]
+            pattern = 'source src="([^"]+)" type='
+            results = parser.parse(html_content, pattern)
+            if results[0]:
+                api_call = results[1][0]
 
         if api_call:
             return True, api_call

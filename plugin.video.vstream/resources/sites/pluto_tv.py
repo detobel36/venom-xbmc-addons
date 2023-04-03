@@ -4,7 +4,7 @@ import random
 import string
 import uuid
 
-from resources.lib.comaddon import Progress, addon, isMatrix, SiteManager
+from resources.lib.comaddon import Progress, Addon, isMatrix, SiteManager
 from resources.lib.gui.gui import Gui
 from resources.lib.gui.hoster import HosterGui
 from resources.lib.handler.inputParameterHandler import InputParameterHandler
@@ -28,10 +28,10 @@ VOD = (
 
 
 def getData():
-    if addon().getSetting("PlutoTV_sid"):
-        deviceID = addon().getSetting("PlutoTV_deviceID")
-        clientID = addon().getSetting("PlutoTV_clientID")
-        sid = addon().getSetting("PlutoTV_sid")
+    if Addon().getSetting("PlutoTV_sid"):
+        deviceID = Addon().getSetting("PlutoTV_deviceID")
+        clientID = Addon().getSetting("PlutoTV_clientID")
+        sid = Addon().getSetting("PlutoTV_sid")
 
     else:
         sid = str(uuid.uuid1().hex)
@@ -44,9 +44,9 @@ def getData():
                     string.digits +
                     '=+') for _ in range(24)))
 
-        addon().setSetting("PlutoTV_deviceID", deviceID)
-        addon().setSetting("PlutoTV_clientID", clientID)
-        addon().setSetting("PlutoTV_sid", sid)
+        Addon().setSetting("PlutoTV_deviceID", deviceID)
+        Addon().setSetting("PlutoTV_clientID", clientID)
+        Addon().setSetting("PlutoTV_sid", sid)
 
     return clientID, deviceID, sid
 
@@ -55,7 +55,7 @@ def load():
     gui = Gui()
 
     output_parameter_handler = OutputParameterHandler()
-    output_parameter_handler.addParameter('siteUrl', CHAINE_DIRECT[0])
+    output_parameter_handler.addParameter('site_url', CHAINE_DIRECT[0])
     gui.addDir(
         SITE_IDENTIFIER,
         CHAINE_DIRECT[1],
@@ -63,7 +63,7 @@ def load():
         'tv.png',
         output_parameter_handler)
 
-    output_parameter_handler.addParameter('siteUrl', VOD[0])
+    output_parameter_handler.addParameter('site_url', VOD[0])
     gui.addDir(
         SITE_IDENTIFIER,
         VOD[1],
@@ -78,37 +78,37 @@ def showTV():
     gui = Gui()
 
     input_parameter_handler = InputParameterHandler()
-    sUrl = input_parameter_handler.getValue('siteUrl')
+    url = input_parameter_handler.getValue('site_url')
 
     clientID, deviceID, sid = getData()
 
-    oRequestHandler = RequestHandler(sUrl)
-    oRequestHandler.addHeaderEntry('User-Agent', UA)
-    sHtmlContent = oRequestHandler.request(jsonDecode=True)
+    request_handler = RequestHandler(url)
+    request_handler.addHeaderEntry('User-Agent', UA)
+    html_content = request_handler.request(json_decode=True)
 
-    if sHtmlContent:
+    if html_content:
         output_parameter_handler = OutputParameterHandler()
-        for aEntry in sHtmlContent:
-            sThumb = aEntry["featuredImage"]["path"]
-            title = aEntry["name"]
+        for entry in html_content:
+            thumb = entry["featuredImage"]["path"]
+            title = entry["name"]
             if not isMatrix():
                 title = title.encode('utf8')
 
-            sUrl2 = "https://boot.pluto.tv/v4/start?deviceId=" + deviceID
-            sUrl2 += "&deviceMake=Firefox&deviceType=web&deviceVersion=87.0&deviceModel=web&DNT=0&appName=web"
-            sUrl2 += "&appVersion=5.14.0-0f5ca04c21649b8c8aad4e56266a23b96d73b83a&serverSideAds=true&channelSlug="
-            sUrl2 += aEntry["slug"] + "&episodeSlugs=&clientID=" + \
+            url2 = "https://boot.pluto.tv/v4/start?deviceId=" + deviceID
+            url2 += "&deviceMake=Firefox&deviceType=web&deviceVersion=87.0&deviceModel=web&DNT=0&appName=web"
+            url2 += "&appVersion=5.14.0-0f5ca04c21649b8c8aad4e56266a23b96d73b83a&serverSideAds=true&channelSlug="
+            url2 += entry["slug"] + "&episodeSlugs=&clientID=" + \
                 clientID + "&clientModelNumber=na"
 
-            output_parameter_handler.addParameter('siteUrl', sUrl2)
-            output_parameter_handler.addParameter('sMovieTitle', title)
-            output_parameter_handler.addParameter('sThumb', sThumb)
+            output_parameter_handler.addParameter('site_url', url2)
+            output_parameter_handler.addParameter('movie_title', title)
+            output_parameter_handler.addParameter('thumb', thumb)
             gui.addMisc(
                 SITE_IDENTIFIER,
                 'showHosters',
                 title,
                 'tv.png',
-                sThumb,
+                thumb,
                 '',
                 output_parameter_handler)
 
@@ -119,21 +119,21 @@ def showGenre():
     gui = Gui()
 
     input_parameter_handler = InputParameterHandler()
-    sUrl = input_parameter_handler.getValue('siteUrl')
+    url = input_parameter_handler.getValue('site_url')
 
-    oRequestHandler = RequestHandler(sUrl)
-    oRequestHandler.addHeaderEntry('User-Agent', UA)
-    sHtmlContent = oRequestHandler.request(jsonDecode=True)
+    request_handler = RequestHandler(url)
+    request_handler.addHeaderEntry('User-Agent', UA)
+    html_content = request_handler.request(json_decode=True)
 
     sID = 1
-    if sHtmlContent:
+    if html_content:
         output_parameter_handler = OutputParameterHandler()
-        for aEntry in sHtmlContent["categories"]:
-            title = aEntry["name"]
+        for entry in html_content["categories"]:
+            title = entry["name"]
             if not isMatrix():
                 title = title.encode('utf8')
 
-            output_parameter_handler.addParameter('siteUrl', sUrl)
+            output_parameter_handler.addParameter('site_url', url)
             output_parameter_handler.addParameter('sID', int(sID))
             sID = sID + 1
 
@@ -151,75 +151,75 @@ def showVOD():
     gui = Gui()
 
     input_parameter_handler = InputParameterHandler()
-    sUrl = input_parameter_handler.getValue('siteUrl')
+    url = input_parameter_handler.getValue('site_url')
     sID = input_parameter_handler.getValue('sID')
 
-    oRequestHandler = RequestHandler(sUrl)
-    oRequestHandler.addHeaderEntry('User-Agent', UA)
-    sHtmlContent = oRequestHandler.request(jsonDecode=True)
+    request_handler = RequestHandler(url)
+    request_handler.addHeaderEntry('User-Agent', UA)
+    html_content = request_handler.request(json_decode=True)
 
-    if sHtmlContent:
-        items = sHtmlContent["categories"][int(sID) - 1]["items"]
+    if html_content:
+        items = html_content["categories"][int(sID) - 1]["items"]
         total = len(items)
         progress_ = Progress().VScreate(SITE_NAME)
 
         output_parameter_handler = OutputParameterHandler()
-        for aEntry in items:
+        for entry in items:
             progress_.VSupdate(progress_, total)
             if progress_.iscanceled():
                 break
 
-            sThumb = aEntry["featuredImage"]["path"]
-            title = aEntry["name"]
+            thumb = entry["featuredImage"]["path"]
+            title = entry["name"]
             # /!\ ces replace sont différents
             title = title.replace(
                 ' : Saison',
                 ' saison').replace(
                 ' : Saison',
                 ' saison')
-            ids = aEntry["_id"]
-            desc = aEntry["description"]
+            ids = entry["_id"]
+            desc = entry["description"]
             if not isMatrix():
                 title = title.encode('utf8')
                 desc = desc.encode('utf8')
 
-            output_parameter_handler.addParameter('sMovieTitle', title)
-            output_parameter_handler.addParameter('sThumb', sThumb)
+            output_parameter_handler.addParameter('movie_title', title)
+            output_parameter_handler.addParameter('thumb', thumb)
             output_parameter_handler.addParameter('desc', desc)
 
             VOD_SERIES = "https://service-vod.clusters.pluto.tv/v3/vod/series/"
-            if aEntry["type"] == "series":
-                sUrl = VOD_SERIES + ids + "/seasons?includeItems=true&deviceType=web"
-                output_parameter_handler.addParameter('siteUrl', sUrl)
+            if entry["type"] == "series":
+                url = VOD_SERIES + ids + "/seasons?includeItems=true&deviceType=web"
+                output_parameter_handler.addParameter('site_url', url)
                 gui.addTV(
                     SITE_IDENTIFIER,
                     'showSerieSxE',
                     title,
                     '',
-                    sThumb,
+                    thumb,
                     desc,
                     output_parameter_handler)
-            elif aEntry["type"] == "Anime":
-                sUrl = VOD_SERIES + ids + "/seasons?includeItems=true&deviceType=web"
-                output_parameter_handler.addParameter('siteUrl', sUrl)
+            elif entry["type"] == "Anime":
+                url = VOD_SERIES + ids + "/seasons?includeItems=true&deviceType=web"
+                output_parameter_handler.addParameter('site_url', url)
                 gui.addAnime(
                     SITE_IDENTIFIER,
                     'showSerieSxE',
                     title,
                     '',
-                    sThumb,
+                    thumb,
                     desc,
                     output_parameter_handler)
             else:
-                siteUrl = "https://service-stitcher.clusters.pluto.tv/stitch/hls/episode/" + \
+                site_url = "https://service-stitcher.clusters.pluto.tv/stitch/hls/episode/" + \
                     ids + "/master.m3u8"
-                output_parameter_handler.addParameter('siteUrl', siteUrl)
+                output_parameter_handler.addParameter('site_url', site_url)
                 gui.addMovie(
                     SITE_IDENTIFIER,
                     'seriesHosters',
                     title,
                     '',
-                    sThumb,
+                    thumb,
                     desc,
                     output_parameter_handler)
 
@@ -232,34 +232,34 @@ def showSerieSxE():
     gui = Gui()
 
     input_parameter_handler = InputParameterHandler()
-    sUrl = input_parameter_handler.getValue('siteUrl')
-    sThumb = input_parameter_handler.getValue('sThumb')
-    sMovieTitle = input_parameter_handler.getValue('sMovieTitle')
+    url = input_parameter_handler.getValue('site_url')
+    thumb = input_parameter_handler.getValue('thumb')
+    movie_title = input_parameter_handler.getValue('movie_title')
     desc = input_parameter_handler.getValue('desc')
 
-    oRequestHandler = RequestHandler(sUrl)
-    oRequestHandler.addHeaderEntry('User-Agent', UA)
-    sHtmlContent = oRequestHandler.request(jsonDecode=True)
+    request_handler = RequestHandler(url)
+    request_handler.addHeaderEntry('User-Agent', UA)
+    html_content = request_handler.request(json_decode=True)
 
-    if sHtmlContent:
+    if html_content:
         output_parameter_handler = OutputParameterHandler()
-        for aEntry in sHtmlContent["seasons"]:
-            for a in aEntry["episodes"]:
-                title = sMovieTitle + " S" + \
+        for entry in html_content["seasons"]:
+            for a in entry["episodes"]:
+                title = movie_title + " S" + \
                     str(a["season"]) + " E" + str(a["number"])
                 sID = a["_id"]
 
-                siteUrl = "https://service-stitcher.clusters.pluto.tv/stitch/hls/episode/" + \
+                site_url = "https://service-stitcher.clusters.pluto.tv/stitch/hls/episode/" + \
                     sID + "/master.m3u8"
-                output_parameter_handler.addParameter('siteUrl', siteUrl)
-                output_parameter_handler.addParameter('sMovieTitle', title)
-                output_parameter_handler.addParameter('sThumb', sThumb)
+                output_parameter_handler.addParameter('site_url', site_url)
+                output_parameter_handler.addParameter('movie_title', title)
+                output_parameter_handler.addParameter('thumb', thumb)
                 gui.addEpisode(
                     SITE_IDENTIFIER,
                     'seriesHosters',
                     title,
                     'series.png',
-                    sThumb,
+                    thumb,
                     desc,
                     output_parameter_handler)
 
@@ -269,23 +269,23 @@ def showSerieSxE():
 def showHosters():
     gui = Gui()
     input_parameter_handler = InputParameterHandler()
-    sUrl = input_parameter_handler.getValue('siteUrl')
-    sMovieTitle = input_parameter_handler.getValue('sMovieTitle')
-    sThumb = input_parameter_handler.getValue('sThumb')
+    url = input_parameter_handler.getValue('site_url')
+    movie_title = input_parameter_handler.getValue('movie_title')
+    thumb = input_parameter_handler.getValue('thumb')
 
-    oRequestHandler = RequestHandler(sUrl)
-    oRequestHandler.addHeaderEntry('User-Agent', UA)
-    sHtmlContent = oRequestHandler.request(jsonDecode=True)
+    request_handler = RequestHandler(url)
+    request_handler.addHeaderEntry('User-Agent', UA)
+    html_content = request_handler.request(json_decode=True)
 
-    sHosterUrl = "https://service-stitcher.clusters.pluto.tv/stitch/hls/channel/"
-    sHosterUrl += sHtmlContent["startingChannel"]["id"] + \
-        "/master.m3u8?" + sHtmlContent["stitcherParams"]
+    hoster_url = "https://service-stitcher.clusters.pluto.tv/stitch/hls/channel/"
+    hoster_url += html_content["startingChannel"]["id"] + \
+        "/master.m3u8?" + html_content["stitcherParams"]
 
-    oHoster = HosterGui().checkHoster(sHosterUrl)
-    if oHoster:
-        oHoster.setDisplayName(sMovieTitle)
-        oHoster.setFileName(sMovieTitle)
-        HosterGui().showHoster(gui, oHoster, sHosterUrl, sThumb,
+    hoster = HosterGui().checkHoster(hoster_url)
+    if hoster:
+        hoster.setDisplayName(movie_title)
+        hoster.setFileName(movie_title)
+        HosterGui().showHoster(gui, hoster, hoster_url, thumb,
                                input_parameter_handler=input_parameter_handler)
 
     gui.setEndOfDirectory()
@@ -294,24 +294,24 @@ def showHosters():
 def seriesHosters():
     gui = Gui()
     input_parameter_handler = InputParameterHandler()
-    sUrl = input_parameter_handler.getValue('siteUrl')
-    sThumb = input_parameter_handler.getValue('sThumb')
-    sMovieTitle = input_parameter_handler.getValue('sMovieTitle')
+    url = input_parameter_handler.getValue('site_url')
+    thumb = input_parameter_handler.getValue('thumb')
+    movie_title = input_parameter_handler.getValue('movie_title')
 
     clientID, deviceID, sid = getData()
 
-    sHosterUrl = sUrl
-    sHosterUrl += "?appName=web&appVersion=5.14.0-0f5ca04c21649b8c8aad4e56266a23b96d73b83a&deviceDNT=false"
-    sHosterUrl += "&deviceId=" + deviceID + \
+    hoster_url = url
+    hoster_url += "?appName=web&appVersion=5.14.0-0f5ca04c21649b8c8aad4e56266a23b96d73b83a&deviceDNT=false"
+    hoster_url += "&deviceId=" + deviceID + \
         "&deviceMake=Firefox&deviceModel=web&deviceType=web&deviceVersion=87.0"
-    sHosterUrl += "&includeExtendedEvents=false&marketingRegion=FR&sid=" + \
+    hoster_url += "&includeExtendedEvents=false&marketingRegion=FR&sid=" + \
         sid + "&serverSideAds=true"
 
-    oHoster = HosterGui().checkHoster(sUrl)
-    if oHoster:
-        oHoster.setDisplayName(sMovieTitle)
-        oHoster.setFileName(sMovieTitle)
-        HosterGui().showHoster(gui, oHoster, sHosterUrl, sThumb,
+    hoster = HosterGui().checkHoster(url)
+    if hoster:
+        hoster.setDisplayName(movie_title)
+        hoster.setFileName(movie_title)
+        HosterGui().showHoster(gui, hoster, hoster_url, thumb,
                                input_parameter_handler=input_parameter_handler)
 
     gui.setEndOfDirectory()

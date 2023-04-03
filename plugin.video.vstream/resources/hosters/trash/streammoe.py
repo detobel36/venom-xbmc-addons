@@ -12,23 +12,23 @@ class cHoster(iHoster):
     def __init__(self):
         iHoster.__init__(self, 'streammoe', 'Stream.moe')
 
-    def _getMediaLinkForGuest(self, autoPlay=False):
+    def _getMediaLinkForGuest(self, auto_play=False):
         api_call = False
 
-        oRequest = RequestHandler(self._url)
-        sHtmlContent = oRequest.request()
+        request = RequestHandler(self._url)
+        html_content = request.request()
 
-        oParser = Parser()
-        sPattern = "var contents = atob\\('([^']+)'\\);"
-        aResult = oParser.parse(sHtmlContent, sPattern)
+        parser = Parser()
+        pattern = "var contents = atob\\('([^']+)'\\);"
+        results = parser.parse(html_content, pattern)
 
-        if (aResult[0]):
-            chain = base64.decodestring(aResult[1][0])
+        if (results[0]):
+            chain = base64.decodestring(results[1][0])
 
-            sPattern = '<source src="([^"]+)"'
-            aResult = oParser.parse(chain, sPattern)
-            if (aResult[0]):
-                api_call = aResult[1][0]
+            pattern = '<source src="([^"]+)"'
+            results = parser.parse(chain, pattern)
+            if (results[0]):
+                api_call = results[1][0]
 
         if api_call:
             return True, api_call

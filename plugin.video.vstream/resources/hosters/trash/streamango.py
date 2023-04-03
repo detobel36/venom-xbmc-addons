@@ -44,13 +44,13 @@ class cHoster(iHoster):
 
         return _0x59b81a
 
-    def _getMediaLinkForGuest(self, autoPlay=False):
+    def _getMediaLinkForGuest(self, auto_play=False):
         api_call = False
-        oRequest = RequestHandler(self._url)
-        sHtmlContent = oRequest.request()
+        request = RequestHandler(self._url)
+        html_content = request.request()
 
         r1 = re.search(
-            "{type:\"video/mp4\",src:\\w+\\('([^']+)',(\\d+)", sHtmlContent)
+            "{type:\"video/mp4\",src:\\w+\\('([^']+)',(\\d+)", html_content)
         if (r1):
             api_call = self.decode(r1.group(1), int(r1.group(2)))
             if api_call.endswith('@'):

@@ -793,7 +793,7 @@ class ParseResults(object):
         return len(self.__toklist)
 
     def __bool__(self):
-        return (not not self.__toklist)
+        return not not self.__toklist
     __nonzero__ = __bool__
 
     def __iter__(self):
@@ -1281,7 +1281,7 @@ class ParseResults(object):
                 for i, vv in enumerate(v):
                     if isinstance(vv, ParseResults):
                         out.append("\n%s%s[%d]:\n%s%s%s" % (indent,
-                                                            ('  ' * (_depth)),
+                                                            ('  ' * _depth),
                                                             i,
                                                             indent,
                                                             ('  ' * (_depth + 1)),
@@ -1291,7 +1291,7 @@ class ParseResults(object):
                                                                     _depth=_depth + 1)))
                     else:
                         out.append("\n%s%s[%d]:\n%s%s%s" % (indent,
-                                                            ('  ' * (_depth)),
+                                                            ('  ' * _depth),
                                                             i,
                                                             indent,
                                                             ('  ' * (_depth + 1)),
@@ -1849,7 +1849,7 @@ class ParserElement(object):
     # ~ @profile
     def _parseNoCache(self, instring, loc, doActions=True, callPreParse=True):
         TRY, MATCH, FAIL = 0, 1, 2
-        debugging = (self.debug)  # and doActions)
+        debugging = self.debug  # and doActions)
 
         if debugging or self.failAction:
             # ~ print ("Match", self, "at loc", loc, "(%d, %d)" % (lineno(loc, instring), col(loc, instring)))

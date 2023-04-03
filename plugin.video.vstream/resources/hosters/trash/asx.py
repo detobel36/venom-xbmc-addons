@@ -10,9 +10,9 @@ class cHoster(iHoster):
     def getPattern(self):
         return 'mms://(.*?)"'
 
-    def _getMediaLinkForGuest(self, autoPlay=False):
+    def _getMediaLinkForGuest(self, auto_play=False):
         oHosterHandler = cHosterHandler()
-        aResult = oHosterHandler.getUrl(self)
-        if aResult[0] is True:
-            return True, 'mms://' + aResult[1]
+        results = oHosterHandler.getUrl(self)
+        if results[0] is True:
+            return True, 'mms://' + results[1]
         return False, ''

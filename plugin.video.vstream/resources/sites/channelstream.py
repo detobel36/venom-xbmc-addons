@@ -32,7 +32,7 @@ def load():
     gui = Gui()
 
     output_parameter_handler = OutputParameterHandler()
-    output_parameter_handler.addParameter('siteUrl', SPORT_LIVE[0])
+    output_parameter_handler.addParameter('site_url', SPORT_LIVE[0])
     gui.addDir(
         SITE_IDENTIFIER,
         SPORT_LIVE[1],
@@ -45,35 +45,35 @@ def load():
 
 def showMovies():
     gui = Gui()
-    oParser = Parser()
+    parser = Parser()
 
     input_parameter_handler = InputParameterHandler()
-    sUrl = URL_MAIN + input_parameter_handler.getValue('siteUrl')
+    url = URL_MAIN + input_parameter_handler.getValue('site_url')
 
-    oRequestHandler = RequestHandler(sUrl)
-    sHtmlContent = oRequestHandler.request()
+    request_handler = RequestHandler(url)
+    html_content = request_handler.request()
     if isMatrix():
-        sHtmlContent = sHtmlContent.replace('Ã®', 'î').replace('Ã©', 'é')
+        html_content = html_content.replace('Ã®', 'î').replace('Ã©', 'é')
 
     # récupérer les drapeaux pour en faire des thumb
-    sPattern = "\\.flag\\.([^{]+){.+?url\\(([^)]+)\\)"
-    aResult = oParser.parse(sHtmlContent, sPattern)
-    flags = dict(aResult[1])
+    pattern = "\\.flag\\.([^{]+){.+?url\\(([^)]+)\\)"
+    results = parser.parse(html_content, pattern)
+    flags = dict(results[1])
 
-    sPattern = "colspan=\"7\".+?<b>([^<]+)<\\/b>.+?location\\.href = '([^']+).+?text-align.+?>(.+?)<\\/td>.+?<span class=\"flag ([^\"]+).+?text-align.+?>([^<]+).+?text-align: left.+?>([^<]+).+?<span class=\"t\">([^<]+)<\\/span>"
-    aResult = oParser.parse(sHtmlContent, sPattern)
+    pattern = "colspan=\"7\".+?<b>([^<]+)<\\/b>.+?location\\.href = '([^']+).+?text-align.+?>(.+?)<\\/td>.+?<span class=\"flag ([^\"]+).+?text-align.+?>([^<]+).+?text-align: left.+?>([^<]+).+?<span class=\"t\">([^<]+)<\\/span>"
+    results = parser.parse(html_content, pattern)
 
-    if aResult[0]:
+    if results[0]:
         output_parameter_handler = OutputParameterHandler()
-        for aEntry in aResult[1]:
-            sUrl2 = aEntry[1]
-            sDate = aEntry[2].replace('<br />', ' ')
-            flag = aEntry[3]
-            sdesc1 = aEntry[4]
-            sdesc2 = aEntry[5]
-            sTime = aEntry[6]
+        for entry in results[1]:
+            url2 = entry[1]
+            sDate = entry[2].replace('<br />', ' ')
+            flag = entry[3]
+            sdesc1 = entry[4]
+            sdesc2 = entry[5]
+            sTime = entry[6]
 
-            sThumb = flags.get(flag)
+            thumb = flags.get(flag)
             title = ''
             if sDate:
                 try:
@@ -88,21 +88,21 @@ def showMovies():
 
             if sdesc1:
                 title += sdesc1 + ' - ' + sdesc2 + ' - '
-            title += '(' + aEntry[0] + ')'
-            sDisplayTitle = title
-            desc = sDisplayTitle
+            title += '(' + entry[0] + ')'
+            display_title = title
+            desc = display_title
 
-            output_parameter_handler.addParameter('siteUrl', sUrl2)
-            output_parameter_handler.addParameter('sMovieTitle', title)
-            output_parameter_handler.addParameter('sThumb', sThumb)
+            output_parameter_handler.addParameter('site_url', url2)
+            output_parameter_handler.addParameter('movie_title', title)
+            output_parameter_handler.addParameter('thumb', thumb)
             output_parameter_handler.addParameter('desc', desc)
 
             gui.addLink(
                 SITE_IDENTIFIER,
                 'showHoster',
                 title,
-                sThumb,
-                sDisplayTitle,
+                thumb,
+                display_title,
                 output_parameter_handler)
 
     gui.setEndOfDirectory()
@@ -110,109 +110,109 @@ def showMovies():
 
 def showHoster():
     gui = Gui()
-    oParser = Parser()
+    parser = Parser()
 
     input_parameter_handler = InputParameterHandler()
-    sUrl = input_parameter_handler.getValue('siteUrl')
-    if not sUrl.startswith('http'):
-        sUrl = URL_MAIN + sUrl
-    title = input_parameter_handler.getValue('sMovieTitle')
+    url = input_parameter_handler.getValue('site_url')
+    if not url.startswith('http'):
+        url = URL_MAIN + url
+    title = input_parameter_handler.getValue('movie_title')
     desc = input_parameter_handler.getValue('desc')
-    sThumb = input_parameter_handler.getValue('sThumb')
-    sCat = 6
+    thumb = input_parameter_handler.getValue('thumb')
+    cat = 6
     sMeta = 0
 
-    oRequestHandler = RequestHandler(sUrl)
-    sHtmlContent = oRequestHandler.request()
+    request_handler = RequestHandler(url)
+    html_content = request_handler.request()
 
     # Double Iframe a passer.
-    sPattern = "document\\.getElementById\\('video'\\)\\.src='([^']+)'.+?>([^<]+)<"
-    aResult = oParser.parse(sHtmlContent, sPattern)
+    pattern = "document\\.getElementById\\('video'\\)\\.src='([^']+)'.+?>([^<]+)<"
+    results = parser.parse(html_content, pattern)
 
-    if not aResult[1]:  # Pas de flux
+    if not results[1]:  # Pas de flux
         gui.setEndOfDirectory()
         return
 
-    for entry in aResult[1]:
+    for entry in results[1]:
         output_parameter_handler = OutputParameterHandler()
         iframeURL1 = entry[0]
         canal = entry[1]
-        sMovieTitle = title
-        if canal not in sMovieTitle:
-            sMovieTitle += ' [' + canal + ']'
+        movie_title = title
+        if canal not in movie_title:
+            movie_title += ' [' + canal + ']'
 
-        output_parameter_handler.addParameter('sMovieTitle', title)
-        output_parameter_handler.addParameter('thumbnail', sThumb)
+        output_parameter_handler.addParameter('movie_title', title)
+        output_parameter_handler.addParameter('thumbnail', thumb)
         output_parameter_handler.addParameter('desc', desc)
 
-        oGuiElement = GuiElement()
-        oGuiElement.setTitle(sMovieTitle)
-        oGuiElement.setDescription(desc)
-        oGuiElement.setFileName(sMovieTitle)
-        oGuiElement.setSiteName(resources.sites.freebox.SITE_IDENTIFIER)
-        oGuiElement.setFunction('play__')
-        oGuiElement.setIcon('tv.png')
-        oGuiElement.setMeta(sMeta)
-        oGuiElement.setThumbnail(sThumb)
-        oGuiElement.setDirectTvFanart()
-        oGuiElement.setCat(sCat)
-        oGuiElement.setMeta(sMeta)
+        gui_element = GuiElement()
+        gui_element.setTitle(movie_title)
+        gui_element.setDescription(desc)
+        gui_element.setFileName(movie_title)
+        gui_element.setSiteName(resources.sites.freebox.SITE_IDENTIFIER)
+        gui_element.setFunction('play__')
+        gui_element.setIcon('tv.png')
+        gui_element.setMeta(sMeta)
+        gui_element.setThumbnail(thumb)
+        gui_element.setDirectTvFanart()
+        gui_element.setCat(cat)
+        gui_element.setMeta(sMeta)
 
         if 'dailymotion' in iframeURL1:
             output_parameter_handler.addParameter(
-                'sHosterIdentifier', 'dailymotion')
-            output_parameter_handler.addParameter('sMediaUrl', iframeURL1)
+                'hoster_identifier', 'dailymotion')
+            output_parameter_handler.addParameter('media_url', iframeURL1)
             output_parameter_handler.addParameter(
-                'siteUrl', sHosterUrl)  # variable manquante
-            output_parameter_handler.addParameter('sFileName', sMovieTitle)
-            oGuiElement.setFunction('play')
-            oGuiElement.setSiteName('HosterGui')
+                'site_url', hoster_url)  # variable manquante
+            output_parameter_handler.addParameter('file_name', movie_title)
+            gui_element.setFunction('play')
+            gui_element.setSiteName('HosterGui')
             # addHost absent ???? del 20/08/2021
-            gui.addHost(oGuiElement, output_parameter_handler)
+            gui.addHost(gui_element, output_parameter_handler)
             Gui.CONTENT = 'movies'
             gui.setEndOfDirectory()
             return
 
-        oRequestHandler = RequestHandler(iframeURL1)
-        oRequestHandler.addHeaderEntry('User-Agent', UA)
-        # oRequestHandler.addHeaderEntry('Referer', siterefer) # a verifier
-        sHtmlContent = oRequestHandler.request()
+        request_handler = RequestHandler(iframeURL1)
+        request_handler.addHeaderEntry('User-Agent', UA)
+        # request_handler.addHeaderEntry('Referer', siterefer) # a verifier
+        html_content = request_handler.request()
 
-        sHosterUrl = ''
-        oParser = Parser()
-        sPattern = '<iframe.+?src="([^"]+)'
-        aResult2 = oParser.parse(sHtmlContent, sPattern)
+        hoster_url = ''
+        parser = Parser()
+        pattern = '<iframe.+?src="([^"]+)'
+        aResult2 = parser.parse(html_content, pattern)
 
         if not aResult2[0]:
-            sPattern = "playStream\\('iframe','([^']+)'\\)"
-            aResult2 = oParser.parse(sHtmlContent, sPattern)
+            pattern = "playStream\\('iframe','([^']+)'\\)"
+            aResult2 = parser.parse(html_content, pattern)
 
         if aResult2[0]:
             iframeURL1 = aResult2[1][0]
 
             if 'cloudstream' in iframeURL1:
-                sHosterUrl = getHosterWigistream(iframeURL1, sUrl)
+                hoster_url = getHosterWigistream(iframeURL1, url)
 
-            if not sHosterUrl:
-                oRequestHandler = RequestHandler(iframeURL1)
-                oRequestHandler.addHeaderEntry('User-Agent', UA)
-                sHtmlContent = oRequestHandler.request()
+            if not hoster_url:
+                request_handler = RequestHandler(iframeURL1)
+                request_handler.addHeaderEntry('User-Agent', UA)
+                html_content = request_handler.request()
 
-                oParser = Parser()
-                sPattern = '<iframe.+?src="([^"]+)'
-                aResult2 = oParser.parse(sHtmlContent, sPattern)
+                parser = Parser()
+                pattern = '<iframe.+?src="([^"]+)'
+                aResult2 = parser.parse(html_content, pattern)
 
                 if aResult2[0]:
                     urlHoster = aResult2[1][0]
                     if 'primetubsub' in urlHoster or 'sportcast' in urlHoster:
-                        sHosterUrl = getHosterPrimetubsub(
+                        hoster_url = getHosterPrimetubsub(
                             urlHoster, iframeURL1)
                     else:
-                        sHosterUrl = getHosterWigistream(urlHoster, iframeURL1)
+                        hoster_url = getHosterWigistream(urlHoster, iframeURL1)
 
-        if sHosterUrl:
-            output_parameter_handler.addParameter('siteUrl', sHosterUrl)
-            gui.addFolder(oGuiElement, output_parameter_handler)
+        if hoster_url:
+            output_parameter_handler.addParameter('site_url', hoster_url)
+            gui.addFolder(gui_element, output_parameter_handler)
 
     Gui.CONTENT = 'files'
     gui.setEndOfDirectory()
@@ -222,60 +222,60 @@ def getHosterWigistream(url, referer):
     url = url.strip()
     if not url.startswith('http'):
         url = 'http:' + url
-    oRequestHandler = RequestHandler(url)
-    oRequestHandler.addHeaderEntry('User-Agent', UA)
-    oRequestHandler.addHeaderEntry('Referer', referer)
-    sHtmlContent = oRequestHandler.request()
+    request_handler = RequestHandler(url)
+    request_handler.addHeaderEntry('User-Agent', UA)
+    request_handler.addHeaderEntry('Referer', referer)
+    html_content = request_handler.request()
 
-    sPattern = '(\\s*eval\\s*\\(\\s*function(?:.|\\s)+?{}\\)\\))'
-    aResult = re.findall(sPattern, sHtmlContent)
+    pattern = '(\\s*eval\\s*\\(\\s*function(?:.|\\s)+?{}\\)\\))'
+    results = re.findall(pattern, html_content)
 
-    if aResult:
-        sstr = aResult[0]
+    if results:
+        sstr = results[0]
         if not sstr.endswith(';'):
             sstr = sstr + ';'
         sUnpack = cPacker().unpack(sstr)
-        sPattern = 'src="(.+?)"'
-        aResult = re.findall(sPattern, sUnpack)
-        if aResult:
-            return aResult[0] + '|User-Agent=' + UA + '&Referer=' + Quote(url)
+        pattern = 'src="(.+?)"'
+        results = re.findall(pattern, sUnpack)
+        if results:
+            return results[0] + '|User-Agent=' + UA + '&Referer=' + Quote(url)
 
     else:
-        sPattern = "source:'(.+?)'"
-        aResult = re.findall(sPattern, sHtmlContent)
-        if aResult:
-            return aResult[0] + '|User-Agent=' + UA + '&Referer=' + Quote(url)
+        pattern = "source:'(.+?)'"
+        results = re.findall(pattern, html_content)
+        if results:
+            return results[0] + '|User-Agent=' + UA + '&Referer=' + Quote(url)
 
     return False
 
 
 def getHosterPrimetubsub(url, referer):
-    oParser = Parser()
+    parser = Parser()
 
-    oRequestHandler = RequestHandler(url)
-    oRequestHandler.addHeaderEntry('User-Agent', UA)
-    oRequestHandler.addHeaderEntry('Referer', referer)
-    sHtmlContent = oRequestHandler.request()
-    sPattern = '<iframe.+?src="([^"]+)'
-    aResult = oParser.parse(sHtmlContent, sPattern)
+    request_handler = RequestHandler(url)
+    request_handler.addHeaderEntry('User-Agent', UA)
+    request_handler.addHeaderEntry('Referer', referer)
+    html_content = request_handler.request()
+    pattern = '<iframe.+?src="([^"]+)'
+    results = parser.parse(html_content, pattern)
 
-    if not aResult[0]:
+    if not results[0]:
         return
 
     referer = url
-    url = aResult[1][0]
+    url = results[1][0]
 
-    oRequestHandler = RequestHandler(url)
-    oRequestHandler.addHeaderEntry('User-Agent', UA)
-    oRequestHandler.addHeaderEntry('Referer', referer)
-    sHtmlContent = oRequestHandler.request()
-    sPattern = "(src|[^/]source):'([^']+)"
-    aResult = oParser.parse(sHtmlContent, sPattern)
+    request_handler = RequestHandler(url)
+    request_handler.addHeaderEntry('User-Agent', UA)
+    request_handler.addHeaderEntry('Referer', referer)
+    html_content = request_handler.request()
+    pattern = "(src|[^/]source):'([^']+)"
+    results = parser.parse(html_content, pattern)
 
-    if not aResult[0]:
+    if not results[0]:
         return
 
     referer = url
-    url = aResult[1][0][1]
+    url = results[1][0][1]
 
     return url + '|User-Agent=' + UA + '&Referer=' + Quote(referer)

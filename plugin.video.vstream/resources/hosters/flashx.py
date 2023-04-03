@@ -71,32 +71,32 @@ def unlockUrl(url2=None):
 
     VSlog('Test unlock url :' + url1)
 
-    oRequest = RequestHandler(url1)
-    oRequest.addParameters('User-Agent', UA)
-    # oRequest.addParameters('Accept', '*/*')
-    # oRequest.addParameters('Accept-Encoding', 'gzip, deflate, br')
-    # oRequest.addParameters('Accept-Language', 'fr,fr-FR;q=0.8,en-US;q=0.5,en;q=0.3')
-    oRequest.addParameters('Referer', 'https://www.flashx.co/dl?playthis')
-    code = oRequest.request()
+    request = RequestHandler(url1)
+    request.addParameters('User-Agent', UA)
+    # request.addParameters('Accept', '*/*')
+    # request.addParameters('Accept-Encoding', 'gzip, deflate, br')
+    # request.addParameters('Accept-Language', 'fr,fr-FR;q=0.8,en-US;q=0.5,en;q=0.3')
+    request.addParameters('Referer', 'https://www.flashx.co/dl?playthis')
+    code = request.request()
 
     url = ''
     if not code:
-        url = oRequest.getRealUrl()
+        url = request.getRealUrl()
         VSlog('Redirection :' + url)
     else:
         # VSlog(code)
-        aResult = re.search(
+        results = re.search(
             "!= null\\){\\s*\\$.get\\('([^']+)', *{(.+?)}",
             code,
             re.DOTALL)
-        if aResult:
-            dat = aResult.group(2)
+        if results:
+            dat = results.group(2)
             dat = dat.replace("'", '')
             dat = dat.replace(" ", '')
 
             dat2 = dict(x.split(':') for x in dat.split(','))
 
-            dat3 = aResult.group(1) + '?'
+            dat3 = results.group(1) + '?'
             for i, j in dat2.items():
                 dat3 = dat3 + str(i) + '=' + str(j) + '&'
 
@@ -119,48 +119,48 @@ def loadLinks(htmlcode):
     VSlog('Scan des liens')
 
     host = 'https://www.flashx.tv'
-    sPattern = '[\\("\'](https*:)*(\\/[^,"\'\\)\\s]+)[\\)\'"]'
-    aResult = re.findall(sPattern, htmlcode, re.DOTALL)
+    pattern = '[\\("\'](https*:)*(\\/[^,"\'\\)\\s]+)[\\)\'"]'
+    results = re.findall(pattern, htmlcode, re.DOTALL)
 
-    # VSlog(str(aResult))
-    for http, urlspam in aResult:
-        sUrl = urlspam
+    # VSlog(str(results))
+    for http, urlspam in results:
+        url = urlspam
 
         if http:
-            sUrl = http + sUrl
+            url = http + url
 
-        sUrl = sUrl.replace('/\\/', '//')
-        sUrl = sUrl.replace('\\/', '/')
+        url = url.replace('/\\/', '//')
+        url = url.replace('\\/', '/')
 
         # filtrage mauvaise url
-        if (sUrl.count('/') < 2) or ('<' in sUrl) or ('>' in sUrl) or (len(sUrl) < 15):
+        if (url.count('/') < 2) or ('<' in url) or ('>' in url) or (len(url) < 15):
             continue
-        if '[' in sUrl or ']' in sUrl:
+        if '[' in url or ']' in url:
             continue
-        if '.jpg' in sUrl or '.png' in sUrl:
+        if '.jpg' in url or '.png' in url:
             continue
 
-        # VSlog('test : ' + sUrl)
+        # VSlog('test : ' + url)
 
-        if '\\x' in sUrl or '\\u' in sUrl:
-            sUrl = ASCIIDecode(sUrl)
-            if not sUrl:
+        if '\\x' in url or '\\u' in url:
+            url = ASCIIDecode(url)
+            if not url:
                 continue
 
-        if sUrl.startswith('//'):
-            sUrl = 'http:' + sUrl
+        if url.startswith('//'):
+            url = 'http:' + url
 
-        if sUrl.startswith('/'):
-            sUrl = host + sUrl
+        if url.startswith('/'):
+            url = host + url
 
         # Url ou il ne faut pas aller
-        if 'dok3v' in sUrl:
+        if 'dok3v' in url:
             continue
 
         # pour test
-        if ('.js' not in sUrl) or ('.cgi' not in sUrl):
+        if ('.js' not in url) or ('.cgi' not in url):
             continue
-        # if 'flashx' in sUrl:
+        # if 'flashx' in url:
             # continue
 
         headers8 = {'User-Agent': UA,
@@ -168,13 +168,13 @@ def loadLinks(htmlcode):
                     }
 
         try:
-            request = urllib2.Request(sUrl, None, headers8)
+            request = urllib2.Request(url, None, headers8)
             reponse = urllib2.urlopen(request)
             sCode = reponse.read()
             reponse.close()
-            # VSlog('Worked ' + sUrl)
+            # VSlog('Worked ' + url)
         except HttpError as e:
-            if not e.geturl() == sUrl:
+            if not e.geturl() == url:
                 try:
                     headers9 = {
                         'User-Agent': UA,
@@ -187,13 +187,13 @@ def loadLinks(htmlcode):
                     reponse = urllib2.urlopen(request)
                     sCode = reponse.read()
                     reponse.close()
-                    # VSlog('Worked ' + sUrl)
+                    # VSlog('Worked ' + url)
                 except HttpError as e:
                     VSlog(str(e.code))
                     # VSlog(e.read())
-                    VSlog('Redirection Blocked ' + sUrl + ' Red ' + e.geturl())
+                    VSlog('Redirection Blocked ' + url + ' Red ' + e.geturl())
             else:
-                # VSlog('Blocked ' + sUrl)
+                # VSlog('Blocked ' + url)
                 VSlog(str(e.code))
                 VSlog('>>' + e.geturl())
                 VSlog(e.read())
@@ -206,13 +206,13 @@ class cHoster(iHoster):
     def __init__(self):
         iHoster.__init__(self, 'flashx', 'FlashX')
 
-    def getRedirectHtml(self, web_url, sId, NoEmbed=False):
+    def getRedirectHtml(self, web_url, s_id, NoEmbed=False):
         headers = {
             # 'Host': 'www.flashx.tv',
             'User-Agent': UA,
             # 'Accept': 'text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8',
             # 'Accept-Language': 'fr,fr-FR;q=0.8,en-US;q=0.5,en;q=0.3',
-            'Referer': 'http://embed.flashx.tv/embed.php?c=' + sId,
+            'Referer': 'http://embed.flashx.tv/embed.php?c=' + s_id,
             'Accept-Encoding': 'identity'
         }
 
@@ -231,7 +231,7 @@ class cHoster(iHoster):
             try:
                 # ok ca a enfin marche
                 reponse = urllib2.urlopen(request)
-                sHtmlContent = reponse.read()
+                html_content = reponse.read()
                 reponse.close()
 
                 if reponse.geturl() != web_url and reponse.geturl() != '':
@@ -255,56 +255,56 @@ class cHoster(iHoster):
 
             MaxRedirection = MaxRedirection - 1
 
-        return sHtmlContent
+        return html_content
 
     def __getIdFromUrl(self, url):
-        sPattern = "https*:\\/\\/((?:www.|play.)?flashx.+?)\\/(?:playvid-)?(?:embed-)?(?:embed.+?=)?" + \
+        pattern = "https*:\\/\\/((?:www.|play.)?flashx.+?)\\/(?:playvid-)?(?:embed-)?(?:embed.+?=)?" + \
             "(-*[0-9a-zA-Z]+)?(?:.html)?"
-        oParser = Parser()
-        aResult = oParser.parse(url, sPattern)
-        if aResult[0] is True:
-            return aResult[1][0][1]
+        parser = Parser()
+        results = parser.parse(url, pattern)
+        if results[0] is True:
+            return results[1][0][1]
 
         return ''
 
     def getHost(self, url):
-        oParser = Parser()
-        sPattern = 'https*:\\/\\/(.+?)\\/'
-        aResult = oParser.parse(url, sPattern)
-        if aResult[0]:
-            return aResult[1][0]
+        parser = Parser()
+        pattern = 'https*:\\/\\/(.+?)\\/'
+        results = parser.parse(url, pattern)
+        if results[0]:
+            return results[1][0]
         return ''
 
     def setUrl(self, url):
         self._url = 'http://' + \
             self.getHost(url) + '/embed.php?c=' + self.__getIdFromUrl(url)
 
-    def _getMediaLinkForGuest(self, autoPlay=False):
+    def _getMediaLinkForGuest(self, auto_play=False):
         api_call = False
 
-        oParser = Parser()
+        parser = Parser()
 
         # on recupere le host actuel
         HOST = self.getHost(self._url)
 
         # on recupere l'ID
-        sId = self.__getIdFromUrl(self._url)
-        if sId == '':
+        s_id = self.__getIdFromUrl(self._url)
+        if s_id == '':
             VSlog("Id prb")
             return False, False
 
         # on ne garde que les chiffres
-        # sId = re.sub(r'-.+', '', sId)
+        # s_id = re.sub(r'-.+', '', s_id)
 
         # on cherche la vraie url
-        sHtmlContent = self.getRedirectHtml(self._url, sId)
+        html_content = self.getRedirectHtml(self._url, s_id)
 
         # fh = open('c:\\test.txt', "w")
-        # fh.write(sHtmlContent)
+        # fh.write(html_content)
         # fh.close()
 
-        sPattern = 'href=["\'](https*:\\/\\/www\\.flashx[^"\']+)'
-        AllUrl = re.findall(sPattern, sHtmlContent, re.DOTALL)
+        pattern = 'href=["\'](https*:\\/\\/www\\.flashx[^"\']+)'
+        AllUrl = re.findall(pattern, html_content, re.DOTALL)
         # VSlog(str(AllUrl))
 
         # Disabled for the moment
@@ -324,12 +324,12 @@ class cHoster(iHoster):
 
         # Requests to unlock video
         # unlock fake video
-        loadLinks(sHtmlContent)
+        loadLinks(html_content)
         # unlock bubble
         unlock = False
         url2 = re.findall(
             '["\']([^"\']+?\\.js\\?cache.+?)["\']',
-            sHtmlContent,
+            html_content,
             re.DOTALL)
         if not url2:
             VSlog('No special unlock url find')
@@ -343,89 +343,89 @@ class cHoster(iHoster):
             return False, False
 
         # get the page
-        sHtmlContent = self.getRedirectHtml(web_url, sId, True)
+        html_content = self.getRedirectHtml(web_url, s_id, True)
 
-        if sHtmlContent is False:
+        if html_content is False:
             VSlog('Passage en mode barbare')
             # ok ca a rate on passe toutes les url de AllUrl
             for i in AllUrl:
                 if not i == web_url:
-                    sHtmlContent = self.getRedirectHtml(i, sId, True)
-                    if sHtmlContent:
+                    html_content = self.getRedirectHtml(i, s_id, True)
+                    if html_content:
                         break
 
-        if not sHtmlContent:
+        if not html_content:
             return False, False
 
-        if 'reload the page!' in sHtmlContent:
+        if 'reload the page!' in html_content:
             # VSlog("page bloquée")
 
             # On recupere la bonne url
             sGoodUrl = web_url
 
             # on recupere la page de refresh
-            sPattern = 'reload the page! <a href="([^"]+)">!! <b>'
-            aResult = re.findall(sPattern, sHtmlContent)
-            if not aResult:
+            pattern = 'reload the page! <a href="([^"]+)">!! <b>'
+            results = re.findall(pattern, html_content)
+            if not results:
                 return False, False
-            sRefresh = aResult[0]
+            sRefresh = results[0]
 
             # on recupere le script de debloquage
-            sPattern = "<script type='text/javascript' src='([^']+)'><\\/script>"
-            aResult = re.findall(sPattern, sHtmlContent)
-            if not aResult:
+            pattern = "<script type='text/javascript' src='([^']+)'><\\/script>"
+            results = re.findall(pattern, html_content)
+            if not results:
                 return False, False
 
-            deblockurl = aResult[0]
+            deblockurl = results[0]
             if deblockurl.startswith('//'):
                 deblockurl = 'http:' + deblockurl
 
             # on debloque la page
-            sHtmlContent = self.getRedirectHtml(deblockurl, sId)
+            html_content = self.getRedirectHtml(deblockurl, s_id)
 
             # lien speciaux ?
             if sRefresh.startswith('./'):
                 sRefresh = 'http://' + self.getHost(sGoodUrl) + sRefresh[1:]
 
             # on rafraichit la page
-            sHtmlContent = self.getRedirectHtml(sRefresh, sId)
+            html_content = self.getRedirectHtml(sRefresh, s_id)
 
             # et on re-recupere la page
-            sHtmlContent = self.getRedirectHtml(sGoodUrl, sId)
+            html_content = self.getRedirectHtml(sGoodUrl, s_id)
 
         # if (False):
 
         #     # A t on le lien code directement?
-        #     sPattern = "(\s*eval\s*\(\s*function(?:.|\s)+?)<\/script>"
-        #     aResult = re.findall(sPattern, sHtmlContent)
+        #     pattern = "(\s*eval\s*\(\s*function(?:.|\s)+?)<\/script>"
+        #     results = re.findall(pattern, html_content)
 
-        #     if (aResult):
+        #     if (results):
         #         # VSlog("lien code")
 
-        #         AllPacked = re.findall('(eval\(function\(p,a,c,k.*?)\s+<\/script>', sHtmlContent, re.DOTALL)
+        #         AllPacked = re.findall('(eval\(function\(p,a,c,k.*?)\s+<\/script>', html_content, re.DOTALL)
         #         if AllPacked:
         #             for i in AllPacked:
         #                 sUnpacked = cPacker().unpack(i)
-        #                 sHtmlContent = sUnpacked
-        #                 if "file" in sHtmlContent:
+        #                 html_content = sUnpacked
+        #                 if "file" in html_content:
         #                     break
         #         else:
         #             return False, False
 
         # decodage classique
-        sPattern = '{file:"([^",]+)",label:"([^"<>,]+)"}'
-        sPattern = '{src: *\'([^"\',]+)\'.+?label: *\'([^"<>,\']+)\''
-        aResult = oParser.parse(sHtmlContent, sPattern)
+        pattern = '{file:"([^",]+)",label:"([^"<>,]+)"}'
+        pattern = '{src: *\'([^"\',]+)\'.+?label: *\'([^"<>,\']+)\''
+        results = parser.parse(html_content, pattern)
 
-        # VSlog(str(aResult))
+        # VSlog(str(results))
 
-        if aResult[0] is True:
+        if results[0] is True:
             # initialisation des tableaux
             url = []
             qua = []
 
             # Remplissage des tableaux
-            for i in aResult[1]:
+            for i in results[1]:
                 url.append(str(i[0]))
                 qua.append(str(i[1]))
 

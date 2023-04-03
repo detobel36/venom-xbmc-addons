@@ -11,10 +11,10 @@ class cHoster(iHoster):
     def getPattern(self):
         return 's1.addVariable\\("file".*?"([^"]+)"'
 
-    def _getMediaLinkForGuest(self, autoPlay=False):
+    def _getMediaLinkForGuest(self, auto_play=False):
         oHosterHandler = cHosterHandler()
-        aResult = oHosterHandler.getUrl(self)
-        if aResult[0] is True:
-            return True, cUtil().urlDecode(aResult[1])
+        results = oHosterHandler.getUrl(self)
+        if results[0] is True:
+            return True, cUtil().urlDecode(results[1])
 
         return False, ''

@@ -12,19 +12,19 @@ class cHoster(iHoster):
     def __init__(self):
         iHoster.__init__(self, 'mixloads', 'Mixloads')
 
-    def _getMediaLinkForGuest(self, autoPlay=False):
+    def _getMediaLinkForGuest(self, auto_play=False):
         api_call = ''
-        oParser = Parser()
+        parser = Parser()
 
-        oRequest = RequestHandler(self._url)
-        sHtmlContent = oRequest.request()
+        request = RequestHandler(self._url)
+        html_content = request.request()
 
-        sPattern = '{file:"([^"]+)",label:"([^"]+)"}'
-        aResult = oParser.parse(sHtmlContent, sPattern)
-        if aResult[0] is True:
+        pattern = '{file:"([^"]+)",label:"([^"]+)"}'
+        results = parser.parse(html_content, pattern)
+        if results[0] is True:
             url = []
             qua = []
-            for i in aResult[1]:
+            for i in results[1]:
                 url.append(str(i[0]))
                 qua.append(str(i[1]))
 

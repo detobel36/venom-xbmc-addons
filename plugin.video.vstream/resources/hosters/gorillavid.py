@@ -12,34 +12,34 @@ class cHoster(iHoster):
     def __init__(self):
         iHoster.__init__(self, 'gorillavid', 'Gorillavid')
 
-    def __getIdFromUrl(self, sUrl):
-        sPattern = 'http://gorillavid.in/embed.+?-([^<]+)-'
-        oParser = Parser()
-        aResult = oParser.parse(sUrl, sPattern)
-        if aResult[0] is True:
-            return aResult[1][0]
+    def __getIdFromUrl(self, url):
+        pattern = 'http://gorillavid.in/embed.+?-([^<]+)-'
+        parser = Parser()
+        results = parser.parse(url, pattern)
+        if results[0] is True:
+            return results[1][0]
 
         return ''
 
-    def _getMediaLinkForGuest(self, autoPlay=False):
+    def _getMediaLinkForGuest(self, auto_play=False):
         api_call = False
-        oParser = Parser()
+        parser = Parser()
 
-        sId = self.__getIdFromUrl(self._url)
+        s_id = self.__getIdFromUrl(self._url)
 
-        url = 'http://gorillavid.in/' + sId
-        oRequest = RequestHandler(url)
-        sHtmlContent = oRequest.request()
-        sPattern = '<input type="hidden" name="([^"]+)" value="([^"]+)"'
-        aResult = oParser.parse(sHtmlContent, sPattern)
+        url = 'http://gorillavid.in/' + s_id
+        request = RequestHandler(url)
+        html_content = request.request()
+        pattern = '<input type="hidden" name="([^"]+)" value="([^"]+)"'
+        results = parser.parse(html_content, pattern)
 
-        if aResult[0] is True:
-            oRequest.setRequestType(RequestHandler.REQUEST_TYPE_POST)
-            for aEntry in aResult[1]:
-                oRequest.addParameters(aEntry[0], aEntry[1])
-            oRequest.addParameters('referer', url)
-            sHtmlContent = oRequest.request()
-            r2 = re.search('file: "([^"]+)",', sHtmlContent)
+        if results[0] is True:
+            request.setRequestType(RequestHandler.REQUEST_TYPE_POST)
+            for entry in results[1]:
+                request.addParameters(entry[0], entry[1])
+            request.addParameters('referer', url)
+            html_content = request.request()
+            r2 = re.search('file: "([^"]+)",', html_content)
             if r2:
                 api_call = r2.group(1)
 

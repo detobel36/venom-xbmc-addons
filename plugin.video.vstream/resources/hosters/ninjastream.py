@@ -14,19 +14,19 @@ class cHoster(iHoster):
 
     # facultatif mais a laisser pour compatibilitee
     # Extraction du lien et decodage si besoin
-    def _getMediaLinkForGuest(self, autoPlay=False):
-        oRequestHandler = RequestHandler(
+    def _getMediaLinkForGuest(self, auto_play=False):
+        request_handler = RequestHandler(
             "https://ninjastream.to/api/video/get")
-        oRequestHandler.setRequestType(1)
-        oRequestHandler.addHeaderEntry('Referer', self._url)
-        oRequestHandler.addHeaderEntry('User-Agent', UA)
-        oRequestHandler.addHeaderEntry('X-Requested-With', 'XMLHttpRequest')
-        oRequestHandler.addHeaderEntry(
+        request_handler.setRequestType(1)
+        request_handler.addHeaderEntry('Referer', self._url)
+        request_handler.addHeaderEntry('User-Agent', UA)
+        request_handler.addHeaderEntry('X-Requested-With', 'XMLHttpRequest')
+        request_handler.addHeaderEntry(
             'Origin', 'https://{0}'.format(self._url.split('/')[2]))
-        oRequestHandler.addJSONEntry('id', self._url.split('/')[4])
-        sHtmlContent = oRequestHandler.request(jsonDecode=True)
+        request_handler.addJSONEntry('id', self._url.split('/')[4])
+        html_content = request_handler.request(json_decode=True)
 
-        api_call = sHtmlContent['result']['playlist']
+        api_call = html_content['result']['playlist']
 
         if api_call:
             # Rajout d'un header ?

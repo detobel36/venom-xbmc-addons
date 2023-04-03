@@ -14,25 +14,25 @@ class cHoster(iHoster):
     def isDownloadable(self):
         return False
 
-    def _getMediaLinkForGuest(self, autoPlay=False):
+    def _getMediaLinkForGuest(self, auto_play=False):
         api_call = False
 
-        oRequest = RequestHandler(self._url)
-        sHtmlContent = oRequest.request()
-        if 'File was deleted' in sHtmlContent:
+        request = RequestHandler(self._url)
+        html_content = request.request()
+        if 'File was deleted' in html_content:
             return False, False
 
-        oParser = Parser()
-        sPattern = '(eval\\(function\\(p,a,c,k,e(?:.|\\s)+?\\))<\\/script>'
-        aResult = oParser.parse(sHtmlContent, sPattern)
-        if aResult[0] is True:
-            sHtmlContent = cPacker().unpack(aResult[1][0])
+        parser = Parser()
+        pattern = '(eval\\(function\\(p,a,c,k,e(?:.|\\s)+?\\))<\\/script>'
+        results = parser.parse(html_content, pattern)
+        if results[0] is True:
+            html_content = cPacker().unpack(results[1][0])
 
-        sPattern = '{file:"(http.+?mp4)"}'
-        aResult = oParser.parse(sHtmlContent, sPattern)
-        if aResult[0] is True:
+        pattern = '{file:"(http.+?mp4)"}'
+        results = parser.parse(html_content, pattern)
+        if results[0] is True:
             # pas de choix qualité trouvé pour le moment
-            api_call = aResult[1][0]
+            api_call = results[1][0]
 
         if api_call:
             return True, api_call

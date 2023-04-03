@@ -21,23 +21,23 @@ class cHoster(iHoster):
         host = parts[0] + '//' + parts[1].split('/', 1)[0]
         return host
 
-    def _getMediaLinkForGuest(self, autoPlay=False):
-        oRequest = RequestHandler(self._url.replace('sn', 'embed'))
-        oRequest.addHeaderEntry('User-Agent', UA)
-        oRequest.addHeaderEntry('Host', 'www.speedvid.net')
-        sHtmlContent = oRequest.request()
+    def _getMediaLinkForGuest(self, auto_play=False):
+        request = RequestHandler(self._url.replace('sn', 'embed'))
+        request.addHeaderEntry('User-Agent', UA)
+        request.addHeaderEntry('Host', 'www.speedvid.net')
+        html_content = request.request()
 
         # suppression commentaires
-        sHtmlContent = re.sub(r'<!--.*?-->', '', sHtmlContent)
+        html_content = re.sub(r'<!--.*?-->', '', html_content)
 
-        oParser = Parser()
+        parser = Parser()
 
         # fh = open('c:\\test0.txt', "w")
-        # fh.write(sHtmlContent)
+        # fh.write(html_content)
         # fh.close()
 
         # decodage de la page html
-        sHtmlContent3 = sHtmlContent
+        sHtmlContent3 = html_content
         code = ''
         maxboucle = 10
         while maxboucle > 0:
@@ -47,24 +47,24 @@ class cHoster(iHoster):
 
             maxboucle = maxboucle - 1
 
-        sHtmlContent = sHtmlContent3
+        html_content = sHtmlContent3
 
         VSlog('fini')
 
         # fh = open('c:\\test.txt', "w")
-        # fh.write(sHtmlContent)
+        # fh.write(html_content)
         # fh.close()
 
         realurl = ''
 
-        red = re.findall('location.href *= *[\'"]([^\'"]+)', sHtmlContent)
+        red = re.findall('location.href *= *[\'"]([^\'"]+)', html_content)
         if red:
             realurl = red[0]
         else:
             VSlog("2")
             red = re.findall(
                 'location\\.assign *\\( *"([^"]+)" \\)',
-                sHtmlContent)
+                html_content)
             if red:
                 realurl = red[0]
 
@@ -80,36 +80,36 @@ class cHoster(iHoster):
 
         VSlog('Real url>> ' + realurl)
 
-        oRequest = RequestHandler(realurl)
-        oRequest.addHeaderEntry('User-Agent', UA)
-        oRequest.addHeaderEntry('Referer', self._url)
+        request = RequestHandler(realurl)
+        request.addHeaderEntry('User-Agent', UA)
+        request.addHeaderEntry('Referer', self._url)
 
-        sHtmlContent = oRequest.request()
+        html_content = request.request()
 
         # fh = open('c:\\test.txt', "w")
-        # fh.write(sHtmlContent)
+        # fh.write(html_content)
         # fh.close()
 
         api_call = ''
 
-        sPattern = '(eval\\(function\\(p,a,c,k,e(?:.|\\s)+?\\)\\))<'
-        aResult = oParser.parse(sHtmlContent, sPattern)
-        if aResult[0] is True:
-            for packed in aResult[1]:
-                sHtmlContent = cPacker().unpack(packed)
-                sHtmlContent = sHtmlContent.replace('\\', '')
-                if "jwplayer('vplayer').setup" in sHtmlContent:
+        pattern = '(eval\\(function\\(p,a,c,k,e(?:.|\\s)+?\\)\\))<'
+        results = parser.parse(html_content, pattern)
+        if results[0] is True:
+            for packed in results[1]:
+                html_content = cPacker().unpack(packed)
+                html_content = html_content.replace('\\', '')
+                if "jwplayer('vplayer').setup" in html_content:
                     sPattern2 = "{file:.([^']+.mp4)"
-                    aResult2 = oParser.parse(sHtmlContent, sPattern2)
+                    aResult2 = parser.parse(html_content, sPattern2)
                     if aResult2[0] is True:
                         api_call = aResult2[1][0]
                         break
 
         else:
-            sPattern = "file\\s*:\\s*\'([^\']+.mp4)"
-            aResult = oParser.parse(sHtmlContent, sPattern)
-            if aResult[0] is True:
-                api_call = aResult[1][0]
+            pattern = "file\\s*:\\s*\'([^\']+.mp4)"
+            results = parser.parse(html_content, pattern)
+            if results[0] is True:
+                api_call = results[1][0]
 
         VSlog('API_CALL: ' + api_call)
 
@@ -124,11 +124,11 @@ class cHoster(iHoster):
 
 
 def checkCpacker(strToPack):
-    sPattern = '>([^>]+\\(p,a,c,k,e(?:.|\\s)+?\\)\\)\\s*)<'
-    aResult = re.search(sPattern, strToPack, re.DOTALL | re.UNICODE)
-    if aResult:
+    pattern = '>([^>]+\\(p,a,c,k,e(?:.|\\s)+?\\)\\)\\s*)<'
+    results = re.search(pattern, strToPack, re.DOTALL | re.UNICODE)
+    if results:
         # VSlog('Cpacker encryption')
-        str2 = aResult.group(1)
+        str2 = results.group(1)
 
         if not str2.endswith(';'):
             str2 = str2 + ';'
@@ -147,40 +147,40 @@ def checkCpacker(strToPack):
 
         # VSlog(tmp)
 
-        return strToPack[:(aResult.start() + 1)] + tmp + \
-            strToPack[(aResult.end() - 1):]
+        return strToPack[:(results.start() + 1)] + tmp + \
+            strToPack[(results.end() - 1):]
 
     return strToPack
 
 
 # def checkJJDecoder(str):
 
-#     sPattern = '([a-z]=.+?\(\)\)\(\);)'
-#     aResult = re.search(sPattern, str, re.DOTALL | re.UNICODE)
-#     if (aResult):
+#     pattern = '([a-z]=.+?\(\)\)\(\);)'
+#     results = re.search(pattern, str, re.DOTALL | re.UNICODE)
+#     if (results):
 #         VSlog('JJ encryption')
-#         tmp = JJDecoder(aResult.group(0)).decode()
+#         tmp = JJDecoder(results.group(0)).decode()
 
-#         return str[:aResult.start()] + tmp + str[aResult.end():]
+#         return str[:results.start()] + tmp + str[results.end():]
 
 #     return str
 
 
 def checkAADecoder(stringToDecode):
-    aResult = re.search(
+    results = re.search(
         '([>;]\\s*)(ﾟωﾟ.+?\\(\'_\'\\);)',
         str,
         re.DOTALL | re.UNICODE)
-    if aResult:
+    if results:
         VSlog('AA encryption')
 
-        # tmp = aResult.group(1) + AADecoder(aResult.group(2)).decode()
+        # tmp = results.group(1) + AADecoder(results.group(2)).decode()
 
         JP = JsParser()
         liste_var = []
 
         try:
-            js_code = aResult.group(2)
+            js_code = results.group(2)
 
             try:
                 js_code = unicode(js_code, "utf-8")
@@ -190,8 +190,8 @@ def checkAADecoder(stringToDecode):
             tmp = JP.ProcessJS(js_code, liste_var)
             tmp = JP.LastEval.decode('string-escape').decode('string-escape')
 
-            return stringToDecode[:aResult.start()] + \
-                tmp + stringToDecode[aResult.end():]
+            return stringToDecode[:results.start()] + \
+                tmp + stringToDecode[results.end():]
         except Exception:
             return ''
     return stringToDecode
