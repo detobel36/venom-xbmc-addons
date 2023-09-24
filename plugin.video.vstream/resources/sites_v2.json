@@ -1,0 +1,120 @@
+{
+  "sites": {
+    "_1seriestreaming": {
+      "label": "1 SerieStreaming",
+      "active": true,
+      "url": "https://1seriestreaming.net/",
+      "token": {
+        "url": "https://1seriestreaming.net/accueil-1",
+        "html_token_input": "input[name='_token']",
+        "data_key": "_token"
+      },
+      "search": {
+        "series": {
+          "separator": "+",
+          "request": "POST",
+          "url": "https://1seriestreaming.net/search",
+          "search_param": "q",
+          "results": {
+            "list_results": "body .container .content .items .item",
+            "title": "a .text-truncate",
+            "year": "a .text-muted",
+            "thumb": {
+              "path": "a img",
+              "attr": "data-src"
+            },
+            "url": {
+              "path": "a",
+              "attr": "href"
+            },
+            "filters": [
+              {
+                "elem": "thumb",
+                "neq": "https://1seriestreaming.net/images/no-poster.svg"
+              }
+            ]
+          }
+        },
+        "season": {
+          "results": {
+            "list_results": ".container .content div.row div",
+            "season": "a.seasonbar span",
+            "url": {
+              "path": "a",
+              "attr": "href"
+            }
+          }
+        },
+        "episode": {
+          "results": {
+            "list_results": ".container .content div.row div",
+            "episode": "a.episodebar span",
+            "url": {
+              "path": "a",
+              "attr": "href"
+            }
+          }
+        }
+      }
+    },
+    "_33seriestreaming": {
+      "label": "33 S\u00e9ries",
+      "active": true,
+      "url": "https://ww1.33seriestreaming.lol/",
+      "search": {
+        "series": {
+          "separator": "+",
+          "request": "POST",
+          "url": "https://ww1.33seriestreaming.lol/index.php?do=search",
+          "search_param": "story",
+          "static_params": {
+            "do": "search",
+            "subaction": "search"
+          },
+          "results": {
+            "list_results": "main.col-main .items-list .short-item",
+            "filters": [
+              {
+                "path": ".film-verz",
+                "eq": "Serie"
+              }
+            ],
+            "url": {
+              "attr": "href"
+            },
+            "title": ".short-item__title",
+            "remote_infos": {
+              "year": "article.page.pmovie .pmovie__info-right li div a[href^=\"https://ww1.33seriestreaming.lol/series/annee/\"][href$=\".html\"]",
+              "thumb": {
+                "path": "article.page.pmovie .pmovie__left .pmovie__poster img",
+                "attr": "data-src"
+              }
+            }
+          }
+        },
+        "season": {
+          "results": {
+            "list_results": "article.page.pmovie .pmovie__seasons-list a.short-item",
+            "season": "div div.short-item__season",
+            "thumb": {
+              "path": "div img",
+              "attr": "data-src"
+            },
+            "url": {
+              "attr": "href"
+            }
+          }
+        },
+        "episode": {
+          "results": {
+            "list_results": "article.page.pmovie .sect__content a.episode_btn",
+            "episode": "",
+            "url": {
+              "attr": "href"
+            }
+          }
+        }
+      }
+    }
+  }
+}
