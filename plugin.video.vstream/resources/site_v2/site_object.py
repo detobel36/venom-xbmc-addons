@@ -2,13 +2,12 @@
 # vStream https://github.com/Kodi-vStream/venom-xbmc-addons
 from __future__ import annotations
 
-from typing import List, TYPE_CHECKING
+from typing import TYPE_CHECKING
 
 from resources.site_v2.site_request import SiteRequest
-from resources.site_v2.site_search import SiteSearch
 
 if TYPE_CHECKING:
-    from resources.site_v2.site_result_serie import SiteResultSerie
+    pass
 
 
 # Représente toutes les informations liées à un site web
@@ -47,14 +46,6 @@ class SiteObject:
 
     def get_token_json(self):
         return self._json_data['token']
-
-    def search_series(self, title: str) -> List[SiteResultSerie]:
-        if self.is_enabled():
-            if self._site_search is None:
-                self._site_search = SiteSearch(self._is_matrix, self)
-            return self._site_search.search_series(title)
-        else:
-            return []
 
     def get_site_request(self) -> SiteRequest:
         return self._site_request

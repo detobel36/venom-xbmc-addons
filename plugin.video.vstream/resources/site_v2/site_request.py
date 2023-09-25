@@ -1,10 +1,11 @@
 # -*- coding: utf-8 -*-
 # vStream https://github.com/Kodi-vStream/venom-xbmc-addons
 from __future__ import annotations
-from requests import Session, Request, RequestException, ConnectionError, Response
+
 from typing import TYPE_CHECKING
 
 from bs4 import BeautifulSoup
+from requests import Session, Request, RequestException, ConnectionError, Response
 
 if TYPE_CHECKING:
     from resources.site_v2.site_object import SiteObject
@@ -35,7 +36,7 @@ class SiteRequest:
         soup = BeautifulSoup(response_data, 'html.parser')
         token_input = soup.select_one(site_json_token_data['html_token_input'])
         if 'value' in token_input.attrs:
-            token_value =  token_input.attrs['value']
+            token_value = token_input.attrs['value']
         else:
             token_value = ''
 
@@ -45,7 +46,6 @@ class SiteRequest:
         self._headers['Cookie'] = str_cookies
 
         self._list_data[site_json_token_data['data_key']] = token_value
-
 
     def request(self, url: str, request_type: str, request_token_if_needed=True, list_data=None) -> Response:
         result = None
@@ -72,7 +72,7 @@ class SiteRequest:
             # print("Cookies in session:", self._session.cookies)
 
             result = self._session.send(prepped, timeout=self._timeout, allow_redirects=self._redirects,
-                                   verify=self._verify)
+                                        verify=self._verify)
         except ConnectionError as e:
             # TODO
             pass

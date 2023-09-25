@@ -40,4 +40,5 @@ class SiteResultEpisode(SiteResultSeason):
         return season_result
 
     def list_hosts(self) -> List[Any]:
+        # TODO
         return []

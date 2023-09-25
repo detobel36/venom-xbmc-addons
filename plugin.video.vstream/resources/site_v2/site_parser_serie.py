@@ -2,22 +2,19 @@
 # vStream https://github.com/Kodi-vStream/venom-xbmc-addons
 from __future__ import annotations
 
-from typing import List, TYPE_CHECKING
+from typing import TYPE_CHECKING, List
 
 from resources.site_v2.site_parser import SiteParser
 from resources.site_v2.site_result_serie import SiteResultSerie
 
 if TYPE_CHECKING:
-    from resources.site_v2.site_object import SiteObject
+    pass
 
 
-class SiteSearch:
+class SiteParserSerie(SiteParser):
 
-    def __init__(self, is_matrix: bool, site: SiteObject):
-        self._is_matrix = is_matrix
-        self._site = site
-
-    def search_series(self, title: str) -> List[SiteResultSerie]:
+    # Override
+    def get_list_serie(self, title: str) -> List[SiteResultSerie]:
         series_json_data = self._site.get_search_json()['series']
         if 'url' not in series_json_data:
             url = self._site.get_url()

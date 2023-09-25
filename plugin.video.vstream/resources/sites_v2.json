@@ -47,8 +47,14 @@
         },
         "episode": {
           "results": {
-            "list_results": ".container .content div.row div",
-            "episode": "a.episodebar span",
+            "list_results": ".container .content:nth-child(1n) div.row div",
+            "filters": [
+              {
+                "elem": "url",
+                "contains": "/episode/"
+              }
+            ],
+            "episode": "a.seasonbar span",
             "url": {
               "path": "a",
               "attr": "href"

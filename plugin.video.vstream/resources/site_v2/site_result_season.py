@@ -2,11 +2,9 @@
 # vStream https://github.com/Kodi-vStream/venom-xbmc-addons
 from __future__ import annotations
 
-from typing import TYPE_CHECKING, List
+from typing import TYPE_CHECKING
 
-from resources.site_v2.site_parser_episode import SiteParserEpisode
 from resources.site_v2.site_result import SiteResult
-from resources.site_v2.site_result_episode import SiteResultEpisode
 from resources.site_v2.site_result_serie import SiteResultSerie
 
 if TYPE_CHECKING:
@@ -40,9 +38,3 @@ class SiteResultSeason(SiteResultSerie):
         season_result = SiteResultSeason(result._site)
         season_result.update(result)
         return season_result
-
-    def list_episode(self) -> List[SiteResultEpisode]:
-        self._fetch_content_if_none()
-        list_result = SiteParserEpisode(self._site).parse_beautiful_soup_and_list_results(
-            self._content, self._site.get_search_json()['episode']['results'])
-        return self._update_result_with_current_elem(list_result)

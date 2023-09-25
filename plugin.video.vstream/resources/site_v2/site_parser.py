@@ -39,7 +39,8 @@ class SiteParser:
                 response = self._site.get_site_request().request(result.get_url(), "GET")
                 soup = BeautifulSoup(response.content, 'html.parser')
                 result.update(self._parse_result(soup, result_json_data['remote_infos']))
-                result.set_content(soup)
+                result.set_content(soup, result.get_url())
+
             else:
                 result = self._parse_result(elem, result_json_data)
 

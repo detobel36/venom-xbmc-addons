@@ -53,7 +53,7 @@ class SiteResult:
                     self._url = other_result._url
             if other_result._content is not None:
                 if self._content is None or erase:
-                    self._content = other_result._content
+                    self.set_content(other_result._content, other_result._url)
         return self
 
     def _get_key(self, key_name: str) -> str | None:
@@ -77,7 +77,8 @@ class SiteResult:
         for item_filter in list_filters:
             if ('elem' in item_filter and
                     ('eq' in item_filter and self._get_key(item_filter['elem']) != item_filter['eq']) or
-                    ('neq' in item_filter and self._get_key(item_filter['elem']) == item_filter['neq'])):
+                    ('neq' in item_filter and self._get_key(item_filter['elem']) == item_filter['neq']) or
+                    ('contains' in item_filter and item_filter['contains'] not in self._get_key(item_filter['elem']))):
                 return False
         return True
 
@@ -91,12 +92,23 @@ class SiteResult:
             result += f"\n\tURL: {self._url}"
         if self._thumb is not None:
             result += f"\n\tImg: {self._thumb}"
+        if self._content is not None:
+            result += "\n\tContent defined"
         return result
 
-    def set_content(self, soup: BeautifulSoup):
+    def set_content(self, soup: BeautifulSoup, url_from: str):
         """
         Contient le contenu de la page qui permet d'avoir ces résultats
 
         :param soup: le contenu de la page (format donné par BeautifulSoup)
+        :param url_from: URL lié au contenu passé au premier paramètre
         """
-        self._content = soup
+        if url_from == self._url:
+            self._content = soup
+
+    def _fetch_content_if_none(self) -> None:
+        if self._content is None:
+            # Si on n'a pas le contenu, c'est qu'on arrive ici à cause d'une donnée stockée
+            # On doit donc refaire la requête
+            response = self._site.get_site_request().request(self._url, request_type='GET')
+            self.set_content(BeautifulSoup(response.content, 'html.parser'), self._url)
