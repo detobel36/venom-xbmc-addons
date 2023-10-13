@@ -6,21 +6,24 @@ from typing import List, Dict, TYPE_CHECKING
 
 from bs4 import BeautifulSoup
 
+from resources.site_v2.filter_utils import FilterUtils
+
 if TYPE_CHECKING:
-    from resources.site_v2.site_object import SiteObject
+    from resources.site_v2.site import Site
 
 
 # Permet de stocker le résultat d'une recherche
 # L'idée est de pouvoir, à partir de cet élément, afficher un résultat à l'utilisateur
-class SiteResult:
+class Result:
 
-    def __init__(self, site: SiteObject):
+    def __init__(self, site: Site):
         self._site = site
         self._year = None
         self._title = None
         self._thumb = None
         self._url = None
         self._content = None
+        self._extra_data = dict()
 
     def set_title(self, title: str):
         self._title = title
@@ -37,8 +40,11 @@ class SiteResult:
     def get_url(self):
         return self._url
 
+    def add_extra_data(self, key, data):
+        self._extra_data[key] = data
+
     def update(self, other_result, erase=True):
-        if isinstance(other_result, SiteResult):
+        if isinstance(other_result, Result):
             if other_result._title is not None:
                 if self._title is None or erase:
                     self._title = other_result._title
@@ -54,9 +60,13 @@ class SiteResult:
             if other_result._content is not None:
                 if self._content is None or erase:
                     self.set_content(other_result._content, other_result._url)
+            if other_result._extra_data is not None and len(other_result._extra_data) > 0:
+                if len(self._extra_data) == 0 or erase:
+                    for key, value in other_result._extra_data.items():
+                        self._extra_data[key] = value
         return self
 
-    def _get_key(self, key_name: str) -> str | None:
+    def get_key(self, key_name: str) -> str | None:
         if key_name == 'title':
             return self._title
         elif key_name == 'year':
@@ -65,7 +75,38 @@ class SiteResult:
             return self._thumb
         elif key_name == 'url':
             return self._url
+        elif key_name.startswith('extra_data.'):
+            split_key_name = key_name.split('.')
+            if len(split_key_name) == 2:
+                extra_data_key = split_key_name[1]
+                if extra_data_key in self._extra_data:
+                    return self._extra_data[extra_data_key]
+                else:
+                    print("[ERROR] don't find key '" + extra_data_key + "' in extra_data of ",
+                          self._site.get_site_key())
+            else:
+                print("[ERROR] extra_data key needs to define key in the extra_data", key_name)
+                return None
         return None
+
+    def set_key(self, key, value):
+        if key == 'title':
+            self.set_title(value)
+        elif key == 'year':
+            self.set_year(value)
+        elif key == 'thumb':
+            self.set_thumb(value)
+        elif key == 'url':
+            self.set_url(value)
+        elif key.startswith('extra_data.'):
+            split_key_name = key.split('.')
+            if len(split_key_name) == 2:
+                extra_data_key = split_key_name[1]
+                self._extra_data[extra_data_key] = value
+            else:
+                print("[ERROR] extra_data key needs to define key in the extra_data", key)
+        else:
+            print("[ERROR] don't find key '" + key + "' in parameters of ", self._site.get_site_key())
 
     def is_not_ignore_by_filters(self, list_filters: List[Dict[str, str]]) -> bool:
         """
@@ -75,11 +116,10 @@ class SiteResult:
         :return: bool True si le résultat est valide, False s'il doit être ignoré à cause des filtres
         """
         for item_filter in list_filters:
-            if ('elem' in item_filter and
-                    ('eq' in item_filter and self._get_key(item_filter['elem']) != item_filter['eq']) or
-                    ('neq' in item_filter and self._get_key(item_filter['elem']) == item_filter['neq']) or
-                    ('contains' in item_filter and item_filter['contains'] not in self._get_key(item_filter['elem']))):
-                return False
+            if 'elem' in item_filter:
+                result = FilterUtils.is_not_ignore_by_filters(item_filter, self.get_key(item_filter['elem']))
+                if result is False:
+                    return False
         return True
 
     def __str__(self) -> str:

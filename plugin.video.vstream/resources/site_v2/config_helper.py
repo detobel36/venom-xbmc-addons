@@ -8,7 +8,7 @@ import xbmcvfs
 from resources.lib.comaddon import VSPath, VSProfil
 
 
-class SiteConfig:
+class ConfigHelper:
     DEFAULT_SITE_PATH = 'special://home/addons/plugin.video.vstream/resources/sites.json'
     MASTER_SITE_PATH = 'special://home/userdata/addon_data/plugin.video.vstream/sites.json'
     USER_SITE_PATH_PART1 = 'special://home/userdata/profiles/'

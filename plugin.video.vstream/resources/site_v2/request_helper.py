@@ -8,12 +8,12 @@ from bs4 import BeautifulSoup
 from requests import Session, Request, RequestException, ConnectionError, Response
 
 if TYPE_CHECKING:
-    from resources.site_v2.site_object import SiteObject
+    from resources.site_v2.site import Site
 
 
-class SiteRequest:
+class RequestHelper:
 
-    def __init__(self, is_matrix: bool, site: SiteObject):
+    def __init__(self, is_matrix: bool, site: Site):
         self._site = site
         self._is_matrix = is_matrix
         self._session = Session()

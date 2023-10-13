@@ -4,14 +4,14 @@ from __future__ import annotations
 
 from typing import TYPE_CHECKING
 
-from resources.site_v2.site_request import SiteRequest
+from resources.site_v2.request_helper import RequestHelper
 
 if TYPE_CHECKING:
     pass
 
 
 # Représente toutes les informations liées à un site web
-class SiteObject:
+class Site:
 
     def __init__(self, site_key, json_data, is_matrix=True):
         self._site_key = site_key
@@ -20,7 +20,7 @@ class SiteObject:
         # Singleton, instancié que si on en a besoin
         self._site_search = None
 
-        self._site_request = SiteRequest(self._is_matrix, self)
+        self._site_request = RequestHelper(self._is_matrix, self)
 
     def get_site_key(self) -> str:
         return self._site_key
@@ -47,5 +47,5 @@ class SiteObject:
     def get_token_json(self):
         return self._json_data['token']
 
-    def get_site_request(self) -> SiteRequest:
+    def get_site_request(self) -> RequestHelper:
         return self._site_request

@@ -6,23 +6,23 @@ from typing import TYPE_CHECKING
 
 from bs4 import BeautifulSoup
 
-from resources.site_v2.site_result import SiteResult
+from resources.site_v2.result import Result
 
 if TYPE_CHECKING:
-    from resources.site_v2.site_object import SiteObject
+    from resources.site_v2.site import Site
 
 
-class SiteResultSerie(SiteResult):
+class ResultSerie(Result):
 
-    def __init__(self, site: SiteObject):
+    def __init__(self, site: Site):
         super().__init__(site)
 
     def __str__(self) -> str:
         return "<serie> " + super().__str__()
 
     @staticmethod
-    def from_result(result: SiteResult) -> SiteResultSerie:
-        serie_result = SiteResultSerie(result._site)
+    def from_result(result: Result) -> ResultSerie:
+        serie_result = ResultSerie(result._site)
         serie_result.update(result)
         return serie_result
 

@@ -8,7 +8,11 @@
 
 import json
 
-from resources.site_v2.site_object import SiteObject
+from resources.site_v2.parser_episode import ParserEpisode
+from resources.site_v2.parser_hoster import ParserHoster
+from resources.site_v2.parser_season import ParserSeason
+from resources.site_v2.parser_serie import ParserSerie
+from resources.site_v2.site import Site
 
 
 def get_json_data(site_path):
@@ -19,23 +23,32 @@ def get_json_data(site_path):
 json_data = get_json_data('./resources/sites_v2.json')
 
 for site_key, site_values in json_data['sites'].items():
-    site = SiteObject(site_key, site_values, True)
-    list_results = site.search_series("Lucifer")
-    for result in list_results:
-        print(result)
+    site = Site(site_key, site_values, True)
+    if site.is_enabled():
+        list_results = ParserSerie(site).get_list_serie("Lucifer")
+        for result in list_results:
+            print(result)
 
-    if len(list_results) > 0:
-        print("-------------------")
-        print("List season for", site_key)
-        list_season = list_results[0].list_season()
-        for season in list_season:
-            print(season)
-
-        if len(list_season) > 0:
+        if len(list_results) > 0:
             print("-------------------")
-            print("List episode for", site_key)
-            list_episode = list_season[0].list_episode()
-            for episode in list_episode:
-                print(episode)
+            print("List season for", site_key)
+            list_season = ParserSeason(site).list_season(list_results[0])
+            for season in list_season:
+                print(season)
 
-        print("-------------------")
+            if len(list_season) > 0:
+                # print("-------------------")
+                # print("List episode for", site_key)
+                list_episode = ParserEpisode(site).list_episode(list_season[0])
+                # for episode in list_episode:
+                #     print(episode)
+
+                if len(list_episode) > 0:
+                    print("List host for ", list_episode[0])
+                    print("-------------------")
+                    print("List hoster for", site_key)
+                    list_hoster = ParserHoster(site).list_hosts(list_episode[0])
+                    for hoster in list_hoster:
+                        print(hoster)
+
+            print("-------------------")

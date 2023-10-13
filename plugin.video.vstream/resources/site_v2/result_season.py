@@ -4,16 +4,16 @@ from __future__ import annotations
 
 from typing import TYPE_CHECKING
 
-from resources.site_v2.site_result import SiteResult
-from resources.site_v2.site_result_serie import SiteResultSerie
+from resources.site_v2.result import Result
+from resources.site_v2.result_serie import ResultSerie
 
 if TYPE_CHECKING:
-    from resources.site_v2.site_object import SiteObject
+    from resources.site_v2.site import Site
 
 
-class SiteResultSeason(SiteResultSerie):
+class ResultSeason(ResultSerie):
 
-    def __init__(self, site: SiteObject):
+    def __init__(self, site: Site):
         super().__init__(site)
         self._season_number = None
 
@@ -26,15 +26,28 @@ class SiteResultSeason(SiteResultSerie):
             result += f"\n\tSeason: {self._season_number}"
         return result
 
+    def get_key(self, key_name: str) -> str | None:
+        result = super().get_key(key_name)
+        if result is None:
+            if key_name == 'season':
+                result = self._season_number
+        return result
+
+    def set_key(self, key, value):
+        if key == 'season':
+            self.set_season_number(value)
+        else:
+            super().set_key(key, value)
+
     def update(self, other_result, erase=True):
         super().update(other_result, erase)
-        if isinstance(other_result, SiteResultSeason):
+        if isinstance(other_result, ResultSeason):
             if other_result._season_number is not None:
                 if self._season_number is None or erase:
                     self._season_number = other_result._season_number
 
     @staticmethod
-    def from_result(result: SiteResult) -> SiteResultSeason:
-        season_result = SiteResultSeason(result._site)
+    def from_result(result: Result) -> ResultSeason:
+        season_result = ResultSeason(result._site)
         season_result.update(result)
         return season_result
