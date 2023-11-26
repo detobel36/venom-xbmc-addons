@@ -104,6 +104,12 @@ class Parser:
             except ValueError:
                 print("[WARN] Invalid year:", str_year, 'for site', self._site.get_site_key())
 
+        if 'lang' in json_data:
+            result.set_lang(Parser._read_element_data(elem, json_data['lang']))
+
+        if 'quality' in json_data:
+            result.set_quality(Parser._read_element_data(elem, json_data['quality']))
+
         if 'extra_data' in json_data:
             for json_data_elem in json_data['extra_data']:
                 result.add_extra_data(json_data_elem['key'], Parser._read_element_data(elem, json_data_elem))

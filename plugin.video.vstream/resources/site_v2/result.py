@@ -21,6 +21,8 @@ class Result:
         self._year = None
         self._title = None
         self._thumb = None
+        self._lang = None
+        self._quality = None
         self._url = None
         self._content = None
         self._extra_data = dict()
@@ -39,6 +41,14 @@ class Result:
 
     def get_url(self):
         return self._url
+
+    def set_lang(self, lang: str):
+        # TODO ajout d'un système pour normaliser les langues
+        self._lang = lang
+
+    def set_quality(self, quality: str):
+        # TODO ajout d'un système pour normaliser les qualités disponibles
+        self._quality = quality
 
     def add_extra_data(self, key, data):
         self._extra_data[key] = data
@@ -60,6 +70,12 @@ class Result:
             if other_result._content is not None:
                 if self._content is None or erase:
                     self.set_content(other_result._content, other_result._url)
+            if other_result._lang is not None:
+                if self._lang is None or erase:
+                    self._lang = other_result._lang
+            if other_result._quality is not None:
+                if self._quality is None or erase:
+                    self._quality = other_result._quality
             if other_result._extra_data is not None and len(other_result._extra_data) > 0:
                 if len(self._extra_data) == 0 or erase:
                     for key, value in other_result._extra_data.items():
@@ -75,6 +91,10 @@ class Result:
             return self._thumb
         elif key_name == 'url':
             return self._url
+        elif key_name == 'quality':
+            return self._quality
+        elif key_name == 'lang':
+            return self._lang
         elif key_name.startswith('extra_data.'):
             split_key_name = key_name.split('.')
             if len(split_key_name) == 2:
@@ -98,6 +118,10 @@ class Result:
             self.set_thumb(value)
         elif key == 'url':
             self.set_url(value)
+        elif key == 'quality':
+            self.set_quality(value)
+        elif key == 'lang':
+            self.set_lang(value)
         elif key.startswith('extra_data.'):
             split_key_name = key.split('.')
             if len(split_key_name) == 2:
@@ -132,6 +156,10 @@ class Result:
             result += f"\n\tURL: {self._url}"
         if self._thumb is not None:
             result += f"\n\tImg: {self._thumb}"
+        if self._lang is not None:
+            result += f"\n\tLang: {self._lang}"
+        if self._quality is not None:
+            result += f"\n\tQuality: {self._quality}"
         if self._content is not None:
             result += "\n\tContent defined"
         return result

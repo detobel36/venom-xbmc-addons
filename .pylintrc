@@ -1,0 +1,14 @@
+[MASTER]
+
+# Add files or directories to the blacklist.
+ignore=LICENSE,
+       MANIFEST.in,
+       PUBLISH.md,
+       README.md,
+       requirements.txt,
+       script.test,
+
+[FORMAT]
+
+# Maximum number of characters on a single line.
+max-line-length=120
