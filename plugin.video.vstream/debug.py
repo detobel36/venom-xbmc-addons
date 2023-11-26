@@ -8,10 +8,10 @@
 
 import json
 
-from resources.site_v2.parser_episode import ParserEpisode
-from resources.site_v2.parser_hoster import ParserHoster
-from resources.site_v2.parser_season import ParserSeason
-from resources.site_v2.parser_serie import ParserSerie
+from resources.site_v2.episode.parser_episode import ParserEpisode
+from resources.site_v2.hoster.parser_hoster import ParserHoster
+from resources.site_v2.season.parser_season import ParserSeason
+from resources.site_v2.serie.parser_serie import ParserSerie
 from resources.site_v2.site import Site
 
 
