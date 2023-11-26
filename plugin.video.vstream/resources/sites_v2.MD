@@ -4,6 +4,27 @@ Ce fichier permet de spécifier les sites web pris en charge par vStream.
 Pour chaque site, plusieurs informations seront préciser. Permettant à vStream de savoir comment interroger le site
 web afin de récupérer les informations.
 
+Table des matières:
+
+- [Structure](#structure)
+    - [Structure globale](#structure-globale)
+    - [Structure pour chaque site](#structure-pour-chaque-site)
+    - [Structure de la partie token](#structure-de-la-partie-token)
+    - [Structure de la partie `search`](#structure-de-la-partie-search)
+        - [Paramètre d'une recherche](#paramètre-dune-recherche)
+        - [Champs communs dans `results`](#champs-communs-dans-results)
+            - [Custom selector type](#custom-selector-type)
+            - [Extra data](#extra-data)
+            - [Filters](#filters)
+            - [Remote infos](#remote-infos)
+            - [Data Field Value](#data-field-value)
+        - [Serie Structure](#serie-structure)
+        - [Season Structure](#season-structure)
+        - [Episode Structure](#episode-structure)
+        - [Hoster Structure](#hoster-structure)
+        - [Movie Structure](#movie-structure)
+- [Améliorations possibles](#améliorations-possibles)
+
 # Structure
 
 ## Structure globale
