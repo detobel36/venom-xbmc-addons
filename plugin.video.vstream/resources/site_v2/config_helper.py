@@ -9,12 +9,22 @@ from resources.lib.comaddon import VSPath, VSProfil
 
 
 class ConfigHelper:
+    """
+    Classe permettant de charger les paramètres
+    """
+
     DEFAULT_SITE_PATH = 'special://home/addons/plugin.video.vstream/resources/sites.json'
     MASTER_SITE_PATH = 'special://home/userdata/addon_data/plugin.video.vstream/sites.json'
     USER_SITE_PATH_PART1 = 'special://home/userdata/profiles/'
     USER_SITE_PATH_PART2 = '/addon_data/plugin.video.vstream/sites.json'
 
     def get_json_data(self):
+        """
+        Récupère les informations stockées dans le JSON
+
+        :return: dict avec toutes les informations présentes dans le JSON
+        """
+
         # Propriétés par défaut
         default_path = VSPath(self.DEFAULT_SITE_PATH)
 

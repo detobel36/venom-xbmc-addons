@@ -12,11 +12,17 @@ if TYPE_CHECKING:
     from resources.site_v2.site import Site
 
 
-# Permet de stocker le résultat d'une recherche
-# L'idée est de pouvoir, à partir de cet élément, afficher un résultat à l'utilisateur
 class Result:
+    """
+    Permet de stocker le résultat d'une recherche
+    L'idée est de pouvoir, à partir de cet élément, afficher un résultat à l'utilisateur
+    """
 
     def __init__(self, site: Site):
+        """
+        Constructeur
+        :param site: les informations du site
+        """
         self._site = site
         self._year = None
         self._title = None
@@ -25,18 +31,36 @@ class Result:
         self._quality = None
         self._url = None
         self._content = None
-        self._extra_data = dict()
+        self._extra_data = {}
 
-    def set_title(self, title: str):
+    def set_title(self, title: str) -> None:
+        """
+        Permet de modifier le titre
+
+        :param title: le nouveau titre
+        """
         self._title = title
 
-    def set_year(self, year: int):
+    def set_year(self, year: int) -> None:
+        """
+        Permet de modifier l'année
+        :param year: la nouvelle année à sauvegarder
+        """
         self._year = year
 
-    def set_thumb(self, thumb: str):
+    def set_thumb(self, thumb: str) -> None:
+        """
+        Permet de modifier l'image
+        :param thumb: la nouvelle image
+        """
         self._thumb = thumb
 
-    def set_url(self, url: str):
+    def set_url(self, url: str) -> None:
+        """
+        Permet de modifier l'url
+        :param url:
+        :return:
+        """
         self._url = url
 
     def get_url(self):
