@@ -15,11 +15,24 @@ if TYPE_CHECKING:
 
 
 class Parser:
+    """
+    Analyse une page web et récupère des informations
+    """
 
     def __init__(self, site: Site):
+        """
+        Constructeur
+        :param site: information sur le site
+        """
         self._site = site
 
     def parse_beautiful_soup_and_list_results(self, soup: BeautifulSoup, result_json_data) -> List[Result]:
+        """
+        Analyse une page web et récupère des informations
+        :param soup: instance de beautifulSoup qui contient les informations
+        :param result_json_data: json qui dit comment analyser les données
+        :return: une liste de résultats
+        """
         results: List[Result] = []
         for elem in soup.select(result_json_data['list_results']):
             if 'filters' in result_json_data:

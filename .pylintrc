@@ -18,7 +18,9 @@ ignore=LICENSE,
 #        stuff-thats-only-ignored-for-now-and-will-be-addressed-in-a-pr,
 #        stuff-thats-only-ignored-for-now-and-will-be-addressed-in-a-pr2
 disable=missing-module-docstring,
-        import-error
+        import-error,
+        too-few-public-methods,
+        fixme
 
 [FORMAT]
 

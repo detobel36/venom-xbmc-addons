@@ -30,7 +30,7 @@ class ConfigHelper:
 
         # Propriétés selon le profil
         name = VSProfil()
-        if name == 'Master user':  # Le cas par defaut
+        if name == 'Master user':  # Le cas par default
             path = VSPath(self.MASTER_SITE_PATH)
         else:
             path = VSPath(self.USER_SITE_PATH_PART1 + name + self.USER_SITE_PATH_PART2)
@@ -43,10 +43,10 @@ class ConfigHelper:
 
         # Chargement des properties
         try:
-            with open(properties_path) as properties_file:
+            with open(properties_path, 'r', encoding='utf-8') as properties_file:
                 return json.load(properties_file)
         except IOError:
             # le fichier n'existe pas, on le crée à partir des settings par défaut
             xbmcvfs.copy(default_path, path)
-            with open(properties_path) as properties_file:
+            with open(properties_path, 'r', encoding='utf-8') as properties_file:
                 return json.load(properties_file)
