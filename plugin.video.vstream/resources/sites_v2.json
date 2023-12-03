@@ -94,12 +94,12 @@
     "_33seriestreaming": {
       "label": "33 S\u00e9ries",
       "active": true,
-      "url": "https://ww1.33seriestreaming.lol/",
+      "url": "https://www.33seriestreaming.vin/",
       "search": {
         "series": {
           "separator": "+",
           "request": "POST",
-          "url": "https://ww1.33seriestreaming.lol/index.php?do=search",
+          "url": "https://www.33seriestreaming.vin/",
           "search_param": "story",
           "static_params": {
             "do": "search",
@@ -107,28 +107,15 @@
           },
           "results": {
             "list_results": "main.col-main .items-list .short-item",
-            "filters": [
-              {
-                "path": ".film-verz",
-                "eq": "Serie"
-              }
-            ],
             "url": {
               "attr": "href"
             },
             "title": {
               "path": ".short-item__title"
             },
-            "remote_infos": {
-              "infos": {
-                "year": {
-                  "path": "article.page.pmovie .pmovie__info-right li div a[href^=\"https://ww1.33seriestreaming.lol/series/annee/\"][href$=\".html\"]"
-                },
-                "thumb": {
-                  "path": "article.page.pmovie .pmovie__left .pmovie__poster img",
-                  "attr": "data-src"
-                }
-              }
+            "thumb": {
+              "path": "img",
+              "attr": "data-src"
             }
           }
         },
@@ -169,7 +156,7 @@
           "results": {
             "list_results": "article.page.pmovie .pmovie__player-block ul.pmovie__stream-select.tabs-block__select li",
             "url": {
-              "value": "https://ww1.33seriestreaming.lol/engine/ajax/controller.php"
+              "value": "https://www.33seriestreaming.vin/engine/ajax/Season.php"
             },
             "host_name": {
               "attr": "data-name",
@@ -188,12 +175,8 @@
             },
             "extra_data": [
               {
-                "attr": "data-hash",
-                "key": "host_hash"
-              },
-              {
-                "attr": "data-episode",
-                "key": "host_episode_id"
+                "attr": "data-id",
+                "key": "host_id"
               }
             ],
             "filters": [
@@ -216,12 +199,8 @@
                   "var": "host_name"
                 },
                 {
-                  "key": "hash",
-                  "var": "extra_data.host_hash"
-                },
-                {
-                  "key": "episode",
-                  "var": "extra_data.host_episode_id"
+                  "key": "id",
+                  "var": "extra_data.host_id"
                 }
               ]
             }
