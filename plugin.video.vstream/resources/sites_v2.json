@@ -1,0 +1,212 @@
+{
+  "sites": {
+    "_1seriestreaming": {
+      "label": "1 SerieStreaming",
+      "active": true,
+      "url": "https://1seriestreaming.net/",
+      "token": {
+        "url": "https://1seriestreaming.net/accueil-1",
+        "html_token_input": "input[name='_token']",
+        "data_key": "_token"
+      },
+      "search": {
+        "series": {
+          "separator": "+",
+          "request": "POST",
+          "url": "https://1seriestreaming.net/search",
+          "search_param": "q",
+          "results": {
+            "list_results": "body .container .content .items .item",
+            "title": {
+              "path": "a .text-truncate"
+            },
+            "year": {
+              "path": "a .text-muted"
+            },
+            "thumb": {
+              "path": "a img",
+              "attr": "data-src"
+            },
+            "url": {
+              "path": "a",
+              "attr": "href"
+            },
+            "filters": [
+              {
+                "elem": "thumb",
+                "neq": "https://1seriestreaming.net/images/no-poster.svg"
+              }
+            ]
+          }
+        },
+        "season": {
+          "results": {
+            "list_results": ".container .content div.row div",
+            "season": {
+              "path": "a.seasonbar span"
+            },
+            "url": {
+              "path": "a",
+              "attr": "href"
+            }
+          }
+        },
+        "episode": {
+          "results": {
+            "list_results": ".container .content:nth-child(1n) div.row div",
+            "filters": [
+              {
+                "elem": "url",
+                "contains": "/episode/"
+              }
+            ],
+            "episode": {
+              "path": "a.seasonbar span"
+            },
+            "url": {
+              "path": "a",
+              "attr": "href"
+            }
+          }
+        },
+        "hoster": {
+          "results": {
+            "list_results": ".container #links .ply.plyhash",
+            "lang": {
+              "path": "div.col-sm-1.text-right.d-none.d-sm-block img",
+              "attr": "title"
+            },
+            "quality": {
+              "path": "div.col-sm-1.col-2.text-right span.font-weight-bold"
+            },
+            "url": {
+              "attr": "data-url",
+              "prefix": "https://1seriestreaming.net/ll/captcha?hash="
+            },
+            "host_name": {
+              "path": "div.col.font-weight-bold.text-uppercase .pl-3 img",
+              "attr": "alt"
+            }
+          }
+        }
+      }
+    },
+    "_33seriestreaming": {
+      "label": "33 S\u00e9ries",
+      "active": true,
+      "url": "https://www.33seriestreaming.vin/",
+      "search": {
+        "series": {
+          "separator": "+",
+          "request": "POST",
+          "url": "https://www.33seriestreaming.vin/",
+          "search_param": "story",
+          "static_params": {
+            "do": "search",
+            "subaction": "search"
+          },
+          "results": {
+            "list_results": "main.col-main .items-list .short-item",
+            "url": {
+              "attr": "href"
+            },
+            "title": {
+              "path": ".short-item__title"
+            },
+            "thumb": {
+              "path": "img",
+              "attr": "data-src"
+            }
+          }
+        },
+        "season": {
+          "results": {
+            "list_results": "article.page.pmovie .pmovie__seasons-list a.short-item",
+            "season": {
+              "path": "div div.short-item__season",
+              "regex": {
+                "pattern": "^S0*",
+                "repl": ""
+              }
+            },
+            "thumb": {
+              "path": "div img",
+              "attr": "data-src"
+            },
+            "url": {
+              "attr": "href"
+            }
+          }
+        },
+        "episode": {
+          "results": {
+            "list_results": "article.page.pmovie .sect__content a.episode_btn",
+            "episode": {
+              "regex": {
+                "pattern": "épisode ",
+                "repl": ""
+              }
+            },
+            "url": {
+              "attr": "href"
+            }
+          }
+        },
+        "hoster": {
+          "results": {
+            "list_results": "article.page.pmovie .pmovie__player-block ul.pmovie__stream-select.tabs-block__select li",
+            "url": {
+              "value": "https://www.33seriestreaming.vin/engine/ajax/Season.php"
+            },
+            "host_name": {
+              "attr": "data-name",
+              "regex": {
+                "pattern": "-vostfr$",
+                "repl": ""
+              }
+            },
+            "lang": {
+              "path": "div.pmovie__stream-select-depuis img",
+              "attr": "src",
+              "regex": {
+                "pattern": ".*/([^/]+)\\.png$",
+                "repl": "\\1"
+              }
+            },
+            "extra_data": [
+              {
+                "attr": "data-id",
+                "key": "host_id"
+              }
+            ],
+            "filters": [
+              {
+                "attr": "class",
+                "not_contains": "nopls"
+              }
+            ],
+            "remote_infos": {
+              "parse_result": "raw",
+              "parse_result_raw_key": "url",
+              "method": "POST",
+              "data_field": [
+                {
+                  "key": "mod",
+                  "value": "xfield_ajaxs"
+                },
+                {
+                  "key": "name",
+                  "var": "host_name"
+                },
+                {
+                  "key": "id",
+                  "var": "extra_data.host_id"
+                }
+              ]
+            }
+          }
+        }
+      }
+    }
+  }
+}
