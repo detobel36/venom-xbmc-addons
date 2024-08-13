@@ -1,5 +1,10 @@
 {
     "sites": {
+        "generic": {
+            "label": "Générique",
+            "active": "True",
+            "url": "https://google.com"
+        },
         "_1seriestreaming": {
             "label": "1 SerieStreaming",
             "active": "True",

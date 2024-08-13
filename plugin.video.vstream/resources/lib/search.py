@@ -155,6 +155,6 @@ class cSearch:
                 self.listRemainingPlugins.remove(plugin['name'])
                 self._progressUpdate()
 
-            VSlog('Load Search: ' + str(plugin['identifier']))
+            VSlog('Load Search: ' + str(plugin['identifier']) + ' (call function: ' + str(function) + ' on url: ' + str(sUrl) + ')')
         except Exception as e:
             VSlog(plugin['identifier'] + ': search failed (' + str(e) + ')')
